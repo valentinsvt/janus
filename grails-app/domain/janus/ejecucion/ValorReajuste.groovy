@@ -17,6 +17,11 @@ class ValorReajuste {
 
     double valor
 
+    /*Reajuste al periodo que le toca*/
+    Double valorReajuste=0
+    PeriodosInec periodoReajuste
+
+
     static mapping = {
         table 'vlrj'
         cache usage: 'read-write', include: 'non-lazy'
@@ -33,6 +38,8 @@ class ValorReajuste {
             valor column: 'vlrjvlor'
             obra column: 'obra__id'
             planillaLiq column: 'plnllqui'
+            valorReajuste column: 'vlrjvlrj'
+            periodoReajuste column: 'prinrjid'
         }
     }
     static constraints = {
@@ -44,5 +51,6 @@ class ValorReajuste {
         valor(blank: true, nullable: true)
         obra(blank: false, nullable: false)
         planillaLiq(blank: true, nullable: true)
+        periodoReajuste(blank: true, nullable: true)
     }
 }

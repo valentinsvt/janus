@@ -8,7 +8,7 @@ class PeriodoPlanilla {
     PeriodosInec periodo
     PeriodosInec periodoLiquidacion
     String titulo
-    double total  =0 /*Mabno de obra (b0 por periodo)*/
+    double total  =0 /*Mano de obra (b0 por periodo)*/
     double totalLiq=0
     double p0=0
     double p0Liq=0
@@ -20,7 +20,11 @@ class PeriodoPlanilla {
     double parcialPlanillaLiq=0
     int dias
 
-
+    /*Reajuste al periodo que le toca*/
+    Double p0Reajuste=0
+    Double frReajuste=0
+    Double b0Reajuste = 0
+    PeriodosInec periodoReajuste
 
     static mapping = {
 
@@ -48,11 +52,17 @@ class PeriodoPlanilla {
             frLiq column: "prplfrlq"
             parcialCronogramaLiq column: 'prplpclq'
             parcialPlanillaLiq column: 'prplpplq'
+            p0Reajuste column: 'prplp0rj'
+            frReajuste column: 'prplfrrj'
+            periodoReajuste column: 'prinrjid'
+            b0Reajuste column: 'prplb0rj'
         }
 
     }
     static constraints = {
         periodoLiquidacion(blank:true,nullable: true)
+        periodoReajuste(blank:true,nullable: true)
+        b0Reajuste(blank:true,nullable: true)
     }
 
 }

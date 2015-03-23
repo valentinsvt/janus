@@ -332,12 +332,25 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaB0, new Paragraph("Reajustado a: ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
         periodos.each { per ->
             if(per.planilla.tipoPlanilla.codigo!="A"){
-                addCellTabla(tablaB0, new Paragraph(per.periodo.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                if(per.periodoReajuste){
+                    addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaB0, new Paragraph(per.periodoReajuste.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+                }else{
+                    addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaB0, new Paragraph(per.periodo.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+                }
+
             }else{
                 if(per.fechaIncio<=planillaDeAnticipo.fechaPresentacion && per.fechaFin>=planillaDeAnticipo.fechaPresentacion) {
                     addCellTabla(tablaB0, new Paragraph("Pago: "+planillaDeAnticipo.fechaPago.format("dd-MM-yyyy"), fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                    addCellTabla(tablaB0, new Paragraph("Indices: "+planilla.periodoAnticipo.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    if(per.periodoReajuste){
+                        addCellTabla(tablaB0, new Paragraph("Indices: "+per.periodoReajuste.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    }else{
+                        addCellTabla(tablaB0, new Paragraph("Indices: "+per.periodo.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    }
+
                 }else{
                     addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -354,51 +367,76 @@ class ReportePlanillas3Controller {
             totalCoef += c.valor
 
             periodos.each { per ->
-                if(per.planilla.tipoPlanilla.codigo!="A" ){
-                    def valor = ValorIndice.findByPeriodoAndIndice(per.periodo, c.indice).valor
-                    if (!valor) {
-                        println "wtf no valor " + per.periodo + "  " + c.indice
-                        valor = 0
-                    }
-                    addCellTabla(tablaB0, new Paragraph(numero(valor, 2), fontTd), [border: Color.BLACK, bcr: Color.WHITE, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}")
-                    if (vlrj.size() > 0) {
-                        valor = vlrj.pop().valor
-                    } else {
-                        println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}"
-                        valor = -1
-                    }
-                    addCellTabla(tablaB0, new Paragraph(numero(valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                def valor
+                if(per.periodoReajuste){
+                    valor = ValorIndice.findByPeriodoAndIndice(per.periodoReajuste, c.indice).valor
                 }else{
-                    if(per.fechaIncio<=planillaDeAnticipo.fechaPresentacion && per.fechaFin>=planillaDeAnticipo.fechaPresentacion){
-                        def valor = ValorIndice.findByPeriodoAndIndice(planilla.periodoAnticipo, c.indice).valor
-//                    println "valor indice "+valor
-                        if (!valor) {
-                            //println "wtf no valor anticipo" + p.periodo + "  " + c.indice
-                            valor = 0
-                        }
-                        addCellTabla(tablaB0, new Paragraph(numero(valor, 2), fontTd), [border: Color.BLACK, bcr: Color.WHITE, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                        addCellTabla(tablaB0, new Paragraph(numero(valor*c.valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                        tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
-//                        tablaBo += "<td class='number'>" + numero(valor*c.valor) + "</td>"
-                        totalAnticipo+=(valor*c.valor).toDouble().round(3)
-                    }else{
-                        def valor = ValorIndice.findByPeriodoAndIndice(per.periodo, c.indice).valor
-                        if (!valor) {
-                            println "wtf no valor " + per.periodo + "  " + c.indice
-                            valor = 0
-                        }
-                        addCellTabla(tablaB0, new Paragraph(numero(valor, 2), fontTd), [border: Color.BLACK, bcr: Color.WHITE, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}")
-                        if (vlrj.size() > 0) {
-                            valor = vlrj.pop().valor
-                        } else {
-                            println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}"
-                            valor = -1
-                        }
-                        addCellTabla(tablaB0, new Paragraph(numero(valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                    }
+                    valor = ValorIndice.findByPeriodoAndIndice(per.periodo, c.indice).valor
                 }
+                if (!valor) {
+                    println "wtf no valor " + per.periodo + "   ${per.periodoReajuste}  " + c.indice
+                    valor = 0
+                }
+                addCellTabla(tablaB0, new Paragraph(numero(valor, 2), fontTd), [border: Color.BLACK, bcr: Color.WHITE, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}")
+                if (vlrj.size() > 0) {
+                    valor = vlrj.pop()
+                    if(per.periodoReajuste){
+                        valor=valor.valorReajuste
+                    }else{
+                        valor=valor.valor
+                    }
+                } else {
+                    println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}"
+                    /*Aqui recalcular*/
+                    valor = -1
+                }
+                addCellTabla(tablaB0, new Paragraph(numero(valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+               // tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+//                if(per.planilla.tipoPlanilla.codigo!="A" ){
+//                    def valor = ValorIndice.findByPeriodoAndIndice(per.periodo, c.indice).valor
+//                    if (!valor) {
+//                        println "wtf no valor " + per.periodo + "  " + c.indice
+//                        valor = 0
+//                    }
+//                    addCellTabla(tablaB0, new Paragraph(numero(valor, 2), fontTd), [border: Color.BLACK, bcr: Color.WHITE, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}")
+//                    if (vlrj.size() > 0) {
+//                        valor = vlrj.pop().valor
+//                    } else {
+//                        println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}"
+//                        valor = -1
+//                    }
+//                    addCellTabla(tablaB0, new Paragraph(numero(valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                }else{
+//                    if(per.fechaIncio<=planillaDeAnticipo.fechaPresentacion && per.fechaFin>=planillaDeAnticipo.fechaPresentacion){
+//                        def valor = ValorIndice.findByPeriodoAndIndice(planilla.periodoAnticipo, c.indice).valor
+////
+//                        if (!valor) {
+//
+//                            valor = 0
+//                        }
+//                        addCellTabla(tablaB0, new Paragraph(numero(valor, 2), fontTd), [border: Color.BLACK, bcr: Color.WHITE, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                        addCellTabla(tablaB0, new Paragraph(numero(valor*c.valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+////
+//                        totalAnticipo+=(valor*c.valor).toDouble().round(3)
+//                    }else{
+//                        def valor = ValorIndice.findByPeriodoAndIndice(per.periodo, c.indice).valor
+//                        if (!valor) {
+//                            println "wtf no valor " + per.periodo + "  " + c.indice
+//                            valor = 0
+//                        }
+//                        addCellTabla(tablaB0, new Paragraph(numero(valor, 2), fontTd), [border: Color.BLACK, bcr: Color.WHITE, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}")
+//                        if (vlrj.size() > 0) {
+//                            valor = vlrj.pop().valor
+//                        } else {
+//                            println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}"
+//                            valor = -1
+//                        }
+//                        addCellTabla(tablaB0, new Paragraph(numero(valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                    }
+//                }
 
             }
         }
@@ -406,8 +444,8 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaB0, new Paragraph("TOTALES", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaB0, new Paragraph(numero(totalCoef), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         periodos.each { per ->
-            if(per.fechaIncio<=planillaDeAnticipo.fechaPresentacion && per.fechaFin>=planillaDeAnticipo.fechaPresentacion) {
-                addCellTabla(tablaB0, new Paragraph(numero(totalAnticipo), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+            if(per.periodoReajuste) {
+                addCellTabla(tablaB0, new Paragraph(numero(per.b0Reajuste), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
             }else{
                 addCellTabla(tablaB0, new Paragraph(numero(per.total), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
             }
@@ -1292,11 +1330,11 @@ class ReportePlanillas3Controller {
             }
         }
 
-        if(planilla.tipoPlanilla.codigo == "A")
-            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo?.descripcion}", fontTitle1))
-
-        if(planilla.tipoPlanilla.codigo == "P" )
-            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${PeriodoPlanilla.findByPlanilla(planilla).periodo.descripcion}", fontTitle1))
+//        if(planilla.tipoPlanilla.codigo == "A")
+//            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo?.descripcion}", fontTitle1))
+//
+//        if(planilla.tipoPlanilla.codigo == "P" )
+//            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${PeriodoPlanilla.findByPlanilla(planilla).periodo.descripcion}", fontTitle1))
         /* ***************************************************** Fin Detalles *************************************************************/
 
         document.close();
