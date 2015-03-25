@@ -489,7 +489,7 @@ class ReportePlanillas3Controller {
 
 
         PdfPTable tablaMl = new PdfPTable(5);
-        tablaMl.setWidths(arregloEnteros([18, 19, 17, 15, 15, 16]))
+        tablaMl.setWidths(arregloEnteros([18, 27, 24, 15, 16]))
         tablaMl.setWidthPercentage(50);
         tablaMl.setHorizontalAlignment(Element.ALIGN_LEFT)
 
