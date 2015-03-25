@@ -877,6 +877,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         println "encontro periodo anticipo"+perAnticipo
                         if(perAnticipo){
                             def res = preciosService.verificaIndicesPeriodo(contrato,perAnticipo)
+                            println "verficacion de indices "+perAnticipo.descripcion
+                            println "res "+res
                             if(res.size()==0){
                                 //planilla.periodoAnticipo=perAnticipo
                                 it.periodoReajuste=perAnticipo
@@ -892,6 +894,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     println "encontro periodo avance"+perReajuste
                     if(perReajuste){
                         def res = preciosService.verificaIndicesPeriodo(contrato,perReajuste)
+                        println "verficacion de indices "+perReajuste.descripcion
+                        println "res "+res
                         if(res.size()==0){
                             //planilla.periodoAnticipo=perAnticipo
                             it.periodoReajuste=perReajuste

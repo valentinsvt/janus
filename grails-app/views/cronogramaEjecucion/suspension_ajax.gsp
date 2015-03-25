@@ -25,13 +25,12 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Fecha de fin
+                Fecha de fin (opcional)
             </span>
         </div>
 
         <div class="controls">
-            <elm:datepicker name="fin" class="required dateEC" onClose="updateDias"/>
-            <span class="mandatory">*</span>
+            <elm:datepicker name="fin" class="dateEC" onClose="updateDias"/>
 
             <p class="help-block">No incluido</p>
 

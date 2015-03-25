@@ -8,357 +8,411 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-    <head>
-        <meta name="layout" content="main">
+<head>
+    <meta name="layout" content="main">
 
 
-        <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
-        <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
+    <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
+    <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
 
-        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
-        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'custom-methods.js')}"></script>
-        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'custom-methods.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
 
-        <script src="${resource(dir: 'js/jquery/i18n', file: 'jquery.ui.datepicker-es.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/i18n', file: 'jquery.ui.datepicker-es.js')}"></script>
 
-        <link href="${resource(dir: 'css', file: 'cronograma.css')}" rel="stylesheet">
-        <title>Cronograma ejecución</title>
-    </head>
+    <link href="${resource(dir: 'css', file: 'cronograma.css')}" rel="stylesheet">
+    <title>Cronograma ejecución</title>
+</head>
 
-    <body>
-        <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
+<body>
+<g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
 
-        <div class="tituloTree">
-            Cronograma de ejecución de la obra ${obra.descripcion} (${meses} mes${meses == 1 ? "" : "es"})
-        </div>
+<div class="tituloTree">
+    Cronograma de ejecución de la obra ${obra.descripcion} (${meses} mes${meses == 1 ? "" : "es"})
+</div>
 
-        <div class="btn-toolbar hide" id="toolbar">
-            <div class="btn-group">
-                <a href="${g.createLink(controller: 'contrato', action: 'verContrato', params: [contrato: contrato?.id])}" class="btn btn-ajax btn-new" id="atras" rel="tooltip" title="Regresar al contrato">
-                    <i class="icon-arrow-left"></i>
-                    Regresar
+<div class="btn-toolbar hide" id="toolbar">
+    <div class="btn-group">
+        <a href="${g.createLink(controller: 'contrato', action: 'verContrato', params: [contrato: contrato?.id])}" class="btn btn-ajax btn-new" id="atras" rel="tooltip" title="Regresar al contrato">
+            <i class="icon-arrow-left"></i>
+            Regresar
+        </a>
+    </div>
+
+    <g:if test="${meses > 0}">
+        <div class="btn-group">
+            <g:if test="${suspensiones.size() == 0}">
+                <a href="#" class="btn btn-info" id="btnAmpl">
+                    <i class="icon-resize-full"></i>
+                    Ampliación
                 </a>
-            </div>
-
-            <g:if test="${meses > 0}">
-                <div class="btn-group">
-                    <a href="#" class="btn btn-info" id="btnAmpl">
-                        <i class="icon-resize-full"></i>
-                        Ampliación
-                    </a>
-                    <a href="#" class="btn btn-info" id="btnSusp">
-                        <i class="icon-resize-small"></i>
-                        Suspensión
-                    </a>
-                    <a href="#" class="btn btn-info" id="btnModif">
-                        <i class="icon-retweet"></i>
-                        Modificación
-                    </a>
-                    %{--<a href="#" class="btn btn-info" id="btnFecha">--}%
-                    %{--<i class="icon-calendar"></i>--}%
-                    %{--Cambiar fecha de fin--}%
-                    %{--</a>--}%
-                    %{--<a href="#" class="btn btn-danger disabled" id="btnDelSusp">--}%
-                    %{--<i class="icon-trash"></i>--}%
-                    %{--Eliminar Suspensión--}%
-                    %{--</a>--}%
-                </div>
-
-            %{--<div class="btn-group">--}%
-            %{--<a href="#" class="btn btn-info disabled" id="btnCambio">--}%
-            %{--<i class="icon-exchange"></i>--}%
-            %{--Modificar--}%
-            %{--</a>--}%
-            %{--</div>--}%
-
-            %{--<div class="btn-group">--}%
-            %{--<a href="#" class="btn" id="btnGrafico">--}%
-            %{--<i class="icon-bar-chart"></i>--}%
-            %{--Gráficos de avance--}%
-            %{--</a>--}%
-            %{--<a href="#" class="btn" id="btnGraficoEco">--}%
-            %{--<i class="icon-bar-chart"></i>--}%
-            %{--Gráfico de avance económico--}%
-            %{--</a>--}%
-            %{--<a href="#" class="btn" id="btnGraficoFis">--}%
-            %{--<i class="icon-bar-chart"></i>--}%
-            %{--Gráfico de avance físico--}%
-            %{--</a>--}%
-            %{--<g:link action="excel" class="btn" id="${obra.id}">--}%
-            %{--<i class="icon-table"></i>--}%
-            %{--Exportar a Excel--}%
-            %{--</g:link>--}%
-            %{--</div>--}%
+                <a href="#" class="btn btn-info" id="btnModif">
+                    <i class="icon-retweet"></i>
+                    Modificación
+                </a>
+                <a href="#" class="btn btn-info" id="btnSusp">
+                    <i class="icon-resize-small"></i>
+                    Suspensión
+                </a>
             </g:if>
+            <g:else>
+                <a href="#" class="btn btn-info" id="btnEndSusp">
+                    <i class="icon-resize-small"></i>
+                    Terminar Suspensión
+                </a>
+            </g:else>
+        %{--<a href="#" class="btn btn-info" id="btnFecha">--}%
+        %{--<i class="icon-calendar"></i>--}%
+        %{--Cambiar fecha de fin--}%
+        %{--</a>--}%
+        %{--<a href="#" class="btn btn-danger disabled" id="btnDelSusp">--}%
+        %{--<i class="icon-trash"></i>--}%
+        %{--Eliminar Suspensión--}%
+        %{--</a>--}%
         </div>
 
-        <div>
-            La ruta crítica se muestra con los rubros marcados en amarillo
-        </div>
+    %{--<div class="btn-group">--}%
+    %{--<a href="#" class="btn btn-info disabled" id="btnCambio">--}%
+    %{--<i class="icon-exchange"></i>--}%
+    %{--Modificar--}%
+    %{--</a>--}%
+    %{--</div>--}%
 
-        <div id="divTabla">
+    %{--<div class="btn-group">--}%
+    %{--<a href="#" class="btn" id="btnGrafico">--}%
+    %{--<i class="icon-bar-chart"></i>--}%
+    %{--Gráficos de avance--}%
+    %{--</a>--}%
+    %{--<a href="#" class="btn" id="btnGraficoEco">--}%
+    %{--<i class="icon-bar-chart"></i>--}%
+    %{--Gráfico de avance económico--}%
+    %{--</a>--}%
+    %{--<a href="#" class="btn" id="btnGraficoFis">--}%
+    %{--<i class="icon-bar-chart"></i>--}%
+    %{--Gráfico de avance físico--}%
+    %{--</a>--}%
+    %{--<g:link action="excel" class="btn" id="${obra.id}">--}%
+    %{--<i class="icon-table"></i>--}%
+    %{--Exportar a Excel--}%
+    %{--</g:link>--}%
+    %{--</div>--}%
+    </g:if>
+</div>
 
-        </div>
+<div>
+    La ruta crítica se muestra con los rubros marcados en amarillo
+</div>
 
-        <div class="modal fade hide large" id="modal-forms">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
+<g:if test="${suspensiones.size() != 0}">
+    <div class="alert alert-danger">
+        <strong>La obra se encuentra suspendida desde ${ini*.format("dd-MM-yyyy")}</strong>
+    </div>
+</g:if>
 
-                <h3 id="modalTitle-forms"></h3>
-            </div>
+<div id="divTabla">
 
-            <div class="modal-body" id="modalBody-forms">
+</div>
 
-            </div>
+<div class="modal fade hide large" id="modal-forms">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
 
-            <div class="modal-footer" id="modalFooter-forms">
-            </div>
-        </div>
+        <h3 id="modalTitle-forms"></h3>
+    </div>
+
+    <div class="modal-body" id="modalBody-forms">
+
+    </div>
+
+    <div class="modal-footer" id="modalFooter-forms">
+    </div>
+</div>
 
 
-        <script type="text/javascript">
-            function daydiff(first, second) {
-                return (second - first) / (1000 * 60 * 60 * 24)
+<script type="text/javascript">
+    function daydiff(first, second) {
+        return (second - first) / (1000 * 60 * 60 * 24)
+    }
+
+    function updateDias() {
+        var ini = $("#ini").datepicker("getDate");
+        var fin = $("#fin").datepicker("getDate");
+        if (ini && fin) {
+            var dif = daydiff(ini, fin);
+            if (dif < 0) {
+                dif = 0;
             }
+            $("#diasSuspension").text(dif + " día" + (dif == 1 ? "" : "s"));
+        }
+        if (ini) {
+            $("#fin").datepicker("option", "minDate", ini.add(1).days());
+        }
+        if (fin) {
+            $("#inicio").datepicker("option", "maxDate", fin.add(-1).days());
+        }
+    }
 
-            function updateDias() {
-                var ini = $("#ini").datepicker("getDate");
-                var fin = $("#fin").datepicker("getDate");
-                if (ini && fin) {
-                    var dif = daydiff(ini, fin);
-                    if (dif < 0) {
-                        dif = 0;
-                    }
-                    $("#diasSuspension").text(dif + " día" + (dif == 1 ? "" : "s"));
-                }
-                if (ini) {
-                    $("#fin").datepicker("option", "minDate", ini.add(1).days());
-                }
-                if (fin) {
-                    $("#inicio").datepicker("option", "maxDate", fin.add(-1).days());
-                }
-            }
-
-            function validarNum(ev) {
-                /*
-                 48-57      -> numeros
-                 96-105     -> teclado numerico
-                 188        -> , (coma)
-                 190        -> . (punto) teclado
-                 110        -> . (punto) teclado numerico
-                 8          -> backspace
-                 46         -> delete
-                 9          -> tab
-                 37         -> flecha izq
-                 39         -> flecha der
-                 */
-                return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
-                        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
 //                        ev.keyCode == 190 || ev.keyCode == 110 ||
-                        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
-                        ev.keyCode == 37 || ev.keyCode == 39);
-            }
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
 
-            function updateTabla() {
-                var divLoad = $("<div style='text-align: center;'></div>").html(spinnerBg).append("<br/>Cargando...Por favor espere...");
-                $("#toolbar").hide();
-                $("#divTabla").html(divLoad);
+    function updateTabla() {
+        var divLoad = $("<div style='text-align: center;'></div>").html(spinnerBg).append("<br/>Cargando...Por favor espere...");
+        $("#toolbar").hide();
+        $("#divTabla").html(divLoad);
+        $.ajax({
+            type    : "POST",
+            url     : "${createLink(action: 'tabla')}",
+            data    : {
+                id : ${obra.id}
+            },
+            success : function (msg) {
+                $("#divTabla").html(msg);
+                $("#toolbar").show();
+            }
+        });
+    }
+
+    function log(msg) {
+        ////console.log(msg);
+    }
+
+    $(function () {
+        updateTabla();
+    });
+
+    $(function () {
+        $("#btnCambio").click(function () {
+            if (!$(this).hasClass("disabled")) {
+                var $row = $(".item_row.rowSelected");
+                var vol = $row.data("vol");
+
                 $.ajax({
                     type    : "POST",
-                    url     : "${createLink(action: 'tabla')}",
+                    url     : "${createLink(action:'modificarVolumen')}",
                     data    : {
-                        id : ${obra.id}
+                        vol : vol
                     },
                     success : function (msg) {
-                        $("#divTabla").html(msg);
-                        $("#toolbar").show();
-                    }
-                });
-            }
+                        var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
-            function log(msg) {
-                ////console.log(msg);
-            }
-
-            $(function () {
-                updateTabla();
-            });
-
-            $(function () {
-                $("#btnCambio").click(function () {
-                    if (!$(this).hasClass("disabled")) {
-                        var $row = $(".item_row.rowSelected");
-                        var vol = $row.data("vol");
-
-                        $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(action:'modificarVolumen')}",
-                            data    : {
-                                vol : vol
-                            },
-                            success : function (msg) {
-                                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                                btnSave.click(function () {
-                                    if ($("#frmSave-modificacion").valid()) {
-                                        btnSave.replaceWith(spinner);
-                                        %{--$.ajax({--}%
-                                        %{--type    : "POST",--}%
-                                        %{--url     : "${createLink(action:'ampliacion')}",--}%
-                                        %{--data    : {--}%
-                                        %{--obra : "${obra.id}",--}%
-                                        %{--dias : $("#dias").val()--}%
-                                        %{--},--}%
-                                        %{--success : function (msg) {--}%
-                                        %{--$("#modal-forms").modal("hide");--}%
-                                        %{--updateTabla();--}%
-                                        %{--}--}%
-                                        %{--});--}%
-                                    }
-                                    return false;
-                                });
-
-                                $("#modalTitle-forms").html("Modificación");
-                                $("#modalBody-forms").html(msg);
-                                $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
-                                $("#modal-forms").modal("show");
+                        btnSave.click(function () {
+                            if ($("#frmSave-modificacion").valid()) {
+                                btnSave.replaceWith(spinner);
+                                %{--$.ajax({--}%
+                                %{--type    : "POST",--}%
+                                %{--url     : "${createLink(action:'ampliacion')}",--}%
+                                %{--data    : {--}%
+                                %{--obra : "${obra.id}",--}%
+                                %{--dias : $("#dias").val()--}%
+                                %{--},--}%
+                                %{--success : function (msg) {--}%
+                                %{--$("#modal-forms").modal("hide");--}%
+                                %{--updateTabla();--}%
+                                %{--}--}%
+                                %{--});--}%
                             }
+                            return false;
                         });
 
-                    }
-                    return false;
-                });
-
-                $("#btnAmpl").click(function () {
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'ampliacion_ajax')}",
-                        success : function (msg) {
-                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                            btnSave.click(function () {
-                                if ($("#frmSave-ampliacion").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                    var data = $("#frmSave-ampliacion").serialize();
-                                    data += "&obra=${obra.id}";
-                                    $.ajax({
-                                        type    : "POST",
-                                        url     : "${createLink(action:'ampliacion')}",
-                                        data    : data,
-                                        success : function (msg) {
-                                            $("#modal-forms").modal("hide");
-                                            updateTabla();
-                                        }
-                                    });
-                                }
-                                return false;
-                            });
-
-                            $("#modalTitle-forms").html("Ampliación");
-                            $("#modalBody-forms").html(msg);
-                            $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
-                            $("#modal-forms").modal("show");
-
-                        }
-                    });
-                    return false;
-                });
-                $("#btnSusp").click(function () {
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'suspension_ajax')}",
-                        data    : {
-                            obra : "${obra.id}"
-                        },
-                        success : function (msg) {
-                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                            btnSave.click(function () {
-                                if ($("#frmSave-suspension").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                    var data = $("#frmSave-suspension").serialize();
-                                    data += "&obra=${obra.id}";
-                                    $.ajax({
-                                        type    : "POST",
-                                        url     : "${createLink(action:'suspension')}",
-                                        data    : data,
-                                        success : function (msg) {
-//                                            ////console.log(msg);
-                                            $("#modal-forms").modal("hide");
-                                            updateTabla();
-                                        }
-                                    });
-                                }
-                                return false;
-                            });
-
-                            $("#modalTitle-forms").html("Suspensión");
-                            $("#modalBody-forms").html(msg);
-                            $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
-                            $("#modal-forms").modal("show");
-
-                        }
-                    });
-                    return false;
-                });
-
-                $("#btnModif").click(function () {
-                    var vol = $(".rowSelected").first().data("vol");
-                    if (vol) {
-                        $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(action:'modificacion_ajax')}",
-                            data    : {
-                                obra     : "${obra.id}",
-                                contrato : "${contrato.id}",
-                                vol      : vol
-                            },
-                            success : function (msg) {
-                                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                                btnSave.click(function () {
-                                    btnSave.replaceWith(spinner);
-                                    var data = "obra=${obra.id}";
-                                    $(".tiny").each(function () {
-                                        var tipo = $(this).data("tipo");
-                                        var val = parseFloat($(this).val()) + parseFloat($(this).data("val1"));
-                                        var crono = $(this).data("id");
-                                        var periodo = $(this).data("id2");
-                                        var vol = $(this).data("id3");
-                                        data += "&" + (tipo + "=" + val + "_" + periodo + "_" + vol + "_" + crono);
-                                    });
-                                    $.ajax({
-                                        type    : "POST",
-                                        url     : "${createLink(action:'modificacion')}",
-                                        data    : data,
-                                        success : function (msg) {
-//                                            console.log(msg);
-                                            $("#modal-forms").modal("hide");
-                                            updateTabla();
-                                        }
-                                    });
-                                    return false;
-                                });
-
-                                $("#modalTitle-forms").html("Modificación");
-                                $("#modalBody-forms").html(msg);
-                                $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
-                                $("#modal-forms").modal("show");
-                            }
-                        });
-                    } else {
-                        var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
                         $("#modalTitle-forms").html("Modificación");
-                        $("#modalBody-forms").html("Seleccione el rubro a modificar haciendo click sobre la fila adecuada (la fila tomará un color azul - o verde si es parte de la ruta crítica)");
-                        $("#modalFooter-forms").html("").append(btnCancel);
+                        $("#modalBody-forms").html(msg);
+                        $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
                         $("#modal-forms").modal("show");
                     }
-                    return false;
                 });
+
+            }
+            return false;
+        });
+
+        $("#btnAmpl").click(function () {
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'ampliacion_ajax')}",
+                success : function (msg) {
+                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                    btnSave.click(function () {
+                        if ($("#frmSave-ampliacion").valid()) {
+                            btnSave.replaceWith(spinner);
+                            var data = $("#frmSave-ampliacion").serialize();
+                            data += "&obra=${obra.id}";
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'ampliacion')}",
+                                data    : data,
+                                success : function (msg) {
+                                    $("#modal-forms").modal("hide");
+                                    updateTabla();
+                                }
+                            });
+                        }
+                        return false;
+                    });
+
+                    $("#modalTitle-forms").html("Ampliación");
+                    $("#modalBody-forms").html(msg);
+                    $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                    $("#modal-forms").modal("show");
+
+                }
+            });
+            return false;
+        });
+
+        $("#btnEndSusp").click(function() {
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'terminaSuspension_ajax')}",
+                data    : {
+                    obra : "${obra.id}"
+                },
+                success : function (msg) {
+                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                    btnSave.click(function () {
+                        if ($("#frmSave-terminaSuspension").valid()) {
+                            btnSave.replaceWith(spinner);
+                            var data = $("#frmSave-terminaSuspension").serialize();
+                            data += "&obra=${obra.id}";
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'terminaSuspension')}",
+                                data    : data,
+                                success : function (msg) {
+//                                            ////console.log(msg);
+                                    $("#modal-forms").modal("hide");
+                                    location.reload(true);
+                                }
+                            });
+                        }
+                        return false;
+                    });
+
+                    $("#modalTitle-forms").html("Terminar Suspensión");
+                    $("#modalBody-forms").html(msg);
+                    $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                    $("#modal-forms").modal("show");
+
+                }
+            });
+        });
+
+        $("#btnSusp").click(function () {
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'suspension_ajax')}",
+                data    : {
+                    obra : "${obra.id}"
+                },
+                success : function (msg) {
+                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                    btnSave.click(function () {
+                        if ($("#frmSave-suspension").valid()) {
+                            btnSave.replaceWith(spinner);
+                            var data = $("#frmSave-suspension").serialize();
+                            data += "&obra=${obra.id}";
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'suspensionNueva')}",
+                                data    : data,
+                                success : function (msg) {
+//                                            ////console.log(msg);
+                                    $("#modal-forms").modal("hide");
+                                    location.reload(true);
+                                }
+                            });
+                        }
+                        return false;
+                    });
+
+                    $("#modalTitle-forms").html("Suspensión");
+                    $("#modalBody-forms").html(msg);
+                    $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                    $("#modal-forms").modal("show");
+
+                }
+            });
+            return false;
+        });
+
+        $("#btnModif").click(function () {
+            var vol = $(".rowSelected").first().data("vol");
+            if (vol) {
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(action:'modificacion_ajax')}",
+                    data    : {
+                        obra     : "${obra.id}",
+                        contrato : "${contrato.id}",
+                        vol      : vol
+                    },
+                    success : function (msg) {
+                        var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                        btnSave.click(function () {
+                            btnSave.replaceWith(spinner);
+                            var data = "obra=${obra.id}";
+                            $(".tiny").each(function () {
+                                var tipo = $(this).data("tipo");
+                                var val = parseFloat($(this).val()) + parseFloat($(this).data("val1"));
+                                var crono = $(this).data("id");
+                                var periodo = $(this).data("id2");
+                                var vol = $(this).data("id3");
+                                data += "&" + (tipo + "=" + val + "_" + periodo + "_" + vol + "_" + crono);
+                            });
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'modificacion')}",
+                                data    : data,
+                                success : function (msg) {
+//                                            console.log(msg);
+                                    $("#modal-forms").modal("hide");
+                                    updateTabla();
+                                }
+                            });
+                            return false;
+                        });
+
+                        $("#modalTitle-forms").html("Modificación");
+                        $("#modalBody-forms").html(msg);
+                        $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                        $("#modal-forms").modal("show");
+                    }
+                });
+            } else {
+                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
+                $("#modalTitle-forms").html("Modificación");
+                $("#modalBody-forms").html("Seleccione el rubro a modificar haciendo click sobre la fila adecuada (la fila tomará un color azul - o verde si es parte de la ruta crítica)");
+                $("#modalFooter-forms").html("").append(btnCancel);
+                $("#modal-forms").modal("show");
+            }
+            return false;
+        });
 
 //                $("#btnDelSusp").click(function () {
 //                    if (!$(this).hasClass("disabled")) {
@@ -386,46 +440,46 @@
 //                    return false;
 //                });
 
-                $("#btnFecha").click(function () {
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'cambioFecha_ajax')}",
-                        data    : {
-                            obra : "${obra.id}"
-                        },
-                        success : function (msg) {
-                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+        $("#btnFecha").click(function () {
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'cambioFecha_ajax')}",
+                data    : {
+                    obra : "${obra.id}"
+                },
+                success : function (msg) {
+                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
-                            btnSave.click(function () {
-                                if ($("#frmSave-suspension").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                    $.ajax({
-                                        type    : "POST",
-                                        url     : "${createLink(action:'cambioFecha')}",
-                                        data    : {
-                                            obra  : "${obra.id}",
-                                            fecha : $("#fecha").val()
-                                        },
-                                        success : function (msg) {
-                                            //                                            ////console.log(msg);
-                                            $("#modal-forms").modal("hide");
-                                            updateTabla();
-                                        }
-                                    });
+                    btnSave.click(function () {
+                        if ($("#frmSave-suspension").valid()) {
+                            btnSave.replaceWith(spinner);
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'cambioFecha')}",
+                                data    : {
+                                    obra  : "${obra.id}",
+                                    fecha : $("#fecha").val()
+                                },
+                                success : function (msg) {
+                                    //                                            ////console.log(msg);
+                                    $("#modal-forms").modal("hide");
+                                    updateTabla();
                                 }
-                                return false;
                             });
-
-                            $("#modalTitle-forms").html("Cambio de fecha");
-                            $("#modalBody-forms").html(msg);
-                            $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
-                            $("#modal-forms").modal("show");
                         }
+                        return false;
                     });
-                    return false;
-                });
+
+                    $("#modalTitle-forms").html("Cambio de fecha");
+                    $("#modalBody-forms").html(msg);
+                    $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                    $("#modal-forms").modal("show");
+                }
             });
-        </script>
-    </body>
+            return false;
+        });
+    });
+</script>
+</body>
 </html>

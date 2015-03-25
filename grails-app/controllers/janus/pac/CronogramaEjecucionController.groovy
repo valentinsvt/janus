@@ -63,6 +63,307 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         return [min: minDate]
     }
 
+
+    def terminaSuspension_ajax() {
+        def obra = Obra.get(params.obra)
+        def fi = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            isNull("fechaFin")
+            projections {
+                max("fechaInicio")
+            }
+        }
+
+        def minDate = fi.first().format("yyyy") + "," + (fi.first().format("MM").toInteger() - 1) + "," + fi.first().format("dd")
+        return [min: minDate]
+    }
+
+    /* Agregado el 25-03-2015 xq quieren hacer suspensiones sin fecha de fin: se divide el proceso en 2 partes:
+            primero hace una modificacion tipo suspension sin fecha de fin y con -1 en dias
+            segundo el action terminaSuspension modifica la modificacino para ponerle fecha fin y dias y recalcula las fechas de periodos del cronograma
+     */
+    def suspensionNueva() {
+        println "AQUIIIIII"
+        def obra = Obra.get(params.obra)
+        def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
+
+        def fin = null, finSusp = null, dias = -1
+
+
+        def ini = new Date().parse("dd-MM-yyyy", params.ini)
+        if(params.fin) {
+            fin = new Date().parse("dd-MM-yyyy", params.fin)
+
+            finSusp = fin
+            use(TimeCategory) {
+                finSusp = fin - 1.days
+            }
+            dias = finSusp - ini + 1
+        }
+
+        def modificacion = new Modificaciones([
+                obra: obra,
+                tipo: "S",
+                dias: dias,
+                fecha: new Date(),
+                fechaInicio: ini,
+                fechaFin: finSusp,
+                motivo: params.motivo,
+                observaciones: params.observaciones,
+                memo: params.memo.toUpperCase()
+        ])
+
+        if (!modificacion.save(flush: true)) {
+            println "error modificacion: " + modificacion.errors
+        } else {
+            println "modificacion "+ modificacion.id+"   ini: "+modificacion.fechaInicio+   "    fin: "+modificacion.fechaFin+"     dias: "+modificacion.dias
+        }
+        render "OK"
+    }
+
+    /* Agregado el 25-03-2015 xq quieren hacer suspensiones sin fecha de fin: se divide el proceso en 2 partes:
+            primero el action suspensionNueva hace una modificacion tipo suspension sin fecha de fin y con -1 en dias
+            segundo modifica la modificacino para ponerle fecha fin y dias y recalcula las fechas de periodos del cronograma
+     */
+    def terminaSuspension() {
+        def obra = Obra.get(params.obra)
+        def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
+        def ini = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            or {
+                isNull("fechaFin")
+                gt("fechaFin", new Date().clearTime())
+            }
+            projections {
+                min("fechaInicio")
+            }
+        }.first()
+        def suspensiones = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            isNull("fechaFin")
+        }
+
+        def fin = new Date().parse("dd-MM-yyyy", params.fin)
+
+        def finSusp = fin
+        use(TimeCategory) {
+            finSusp = fin - 1.days
+        }
+        def errores = ""
+
+        //1ro cambia fecha fin y cant dias para todas las suspensiones
+        suspensiones.each {sus->
+            def dias = finSusp - sus.fechaInicio + 1
+            sus.dias = dias
+            sus.fechaFin = finSusp
+            if(params.observaciones && params.observaciones.trim()!="") {
+                sus.observaciones = params.observaciones+"       "+sus.observaciones
+            }
+            if(!sus.save(flush:true)) {
+                errores += renderErrors(bean:sus)
+                println "EEOR EN TEMINAR SUSSPENSION: "+sus.errors
+            }
+        }
+
+        //2do recalcula tdod lo q hacia antes la suspension
+        def num = 1
+
+        def anterior = null
+        def moved = false
+
+        periodos.eachWithIndex { PeriodoEjecucion per, int i ->
+//            println per
+            def nuevoIni, nuevoFin
+            if (per.fechaInicio <= ini && per.fechaFin >= ini) {
+//                println "\tEste es el q hay q dividir en 2 partes"
+//                println "\t" + per.fechaInicio + " " + per.fechaFin
+
+                def dias1 = ini - per.fechaInicio
+
+                //crea el periodo de tipo suspension con fecha inicio y fecha fin
+                def suspension = new PeriodoEjecucion([
+                        obra: obra,
+                        numero: num,
+                        tipo: "S",
+                        fechaInicio: ini,
+                        fechaFin: finSusp
+                ])
+                if (!suspension.save(flush: true)) {
+                    println "Error al guardar la suspension: " + suspension.errors
+                }
+
+//                println "\t\tPARTE 1"
+//                println "\t\tdias: " + dias1
+                if (dias1 == 0) {
+//                    println "\t\tson 0 dias de diferencia: la suspension es antes de q empiece la obra: se mueven las fechas y no se divide en 2"
+                    def diasPeriodo = per.fechaFin - per.fechaInicio
+                    nuevoIni = fin
+                    use(TimeCategory) {
+                        nuevoFin = nuevoIni + diasPeriodo.days
+                    }
+
+                    per.fechaInicio = nuevoIni
+                    per.fechaFin = nuevoFin
+                    if (!per.save(flush: true)) {
+                        println "error 1: " + per.errors
+                    }
+//                    println "\t\tSUSPENSION: "
+//                    println "\t\t inicio: " + ini
+//                    println "\t\t fin: " + finSusp
+//                    println "\t\tPERIODO:"
+//                    println "\t\t inicio: " + nuevoIni
+//                    println "\t\t fin: " + nuevoFin
+                    anterior = nuevoFin
+
+                } else {
+                    // numero de dias que tiene el periodo: este numero tiene que quedarse uigual, pero separado
+                    def diasPeriodo = per.fechaFin - per.fechaInicio
+//                    println "\t\tes al menos 1 dia de diferencia: se divide el periodo en 2, con la suspension en medio"
+
+                    // primera parte: la fecha de inicio se queda igual, la fecha de fin es un dia antes de la suspension. se calculan los dias para dividir los valores proporcionalemente
+//                    println "\t\t\tPARTE 1:"
+                    nuevoIni = per.fechaInicio
+                    use(TimeCategory) {
+                        nuevoFin = ini - 1.days
+                    }
+                    def diasParte1 = nuevoFin - nuevoIni
+//                    println "\t\t inicio: " + nuevoIni
+//                    println "\t\t fin: " + nuevoFin
+//                    println "\t\t dias: " + diasParte1
+
+                    per.fechaInicio = nuevoIni
+                    per.fechaFin = nuevoFin
+                    if (!per.save(flush: true)) {
+                        println "error 2: " + per.errors
+                    }
+
+                    // aqui va la suspension
+//                    println "\t\t\tSUSPENSION: "
+//                    println "\t\t inicio: " + ini
+//                    println "\t\t fin: " + finSusp
+
+                    def diasParte2 = diasPeriodo - diasParte1
+
+                    // segunda parte: la fecha de inicio es la del fin de la suspension, para la de fin se suman los dias q le faltan
+//                    println "\t\t\tPARTE 2: "
+                    def nuevoIni2 = fin
+                    def nuevoFin2
+                    use(TimeCategory) {
+                        nuevoFin2 = nuevoIni2 + diasParte2.days
+                    }
+//                    println "\t\t inicio: " + nuevoIni2
+//                    println "\t\t fin: " + nuevoFin2
+//                    println "\t\t dias: " + diasParte2
+
+//                    println "\t\t\tTOTAL: " + (diasParte1 + diasParte2)
+                    anterior = nuevoFin2
+
+                    //crea el periodo de tipo periodo con fecha inicio y fecha fin: la otra parte del periodo recortado
+                    def periodo2 = new PeriodoEjecucion([
+                            obra: obra,
+                            numero: per.numero,
+                            tipo: "P",
+                            fechaInicio: nuevoIni2,
+                            fechaFin: nuevoFin2
+                    ])
+                    if (!periodo2.save(flush: true)) {
+                        println "Error al guardar el periodo2: " + periodo2.errors
+                    }
+
+//                    println "CRONOGRAMAS AFECTADOS POR LA DIVISION"
+                    // itera sobre los cronogramaEjecucion afectados por per: hay q dividir proporcionalmente los valoresy crear otro cronogramaEjecucion con la otra parte
+                    CronogramaEjecucion.findAllByPeriodo(per).eachWithIndex { CronogramaEjecucion crono, int j ->
+//                        println crono
+//                        println "   ..original.."
+//                        println "   cantidad: " + crono.cantidad
+//                        println "   porcentaje: " + crono.porcentaje
+//                        println "   precio: " + crono.precio
+//                        println "   en " + diasPeriodo + " dias"
+
+                        def cantidad1, cantidad2, porcentaje1, porcentaje2, precio1, precio2
+                        cantidad1 = (crono.cantidad * diasParte1) / diasPeriodo
+                        cantidad2 = (crono.cantidad * diasParte2) / diasPeriodo
+                        porcentaje1 = (crono.porcentaje * diasParte1) / diasPeriodo
+                        porcentaje2 = (crono.porcentaje * diasParte2) / diasPeriodo
+                        precio1 = (crono.precio * diasParte1) / diasPeriodo
+                        precio2 = (crono.precio * diasParte2) / diasPeriodo
+
+                        crono.cantidad = cantidad1
+                        crono.porcentaje = porcentaje1
+                        crono.precio = precio1
+                        if (!crono.save(flush: true)) {
+                            println "error 3: " + crono.errors
+                        }
+
+                        def crono2 = new CronogramaEjecucion([
+                                volumenObra: crono.volumenObra,
+                                periodo: periodo2,
+                                precio: precio2,
+                                porcentaje: porcentaje2,
+                                cantidad: cantidad2
+                        ])
+                        if (!crono2.save(flush: true)) {
+                            println "error 4: " + crono2.errors
+                        }
+
+//                        println "   >> parte 1 <<"
+//                        println "   en " + diasParte1 + " dias"
+//                        println "   cantidad: " + cantidad1
+//                        println "   porcentaje: " + porcentaje1
+//                        println "   precio: " + precio1
+//                        println "   >> parte 2 <<"
+//                        println "   en " + diasParte2 + " dias"
+//                        println "   cantidad: " + cantidad2
+//                        println "   porcentaje: " + porcentaje2
+//                        println "   precio: " + precio2
+//                        println "   == total =="
+//                        println "   en " + (diasParte1 + diasParte2) + " dias"
+//                        println "   cantidad: " + (cantidad1 + cantidad2)
+//                        println "   porcentaje: " + (porcentaje1 + porcentaje2)
+//                        println "   precio: " + (precio1 + precio2)
+                    }
+
+                }
+                moved = true
+            } else {
+                if (!moved) {
+                    if (per.tipo == "S") {
+                        num++
+                    }
+                }
+                if (moved) {
+                    //                    println "\tEste solo se recorren las fechas de inicio y de fin"
+                    def diasPeriodo = per.fechaFin - per.fechaInicio
+//                    println "......" + anterior
+                    use(TimeCategory) {
+                        nuevoIni = anterior + 1.days
+                    }
+                    use(TimeCategory) {
+                        nuevoFin = nuevoIni + diasPeriodo.days
+                    }
+
+                    per.fechaInicio = nuevoIni
+                    per.fechaFin = nuevoFin
+                    if (!per.save(flush: true)) {
+                        println "error 1: " + per.errors
+                    }
+//                    println "\t de " + per.fechaInicio + " " + per.fechaFin
+//                    println "\t a " + nuevoIni + " " + nuevoFin
+                    anterior = nuevoFin
+                } else {
+//                    println "\tEste periodo esta antes de la suspension: no se le hace nada"
+                }
+            }
+//            println "____________________________________________________________________________________"
+        }
+
+        render "OK"
+    }
+
+
     def suspension() {
 //        println params
 
@@ -1527,7 +1828,40 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             } //detalles.each
         } //if cronogramas == 0
 
-        return [obra: obra, contrato: contrato]
+        /*
+          def modificacion = new Modificaciones([
+                obra: obra,
+                tipo: "S",
+                dias: dias,
+                fecha: new Date(),
+                fechaInicio: ini,
+                fechaFin: finSusp,
+                motivo: params.motivo,
+                observaciones: params.observaciones,
+                memo: params.memo.toUpperCase()
+        ])
+         */
+        def suspensiones = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            or {
+                isNull("fechaFin")
+                and {
+                    le("fechaInicio", new Date().clearTime())
+                    gt("fechaFin", new Date().clearTime())
+                }
+            }
+        }
+        def ini = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            isNull("fechaFin")
+            projections {
+                min("fechaInicio")
+            }
+        }
+//        println "suspensiones "+suspensiones
+        return [obra: obra, contrato: contrato, suspensiones:suspensiones, ini:ini]
     }
 
     def index_old() {
