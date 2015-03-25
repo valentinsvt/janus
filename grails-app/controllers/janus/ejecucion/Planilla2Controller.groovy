@@ -1269,7 +1269,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         bodyMultaRetraso += "<th class='tal'>${fechaConFormato(p.fechaIncio, 'MMM-yy')}</th>"
                         bodyMultaRetraso += "<td class='number'>${numero(p.parcialCronograma, 2)}</td>"
                         bodyMultaRetraso += "<td class='number'>${numero(p.parcialPlanilla, 2)}</td>"
-                        bodyMultaRetraso += "<td class='number'>${numero(retraso, 0)}</td>"
+//                        bodyMultaRetraso += "<td class='number'>${numero(retraso, 0)}</td>"
                         bodyMultaRetraso += "<td class='number'>${numero(prmlMultaIncumplimiento, 0)} x 1000</td>"
 
 
@@ -1530,7 +1530,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaMl += '<th>Mes y año</th>'
             tablaMl += '<th>Cronograma</th>'
             tablaMl += '<th>Planillado</th>'
-            tablaMl += '<th>Retraso</th>'
+//            tablaMl += '<th>Retraso</th>'
             tablaMl += '<th>Multa</th>'
             tablaMl += '</tr>'
             tablaMl += '</thead>'
@@ -1542,7 +1542,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaMl += '<th>TOTAL</th>'
             tablaMl += "<th style='text-align:right'>${numero(totCrono, 2)}</th>"
             tablaMl += "<th style='text-align:right'>${numero(totPlan, 2)}</th>"
-            tablaMl += "<th style='text-align:right'>Multa</th>"
+//            tablaMl += "<th style='text-align:right'>Multa</th>"
             tablaMl += "<th class='number'>${numero(multaInc,2)}</th>"
             tablaMl += '</tr>'
             tablaMl += '</tfoot>'
