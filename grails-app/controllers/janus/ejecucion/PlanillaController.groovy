@@ -1674,10 +1674,32 @@ class PlanillaController extends janus.seguridad.Shield {
             fechaMax = new Date()
 //        println "fecha max " + fechaMax
 
+        def suspensiones = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            le("fechaInicio", new Date().clearTime())
+            or {
+                isNull("fechaFin")
+                gt("fechaFin", new Date().clearTime())
+            }
+        }
+        def ini = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            le("fechaInicio", new Date().clearTime())
+            or {
+                isNull("fechaFin")
+                gt("fechaFin", new Date().clearTime())
+            }
+            projections {
+                min("fechaInicio")
+            }
+        }
+
         //println "12: " + tiposPlanilla.codigo
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
-                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax]
+                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini]
     }
 
 
