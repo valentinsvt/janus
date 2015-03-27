@@ -162,14 +162,16 @@
     </div>
 
     <div class="span4">
+%{--
         <g:if test="${planillaInstance.id}">
             ${planillaInstance?.numero}
         </g:if>
         <g:else>
+--}%
             <g:textField name="numero" maxlength="30" class="span3 required allCaps"
                          value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
         %{--<span class="uneditable-input span3">${planillaInstance.numero}</span>--}%
-        </g:else>
+        %{--</g:else>--}%
         <p class="help-block ui-helper-hidden"></p>
     </div>
 
