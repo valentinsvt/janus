@@ -121,7 +121,7 @@
             </div>
 
             <div class="btn-group" data-toggle="buttons-radio">
-                <g:link action="coeficientes" id="${obra.id}" params="[tipo: 'p']" class="btn btn-info ${tipo == 'p' ? 'active' : ''} btn-tab">
+                <g:link action="coeficientes" id="${obra.id}" params="[tipo: 'p', sbpr: params.sbpr]" class="btn btn-info ${tipo == 'p' ? 'active' : ''} btn-tab">
                     <i class="icon-cogs"></i>
                     Fórmula polinómica
                 </g:link>

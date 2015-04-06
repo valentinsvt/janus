@@ -83,7 +83,8 @@
         <i class="icon-arrow-left"></i>
         Regresar
     </a>
-    <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btn btn-ajax btn-new btnFormula" params="[obra: obra]" title="Coeficientes">
+    <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btn btn-ajax btn-new btnFormula"
+            params="[obra: obra, sbpr: params.sbpr]" title="Coeficientes">
         <i class="icon-table"></i>
         Fórmula polinómica
     </g:link>
@@ -113,6 +114,8 @@
         Imprimir Desglose
     </a>
 </div>
+
+${params}
 
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0;width: 100%;max-width: 100%;overflow-x: hidden">
     <div style="width: 1060px;overflow-x: auto;max-width: 1050px;" class="scroll-pane">
@@ -169,7 +172,7 @@
         $.ajax({
             type    : "POST",
             url     : "${createLink(action: 'matrizPolinomica',controller: 'matriz')}",
-            data    : "id=${obra}&inicio=" + inicio + "&limit=" + limite,
+            data    : "id=${obra}&inicio=" + inicio + "&limit=" + limite + "&sbpr=${sbpr}",
             success : function (msg) {
 
                 $("#dlgLoad").dialog("close");
@@ -200,7 +203,7 @@
         $.ajax({
             type    : "POST",
             url     : "${createLink(action: 'matrizPolinomica',controller: 'matriz')}",
-            data    : "id=${obra}&inicio=" + inicio + "&limit=" + limite,
+            data    : "id=${obra}&inicio=" + inicio + "&limit=" + limite + "&sbpr=${sbpr}",
             async   : false,
             success : function (msg) {
 
@@ -432,8 +435,12 @@
                 type    : "POST",
                 url     : url,
                 success : function (msg2) {
-                    if (msg2 == "ok" || msg2 == "OK") {
-                        location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra)}";
+                    console.log(msg2)
+                    var arr = msg2.split("_")
+                    var msg_ok = arr[0]
+                    var sbpr = arr[1]
+                    if (msg_ok == "ok" || msg_ok == "OK") {
+                        location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra)}?sbpr="+sbpr;
                     }
                 }
             });

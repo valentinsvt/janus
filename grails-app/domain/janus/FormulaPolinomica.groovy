@@ -4,6 +4,7 @@ class FormulaPolinomica implements Serializable {
     Indice indice
     String numero
     double valor
+    SubPresupuesto subPresupuesto
     static auditable = true
     static mapping = {
         table 'fpob'
@@ -17,6 +18,7 @@ class FormulaPolinomica implements Serializable {
             indice column: 'indc__id'
             numero column: 'fpobnmro'
             valor column: 'fpobvlor'
+            subPresupuesto column: 'sbpr__id'
         }
     }
     static constraints = {
@@ -24,6 +26,7 @@ class FormulaPolinomica implements Serializable {
         numero(size: 1..3, blank: false, attributes: [title: 'numero'])
         valor(blank: true, nullable: true, attributes: [title: 'valor'])
         indice(blank: true, nullable: true, attributes: [title: 'indice'])
+        subPresupuesto(blank: true, nullable: true, attributes: [title: 'subpresupuesto'])
 
     }
 }
