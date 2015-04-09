@@ -413,6 +413,22 @@ class PreciosService {
         return result
      }
 
+    /* retorna el valor total de la obra recalculandola en base a sus VLOB,
+     * rbro_pcun_v2 hace uso de rbro_pcun_v2 que manejo las obras registradas
+     * se puede intentar llamar a este procesopara poner OBRAVLOR antes de ir a reportes -- TODO */
+    def valor_de_obra(obra){
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select sum(totl) total from rbro_pcun_v2(${obra})"
+        def valor = 0.0
+        cn.eachRow(sql.toString()) { r ->
+            valor = r.total
+        }
+        cn.close()
+        return valor
+    }
+
+
     def rbro_pcun_vae(obra){
 
         def cn = dbConnectionService.getConnection()

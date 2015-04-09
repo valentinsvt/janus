@@ -647,6 +647,7 @@ class Reportes2Controller {
             text = text.decodeHTML()
             text = text.replaceAll(/</, /&lt;/);
             text = text.replaceAll(/>/, /&gt;/);
+            text = text.replaceAll(/"/, /&quot;/);
             corregidos += text
         }
 //        println("nombres " +corregidos)
@@ -1019,6 +1020,7 @@ class Reportes2Controller {
                 text = text.decodeHTML()
                 text = text.replaceAll(/</, /&lt;/);
                 text = text.replaceAll(/>/, /&gt;/);
+                text = text.replaceAll(/"/, /&quot;/);
                 corregidos += text
             }
 

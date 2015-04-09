@@ -669,7 +669,7 @@ class ReportesController {
             label = new Label(0, fila, "${i + 1}", times10); sheet.addCell(label);
             label = new Label(1, fila, p.anio.anio, times10); sheet.addCell(label);
             label = new Label(2, fila, p.presupuesto.numero, times10); sheet.addCell(label);
-            label = new Label(3, fila, p.cpp.numero, times10); sheet.addCell(label);
+            label = new Label(3, fila, p.cpp?.numero, times10); sheet.addCell(label);
             label = new Label(4, fila, p.tipoCompra.descripcion, times10); sheet.addCell(label);
             label = new Label(5, fila, p.descripcion, times10); sheet.addCell(label);
             def number = new Number(6, fila, p.cantidad); sheet.addCell(number);

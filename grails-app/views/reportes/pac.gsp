@@ -172,7 +172,7 @@
                             <td style="text-align: center;">${i + 1}</td>
                             <td style="width: 40px;" class="anio">${p.anio.anio}</td>
                             <td class="prsp">${p.presupuesto.numero}</td>
-                            <td class="cpac">${p.cpp.numero}</td>
+                            <td class="cpac">${p.cpp?.numero}</td>
                             <td class="tipo">${p.tipoCompra.descripcion}</td>
                             <td class="desc">${p.descripcion}</td>
                             <td style="text-align: right" class="cant">

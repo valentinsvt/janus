@@ -89,10 +89,10 @@ class Reportes3Controller {
 //        println text
 //            text = text.replaceAll("&lt;", "*lt*")
 //            text = text.replaceAll("&gt;", "*gt*")
-
             text = text.decodeHTML()
             text = text.replaceAll(/</, /&lt;/);
             text = text.replaceAll(/>/, /&gt;/);
+            text = text.replaceAll(/"/, /&quot;/);
 //        println "--------------------------------------------------------------"
 //        text = util.clean(str: text)
 //            text = text.decodeHTML()
@@ -182,6 +182,7 @@ class Reportes3Controller {
             text = text.decodeHTML()
             text = text.replaceAll(/</, /&lt;/);
             text = text.replaceAll(/>/, /&gt;/);
+            text = text.replaceAll(/"/, /&quot;/);
 //        println "--------------------------------------------------------------"
 //        text = util.clean(str: text)
 //            text = text.decodeHTML()
@@ -930,6 +931,7 @@ class Reportes3Controller {
         text = text.decodeHTML()
         text = text.replaceAll(/</, /&lt;/);
         text = text.replaceAll(/>/, /&gt;/);
+        text = text.replaceAll(/"/, /&quot;/);
         rubro.nombre = text
 
         def fecha
@@ -1122,6 +1124,7 @@ class Reportes3Controller {
         text = text.decodeHTML()
         text = text.replaceAll(/</, /&lt;/);
         text = text.replaceAll(/>/, /&gt;/);
+        text = text.replaceAll(/"/, /&quot;/);
         rubro.nombre = text
 
         def fecha
@@ -1407,6 +1410,7 @@ class Reportes3Controller {
                 text = text.decodeHTML()
                 text = text.replaceAll(/</, /&lt;/);
                 text = text.replaceAll(/>/, /&gt;/);
+                text = text.replaceAll(/"/, /&quot;/);
                 corregidos += text
             }
 

@@ -394,7 +394,7 @@ class Reportes4Controller {
 
     def tablaRegistradas () {
 
-//        println("paramsReg" + params)
+        println("paramsReg" + params)
 
         def obras
 
@@ -501,12 +501,13 @@ class Reportes4Controller {
 
         cn = dbConnectionService.getConnection()
 
+        println(sql)
         res = cn.rows(sql.toString())
-//        println(sql)
 //        println(res)
 
         res.each{
 
+/*
             totales = 0
             total1=0
 
@@ -528,10 +529,11 @@ class Reportes4Controller {
 
 
             }
+*/
 
 //           println("--->>" + totalPresupuestoBien)
-            valoresTotales += totalPresupuestoBien
-
+//            valoresTotales += totalPresupuestoBien
+            valoresTotales += preciosService.valor_de_obra(it.id)
         }
 
 //        println("##" + valoresTotales)
