@@ -676,27 +676,17 @@ class Reportes4Controller {
             total1=0
 
             valores =  preciosService.rbro_pcun_v2(it.id)
-
             subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-
             subPres.each { s->
-
                 valores.each {
                     if(it.sbprdscr == s.descripcion){
-
                         totales = it.totl
                         totalPresupuestoBien = (total1 += totales)
                     }
-
-
                 }
-
-
             }
-
 //           println("--->>" + totalPresupuestoBien)
             valoresTotales += totalPresupuestoBien
-
         }
 
 //        println("##" + valoresTotales)
@@ -945,9 +935,9 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(7);
+        PdfPTable tablaRegistradas = new PdfPTable(9);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([14, 35, 18, 8, 30, 10, 10]))
+        tablaRegistradas.setWidths(arregloEnteros([14, 35, 18, 8, 30, 10, 10,14,8]))
 
         addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
@@ -956,7 +946,8 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Requirente", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Doc. Referencia", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
 
         res.eachWithIndex {i,j->
 
@@ -974,18 +965,18 @@ class Reportes4Controller {
                 addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
                         2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
             }else {
-
                 addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
-
             }
 
             addCellTabla(tablaRegistradas, new Paragraph(i.elaborado, times8normal), prmsCellLeft)
-//            addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellLeft)
-
-
+            addCellTabla(tablaRegistradas, new Paragraph(i.ingreso, times8normal), prmsCellLeft)
+            if(i.estado == "R"){
+                addCellTabla(tablaRegistradas, new Paragraph("Registrada", times8normal), prmsCellLeft)
+            }else{
+                addCellTabla(tablaRegistradas, new Paragraph("No Registrada", times8normal), prmsCellLeft)
+            }
 
         }
-
 
         document.add(tablaRegistradas);
         document.close();
@@ -1174,9 +1165,9 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(7);
+        PdfPTable tablaRegistradas = new PdfPTable(9);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([14, 35, 18, 8, 25, 10, 15]))
+        tablaRegistradas.setWidths(arregloEnteros([14, 35, 18, 8, 25, 10, 15,14,8]))
 
         addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
@@ -1185,7 +1176,8 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Requirente", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Doc. Referencia", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
 
         res.eachWithIndex {i,j->
 
@@ -1205,6 +1197,12 @@ class Reportes4Controller {
             }
 
             addCellTabla(tablaRegistradas, new Paragraph(i.elaborado, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.ingreso, times8normal), prmsCellLeft)
+            if(i?.estado == 'R'){
+                addCellTabla(tablaRegistradas, new Paragraph('Registrada', times8normal), prmsCellLeft)
+            }else{
+                addCellTabla(tablaRegistradas, new Paragraph('No Registrada', times8normal), prmsCellLeft)
+            }
 //            addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellLeft)
 
 
@@ -1367,7 +1365,9 @@ class Reportes4Controller {
         sheet.setColumnView(3, 25)
         sheet.setColumnView(4, 40)
         sheet.setColumnView(5, 25)
-        sheet.setColumnView(8, 20)
+        sheet.setColumnView(6, 25)
+        sheet.setColumnView(7, 15)
+        sheet.setColumnView(8, 15)
         // inicia textos y numeros para asocias a columnas
 
         def label
@@ -1392,7 +1392,8 @@ class Reportes4Controller {
         label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
         label = new Label(5, 4, "Valor", times16format); sheet.addCell(label);
         label = new Label(6, 4, "Requirente", times16format); sheet.addCell(label);
-//        label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Doc. Referencia", times16format); sheet.addCell(label);
+        label = new Label(8, 4, "Estado", times16format); sheet.addCell(label);
 
         res.eachWithIndex {i, j->
 
@@ -1409,7 +1410,13 @@ class Reportes4Controller {
             }
 
             label = new Label(6, fila, i?.elaborado?.toString()); sheet.addCell(label);
-//            label = new Label(7, fila, i?.estado?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.ingreso?.toString()); sheet.addCell(label);
+            if(i?.estado?.toString() == 'R'){
+                label = new Label(8, fila, 'Registrada'); sheet.addCell(label);
+            }else{
+                label = new Label(8, fila, 'No Registrada'); sheet.addCell(label);
+            }
+//            label = new Label(8, fila, i?.estado?.toString()); sheet.addCell(label);
             fila++
 
         }
@@ -1562,7 +1569,9 @@ class Reportes4Controller {
         sheet.setColumnView(3, 25)
         sheet.setColumnView(4, 40)
         sheet.setColumnView(5, 25)
-        sheet.setColumnView(8, 20)
+        sheet.setColumnView(6, 25)
+        sheet.setColumnView(7, 15)
+        sheet.setColumnView(8, 15)
         // inicia textos y numeros para asocias a columnas
 
         def label
@@ -1587,7 +1596,8 @@ class Reportes4Controller {
         label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
         label = new Label(5, 4, "Valor", times16format); sheet.addCell(label);
         label = new Label(6, 4, "Requirente", times16format); sheet.addCell(label);
-        label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Doc. Referencia", times16format); sheet.addCell(label);
+        label = new Label(8, 4, "Estado", times16format); sheet.addCell(label);
 
         res.eachWithIndex {i, j->
 
@@ -1604,7 +1614,13 @@ class Reportes4Controller {
             }
 
             label = new Label(6, fila, i?.elaborado?.toString()); sheet.addCell(label);
-            label = new Label(7, fila, i?.estado?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.ingreso?.toString()); sheet.addCell(label);
+            if(i?.estado?.toString() == 'R'){
+                label = new Label(8, fila,'Registrada' ); sheet.addCell(label);
+            }else{
+                label = new Label(8, fila, 'No Registrada'); sheet.addCell(label);
+            }
+//            label = new Label(8, fila, i?.estado?.toString()); sheet.addCell(label);
             fila++
 
         }
@@ -2206,9 +2222,7 @@ class Reportes4Controller {
 
 //            println "++++++++ SQL   "+sql+"\n\n"
 
-
         cn = dbConnectionService.getConnection()
-
         res = cn.rows(sql.toString())
 
 
@@ -2224,11 +2238,8 @@ class Reportes4Controller {
 
 
         res.each{ i->
-
             obra = Obra.get(i.id)
-
             concurso = janus.pac.Concurso.findByObra(obra)
-
 
             if(concurso){
                 oferta = janus.pac.Oferta.findAllByConcurso(concurso)
@@ -2255,27 +2266,17 @@ class Reportes4Controller {
             total1=0
 
             valores =  preciosService.rbro_pcun_v2(it.id)
-
             subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-
             subPres.each { s->
-
                 valores.each {
                     if(it.sbprdscr == s.descripcion){
-
                         totales = it.totl
                         totalPresupuestoBien = (total1 += totales)
                     }
-
-
                 }
-
-
             }
-
 //           println("--->>" + totalPresupuestoBien)
             valoresTotales += totalPresupuestoBien
-
         }
 
 
@@ -2321,7 +2322,6 @@ class Reportes4Controller {
         label = new Label(1, 2, "REPORTE EXCEL OBRAS CONTRATADAS", times16format); sheet.addCell(label);
 
 
-
         label = new Label(0, 4, "Código: ", times16format); sheet.addCell(label);
         label = new Label(1, 4, "Nombre", times16format); sheet.addCell(label);
         label = new Label(2, 4, "Tipo", times16format); sheet.addCell(label);
@@ -2331,7 +2331,7 @@ class Reportes4Controller {
         label = new Label(6, 4, "Elaborado", times16format); sheet.addCell(label);
         label = new Label(7, 4, "Contrato", times16format); sheet.addCell(label);
 
-        res.eachWithIndex {i, j->
+        obras.eachWithIndex {i, j->
 
 
             label = new Label(0, fila, i.codigo.toString()); sheet.addCell(label);
@@ -2347,11 +2347,10 @@ class Reportes4Controller {
 
             label = new Label(6, fila, i?.elaborado?.toString()); sheet.addCell(label);
             label = new Label(7, fila, " "); sheet.addCell(label);
-//            label = new Label(7, fila, contratos[j].codigo); sheet.addCell(label);
+            label = new Label(7, fila, contratos[j]?.codigo); sheet.addCell(label);
             fila++
 
         }
-
 
         workbook.write();
         workbook.close();
@@ -2367,7 +2366,6 @@ class Reportes4Controller {
     def aseguradoras () {
 
         def perfil = session.perfil.id
-
         return [perfil: perfil]
     }
 
@@ -2568,7 +2566,7 @@ class Reportes4Controller {
 
         PdfPTable tablaRegistradas = new PdfPTable(3);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([10, 2, 70]))
+        tablaRegistradas.setWidths(arregloEnteros([20, 2, 70]))
 
 
         res.each {
@@ -2596,6 +2594,14 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph("Contacto", times10bold), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(it?.contacto, times10normal), prmsCellLeft)
+
+            addCellTabla(tablaRegistradas, new Paragraph("Fecha Contacto", times10bold), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(printFecha(it?.fecha), times10normal), prmsCellLeft)
+
+            addCellTabla(tablaRegistradas, new Paragraph("Observaciones", times10bold), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(it?.observaciones, times10normal), prmsCellLeft)
 
             addCellTabla(tablaRegistradas, new Paragraph("_____________________________________________________________________________________________________________", times8normal), prmsHeaderHoja4)
 
@@ -2689,12 +2695,13 @@ class Reportes4Controller {
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 12)
-        sheet.setColumnView(1, 60)
+        sheet.setColumnView(1, 40)
         sheet.setColumnView(2, 25)
         sheet.setColumnView(3, 25)
-        sheet.setColumnView(4, 40)
+        sheet.setColumnView(4, 20)
         sheet.setColumnView(5, 25)
-        sheet.setColumnView(8, 20)
+        sheet.setColumnView(6, 20)
+        sheet.setColumnView(7, 20)
         // inicia textos y numeros para asocias a columnas
 
         def label
@@ -2718,17 +2725,21 @@ class Reportes4Controller {
         label = new Label(3, 4, "Teléfono", times16format); sheet.addCell(label);
         label = new Label(4, 4, "Fax", times16format); sheet.addCell(label);
         label = new Label(5, 4, "Contacto", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Fecha Contacto", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Observaciones", times16format); sheet.addCell(label);
 
 
         res.eachWithIndex {i, j->
 
 
-            label = new Label(0, fila, i.tipoaseguradora.toString()); sheet.addCell(label);
+            label = new Label(0, fila, i?.tipoaseguradora?.toString()); sheet.addCell(label);
             label = new Label(1, fila, i?.nombre.toString()); sheet.addCell(label);
             label = new Label(2, fila, i?.direccion?.toString()); sheet.addCell(label);
             label = new Label(3, fila, i?.telefono?.toString()); sheet.addCell(label);
-            label = new Label(3, fila, i?.fax?.toString()); sheet.addCell(label);
-            label = new Label(3, fila, i?.contacto?.toString()); sheet.addCell(label);
+            label = new Label(4, fila, i?.fax?.toString()); sheet.addCell(label);
+            label = new Label(5, fila, i?.contacto?.toString()); sheet.addCell(label);
+            label = new Label(6, fila, i?.fecha?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.observaciones?.toString()); sheet.addCell(label);
 
             fila++
 
@@ -2972,6 +2983,14 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(it?.ruc, times10normal), prmsCellLeft)
 
+            addCellTabla(tablaRegistradas, new Paragraph("Siglas", times10bold), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(it?.sigla, times10normal), prmsCellLeft)
+
+            addCellTabla(tablaRegistradas, new Paragraph("Título", times10bold), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(it?.titulo, times10normal), prmsCellLeft)
+
             addCellTabla(tablaRegistradas, new Paragraph("Especialidad", times10bold), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(it?.especialidad, times10normal), prmsCellLeft)
@@ -2991,6 +3010,14 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph("Teléfono", times10bold), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(it?.telefono, times10normal), prmsCellLeft)
+
+            addCellTabla(tablaRegistradas, new Paragraph("Garante", times10bold), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(it?.garante, times10normal), prmsCellLeft)
+
+            addCellTabla(tablaRegistradas, new Paragraph("Fecha Cont.", times10bold), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(printFecha(it?.fecha), times10normal), prmsCellLeft)
 
             addCellTabla(tablaRegistradas, new Paragraph("Fecha Contrato", times10bold), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
@@ -3037,9 +3064,12 @@ class Reportes4Controller {
                 "  p.prvegrnt    garante,\n" +
                 "  p.prvenbct    nombrecon,\n" +
                 "  p.prveapct    apellidocon,\n" +
-                "  p.prvefccn    fecha\n" +
+                "  p.prvefccn    fecha,\n" +
+                "  f.cntrfcsb    fechacontrato\n" +
                 "FROM prve p\n" +
-                "  LEFT JOIN espc e ON p.espc__id = e.espc__id\n"
+                "  LEFT JOIN espc e ON p.espc__id = e.espc__id\n"+
+                "  LEFT JOIN ofrt o ON p.prve__id = o.prve__id\n"+
+                "  LEFT JOIN cntr f ON o.ofrt__id = f.ofrt__id\n"
 
         def filtroBuscador = ""
         def buscador=""
@@ -3089,13 +3119,18 @@ class Reportes4Controller {
 
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
-        sheet.setColumnView(0, 12)
-        sheet.setColumnView(1, 60)
-        sheet.setColumnView(2, 25)
-        sheet.setColumnView(3, 25)
-        sheet.setColumnView(4, 40)
-        sheet.setColumnView(5, 25)
-        sheet.setColumnView(8, 20)
+        sheet.setColumnView(0, 35)
+        sheet.setColumnView(1, 20)
+        sheet.setColumnView(2, 10)
+        sheet.setColumnView(3, 10)
+        sheet.setColumnView(4, 15)
+        sheet.setColumnView(5, 15)
+        sheet.setColumnView(6, 35)
+        sheet.setColumnView(7, 35)
+        sheet.setColumnView(8, 15)
+        sheet.setColumnView(9, 30)
+        sheet.setColumnView(10, 20)
+        sheet.setColumnView(11, 20)
         // inicia textos y numeros para asocias a columnas
 
         def label
@@ -3111,30 +3146,35 @@ class Reportes4Controller {
         label = new Label(1, 1, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
         label = new Label(1, 2, "REPORTE EXCEL CONTRATISTAS", times16format); sheet.addCell(label);
 
-
-
         label = new Label(0, 4, "Nombre: ", times16format); sheet.addCell(label);
         label = new Label(1, 4, "Cédula/RUC", times16format); sheet.addCell(label);
-        label = new Label(2, 4, "Especialidad", times16format); sheet.addCell(label);
-        label = new Label(3, 4, "Cámara", times16format); sheet.addCell(label);
-        label = new Label(4, 4, "Contacto", times16format); sheet.addCell(label);
-        label = new Label(5, 4, "Dirección", times16format); sheet.addCell(label);
-        label = new Label(6, 4, "Teléfono", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "Siglas", times16format); sheet.addCell(label);
+        label = new Label(3, 4, "Título", times16format); sheet.addCell(label);
+        label = new Label(4, 4, "Especialidad", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "Cámara", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Contacto", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Dirección", times16format); sheet.addCell(label);
+        label = new Label(8, 4, "Teléfono", times16format); sheet.addCell(label);
+        label = new Label(9, 4, "Garante", times16format); sheet.addCell(label);
+        label = new Label(10, 4, "Fecha Cont.", times16format); sheet.addCell(label);
+        label = new Label(11, 4, "Fecha Contrato", times16format); sheet.addCell(label);
 
 
         res.eachWithIndex {i, j->
-
-
             label = new Label(0, fila, i.nombre.toString()); sheet.addCell(label);
             label = new Label(1, fila, i?.ruc.toString()); sheet.addCell(label);
-            label = new Label(2, fila, i?.especialidad?.toString()); sheet.addCell(label);
-            label = new Label(3, fila, i?.camara?.toString()); sheet.addCell(label);
-            label = new Label(4, fila, i?.nombrecon?.toString() + " " + i?.apellidocon?.toString()); sheet.addCell(label);
-            label = new Label(5, fila, i?.direccion?.toString()); sheet.addCell(label);
-            label = new Label(6, fila, i?.telefono?.toString()); sheet.addCell(label);
+            label = new Label(2, fila, i?.sigla?.toString()); sheet.addCell(label);
+            label = new Label(3, fila, i?.titulo.toString()); sheet.addCell(label);
+            label = new Label(4, fila, i?.especialidad?.toString()); sheet.addCell(label);
+            label = new Label(5, fila, i?.camara?.toString()); sheet.addCell(label);
+            label = new Label(6, fila, i?.nombrecon?.toString() + " " + i?.apellidocon?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.direccion?.toString()); sheet.addCell(label);
+            label = new Label(8, fila, i?.telefono?.toString()); sheet.addCell(label);
+            label = new Label(9, fila, i?.garante?.toString()); sheet.addCell(label);
+            label = new Label(10, fila, i?.fecha?.toString()); sheet.addCell(label);
+            label = new Label(11, fila, i?.fechacontrato?.toString()); sheet.addCell(label);
 
             fila++
-
         }
 
 
@@ -3150,11 +3190,8 @@ class Reportes4Controller {
 
     def contratos (){
 
-
         def perfil = session.perfil.id
-
         return [perfil: perfil]
-
 
     }
 
@@ -3424,20 +3461,25 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(9);
+        PdfPTable tablaRegistradas = new PdfPTable(11);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([14, 14, 30, 25, 10, 20, 10, 10, 10]))
+        tablaRegistradas.setWidths(arregloEnteros([14, 14,15, 15,30, 25,15, 20, 15, 10, 15]))
 
         addCellTabla(tablaRegistradas, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Fecha Suscripcion", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Concurso", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Obra", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Nombre de la Obra", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Cantón - Parroquia - Comunidad", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Plazo", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Clase de Obra", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Tipo de Contrato", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Contratista", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Monto", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("% Anticipo", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Anticipo", times8bold), prmsCellHead2)
-
+//        addCellTabla(tablaRegistradas, new Paragraph("Fecha Inicio", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Fecha Fin", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Plazo", times8bold), prmsCellHead2)
 
         switch (params.buscador) {
             case "cdgo":
@@ -3524,15 +3566,14 @@ class Reportes4Controller {
 
 
         res.eachWithIndex {i,j->
-
             addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
-//            addCellTabla(tablaRegistradas, new Paragraph (i.fechasu.toString(), times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fechasu, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
-//            addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
-//            addCellTabla(tablaRegistradas, new Paragraph(i.memo, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.concurso, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.obracodigo, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.obranombre, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.plazo, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.tipoobra, times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(i.tipocontrato, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.nombrecontra, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.monto, minFractionDigits:
                     2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
@@ -3540,7 +3581,9 @@ class Reportes4Controller {
                     0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.anticipo, minFractionDigits:
                     2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
-
+//            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fechainicio, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fechafin, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(i.plazo, times8normal), prmsCellLeft)
         }
 
 
@@ -3675,12 +3718,18 @@ class Reportes4Controller {
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 12)
-        sheet.setColumnView(1, 60)
+        sheet.setColumnView(1, 20)
         sheet.setColumnView(2, 25)
         sheet.setColumnView(3, 25)
         sheet.setColumnView(4, 40)
         sheet.setColumnView(5, 25)
         sheet.setColumnView(8, 20)
+        sheet.setColumnView(9, 10)
+        sheet.setColumnView(10, 10)
+        sheet.setColumnView(11, 15)
+        sheet.setColumnView(12, 15)
+        sheet.setColumnView(13, 15)
+        sheet.setColumnView(14, 10)
         // inicia textos y numeros para asocias a columnas
 
         def label
@@ -3702,26 +3751,37 @@ class Reportes4Controller {
         label = new Label(1, 4, "Fecha Suscripción", times16format); sheet.addCell(label);
         label = new Label(2, 4, "Memo", times16format); sheet.addCell(label);
         label = new Label(3, 4, "Obra", times16format); sheet.addCell(label);
-        label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
-        label = new Label(5, 4, "Plazo", times16format); sheet.addCell(label);
-        label = new Label(6, 4, "Contratista", times16format); sheet.addCell(label);
-        label = new Label(7, 4, "Monto", times16format); sheet.addCell(label);
-        label = new Label(8, 4, "% Anticipo", times16format); sheet.addCell(label);
-        label = new Label(9, 4, "Anticipo", times16format); sheet.addCell(label);
+        label = new Label(4, 4, "Nombre de la Obra", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Clase de Obra", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Tipo de Obra", times16format); sheet.addCell(label);
+        label = new Label(8, 4, "Contratista", times16format); sheet.addCell(label);
+        label = new Label(9, 4, "Monto", times16format); sheet.addCell(label);
+        label = new Label(10, 4, "% Anticipo", times16format); sheet.addCell(label);
+        label = new Label(11, 4, "Anticipo", times16format); sheet.addCell(label);
+        label = new Label(12, 4, "Fecha Inicio", times16format); sheet.addCell(label);
+        label = new Label(13, 4, "Fecha Fin", times16format); sheet.addCell(label);
+        label = new Label(14, 4, "Plazo", times16format); sheet.addCell(label);
 
 
 
         res.eachWithIndex {i, j->
             label = new Label(0, fila, i?.codigo?.toString()); sheet.addCell(label);
-            label = new Label(1, fila, i?.fechainicio?.toString()); sheet.addCell(label);
-            label = new Label(2, fila, i.memo.toString()); sheet.addCell(label);
-            label = new Label(3, fila, i?.obranombre?.toString()); sheet.addCell(label);
-            label = new Label(4, fila, i?.canton?.toString() + " " + i?.parroquia?.toString()); sheet.addCell(label);
-            label = new Label(5, fila, i?.plazo?.toString()); sheet.addCell(label);
-            label = new Label(6, fila, i?.nombrecontra?.toString()); sheet.addCell(label);
-            number = new jxl.write.Number(7, fila, i.monto); sheet.addCell(number);
-            number = new jxl.write.Number(8, fila, i.porcentaje); sheet.addCell(number);
-            number = new jxl.write.Number(9, fila, i.anticipo); sheet.addCell(number);
+            label = new Label(1, fila, i?.fechasu?.toString()); sheet.addCell(label);
+            label = new Label(2, fila, i.concurso.toString()); sheet.addCell(label);
+            label = new Label(3, fila, i?.obracodigo?.toString()); sheet.addCell(label);
+            label = new Label(4, fila, i?.obranombre?.toString()); sheet.addCell(label);
+            label = new Label(5, fila, i?.canton?.toString() + " " + i?.parroquia?.toString()); sheet.addCell(label);
+            label = new Label(6, fila, i?.tipoobra?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.tipocontrato?.toString()); sheet.addCell(label);
+            label = new Label(8, fila, i?.nombrecontra?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(9, fila, i.monto); sheet.addCell(number);
+            number = new jxl.write.Number(10, fila, i.porcentaje); sheet.addCell(number);
+            number = new jxl.write.Number(11, fila, i.anticipo); sheet.addCell(number);
+            label = new Label(12, fila, i?.fechainicio?.toString()); sheet.addCell(label);
+            label = new Label(13, fila, i?.fechafin?.toString()); sheet.addCell(label);
+            label = new Label(14, fila, i?.plazo); sheet.addCell(label);
+
             fila++
         }
         workbook.write();
@@ -4010,9 +4070,9 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(13);
+        PdfPTable tablaRegistradas = new PdfPTable(14);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([15, 30, 25, 20, 8, 20, 30, 15, 10, 20,15,15,10]))
+        tablaRegistradas.setWidths(arregloEnteros([15, 30, 25, 20, 8, 15, 30, 15, 9, 20,15,15,12,10]))
 
         addCellTabla(tablaRegistradas, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Contratista", times8bold), prmsCellHead2)
@@ -4027,6 +4087,7 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Emisión", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Vencimiento", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Cancela-ción", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Moneda", times8bold), prmsCellHead2)
 
         switch (params.buscador) {
             case "cdgo":
@@ -4122,6 +4183,7 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.vencimiento, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.dias, minFractionDigits:
                     0, maxFractionDigits: 0, format: "##,##0", locale: "ec")+ " Días", times8normal), prmsCellRight)
+            addCellTabla(tablaRegistradas, new Paragraph(i.moneda, times8normal), prmsCellLeft)
 
         }
 
@@ -4146,8 +4208,6 @@ class Reportes4Controller {
 
     def reporteExcelGarantias() {
 
-
-
         def sql
         def res
         def cn
@@ -4157,7 +4217,6 @@ class Reportes4Controller {
                 "  g.grnt__id    id,\n" +
                 "  g.grntcdgo    codigo, \n" +
                 "  g.grntnmrv    renovacion,\n" +
-                "  g.grntpdre    padre,\n" +
                 "  c.cntrcdgo    codigocontrato,\n" +
                 "  t.tpgrdscr    tipogarantia,\n" +
                 "  q.tdgrdscr    documento,\n" +
@@ -4171,19 +4230,18 @@ class Reportes4Controller {
                 "  g.grntdias    dias\n" +
                 "FROM grnt g\n" +
                 "  LEFT JOIN cntr c ON g.cntr__id = c.cntr__id\n" +
+                "  LEFT JOIN ofrt o ON c.ofrt__id = o.ofrt__id\n" +
                 "  LEFT JOIN tpgr t ON g.tpgr__id = t.tpgr__id\n" +
                 "  LEFT JOIN tdgr q ON g.tdgr__id = q.tdgr__id\n" +
                 "  LEFT JOIN asgr a ON g.asgr__id = a.asgr__id\n" +
-                "  LEFT JOIN prve s ON c.prve__id = s.prve__id\n" +
+                "  LEFT JOIN prve s ON o.prve__id = s.prve__id\n" +
                 "  LEFT JOIN mnda m ON g.mnda__id = m.mnda__id\n"
 
 
         def filtroBuscador = ""
-
         def buscador = ""
 
         params.criterio = params.criterio.trim();
-
 
         switch (params.buscador) {
             case "cdgo":
@@ -4224,12 +4282,8 @@ class Reportes4Controller {
         }
 
         sql = sqlBase + filtroBuscador
-
         cn = dbConnectionService.getConnection()
-
         res = cn.rows(sql.toString())
-
-
 
         WorkbookSettings workbookSettings = new WorkbookSettings()
         workbookSettings.locale = Locale.default
@@ -4238,7 +4292,6 @@ class Reportes4Controller {
         file.deleteOnExit()
 
         WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
-
         WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
         WritableCellFormat formatXls = new WritableCellFormat(font)
 
@@ -4249,13 +4302,20 @@ class Reportes4Controller {
 
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
-        sheet.setColumnView(0, 12)
-        sheet.setColumnView(1, 60)
+        sheet.setColumnView(0, 20)
+        sheet.setColumnView(1, 35)
         sheet.setColumnView(2, 25)
-        sheet.setColumnView(3, 25)
-        sheet.setColumnView(4, 40)
-        sheet.setColumnView(5, 25)
-        sheet.setColumnView(8, 20)
+        sheet.setColumnView(3, 15)
+        sheet.setColumnView(4, 15)
+        sheet.setColumnView(5, 15)
+        sheet.setColumnView(6, 40)
+        sheet.setColumnView(7, 25)
+        sheet.setColumnView(8, 15)
+        sheet.setColumnView(9, 15)
+        sheet.setColumnView(10, 15)
+        sheet.setColumnView(11, 15)
+        sheet.setColumnView(12, 15)
+        sheet.setColumnView(13, 15)
         // inicia textos y numeros para asocias a columnas
 
         def label
@@ -4264,14 +4324,11 @@ class Reportes4Controller {
 
         def fila = 6;
 
-
         NumberFormat nf = new NumberFormat("#.##");
         WritableCellFormat cf2obj = new WritableCellFormat(nf);
 
         label = new Label(1, 1, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
         label = new Label(1, 2, "REPORTE EXCEL REGISTRADAS", times16format); sheet.addCell(label);
-
-
 
         label = new Label(0, 4, "N° Contrato: ", times16format); sheet.addCell(label);
         label = new Label(1, 4, "Contratista", times16format); sheet.addCell(label);
@@ -4280,18 +4337,18 @@ class Reportes4Controller {
         label = new Label(4, 4, "Rnov", times16format); sheet.addCell(label);
         label = new Label(5, 4, "Original", times16format); sheet.addCell(label);
         label = new Label(6, 4, "Aseguradora", times16format); sheet.addCell(label);
-        label = new Label(7, 4, "DOcumento", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Documento", times16format); sheet.addCell(label);
         label = new Label(8, 4, "Estado", times16format); sheet.addCell(label);
         label = new Label(9, 4, "Monto", times16format); sheet.addCell(label);
         label = new Label(10, 4, "Emisión", times16format); sheet.addCell(label);
         label = new Label(11, 4, "Vencimiento", times16format); sheet.addCell(label);
         label = new Label(12, 4, "Cancelación", times16format); sheet.addCell(label);
+        label = new Label(13, 4, "Moneda", times16format); sheet.addCell(label);
 
 
         res.eachWithIndex {i, j->
 
-
-            label = new Label(0, fila, i?.codigocontrato.toString()); sheet.addCell(label);
+            label = new Label(0, fila, i?.codigocontrato?.toString()); sheet.addCell(label);
             label = new Label(1, fila, i?.contratista); sheet.addCell(label);
             label = new Label(2, fila, i.tipogarantia.toString()); sheet.addCell(label);
             label = new Label(3, fila, i?.codigo?.toString()); sheet.addCell(label);
@@ -4304,12 +4361,10 @@ class Reportes4Controller {
             label = new Label(10, fila, i?.emision?.toString()); sheet.addCell(label);
             label = new Label(11, fila, i?.vencimiento?.toString()); sheet.addCell(label);
             number = new jxl.write.Number(12, fila, i.dias); sheet.addCell(number);
-
+            label = new Label(13, fila, i?.moneda?.toString()); sheet.addCell(label);
 
             fila++
-
         }
-
 
         workbook.write();
         workbook.close();

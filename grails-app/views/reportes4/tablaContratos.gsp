@@ -71,25 +71,25 @@
                 <th style="width: 60px;">
                     Suscripción
                 </th>
-                <th style="width: 300px">
+                <th style="width: 280px">
                     Concurso
                 </th>
                 <th style="width: 180px">
                     Obra
                 </th>
-                <th style="width: 280px">
+                <th style="width: 350px">
                     Nombre de la Obra
                 </th>
                 <th style="width: 80px">
                     Parroquia
                 </th>
-                <th style="width: 400px">
+                <th style="width: 100px">
                     Cantón
                 </th>
                 <th style="width: 120px">
                     Clase de Obra
                 </th>
-                <th style="width: 280px">
+                <th style="width: 250px">
                     Tipo de Contrato
                 </th>
                 <th style="width: 80px">

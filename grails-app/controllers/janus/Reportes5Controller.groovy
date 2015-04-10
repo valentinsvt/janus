@@ -244,13 +244,14 @@ class Reportes5Controller {
 
         def res = filasAvance(params)
 
-        def tablaDatos = new PdfPTable(10);
+        def tablaDatos = new PdfPTable(11);
         tablaDatos.setWidthPercentage(100);
-        tablaDatos.setWidths(arregloEnteros([7, 18, 13, 9, 14, 7, 9, 6, 7, 10]))
+        tablaDatos.setWidths(arregloEnteros([7, 18, 13, 9, 14, 7, 9, 6, 7, 8,10]))
 
         def paramsHead = [border: Color.BLACK,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.WHITE, valign: Element.ALIGN_RIGHT]
 
         addCellTabla(tablaDatos, new Paragraph("Código", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("Nombre", fontTh), paramsHead)
@@ -261,6 +262,7 @@ class Reportes5Controller {
         addCellTabla(tablaDatos, new Paragraph("Fecha suscripción", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("Plazo", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("% Avance", fontTh), paramsHead)
+        addCellTabla(tablaDatos, new Paragraph("Avance Físico", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("Estado", fontTh), paramsHead)
 
         res.each { fila ->
@@ -280,6 +282,7 @@ class Reportes5Controller {
             addCellTabla(tablaDatos, new Paragraph(fila.fecha.format("dd-MM-yyyy"), fontTd), prmsCellLeft)
             addCellTabla(tablaDatos, new Paragraph(numero(fila.plazo, 0) + " días", fontTd), prmsCellLeft)
             addCellTabla(tablaDatos, new Paragraph(numero((fila.sum / fila.monto) * 100, 2) + "%", fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(numero(fila.fisico, 2), fontTd), prmsCellLeft)
             addCellTabla(tablaDatos, new Paragraph(estado, fontTd), prmsCellLeft)
         }
 
