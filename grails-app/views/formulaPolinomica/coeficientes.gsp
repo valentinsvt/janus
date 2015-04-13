@@ -125,7 +125,7 @@
                     <i class="icon-cogs"></i>
                     Fórmula polinómica
                 </g:link>
-                <g:link action="coeficientes" id="${obra.id}" params="[tipo: 'c']" class="btn btn-info  ${tipo == 'c' ? 'active' : ''} btn-tab">
+                <g:link action="coeficientes" id="${obra.id}" params="[tipo: 'c', sbpr: params.sbpr]" class="btn btn-info  ${tipo == 'c' ? 'active' : ''} btn-tab">
                     <i class="icon-group"></i>
                     Cuadrilla Tipo
                 </g:link>
@@ -173,7 +173,7 @@
 
                         <div class="btn-toolbar" style="margin-left: 10px; margin-bottom:0;">
                             <div class="btn-group">
-                                <g:if test="${obra?.liquidacion == 1 || obra.estado != 'R'}">
+                                <g:if test="${obra?.liquidacion == 1 || obra.estado != 'R' || obra?.codigo[-1..-2] != 'OF'}">
                                     <a href="#" id="btnAgregarItems" class="btn btn-success disabled">
                                         <i class="icon-plus"></i>
                                         Agregar a <span id="spanCoef"></span> <span id="spanSuma" data-total="0"></span>
@@ -444,7 +444,7 @@
                             separator_after  : false,
                             icon             : icons.edit,
                             action           : function (obj) {
-                                <g:if test="${obra?.liquidacion==1 || obra?.estado!='R'}">
+                                <g:if test="${obra?.liquidacion==1 || obra?.estado!='R' || obra?.codigo[-1..-2] != 'OF'}">
                                 $.ajax({
                                     type    : "POST",
                                     url     : "${createLink(action: 'editarGrupo')}",
@@ -512,6 +512,8 @@
                         var nodePrecio = node.attr("precio");
                         var nodeGrupo = node.attr("grupo");
 
+                        %{--console.log("nodo:" + node.attr("grupo"), "data:" + "${params.tipo}");--}%
+
                         /*** Selecciona el nodo y su padre ***/
                         var $seleccionados = $("a.selected, div.selected, a.editable, div.editable");
                         $seleccionados.removeClass("selected editable");
@@ -526,8 +528,7 @@
                             separator_after  : false,
                             icon             : icons.delete,
                             action           : function (obj) {
-                                <g:if test="${obra?.liquidacion==1 || obra?.estado!='R'}">
-
+                                <g:if test="${obra?.liquidacion==1 || obra?.estado!='R' || obra?.codigo[-1..-2] != 'OF'}">
                                 $.box({
                                     imageClass : "box_info",
                                     text       : "Está seguro de eliminar " + nodeText + " del grupo " + parentText + "?",
@@ -556,8 +557,10 @@
                                                             var tdDesc = $("<td>").append(nodeDes);
                                                             var tdApor = $("<td class='numero'>").append(number_format(nodeValor, 5, '.', ''));
                                                             var tdPrec = $("<td class='numero'>").append(number_format(nodePrecio, 5, '.', ''));
+
                                                             tr.append(tdItem).append(tdDesc);
-                                                            if (nodeGrupo.toString() == "2") {
+//                                                            if (nodeGrupo.toString() == "2") {
+                                                            if ("${params.tipo}" == "c") {
                                                                 tr.append(tdPrec);
                                                             }
                                                             tr.append(tdApor);

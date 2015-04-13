@@ -64,11 +64,11 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def delItemFormula() {
-//        println "delete "
-//        println params
+        println "delete " + params
         def itemFormulaPolinomica = ItemsFormulaPolinomica.get(params.id)
         def formula = itemFormulaPolinomica.formulaPolinomica
         formula.valor = formula.valor - itemFormulaPolinomica.valor
+        println "valor: ${formula.valor}"
         if (formula.save(flush: true)) {
             itemFormulaPolinomica.delete(flush: true)
             render "OK_" + formula.valor
@@ -199,7 +199,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     data.add(mapFormula)
                 }
             }
-//            println data
+            println "data: " + data
+            println "sbpr: " + sbpr
             def json = new JsonBuilder(data)
 //            println json.toPrettyString()
 /*
@@ -245,7 +246,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             }
             println "SQL items: " + sql
             def rows = cn.rows(sql.toString())
-
+            println "rows: $rows"
             [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total]
         }
     }
@@ -343,6 +344,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                 if (it < 10) {
                     def cuadrilla = new FormulaPolinomica()
                     cuadrilla.obra = obra
+                    cuadrilla.subPresupuesto = sbpr
                     cuadrilla.numero = "c0" + (it + 1)
                     if (it == 9)
                         cuadrilla.numero = "c" + (it + 1)
