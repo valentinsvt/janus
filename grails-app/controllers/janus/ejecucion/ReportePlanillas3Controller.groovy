@@ -10,6 +10,7 @@ import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
+import janus.Obra
 import janus.Parametros
 import janus.VolumenesObra
 import janus.pac.PeriodoEjecucion
@@ -1264,7 +1265,17 @@ class ReportePlanillas3Controller {
 //            tablaDetalles.setFooterRows(1);
 //            tablaDetalles.setHeaderRows(5);
 
-            def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+            def obra_of = Obra.findByCodigoIlike(obra.codigo + "_OF")
+
+            def detalle = [:]
+            if (obra_of) {
+                detalle = VolumenesObra.findAllByObra(obra_of, [sort: "orden"])
+            }   else {
+                detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+            }
+
+//            def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+/*
             def precios = [:]
             def indirecto = obra.totales / 100
             preciosService.ac_rbroObra(obra.id)
@@ -1272,6 +1283,20 @@ class ReportePlanillas3Controller {
                 def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
                 precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
             }
+*/
+
+            def precios = [:]
+            detalle.each {
+                def res
+                if (obra_of) {
+                    res = preciosService.precioVlob(obra_of.id, it.item.id)
+                }   else {
+                    res = preciosService.precioVlob(obra.id, it.item.id)
+                }
+                precios.put(it.id.toString(), res["precio"][0])
+            }
+
+
             def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
             def height = 12
             def maxRows = 45

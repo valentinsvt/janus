@@ -3817,17 +3817,35 @@ class PlanillaController extends janus.seguridad.Shield {
         def contrato = Contrato.get(params.contrato)
 
         def obra = contrato.oferta.concurso.obra
-        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        /* SI la obra **_OF existe, se deben tomar los valores de VLOB de **_OF */
+        def obra_of = Obra.findByCodigoIlike(obra.codigo + "_OF")
+
+        def detalle = [:]
+        if (obra_of) {
+            detalle = VolumenesObra.findAllByObra(obra_of, [sort: "orden"])
+        }   else {
+            detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        }
 
         def precios = [:]
-        def indirecto = obra.totales / 100
+//        def indirecto = obra.totales / 100
 
-        preciosService.ac_rbroObra(obra.id)
+//        preciosService.ac_rbroObra(obra.id)
 
         detalle.each {
-            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
-            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            def res
+            if (obra_of) {
+                res = preciosService.precioVlob(obra_of.id, it.item.id)
+            }   else {
+                res = preciosService.precioVlob(obra.id, it.item.id)
+            }
+
+//            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//            println "resultado: " + res
+            precios.put(it.id.toString(), res["precio"][0])
         }
+
 
         def planillasAnteriores = Planilla.withCriteria {
             eq("contrato", contrato)
