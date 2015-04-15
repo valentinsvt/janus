@@ -575,7 +575,8 @@ class ObraFPController {
         def tx_sql = "select item.item__id, grpo__id from vlobitem, item, dprt, sbgr "
         //tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and sbpr__id = ${sbpr} and "
         tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and ${tx_wh}"
-        tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 1 "
+        tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 1 and "
+        tx_sql += "item.itemcdgo not in ('REP', 'COMB', 'SLDO') "
         tx_sql += "group by item.item__id, grpo__id order by item.itemcdgo"  //gdo --
         //println "materiales: " + tx_sql
         cn.eachRow(tx_sql.toString()) { row ->
@@ -586,6 +587,7 @@ class ObraFPController {
             creaCampo(id, row.item__id + "_U", "M", sbpr)
             creaCampo(id, row.item__id + "_T", "M", sbpr)
         }
+//        println "crea columna saldo: id: $id, id_sldo: $id_saldo, sbpr: $sbpr"
         creaCampo(id, id_saldo + "_U", "M", sbpr)
         creaCampo(id, id_saldo + "_T", "M", sbpr)
         cn.close()
@@ -643,7 +645,7 @@ class ObraFPController {
             contador++
         }
         tx_sql = "select distinct clmncdgo from mfcl where obra__id = ${id} and clmndscr like '%_T' or clmndscr like '%_U' and sbpr__id = ${sbpr}"
-        println "2rubros: " + tx_sql
+//        println "2rubros: " + tx_sql
         cn.eachRow(tx_sql.toString()) { d ->
 //            println "insert into mfvl (obra__id, clmncdgo, codigo, valor, sbpr__id) " +
 //            "select obra__id, ${d.clmncdgo}, codigo, 0 sbpr__id from mfrb where obra__id = ${id} and sbpr__id = ${sbpr}"
@@ -767,7 +769,7 @@ class ObraFPController {
             tx_sql += "where item.item__id = vlob.item__id and obra__id = ${id} and "
             tx_sql += "vlobcntd > 0 and undd.undd__id = item.undd__id and sbpr__id = ${sbpr} "
         }
-        println "des_Materiales: " + tx_sql + "/n con transporte: $conTrnp"
+//        println "des_Materiales: " + tx_sql + "/n con transporte: $conTrnp"
 
         cn.eachRow(tx_sql.toString()) { row ->
             if (conTrnp) {
@@ -969,7 +971,7 @@ class ObraFPController {
         def cntd = 0.0
         ejecutaSQL("update mfcl set clmntipo = null where obra__id = ${id} and clmndscr like '%U'")
         tx_sql = "select codigo from mfrb where obra__id = ${id} and sbpr__id = ${sbpr} and codigo not like 'sS%'"
-        println "acManoDeObra .. $tx_sql"
+//        println "acManoDeObra .. $tx_sql"
         cn.eachRow(tx_sql.toString()) { row ->
             tx_cr = "select sum(valor) suma from mfvl v, mfcl c "
             tx_cr += "where c.obra__id = ${id} and c.obra__id = v.obra__id and codigo = '${row.codigo}' and c.sbpr__id = ${sbpr} and " +
@@ -1140,7 +1142,7 @@ class ObraFPController {
                 "clmndscr like '%_T' and v.clmncdgo = c1.clmncdgo and c.sbpr__id = v.sbpr__id and c.sbpr__id = ${sbpr}) " +
                 "where obra__id = ${id} and valor = 0 and " +
                 "codigo = 'sS2' and clmncdgo in (select clmncdgo from mfcl where clmndscr like '%_T' and sbpr__id = ${sbpr})"
-        println "completaTotalS2 tx: $tx"
+//        println "completaTotalS2 tx: $tx"
         ejecutaSQL(tx)
 
         if (hayEqpo) {
@@ -1175,7 +1177,7 @@ class ObraFPController {
         tx_sql += "where c.clmncdgo = v.clmncdgo and c.obra__id = v.obra__id and c.obra__id = ${id} and c.sbpr__id = ${sbpr} and " +
                 "c.sbpr__id = v.sbpr__id and codigo = 'sS2' and clmndscr like '%_T' and "
         tx_sql += "clmntipo in ('O', 'M', 'D')"
-        println "acTotal S2: sql: " + tx_sql
+//        println "acTotal S2: sql: " + tx_sql
         cn.eachRow(tx_sql.toString()) { row ->
             clmn = columnaCdgo(id, "TOTAL_T", sbpr)
             ejecutaSQL("update mfvl set valor = ${row.suma} " +
