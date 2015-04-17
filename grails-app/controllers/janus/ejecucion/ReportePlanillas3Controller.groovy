@@ -183,7 +183,8 @@ class ReportePlanillas3Controller {
 //            def strContratista = cap(contratista.titulo + " " + contratista.nombreContacto + " " + contratista.apellidoContacto + "\nContratista")
             def strContratista = nombrePersona(contratista, "prov") + "\nContratista"
             def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
-            def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
+//            def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
+            def strSubdirector = "Ing. Miguel Velasteguí" + "\nSubdirector"
             def strAdmin = nombrePersona(administrador) + "\nAdministrador - Delegado"
             def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
             def strFechaAprobacion = "\nFecha de aprobación"
@@ -194,6 +195,10 @@ class ReportePlanillas3Controller {
                 fontTdFirmas = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL);
 
                 tablaFirmas.setWidths(arregloEnteros([35, 30, 35]))
+
+//                addCellTabla(tablaFirmas, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                addCellTabla(tablaFirmas, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -1256,7 +1261,10 @@ class ReportePlanillas3Controller {
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalAnt, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalAct, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+
                 }
+
             }
 
             /* ************* fin header *****************/
