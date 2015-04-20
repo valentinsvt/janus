@@ -1674,7 +1674,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             redirect(action: "errores", params: [link: link])
             return
         }
-//        println "pasa retraso"
+        println "pasa retraso"
 
         if (fechaPresentacion < fechaMax) {
             retraso *= -1
