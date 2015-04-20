@@ -28,7 +28,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="dias" class="required digits"/>
+            <g:textField name="dias" class="required digits" style="width: 100px;"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="memo" class="required allCaps"/>
+            <g:textField name="memo" class="required allCaps" style="width: 240px;"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -58,7 +58,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="motivo" class="required "/>
+            <g:textField name="motivo" class="required" style="width: 500px;"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -73,7 +73,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="observaciones" class="required "/>
+            <g:textField name="observaciones" class="required" style="width: 500px;"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>

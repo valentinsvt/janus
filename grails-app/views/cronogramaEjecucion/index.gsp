@@ -41,7 +41,8 @@
             </div>
 
             <g:if test="${meses > 0}">
-                <div class="btn-group">
+                <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                    <div class="btn-group">
                     <g:if test="${suspensiones.size() == 0}">
                         <a href="#" class="btn btn-info" id="btnAmpl">
                             <i class="icon-resize-full"></i>
@@ -70,7 +71,8 @@
                 %{--<i class="icon-trash"></i>--}%
                 %{--Eliminar Suspensión--}%
                 %{--</a>--}%
-                </div>
+                    </div>
+                </g:if>
 
             %{--<div class="btn-group">--}%
             %{--<a href="#" class="btn btn-info disabled" id="btnCambio">--}%

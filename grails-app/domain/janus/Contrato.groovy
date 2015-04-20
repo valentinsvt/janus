@@ -146,7 +146,13 @@ class Contrato implements Serializable {
     }
 
     def getObra() {
-        return this.oferta?.concurso?.obra
+
+        def tmp_obra = Obra.findByCodigo(this.oferta?.concurso?.obra.codigo+"-OF")
+        if(!tmp_obra) {
+            return this.oferta?.concurso?.obra
+        } else {
+            return tmp_obra
+        }
     }
 
     def getAdministradorContrato() {

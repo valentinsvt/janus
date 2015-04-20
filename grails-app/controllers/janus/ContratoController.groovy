@@ -275,12 +275,17 @@ class ContratoController extends janus.seguridad.Shield {
     def copiarPolinomica() {
         def contrato = Contrato.get(params.id)
         def pac = contrato.oferta.concurso.pac.tipoProcedimiento.fuente
+
+/*
         def obraOld = contrato.oferta.concurso.obra
 
         def obra = Obra.findByCodigo(obraOld.codigo+"-OF")
         if(!obra) {
             obra = obraOld
         }
+*/
+        /** retorna el id  de la obra terminada en OF o la del cuncurso **/
+        def obra = contrato.obra
 
         def fp = FormulaPolinomica.findAllByObra(obra)
         def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
