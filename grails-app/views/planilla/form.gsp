@@ -131,7 +131,7 @@
     </div>
 
     <div class="span4">
-        <g:if test="${planillaInstance.id}">
+        <g:if test="${!planillaInstance.id}">
             ${planillaInstance?.tipoPlanilla?.nombre}
         </g:if>
         <g:else>

@@ -1648,7 +1648,7 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-//        println "PERIODOS: "+periodos
+        println "PERIODOS: "+periodos
 
         def now = new Date()
         def maxDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},"

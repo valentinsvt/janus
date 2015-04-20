@@ -872,7 +872,8 @@ class ReportePlanillas3Controller {
                 fechaMax = null
             }
 
-            if (!fechaMax) {
+//            if (!fechaMax) {
+            if (fechaMax == false) {
 //                redirect(action: "errores")
                 def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
                 def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
@@ -880,7 +881,7 @@ class ReportePlanillas3Controller {
                 link += "&nbsp;&nbsp;&nbsp;"
                 link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
                 flash.message = res[1]
-                redirect(action: "errores", params: [link: link])
+                redirect(controller: "planilla2", action: "errores", params: [link: link])
                 return
             }
 
@@ -901,7 +902,7 @@ class ReportePlanillas3Controller {
 //            println res2
 //            println ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
-            if (!retraso) {
+            if (retraso == false) {
 //                redirect(action: "errores")
                 def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
                 def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res2[2] ?: ""])
@@ -909,7 +910,7 @@ class ReportePlanillas3Controller {
                 link += "&nbsp;&nbsp;&nbsp;"
                 link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
                 flash.message = res2[1]
-                redirect(action: "errores", params: [link: link])
+                redirect(controller: "planilla2", action: "errores", params: [link: link])
                 return
             }
 
