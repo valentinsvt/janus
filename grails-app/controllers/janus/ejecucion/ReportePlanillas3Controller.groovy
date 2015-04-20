@@ -197,7 +197,11 @@ class ReportePlanillas3Controller {
                 tablaFirmas.setWidths(arregloEnteros([35, 30, 35]))
 
 //                addCellTabla(tablaFirmas, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
-                addCellTabla(tablaFirmas, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                if(planilla?.observaciones != null){
+                    addCellTabla(tablaFirmas, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                }else{
+                    addCellTabla(tablaFirmas, new Paragraph("Observaciones: ", fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                }
 
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -215,6 +219,9 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 //                addCellTabla(tablaFirmas, new Paragraph(strAdmin, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+                tablaFirmas.setKeepTogether(true)
+
             } else if (params.tipo == "otro") {
 //                if (planilla.tipoPlanilla.codigo != 'A') {
                 if (params.orientacion == "horizontal") {
@@ -564,7 +571,18 @@ class ReportePlanillas3Controller {
 
         printFirmas([tipo: "otro", orientacion: "horizontal"])
 
+
+        println("totPlan " + totPlan)
+        println("totCrono " + totCrono)
+        println("contrato" + contrato.monto)
+//        println("totPlan " + totPlan)
+
+
         def multaInc=(totPlan/totCrono<0.80)?contrato.monto/1000:0
+
+
+
+
         addCellTabla(tablaMl, new Paragraph(numero(multaInc, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         /* ***************************************************** Fin Tabla P0 *************************************************************/
 
