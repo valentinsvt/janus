@@ -464,6 +464,9 @@ class ObraController extends janus.seguridad.Shield {
             fechaPrecio = d.fcha
         }
 
+        def sbprMF = [:]
+
+
 //        println "fecha: " + fechaPrecio
 
 //filtro original combos programa tipo clase
@@ -498,7 +501,15 @@ class ObraController extends janus.seguridad.Shield {
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "canton": ["Canton", "string"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"], "estado": ["Estado", "string"], "valor": ["Monto", "number"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
-            def subs = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+            cn.eachRow("select distinct sbpr__id from mfrb where obra__id = ${obra.id} order by sbpr__id".toString()) { d ->
+                if(d.sbpr__id == 0)
+                    sbprMF << ["0" : 'Todos los subpresupuestos']
+                else
+                    sbprMF << ["${d.sbpr__id}" : SubPresupuesto.get(d.sbpr__id).descripcion]
+            }
+
+//            def subs = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+            def subs = VolumenesObra.findAllByObra(obra).subPresupuesto.unique().sort{it.id}
             def volumen = VolumenesObra.findByObra(obra)
             def formula = FormulaPolinomica.findByObra(obra)
 
@@ -562,8 +573,10 @@ class ObraController extends janus.seguridad.Shield {
 
 //            println "dueÑo: " + duenoObra
 
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo,
-             dire  : direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, duenoObra: duenoObra]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen,
+             matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra,
+             claseObra: claseObra, grupoDir: grupo, dire  : direccion, depar: departamentos, concurso: concurso,
+             personasUtfpu: personasUtfpu, duenoObra: duenoObra, sbprMF:sbprMF]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento
@@ -591,7 +604,9 @@ class ObraController extends janus.seguridad.Shield {
             duenoObra = 0
 
 
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio, personasUtfpu: personasUtfpu, duenoObra: duenoObra]
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil, programa: programa,
+             tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos,
+             fcha: fechaPrecio, personasUtfpu: personasUtfpu, duenoObra: duenoObra, sbprMF:sbprMF]
         }
 
 

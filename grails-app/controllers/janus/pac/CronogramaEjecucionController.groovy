@@ -1753,7 +1753,23 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             redirect(action: "errores", params: [contrato: params.id])
             return
         }
-        def obra = contrato?.oferta?.concurso?.obra
+//        def obra = contrato?.oferta?.concurso?.obra
+
+        def obraOld = contrato?.oferta?.concurso?.obra
+        println "oblraOld $obraOld"
+
+        if (!obraOld) {
+            flash.message = "No se encontró la obra"
+            flash.clase = "alert-error"
+            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
+            return
+        }
+
+        def obra = Obra.findByCodigo(obraOld.codigo+"-OF")
+        if(!obra) {
+            obra = obraOld
+        }
+
         if (!obra) {
             flash.message = "No se encontró la obra"
             flash.clase = "alert-error"

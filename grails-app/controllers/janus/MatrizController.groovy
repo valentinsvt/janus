@@ -16,9 +16,10 @@ class MatrizController extends janus.seguridad.Shield {
     }
 
     def pantallaMatriz(){
+        println "....." + params
         def obra = params.id
         def cn = dbConnectionService.getConnection()
-        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra} order by  1"
+        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra} and sbpr__id = ${params.sbpr} order by  1"
 //        println "sql desc "+sql
         def columnas = []
         def filas = []
@@ -39,13 +40,13 @@ class MatrizController extends janus.seguridad.Shield {
                     col = parts[0]
                 }
 
-                if(col=~"Mano de Obra"){
+                if(col =~ "Mano de Obra"){
                     indices["mano"].add(cont)
                 }
-                if(col=~"SALDO"){
+                if(col =~ "SALDO"){
                     indices["saldo"].add(cont)
                 }
-                if(col=~"TOTAL"){
+                if(col =~ "TOTAL"){
                     indices["total"].add(cont)
                 }
                 //println "col "+col
@@ -59,7 +60,7 @@ class MatrizController extends janus.seguridad.Shield {
        // println "indices "+indices
         session.indices = indices
         def titulo = Obra.get(obra).desgloseTransporte == "S" ? 'Matriz con desglose de Transporte' : 'Matriz sin desglose de Transporte'
-        [obra: obra, cols: columnas, titulo: titulo]
+        [obra: obra, cols: columnas, titulo: titulo, sbpr: params.sbpr]
     }
 
     def matrizPolinomica(){
@@ -75,14 +76,14 @@ class MatrizController extends janus.seguridad.Shield {
         offset = offset*limit
         def cn = dbConnectionService.getConnection()
         def cn2 = dbConnectionService.getConnection()
-        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra} order by 1"
+        def sql = "SELECT clmncdgo, clmndscr, clmntipo from mfcl where obra__id = ${obra} and sbpr__id = ${params.sbpr}  order by 1"
 
         def columnas = []
         def filas = []
         cn.eachRow(sql.toString()){r->
-            columnas.add([r[0],r[1],r[2]])
+            columnas.add([r[0], r[1], r[2]])
         }
-        sql ="SELECT * from mfrb where obra__id =${obra} order by orden limit ${limit} offset ${offset}"
+        sql ="SELECT * from mfrb where obra__id =${obra} and sbpr__id = ${params.sbpr} order by orden limit ${limit} offset ${offset}"
         //println "sql desc "+sql
         def cont = offset+1
         cn.eachRow(sql.toString()){r->
@@ -90,7 +91,7 @@ class MatrizController extends janus.seguridad.Shield {
             def sq =""
             columnas.each {c->
                 if(c[2]!="R"){
-                    sq = "select valor from mfvl where clmncdgo=${c[0]} and codigo='${r[0].trim()}' and obra__id =${obra}"
+                    sq = "select valor from mfvl where clmncdgo=${c[0]} and codigo='${r[0].trim()}' and obra__id =${obra} and sbpr__id = ${params.sbpr}"
                     cn2.eachRow(sq.toString()){v->
                         tmp.add(v[0])
                     }
@@ -105,7 +106,7 @@ class MatrizController extends janus.seguridad.Shield {
         if (filas.size()==0)
             render "fin"
         else
-            [filas:filas,cols:columnas,obraId:params.id,offset:offset,indices:indices]
+            [filas:filas, cols:columnas, obraId:params.id, offset:offset, indices:indices, sbpr: params.sbpr]
 
 
     }
@@ -116,7 +117,12 @@ class MatrizController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def cn2 = dbConnectionService.getConnection()
         def updates = dbConnectionService.getConnection()
-        def sql = "SELECT v.voit__id,v.obra__id,v.item__id,v.voitpcun,v.voitcntd,v.voitcoef,v.voitordn,v.voittrnp,v.voitrndm,i.itemnmbr,i.dprt__id,d.sbgr__id,s.grpo__id,o.clmndscr,o.clmncdgo from vlobitem v,dprt d,sbgr s,item i,mfcl o where v.item__id=i.item__id and i.dprt__id=d.dprt__id and d.sbgr__id=s.sbgr__id  and o.clmndscr = i.itemcmpo || '_T'  and  v.obra__id = ${params.obra} and o.obra__id=${params.obra} order by s.grpo__id"
+        def sql = "SELECT v.voit__id,v.obra__id,v.item__id,v.voitpcun,v.voitcntd,v.voitcoef,v.voitordn,v.voittrnp,v.voitrndm, " +
+                "i.itemnmbr,i.dprt__id,d.sbgr__id,s.grpo__id, o.clmndscr, o.clmncdgo " +
+                "from vlobitem v, dprt d, sbgr s, item i, mfcl o " +
+                "where v.item__id=i.item__id and i.dprt__id=d.dprt__id and d.sbgr__id=s.sbgr__id  and o.clmndscr = i.itemcmpo || '_T' and " +
+                "v.obra__id = ${params.obra} and o.obra__id=${params.obra}  and v.sbpr__id = ${params.sbpr} and o.sbpr__id = v.sbpr__id " +
+                "order by s.grpo__id"
 //        println "sql "+sql
         cn.eachRow(sql.toString()){r->
 //            println "r-> "+r
@@ -125,7 +131,7 @@ class MatrizController extends janus.seguridad.Shield {
                 codigo = "sS3"
             else
                 codigo = "sS5"
-            def select = "select valor from mfvl where clmncdgo=${r['clmncdgo']} and codigo='${codigo}' and obra__id =${params.obra} "
+            def select = "select valor from mfvl where clmncdgo=${r['clmncdgo']} and codigo='${codigo}' and obra__id =${params.obra}  and sbpr__id = ${params.sbpr} "
             def valor = 0
             cn2.eachRow(select.toString()){r2->
 //                println "r2 "+r2

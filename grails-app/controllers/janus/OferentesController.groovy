@@ -22,12 +22,13 @@ class OferentesController extends janus.seguridad.Shield {
         def ofId=params.obraOf
         def copia= new Obra()
         Obra.properties.declaredFields.each {
-            // println "campo--> "+it.getName()
-            copia.properties[it.getName()]=obra.properties[it.getName()]
+//            println "campo--> "+it.getName()
+            if(it.getName() != 'id') copia.properties[it.getName()]=obra.properties[it.getName()]
         }
-        copia.oferente=oferente
-        copia.codigo=obra.codigo+"-OF"
-        copia.estado="R"
+//        println "copia: ${copia.codigo} obra código: ${obra.codigo}, id: ${copia.id}"
+        copia.oferente = oferente
+        copia.codigo = obra.codigo+"-OF"
+        copia.estado = "R"
         copia.save(flush: true)
         oferentesService.copiaDatosObra(copia.id,ofId)
         //println "id "+copia.id

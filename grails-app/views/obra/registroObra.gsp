@@ -863,11 +863,14 @@
                     </a></li>
                     <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
                     <li>
-                        %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}" class="btnFormula">--}%
+%{--
                         <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btnFormula" params="[obra: obra?.id]" title="Coeficientes">
                             Fórmula Pol.
                         </g:link>
-                    </li>
+--}%
+                        <a href="#" id="btnFormula"><i class="icon-money"></i>Fórmula Pol.</a>
+
+                   </li>
                     %{--<li><a href="#">FP Liquidación</a></li>--}%
                     <li><a href="#" id="btnRubros"><i class="icon-money"></i>Rubros</a></li>
                     <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
@@ -983,16 +986,26 @@
                         </p>
                     </g:if>
                 </g:else>
-                <p>Desea generar la matriz? Esta acción podria tomar varios minutos</p>
-                <a href="#" class="btn btn-info" id="no">No</a>
-                <a href="#" class="btn btn-danger" id="si">Si</a>
-                <a href="#" class="btn btn-info" id="cancela" style="margin-left: 400px;">Cancelar</a>
+
+                %{--${sbprMF}--}%
+                <span style="margin-left: 100px;">Generada para:</span>
+                <g:select name="matriz_gen" from="${sbprMF}" optionKey="key" optionValue="value"
+                          style="margin-right: 20px; width: 400px"></g:select>
+
+                %{--<g:each var="sb" in="${sbprMF}" status="i">--}%
+                    %{--${sb.key} ${sb.value}<br/>--}%
+                %{--</g:each>--}%
+
+                <p style="margin-top: 20px">Desea volver a generar la matriz? o generar otra matriz</p>
+                <a href="#" class="btn btn-info" id="no">No -> Ver la Matriz existente</a>
+                <a href="#" class="btn btn-danger" id="si">Si -> Generar Matriz</a>
+                <a href="#" class="btn btn-info" id="cancela" style="margin-left: 200px;">Cancelar</a>
 
             </div>
 
             <div id="datos_matriz" style="text-align: center">
                 <span>Seleccione el subpresupuesto:</span>
-                <g:select name="mtariz_sub" from="${subs}" noSelection="['0': 'Todos los subpresupuestos']" optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
+                <g:select name="matriz_sub" from="${subs}" noSelection="['0': 'Todos los subpresupuestos']" optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
                 <p>Generar con desglose de Transporte <input type="checkbox" id="si_trans" style="margin-top: -3px" checked="true">
 
                 %{--"FP.... ${FormulaPolinomica.countByObra(janus.Obra.get(obra?.id))}"--}%
@@ -1005,6 +1018,36 @@
         </div>
 
     </div>
+
+    <div class="modal hide fade mediumModal" id="modal-formula" style=";overflow: hidden;">
+        <div class="modal-header btn-primary">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+
+            <h3 id="modal_title_formula">
+            </h3>
+        </div>
+
+        <div class="modal-body" id="modal_body_formula">
+            <div id="msg_formula">
+                <g:if test="${!obra.desgloseTransporte}">
+                    <p style="font-size: 14px; text-align: center;">No existe una matriz de la fórmula polinómica</p>
+                </g:if>
+                <g:else>
+            %{--${sbprMF}--}%
+                <span style="margin-left: 100px;">Subpresupuesto:</span>
+                <g:select name="matriz_genFP" from="${sbprMF}" optionKey="key" optionValue="value"
+                          style="margin-right: 20px; width: 400px"></g:select>
+
+                <a href="#" class="btn btn-info" id="irFP">Ir a la Fórmula Polinómica</a>
+                <a href="#" class="btn btn-info" id="cancelaFP" style="margin-left: 360px;">Cancelar</a>
+                </g:else>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </g:if>
 
 <div id="admDirecta">
@@ -1599,10 +1642,11 @@
             $("#datos_matriz").hide();
             $("#msg_matriz").show();
             $("#modal-matriz").modal("show")
-
         });
+
         $("#no").click(function () {
-            location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',id: obra?.id)}"
+            var sb = $("#matriz_gen").val();
+            location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',id: obra?.id)}?sbpr="+sb
         });
         $("#si").click(function () {
             $("#datos_matriz").show();
@@ -1664,7 +1708,7 @@
         });
 
         $("#ok_matiz").click(function () {
-            var sp = $("#mtariz_sub").val();
+            var sp = $("#matriz_sub").val();
 //            var tr = $("#si_trans").attr("checked");
             var tr = $("#si_trans").is(':checked');
             var borrar = $("#borra_fp").is(':checked');
@@ -1675,12 +1719,17 @@
 
             $.ajax({
                 type    : "POST",
-                url     : "${createLink(action: 'validaciones',controller: 'obraFP')}",
+                url     : "${createLink(action: 'validaciones', controller: 'obraFP')}",
                 data    : "obra=${obra.id}&sub=" + sp + "&trans=" + tr + "&borraFP=" + borrar,
                 success : function (msg) {
                     $("#dlgLoad").dialog("close");
                     $("#modal-matriz").modal("hide")
-                    if (msg != "ok") {
+//                    console.log(msg)
+                    var arr = msg.split("_")
+                    var ok_msg = arr[0]
+                    var sbpr = arr[1]
+//                    console.log(arr, ok_msg, sbpr)
+                    if (ok_msg != "ok") {
                         $.box({
                             imageClass : "box_info",
                             text       : msg,
@@ -1697,10 +1746,11 @@
                             }
                         });
                     } else {
-                        location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',params:[id:obra.id,inicio:0,limit:40, trnp: tr])}"
+                        location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',
+                        params:[id:obra.id,inicio:0,limit:40])}&sbpr="+sbpr
                     }
                 },
-                error   : function () {
+                error : function () {
                     $("#dlgLoad").dialog("close");
                     $("#modal-matriz").modal("hide");
                     $.box({
@@ -2279,8 +2329,25 @@
             });
         }
 
-        $(".btnFormula").click(function () {
+        $("#btnFormula").click(function () {
+            $("#modal_title_formula").html("Fórmula Polinómica");
+            $("#datos_formula").hide();
+            $("#msg_formula").show();
+            $("#modal-formula").modal("show")
+        });
+
+        $("#irFP").click(function () {
+            var sb = $("#matriz_genFP").val();
+            location.href = "${g.createLink(controller: 'formulaPolinomica',action: 'coeficientes',id: obra?.id)}?sbpr="+sb
+        });
+        $("#cancelaFP").click(function () {
+            $("#modal-formula").modal("hide")
+        });
+
+        $(".btnFormula__s").click(function () {
             var url = $(this).attr("href");
+
+
             $.ajax({
                 type    : "POST",
                 async   : false,

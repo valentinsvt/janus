@@ -10,6 +10,7 @@ import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
+import janus.Obra
 import janus.Parametros
 import janus.VolumenesObra
 import janus.pac.PeriodoEjecucion
@@ -182,7 +183,8 @@ class ReportePlanillas3Controller {
 //            def strContratista = cap(contratista.titulo + " " + contratista.nombreContacto + " " + contratista.apellidoContacto + "\nContratista")
             def strContratista = nombrePersona(contratista, "prov") + "\nContratista"
             def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
-            def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
+//            def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
+            def strSubdirector = "Ing. Miguel Velasteguí" + "\nSubdirector"
             def strAdmin = nombrePersona(administrador) + "\nAdministrador - Delegado"
             def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
             def strFechaAprobacion = "\nFecha de aprobación"
@@ -193,6 +195,15 @@ class ReportePlanillas3Controller {
                 fontTdFirmas = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL);
 
                 tablaFirmas.setWidths(arregloEnteros([35, 30, 35]))
+
+//                addCellTabla(tablaFirmas, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+
+                if(planilla?.observaciones != null){
+                    addCellTabla(tablaFirmas, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                }else{
+                    addCellTabla(tablaFirmas, new Paragraph("Observaciones: ", fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                }
+
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -209,6 +220,9 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 //                addCellTabla(tablaFirmas, new Paragraph(strAdmin, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+                tablaFirmas.setKeepTogether(true)
+
             } else if (params.tipo == "otro") {
 //                if (planilla.tipoPlanilla.codigo != 'A') {
                 if (params.orientacion == "horizontal") {
@@ -629,7 +643,9 @@ class ReportePlanillas3Controller {
             } else if (i == 1) { //anticipo
                 PdfPTable inner5 = new PdfPTable(1);
                 addCellTabla(inner5, new Paragraph(per.titulo, fontTh), [border: Color.BLACK, bwb: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(inner5, new Paragraph(fechaConFormato(per.fechaIncio), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+//                addCellTabla(inner5, new Paragraph(fechaConFormato(per.fechaIncio), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(inner5, new Paragraph(fechaConFormato((per.periodoReajuste)?per.periodoReajuste.fechaInicio:per.periodo.fechaInicio), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+//                fechaConFormato((p.periodoReajuste)?p.periodoReajuste.fechaInicio:p.periodo.fechaInicio, "MMM-yyyy")
                 addCellTabla(inner5, new Paragraph(per.titulo, fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(inner3, inner5, [border: Color.BLACK, bwb: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 //                addCellTabla(inner3, new Paragraph("123", fontTd), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -864,7 +880,8 @@ class ReportePlanillas3Controller {
                 fechaMax = null
             }
 
-            if (!fechaMax) {
+//            if (!fechaMax) {
+            if (fechaMax == false) {
 //                redirect(action: "errores")
                 def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
                 def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
@@ -872,7 +889,7 @@ class ReportePlanillas3Controller {
                 link += "&nbsp;&nbsp;&nbsp;"
                 link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
                 flash.message = res[1]
-                redirect(action: "errores", params: [link: link])
+                redirect(controller: "planilla2", action: "errores", params: [link: link])
                 return
             }
 
@@ -893,7 +910,7 @@ class ReportePlanillas3Controller {
 //            println res2
 //            println ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
-            if (!retraso) {
+            if (retraso == false) {
 //                redirect(action: "errores")
                 def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
                 def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res2[2] ?: ""])
@@ -901,7 +918,7 @@ class ReportePlanillas3Controller {
                 link += "&nbsp;&nbsp;&nbsp;"
                 link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
                 flash.message = res2[1]
-                redirect(action: "errores", params: [link: link])
+                redirect(controller: "planilla2", action: "errores", params: [link: link])
                 return
             }
 
@@ -1253,7 +1270,10 @@ class ReportePlanillas3Controller {
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalAnt, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalAct, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+
                 }
+
             }
 
             /* ************* fin header *****************/
@@ -1264,7 +1284,17 @@ class ReportePlanillas3Controller {
 //            tablaDetalles.setFooterRows(1);
 //            tablaDetalles.setHeaderRows(5);
 
-            def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+            def obra_of = Obra.findByCodigoIlike(obra.codigo + "_OF")
+
+            def detalle = [:]
+            if (obra_of) {
+                detalle = VolumenesObra.findAllByObra(obra_of, [sort: "orden"])
+            }   else {
+                detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+            }
+
+//            def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+/*
             def precios = [:]
             def indirecto = obra.totales / 100
             preciosService.ac_rbroObra(obra.id)
@@ -1272,6 +1302,20 @@ class ReportePlanillas3Controller {
                 def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
                 precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
             }
+*/
+
+            def precios = [:]
+            detalle.each {
+                def res
+                if (obra_of) {
+                    res = preciosService.precioVlob(obra_of.id, it.item.id)
+                }   else {
+                    res = preciosService.precioVlob(obra.id, it.item.id)
+                }
+                precios.put(it.id.toString(), res["precio"][0])
+            }
+
+
             def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
             def height = 12
             def maxRows = 45

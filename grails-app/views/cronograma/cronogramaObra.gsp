@@ -86,9 +86,12 @@
                     Subpresupuesto: <g:select name="subpresupuesto" from="${subpres}" optionKey="id" optionValue="descripcion"
                                               style="width: 300px;font-size: 10px" id="subpres" value="${subpre}"
                                               noSelection="['-1': 'TODOS']"/>
+                    <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
+%{--
                     <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
                     <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
                     </g:if>
+--}%
 
                     <g:if test="${obra.estado != 'R'}">
                         <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>

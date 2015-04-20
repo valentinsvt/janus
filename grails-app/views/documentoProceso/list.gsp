@@ -42,7 +42,7 @@
                         </g:link>
                     </g:if>
                     <g:else>
-                        <g:link controller="contrato" action="verContrato" class="btn" params="[contrato: contrato.id]">
+                        <g:link controller="contrato" action="verContrato" class="btn" params="[contrato: contrato?.id]">
                             <i class="icon-caret-left"></i>
                             Regresar
                         </g:link>
@@ -243,7 +243,7 @@
                         url     : "${createLink(action:'copiarDocumentos')}",
                         data    : {
                             id : "${concurso.id}",
-                            contrato : "${contrato.id}"
+                            contrato : "${contrato?.id}"
                         },
                         success : function (msg) {
                             location.reload();
