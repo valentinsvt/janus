@@ -2561,6 +2561,7 @@ class ReportesPlanillasController {
             neg = "MENOS "
         }
         def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
+        println "a letras: $totalLetras, resulta: $numerosALetras"
 //       def strParrafo3 = "Son ${neg}${numerosALetras}"
 //        Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
         Paragraph parrafo3 = new Paragraph(texto.parrafo3, fontContenido);
