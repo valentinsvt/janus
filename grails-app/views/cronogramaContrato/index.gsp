@@ -136,6 +136,7 @@
 
                             <tr class="item_row ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''}" id="${vol.id} " data-id="${vol.id}">
                                 <td class="codigo">
+                                    %{--${vol}<br/>--}%
                                     ${vol.item.codigo}
                                 </td>
                                 <td class="nombre">
@@ -171,6 +172,7 @@
                                         %{--${totalMes[i] = 0}--}%
                                         %{--</g:if>--}%
                                         %{--${totalMes[i] = prec ? totalMes[i] + prec : totalMes}--}%
+                                        %{--${prec}<br/>--}%
                                         <g:formatNumber number="${prec?.precio}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                     </td>
                                 </g:each>
@@ -193,6 +195,7 @@
                                     <td class="prct mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
                                         data-tipo="prct" data-val="${porc?.porcentaje ?: 0}" data-id="${porc?.id ?: ''}">
                                         %{--<g:set var="totalPrcRow" value="${porc ? totalPrcRow + porc : totalPrcRow}"/>--}%
+                                        %{--${porc}<br/>--}%
                                         <g:formatNumber number="${porc?.porcentaje}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                     </td>
                                 </g:each>
@@ -215,6 +218,7 @@
                                     <td class="fis mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
                                         data-tipo="fis" data-val="${cant?.cantidad ?: 0}" data-id="${cant?.id ?: ''}">
                                         %{--<g:set var="totalCanRow" value="${cant ? totalCanRow + cant : totalCanRow}"/>--}%
+                                        %{--${cant}<br/>--}%
                                         <g:formatNumber number="${cant?.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                     </td>
                                 </g:each>

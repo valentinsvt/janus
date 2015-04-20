@@ -10,8 +10,8 @@ table th {
 
 .tiny {
     font-size  : 12px !important;
-    height     : 10px !important;
-    width      : 40px !important;
+    height     : 15px !important;
+    width      : 50px !important;
     text-align : right !important;
 }
 
@@ -82,16 +82,16 @@ table th {
             if (val == "") {
                 $(".tiny").each(function () {
                     if ($(this).data("periodo") == periodo) {
-                        $(this).val("0.00");
+//                        $(this).val("0.00");
                     }
                 })
             } else {
                 try {
                     val = parseFloat(val);
-                    var max = parseFloat($(this).data("max"));
-                    if (val > max) {
-                        val = max;
-                    }
+//                    var max = parseFloat($(this).data("max"));
+//                    if (val > max) {
+//                        val = max;
+//                    }
                     var $maxSumDol = $tinyDol.last();
                     var $maxSumPrc = $tinyPrc.last();
                     var $maxSumFis = $tinyFis.last();
@@ -112,6 +112,8 @@ table th {
                     var prc = parseFloat($prc.val());
                     var fis = parseFloat($fis.val());
 
+                    var ok = false;
+
                     //                        console.log(val, max, $dol, dol, $fis, fis, $prc, prc, $maxSumDol, maxSumDol, $maxSumPrc, maxSumPrc, $maxSumFis, maxSumFis, totFis, totPrc, totDol);
                     //                        console.log(tipo)
                     switch (tipo) {
@@ -120,55 +122,59 @@ table th {
                             dol = val;
                             prc = (dol * 100) / totDol;
                             fis = totFis * (prc / 100);
+                            ok = true;
                             break;
-                        case "prct":
-                            //calcular el $ y cantidad
-                            prc = val;
-                            dol = totDol * (prc / 100);
-                            fis = totFis * (prc / 100);
-                            break;
-                        case "fis":
-                            //calcular el % y el $
-                            fis = val;
-                            prc = (fis * 100) / totFis;
-                            dol = totDol * (prc / 100);
-                            break;
+//                        case "prct":
+//                            //calcular el $ y cantidad
+//                            prc = val;
+//                            dol = totDol * (prc / 100);
+//                            fis = totFis * (prc / 100);
+//                            ok = true;
+//                            break;
+//                        case "fis":
+//                            //calcular el % y el $
+//                            fis = val;
+//                            prc = (fis * 100) / totFis;
+//                            dol = totDol * (prc / 100);
+//                            ok = true;
+//                            break;
                     }
+                    if (ok) {
+                        dol = number_format(dol, 2, ".", "");
+                        fis = number_format(fis, 2, ".", "");
+                        prc = number_format(prc, 2, ".", "");
+                        $dol.val(dol);
+                        $fis.val(fis);
+                        $prc.val(prc);
 
-                    dol = number_format(dol, 2, ".", "");
-                    fis = number_format(fis, 2, ".", "");
-                    prc = number_format(prc, 2, ".", "");
-                    $dol.val(dol);
-                    $fis.val(fis);
-                    $prc.val(prc);
+                        var sumDol = 0, sumPrc = 0, sumFis = 0;
+                        $tinyDol.each(function () {
+                            sumDol += parseFloat($.trim($(this).val()));
+                        });
+                        $tinyPrc.each(function () {
+                            sumPrc += parseFloat($.trim($(this).val()));
+                        });
+                        $tinyFis.each(function () {
+                            sumFis += parseFloat($.trim($(this).val()));
+                        });
+                        //                        console.log(sumDol, maxSumDol, sumDol - maxSumDol, " | ", sumPrc, maxSumPrc, sumPrc - maxSumPrc, " | ", sumFis, maxSumFis, sumFis - maxSumFis);
 
-                    var sumDol = 0, sumPrc = 0, sumFis = 0;
-                    $tinyDol.each(function () {
-                        sumDol += parseFloat($.trim($(this).val()));
-                    });
-                    $tinyPrc.each(function () {
-                        sumPrc += parseFloat($.trim($(this).val()));
-                    });
-                    $tinyFis.each(function () {
-                        sumFis += parseFloat($.trim($(this).val()));
-                    });
-                    //                        console.log(sumDol, maxSumDol, sumDol - maxSumDol, " | ", sumPrc, maxSumPrc, sumPrc - maxSumPrc, " | ", sumFis, maxSumFis, sumFis - maxSumFis);
+                        maxSumDol = parseFloat(number_format(maxSumDol, 2, ".", ""));
+                        maxSumPrc = parseFloat(number_format(maxSumPrc, 2, ".", ""));
+                        maxSumFis = parseFloat(number_format(maxSumFis, 2, ".", ""));
 
-                    maxSumDol = parseFloat(number_format(maxSumDol, 2, ".", ""));
-                    maxSumPrc = parseFloat(number_format(maxSumPrc, 2, ".", ""));
-                    maxSumFis = parseFloat(number_format(maxSumFis, 2, ".", ""));
-
-                    if (sumDol > maxSumDol) {
-                        $tinyDol.not(".p" + periodo).val("0.00");
-                        //                            console.log($tinyDol.not(".p" + periodo));
-                    }
-                    if (sumPrc > maxSumPrc) {
-                        $tinyPrc.not(".p" + periodo).val("0.00");
-                        //                            console.log($tinyPrc.not(".p" + periodo));
-                    }
-                    if (sumFis > maxSumFis) {
-                        $tinyFis.not(".p" + periodo).val("0.00");
-                        //                            console.log($tinyFis.not(".p" + periodo));
+//                    if (sumDol > maxSumDol) {
+//                        $tinyDol.not(".p" + periodo).val("0.00");
+//                        //                            console.log($tinyDol.not(".p" + periodo));
+//                    }
+//                    if (sumPrc > maxSumPrc) {
+//                        $tinyPrc.not(".p" + periodo).val("0.00");
+//                        //                            console.log($tinyPrc.not(".p" + periodo));
+//                    }
+//                    if (sumFis > maxSumFis) {
+//                        $tinyFis.not(".p" + periodo).val("0.00");
+//                        //                            console.log($tinyFis.not(".p" + periodo));
+//                    }
                     }
                     updateTotal();
                 } catch (e) {

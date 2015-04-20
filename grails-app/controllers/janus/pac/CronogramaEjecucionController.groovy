@@ -83,6 +83,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             primero hace una modificacion tipo suspension sin fecha de fin y con -1 en dias
             segundo el action terminaSuspension modifica la modificacino para ponerle fecha fin y dias y recalcula las fechas de periodos del cronograma
      */
+
     def suspensionNueva() {
         println "AQUIIIIII"
         def obra = Obra.get(params.obra)
@@ -92,7 +93,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
 
         def ini = new Date().parse("dd-MM-yyyy", params.ini)
-        if(params.fin) {
+        if (params.fin) {
             fin = new Date().parse("dd-MM-yyyy", params.fin)
 
             finSusp = fin
@@ -103,21 +104,21 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         }
 
         def modificacion = new Modificaciones([
-                obra: obra,
-                tipo: "S",
-                dias: dias,
-                fecha: new Date(),
-                fechaInicio: ini,
-                fechaFin: finSusp,
-                motivo: params.motivo,
+                obra         : obra,
+                tipo         : "S",
+                dias         : dias,
+                fecha        : new Date(),
+                fechaInicio  : ini,
+                fechaFin     : finSusp,
+                motivo       : params.motivo,
                 observaciones: params.observaciones,
-                memo: params.memo.toUpperCase()
+                memo         : params.memo.toUpperCase()
         ])
 
         if (!modificacion.save(flush: true)) {
             println "error modificacion: " + modificacion.errors
         } else {
-            println "modificacion "+ modificacion.id+"   ini: "+modificacion.fechaInicio+   "    fin: "+modificacion.fechaFin+"     dias: "+modificacion.dias
+            println "modificacion " + modificacion.id + "   ini: " + modificacion.fechaInicio + "    fin: " + modificacion.fechaFin + "     dias: " + modificacion.dias
         }
         render "OK"
     }
@@ -126,6 +127,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             primero el action suspensionNueva hace una modificacion tipo suspension sin fecha de fin y con -1 en dias
             segundo modifica la modificacino para ponerle fecha fin y dias y recalcula las fechas de periodos del cronograma
      */
+
     def terminaSuspension() {
         def obra = Obra.get(params.obra)
         def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
@@ -155,16 +157,16 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def errores = ""
 
         //1ro cambia fecha fin y cant dias para todas las suspensiones
-        suspensiones.each {sus->
+        suspensiones.each { sus ->
             def dias = finSusp - sus.fechaInicio + 1
             sus.dias = dias
             sus.fechaFin = finSusp
-            if(params.observaciones && params.observaciones.trim()!="") {
-                sus.observaciones = params.observaciones+"       "+sus.observaciones
+            if (params.observaciones && params.observaciones.trim() != "") {
+                sus.observaciones = params.observaciones + "       " + sus.observaciones
             }
-            if(!sus.save(flush:true)) {
-                errores += renderErrors(bean:sus)
-                println "EEOR EN TEMINAR SUSSPENSION: "+sus.errors
+            if (!sus.save(flush: true)) {
+                errores += renderErrors(bean: sus)
+                println "EEOR EN TEMINAR SUSSPENSION: " + sus.errors
             }
         }
 
@@ -185,11 +187,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                 //crea el periodo de tipo suspension con fecha inicio y fecha fin
                 def suspension = new PeriodoEjecucion([
-                        obra: obra,
-                        numero: num,
-                        tipo: "S",
+                        obra       : obra,
+                        numero     : num,
+                        tipo       : "S",
                         fechaInicio: ini,
-                        fechaFin: finSusp
+                        fechaFin   : finSusp
                 ])
                 if (!suspension.save(flush: true)) {
                     println "Error al guardar la suspension: " + suspension.errors
@@ -263,11 +265,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                     //crea el periodo de tipo periodo con fecha inicio y fecha fin: la otra parte del periodo recortado
                     def periodo2 = new PeriodoEjecucion([
-                            obra: obra,
-                            numero: per.numero,
-                            tipo: "P",
+                            obra       : obra,
+                            numero     : per.numero,
+                            tipo       : "P",
                             fechaInicio: nuevoIni2,
-                            fechaFin: nuevoFin2
+                            fechaFin   : nuevoFin2
                     ])
                     if (!periodo2.save(flush: true)) {
                         println "Error al guardar el periodo2: " + periodo2.errors
@@ -300,10 +302,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                         def crono2 = new CronogramaEjecucion([
                                 volumenObra: crono.volumenObra,
-                                periodo: periodo2,
-                                precio: precio2,
-                                porcentaje: porcentaje2,
-                                cantidad: cantidad2
+                                periodo    : periodo2,
+                                precio     : precio2,
+                                porcentaje : porcentaje2,
+                                cantidad   : cantidad2
                         ])
                         if (!crono2.save(flush: true)) {
                             println "error 4: " + crono2.errors
@@ -379,15 +381,15 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         }
 
         def modificacion = new Modificaciones([
-                obra: obra,
-                tipo: "S",
-                dias: finSusp - ini + 1,
-                fecha: new Date(),
-                fechaInicio: ini,
-                fechaFin: finSusp,
-                motivo: params.motivo,
+                obra         : obra,
+                tipo         : "S",
+                dias         : finSusp - ini + 1,
+                fecha        : new Date(),
+                fechaInicio  : ini,
+                fechaFin     : finSusp,
+                motivo       : params.motivo,
                 observaciones: params.observaciones,
-                memo: params.memo.toUpperCase()
+                memo         : params.memo.toUpperCase()
         ])
 
         if (!modificacion.save(flush: true)) {
@@ -414,11 +416,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                 //crea el periodo de tipo suspension con fecha inicio y fecha fin
                 def suspension = new PeriodoEjecucion([
-                        obra: obra,
-                        numero: num,
-                        tipo: "S",
+                        obra       : obra,
+                        numero     : num,
+                        tipo       : "S",
                         fechaInicio: ini,
-                        fechaFin: finSusp
+                        fechaFin   : finSusp
                 ])
                 if (!suspension.save(flush: true)) {
                     println "Error al guardar la suspension: " + suspension.errors
@@ -492,11 +494,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                     //crea el periodo de tipo periodo con fecha inicio y fecha fin: la otra parte del periodo recortado
                     def periodo2 = new PeriodoEjecucion([
-                            obra: obra,
-                            numero: per.numero,
-                            tipo: "P",
+                            obra       : obra,
+                            numero     : per.numero,
+                            tipo       : "P",
                             fechaInicio: nuevoIni2,
-                            fechaFin: nuevoFin2
+                            fechaFin   : nuevoFin2
                     ])
                     if (!periodo2.save(flush: true)) {
                         println "Error al guardar el periodo2: " + periodo2.errors
@@ -529,10 +531,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                         def crono2 = new CronogramaEjecucion([
                                 volumenObra: crono.volumenObra,
-                                periodo: periodo2,
-                                precio: precio2,
-                                porcentaje: porcentaje2,
-                                cantidad: cantidad2
+                                periodo    : periodo2,
+                                precio     : precio2,
+                                porcentaje : porcentaje2,
+                                cantidad   : cantidad2
                         ])
                         if (!crono2.save(flush: true)) {
                             println "error 4: " + crono2.errors
@@ -616,13 +618,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //            println res
         def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
         def cronos = [
-                codigo: vol.item.codigo,
-                nombre: vol.item.nombre,
-                unidad: vol.item.unidad.codigo,
+                codigo  : vol.item.codigo,
+                nombre  : vol.item.nombre,
+                unidad  : vol.item.unidad.codigo,
                 cantidad: vol.cantidad,
-                precioU: precio,
-                parcial: precio * vol.cantidad,
-                volumen: vol
+                precioU : precio,
+                parcial : precio * vol.cantidad,
+                volumen : vol
         ]
 
         html += "<table class='table table-condensed'>"
@@ -675,6 +677,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def cantModificable = []
 
+        println "cantModificable0: " + cantModificable
+
         def filaDol = "", filaPor = "", filaCan = ""
         def totDol = 0, totPor = 0, totCan = 0
         periodos.eachWithIndex { periodo, i ->
@@ -684,11 +688,12 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             filaCan += "<td class='fis num ${periodo.tipo}'>"
 
             cantModificable[i] = [
-                    dol: 0,
-                    por: 0,
-                    can: 0,
+                    dol  : 0,
+                    por  : 0,
+                    can  : 0,
                     crono: null
             ]
+            println "cantModificable1: " + cantModificable
             if (cronosPer.size() == 1) {
                 cronosPer = cronosPer[0]
 //                    println cronosPer.id
@@ -703,18 +708,19 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 totCan += cronosPer.cantidad
 
                 cantModificable[i] = [
-                        dol: cronosPer.precio,
-                        por: cronosPer.porcentaje,
-                        can: cronosPer.cantidad,
+                        dol  : cronosPer.precio,
+                        por  : cronosPer.porcentaje,
+                        can  : cronosPer.cantidad,
                         crono: cronosPer.id
                 ]
+                println "cantModificable2: " + cantModificable
 //                totalesDol[i] += cronosPer.precio
             }
             filaDol += "</td>"
             filaPor += "</td>"
             filaCan += "</td>"
         }
-
+        println "cantModificable3: " + cantModificable
 //        println cantModificable
 
         def filaDolPla = "", filaPorPla = "", filaCanPla = ""
@@ -745,10 +751,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             def totalPlanilla = 0
             def modificable = true
 //            println cantModificable[i]
+            println "cantModificable4[${i}]: " + cantModificable[i]
 
             planillasPeriodo.each { pla ->
-//                println "periodo: " + periodo.fechaInicio.format("dd-MM-yyyy") + " - " + periodo.fechaFin.format("dd-MM-yyyy")
-//                println "\tplanilla: " + pla.fechaInicio.format("dd-MM-yyyy") + " - " + pla.fechaFin.format("dd-MM-yyyy")
+                println "periodo: " + periodo.fechaInicio.format("dd-MM-yyyy") + " - " + periodo.fechaFin.format("dd-MM-yyyy")
+                println "\tplanilla: " + pla.fechaInicio.format("dd-MM-yyyy") + " - " + pla.fechaFin.format("dd-MM-yyyy")
                 if (pla.fechaFin >= periodo.fechaFin) {
                     modificable = false
 //                    cantModificable[i] = [
@@ -761,6 +768,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     cantModificable[i].can = 0
 
                 }
+                println "cantModificable5[${i}]: " + cantModificable[i]
                 def diasPlanilla = pla.fechaFin - pla.fechaInicio + 1
                 totalPlanilla += (diasPlanilla * cantDia)
             }
@@ -776,6 +784,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             totPorPla += porPla
             totCanPla += canPla
 
+            println "\t\ttotalPlanilla=" + totalPlanilla + "   porPla=" + porPla + "   canPla=" + canPla
+
             if (modificable) {
                 def dol = cantModificable[i].dol - totalPlanilla
                 def por = cantModificable[i].por - porPla
@@ -784,25 +794,31 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def maxPor = numero(por.toDouble().round(2))
                 def maxCan = numero(can.toDouble().round(2))
 
+                println "cantModificable6[${i}]: " + cantModificable[i]
+
                 maxDolAcu += dol.toDouble()
                 maxPrctAcu += por.toDouble()
                 maxCanAcu += can.toDouble()
 
-                filaDolMod += "<input type='number' class='input-mini tiny dol p${i}' value='" + maxDol +
+                println "\tdol=" + dol + "  por=" + por + "  can=" + can + "  maxDol=" + maxDol + "   maxPor=" + maxPor + "   maxCan=" + maxCan +
+                        "   maxDolAcu=" + maxDolAcu + "  maxPrctAcu=" + maxPrctAcu + "  maxCanAcu=" + maxCanAcu
+
+
+                filaDolMod += "<input type='text' class='input-mini tiny dol p${i}' value='" + "0.00" +/* maxDol +*/
                         "' data-tipo='dol' data-total='${totDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
                         " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
-                        " data-val1='${totalPlanilla.toDouble().round(2)}' /> " +
-                        "(max. ${maxDolAcu.toDouble().round(2)})"
-                filaPorMod += "<input type='number' class='input-mini tiny prct p${i}' value='" + maxPor +
+                        " data-val1='${totalPlanilla.toDouble().round(2)}' /> " /*+
+                        "(max. ${maxDolAcu.toDouble().round(2)})"*/
+                filaPorMod += "<input type='text' class='input-mini tiny prct p${i}' value='" + "0.00" + /*maxPor +*/
                         "' data-tipo='prct' data-total='${totPor}' data-periodo='${i}' data-max='" + maxPrctAcu + "' " +
                         " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
-                        " data-val1='${porPla.toDouble().round(2)}'  /> " +
-                        "(max. ${maxPrctAcu.toDouble().round(2)})"
-                filaCanMod += "<input type='number' class='input-mini tiny fis p${i}' value='" + maxCan +
+                        " data-val1='${porPla.toDouble().round(2)}'  /> " /*+
+                        "(max. ${maxPrctAcu.toDouble().round(2)})"*/
+                filaCanMod += "<input type='text' class='input-mini tiny fis p${i}' value='" + "0.00" + /*maxCan +*/
                         "' data-tipo='fis' data-total='${totCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
                         " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
-                        " data-val1='${canPla.toDouble().round(2)}' /> " +
-                        "(max. ${maxCanAcu.toDouble().round(2)})"
+                        " data-val1='${canPla.toDouble().round(2)}' /> " /*+
+                        "(max. ${maxCanAcu.toDouble().round(2)})"*/
             }
 
             filaDolPla += "</td>"
@@ -915,8 +931,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def crono = parts[3]
                 if (!modificaciones[periodo]) {
                     modificaciones[periodo] = [
-                            fis: [:],
-                            dol: [:],
+                            fis : [:],
+                            dol : [:],
                             prct: [:]
                     ]
                 }
@@ -935,8 +951,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def crono = parts[3]
                 if (!modificaciones[periodo]) {
                     modificaciones[periodo] = [
-                            fis: [:],
-                            dol: [:],
+                            fis : [:],
+                            dol : [:],
                             prct: [:]
                     ]
                 }
@@ -955,8 +971,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def crono = parts[3]
                 if (!modificaciones[periodo]) {
                     modificaciones[periodo] = [
-                            fis: [:],
-                            dol: [:],
+                            fis : [:],
+                            dol : [:],
                             prct: [:]
                     ]
                 }
@@ -1003,13 +1019,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def obra = Obra.get(params.obra)
 
         def modificacion = new Modificaciones([
-                obra: obra,
-                tipo: "A",
-                dias: dias,
-                fecha: new Date(),
-                motivo: params.motivo,
+                obra         : obra,
+                tipo         : "A",
+                dias         : dias,
+                fecha        : new Date(),
+                motivo       : params.motivo,
                 observaciones: params.observaciones,
-                memo: params.memo.toUpperCase()
+                memo         : params.memo.toUpperCase()
         ])
         if (!modificacion.save(flush: true)) {
             println "error modificacion: " + modificacion.errors
@@ -1069,11 +1085,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 if (add > 0) {
                     fin = inicio + (add - 1)
                     def newPer = new PeriodoEjecucion([
-                            obra: obra,
-                            numero: next,
-                            tipo: "P",
+                            obra       : obra,
+                            numero     : next,
+                            tipo       : "P",
                             fechaInicio: inicio,
-                            fechaFin: fin
+                            fechaFin   : fin
                     ])
                     if (!newPer.save(flush: true)) {
                         errores = true
@@ -1104,13 +1120,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def periodos
 
         def modificacion = new Modificaciones([
-                obra: obra,
-                tipo: "A",
-                dias: dias,
-                fecha: new Date(),
-                motivo: params.motivo,
+                obra         : obra,
+                tipo         : "A",
+                dias         : dias,
+                fecha        : new Date(),
+                motivo       : params.motivo,
                 observaciones: params.observaciones,
-                memo: params.memo.toUpperCase()
+                memo         : params.memo.toUpperCase()
         ])
         if (!modificacion.save(flush: true)) {
             println "error modificacion: " + modificacion.errors
@@ -1223,13 +1239,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //            println res
             def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
             cronos.add([
-                    codigo: vol.item.codigo,
-                    nombre: vol.item.nombre,
-                    unidad: vol.item.unidad.codigo,
+                    codigo  : vol.item.codigo,
+                    nombre  : vol.item.nombre,
+                    unidad  : vol.item.unidad.codigo,
                     cantidad: vol.cantidad,
-                    precioU: precio,
-                    parcial: precio * vol.cantidad,
-                    volumen: vol
+                    precioU : precio,
+                    parcial : precio * vol.cantidad,
+                    volumen : vol
             ])
         }//detalles.each
 
@@ -1467,12 +1483,12 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //            precios.put(vol.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
             def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
             def mapaVol = [
-                    codigo: vol.item.codigo,
-                    nombre: vol.item.nombre,
-                    unidad: vol.item.unidad.codigo,
+                    codigo  : vol.item.codigo,
+                    nombre  : vol.item.nombre,
+                    unidad  : vol.item.unidad.codigo,
                     cantidad: vol.cantidad,
-                    precioU: precio,
-                    parcial: precio * vol.cantidad,
+                    precioU : precio,
+                    parcial : precio * vol.cantidad,
                     periodos: []
             ]
             sum += mapaVol.parcial
@@ -1487,20 +1503,20 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             c.each { cc ->
                 if (b) {
                     periodos.add([
-                            ini: cc.fechaInicio,
-                            fin: cc.fechaFin,
+                            ini : cc.fechaInicio,
+                            fin : cc.fechaFin,
                             tipo: cc.tipo,
-                            num: cc.periodo
+                            num : cc.periodo
                     ])
                 }
                 mapaVol.periodos.add([
-                        tipo: cc.tipo,
-                        num: cc.periodo,
-                        cantidad: cc.cantidad,
-                        precio: cc.precio,
+                        tipo      : cc.tipo,
+                        num       : cc.periodo,
+                        cantidad  : cc.cantidad,
+                        precio    : cc.precio,
                         porcentaje: cc.porcentaje,
-                        ini: cc.fechaInicio,
-                        fin: cc.fechaFin,
+                        ini       : cc.fechaInicio,
+                        fin       : cc.fechaFin,
                 ])
             }
             cronos.add(mapaVol)
@@ -1792,11 +1808,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     if (periodo.size() == 0) {
 //                        println "crea el periodo"
                         periodo = new PeriodoEjecucion([
-                                obra: obra,
-                                numero: crono.periodo,
-                                tipo: "P",
+                                obra       : obra,
+                                numero     : crono.periodo,
+                                tipo       : "P",
                                 fechaInicio: ini,
-                                fechaFin: fin
+                                fechaFin   : fin
                         ])
                         if (!periodo.save(flush: true)) {
                             println "Error al guardar el periodo " + periodo.errors
@@ -1812,10 +1828,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     if (continua) {
                         def cronoEjecucion = new CronogramaEjecucion([
                                 volumenObra: vol,
-                                periodo: periodo,
-                                precio: crono.precio,
-                                porcentaje: crono.porcentaje,
-                                cantidad: crono.cantidad
+                                periodo    : periodo,
+                                precio     : crono.precio,
+                                porcentaje : crono.porcentaje,
+                                cantidad   : crono.cantidad
                         ])
                         if (!cronoEjecucion.save(flush: true)) {
                             println "Error al guardar el crono ejecucion del crono " + crono.id
@@ -1861,7 +1877,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
         }
 //        println "suspensiones "+suspensiones
-        return [obra: obra, contrato: contrato, suspensiones:suspensiones, ini:ini]
+        return [obra: obra, contrato: contrato, suspensiones: suspensiones, ini: ini]
     }
 
     def index_old() {
