@@ -1652,24 +1652,29 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def fechaPresentacion = planilla.fechaPresentacion
 //        def retraso = fechaPresentacion - fechaMax + 1
 
-        def retraso = diasLaborablesService.diasLaborablesEntre(fechaPresentacion, fechaMax)
-        if (retraso[0]) {
-            retraso = retraso[1]
+        def retrasoX = diasLaborablesService.diasLaborablesEntre(fechaPresentacion, fechaMax)
+        def retraso = null
+        if (retrasoX[0]) {
+            retraso = retrasoX[1]
         } else {
             retraso = null
         }
 
-        if (!retraso) {
+//        println "retraso: $retraso, dias laborables: $retrasoX"
+
+//        if (!retraso) {
+        if (retraso == false) {
 //                redirect(action: "errores")
             def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
-            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: retraso[2] ?: ""])
+            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: retrasoX[2] ?: ""])
             def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
             link += "&nbsp;&nbsp;&nbsp;"
             link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
-            flash.message = retraso[1]
+            flash.message = retrasoX[1]
             redirect(action: "errores", params: [link: link])
             return
         }
+//        println "pasa retraso"
 
         if (fechaPresentacion < fechaMax) {
             retraso *= -1
