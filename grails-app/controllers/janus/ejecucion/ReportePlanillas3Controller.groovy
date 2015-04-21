@@ -22,10 +22,11 @@ class ReportePlanillas3Controller {
     def diasLaborablesService
     def reportePlanillaNuevo() {
         def planilla = Planilla.get(params.id)
-        def obra = planilla.contrato.oferta.concurso.obra
+//        def obra = planilla.contrato.oferta.concurso.obra
+        def obra = planilla.contrato.obra
         def contrato = planilla.contrato
 
-        println "obra prerporte planillas!!!!  : ${obra.id}"
+        println "obra prerporte planillas!!!!  : ${obra.id}, obra: $obra.id"
         def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
 
 //
@@ -41,7 +42,7 @@ class ReportePlanillas3Controller {
 
 
         def liquidacion = false
-        println "planilla " + planilla
+        println "planilla $planilla fechas: ${planilla?.fechaFin}, prej: $prej"
         if (planilla?.fechaFin) {
             liquidacion = planilla.fechaFin >= prej[0].fechaFin
         }
