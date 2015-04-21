@@ -572,7 +572,10 @@ class ReportePlanillas3Controller {
 
         printFirmas([tipo: "otro", orientacion: "horizontal"])
 
-        def multaInc=(totPlan/totCrono<0.80)?contrato.monto/1000:0
+        def multaInc = 0.0
+        if (totCrono > 0) {
+            multaInc = (totPlan/totCrono<0.80)?contrato.monto/1000:0
+        }
         addCellTabla(tablaMl, new Paragraph(numero(multaInc, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         /* ***************************************************** Fin Tabla P0 *************************************************************/
 

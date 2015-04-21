@@ -2878,7 +2878,7 @@ class ReportesPlanillasController {
         def str = ""
 
         def texto = Pdfs.findAllByObra(obra)
-//        println "................." + texto.size() + " obra:" + obra.id
+        println "................." + texto.size() + " obra:" + obra.id
         if (texto.size() == 0) {
             /* accede a crear inicio de obra solo el administrador */
             if (contrato.administrador.id == session.usuario.id) {
