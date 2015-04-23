@@ -20,6 +20,7 @@ import java.awt.Color
 class ReportePlanillas3Controller {
     def preciosService
     def diasLaborablesService
+
     def reportePlanillaNuevo() {
         def planilla = Planilla.get(params.id)
 //        def obra = planilla.contrato.oferta.concurso.obra
@@ -30,7 +31,7 @@ class ReportePlanillas3Controller {
         def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
 
 //
-//        println "****************************************"
+        println "****************************************"
 //        println planilla
 //        println planilla.tipoPlanilla.codigo
 ////        println planilla?.fechaFin
