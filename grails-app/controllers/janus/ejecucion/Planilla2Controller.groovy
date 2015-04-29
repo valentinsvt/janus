@@ -2261,31 +2261,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
             def val = ValorIndice.findAllByPeriodo(per)
             println "val para per "+per+" ==> "+val.size()
             if (val.size()<10) {
-//                    def vals = ValorIndice.withCriteria {
-//                        eq("indice", c.indice)
-//                        periodo {
-//                            le("fechaInicio", per.fechaInicio)
-//                            order("fechaInicio", "asc")
-//                        }
-//                    }
-////                println "no hay val   ${c.indice.id}---- ${per} "+vals.periodo
-//                    if (vals.size() > 0) {
-//                        perNuevo = vals.pop().periodo
-//                    } else {
-//                        if (!flash.message.contains(c.indice.toString()) || !flash.message.contains(per.toString())) {
-//                            flash.message += "<li>No se encontró el valor de índice de  " + c.indice + " en el periodo " + per + "</li>"
-//                        }
-//                        println "error wtf  " + c.indice + " (" + c.indice.id + ") " + per + " (" + per.id + ")"
-//                        perNuevo = null
-//                    }
-                /*Agrego un valor en 1 20-01-2015*/
-//                    println "creando nuevo valor  para "+c.indice+" , "+per+" "
-//                    def valNuevo = new ValorIndice()
-//                    valNuevo.indice=c.indice
-//                    valNuevo.periodo=per
-//                    valNuevo.valor=1
-//                    valNuevo.save(flush: true)
-//                    val = valNuevo
                 perNuevo = PeriodosInec.findAllByFechaFinLessThan(per.fechaInicio,[sort:"fechaFin",limit: 3,"order":"desc"])
                 println "no hay indices en "+per
                 println "periodos anteriores "+perNuevo
@@ -2295,12 +2270,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     perNuevo=null
                 println "per nuevo "+perNuevo
             }
-
-
-//            if (i > 12 * 5) {
-//                return null
-//            }
-
             if(!perNuevo)
                 return null
 
@@ -2311,6 +2280,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         }
         return perNuevo
     }
+
     def verificaIndicesAvance(pcs, per, i,Date inicio,Date fin,contrato) {
         println "verificaIndicesAvance: pcs: $pcs, per: $per, inicio: ${inicio.format('dd-MM-yyyy')}, fin: $fin"
         if(inicio.date != 1){
@@ -2345,59 +2315,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         }
         return per
     }
-//    def verificaIndices(pcs, per, i) {
-//        if (!flash.message) {
-//            flash.message = ""
-//        }
-//        println "verifica indices!!! "
-//        def perNuevo = per
-//        if (per != null) {
-//            pcs.each { c ->
-//                def val = ValorIndice.findByIndiceAndPeriodo(c.indice, per)
-//                if (!val) {
-////                    def vals = ValorIndice.withCriteria {
-////                        eq("indice", c.indice)
-////                        periodo {
-////                            le("fechaInicio", per.fechaInicio)
-////                            order("fechaInicio", "asc")
-////                        }
-////                    }
-//////                println "no hay val   ${c.indice.id}---- ${per} "+vals.periodo
-////                    if (vals.size() > 0) {
-////                        perNuevo = vals.pop().periodo
-////                    } else {
-////                        if (!flash.message.contains(c.indice.toString()) || !flash.message.contains(per.toString())) {
-////                            flash.message += "<li>No se encontró el valor de índice de  " + c.indice + " en el periodo " + per + "</li>"
-////                        }
-////                        println "error wtf  " + c.indice + " (" + c.indice.id + ") " + per + " (" + per.id + ")"
-////                        perNuevo = null
-////                    }
-//                    /*Agrego un valor en 1 20-01-2015*/
-////                    println "creando nuevo valor  para "+c.indice+" , "+per+" "
-////                    def valNuevo = new ValorIndice()
-////                    valNuevo.indice=c.indice
-////                    valNuevo.periodo=per
-////                    valNuevo.valor=1
-////                    valNuevo.save(flush: true)
-////                    val = valNuevo
-//                    perNuevo = null
-//                }
-//            }
-//
-////            if (i > 12 * 5) {
-////                return null
-////            }
-//
-//            if(!perNuevo)
-//                return null
-//
-//            if (per != perNuevo) {
-//                i++
-//                perNuevo = verificaIndices(pcs, perNuevo, i)
-//            }
-//        }
-//        return perNuevo
-//    }
+
     def getLastDayOfMonth(fecha) {
         Date today = new Date();
 

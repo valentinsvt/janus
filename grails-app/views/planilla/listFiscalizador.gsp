@@ -104,7 +104,7 @@
                         <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
                         <g:sortableColumn property="fechaInicio" title="Fecha inicio"/>
                         <g:sortableColumn property="fechaFin" title="Fecha fin"/>
-                        <g:sortableColumn property="descripcion" title="Descripcion"/>
+                        <g:sortableColumn property="descripcion" title="Descripción"/>
                         <g:sortableColumn property="valor" title="Valor"/>
                         <th width="180">Acciones</th>
                         <th width="130">Pagos</th>
@@ -141,7 +141,7 @@
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaFin}" format="dd-MM-yyyy"/>
                             </td>
-                            <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
+                            <td>${planillaInstance.id} ${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
                             <td class="numero">
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>
@@ -167,9 +167,11 @@
                                     %{--</g:if>--}%
                                 </g:if>
 
+%{--
                                 <g:link controller="planilla" action="procesar" id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small">
                                     <i class="icon-table"></i>
                                 </g:link>
+--}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">

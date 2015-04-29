@@ -4118,20 +4118,22 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def procesar() {
         println "procesa planilla, params: $params"
-        procesaPlPo(params.id)  /* procesa plpo **/
+        procesaPlPo(params.id)  /* calcula valores de Po de esta planilla --> plpo **/
+        insertaReajuste(params.id) /** inserta valores de reajuste --> rjpl **/
+
         render "ok"
     }
 
+    /* *** Las planillas ya generadas, se ejecuta manualmente el procedimiento insr_pems(cntr__id) ***
+    * calcula los valores Po a aplicarse con esta planilla                                          */
     def procesaPlPo(id) {
         println "procesa planilla, params: $params"
-
-        /* *** Las planillas ya generadas, se ejecuta manualmente el procedimiento insr_pems(cntr__id) *** */
-
         def prmt = [:]
         def plnl = Planilla.get(id)
         def cntr = Contrato.get(plnl.contrato.id)
         def prdo = 0
         def pa
+        def hayAnteriores = false
         println "tipoPlanilla: $plnl.tipoPlanilla"
 
         if (plnl.tipoPlanilla.toString() == 'A'){
@@ -4201,6 +4203,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         println "Valor de Po para ${pems.last().fechaFin.format('MMM')} es ${prmt.valorPo}"
                         println " a insertar: $prmt"
                         println insertaPo(prmt)
+                        hayAnteriores = true
                         prdo++
                     }
                     prdo--
@@ -4228,8 +4231,11 @@ class PlanillaController extends janus.seguridad.Shield {
                     prmt.acumuladoPlanillas = plAcumulado
                     prmt.periodo = prdo
                     prmt.mes = p.fechaInicio.format('MMM-yyyy')
-                    prmt.valorPo = Math.round((p.valor - plAnteriores(p))*(1 - cntr.porcentajeAnticipo/100)*100)/100
-                    println "Valor de Po para ${pems.last().fechaFin.format('MMM')} es ${prmt.valorPo}"
+                    if(hayAnteriores){
+                        prmt.valorPo = Math.round((p.valor - plAnteriores(p))*(1 - cntr.porcentajeAnticipo/100)*100)/100
+                    } else {
+                        prmt.valorPo = Math.round((p.valor)*(1 - cntr.porcentajeAnticipo/100)*100)/100
+                    }
                     println " a insertar: $prmt"
                     println insertaPo(prmt)
                 }
@@ -4289,7 +4295,12 @@ class PlanillaController extends janus.seguridad.Shield {
             def plpo = new PlanillaPo()
             plpo.planilla = plnl
             plpo.valorPo = valor
-            plpo.mes = pa.fechaMemoPagoPlanilla.format('MMM-yyyy')
+            if(plnl.id == pa.id){
+                plpo.mes = pa.fechaIngreso.format('MMM-yyyy')
+            } else {
+                plpo.mes = pa.fechaPago.format('MMM-yyyy')
+            }
+
             plpo.periodo = 0
             if (plpo.save([flush: true])) {
                 flash.clase = "alert-success"
@@ -4324,5 +4335,138 @@ class PlanillaController extends janus.seguridad.Shield {
         println "valor anterior: $valor"
         return valor
     }
+
+    /** Con cada planilla se vuelve a reajustar las anteriores si:
+     * (1) es anticipo y existen índices a la fecha de pago
+     * (2) es avance y existen índices del periodo planillado
+     * la planila N puede reajuestar desde 0 .. N-1 (0 es la planilla de anticipo) **/
+    def insertaReajuste(id) {
+        def prmt = [:]
+        def plnl = Planilla.get(id)
+        def prdoInec
+
+        println "procesa Reajuste: planilla ${plnl.id}, tipo: ${plnl.tipoPlanilla}"
+        if(plnl.tipoPlanilla.toString() == 'A') {
+            /** no recalcula reajuste **/
+            println "es anticipo"
+            prmt.planilla = plnl
+            prmt.planillaReajustada = plnl
+            if(plnl.periodoIndices){
+                if(verficaPrin(plnl.periodoIndices)){
+                    prmt.periodoInec = plnl.periodoIndices
+                } else
+                    prmt.periodoInec = indicesDisponibles(plnl.contrato, plnl.fechaInicio)
+            }
+//          insertaRjpl(prmt)
+        }   else { /** planillas de avance **/
+            def pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThanEquals(plnl.contrato,
+                    TipoPlanilla.findAllByCodigoInList(['A', 'P']), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])
+            pl.each { p ->   /** planillas anteriores **/
+                if(p.tipoPlanilla == 'A'){
+                    /** debe reajustar con índices de la fecha de pago si ya esá apgada y si existen los índices **/
+                    if(p.fechaPago) {
+                        prdoInec = indicesDisponibles(plnl.contrato, p.fechaPago)
+                        if(prdoInec > 0) {
+                            prmt.periodoInec = PeriodosInec.get(prdoInec);
+                            prmt.planilla = plnl
+                            prmt.planillaReajustada = p
+//                        insertaRjpl(prmt)
+                        }
+                    }
+                } else {  /** reajusta planillas de avance **/
+                    prdoInec = indicesDisponibles(plnl.contrato, p.fechaInicio)
+                    if(prdoInec > 0) {
+                        prmt.periodoInec = PeriodosInec.get(prdoInec);
+                        prmt.planilla = plnl
+                        prmt.planillaReajustada = p
+//                        insertaRjpl(prmt)
+                    }
+                }
+                println "planilla: ${p.id} tipo: ${p.tipoPlanilla}"
+            }
+
+        }
+
+    }
+
+    /** retorna el id del periodoInec mas reciente**/
+    def indicesDisponibles(cntr, fcha) {
+        def pcs = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", cntr)
+                or {
+                    ilike("numero", "c%")
+                    and {
+                        ne("numero", "P0")
+                        ne("numero", "p01")
+                        ilike("numero", "p%")
+                    }
+                }
+                order("numero", "asc")
+            }
+        }
+
+        return 42
+    }
+
+    def verficaPrin(prdo) {
+        return true
+    }
+
+
+    /*
+        def pcs = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    ilike("numero", "c%")
+                    and {
+                        ne("numero", "P0")
+                        ne("numero", "p01")
+                        ilike("numero", "p%")
+                    }
+                }
+                order("numero", "asc")
+            }
+        }
+
+
+        def verificaIndicesAvance(pcs, per, i,Date inicio,Date fin,contrato) {
+        println "verificaIndicesAvance: pcs: $pcs, per: $per, inicio: ${inicio.format('dd-MM-yyyy')}, fin: $fin"
+        if(inicio.date != 1){
+            inicio = new Date().parse('dd-MM-yyyy', '1-' + (inicio.month + 1) + '-' + (inicio.year + 1900))
+        }
+        println "nuevo inicio: ${inicio.format('dd-MM-yyyy')}"
+        if (!flash.message) {
+            flash.message = ""
+        }
+        i=i+1
+        if(i>10)
+            return null
+          println "verifica indices!!! periodo "+per
+        def perNuevo = per
+        if (per == null) {
+            println "final: ${getLastDayOfMonth(inicio).date}, mes: ${inicio.month + 1}"
+            def mesAnterior = inicio - 15
+            inicio = new Date().parse('dd-MM-yyyy', "${getLastDayOfMonth(mesAnterior).date}-${mesAnterior.month + 1}-${(mesAnterior.year + 1900)}")
+            fin = new Date().parse('dd-MM-yyyy', "1-${mesAnterior.month + 1}-${(mesAnterior.year + 1900)}")
+            println "inicio: ${inicio.format('dd-MM-yyyy')}, fin: ${fin.format('dd-MM-yyyy')}"
+
+            per =  PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, fin)
+            per = verificaIndicesAvance(pcs,per,i,inicio,fin,contrato)
+        }else {
+            def res = preciosService.verificaIndicesPeriodo(contrato,per)
+            //  println "res "+res
+            if(res.size()>0){
+                //    println "no paso la verificacion "
+                per = verificaIndicesAvance(pcs,null,i,inicio,fin,contrato)
+            }
+        }
+        return per
+    }
+
+
+
+     */
 
 }
