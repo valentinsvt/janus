@@ -22,12 +22,15 @@ class Shield {
             session.finalize()
             return false
         } else {
+                return true
 
+/*
                 if( isAllowed()){
                     return true
                 }else{
                     redirect(controller: "shield",action:  "ataques")
                 }
+*/
 
         }
         return false

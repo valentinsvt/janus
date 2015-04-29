@@ -25,4 +25,8 @@ class TipoPlanilla implements Serializable{
         codigo(blank: true, nullable: true)
         nombre(blank: true, nullable: true)
     }
+    String toString(){
+        codigo
+    }
 }
+

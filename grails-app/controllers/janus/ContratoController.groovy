@@ -274,8 +274,8 @@ class ContratoController extends janus.seguridad.Shield {
 
     def copiarPolinomica() {
         def contrato = Contrato.get(params.id)
-        def pac = contrato.oferta.concurso.pac.tipoProcedimiento.fuente
-
+//        def pac = contrato.oferta.concurso.pac.tipoProcedimiento.fuente
+//
 /*
         def obraOld = contrato.oferta.concurso.obra
 
@@ -293,12 +293,6 @@ class ContratoController extends janus.seguridad.Shield {
         def fpB0
         //copia la formula polinomica a la formula polinomica contractual si esta no existe
         if (fr.size() < 5) {
-            if (pac == 'OB') {
-                //copia de la obra
-            } else if (pac == 'OF') {
-                //copia del oferente ganador
-            }
-
             //esto copia de la obra
             fr.each {
                 it.delete(flush: true)
@@ -316,6 +310,7 @@ class ContratoController extends janus.seguridad.Shield {
                     }
                 }
             }
+/*
             def fpP0 = new FormulaPolinomicaContractual()
             fpP0.valor = 0
             fpP0.contrato = contrato
@@ -343,6 +338,7 @@ class ContratoController extends janus.seguridad.Shield {
             if (!fpFr.save(flush: true)) {
                 println "error fpFr" + fpFr.errors
             }
+*/
         }
 
         //return la tabla para editar

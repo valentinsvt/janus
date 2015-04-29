@@ -166,6 +166,11 @@
                                     </g:link>
                                     %{--</g:if>--}%
                                 </g:if>
+
+                                <g:link controller="planilla" action="procesar" id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small">
+                                    <i class="icon-table"></i>
+                                </g:link>
+
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
                                         <i class="icon-table icon-large"></i>

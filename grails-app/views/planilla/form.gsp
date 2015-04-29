@@ -129,16 +129,18 @@
     <div class='span2 formato'>
         Tipo de Planilla
     </div>
+    <div class="span10">
+    <g:if test="${planillaInstance.id}">
+        ${planillaInstance?.tipoPlanilla?.nombre} <span style="margin-left: 290px;">Planillado del: ${planillaInstance?.fechaInicio.format('dd-MM-yyyy')} Hasta: ${planillaInstance?.fechaFin.format('dd-MM-yyyy')}</span>
+    </g:if>
+    </div>
 
     <div class="span4">
-        <g:if test="${planillaInstance.id}">
-            ${planillaInstance?.tipoPlanilla?.nombre}
-        </g:if>
-        <g:else>
+        <g:if test="${!planillaInstance.id}">
             <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id" optionValue="nombre"
                       class="many-to-one span3 required" value="${planillaInstance?.tipoPlanilla?.id}"/>
             <span class="mandatory">*</span>
-        </g:else>
+        </g:if>
         <p class="help-block ui-helper-hidden"></p>
     </div>
 
