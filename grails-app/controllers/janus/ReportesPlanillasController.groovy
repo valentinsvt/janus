@@ -2392,16 +2392,16 @@ class ReportesPlanillasController {
         Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font fontInfo = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
 
-        Font fontThHeader = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
-        Font fontTdHeader = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font fontThHeader = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdHeader = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
         Font fontThHeaderGris = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
         Font fontTdHeaderGris = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
-        Font fontThTabla = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
-        Font fontTdTabla = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font fontThTabla = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdTabla = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
-        Font fontContenido = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font fontContenido = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
         Font fontFirma = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
@@ -2664,13 +2664,13 @@ class ReportesPlanillasController {
         Font fontThHeaderGris = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
         Font fontTdHeaderGris = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL);
 
-        Font fontThHeader = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
-        Font fontTdHeader = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font fontThHeader = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdHeader = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
-        Font fontThTabla = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
-        Font fontTdTabla = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font fontThTabla = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdTabla = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
-        Font fontContenido = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font fontContenido = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
         Font fontFirma = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
