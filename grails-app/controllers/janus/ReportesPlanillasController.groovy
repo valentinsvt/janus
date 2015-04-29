@@ -2700,7 +2700,8 @@ class ReportesPlanillasController {
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
-        preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO " + obra.nombre, fontTituloGad));
+        preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO DEL ANTICIPO DE LA OBRA ", fontTituloGad));
+        preface.add(new Paragraph(obra.nombre, fontTituloGad));
         addEmptyLine(preface, 1);
 //        Paragraph preface2 = new Paragraph();
 //        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), fontInfo))
