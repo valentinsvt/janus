@@ -106,7 +106,7 @@
                         <g:sortableColumn property="fechaFin" title="Fecha fin"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="valor" title="Valor"/>
-                        <th width="160">Acciones</th>
+                        <th width="180">Acciones</th>
                         <th width="130">Pagos</th>
                     </tr>
                 </thead>

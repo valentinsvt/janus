@@ -859,6 +859,11 @@ class ReportesController {
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
                     prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum]
 
+//        Paragraph headers0 = new Paragraph();
+//        headers0.setAlignment(Element.ALIGN_RIGHT);
+//        headers0.add(new Paragraph("SEP-GADPP", times12bold));
+//        document.add(headers0);
+
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);

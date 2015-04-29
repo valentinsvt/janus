@@ -144,6 +144,7 @@
 <div class="hoja">
 
 <div class="tituloPdf">
+
     <p style="font-size: 18px">
         <b>G.A.D. PROVINCIA DE PICHINCHA</b>
     </p>

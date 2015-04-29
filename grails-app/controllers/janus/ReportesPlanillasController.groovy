@@ -2420,7 +2420,7 @@ class ReportesPlanillasController {
 
         document.open();
         PdfContentByte cb = pdfw.getDirectContent();
-        document.addTitle("Memo de pedido de pago del anticipo de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addTitle("Memo de pedido de pago" + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
         document.addSubject("Generado por el sistema Janus");
         document.addKeywords("reporte, janus, memo, pedido, pago, anticipo");
         document.addAuthor("Janus");
@@ -2430,7 +2430,8 @@ class ReportesPlanillasController {
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
-        preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO DEL ANTICIPO DE LA OBRA " + obra.nombre, fontTituloGad));
+        preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO ", fontTituloGad));
+        preface.add(new Paragraph(obra.nombre, fontTituloGad));
         addEmptyLine(preface, 1);
 //        Paragraph preface2 = new Paragraph();
 //        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), fontInfo))
@@ -2540,6 +2541,8 @@ class ReportesPlanillasController {
 
         addCellTabla(tablaValores, new Paragraph("(+) Reajuste  ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("Total planilla + reajuste ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero((planilla.reajuste + planilla.valor), 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("(-) Anticipo  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.descuentos, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("(-) Multas  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -2697,7 +2700,7 @@ class ReportesPlanillasController {
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
-        preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO DEL ANTICIPO DE LA OBRA " + obra.nombre, fontTituloGad));
+        preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO " + obra.nombre, fontTituloGad));
         addEmptyLine(preface, 1);
 //        Paragraph preface2 = new Paragraph();
 //        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), fontInfo))
