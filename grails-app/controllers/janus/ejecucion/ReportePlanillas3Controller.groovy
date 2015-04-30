@@ -544,72 +544,72 @@ class ReportePlanillas3Controller {
         def act2 = 0
         def diasTot = 0, totCrono = 0, totPlan = 0, totalMultaRetraso = 0, totalCronoPlanilla = 0
 
-//        periodos.each { per ->
-//            if (per.titulo != "OFERTA") {
-//                if (per.titulo == "ANTICIPO") {
-//                    addCellTabla(tablaP0, new Paragraph(per.titulo, fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaP0, new Paragraph(fechaConFormato(per.fechaIncio), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaP0, new Paragraph(numero(per.p0, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
-//                } else {
-//                    def dias = per.fechaFin - per.fechaIncio + 1
-//                    diasTot += dias
-//                    addCellTabla(tablaP0, new Paragraph(fechaConFormato(per.fechaIncio), fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaP0, new Paragraph("(" + dias + ")", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaP0, new Paragraph(numero(per.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                    act += per.parcialCronograma
-//                    totCrono += per.parcialCronograma
-//                    addCellTabla(tablaP0, new Paragraph(numero(act, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaP0, new Paragraph(numero(per.parcialPlanilla, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                    act2 += per.parcialPlanilla
-//                    totPlan += per.parcialPlanilla
-//                    addCellTabla(tablaP0, new Paragraph(numero(act2, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaP0, new Paragraph(numero(per.p0, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//
-//                    if (per.planilla == planilla) {
-//                        totalCronoPlanilla += per.parcialCronograma
-//                        def retraso = 0, multa = 0
-//                        if (per.parcialCronograma > per.parcialPlanilla) {
-//                            def valorDia = per.parcialCronograma / per.dias
-//                            retraso = ((per.parcialCronograma - per.parcialPlanilla) / valorDia).round(2)
-//                            multa = ((per.parcialCronograma) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
-//                        }
-//                        totalMultaRetraso += multa
-//
-//                        addCellTabla(tablaMl, new Paragraph(fechaConFormato(per.fechaIncio), fontTd), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-//                        addCellTabla(tablaMl, new Paragraph(numero(per.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                        addCellTabla(tablaMl, new Paragraph(numero(per.parcialPlanilla, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                        addCellTabla(tablaMl, new Paragraph(numero(prmlMultaIncumplimiento, 0) + " x 1000", fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-//                    }
-//                }
-//            }
-//        }
+        periodos.each { per ->
+            if (per.titulo != "OFERTA") {
+                if (per.titulo == "ANTICIPO") {
+                    addCellTabla(tablaP0, new Paragraph(per.titulo, fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaP0, new Paragraph(fechaConFormato(per.fechaIncio), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaP0, new Paragraph(numero(per.p0, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
+                } else {
+                    def dias = per.fechaFin - per.fechaIncio + 1
+                    diasTot += dias
+                    addCellTabla(tablaP0, new Paragraph(fechaConFormato(per.fechaIncio), fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaP0, new Paragraph("(" + dias + ")", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaP0, new Paragraph(numero(per.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    act += per.parcialCronograma
+                    totCrono += per.parcialCronograma
+                    addCellTabla(tablaP0, new Paragraph(numero(act, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaP0, new Paragraph(numero(per.parcialPlanilla, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    act2 += per.parcialPlanilla
+                    totPlan += per.parcialPlanilla
+                    addCellTabla(tablaP0, new Paragraph(numero(act2, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaP0, new Paragraph(numero(per.p0, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+                    if (per.planilla == planilla) {
+                        totalCronoPlanilla += per.parcialCronograma
+                        def retraso = 0, multa = 0
+                        if (per.parcialCronograma > per.parcialPlanilla) {
+                            def valorDia = per.parcialCronograma / per.dias
+                            retraso = ((per.parcialCronograma - per.parcialPlanilla) / valorDia).round(2)
+                            multa = ((per.parcialCronograma) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
+                        }
+                        totalMultaRetraso += multa
+
+                        addCellTabla(tablaMl, new Paragraph(fechaConFormato(per.fechaIncio), fontTd), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMl, new Paragraph(numero(per.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMl, new Paragraph(numero(per.parcialPlanilla, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMl, new Paragraph(numero(prmlMultaIncumplimiento, 0) + " x 1000", fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    }
+                }
+            }
+        }
 
 
         //nueva impresion
 
-            pulpo.each {
-               if(it.periodo == 0){
-                   addCellTabla(tablaP0, new Paragraph("ANTICIPO", fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                   addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                   addCellTabla(tablaP0, new Paragraph(numero(it.valorPo, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
-               } else{
-                   addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                   addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                   addCellTabla(tablaP0, new Paragraph(numero(it.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                   totCrono += it.parcialCronograma
-                   addCellTabla(tablaP0, new Paragraph(numero(it.acumuladoCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                   addCellTabla(tablaP0, new Paragraph(numero(it.parcialPlanillas, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                   totPlan += it.parcialPlanillas
-                   addCellTabla(tablaP0, new Paragraph(numero(it.acumuladoPlanillas, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                   addCellTabla(tablaP0, new Paragraph(numero(it.valorPo, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-               }
-            }
+//            pulpo.each {
+//               if(it.periodo == 0){
+//                   addCellTabla(tablaP0, new Paragraph("ANTICIPO", fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//                   addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+//                   addCellTabla(tablaP0, new Paragraph(numero(it.valorPo, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
+//               } else{
+//                   addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//                   addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+//                   addCellTabla(tablaP0, new Paragraph(numero(it.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                   totCrono += it.parcialCronograma
+//                   addCellTabla(tablaP0, new Paragraph(numero(it.acumuladoCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                   addCellTabla(tablaP0, new Paragraph(numero(it.parcialPlanillas, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                   totPlan += it.parcialPlanillas
+//                   addCellTabla(tablaP0, new Paragraph(numero(it.acumuladoPlanillas, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                   addCellTabla(tablaP0, new Paragraph(numero(it.valorPo, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//               }
+//            }
 
 
         if (periodos.size() > 2) {
             addCellTabla(tablaP0, new Paragraph("TOTAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//            addCellTabla(tablaP0, new Paragraph("(" + diasTot + ")", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaP0, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaP0, new Paragraph("(" + diasTot + ")", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+//            addCellTabla(tablaP0, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaP0, new Paragraph(numero(totCrono, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
             addCellTabla(tablaP0, new Paragraph(numero(totPlan, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
             addCellTabla(tablaP0, new Paragraph("", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])

@@ -154,7 +154,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
                     "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
 
-            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del valor a pagar de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
             def editParrafo2 = "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
 
             def strParrafo3 = "Son ${neg}${numerosALetras}"
@@ -437,7 +437,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
                 "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
 
-        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del valor a pagar de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
 
         def strParrafo3 = "Son ${neg}${numerosALetras}"
 
