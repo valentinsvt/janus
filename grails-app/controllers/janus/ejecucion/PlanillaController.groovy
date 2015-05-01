@@ -4128,6 +4128,7 @@ class PlanillaController extends janus.seguridad.Shield {
         **/
 
         render "ok" //debe retornar a planillas y habilitar botón de resumen.
+
     }
 
     /*---------------------------------------------- borrar -------------------------------*/
