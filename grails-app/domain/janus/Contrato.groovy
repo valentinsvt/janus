@@ -1,7 +1,7 @@
 package janus
 
 import janus.pac.Oferta
-import janus.pac.PeriodoValidez
+import janus.ejecucion.PeriodosInec
 import janus.pac.TipoContrato
 import janus.pac.TipoPlazo
 
@@ -11,7 +11,7 @@ class Contrato implements Serializable {
     TipoContrato tipoContrato
     TipoPlazo tipoPlazo
     Contrato padre
-    PeriodoValidez periodoValidez
+    PeriodosInec periodoInec    /** antes PeriodValizdez **/
     String codigo
     String objeto
     Date fechaSubscripcion
@@ -65,7 +65,7 @@ class Contrato implements Serializable {
             tipoContrato column: 'tpcr__id'
             tipoPlazo column: 'tppz__id'
             padre column: 'cntrpdre'
-            periodoValidez column: 'prin__id'
+            periodoInec column: 'prin__id'
             codigo column: 'cntrcdgo'
             objeto column: 'cntrobjt'
             fechaSubscripcion column: 'cntrfcsb'
@@ -111,7 +111,7 @@ class Contrato implements Serializable {
         tipoContrato(blank: true, nullable: true)
         tipoPlazo(blank: true, nullable: true)
         padre(blank: true, nullable: true)
-        periodoValidez(blank: true, nullable: true)
+        periodoInec(blank: true, nullable: true)
         codigo(blank: true, nullable: true)
         objeto(size: 1..1023, blank: true, nullable: true)
         fechaSubscripcion(blank: true, nullable: true)

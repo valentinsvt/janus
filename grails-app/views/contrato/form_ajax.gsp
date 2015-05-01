@@ -69,7 +69,7 @@
             </div>
 
             <div class="controls">
-                <g:select id="periodoValidez" name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list()}" optionKey="id" class="many-to-one  required" value="${contratoInstance?.periodoValidez?.id}"/>
+                <g:select id="periodoValidez" name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list()}" optionKey="id" class="many-to-one  required" value="${contratoInstance?.periodoInec?.id}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

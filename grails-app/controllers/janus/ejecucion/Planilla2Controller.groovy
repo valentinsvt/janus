@@ -1811,13 +1811,13 @@ class Planilla2Controller extends janus.seguridad.Shield {
         }
 
         //todo: revisar esto
-        fechaOferta = planilla.contrato.periodoValidez.fechaInicio
+        fechaOferta = planilla.contrato.periodoInec.fechaInicio
 
         def fechaAnticipo = planilla.fechaPresentacion
         def periodos = PeriodoPlanilla.findAllByPlanilla(planilla, [sort: "id"])
 
-        def perOferta = PeriodosInec.get(contrato.periodoValidez.id)
-        println "periodo oferta "+perOferta+"  "+contrato.periodoValidez
+        def perOferta = PeriodosInec.get(contrato.periodoInec.id)
+        println "periodo oferta "+perOferta+"  "+contrato.periodoInec
         def perAnticipo
         if(!planilla.periodoAnticipo) {
             perAnticipo = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()

@@ -34,4 +34,8 @@ class FormulaPolinomicaContractual implements Serializable {
         valor(blank: true, nullable: true)
         indice(blank: true, nullable: true)
     }
+
+    String toString(){
+        "${numero}:${valor}"
+    }
 }

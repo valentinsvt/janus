@@ -81,7 +81,7 @@
         </div>
     </g:if>
     
-    <g:if test="${contratoInstance?.periodoValidez}">
+    <g:if test="${contratoInstance?.periodoInec}">
         <div class="control-group">
             <div>
                 <span id="periodoValidez-label" class="control-label label label-inverse">
@@ -91,8 +91,8 @@
             <div class="controls">
         
                 <span aria-labelledby="periodoValidez-label">
-        %{--<g:link controller="periodoValidez" action="show" id="${contratoInstance?.periodoValidez?.id}">--}%
-                    ${contratoInstance?.periodoValidez?.encodeAsHTML()}
+        %{--<g:link controller="periodoInec" action="show" id="${contratoInstance?.periodoInec?.id}">--}%
+                    ${contratoInstance?.periodoInec?.encodeAsHTML()}
         %{--</g:link>--}%
                 </span>
         

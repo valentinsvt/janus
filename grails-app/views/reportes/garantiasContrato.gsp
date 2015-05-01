@@ -129,7 +129,7 @@
                 </tr>
                 <tr>
                     <td class="bold">Índices de la oferta</td>
-                    <td>${contrato?.periodoValidez?.descripcion}</td>
+                    <td>${contrato?.periodoInec?.descripcion}</td>
                     <td class="bold">Financiamiento</td>
                     <td>${contrato?.financiamiento}</td>
                 </tr>

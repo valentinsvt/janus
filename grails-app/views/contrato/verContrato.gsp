@@ -299,7 +299,7 @@
 
                     <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
 
-                    <div class="span3">${contrato?.periodoValidez?.descripcion}</div>
+                    <div class="span3">${contrato?.periodoInec?.descripcion}</div>
                 </div>
 
 

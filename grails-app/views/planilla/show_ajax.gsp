@@ -75,7 +75,7 @@
                 <div class="controls">
 
                     <span aria-labelledby="periodoIndices-label">
-                        %{--<g:link controller="periodoValidez" action="show" id="${planillaInstance?.periodoIndices?.id}">--}%
+                        %{--<g:link controller="periodoInec" action="show" id="${planillaInstance?.periodoIndices?.id}">--}%
                         ${planillaInstance?.periodoIndices?.encodeAsHTML()}
                         %{--</g:link>--}%
                     </span>
