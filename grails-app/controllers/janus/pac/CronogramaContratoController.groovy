@@ -29,7 +29,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
             return
         }
         def obraOld = contrato?.oferta?.concurso?.obra
-        println "oblraOld $obraOld"
+        println "oblraOld... $obraOld"
         if (!obraOld) {
             flash.message = "No se encontró la obra"
             flash.clase = "alert-error"

@@ -1,5 +1,6 @@
 package janus.pac
 
+import janus.Contrato
 import janus.Obra
 
 class PeriodoEjecucion {
@@ -9,6 +10,8 @@ class PeriodoEjecucion {
     String tipo
     Date fechaInicio
     Date fechaFin
+    Contrato contrato
+
     static auditable = true
     static mapping = {
         table 'prej'
@@ -23,6 +26,7 @@ class PeriodoEjecucion {
             tipo column: 'prejtipo'
             fechaInicio column: 'prejfcin'
             fechaFin column: 'prejfcfn'
+            contrato column: 'cntr__id'
         }
     }
     static constraints = {
@@ -30,6 +34,7 @@ class PeriodoEjecucion {
         tipo(blank: false, nullable: false, inList: ['P', 'S'], attributes: [title: 'tipo'])
         fechaInicio(blank: false, nullable: false, attributes: [title: 'fecha inicio'])
         fechaFin(blank: false, nullable: false, attributes: [title: 'fecha fin'])
+        contrato(blank: false, nullable: false, attributes: [title: 'contrato'])
     }
 
 }

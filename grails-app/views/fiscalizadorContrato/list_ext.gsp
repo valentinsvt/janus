@@ -7,7 +7,7 @@
     </div>
 
     %{--<g:select id="fiscalizador" name="fiscalizador.id" from="${janus.Persona.findAllByActivo(1, [sort: 'apellido'])}"--}%
-    <g:select id="fiscalizador" name="fiscalizador.id" from="${janus.Persona.findAllByActivoAndDepartamento(1, janus.Departamento.findByCodigo('FISC'))}"
+    <g:select id="fiscalizador" name="fiscalizador.id" from="${janus.Persona.findAllByActivoAndDepartamento(1, janus.Departamento.findByCodigo('FISC'), [sort: 'apellido'])}"
               optionKey="id" class="many-to-one required" optionValue="${{ it.apellido + ' ' + it.nombre }}"
               noSelection="['null': 'Seleccione ...']" style="width:300px; margin-right: 20px;"/>
     Desde: <elm:datepicker value="${new Date()}" name="desde" class="input-small"/>

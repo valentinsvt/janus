@@ -5,6 +5,7 @@ import janus.Contrato
 import janus.Modificaciones
 import janus.Obra
 import janus.VolumenesObra
+import janus.ejecucion.PeriodoEjecucionMes
 import janus.ejecucion.PeriodoPlanilla
 import janus.ejecucion.Planilla
 import janus.ejecucion.TipoPlanilla
@@ -1756,7 +1757,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //        def obra = contrato?.oferta?.concurso?.obra
 
         def obraOld = contrato?.oferta?.concurso?.obra
-        println "oblraOld $obraOld"
+//        println "oblraOld:::: $obraOld"
 
         if (!obraOld) {
             flash.message = "No se encontró la obra"
@@ -1786,8 +1787,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
         }
-//println contrato
-//println obra
+//        println "Index contrato: $contrato"
+//        println "Index obra: $obra"
         //copia el cronograma del contrato (crng) a la tabla cronograma de ejecucion (crej)
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
@@ -1796,13 +1797,21 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def cronogramas = CronogramaEjecucion.countByVolumenObraInList(detalle)
 
         def continua = true
-
+//        println "datos de cronograma $cronogramas"
         if (cronogramas == 0) {
+//            println "no hay datos de cronograma ... inicia cargado"
             detalle.each { vol ->
                 def cronoCon = CronogramaContrato.findAllByVolumenObra(vol)
                 cronoCon.eachWithIndex { crono, cont ->
 
                     def dias = (crono.periodo - 1) * 30 //+ (crono.periodo - 1)
+                    def prdo = 0
+                    if((dias + 30) > contrato.plazo){
+                        prdo = contrato.plazo - dias
+                    }else {
+                        prdo = 30
+                    }
+
 //                    println ">>>" + dias
                     def ini
                     def fin
@@ -1810,7 +1819,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         ini = inicioObra + dias.days
                     }
                     use(TimeCategory) {
-                        fin = ini + 29.days        // 30 - 1 para contar el dia inicial
+//                        fin = ini + 29.days        // 30 - 1 para contar el dia inicial
+                        fin = ini + (prdo - 1).toInteger().days        // 30 - 1 para contar el dia inicial
                     }
 
                     def periodo = PeriodoEjecucion.withCriteria {
@@ -1822,20 +1832,21 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     }
 
                     if (periodo.size() == 0) {
-//                        println "crea el periodo"
+//                        println "crea el periodo con inicio: $ini, fin: $fin, dias: $prdo, plazo: ${contrato.plazo}"
                         periodo = new PeriodoEjecucion([
                                 obra       : obra,
                                 numero     : crono.periodo,
                                 tipo       : "P",
                                 fechaInicio: ini,
-                                fechaFin   : fin
+                                fechaFin   : fin,
+                                contrato   :  contrato
                         ])
                         if (!periodo.save(flush: true)) {
                             println "Error al guardar el periodo " + periodo.errors
                             continua = false
                         }
                     } else if (periodo.size() == 1) {
-//                        println "existe un periodo"
+                        println "existe un periodo"
                         periodo = periodo[0]
                     } else {
                         println "WTF existe mas de un periodo"
@@ -1853,7 +1864,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             println "Error al guardar el crono ejecucion del crono " + crono.id
                             println cronoEjecucion.errors
                         } else {
-//                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
+                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
                         }
                     }//if continua
                 } //cronogramaContrato.each
@@ -2072,4 +2083,83 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //            redirect(action: "list")
 //        }
 //    } //delete
+
+    def actualizaPems() {
+        /** en base a prej ingresa o actualiza dato en pems **/
+        println "actualizaPems params: $params"
+        def cntr = Contrato.get(params.contrato)
+        def prej = PeriodoEjecucion.findAllByContrato(cntr)
+        def pems
+        def fcin     //fecha de incio periodo pems
+        def fcfn     //fecha de fin periodo pems
+        def fcim     //fecha de inicio de mes
+        def fcfm     //fecha de fin de mes
+        def vlor = 0.0
+        def parcial = 0.0
+        prej.each {pe ->
+
+            fcin = pe.fechaInicio
+            fcfm = preciosService.ultimoDiaDelMes(fcin)
+            fcim = fcfm + 1
+            fcfn = pe.fechaFin
+            println "$pe: fcin: $fcin, fcfn: $fcfn, fcfm: $fcfm, fcim: $fcim"
+
+            if (fcfm < pe.fechaFin) {
+                vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
+                parcial = vlor /(pe.fechaFin - pe.fechaInicio) * (fcfm - fcin)
+                println "parcial: $parcial"
+                pems = PeriodoEjecucionMes.findAllByContratoAndObraAndPeriodoEjecucionAndFechaInicioAndFechaFin(cntr, cntr.obra, pe, fcin, fcfm)
+                if(pems){
+                    //* actualiza el periodo actual **/
+                    pems.parcialCronograma = parcial
+                } else {
+                    pems = new PeriodoEjecucionMes()
+                    pems.contrato = cntr
+                    pems.obra = cntr.obra
+                    pems.periodoEjecucion = pe
+                    pems.fechaInicio = fcin
+                    pems.fechaFin = fcfm
+                }
+                if (!pems.save(flush: true)) {
+                    flash.message = "No se pudo actualizar pems"
+                    println "Error al actualizar pems: " + pems.errors
+                } else {
+                    flash.message = "Pems actualizado exitosamente"
+                    redirect(controller: "cronogramaEjecucion", action: "index", id: cntr.id)
+                }
+
+                fcin = fcfm + 1
+                fcfn = pe.fechaFin
+                parcial = vlor - parcial
+
+                pems = PeriodoEjecucionMes.findAllByContratoAndObraAndPeriodoEjecucionAndFechaInicioAndFechaFin(cntr, cntr.obra, pe, fcin, fcfn)
+                if(pems){
+                    //* actualiza el periodo actual **/
+                    pems.parcialCronograma = parcial
+                } else {
+                    pems = new PeriodoEjecucionMes()
+                    pems.contrato = cntr
+                    pems.obra = cntr.obra
+                    pems.periodoEjecucion = pe
+                    pems.fechaInicio = fcin
+                    pems.fechaFin = fcfn
+                }
+                if (!pems.save(flush: true)) {
+                    flash.message = "No se pudo actualizar pems"
+                    println "Error al actualizar pems: " + pems.errors
+                } else {
+                    flash.message = "Pems actualizado exitosamente"
+                    redirect(controller: "cronogramaEjecucion", action: "index", id: cntr.id)
+                }
+
+            } else {
+                /** ingresar solo los dias restantes ver: ../Documentos/pems.sql **/
+            }
+        }
+//        def pems = PeriodoEjecucionMes.
+
+
+        render "ok"
+    }
+
 } //fin controller

@@ -41,7 +41,7 @@
             </div>
 
             <g:if test="${meses > 0}">
-                <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
                     <div class="btn-group">
                     <g:if test="${suspensiones.size() == 0}">
                         <a href="#" class="btn btn-info" id="btnAmpl">
@@ -63,6 +63,17 @@
                             Terminar Suspensión
                         </a>
                     </g:else>
+                    </div>
+
+                    <div class="btn-group">
+                    <g:if test="${suspensiones.size() == 0}">
+                        %{--<a href="../actualizaPems" class="btn btn-info" id="btnPems">--}%
+                        <a href="${g.createLink(action: 'actualizaPems', params: [contrato: contrato?.id])}" class="btn btn-info">
+                            <i class="icon-resize-full"></i>
+                            Actualizar Periodos de Ejecución
+                        </a>
+                    </g:if>
+
                 %{--<a href="#" class="btn btn-info" id="btnFecha">--}%
                 %{--<i class="icon-calendar"></i>--}%
                 %{--Cambiar fecha de fin--}%

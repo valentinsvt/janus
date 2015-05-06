@@ -3,7 +3,6 @@ package janus.ejecucion
 class TipoMulta {
 
     String descripcion
-    double porcentaje
     static auditable = true
     static mapping = {
         table 'tpml'
@@ -14,12 +13,10 @@ class TipoMulta {
         columns {
             id column: 'tpml__id'
             descripcion column: 'tpmldscr'
-            porcentaje column: 'tpmlpcnt'
         }
     }
 
     static constraints = {
         descripcion(maxSize: 63, blank: false, nullable: false)
-        porcentaje(blank: false, nullable: false)
     }
 }

@@ -11,7 +11,7 @@ class Contrato implements Serializable {
     TipoContrato tipoContrato
     TipoPlazo tipoPlazo
     Contrato padre
-    PeriodosInec periodoInec    /** antes PeriodValizdez **/
+    PeriodosInec periodoInec    /** antes PeriodoValidez **/
     String codigo
     String objeto
     Date fechaSubscripcion

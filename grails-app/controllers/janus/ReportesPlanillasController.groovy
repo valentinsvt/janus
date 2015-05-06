@@ -2871,6 +2871,7 @@ class ReportesPlanillasController {
         return [params: params]
     }
 
+    /** imprime orden de inicio de Obra si existe, cas contrario redirecciona a planilla.configOrdenInicioObra**/
     def reporteContrato() {
 
         def obra = Obra.get(params.id)

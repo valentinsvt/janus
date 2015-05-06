@@ -543,7 +543,8 @@
                 });
 
                 $("#imprimir").click(function () {
-                    location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val();
+                    location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" +
+                        $("#oficio").val() + "&firma=" + $("#firma").val();
 //                    $("#imprimirDialog").dialog("open");
 
                 });
