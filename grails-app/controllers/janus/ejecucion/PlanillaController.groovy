@@ -4128,12 +4128,9 @@ class PlanillaController extends janus.seguridad.Shield {
         procesaReajuste(params.id) /** inserta valores de reajuste --> rjpl **/
         println "2.completa procesaReajuste"
         insertaDetalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
-        /** TODO: procesaMultas(id) /** procesa valores de multas, inserta en mlpl
-         * eliminar dominio PlanillaPo
-         *
-        **/
+
         if(Planilla.get(params.id).tipoPlanilla.toString() in ['P', 'Q']){
-            procesaMultas(params.id)  /* mulatas */
+            procesaMultas(params.id)  /* multas */
         }
         println "2.completa procesaReajuste"
 
@@ -4857,6 +4854,8 @@ class PlanillaController extends janus.seguridad.Shield {
         prmt.valorCronograma = rjpl.parcialCronograma
         prmt.dias = retraso
         prmt.monto = multaPlanilla
+        prmt.monto = multaPlanilla
+        prmt.fechaMaxima = fechaMax
         insertaMulta(prmt)
 
         /** multa por incumplimiento cronograma **/
@@ -4872,6 +4871,7 @@ class PlanillaController extends janus.seguridad.Shield {
         prmt.descripcion = "${rjpl.mes} ${Math.round(dias.toDouble())} días"
         prmt.valorCronograma = rjpl.parcialCronograma
         prmt.monto = multaPlanilla
+        prmt.periodo = "${rjpl.mes}"
         insertaMulta(prmt)
 
         /** multa por no acatar disposiciones del fiscalizador **/
@@ -4920,6 +4920,8 @@ class PlanillaController extends janus.seguridad.Shield {
             mlpl.valorCronograma = prmt.valorCronograma?:0
             mlpl.dias = prmt.dias?:0
             mlpl.monto = prmt.monto
+            mlpl.fechaMaxima = prmt.fechaMaxima?:null
+            mlpl.periodo = prmt.periodo?:""
             println "actualiza valores de: $prmt"
         } else {
             mlpl.planilla = prmt.planilla
@@ -4928,6 +4930,8 @@ class PlanillaController extends janus.seguridad.Shield {
             mlpl.valorCronograma = prmt.valorCronograma?: 0
             mlpl.dias = prmt.dias?: 0
             mlpl.monto = prmt.monto
+            mlpl.fechaMaxima = prmt.fechaMaxima?:null
+            mlpl.periodo = prmt.periodo?:""
             println "inserta valores de: $prmt"
         }
         if (mlpl.save([flush: true])) {

@@ -5,6 +5,7 @@ import janus.Contrato
 import janus.Modificaciones
 import janus.Obra
 import janus.VolumenesObra
+import janus.ejecucion.MultasPlanilla
 import janus.ejecucion.PeriodoEjecucionMes
 import janus.ejecucion.PeriodoPlanilla
 import janus.ejecucion.Planilla
@@ -2096,6 +2097,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def fcfm     //fecha de fin de mes
         def vlor = 0.0
         def parcial = 0.0
+        def prmt = [:]
         prej.each {pe ->
 
             fcin = pe.fechaInicio
@@ -2106,60 +2108,78 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
             if (fcfm < pe.fechaFin) {
                 vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
-                parcial = vlor /(pe.fechaFin - pe.fechaInicio) * (fcfm - fcin)
+                println "valor: ${vlor[0]}"
+                parcial = vlor[0] /(pe.fechaFin - pe.fechaInicio) * (fcfm - fcin)
                 println "parcial: $parcial"
-                pems = PeriodoEjecucionMes.findAllByContratoAndObraAndPeriodoEjecucionAndFechaInicioAndFechaFin(cntr, cntr.obra, pe, fcin, fcfm)
-                if(pems){
-                    //* actualiza el periodo actual **/
-                    pems.parcialCronograma = parcial
-                } else {
-                    pems = new PeriodoEjecucionMes()
-                    pems.contrato = cntr
-                    pems.obra = cntr.obra
-                    pems.periodoEjecucion = pe
-                    pems.fechaInicio = fcin
-                    pems.fechaFin = fcfm
-                }
-                if (!pems.save(flush: true)) {
-                    flash.message = "No se pudo actualizar pems"
-                    println "Error al actualizar pems: " + pems.errors
-                } else {
-                    flash.message = "Pems actualizado exitosamente"
-                    redirect(controller: "cronogramaEjecucion", action: "index", id: cntr.id)
-                }
+                prmt = [:]
+                prmt.contrato = cntr
+                prmt.obra = cntr.obra
+                prmt.periodoEjecucion = pe
+                prmt.fechaInicio = fcin
+                prmt.fechaFin = fcfm
+                prmt.parcialCronograma = parcial
+                insertaPems(prmt)
 
                 fcin = fcfm + 1
                 fcfn = pe.fechaFin
-                parcial = vlor - parcial
+                parcial = vlor[0] - parcial
 
-                pems = PeriodoEjecucionMes.findAllByContratoAndObraAndPeriodoEjecucionAndFechaInicioAndFechaFin(cntr, cntr.obra, pe, fcin, fcfn)
-                if(pems){
-                    //* actualiza el periodo actual **/
-                    pems.parcialCronograma = parcial
-                } else {
-                    pems = new PeriodoEjecucionMes()
-                    pems.contrato = cntr
-                    pems.obra = cntr.obra
-                    pems.periodoEjecucion = pe
-                    pems.fechaInicio = fcin
-                    pems.fechaFin = fcfn
-                }
-                if (!pems.save(flush: true)) {
-                    flash.message = "No se pudo actualizar pems"
-                    println "Error al actualizar pems: " + pems.errors
-                } else {
-                    flash.message = "Pems actualizado exitosamente"
-                    redirect(controller: "cronogramaEjecucion", action: "index", id: cntr.id)
-                }
+                prmt = [:]
+                prmt.contrato = cntr
+                prmt.obra = cntr.obra
+                prmt.periodoEjecucion = pe
+                prmt.fechaInicio = fcin
+                prmt.fechaFin = fcfn
+                prmt.parcialCronograma = parcial
+                insertaPems(prmt)
 
-            } else {
-                /** ingresar solo los dias restantes ver: ../Documentos/pems.sql **/
+            } else { /** ingresar solo los dias restantes ver: ../Documentos/pems.sql **/
+                vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
+                parcial = vlor[0]
+                println "parcial: $parcial"
+                prmt = [:]
+                prmt.contrato = cntr
+                prmt.obra = cntr.obra
+                prmt.periodoEjecucion = pe
+                prmt.fechaInicio = fcin
+                prmt.fechaFin = fcfn
+                prmt.parcialCronograma = parcial
+                insertaPems(prmt)
+
             }
         }
 //        def pems = PeriodoEjecucionMes.
 
 
         render "ok"
+    }
+
+    def insertaPems(prmt) {
+        def pems = new PeriodoEjecucionMes()
+        println "inserta pems del contrato : ${prmt}"
+        def pems_an = PeriodoEjecucionMes.findByContratoAndFechaInicioAndFechaFin(prmt.contrato, prmt.fechaInicio, prmt.fechaFin)
+        if (pems_an) {
+            pems = PeriodoEjecucionMes.get(pems_an.id)
+            pems.obra = prmt.obra
+            pems.periodoEjecucion = prmt.periodoEjecucion
+            pems.parcialCronograma = prmt.parcialCronograma
+            println "actualiza valores de: $prmt"
+        } else {
+            pems.contrato = prmt.contrato
+            pems.obra = prmt.obra
+            pems.periodoEjecucion = prmt.periodoEjecucion
+            pems.fechaInicio = prmt.fechaInicio
+            pems.fechaFin = prmt.fechaFin
+            pems.parcialCronograma = prmt.parcialCronograma
+            println "inserta valores de: $prmt"
+        }
+
+        if (!pems.save(flush: true)) {
+            flash.message = "No se pudo actualizar pems"
+            println "Error al actualizar pems: " + pems.errors
+        } else {
+            flash.message = "Pems actualizado exitosamente"
+        }
     }
 
 } //fin controller
