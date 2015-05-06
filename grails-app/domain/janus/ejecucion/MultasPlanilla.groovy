@@ -9,6 +9,8 @@ class MultasPlanilla {
     double valorCronograma
     int dias
     double monto
+    Date fechaMaxima
+    String periodo
 
     static auditable = true
     static mapping = {
@@ -25,6 +27,8 @@ class MultasPlanilla {
             valorCronograma column: 'mlplcrng'
             monto column: 'mlplmnto'
             dias column: 'mlpldias'
+            fechaMaxima column: 'mlplfcmx'
+            periodo column: 'mlplprdo'
         }
     }
 
@@ -35,5 +39,7 @@ class MultasPlanilla {
         valorCronograma(blank:true, nullable: true)
         monto(blank:true, nullable: true)
         dias(blank:true, nullable: true)
+        fechaMaxima(blank:true, nullable: true)
+        periodo(blank:true, nullable: true)
     }
 }
