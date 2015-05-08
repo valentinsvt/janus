@@ -4505,6 +4505,7 @@ class PlanillaController extends janus.seguridad.Shield {
             println "----planilla actual ${plnl.id} tipo: ${plnl.tipoPlanilla}"
 
             prdo++
+            plAcumulado += plnl.valor
             def pems = PeriodoEjecucionMes.findAllByContratoAndFechaFinLessThanEquals(plnl.contrato,
                     plnl.fechaFin, [sort: 'fechaInicio'])
             parcial = 0.0
@@ -4517,7 +4518,8 @@ class PlanillaController extends janus.seguridad.Shield {
                     parcial += ms.parcialCronograma
                 }
             }
-            println "Cronograma <<<<<<<<<<<<< $pems \n plnl: ${plnl.id} tipo: ${plnl.tipoPlanilla}, cronogrmama: $total, $parcial"
+            println "Cronograma <<<<<<<<<<<<< $pems \n plnl: ${plnl.id} tipo: ${plnl.tipoPlanilla}, " +
+                    "cronogrmama: $total, $parcial, planillado: ${plnl.valor}, ac: ${plAcumulado}"
 
             prmt = [:]
             prdoInec = indicesDisponibles(plnl, null) /* para recalcular reajuste */

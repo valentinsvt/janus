@@ -1755,22 +1755,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             redirect(action: "errores", params: [contrato: params.id])
             return
         }
-//        def obra = contrato?.oferta?.concurso?.obra
-
-        def obraOld = contrato?.oferta?.concurso?.obra
-//        println "oblraOld:::: $obraOld"
-
-        if (!obraOld) {
-            flash.message = "No se encontró la obra"
-            flash.clase = "alert-error"
-            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
-            return
-        }
-
-        def obra = Obra.findByCodigo(obraOld.codigo+"-OF")
-        if(!obra) {
-            obra = obraOld
-        }
+        def obra = contrato?.obra
 
         if (!obra) {
             flash.message = "No se encontró la obra"
@@ -2088,8 +2073,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     def actualizaPems() {
         /** en base a prej ingresa o actualiza dato en pems **/
         println "actualizaPems params: $params"
-        def cntr = Contrato.get(params.contrato)
-        def prej = PeriodoEjecucion.findAllByContrato(cntr)
         def pems
         def fcin     //fecha de incio periodo pems
         def fcfn     //fecha de fin periodo pems
@@ -2098,8 +2081,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def vlor = 0.0
         def parcial = 0.0
         def prmt = [:]
-        prej.each {pe ->
 
+        def cntr = Contrato.get(params.contrato)
+        def prej = PeriodoEjecucion.findAllByContrato(cntr)
+
+        prej.each {pe ->
             fcin = pe.fechaInicio
             fcfm = preciosService.ultimoDiaDelMes(fcin)
             fcim = fcfm + 1
@@ -2181,5 +2167,174 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             flash.message = "Pems actualizado exitosamente"
         }
     }
+
+
+    def creaCronogramaEjec() {
+        def contrato = Contrato.get(params.id)
+//println contrato
+        if (!contrato) {
+            flash.message = "No se encontró el contrato"
+            flash.clase = "alert-error"
+//            println flash.message
+            redirect(action: "errores", params: [contrato: params.id])
+            return
+        }
+        def obra = contrato.obra
+        if (!obra) {
+            flash.message = "No se encontró la obra"
+            flash.clase = "alert-error"
+            redirect(action: "errores", params: [contrato: params.id])
+            return
+        }
+        if (!obra.fechaInicio) {
+            flash.message = "La obra no tiene fecha de inicio. Por favor solucione el problema. " + obra.id
+            flash.clase = "alert-error"
+            redirect(action: "errores", params: [contrato: params.id])
+            return
+        }
+        println "Index contrato: $contrato"
+        println "Index obra: $obra"
+
+        /** copia el cronograma del contrato (crng) a la tabla cronograma de ejecucion (crej)
+         *  --Se debe crear primero los prej y luego insertar cada rubro desde cronogramaContrato
+         * **/
+        def prej
+        def continua = true
+        def fcin
+        def fcfn
+        def fcfm
+        def parcial = 0.0
+        def parcial1 = 0.0
+        def parcial2 = 0.0
+        def vlor = 0.0
+        def precio2 = 0.0
+        def porcentaje2 = 0.0
+        def cantidad2 = 0.0
+        def prej2
+        def vol2
+
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def periodos = CronogramaEjecucion.executeQuery("select max(periodo) from CronogramaContrato where contrato = :c", [c: contrato])
+
+        def hayPrej = PeriodoEjecucion.findAllByContrato(contrato)
+        if(!hayPrej){
+            fcin = obra.fechaInicio
+            for (pr in [1..periodos]) {
+                println "crear periodo"
+                def dias = (crono.periodo - 1) * 30 //+ (crono.periodo - 1)
+                def prdo = 0
+                if ((dias + 30) > contrato.plazo) {
+                    prdo = contrato.plazo - dias
+                } else {
+                    prdo = 30
+                }
+
+                fcin = fcfm? fcfm + 1 : obra.fechaInicio
+                fcfn = obra.fechaInicio + (prdo - 1).toInteger()      // 30 - 1 para contar el dia inicial
+                fcfm = preciosService.ultimoDiaDelMes(fcin)
+                if (fcfm < fcfn) {
+                    prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfm)
+                    if (!prej) {
+                        prej = new PeriodoEjecucion()
+                        prej.contrato = contrato
+                        prej.obra = obra
+                        prej.fechaInicio = fcin
+                        prej.fechaFin = fcfm
+                        prej.numero = pr
+                        prej.tipo = 'P'
+                        if (!prej.save(flush: true)) {
+                            flash.message = "No se pudo crear prej"
+                            println "Error al crear prej*******: " + prej.errors
+                        } else {
+                            flash.message = "Prej actualizado exitosamente"
+                        }
+
+                    }
+                }  else {
+                    prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfn)
+                    if (!prej) {
+                        prej = new PeriodoEjecucion()
+                        prej.contrato = contrato
+                        prej.obra = obra
+                        prej.fechaInicio = fcin
+                        prej.fechaFin = fcfn
+                        prej.numero = pr
+                        prej.tipo = 'P'
+                        if (!prej.save(flush: true)) {
+                            flash.message = "No se pudo crear prej"
+                            println "Error al crear prej*******: " + prej.errors
+                        } else {
+                            flash.message = "Prej actualizado exitosamente"
+                        }
+
+                    }
+
+                }
+            }
+
+        }
+
+//        println "datos de cronograma $cronogramas"
+        def cronogramas = CronogramaEjecucion.countByVolumenObraInList(detalle)
+
+        if (cronogramas == 0) {
+//            println "no hay datos de cronograma ... inicia cargado"
+            detalle.each { vol ->
+                def cronoCntr = CronogramaContrato.findAllByVolumenObra(vol, [sort: 'periodo'])
+
+                fcin = obra.fechaInicio
+                cronoCntr.each { crono ->
+
+                    vlor = CronogramaContrato.executeQuery("select sum(precio) from CronogramaContrato where contrato = :c and periodo = :p", [c: contrato, p: crono.periodo])
+                    prej = PeriodoEjecucion.findAllByContratoAndPeriodo(contrato, crono.periodo)
+                    /** ingresar la proporcion en los prej existentes conform el número de días **/
+                    def cronoEjecucion = new CronogramaEjecucion([
+                            volumenObra: vol,
+                            periodo    : prej,
+                            precio     : crono.precio * parcial1,
+                            porcentaje : crono.porcentaje * parcial1,
+                            cantidad   : crono.cantidad * parcial1
+                    ])
+                    if (!cronoEjecucion.save(flush: true)) {
+                        println "Error al guardar el crono ejecucion del crono " + crono.id
+                        println cronoEjecucion.errors
+                    } else {
+                        println "ok " + crono.id + "  =>  " + cronoEjecucion.id
+                    }
+
+                } //cronogramaContrato.each
+            } //detalles.each
+        } //if cronogramas == 0
+
+        redirect(action: "index", params: [obra: obra, id: contrato.id, ini: fcin])
+    }
+
+    def insertaPrej(prmt) {
+        def pems = new PeriodoEjecucion()
+        println "inserta pems del contrato : ${prmt}"
+        def pems_an = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(prmt.contrato, prmt.fechaInicio, prmt.fechaFin)
+        if (pems_an) {
+            pems_an.obra = prmt.obra
+            pems_an.periodoEjecucion = prmt.periodoEjecucion
+            pems_an.parcialCronograma = prmt.parcialCronograma
+            println "actualiza valores de: $prmt"
+        } else {
+            pems.contrato = prmt.contrato
+            pems.obra = prmt.obra
+            pems.periodoEjecucion = prmt.periodoEjecucion
+            pems.fechaInicio = prmt.fechaInicio
+            pems.fechaFin = prmt.fechaFin
+            pems.parcialCronograma = prmt.parcialCronograma
+            println "inserta valores de: $prmt"
+        }
+
+        if (!pems.save(flush: true)) {
+            flash.message = "No se pudo actualizar pems"
+            println "Error al actualizar pems: " + pems.errors
+        } else {
+            flash.message = "Pems actualizado exitosamente"
+        }
+    }
+
 
 } //fin controller
