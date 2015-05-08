@@ -1,10 +1,14 @@
 package janus.ejecucion
 
+import com.lowagie.text.Element
+import com.lowagie.text.Paragraph
 import janus.Contrato
 import janus.FormulaPolinomica
 import janus.Obra
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
+
+import java.awt.Color
 
 class Planilla2Controller extends janus.seguridad.Shield {
 
@@ -1974,80 +1978,186 @@ class Planilla2Controller extends janus.seguridad.Shield {
         }
 
 
+
+        //***************************** B0 ****************************
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla)
+
+        def periodosNuevos = [:]
+        def pagos = [:]
+        def datos = [:]
+        def datosFr = [:]
+        def tams = [30, 8]
+        def tamsFr = [30]
+
+        reajustesPlanilla.each { rj ->
+            def key = rj.periodo
+            if(!periodosNuevos[key]) {
+                periodosNuevos[key] = []
+                pagos[key] = ""
+            }
+            if(rj.periodo == 0) {
+                periodosNuevos[key] += contrato.periodoInec.descripcion
+                tams.add(10)
+                tams.add(10)
+                tamsFr.add(10)
+            }
+            if(rj.planillaReajustadaId != rj.planillaId) {
+                pagos[key] = rj.planillaReajustada?.fechaPago ? "Pago: "+rj.planillaReajustada.fechaPago.format("dd-MM-yyyy") : ""
+            }
+
+            periodosNuevos[key] += rj.mes
+            tams.add(10)
+            tams.add(10)
+            tamsFr.add(10)
+        }
+
+        cs.each { c ->
+            def key = c.id
+            if(!datos[key]) {
+                datos[key] = [:]
+                datos[key].fp = c
+                datos[key].detalles = [:]
+            }
+            reajustesPlanilla.each { rj ->
+                def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
+                datos[key].detalles[rj.periodo] = det
+            }
+        }
+
+
+
         def tableWidth = 150 * periodos.size() + 400
 
         def tablaBo = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${tableWidth}px;'>"
         tablaBo += "<thead>"
         tablaBo += "<tr>"
         tablaBo += "<th colspan=\"2\">Cuadrilla Tipo</th>"
-        println "periodos "+periodos
-        periodos.each {
-            it.total = 0
-            it.fr = 0
-            tablaBo += "<th>${it.titulo}</th>"
-            tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio, "MMM-yy") + "</th>"
-        }
+//        println "periodos "+periodos
+//        periodos.each {
+//            it.total = 0
+//            it.fr = 0
+//            tablaBo += "<th>${it.titulo}</th>"
+//            tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio, "MMM-yy") + "</th>"
+//        }
 
-        def band = true
+
+        periodosNuevos.each { per, meses->
+            if(per == 0){
+                tablaBo += "<th> OFERTA </th>"
+                tablaBo += "<th class='nb'>" + meses[0] + "</th>"
+
+                tablaBo += "<th> ANTICIPO </th>"
+                tablaBo += "<th class='nb'>" + meses[1] + "</th>"
+            }else{
+                tablaBo += "<th> AVANCE </th>"
+                tablaBo += "<th class='nb'>" + meses[0] + "</th>"
+            }
+
+        }
+//
+//        def band = true
+//        tablaBo += "</tr>"
+//        tablaBo += "</thead>"
+//        tablaBo += "<tbody>"
+//        def totalCoef = 0
+//        cs.each { c ->
+//            if(band) {
+//                tablaBo += "<tr>"
+//                tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
+//                tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
+//                totalCoef += c.valor
+//                periodos.each { p ->
+////                println "periodo " + p.periodo + " indice: " + c.indice
+////                println "valor: " + ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)
+//                    def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)?.valor
+//                    if (!valor) {
+//                        println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
+//                        valor = 0
+//                        flash.message = "<p><ul>No hay valor para ${c.indice} en el periodo ${p.periodo}. No se puede generar la planilla</ul></p>"
+//
+//                        band = false
+//                        return
+//                    }
+//
+//                    p.total += (valor * c.valor).round(3)
+//                    p.save(flush: true)
+//
+//                    tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
+//                    valor = (valor * c.valor).round(3)
+//                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
+//                    if (vlrj.size() > 0) {
+//                        vlrj = vlrj.pop()
+//                        if (vlrj != valor) {
+//                            vlrj.valor = valor
+//                            if (!vlrj.save(flush: true)) {
+//                                println "error vlrj update " + vlrj.errors
+//                            }
+//                        }
+//                    } else {
+//                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodo, formulaPolinomica: c, valor: valor])
+//                        if (!vlrj.save(flush: true)) {
+//                            println "error vlrj insert " + vlrj.errors
+//                        }
+//                    }
+//                    tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+//                }
+//
+//                tablaBo += "</tr>"
+//            }
+//        }
+//        if(!band) {
+//            redirect(action: "errores")
+//            return
+//        }
+//        tablaBo += "</tbody><tfoot>"
+//        tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(totalCoef)}</th>"
+//        periodos.each { p ->
+//            tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
+//        }
+//        tablaBo += "</tr></tfoot></table>"
+
         tablaBo += "</tr>"
         tablaBo += "</thead>"
         tablaBo += "<tbody>"
-        def totalCoef = 0
-        cs.each { c ->
-            if(band) {
-                tablaBo += "<tr>"
+
+        datos.each { k, v ->
+            def c = v.fp
+            def det = v.detalles
+
+
+            tablaBo += "<tr>"
                 tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
                 tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
-                totalCoef += c.valor
-                periodos.each { p ->
-//                println "periodo " + p.periodo + " indice: " + c.indice
-//                println "valor: " + ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)
-                    def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)?.valor
-                    if (!valor) {
-                        println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
-                        valor = 0
-                        flash.message = "<p><ul>No hay valor para ${c.indice} en el periodo ${p.periodo}. No se puede generar la planilla</ul></p>"
 
-                        band = false
-                        return
+//            coeficientes = (coeficientes + c.valor)
+
+            det.each { per, dt ->
+                if (dt.size == 1) {
+                    dt = dt.first()
+                    if (per == 0) {
+                        tablaBo += "<th class='number'>" + numero(dt.indiceOferta) + "</th>"
+                        tablaBo += "<th class='number'>" + numero(dt.valorIndcOfrt) + "</th>"
+
+
+//                        totalOferta = (totalOferta + dt.valorIndcOfrt)
+//                        totalAnticipo = (totalAnticipo + dt.valorIndcPrdo)
                     }
+                    tablaBo += "<th class='number'>" + numero(dt.indicePeriodo) + "</th>"
+                    tablaBo += "<th class='number'>" + numero(dt.valorIndcPrdo) + "</th>"
 
-                    p.total += (valor * c.valor).round(3)
-                    p.save(flush: true)
-
-                    tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
-                    valor = (valor * c.valor).round(3)
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
-                    if (vlrj.size() > 0) {
-                        vlrj = vlrj.pop()
-                        if (vlrj != valor) {
-                            vlrj.valor = valor
-                            if (!vlrj.save(flush: true)) {
-                                println "error vlrj update " + vlrj.errors
-                            }
-                        }
-                    } else {
-                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodo, formulaPolinomica: c, valor: valor])
-                        if (!vlrj.save(flush: true)) {
-                            println "error vlrj insert " + vlrj.errors
-                        }
-                    }
-                    tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+//                    totalAvance = (totalAvance + dt.valorIndcPrdo)
+                } else {
+                    println "Hay mas de 1 detalle para la fp ${c} periodo ${per}"
                 }
-
-                tablaBo += "</tr>"
             }
         }
-        if(!band) {
-            redirect(action: "errores")
-            return
-        }
-        tablaBo += "</tbody><tfoot>"
+
         tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(totalCoef)}</th>"
-        periodos.each { p ->
-            tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
-        }
+//        periodos.each { p ->
+//            tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
+//        }
         tablaBo += "</tr></tfoot></table>"
+
 
         //////////////////////////**********************P0*********************///////////////////////////
         def tablaP0 = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${tableWidth}px; margin-top:10px;' >"
