@@ -60,7 +60,8 @@
                 </g:if>
 
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
-                    <g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">
+                    %{--<g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">--}%
+                    <g:link controller="cronogramaEjecucion" class="btn" action="creaCronogramaEjec" id="${contrato?.id}">
                         <i class="icon-th"></i> Cronograma ejecucion
                     </g:link>
                 </g:if>

@@ -1412,7 +1412,8 @@ class PlanillaController extends janus.seguridad.Shield {
             redirect(action: "list", id: planilla.contratoId)
         } else {
             flash.message = "Obra iniciada exitosamente"
-            redirect(controller: "cronogramaEjecucion", action: "index", id: planilla.contratoId)
+//            redirect(controller: "cronogramaEjecucion", action: "index", id: planilla.contratoId)
+            redirect(controller: "cronogramaEjecucion", action: "creaCronogramaEjec", id: planilla.contratoId)
         }
     }
 
@@ -1483,8 +1484,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
 
 
-        def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
+        def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.obra, [sort: "fechaFin"])
         def finalObra = null
+        println "periodosEjec: $periodosEjec"
         if (periodosEjec.size() > 0) {
             finalObra = periodosEjec?.pop()?.fechaFin
         }
@@ -1606,7 +1608,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 inicio = planillasAnt.pop().fechaFin + 1
                 println "inicio " + inicio
                 fin = getLastDayOfMonth(inicio)
-                println "fin " + fin
+                println "fin $fin ... calcula periodos con final de obra: $finalObra"
+
                 if (fin > finalObra) {
                     periodos.put((inicio.format("dd-MM-yyyy") + "_" + finalObra.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + finalObra.format("dd-MM-yyyy"))
                 } else {
@@ -1644,7 +1647,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def fechaMax
         if (contrato.fechaSubscripcion)
-            fechaMax = contrato.fechaSubscripcion.plus(366)
+            fechaMax = contrato.fechaSubscripcion.plus(720)
         else
             fechaMax = new Date()
 //        println "fecha max " + fechaMax
@@ -1671,7 +1674,7 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-        //println "12: " + tiposPlanilla.codigo
+        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado"
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
                 minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini]
@@ -1747,8 +1750,8 @@ class PlanillaController extends janus.seguridad.Shield {
             planillaInstance.properties = params
             if(!params.valor_multa ||  params.valor_multa=="")
                 params.valor_multa =0
-            planillaInstance.descripcionMulta = params.multaDescripcion
-            planillaInstance.multaEspecial = params.valor_multa.toDouble()
+//            planillaInstance.descripcionMulta = params.multaDescripcion
+//            planillaInstance.multaEspecial = params.valor_multa.toDouble()
             if(planillaInstance.tipoPlanilla.codigo=="A"){
                 println "llego al save !!!!!  "+params.periodoPlan
                 planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
@@ -1756,8 +1759,10 @@ class PlanillaController extends janus.seguridad.Shield {
             session.override = true
         }//es edit
         else {
+            println "paramas luego de override: ${params}"
 
             planillaInstance = new Planilla(params)
+            println " creando planilla: ${params.id} con ${params.descripcionMulta}"
 
             switch (planillaInstance.tipoPlanilla.codigo) {
                 case 'A':
@@ -4835,9 +4840,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         if (retraso > 0 || plnl.valor == 0) {
-            if (retraso < 0) {
-                retraso = 0
-            }
+            retraso = 1
         } else {
             retraso = 0
         }

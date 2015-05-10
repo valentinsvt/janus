@@ -1975,100 +1975,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     } //index
 
-//    def list() {
-//        [cronogramaEjecucionInstanceList: CronogramaEjecucion.list(params), params: params]
-//    } //list
-//
-//    def form_ajax() {
-//        def cronogramaEjecucionInstance = new CronogramaEjecucion(params)
-//        if (params.id) {
-//            cronogramaEjecucionInstance = CronogramaEjecucion.get(params.id)
-//            if (!cronogramaEjecucionInstance) {
-//                flash.clase = "alert-error"
-//                flash.message = "No se encontró Cronograma Ejecucion con id " + params.id
-//                redirect(action: "list")
-//                return
-//            } //no existe el objeto
-//        } //es edit
-//        return [cronogramaEjecucionInstance: cronogramaEjecucionInstance]
-//    } //form_ajax
-//
-//    def save() {
-//        def cronogramaEjecucionInstance
-//        if (params.id) {
-//            cronogramaEjecucionInstance = CronogramaEjecucion.get(params.id)
-//            if (!cronogramaEjecucionInstance) {
-//                flash.clase = "alert-error"
-//                flash.message = "No se encontró Cronograma Ejecucion con id " + params.id
-//                redirect(action: 'list')
-//                return
-//            }//no existe el objeto
-//            cronogramaEjecucionInstance.properties = params
-//        }//es edit
-//        else {
-//            cronogramaEjecucionInstance = new CronogramaEjecucion(params)
-//        } //es create
-//        if (!cronogramaEjecucionInstance.save(flush: true)) {
-//            flash.clase = "alert-error"
-//            def str = "<h4>No se pudo guardar Cronograma Ejecucion " + (cronogramaEjecucionInstance.id ? cronogramaEjecucionInstance.id : "") + "</h4>"
-//
-//            str += "<ul>"
-//            cronogramaEjecucionInstance.errors.allErrors.each { err ->
-//                def msg = err.defaultMessage
-//                err.arguments.eachWithIndex { arg, i ->
-//                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
-//                }
-//                str += "<li>" + msg + "</li>"
-//            }
-//            str += "</ul>"
-//
-//            flash.message = str
-//            redirect(action: 'list')
-//            return
-//        }
-//
-//        if (params.id) {
-//            flash.clase = "alert-success"
-//            flash.message = "Se ha actualizado correctamente Cronograma Ejecucion " + cronogramaEjecucionInstance.id
-//        } else {
-//            flash.clase = "alert-success"
-//            flash.message = "Se ha creado correctamente Cronograma Ejecucion " + cronogramaEjecucionInstance.id
-//        }
-//        redirect(action: 'list')
-//    } //save
-//
-//    def show_ajax() {
-//        def cronogramaEjecucionInstance = CronogramaEjecucion.get(params.id)
-//        if (!cronogramaEjecucionInstance) {
-//            flash.clase = "alert-error"
-//            flash.message = "No se encontró Cronograma Ejecucion con id " + params.id
-//            redirect(action: "list")
-//            return
-//        }
-//        [cronogramaEjecucionInstance: cronogramaEjecucionInstance]
-//    } //show
-//
-//    def delete() {
-//        def cronogramaEjecucionInstance = CronogramaEjecucion.get(params.id)
-//        if (!cronogramaEjecucionInstance) {
-//            flash.clase = "alert-error"
-//            flash.message = "No se encontró Cronograma Ejecucion con id " + params.id
-//            redirect(action: "list")
-//            return
-//        }
-//
-//        try {
-//            cronogramaEjecucionInstance.delete(flush: true)
-//            flash.clase = "alert-success"
-//            flash.message = "Se ha eliminado correctamente Cronograma Ejecucion " + cronogramaEjecucionInstance.id
-//            redirect(action: "list")
-//        }
-//        catch (DataIntegrityViolationException e) {
-//            flash.clase = "alert-error"
-//            flash.message = "No se pudo eliminar Cronograma Ejecucion " + (cronogramaEjecucionInstance.id ? cronogramaEjecucionInstance.id : "")
-//            redirect(action: "list")
-//        }
-//    } //delete
 
     def actualizaPems() {
         /** en base a prej ingresa o actualiza dato en pems **/
@@ -2170,8 +2076,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
 
     def creaCronogramaEjec() {
+        println "creaCronogramaEjec para contrato: $params.id"
         def contrato = Contrato.get(params.id)
-//println contrato
         if (!contrato) {
             flash.message = "No se encontró el contrato"
             flash.clase = "alert-error"
@@ -2203,10 +2109,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def fcin
         def fcfn
         def fcfm
+        def fcha
         def parcial = 0.0
         def parcial1 = 0.0
         def parcial2 = 0.0
-        def vlor = 0.0
+        def vlor
         def precio2 = 0.0
         def porcentaje2 = 0.0
         def cantidad2 = 0.0
@@ -2215,24 +2122,27 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def periodos = CronogramaEjecucion.executeQuery("select max(periodo) from CronogramaContrato where contrato = :c", [c: contrato])
+//        println "periodos: $periodos"
 
         def hayPrej = PeriodoEjecucion.findAllByContrato(contrato)
+//        println "hayPrej: $hatPrej"
         if(!hayPrej){
             fcin = obra.fechaInicio
-            for (pr in [1..periodos]) {
-                println "crear periodo"
-                def dias = (crono.periodo - 1) * 30 //+ (crono.periodo - 1)
+            for (pr in (1 .. periodos[0])) {
+                def dias = (pr - 1) * 30 //+ (crono.periodo - 1)
                 def prdo = 0
+                println "crear periodo... pr: $pr, dias: $dias, plazo: ${contrato.plazo}"
+
                 if ((dias + 30) > contrato.plazo) {
                     prdo = contrato.plazo - dias
                 } else {
                     prdo = 30
                 }
 
-                fcin = fcfm? fcfm + 1 : obra.fechaInicio
-                fcfn = obra.fechaInicio + (prdo - 1).toInteger()      // 30 - 1 para contar el dia inicial
+                fcin = fcha? fcha + 1 : obra.fechaInicio
+                fcfn = fcin + (prdo - 1).toInteger()      // 30 - 1 para contar el dia inicial
                 fcfm = preciosService.ultimoDiaDelMes(fcin)
-                if (fcfm < fcfn) {
+                if (fcfm < fcfn) {   /** sobrepas el mes --> 2 periodos **/
                     prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfm)
                     if (!prej) {
                         prej = new PeriodoEjecucion()
@@ -2248,7 +2158,25 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         } else {
                             flash.message = "Prej actualizado exitosamente"
                         }
+                    }
 
+                    fcin = fcfm + 1
+                    fcha = fcfn
+                    prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfn)
+                    if (!prej) {
+                        prej = new PeriodoEjecucion()
+                        prej.contrato = contrato
+                        prej.obra = obra
+                        prej.fechaInicio = fcin
+                        prej.fechaFin = fcfn
+                        prej.numero = pr
+                        prej.tipo = 'P'
+                        if (!prej.save(flush: true)) {
+                            flash.message = "No se pudo crear prej"
+                            println "Error al crear prej*******: " + prej.errors
+                        } else {
+                            flash.message = "Prej actualizado exitosamente"
+                        }
                     }
                 }  else {
                     prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfn)
@@ -2266,12 +2194,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         } else {
                             flash.message = "Prej actualizado exitosamente"
                         }
-
                     }
-
                 }
             }
-
         }
 
 //        println "datos de cronograma $cronogramas"
@@ -2281,29 +2206,49 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //            println "no hay datos de cronograma ... inicia cargado"
             detalle.each { vol ->
                 def cronoCntr = CronogramaContrato.findAllByVolumenObra(vol, [sort: 'periodo'])
-
-                fcin = obra.fechaInicio
                 cronoCntr.each { crono ->
 
-                    vlor = CronogramaContrato.executeQuery("select sum(precio) from CronogramaContrato where contrato = :c and periodo = :p", [c: contrato, p: crono.periodo])
-                    prej = PeriodoEjecucion.findAllByContratoAndPeriodo(contrato, crono.periodo)
+//                    vlor = CronogramaContrato.executeQuery("select sum(precio), sum(porcentaje), sum(cantidad)  from CronogramaContrato where contrato = :c and periodo = :p", [c: contrato, p: crono.periodo])
+                    vlor = CronogramaContrato.findByContratoAndVolumenObraAndPeriodo(contrato, vol, crono.periodo)
+                    prej = PeriodoEjecucion.findAllByContratoAndNumero(contrato, crono.periodo)
                     /** ingresar la proporcion en los prej existentes conform el número de días **/
-                    def cronoEjecucion = new CronogramaEjecucion([
-                            volumenObra: vol,
-                            periodo    : prej,
-                            precio     : crono.precio * parcial1,
-                            porcentaje : crono.porcentaje * parcial1,
-                            cantidad   : crono.cantidad * parcial1
-                    ])
-                    if (!cronoEjecucion.save(flush: true)) {
-                        println "Error al guardar el crono ejecucion del crono " + crono.id
-                        println cronoEjecucion.errors
-                    } else {
-                        println "ok " + crono.id + "  =>  " + cronoEjecucion.id
+                    println "valores cronograma: ${vlor}, prej: $prej"
+                    def prco = 0.0
+                    def pcnt = 0.0
+                    def cntd = 0.0
+                    prej.each {pe ->
+                        if (prco > 0 ){
+                            prco = vlor.precio - prco
+                            pcnt = vlor.porcentaje - pcnt
+                            cntd = vlor.cantidad - cntd
+                        } else {
+                            prco = Math.round(vlor.precio/30* (pe.fechaFin - pe.fechaInicio + 1) * 100)/100
+                            pcnt = Math.round(vlor.porcentaje/30* (pe.fechaFin - pe.fechaInicio + 1) *100)/100
+                            cntd = Math.round(vlor.cantidad/30* (pe.fechaFin - pe.fechaInicio + 1)*100)/100
+                        }
+                        println "crear crej con: ${vol.id}, ${pe.numero}, $prco, $pcnt, $cntd"
+                        def cronoEjecucion = new CronogramaEjecucion([
+                                volumenObra: vol,
+                                periodo    : pe,
+                                precio     : prco,
+                                porcentaje : pcnt,
+                                cantidad   : cntd
+                        ])
+                        if (!cronoEjecucion.save(flush: true)) {
+                            println "Error al guardar el crono ejecucion del crono " + crono.id
+                            println cronoEjecucion.errors
+                        } else {
+                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
+                        }
                     }
 
                 } //cronogramaContrato.each
             } //detalles.each
+            /** una vez cargado el cronograma ejecuta la creacion de periods mensuales, lo cual puede asimilarse dentro de PREJ **/
+            params.contrato = contrato?.id
+            actualizaPems()
+//          actualizaPrej()  /** TODO pone para cada prej los valores de cronograma **/
+
         } //if cronogramas == 0
 
         redirect(action: "index", params: [obra: obra, id: contrato.id, ini: fcin])

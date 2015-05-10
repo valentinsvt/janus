@@ -503,4 +503,103 @@ class IndiceController extends janus.seguridad.Shield {
         }
         render "ok"
     }
+
+    def borrarIndices() {
+
+    }
+
+    def repetidos() {
+        println "repetidos: $params"
+        def cn = dbConnectionService.getConnection()
+        def cn1 = dbConnectionService.getConnection()
+        //println params
+
+//        def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by indcdscr limit 10"
+        def sqlTx = "select indc__id, prin__id from vlin group by prin__id, indc__id having count(*) > 1 " +
+                "order by indc__id"
+        def txValor = ""
+        def dscr = ""
+        def prin = params.prin.toInteger()
+        // obtiene el periodo anterior
+        def registros = 0
+
+        def html = "<table class=\"table table-bordered table-striped table-hover table-condensed\" id=\"tablaPrecios\">"
+        html += "<thead>"
+        html += "<tr>"
+        html += "<th>Id</th>"
+        html += "<th>Nombre del Indice</th>"
+        html += "<th>Periodo</th>"
+        html += "<th>Valor</th>"
+        html += "<th>Borrar</th>"
+        html += "</thead>"
+
+        def body = ""
+        cn.eachRow(sqlTx.toString()) { d ->
+            body += "<tr>"
+
+            def prec = "", p = 0, rubro = "new"
+            txValor = "select vlin__id, vlinvalr, vlin.prin__id, prindscr, indcdscr from vlin, prin, indc " +
+                    "where vlin.indc__id = ${d.indc__id} and vlin.prin__id = ${d.prin__id} and " +
+                    "prin.prin__id = vlin.prin__id and " +
+                    "indc.indc__id = vlin.indc__id order by indcdscr, prinfcin"
+//            println txValor
+            prec = g.formatNumber(number: 0.0, maxFractionDigits: 2, minFractionDigits: 2, locale: "ec")
+            p = 0.0
+            cn1.eachRow(txValor.toString()) { v ->
+                if (v.vlinvalr != null) {
+                    prec = g.formatNumber(number: v.vlinvalr, maxFractionDigits: 2, minFractionDigits: 2, locale: "ec")
+                    p = v.vlinvalr
+                    rubro = v.vlin__id
+                } else {
+                    prec = 0
+                    p = 0
+                    rubro = v.vlin__id
+                }
+                dscr = v.indcdscr
+                body += "<td>${v.vlin__id}</td><td>${dscr}</td><td>${v.prindscr}</td><td class='number' data-id='${v.vlin__id}'>" +
+                        prec + '</td>'
+                body += "<td style='text-align:center'><a class='btn btn-small btn-info btn-ajax btCopia' " +
+                     "href='#' rel='tooltip' title='Copiar' </a>Borrar</td></tr>"
+                registros++
+            }
+        }
+        html += "<tbody>"
+        //println html
+
+        cn.close()
+        cn1.close()
+        html += body
+        html += "Registros repetidos: ${registros}"
+        html += "<script type=\'text/javascript\'>  \$(function () { \$('.btCopia').click(function () {" +
+                "var id = \$(this).parent().prev().data('id');" +
+                "\$.ajax({" +
+                "type: 'POST', url: \"${createLink(action: 'borrarVlin')}\", data: { vlin_id: id }, " +
+                "success : function (msg) {" +
+                "  location.reload();" +
+                "}" +
+                "});" +
+                "}); });</script>"
+
+        html += "</tbody>"
+        html += "</table>"
+        [html: html]
+    }
+
+    def borraRepetidos() {
+        def cn = dbConnectionService.getConnection()
+        if (cn.execute("select * from sp_borra_vlin()")) {
+            flash.message = "Se ha borrado los regisitros Repetidos"
+            render "ok"
+        } else {
+            render "error"
+        }
+    }
+
+    def borrarVlin() {
+        println "borrarVlin: $params"
+        ValorIndice.get(params.vlin_id)?.delete()
+        render "ok"
+    }
+
+
 } //fin controller

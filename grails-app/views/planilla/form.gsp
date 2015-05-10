@@ -11,7 +11,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        <g:if test="${planillaInstance.id}">
+        <g:if test="${planillaInstance?.id}">
             Editar planilla
         </g:if>
         <g:else>
@@ -130,19 +130,20 @@
         Tipo de Planilla
     </div>
     <div class="span10">
-    <g:if test="${planillaInstance.id}">
+    <g:if test="${planillaInstance?.id}">
         ${planillaInstance?.tipoPlanilla?.nombre} <span style="margin-left: 290px;">Planillado del: ${planillaInstance?.fechaInicio.format('dd-MM-yyyy')} Hasta: ${planillaInstance?.fechaFin.format('dd-MM-yyyy')}</span>
     </g:if>
     </div>
 
     <div class="span4">
-        <g:if test="${!planillaInstance.id}">
+        <g:if test="${!planillaInstance?.id}">
             <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id" optionValue="nombre"
                       class="many-to-one span3 required" value="${planillaInstance?.tipoPlanilla?.id}"/>
             <span class="mandatory">*</span>
-        </g:if>
         <p class="help-block ui-helper-hidden"></p>
+        </g:if>
     </div>
+    <g:if test="${!planillaInstance?.id}">
 
     <div class="span2 formato periodo hide">
         Periodo
@@ -152,9 +153,9 @@
         <g:select id="periodoPlanilla" name="periodoPlanilla" from="${periodos}" optionKey="key" class="many-to-one span3"
                   optionValue="value"/>
         <span class="mandatory">*</span>
-
         <p class="help-block ui-helper-hidden"></p>
     </div>
+    </g:if>
 </div>
 
 <div class="row">
@@ -344,13 +345,13 @@
             Multa
         </div>
         <div class="span5">
-            <input type="text" name="multaDescripcion" value="${planillaInstance?.descripcionMulta}" style="width: 100%">
+            <input type="text" name="descripcionMulta" value="${planillaInstance?.descripcionMulta}" style="width: 100%">
         </div>
         <div class='span1 formato'>
             Monto
         </div>
         <div class="span3">
-            <input type="text" name="valor_multa" value="${planillaInstance?.multaEspecial}">
+            <input type="text" name="multaEspecial" value="${planillaInstance?.multaEspecial}">
         </div>
     </div>
 </g:if>
@@ -473,16 +474,18 @@
     });
 
     function checkPeriodo() {
-        if ($("#tipoPlanilla").val() == "3") { //avance
+        if ($("#tipoPlanilla").val() == "3" || "${planillaInstance.tipoPlanilla?.id}" == "3") { //avance
+        %{--if("${planillaInstance.tipoPlanilla?.id}" == "3") {--}%
             $(".periodo,.presentacion,#divMultaDisp").show();
         } else {
             $("#divMultaDisp").hide();
-            if ($("#tipoPlanilla").val() == "2" || $("#tipoPlanilla").val() == "5") {
+//            if ($("#tipoPlanilla").val() == "2" || $("#tipoPlanilla").val() == "5") {
+            if ($("#tipoPlanilla").val() == "2") {
                 $(".presentacion").show();
                 $(".periodo").hide();
             } else {
-                $(".periodo").hide();
-                $(".presentacion").hide();
+                $(".periodo").show();
+                $(".presentacion").show();
             }
         }
     }

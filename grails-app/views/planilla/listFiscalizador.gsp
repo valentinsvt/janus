@@ -171,6 +171,7 @@
                                     <i class="icon-table"></i>
                                 </g:link>
 
+%{--
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
                                         <i class="icon-table icon-large"></i>
@@ -186,6 +187,7 @@
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:elseif>
+--}%
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
                                     <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
                                     <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
@@ -193,12 +195,20 @@
                                     </g:link>
                                     </g:if>
                                 </g:if>
+                                <g:if test="${janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
+                                    <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
+                                            class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                        <i class="icon-print"></i>
+                                    </g:link>
+                                </g:if>
+%{--
                                 <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
                                     <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
                                             class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
+--}%
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
                                     <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
@@ -521,6 +531,8 @@
                     });
                     return false;
                 }); //click btn show
+
+
 
                 $(".btn-delete").click(function () {
                     var id = $(this).data("id");

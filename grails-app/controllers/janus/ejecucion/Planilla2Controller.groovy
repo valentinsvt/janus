@@ -890,8 +890,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
                             println "res "+res
                             if(res.size()==0){
                                 //planilla.periodoAnticipo=perAnticipo
-                                it.periodoReajuste=perAnticipo
-                                it.planilla.imprimeReajueste=planilla
+//                                it.periodoReajuste=perAnticipo
+//                                it.planilla.imprimeReajueste=planilla
                                 planillasService.calculaValores(it,cs,ps,pcs,obra,planillaDeAnticipo)
 
                             }
@@ -907,8 +907,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         println "res "+res
                         if(res.size()==0){
                             //planilla.periodoAnticipo=perAnticipo
-                            it.periodoReajuste=perReajuste
-                            it.planilla.imprimeReajueste=planilla
+//                            it.periodoReajuste=perReajuste
+//                            it.planilla.imprimeReajueste=planilla
                             planillasService.calculaValores(it,cs,ps,pcs,obra,planillaDeAnticipo)
 
                         }
