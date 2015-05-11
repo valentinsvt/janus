@@ -1028,135 +1028,282 @@ class Planilla2Controller extends janus.seguridad.Shield {
         println "periodos  2v " + periodos2.periodo
         /////////////////*************************b0****************************/////////////////////////
 
+
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla)
+
+
+        def periodosNuevos = [:]
+        def pagos = [:]
+        def datos = [:]
+        def datosFr = [:]
+        def tams = [30, 8]
+        def tamsFr = [30]
+
+        reajustesPlanilla.each { rj ->
+            def key = rj.periodo
+            if(!periodosNuevos[key]) {
+                periodosNuevos[key] = []
+//                pagos[key] = ""
+                pagos[key] = [:]
+                pagos[key].indice = rj.periodoInec.fechaInicio.format("MMM-yyyy")
+                pagos[key].valor = rj.valorReajustado
+            }
+            if(rj.periodo == 0) {
+                periodosNuevos[key] += contrato.periodoInec.descripcion
+                tams.add(10)
+                tams.add(10)
+                tamsFr.add(10)
+            }
+            if(rj.planillaReajustadaId != rj.planillaId) {
+                pagos[key].fecha = rj.planillaReajustada?.fechaPago ? "Pago: "+rj.planillaReajustada.fechaPago.format("dd-MM-yyyy") : ""
+            }
+
+            periodosNuevos[key] += rj.mes
+            tams.add(10)
+            tams.add(10)
+            tamsFr.add(10)
+        }
+
+        cs.each { c ->
+            def key = c.id
+            if(!datos[key]) {
+                datos[key] = [:]
+                datos[key].fp = c
+                datos[key].detalles = [:]
+            }
+            reajustesPlanilla.each { rj ->
+                def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
+                datos[key].detalles[rj.periodo] = det
+            }
+        }
+
+
+        def totalesFr = [:]
+
+        def totalesPeriodoFr = [:]
+        def totalesCoeficientes = [:]
+
+        ps.each { c ->
+            def key = c.id
+            if(!datosFr[key]) {
+                datosFr[key] = [:]
+                datosFr[key].fp = c
+                datosFr[key].detalles = [:]
+            }
+            reajustesPlanilla.each { rj ->
+                def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
+                datosFr[key].detalles[rj.periodo] = det
+
+                if(!totalesFr[rj.periodo]) {
+                    totalesFr[rj.periodo] = 0
+                }
+
+                if(!totalesPeriodoFr[rj.periodo]){
+                    totalesPeriodoFr[rj.periodo] = 0
+                }
+
+                if(!totalesCoeficientes[rj.periodo]){
+                    totalesCoeficientes[rj.periodo] = 0
+                }
+            }
+        }
+
+
         def tablaBo = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${tableWidth}px;'>"
         tablaBo += "<thead>"
         tablaBo += "<tr>"
         tablaBo += "<th colspan=\"2\">Cuadrilla Tipo</th>"
-        periodos.each {
-            tablaBo += "<th>${it.titulo}</th>"
-            tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio) +" </th>"
-        }
-        periodos2.each {
-            tablaBo += "<th>${it.titulo}</th>"
-            tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio) + "</th>"
+
+//        periodos.each {
+//            tablaBo += "<th>${it.titulo}</th>"
+//            tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio) +" </th>"
+//        }
+//        periodos2.each {
+//            tablaBo += "<th>${it.titulo}</th>"
+//            tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio) + "</th>"
+//        }
+
+
+
+        periodosNuevos.each { per, meses->
+            if(per == 0){
+                tablaBo += "<th> OFERTA </th>"
+                tablaBo += "<th class='nb'>" + meses[0] + "</th>"
+
+                tablaBo += "<th> ANTICIPO </th>"
+                tablaBo += "<th class='nb'>" + meses[1] + "</th>"
+            }else{
+                tablaBo += "<th> AVANCE </th>"
+                tablaBo += "<th class='nb'>" + meses[0] + "</th>"
+            }
+
         }
 
         tablaBo += "</tr>"
         tablaBo += "<tr>"
         tablaBo += "<th colspan='2'>Periodo utilizado</th>"
-        periodos.each {
-            if(it.planilla.tipoPlanilla.codigo != "A"){
-                if(it.periodoReajuste){
-                    tablaBo += "<th class='nb' colspan='2'>${it.periodoReajuste.descripcion} </th>"
-                }else{
-                    tablaBo += "<th class='nb' colspan='2'>${it.periodo.descripcion} </th>"
-                }
 
-            }else{
-                if(it.fechaIncio <= planillaDeAnticipo.fechaPresentacion && it.fechaFin>=planillaDeAnticipo.fechaPresentacion) {
-                    tablaBo += "<th class='nb' colspan='2'>Pago: ${planillaDeAnticipo.fechaPago.format('dd-MM-yyyy')} <br/> Indices:${(it.periodoReajuste)?it.periodoReajuste:it.periodo} </th>"
-                }else{
-                    tablaBo += "<th class='nb' colspan='2'></th>"
-                }
+        pagos.each { per, pago ->
+            if(per == 0) {
+                tablaBo += "<th> </th>"
+                tablaBo += "<th> </th>"
             }
-
+            if(pago.fecha){
+                tablaBo += "<th>" + pago.fecha ?: '' +  "</th>"
+            }else{
+                tablaBo += "<th> </th>"
+            }
+            tablaBo += "<th>" + "Indice: " + pago.indice ?: '' +  "</th>"
         }
-        periodos2.each {
 
-            tablaBo += "<th class='nb' colspan='2'>${it.periodo.descripcion}</th>"
-        }
+
         tablaBo += "</tr>"
         tablaBo += "</thead>"
         tablaBo += "<tbody>"
 
         def totalCoef = 0
         def totalAnticipo=0
-        cs.each { c ->
+
+//        cs.each { c ->
+//            tablaBo += "<tr>"
+//            tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
+//            tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
+//            totalCoef += c.valor
+//            periodos.each { p ->
+////                if(p.planilla.tipoPlanilla.codigo!="A" ){
+//                def valor
+//                if(p.periodoReajuste){
+//                    valor = ValorIndice.findByPeriodoAndIndice(p.periodoReajuste, c.indice).valor
+//                }else{
+//                    valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice).valor
+//                }
+//                if (!valor) {
+//                    println "wtf no valor " + p.periodo + "   ${p.periodoReajuste}  " + c.indice
+//                    valor = 0
+//                }
+//                tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
+////                valor = (valor*c.valor).round(3)
+//                def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${p.planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
+//                if (vlrj.size() > 0) {
+//                    valor = vlrj.pop()
+//                    if(p.periodoReajuste){
+//                        valor=valor.valorReajuste
+//                    }else{
+//                        valor=valor.valor
+//                    }
+//                } else {
+//                    println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${p.planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}"
+//                    /*Aqui recalcular*/
+//                    valor = -1
+//                }
+//                tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+//
+//
+//            }
+//            periodos2.each { p ->
+//                def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice).valor
+//                if (!valor) {
+//                    println "wtf no valor " + p.periodo + "  " + c.indice
+//                    valor = 0
+//                }
+//
+//                p.total += (valor * c.valor).round(3)
+//                p.save(flush: true)
+//
+//                tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+//                valor = (valor * c.valor).round(3)
+//                def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
+//                if (vlrj.size() > 0) {
+//                    vlrj = vlrj.pop()
+//                    if (vlrj != valor) {
+//                        vlrj.valor = valor
+//                        if (!vlrj.save(flush: true)) {
+//                            println "error vlrj update " + vlrj.errors
+//                        }
+//                    }
+//                } else {
+//                    vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodo, formulaPolinomica: c, valor: valor])
+//                    if (!vlrj.save(flush: true)) {
+//                        println "error vlrj insert " + vlrj.errors
+//                    }
+//                }
+//                tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+//            }
+//
+//            tablaBo += "</tr>"
+//        }
+
+
+        def coeficientes = 0
+        def totalOferta = 0
+        def totalAnticipoN = 0
+        def totalAvance = 0
+
+        tablaBo += "</tr>"
+        tablaBo += "</thead>"
+        tablaBo += "<tbody>"
+
+        datos.each { k, v ->
+            def c = v.fp
+            def det = v.detalles
+
             tablaBo += "<tr>"
             tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
             tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
-            totalCoef += c.valor
-            periodos.each { p ->
-//                if(p.planilla.tipoPlanilla.codigo!="A" ){
-                def valor
-                if(p.periodoReajuste){
-                    valor = ValorIndice.findByPeriodoAndIndice(p.periodoReajuste, c.indice).valor
-                }else{
-                    valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice).valor
-                }
-                if (!valor) {
-                    println "wtf no valor " + p.periodo + "   ${p.periodoReajuste}  " + c.indice
-                    valor = 0
-                }
-                tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
-//                valor = (valor*c.valor).round(3)
-                def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${p.planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
-                if (vlrj.size() > 0) {
-                    valor = vlrj.pop()
-                    if(p.periodoReajuste){
-                        valor=valor.valorReajuste
-                    }else{
-                        valor=valor.valor
+
+            coeficientes += c.valor
+
+            det.each { per, dt ->
+                if (dt.size == 1) {
+                    dt = dt.first()
+                    if (per == 0) {
+                        tablaBo += "<th class='number'>" + numero(dt.indiceOferta) + "</th>"
+                        tablaBo += "<th class='number'>" + numero(dt.valorIndcOfrt) + "</th>"
+
+                        totalOferta += dt.valorIndcOfrt
+                        totalAnticipoN += dt.valorIndcPrdo
                     }
+                    tablaBo += "<th class='number'>" + numero(dt.indicePeriodo) + "</th>"
+                    tablaBo += "<th class='number'>" + numero(dt.valorIndcPrdo) + "</th>"
+
+                    totalAvance += dt.valorIndcPrdo
                 } else {
-                    println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${p.planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}"
-                    /*Aqui recalcular*/
-                    valor = -1
+                    println "Hay mas de 1 detalle para la fp ${c} periodo ${per}"
                 }
-                tablaBo += "<td class='number'>" + numero(valor) + "</td>"
-
-
             }
-            periodos2.each { p ->
-                def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice).valor
-                if (!valor) {
-                    println "wtf no valor " + p.periodo + "  " + c.indice
-                    valor = 0
-                }
-
-                p.total += (valor * c.valor).round(3)
-                p.save(flush: true)
-
-                tablaBo += "<td class='number'>" + numero(valor) + "</td>"
-                valor = (valor * c.valor).round(3)
-                def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
-                if (vlrj.size() > 0) {
-                    vlrj = vlrj.pop()
-                    if (vlrj != valor) {
-                        vlrj.valor = valor
-                        if (!vlrj.save(flush: true)) {
-                            println "error vlrj update " + vlrj.errors
-                        }
-                    }
-                } else {
-                    vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodo, formulaPolinomica: c, valor: valor])
-                    if (!vlrj.save(flush: true)) {
-                        println "error vlrj insert " + vlrj.errors
-                    }
-                }
-                tablaBo += "<td class='number'>" + numero(valor) + "</td>"
-            }
-
-            tablaBo += "</tr>"
         }
+
+
+
         tablaBo += "</tbody><tfoot>"
-        tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(totalCoef)}</th>"
-        periodos.each { p ->
-//            if(p.fechaIncio<=planillaDeAnticipo.fechaPresentacion && p.fechaFin>=planillaDeAnticipo.fechaPresentacion) {
-//                tablaBo += "<td></td><th class='number'>${numero(totalAnticipo)}</th>"
+        tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(coeficientes)}</th>"
+//        periodos.each { p ->
+//            if(p.periodoReajuste){
+//                tablaBo += "<td></td><th class='number'>${numero(p.b0Reajuste)}</th>"
 //            }else{
 //                tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
 //            }
-            if(p.periodoReajuste){
-                tablaBo += "<td></td><th class='number'>${numero(p.b0Reajuste)}</th>"
-            }else{
-                tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
-            }
+//
+//        }
+//        periodos2.each { p ->
+//            tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
+//        }
 
+
+        pagos.each {per, pago->
+            if(per == 0){
+                tablaBo += "<td></td><th class='number'> </th>"
+                tablaBo += "<td></td><th class='number'>${numero(totalOferta)}</th>"
+
+                tablaBo += "<td></td><th class='number'> </th>"
+                tablaBo += "<td></td><th class='number'>${numero(totalAnticipoN)}</th>"
+
+
+            }
+            addCellTabla(tablaB0, new Paragraph("", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaB0, new Paragraph(numero(totalAnticipo), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         }
-        periodos2.each { p ->
-            tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
-        }
+
         tablaBo += "</tr></tfoot></table>"
 
         //////////////////////////**********************P0*********************///////////////////////////
@@ -1831,33 +1978,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
         } else
             perAnticipo=planilla.periodoAnticipo
 
-        //TODO: comentar todo esto despues de las pruebas
-//        def dof = fechaOferta.format("dd")
-//        def mof = fechaOferta.format('MM').toInteger() - 1
-//        def aof = fechaOferta.format('yyyy').toInteger()
-//        if (mof == 0) {
-//            mof = 12
-//            aof = aof - 1
-//        }
-//        def dan = fechaAnticipo.format("dd")
-//        def man = fechaAnticipo.format('MM').toInteger() - 1
-//        def aan = fechaAnticipo.format('yyyy').toInteger()
-//        if (man == 0) {
-//            man = 12
-//            aan = aan - 1
-//        }
-////        def stro = dof + "-" + mof + "-" + aof
-//        def stra = dan + "-" + man + "-" + aan
-////        def nfo = new Date().parse("dd-MM-yyyy", stro)
-//        def nfa = new Date().parse("dd-MM-yyyy", stra)
-//
-////        println "" + fechaOferta + " >> " + nfo + " (" + stro + ")"
-////        println "" + fechaAnticipo + " >> " + nfa + " (" + stra + ")"
-//
-////        perOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(nfo, nfo)
-//        perAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(nfa, nfa)
-
-        //TODO: borrar hasta aqui
 
 //        println "planilla "+planilla+"  "+fechaOferta+"  "+fechaAnticipo+" pers "+periodos+"  "+perOferta+"  "+perAnticipo
         def pcs = FormulaPolinomicaContractual.withCriteria {
@@ -1993,7 +2113,10 @@ class Planilla2Controller extends janus.seguridad.Shield {
             def key = rj.periodo
             if(!periodosNuevos[key]) {
                 periodosNuevos[key] = []
-                pagos[key] = ""
+//                pagos[key] = ""
+                pagos[key] = [:]
+                pagos[key].indice = rj.periodoInec.fechaInicio.format("MMM-yyyy")
+                pagos[key].valor = rj.valorReajustado
             }
             if(rj.periodo == 0) {
                 periodosNuevos[key] += contrato.periodoInec.descripcion
@@ -2021,6 +2144,37 @@ class Planilla2Controller extends janus.seguridad.Shield {
             reajustesPlanilla.each { rj ->
                 def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
                 datos[key].detalles[rj.periodo] = det
+            }
+        }
+
+
+        def totalesFr = [:]
+
+        def totalesPeriodoFr = [:]
+        def totalesCoeficientes = [:]
+
+        ps.each { c ->
+            def key = c.id
+            if(!datosFr[key]) {
+                datosFr[key] = [:]
+                datosFr[key].fp = c
+                datosFr[key].detalles = [:]
+            }
+            reajustesPlanilla.each { rj ->
+                def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
+                datosFr[key].detalles[rj.periodo] = det
+
+                if(!totalesFr[rj.periodo]) {
+                    totalesFr[rj.periodo] = 0
+                }
+
+                if(!totalesPeriodoFr[rj.periodo]){
+                    totalesPeriodoFr[rj.periodo] = 0
+                }
+
+                if(!totalesCoeficientes[rj.periodo]){
+                    totalesCoeficientes[rj.periodo] = 0
+                }
             }
         }
 
@@ -2054,67 +2208,10 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
 
         }
-//
-//        def band = true
-//        tablaBo += "</tr>"
-//        tablaBo += "</thead>"
-//        tablaBo += "<tbody>"
-//        def totalCoef = 0
-//        cs.each { c ->
-//            if(band) {
-//                tablaBo += "<tr>"
-//                tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
-//                tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
-//                totalCoef += c.valor
-//                periodos.each { p ->
-////                println "periodo " + p.periodo + " indice: " + c.indice
-////                println "valor: " + ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)
-//                    def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)?.valor
-//                    if (!valor) {
-//                        println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
-//                        valor = 0
-//                        flash.message = "<p><ul>No hay valor para ${c.indice} en el periodo ${p.periodo}. No se puede generar la planilla</ul></p>"
-//
-//                        band = false
-//                        return
-//                    }
-//
-//                    p.total += (valor * c.valor).round(3)
-//                    p.save(flush: true)
-//
-//                    tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
-//                    valor = (valor * c.valor).round(3)
-//                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
-//                    if (vlrj.size() > 0) {
-//                        vlrj = vlrj.pop()
-//                        if (vlrj != valor) {
-//                            vlrj.valor = valor
-//                            if (!vlrj.save(flush: true)) {
-//                                println "error vlrj update " + vlrj.errors
-//                            }
-//                        }
-//                    } else {
-//                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodo, formulaPolinomica: c, valor: valor])
-//                        if (!vlrj.save(flush: true)) {
-//                            println "error vlrj insert " + vlrj.errors
-//                        }
-//                    }
-//                    tablaBo += "<td class='number'>" + numero(valor) + "</td>"
-//                }
-//
-//                tablaBo += "</tr>"
-//            }
-//        }
-//        if(!band) {
-//            redirect(action: "errores")
-//            return
-//        }
-//        tablaBo += "</tbody><tfoot>"
-//        tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(totalCoef)}</th>"
-//        periodos.each { p ->
-//            tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
-//        }
-//        tablaBo += "</tr></tfoot></table>"
+
+        def coeficientes = 0
+        def totalIndiceOferta = 0
+        def totalAvance = 0
 
         tablaBo += "</tr>"
         tablaBo += "</thead>"
@@ -2124,12 +2221,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
             def c = v.fp
             def det = v.detalles
 
-
             tablaBo += "<tr>"
                 tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
                 tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
 
-//            coeficientes = (coeficientes + c.valor)
+            coeficientes += c.valor
 
             det.each { per, dt ->
                 if (dt.size == 1) {
@@ -2138,28 +2234,31 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         tablaBo += "<th class='number'>" + numero(dt.indiceOferta) + "</th>"
                         tablaBo += "<th class='number'>" + numero(dt.valorIndcOfrt) + "</th>"
 
-
-//                        totalOferta = (totalOferta + dt.valorIndcOfrt)
-//                        totalAnticipo = (totalAnticipo + dt.valorIndcPrdo)
+                        totalIndiceOferta += dt.valorIndcOfrt
                     }
                     tablaBo += "<th class='number'>" + numero(dt.indicePeriodo) + "</th>"
                     tablaBo += "<th class='number'>" + numero(dt.valorIndcPrdo) + "</th>"
 
-//                    totalAvance = (totalAvance + dt.valorIndcPrdo)
+                    totalAvance += dt.valorIndcPrdo
                 } else {
                     println "Hay mas de 1 detalle para la fp ${c} periodo ${per}"
                 }
             }
         }
+        tablaBo += "</tbody><tfoot>"
+        tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(coeficientes)}</th>"
+        tablaBo += "<td></td><th class='number'>${numero(totalIndiceOferta)}</th>"
+        tablaBo += "<td></td><th class='number'>${numero(totalAvance)}</th>"
 
-        tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(totalCoef)}</th>"
-//        periodos.each { p ->
-//            tablaBo += "<td></td><th class='number'>${numero(p.total)}</th>"
-//        }
+
         tablaBo += "</tr></tfoot></table>"
 
 
         //////////////////////////**********************P0*********************///////////////////////////
+
+
+
+
         def tablaP0 = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${tableWidth}px; margin-top:10px;' >"
         tablaP0 += '<thead>'
         tablaP0 += '<tr>'
@@ -2176,27 +2275,22 @@ class Planilla2Controller extends janus.seguridad.Shield {
         tablaP0 += '</tr>'
         tablaP0 += '</thead>'
         tablaP0 += '<tbody>'
-        periodos.each { p ->
-            if (p.titulo != "OFERTA") {
-                tablaP0 += '<tr>'
-                if (p.titulo == "ANTICIPO") {
-                    tablaP0 += "<th>${p.titulo}</th>"
-                    tablaP0 += "<th>${fechaConFormato(p.fechaIncio, 'MMM-yy')}</th>"
-                    tablaP0 += "<td></td>"
-                    tablaP0 += "<td></td>"
-                    tablaP0 += "<td></td>"
-                    tablaP0 += "<td></td>"
-                    tablaP0 += "<td class='number'>${numero(planilla.valor, 2)}</td>"
-                    if (p.p0 == 0 || override) {
-                        p.p0 = planilla.valor
-                        if (!p.save(flush: true)) {
-                            println "error p0 " + p
-                        }
-                    }
-                }
+
+
+        reajustesPlanilla.each{
+            if(it.periodo == 0){
+                tablaP0 += "<th>ANTICIPO</th>"
+                tablaP0 += "<th>${it.mes}</th>"
+                tablaP0 += "<td></td>"
+                tablaP0 += "<td></td>"
+                tablaP0 += "<td></td>"
+                tablaP0 += "<td></td>"
+                tablaP0 += "<td class='number'>${numero(it.valorPo, 2)}</td>"
+            }else{
 
             }
         }
+
         tablaP0 += '</tbody>'
         tablaP0 += '<tfoot>'
         //totales aqui
@@ -2214,22 +2308,22 @@ class Planilla2Controller extends janus.seguridad.Shield {
         tr1 += '<th rowspan="2">Componentes</th>'
         tr3 += "<th>Anticipo</th>"
 
-        def tdRowSpan = '<th colspan="' + (periodos.size() - 1) + '">Periodo de variación y aplicación de fórmula polinómica</th>'
-        periodos.eachWithIndex { p, i ->
-            if (i == 0) { //oferta
-                tr1 += "<th>" + p.titulo + "</th>"
-                tr2 += "<th>" + fechaConFormato(p.fechaIncio) + "</th>"
+        def tdRowSpan = '<th colspan="' + (2) + '">Periodo de variación y aplicación de fórmula polinómica</th>'
+
+        periodosNuevos.each {per, meses ->
+            if(per == 0){
+                tr1 += "<th>OFERTA</th>"
+                tr2 += "<th>" + meses[0] +"</th>"
                 tr3 += "<th class='number'>" + numero(planilla.contrato.porcentajeAnticipo, 0) + "%</th>"
-            } //oferta
-            else if (i == 1) { //anticipo
+
                 tr1 += tdRowSpan
-                tr2 += "<th>" + p.titulo + "<br/>" + fechaConFormato(p.fechaIncio) + "</th>"
-                tr3 += "<th>" + p.titulo + "</th>"
-            } //anticipo
-            else { //otros
-                tr2 += "<th rowspan='2'>" + fechaConFormato(p.fechaIncio) + "</th>"
-            }//otros
-        }  // periodos.each para el header
+                tr2 += "<th>" + "ANTICIPO" + "<br/>" + meses[1] +"</th>"
+                tr3 += "<th>ANTICIPO</th>"
+            }else{
+                println("error de columnas en impresion anticipo!")
+            }
+        }
+
         tr1 += "</tr>"
         tr2 += "</tr>"
         tr3 += "</tr>"
@@ -2239,85 +2333,39 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         def totalFr = 0
 
-        ps.eachWithIndex { p, i ->
+        def totalCoeficientesPr = 0
+
+        datosFr.each { k, v ->
+//            println("entro-->")
+            def c = v.fp
+            def det = v.detalles
             tablaFr += "<tr>"
-            tablaFr += "<th class='tal'>" + p?.indice?.descripcion + " (${p?.numero})</th>"
-            def vlinOferta
-            periodos.eachWithIndex { per, j ->
-                if (j == 0) { // es la oferta
-                    def valor = 0
-                    if (i == 0) { //es mano de obra
-                        vlinOferta = per.total
-                        tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(per.total)}</div></td>"
-                        valor = per.total
-                    } else {
-                        vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo)?.valor
-                        if (!vlinOferta) {
-                            println "WTF no hay vlinOferta indice: ${p.indice} (${p.indiceId}), periodo: ${per.periodo} (${per.periodoId})"
-//                            println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
-//                            valor = 0
-                            flash.message = "<p><ul>No hay valor para ${p.indice} en el periodo ${per.periodo}. No se puede generar la planilla</ul></p>"
-                            redirect(action: "errores")
-                            return
-                        }
-                        tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
-                        valor = vlinOferta
-                    }
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id}")
-                    if (vlrj.size() > 0) {
-                        vlrj = vlrj.pop()
-                        if (vlrj != valor) {
-                            vlrj.valor = valor
-                            if (!vlrj.save(flush: true)) {
-                                println "error vlrj update " + vlrj.errors
-                            }
-                        }
-                    } else {
-                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: per.periodo, formulaPolinomica: p, valor: valor])
-                        if (!vlrj.save(flush: true)) {
-                            println "error vlrj insert " + vlrj.errors
-                        }
-                    }
+            tablaFr += "<th class='tal'>" + c?.indice?.descripcion + " (${c?.numero})</th>"
 
+            det.each { per, dt ->
+                if (dt.size == 1) {
+                    dt = dt.first()
+                    if (per == 0) {
+                        tablaFr += "<td class='number'><div>${numero(c.valor, 3)}</div><div class='bold'>${numero(dt.indiceOferta)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(dt.indicePeriodo, 3)}</div><div class='bold'>${numero(dt.valor)}</div></td>"
+
+                        totalCoeficientesPr += c.valor
+                        totalesPeriodoFr[per] +=  dt.indicePeriodo
+                        totalesCoeficientes[per] += dt.valor
+                    }else{
+                        tablaFr += "<td class='number'><div>${numero(dt.indicePeriodo, 3)}</div><div class='bold'>${numero(dt.valor)}</div></td>"
+
+                        totalesPeriodoFr[per] +=  dt.indicePeriodo
+                        totalesCoeficientes[per] += dt.valor
+                        totalesFr[per] += c.valor
+                    }
                 } else {
-                    def vlin
-                    if (i == 0) {
-                        vlin = per.total
-                    } else {
-                        vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo)?.valor
-                        if (!vlin) {
-                            println "WTF no hay vlin: indice: ${p.indice} (${p.indiceId}), periodo: ${per.periodo} (${per.periodoId})"
-                            vlin = 0
-                        }
-                    }
-//                    println "error l.1875: " + p.indice + " " + p.indice.id + "  " + per.periodo.id + "   " + vlin + "  " + vlinOferta + "  " + p.valor + "  " + "  " + per.periodo.id
-                    def valor = (vlin / vlinOferta * p.valor).round(3)
-
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id}")
-                    if (vlrj.size() > 0) {
-                        vlrj = vlrj.pop()
-                        if (vlrj != valor) {
-                            vlrj.valor = valor
-                            if (!vlrj.save(flush: true)) {
-                                println "error vlrj update " + vlrj.errors
-                            }
-                        }
-                    } else {
-                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: per.periodo, formulaPolinomica: p, valor: valor])
-                        if (!vlrj.save(flush: true)) {
-                            println "error vlrj insert " + vlrj.errors
-                        }
-                    }
-
-                    per.fr += valor
-                    if (!per.save(flush: true)) {
-                        println "error fr " + per.errors
-                    }
-                    tablaFr += "<td class='number'><div>${numero(vlin, 3)}</div><div class='bold'>${numero(valor, 3)}</div></td>"
+                    println "Hay mas de 1 detalle para la fp ${c} periodo ${per}"
                 }
             }
             tablaFr += "</tr>"
         }
+
         tablaFr += "</tbody>"
 
         tr1 = "<tr>"
@@ -2334,24 +2382,55 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         def reajusteTotal = 0
 
-        periodos.eachWithIndex { per, i ->
-            if (i > 0) {
-                def fr1 = (per.fr - 1).round(3)
-                tr1 += "<th class='number'>${numero(per.fr)}</th>"
+        periodosNuevos.eachWithIndex {per3, i->
+            if(per3.key == 0){
+                def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
+                tr1 += "<th class='number'>${totalesCoeficientes[per3.key]}</th>"
                 tr2 += "<th class='number'>${numero(fr1)}</th>"
-                tr3 += "<th class='number'>${numero(per.p0, 2)}</th>"
-                def t = (per.p0 * fr1).round(3)
+                tr3 += "<th class='number'>${numero(reajustesPlanilla[0].valorPo, 2)}</th>"
+                def t = (reajustesPlanilla[0].valorPo * fr1).round(2)
                 tr4 += "<th class='number'>${numero(t, 2)}</th>"
-                reajusteTotal += t
+            }else{
+
             }
         }
+
+
+        def num =reajustesPlanilla.first().id
+        def tt = num - (pagos.size()-1)
+        def tg = []
+
+        while (tt != num){
+            tg += tt
+            tt++
+        }
+//
+//        println("planilla actual " + reajustesPlanilla.first().id)
+//        println("planillas Anteriores " + tg)
+
+        def rjTotalAnterior = 0
+        def promedioActual = 0
+        def totalProcesado = 0
+
+        tg.each{
+            rjTotalAnterior += ReajustePlanilla.get(it).valorReajustado
+        }
+
+        pagos.each{ per, pago ->
+            println("per " + per)
+            println("pago " + pago)
+            promedioActual += pago.valor
+        }
+
+        totalProcesado = promedioActual - rjTotalAnterior
 
         planilla.reajuste = reajusteTotal
         if (!planilla.save(flush: true)) {
             println "error planilla reajuste " + planilla.id
         }
 
-        tr5 += "<th colspan='2'>REAJUSTE TOTAL</th><th class='number'>" + numero(reajusteTotal, 2) + "</th>"
+//        tr5 += "<th colspan='2'>REAJUSTE TOTAL</th><th class='number'>" + numero(reajusteTotal, 2) + "</th>"
+        tr5 += "<th colspan='2'>REAJUSTE TOTAL</th><th class='number'>" + numero(promedioActual, 2) + "</th>"
 
         tablaFr += "<tfoot>"
         tablaFr += tr1 + tr2 + tr3 + tr4 + tr5

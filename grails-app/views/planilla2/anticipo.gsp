@@ -147,9 +147,9 @@
             ${tablaMl}
         </div> <!-- Multas -->
     </g:if>
-    <div class="area" style="min-height: 50px; margin-bottom: 10px;">
-        Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo}
-    </div>
+    %{--<div class="area" style="min-height: 50px; margin-bottom: 10px;">--}%
+        %{--Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo}--}%
+    %{--</div>--}%
 </div>
 
 <div class="modal hide fade" id="modal-tree">

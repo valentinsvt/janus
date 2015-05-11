@@ -141,7 +141,7 @@
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaFin}" format="dd-MM-yyyy"/>
                             </td>
-                            <td>${planillaInstance.id} ${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
+                            <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
                             <td class="numero">
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>
@@ -168,26 +168,26 @@
                                 </g:if>
 
                                 <g:link controller="planilla" action="procesar" id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small">
-                                    <i class="icon-table"></i>
+                                    <i class="icon-gear"></i>
                                 </g:link>
 
-%{--
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                    <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                                        <i class="icon-table icon-large"></i>
-                                    </g:link>
-                                </g:if>
-                                <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
-                                    <g:link controller="planilla2" action="avance" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                                        <i class="icon-table icon-large"></i>
-                                    </g:link>
-                                </g:elseif>
-                                <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                    <g:link controller="planilla2" action="liquidacion" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                                        <i class="icon-table icon-large"></i>
-                                    </g:link>
-                                </g:elseif>
---}%
+
+                                %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
+                                    %{--<g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">--}%
+                                        %{--<i class="icon-table icon-large"></i>--}%
+                                    %{--</g:link>--}%
+                                %{--</g:if>--}%
+                                %{--<g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'P'}">--}%
+                                    %{--<g:link controller="planilla2" action="avance" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">--}%
+                                        %{--<i class="icon-table icon-large"></i>--}%
+                                    %{--</g:link>--}%
+                                %{--</g:elseif>--}%
+                                %{--<g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'L'}">--}%
+                                    %{--<g:link controller="planilla2" action="liquidacion" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">--}%
+                                        %{--<i class="icon-table icon-large"></i>--}%
+                                    %{--</g:link>--}%
+                                %{--</g:elseif>--}%
+
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
                                     <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
                                     <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
