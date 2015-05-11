@@ -269,7 +269,7 @@
                                 if ($("#frmSave-ampliacion").valid()) {
                                     btnSave.replaceWith(spinner);
                                     var data = $("#frmSave-ampliacion").serialize();
-                                    data += "&obra=${obra.id}";
+                                    data += "&obra=${obra.id}&contrato=${contrato.id}";
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'ampliacion')}",

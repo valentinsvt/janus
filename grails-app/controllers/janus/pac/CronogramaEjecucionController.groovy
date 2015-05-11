@@ -597,8 +597,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     }
 
     def modificacion_ajax() {
-        def obra = Obra.get(params.obra.toLong())
         def contrato = Contrato.get(params.contrato.toLong())
+        def obra = contrato.obra
         def vol = VolumenesObra.get(params.vol.toLong())
 
         def html = "", row2 = ""
@@ -609,10 +609,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         }
 
 //        def planillas = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"))
-        def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
+        def periodos = PeriodoEjecucion.findAllByContratoAndObra(contrato, obra, [sort: 'fechaInicio'])
 
         def indirecto = obra.totales / 100
-        preciosService.ac_rbroObra(obra.id)
 
         def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
 //            precios.put(vol.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
@@ -755,16 +754,12 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //            println cantModificable[i]
             println "cantModificable4[${i}]: " + cantModificable[i]
 
+/*
             planillasPeriodo.each { pla ->
                 println "periodo: " + periodo.fechaInicio.format("dd-MM-yyyy") + " - " + periodo.fechaFin.format("dd-MM-yyyy")
                 println "\tplanilla: " + pla.fechaInicio.format("dd-MM-yyyy") + " - " + pla.fechaFin.format("dd-MM-yyyy")
                 if (pla.fechaFin >= periodo.fechaFin) {
                     modificable = false
-//                    cantModificable[i] = [
-//                            dol: 0,
-//                            por: 0,
-//                            can: 0
-//                    ]
                     cantModificable[i].dol = 0
                     cantModificable[i].por = 0
                     cantModificable[i].can = 0
@@ -774,6 +769,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def diasPlanilla = pla.fechaFin - pla.fechaInicio + 1
                 totalPlanilla += (diasPlanilla * cantDia)
             }
+*/
 
             def porPla = (totalPlanilla * 100) / totDol
             def canPla = (totCan * (porPla / 100))
@@ -1013,12 +1009,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def ampliacion_ajax() {}
 
-    def ampliacion() {
-//        println "AMPLIACION"
-//        println params
-
+    def ampliacion() {  /** ampliacion de plazo **/
+        println "params ampliacion de plazo: $params"
         def dias = params.dias.toInteger()
         def obra = Obra.get(params.obra)
+        def cntr = Contrato.get(params.contrato)
 
         def modificacion = new Modificaciones([
                 obra         : obra,
@@ -1027,83 +1022,93 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 fecha        : new Date(),
                 motivo       : params.motivo,
                 observaciones: params.observaciones,
-                memo         : params.memo.toUpperCase()
+                memo         : params.memo.toUpperCase(),
+                contrato     : cntr
         ])
         if (!modificacion.save(flush: true)) {
             println "error modificacion: " + modificacion.errors
         }
 
-        def periodosEj = PeriodoEjecucion.findAllByObra(obra, [sort: "fechaInicio"])
+        def ultimoPeriodo = PeriodoEjecucion.findAllByObra(obra, [sort: "fechaInicio"]).last()
 
-        def ultimoPeriodo = periodosEj.last()
+        def fcin = ultimoPeriodo.fechaInicio
+        def fcfn = ultimoPeriodo.fechaFin
+        def prdo = ultimoPeriodo.numero
+        def fcfm
 
-        def fechaIniPer = ultimoPeriodo.fechaInicio
-        def fechaFinPer = ultimoPeriodo.fechaFin
-        def diasPer = fechaFinPer - fechaIniPer + 1
-        def ultimoPer = ultimoPeriodo.numero
+        fcfm = preciosService.ultimoDiaDelMes(fcin)
+        def diasMes
         def errores = false
 
-        if (diasPer < 30) {
-            def diasAddPer = 30 - diasPer
-            if (diasAddPer > dias) {
-                diasAddPer = dias
-            }
-            dias -= diasAddPer
-            def nuevoFin = fechaFinPer + diasAddPer
-
-            ultimoPeriodo.fechaFin = nuevoFin
+        if (((fcfm - fcfn + 1) >= dias && (fcfm != fcfn))) {
+            ultimoPeriodo.fechaFin = fcfn + dias - 1
             if (!ultimoPeriodo.save(flush: true)) {
                 errores = true
-                println "ERROR!!! ** " + ultimoPeriodo.errors
+                println "ERROR!!!!: " + ultimoPeriodo.errors
+            } else {
+                println " se ha modificado el último prej"
+                dias = 0
             }
-//            println "dias agregados al ultimo per: ${diasAddPer}  " + ultimoPeriodo.numero + "  " + ultimoPeriodo.fechaInicio.format("dd-MM-yyyy") + "  ->  " + nuevoFin.format("dd-MM-yyyy") + " (dias: " + (nuevoFin - ultimoPeriodo.fechaInicio + 1) + ")"
-            fechaFinPer = nuevoFin
         }
 
-        def periodosAdd = Math.ceil(dias / 30)
-        def diasToAdd = dias
+        if (fcfm == fcfn) {
+            println "cambia fecha de inicio"
+            fcin = fcfn + 1
+            fcfn = fcin
+            fcfm = preciosService.ultimoDiaDelMes(fcin)
+        } else {
+            println "pone fecha de inicio"
+            fcin = fcfn + 1
+            fcfm = preciosService.ultimoDiaDelMes(fcin)
+        }
 
-//        println "dias add:" + dias
-//        println "periodos add: " + periodosAdd
-//        println "fin: " + fechaFinPer
+        println "inicio de otros periodos con dias: $dias"
 
-        def inicio = fechaFinPer + 1
-        def fin = fechaFinPer + 30
-        def next = ultimoPer + 1
-
-//        println "Periodos anteriores: "
-//        periodosEj.each {
-//            println it.numero + "  " + it.fechaInicio.format("dd-MM-yyyy") + "  ->  " + it.fechaFin.format("dd-MM-yyyy") + " (dias: " + (it.fechaFin - it.fechaInicio + 1) + ")"
-//        }
-//        println "\nPeriodos nuevos"
-        periodosAdd.times {
-            if (!errores) {
-                def add
-                if (diasToAdd > 30) {
-                    add = 30
+        while (dias > 0) {
+            diasMes = fcfm - fcin + 1
+            if (dias > diasMes)  {
+                /** nuevo periodo **/
+                def periodo = new PeriodoEjecucion([
+                        obra       : obra,
+                        numero     : prdo++,
+                        tipo       : "A",
+                        fechaInicio: fcin,
+                        fechaFin   : fcfm,
+                        contrato   : cntr
+                ])
+                if (!periodo.save(flush: true)) {
+                    errores = true
+                    println "ERROR!!!!: " + periodo.errors
                 } else {
-                    add = diasToAdd
+                    println "crea nuevo periodo completo"
+                    dias -= diasMes
+                    fcin = fcfm + 1
+                    fcfm = preciosService.ultimoDiaDelMes(fcin)
                 }
-                if (add > 0) {
-                    fin = inicio + (add - 1)
-                    def newPer = new PeriodoEjecucion([
-                            obra       : obra,
-                            numero     : next,
-                            tipo       : "P",
-                            fechaInicio: inicio,
-                            fechaFin   : fin
-                    ])
-                    if (!newPer.save(flush: true)) {
-                        errores = true
-                        println "ERROR!!!!: " + newPer.errors
-                    }
-//                println newPer.numero + "  " + newPer.fechaInicio.format("dd-MM-yyyy") + "  ->  " + newPer.fechaFin.format("dd-MM-yyyy") + " (dias: " + (newPer.fechaFin - newPer.fechaInicio + 1) + ")"
-                    inicio = fin + 1
-                    next++
-                    diasToAdd -= add
+
+            } else {
+                fcfn = fcin + dias - 1
+                dias -= (fcfn - fcin + 1)
+                /** alarga el periodo inicial **/
+                def periodo = new PeriodoEjecucion([
+                        obra       : obra,
+                        numero     : prdo++,
+                        tipo       : "A",
+                        fechaInicio: fcin,
+                        fechaFin   : fcfn,
+                        contrato   : cntr
+                ])
+                if (!periodo.save(flush: true)) {
+                    errores = true
+                    println "ERROR!!!!: " + periodo.errors
+                } else {
+                    fcin = fcfn + 1
+                    dias -= (fcfn - fcin + 1)
+                    println "crea nuevo periodo parcial, queda: fcfm: $fcfm, fcin: $fcin, dias: $dias"
                 }
             }
         }
+
         if (!errores) {
             render "OK"
         } else {
@@ -1742,16 +1747,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def index() {
 
-//        if (!params.id) {
-//            params.id = "5"
-//        }
-//println params
         def contrato = Contrato.get(params.id)
-//println contrato
         if (!contrato) {
             flash.message = "No se encontró el contrato"
             flash.clase = "alert-error"
-//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
             return
         }
@@ -1760,32 +1759,24 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         if (!obra) {
             flash.message = "No se encontró la obra"
             flash.clase = "alert-error"
-//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
-//            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
         }
         if (!obra.fechaInicio) {
             flash.message = "La obra no tiene fecha de inicio. Por favor solucione el problema. " + obra.id
             flash.clase = "alert-error"
-//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
-//            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
         }
-//        println "Index contrato: $contrato"
-//        println "Index obra: $obra"
-        //copia el cronograma del contrato (crng) a la tabla cronograma de ejecucion (crej)
 
+/*
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def inicioObra = obra.fechaInicio
 
         def cronogramas = CronogramaEjecucion.countByVolumenObraInList(detalle)
 
         def continua = true
-//        println "datos de cronograma $cronogramas"
         if (cronogramas == 0) {
-//            println "no hay datos de cronograma ... inicia cargado"
             detalle.each { vol ->
                 def cronoCon = CronogramaContrato.findAllByVolumenObra(vol)
                 cronoCon.eachWithIndex { crono, cont ->
@@ -1798,14 +1789,12 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         prdo = 30
                     }
 
-//                    println ">>>" + dias
                     def ini
                     def fin
                     use(TimeCategory) {
                         ini = inicioObra + dias.days
                     }
                     use(TimeCategory) {
-//                        fin = ini + 29.days        // 30 - 1 para contar el dia inicial
                         fin = ini + (prdo - 1).toInteger().days        // 30 - 1 para contar el dia inicial
                     }
 
@@ -1818,7 +1807,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     }
 
                     if (periodo.size() == 0) {
-//                        println "crea el periodo con inicio: $ini, fin: $fin, dias: $prdo, plazo: ${contrato.plazo}"
                         periodo = new PeriodoEjecucion([
                                 obra       : obra,
                                 numero     : crono.periodo,
@@ -1856,20 +1844,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 } //cronogramaContrato.each
             } //detalles.each
         } //if cronogramas == 0
+*/
 
-        /*
-          def modificacion = new Modificaciones([
-                obra: obra,
-                tipo: "S",
-                dias: dias,
-                fecha: new Date(),
-                fechaInicio: ini,
-                fechaFin: finSusp,
-                motivo: params.motivo,
-                observaciones: params.observaciones,
-                memo: params.memo.toUpperCase()
-        ])
-         */
         def suspensiones = Modificaciones.withCriteria {
             eq("obra", obra)
             eq("tipo", "S")
@@ -1889,91 +1865,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 min("fechaInicio")
             }
         }
-//        println "suspensiones "+suspensiones
         return [obra: obra, contrato: contrato, suspensiones: suspensiones, ini: ini]
     }
-
-    def index_old() {
-        /**
-         * TODO: se entra por contrato? por obra?
-         */
-        if (!params.id) {
-            params.id = "5"
-        }
-//println params
-        def contrato = Contrato.get(params.id)
-//println contrato
-        if (!contrato) {
-            flash.message = "No se encontró el contrato"
-            flash.clase = "alert-error"
-//            println flash.message
-            redirect(action: "errores", params: [contrato: params.id])
-            return
-        }
-        def obra = contrato?.oferta?.concurso?.obra
-        if (!obra) {
-            flash.message = "No se encontró la obra"
-            flash.clase = "alert-error"
-//            println flash.message
-            redirect(action: "errores", params: [contrato: params.id])
-//            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
-            return
-        }
-        if (!obra.fechaInicio) {
-            flash.message = "La obra no tiene fecha de inicio. Por favor solucione el problema. " + obra.id
-            flash.clase = "alert-error"
-//            println flash.message
-            redirect(action: "errores", params: [contrato: params.id])
-//            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
-            return
-        }
-//println contrato
-//println obra
-        //copia el cronograma del contrato (crng) a la tabla cronograma de ejecucion (crej)
-        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
-        def inicioObra = obra.fechaInicio
-
-        detalle.each { vol ->
-            CronogramaContrato.findAllByVolumenObra(vol).eachWithIndex { crono, cont ->
-                def c = CronogramaEjecucion.withCriteria {
-                    eq("volumenObra", crono.volumenObra)
-                    eq("periodo", crono.periodo)
-                    eq("tipo", "P")
-                }
-                if (c.size() == 0) {
-                    def dias = (crono.periodo - 1) * 30 + (crono.periodo - 1)
-//                    println ">>>" + dias
-                    def ini
-                    def fin
-                    use(TimeCategory) {
-                        ini = inicioObra + dias.days
-                    }
-                    use(TimeCategory) {
-                        fin = ini + 30.days
-                    }
-
-                    def cronoEjecucion = new CronogramaEjecucion()
-                    cronoEjecucion.properties = crono.properties
-                    cronoEjecucion.fechaInicio = ini
-                    cronoEjecucion.fechaFin = fin
-                    cronoEjecucion.tipo = "P"
-
-                    if (!cronoEjecucion.save(flush: true)) {
-                        println "Error al guardar el crono ejecucion del crono " + crono.id
-                        println cronoEjecucion.errors
-                    } else {
-//                        println "ok " + crono.id + "  =>  " + cronoEjecucion.id
-                    }
-                } else {
-//                    println "Ya hay"
-                }
-            }
-        } //detalle.each
-
-
-        return [obra: obra, contrato: contrato]
-
-    } //index
 
 
     def actualizaPems() {

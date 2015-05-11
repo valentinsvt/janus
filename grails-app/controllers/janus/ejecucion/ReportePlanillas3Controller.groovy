@@ -351,7 +351,7 @@ class ReportePlanillas3Controller {
 
         def coeficientes = 0
         def totalOferta = 0
-        def totalAvance = 0
+        def totalAvance = new double[30]
         def totalAnticipo = 0
 
         addCellTabla(tablaB0, new Paragraph("Cuadrilla Tipo", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
@@ -393,10 +393,12 @@ class ReportePlanillas3Controller {
                         addCellTabla(tablaB0, new Paragraph(numero(dt.valorIndcOfrt), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                        totalOferta = (totalOferta + dt.valorIndcOfrt)
                        totalAnticipo = (totalAnticipo + dt.valorIndcPrdo)
+                    } else {
+                        totalAvance[per] = (totalAvance[per] + dt.valorIndcPrdo)
                     }
                     addCellTabla(tablaB0, new Paragraph(numero(dt.indicePeriodo, 2), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaB0, new Paragraph(numero(dt.valorIndcPrdo), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                    totalAvance = (totalAvance + dt.valorIndcPrdo)
+
                 } else {
                     println "Hay mas de 1 detalle para la fp ${c} periodo ${per}"
                 }
@@ -406,7 +408,7 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaB0, new Paragraph("TOTALES", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaB0, new Paragraph(numero(coeficientes), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
-
+//        println "totalAvance " + totalAvance
 
         pagos.each {per, pago->
             if(per == 0){
@@ -417,7 +419,7 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaB0, new Paragraph(numero(totalAnticipo), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
             }
                 addCellTabla(tablaB0, new Paragraph("", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaB0, new Paragraph(numero(totalAvance), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(numero(totalAvance[per+1]), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
              }
 
 

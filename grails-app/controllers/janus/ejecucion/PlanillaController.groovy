@@ -4466,7 +4466,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //                        println "recalcula Po de: ${poAnterior.valorPo}, con parcial: $parcial, total: $total"
                             aDescontar = Math.round(poAnterior.parcialCronograma*(1 - cntr.porcentajeAnticipo/100)*100)/100
                             ttDescontar += aDescontar
-//                        println "valor a descaontar: $aDescontar"
+                        println "valor a descontar: $aDescontar, poAnterior: ${poAnterior.parcialCronograma*(1 - cntr.porcentajeAnticipo/100)}"
                             if(aDescontar > poAnterior.valorPo) {
                                 prmt.valorPo = aDescontar
                             }  else
@@ -4753,7 +4753,7 @@ class PlanillaController extends janus.seguridad.Shield {
             /** calcular valores de reajuste y actualizar rjpl **/
 //            rj.valor  = PlanillaPo.findByPlanillaAndPeriodo()
             rj.factor = valorFr
-            rj.valorReajustado = valorFr * rj.valorPo - rj.valorPo
+            rj.valorReajustado = Math.round((valorFr * rj.valorPo - rj.valorPo)*100)/100
             rj.fechaReajuste = new Date()
             rj.save(flush: true)
         }

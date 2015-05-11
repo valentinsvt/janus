@@ -73,8 +73,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="observaciones" class="required" style="width: 500px;"/>
-            <span class="mandatory">*</span>
+            <g:textField name="observaciones" style="width: 500px;"/>
+            %{--<span class="mandatory">*</span>--}%
 
             <p class="help-block ui-helper-hidden"></p>
         </div>

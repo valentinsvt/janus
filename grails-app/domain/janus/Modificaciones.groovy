@@ -13,6 +13,8 @@ class Modificaciones implements Serializable {
     String motivo
     String observaciones
     VolumenesObra volObra
+    Contrato contrato
+
     static auditable = true
     static mapping = {
 
@@ -34,6 +36,7 @@ class Modificaciones implements Serializable {
             motivo column: 'mdcemtvo'
             observaciones column: 'mdceobsv'
             volObra column: 'vlob__id'
+            contrato column: 'cntr__id'
         }
 
     }
@@ -49,5 +52,6 @@ class Modificaciones implements Serializable {
         motivo(blank: true, nullable: true)
         observaciones(blank: true, nullable: true)
         volObra(blank: true, nullable: true)
+        contrato(blank: false, nullable: false)
     }
 }
