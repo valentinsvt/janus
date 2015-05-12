@@ -1669,42 +1669,23 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
                 if(mt.tipoMulta.id == 2){
 
-//                    addCellTabla(tablaMultaDisp, new Paragraph("Mes y Año", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph(mt.periodo, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph("Cronograma", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.valorCronograma,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph("Planillado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.planilla.valor,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph(mt.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    document.add(tablaMultaDisp);
-//
-                   tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-                    tablaMl += '</table>'
-                    tablaMl += '<thead>'
-                     tablaMl += '<tr>'
-                    tablaMl += '<th class="tal">Fecha presentación planilla</th><td>' + planilla?.fechaPresentacion?.format("dd-MM-yyyy") + ' </td>'
+                    tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
+                    tablaMl += "<tr>"
+                    tablaMl += '<th class="tal">Mes y Año</th><td>' + mt.periodo + ' </td>'
                     tablaMl += "</tr>"
                     tablaMl += "<tr>"
-                    tablaMl += '<th class="tal">Periodo planilla</th><td>' + planilla?.fechaInicio?.format("dd-MM-yyyy") + " a " + planilla?.fechaFin?.format("dd-MM-yyyy") + ' </td>'
+                    tablaMl += '<th class="tal">Cronograma</th><td>' + numero(mt.valorCronograma,2) + ' </td>'
                     tablaMl += "</tr>"
                     tablaMl += "<tr>"
-                    tablaMl += '<th class="tal">Fecha máximo presentación</th> <td>' + mt.fechaMaxima.format("dd-MM-yyyy") + ' </td>'
-                    tablaMl += "</tr>"
-                    tablaMl += "<tr>"
-                    tablaMl += '<th class="tal">Días de retraso</th> <td>' + numero(mt.dias, 0) + "</td>"
+                    tablaMl += '<th class="tal">Planillado</th> <td>' + numero(mt.planilla.valor,2) + ' </td>'
                     tablaMl += "</tr>"
                     tablaMl += "<tr>"
                     tablaMl += '<th class="tal">Multa</th> <td>' + mt.descripcion + "</td>"
                     tablaMl += "</tr>"
                     tablaMl += "<tr>"
-                    tablaMl += '<th class="tal">Valor de la multa</th> <td>$'  + numero(mt.monto, 2) + "</td>"
-                        tablaMl += '</tr>'
-                        tablaMl += '</tfoot>'
-                        tablaMl += '</table>'
-
+                    tablaMl += '<th class="tal">Valor</th> <td>$'  + numero(mt.monto, 2) + "</td>"
+                    tablaMl += "</tr>"
+                    tablaMl += '</table>'
 
 
                 }
@@ -1723,281 +1704,12 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     tablaMlFs += "</tr>"
                     tablaMlFs += '</table>'
 
-
                 }
-
-
             }
-
-
-
-//            Paragraph tituloMultaUsu = new Paragraph();
-//            tituloMultaUsu.setAlignment(Element.ALIGN_CENTER);
-//            tituloMultaUsu.add(new Paragraph("Otras multas", fontTitle));
-//            addEmptyLine(tituloMultaUsu, 1);
-//            document.add(tituloMultaUsu);
-//
-//            PdfPTable tablaMultaUsu = new PdfPTable(2);
-//            tablaMultaUsu.setWidthPercentage(50);
-//            tablaMultaUsu.setSpacingAfter(10f);
-//
-//            tablaMultaUsu.setHorizontalAlignment(Element.ALIGN_LEFT)
-//
-//            addCellTabla(tablaMultaUsu, new Paragraph("Concepto", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//            addCellTabla(tablaMultaUsu, new Paragraph(planilla.descripcionMulta, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//            addCellTabla(tablaMultaUsu, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//            addCellTabla(tablaMultaUsu, new Paragraph('$'+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-
 
         }
 
 
-
-//        def tablaMl
-//
-//        def multaRetraso = 0, multaIncumplimiento = 0
-//        println "total crono "+totCrono+" total planillado "+totPlan
-//        multaInc=(totPlan/totCrono<0.80)?contrato.monto/1000:0
-//        if (!liquidacion) {
-//            tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-//            tablaMl += '<thead>'
-//            tablaMl += '<tr>'
-//            tablaMl += '<th>Mes y año</th>'
-//            tablaMl += '<th>Cronograma</th>'
-//            tablaMl += '<th>Planillado</th>'
-////            tablaMl += '<th>Retraso</th>'
-//            tablaMl += '<th>Multa</th>'
-//            tablaMl += '</tr>'
-//            tablaMl += '</thead>'
-//            tablaMl += '<tbody>'
-//            tablaMl += bodyMultaRetraso
-//            tablaMl += '</tbody>'
-//            tablaMl += '<tfoot>'
-//            tablaMl += '<tr>'
-//            tablaMl += '<th>TOTAL</th>'
-//            tablaMl += "<th style='text-align:right'>${numero(totCrono, 2)}</th>"
-//            tablaMl += "<th style='text-align:right'>${numero(totPlan, 2)}</th>"
-////            tablaMl += "<th style='text-align:right'>Multa</th>"
-//            tablaMl += "<th class='number'>${numero(multaInc,2)}</th>"
-//            tablaMl += '</tr>'
-//            tablaMl += '</tfoot>'
-//            tablaMl += '</table>'
-//            multaIncumplimiento = totalMultaRetraso
-//        } else {
-//            def fechaFinFiscalizador = contrato.fechaPedidoRecepcionFiscalizador
-////            def retraso = fechaFinFiscalizador - prej[0].fechaFin
-////
-////            if (retraso < 0) {
-////                retraso = 0
-////            }
-//
-//            def ret = diasLaborablesService.diasLaborablesEntre(fechaFinFiscalizador, prej[0].fechaFin)
-//            def retraso = null
-//            if (ret[0]) {
-//                retraso = ret[1]
-//            } else {
-//                retraso = null
-//            }
-//            if (retraso == false) {
-////                redirect(action: "errores")
-//                def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
-//                def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: ret[2] ?: ""])
-//                def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
-//                link += "&nbsp;&nbsp;&nbsp;"
-//                link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
-//                flash.message = ret[1]
-//                redirect(action: "errores", params: [link: link])
-//                return
-//            }
-//
-//            if (fechaFinFiscalizador < prej[0].fechaFin) {
-//                retraso *= -1
-//            }
-//
-//            if (retraso < 0) {
-//                retraso = 0
-//            }
-////            println "retraso" +retraso
-//            totalMultaRetraso = retraso * ((prmlMultaRetraso / 1000) * totalContrato)
-//            tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-//            tablaMl += '<tr>'
-//            tablaMl += '<th class="tal">Fecha final de la obra (cronograma)</th> <td>' + prej[0].fechaFin.format("dd-MM-yyyy") + '</td>'
-//            tablaMl += '</tr>'
-//            tablaMl += '<tr>'
-//            tablaMl += '<th class="tal">Fecha pedido recepción fiscalizador</th> <td>' + fechaFinFiscalizador.format("dd-MM-yyyy") + '<td>'
-//            tablaMl += '</tr>'
-//            tablaMl += "<tr>"
-//            tablaMl += '<th class="tal">Días de retraso</th> <td>' + retraso + '</td>'
-//            tablaMl += "</tr>"
-//            tablaMl += "<tr>"
-//            tablaMl += '<th class="tal">Multa</th> <td>' + prmlMultaRetraso + " x 1000 de \$" + numero(totalContrato, 2) + "</td>"
-//            tablaMl += "</tr>"
-//            tablaMl += "<tr>"
-//            tablaMl += '<th class="tal">Total multa</th> <td>$' + numero(totalMultaRetraso, 2) + '</td>'
-//            tablaMl += "</tr>"
-//            tablaMl += '</table>'
-//            multaRetraso = totalMultaRetraso
-//        }
-
-        ///////////////////////////////////////////************************************ multa no presentacion planilla **********************////////////////////////////
-
-//        def totalMultaPlanilla = 0
-//        def diasMax = 5
-//        def fechaFinPer = planilla.fechaFin
-//        def fechaMax = fechaFinPer
-
-//        def noLaborables = ["Sat", "Sun"]
-//
-////            println fechaMax
-//        diasMax.times {
-//            fechaMax++
-////                println fechaMax
-//            def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
-//            while (noLaborables.contains(fmt.format(fechaMax))) {
-////                    println fmt.format(fechaMax)
-//                fechaMax++
-////                    println fechaMax
-//            }
-//        }
-//            println "***** "+fechaMax
-
-        /* aqui esta con el nuevo service para calcular dias laborables con la tabla */
-//        def res = diasLaborablesService.diasLaborablesDesde(fechaFinPer, diasMax)
-//        if (res[0]) {
-//            fechaMax = res[1]
-//        } else {
-//            fechaMax = null
-//        }
-//        if (!fechaMax) {
-////                redirect(action: "errores")
-//            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
-//            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
-//            def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
-//            link += "&nbsp;&nbsp;&nbsp;"
-//            link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
-//            flash.message = res[1]
-//            redirect(action: "errores2", params: [link: link])
-//            return
-//        }
-//
-//        def fechaPresentacion = planilla.fechaPresentacion
-////        def retraso = fechaPresentacion - fechaMax + 1
-//
-//        def retrasoX = diasLaborablesService.diasLaborablesEntre(fechaPresentacion, fechaMax)
-//        def retraso = null
-//        if (retrasoX[0]) {
-//            retraso = retrasoX[1]
-//        } else {
-//            retraso = null
-//        }
-
-//        println "retraso: $retraso, dias laborables: $retrasoX"
-
-//        if (!retraso) {
-//        if (retraso == false) {
-////                redirect(action: "errores")
-//            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
-//            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: retrasoX[2] ?: ""])
-//            def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
-//            link += "&nbsp;&nbsp;&nbsp;"
-//            link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
-//            flash.message = retrasoX[1]
-//            redirect(action: "errores", params: [link: link])
-//            return
-//        }
-//        println "pasa retraso"
-//
-//        if (fechaPresentacion < fechaMax) {
-//            retraso *= -1
-//        }
-
-//        def multaPlanilla = 0
-//        if (retraso > 0 || planilla.valor == 0) {
-////            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-////            multaPlanilla = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
-////                it.parcialCronograma
-////            }) * (prmlMultaPlanilla / 1000) * retraso
-//            if (retraso < 0) {
-//                retraso = 0
-//            }
-//            multaPlanilla = (prmlMultaPlanilla / 1000) * (planilla.valor > 0 ? planilla.valor : totalCronoPlanilla)
-//        } else {
-//            retraso = 0
-//        }
-
-//        def pMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-//        pMl += "<tr>"
-//        pMl += '<th class="tal">Fecha presentación planilla</th><td>' + fechaPresentacion.format("dd-MM-yyyy") + ' </td>'
-//        pMl += "</tr>"
-//        pMl += "<tr>"
-//        pMl += '<th class="tal">Periodo planilla</th><td>' + planilla.fechaInicio.format("dd-MM-yyyy") + " a " + planilla.fechaFin.format("dd-MM-yyyy") + ' </td>'
-//        pMl += "</tr>"
-//        pMl += "<tr>"
-//        pMl += '<th class="tal">Fecha máximo presentación</th> <td>' + fechaMax.format("dd-MM-yyyy") + ' </td>'
-//        pMl += "</tr>"
-//        pMl += "<tr>"
-//        pMl += '<th class="tal">Días de retraso</th> <td>' + retraso + "</td>"
-//        pMl += "</tr>"
-//        pMl += "<tr>"
-//        pMl += '<th class="tal">Multa</th> <td>' + prmlMultaPlanilla + " x 1000 de \$" + numero((planilla.valor > 0 ? planilla.valor : totalCronoPlanilla), 2) + "</td>"
-//        pMl += "</tr>"
-//        pMl += "<tr>"
-//        pMl += '<th class="tal">Total multa</th> <td>$' + numero(multaPlanilla, 2) + "</td>"
-//        pMl += "</tr>"
-//        pMl += '</table>'
-        ///////////////////////////////////////////************************************ multa no acatar disposiciones fiscalizador **********************////////////////////////////
-//        def diasNoAcatar = planilla.diasMultaDisposiciones
-//        def multaDisposiciones = totalContrato * diasNoAcatar * (prmlMultaDisposiciones / 1000)
-//        def tablaMlFs = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-//        tablaMlFs += "<tr>"
-//        tablaMlFs += '<th class="tal">Días</th> <td>' + diasNoAcatar + "</td>"
-//        tablaMlFs += "</tr>"
-//        tablaMlFs += "<tr>"
-//        tablaMlFs += '<th class="tal">Multa</th> <td>' + prmlMultaDisposiciones + " x 1000 de \$" + numero(totalContrato, 2) + " por día</td>"
-//        tablaMlFs += "</tr>"
-//        tablaMlFs += "<tr>"
-//        tablaMlFs += '<th class="tal">Total multa</th> <td>$' + numero(multaDisposiciones, 2) + "</td>"
-//        tablaMlFs += "</tr>"
-//        tablaMlFs += '</table>'
-        ///////////////////////////////////////////************************************fin**********************////////////////////////////
-
-
-        //////////////////////////////////////////////////////****Multas ingresadas por el usurio**********************//////////
-//        def tablaMultaUsuario = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-//        tablaMultaUsuario += "<tr>"
-//        tablaMultaUsuario += '<th >Concepto</th>'
-//        tablaMultaUsuario += '<th ">Valor</th>'
-//        tablaMultaUsuario += "</tr>"
-//        tablaMultaUsuario += "<tr>"
-//        tablaMultaUsuario += "<td>${planilla.descripcionMulta}</td> <td style='text-align:right'>${ numero(planilla.multaEspecial, 2)}</td>"
-//        tablaMultaUsuario += "</tr>"
-//        tablaMultaUsuario += '</table>'
-//        ////fin///////////
-//
-//        planilla.reajuste = aPlanillar
-//        planilla.multaPlanilla = multaPlanilla
-//        planilla.multaRetraso = multaRetraso
-//        planilla.multaIncumplimiento = multaInc
-//        planilla.multaDisposiciones = multaDisposiciones
-//
-//        def valorAnt = 0
-//        def anterior = 0
-//        if (avanceAnteriores.size() > 0) {
-//            valorAnt = avanceAnteriores.sum { it.valor }
-//            anterior = avanceAnteriores.sum { it.descuentos }
-//        }
-//        def prej2 = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio', order: "asc"])
-//
-//        if (planilla.fechaFin >= prej2.last().fechaFin) {
-//            planilla.descuentos = (contrato.anticipo - anterior).toDouble().round(2)
-//        } else {
-//            planilla.descuentos = (((valorAnt + planilla.valor) / contrato.monto) * contrato.anticipo - anterior).toDouble().round(2)
-//        }
-//
-//        if (!planilla.save(flush: true)) {
-//            println "error planilla reajuste " + planilla.id
-//        }
-        // println "mmensaje "+mensaje
 //        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, tablaMlFs: tablaMlFs, liquidacion: liquidacion, mensaje:mensaje,tablaMultaUsuario:tablaMultaUsuario]
         [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr,  liquidacion: liquidacion, mensaje:mensaje, pMl: pMl, tablaMlFs: tablaMlFs, tablaMl: tablaMl]
     }
@@ -2501,8 +2213,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
         }
 
         pagos.each{ per, pago ->
-            println("per " + per)
-            println("pago " + pago)
             promedioActual += pago.valor
         }
 
