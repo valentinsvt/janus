@@ -140,7 +140,8 @@
 
             <div class="linea" style="height: 100%;"></div>
 
-            <div class="tituloTree">Multa por no presentación de planilla</div>
+            %{--<div class="tituloTree">Multa por no presentación de planilla</div>--}%
+            <div class="tituloTree">Multa por retraso en la presentación de planilla</div>
             ${pMl}
 
             <div class="tituloTree">${!liquidacion ? "Multa por incumplimiento del cronograma" : "Multa por retraso de obra"}</div>
@@ -148,16 +149,16 @@
 
             <div class="tituloTree">Multa por no acatar disposiciones del fiscalizador</div>
             ${tablaMlFs}
-            <div class="tituloTree">Otras multas</div>
-            ${tablaMultaUsuario}
+            %{--<div class="tituloTree">Otras multas</div>--}%
+            %{--${tablaMultaUsuario}--}%
         </div> <!-- Multas -->
     </g:if>
 </div>
-<div class="row" style="padding-left: 60px;display:inline-block;margin-bottom: 15px">
+%{--<div class="row" style="padding-left: 60px;display:inline-block;margin-bottom: 15px">--}%
 
-        ${mensaje}
+        %{--${mensaje}--}%
 
-</div>
+%{--</div>--}%
 
 <div class="modal hide fade" id="modal-tree">
     <div class="modal-header" id="modalHeader">
