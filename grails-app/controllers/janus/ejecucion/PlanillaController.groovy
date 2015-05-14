@@ -4691,7 +4691,7 @@ class PlanillaController extends janus.seguridad.Shield {
             frpl.each {fp ->
                 /** calcula valores para halla Bo **/
                 inof = valorIndice(fp.indice , plnl.contrato.periodoInec)
-                inpr = valorIndice(fp.indice , rjpl.periodoInec)
+                inpr = valorIndice(fp.indice , rj.periodoInec)
                 vlof = Math.round(inof * fp.valor *1000)/1000
                 vlpr = Math.round(inpr * fp.valor *1000)/1000
                 valorBoOf += vlof
@@ -4731,7 +4731,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     inpr = valorBoPr
                 } else {
                     inof = valorIndice(fp.indice , plnl.contrato.periodoInec)
-                    inpr = valorIndice(fp.indice , rjpl.periodoInec)
+                    inpr = valorIndice(fp.indice , rj.periodoInec)
                 }
                 vlof = Math.round(inof * fp.valor *1000)/1000
                 vlpr = Math.round(inpr * fp.valor *1000)/1000
@@ -4784,7 +4784,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         if (dtrj.save([flush: true])) {
             flash.clase = "alert-success"
-            flash.message = "Detalle de Rejuste guardado exitosamente."
+            flash.message = "Detalle de Reajuste guardado exitosamente."
             return 1
         } else {
             flash.clase = "alert-error"
@@ -4941,7 +4941,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         if (mlpl.save([flush: true])) {
             flash.clase = "alert-success"
-            flash.message = "Rejuste guardado exitosamente."
+            flash.message = "Reajuste guardado exitosamente."
             return 1
         } else {
             flash.clase = "alert-error"
