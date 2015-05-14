@@ -1039,10 +1039,33 @@ class ReportePlanillas3Controller {
                     reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
 
 
+                def rjTotalAnteriorD4 = 0
+                def promedioActualD4 = 0
+                def totalProcesadoD4 = 0
+                def numD4
+                def anteriores4
+
+                def anteriorRj4 = reajustesPlanilla.size() - 2
+
+                if(anteriorRj4 >= 0){
+                    numD4 = reajustesPlanilla[anteriorRj4].planillaReajustada
+                    anteriores4 = ReajustePlanilla.findAllByPlanilla(numD4)
+
+                    anteriores4.each{
+                        rjTotalAnteriorD4 += it.valorReajustado
+
+                    }
+                }else{
+                    rjTotalAnteriorD4 = 0
+                }
+
+
 
                 if (params.completo) {
 
-                    def bAnt = planillaAnterior.reajuste
+//                    def bAnt = planillaAnterior.reajuste
+                    def bAnt = rjTotalAnteriorD4
+                    println("valor anterior " + bAnt)
                     def bAct = planilla.reajuste - bAnt
                     def bAcu = bAct + bAnt
 
