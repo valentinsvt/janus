@@ -902,7 +902,6 @@ class ReportePlanillas3Controller {
                     addEmptyLine(tituloMultaNoPres, 1);
                     document.add(tituloMultaNoPres);
 
-
                     PdfPTable tablaMultaDisp = new PdfPTable(2);
                     tablaMultaDisp.setWidthPercentage(50);
                     tablaMultaDisp.setSpacingAfter(10f);
@@ -916,16 +915,8 @@ class ReportePlanillas3Controller {
                     addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     document.add(tablaMultaDisp);
-
-
-
-
                 }
-
-
             }
-
-
 
             Paragraph tituloMultaUsu = new Paragraph();
             tituloMultaUsu.setAlignment(Element.ALIGN_CENTER);
@@ -1103,16 +1094,52 @@ class ReportePlanillas3Controller {
                     def m3 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaIncumplimiento } ?: 0
                     def m4 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaDisposiciones } ?: 0
 
-                    def multasAnt = m1 + m2 + m3 + m4
-//                    def multasAct = totalMultaRetraso + totalMulta
-                    def multasAct = planilla.multaIncumplimiento + planilla.multaRetraso + planilla.multaDisposiciones + planilla.multaPlanilla+planilla.multaEspecial
-                    println "planilla retraso "+planilla.multaRetraso
-                    println "planilla inc "+planilla.multaIncumplimiento
+                    def multasAct = 0
+
+                    multaPlanilla.each {
+                        multasAct += it.monto
+                    }
+
+//                    println("multas actuales" + multasAct)
+
+                    def listaPlanillasAnt
+                    def planAnteriores = []
+                    def planillaAnteriorMulta = reajustesPlanilla.size() -2
+                    def anteriores1
+                    if(planillaAnteriorMulta >= 0){
+                        listaPlanillasAnt = reajustesPlanilla[planillaAnteriorMulta].planillaReajustada
+                        anteriores1 = ReajustePlanilla.findAllByPlanilla(listaPlanillasAnt)
+
+                        anteriores1.each{
+                            planAnteriores += it.planilla
+                        }
+                    }
+
+
+//                    println("pa " + planAnteriores)
+
+                    def listaMultasAnt = MultasPlanilla.findAllByPlanilla(planAnteriores.unique())
+
+//                    println("lista m" + listaMultasAnt)
+                    def multasAnt = 0
+
+                    listaMultasAnt.each {
+                        multasAnt += it.monto
+                    }
+
+//                    println("multas anteriores" + multasAnt)
+
+//                    def multasAnt = m1 + m2 + m3 + m4
+//                    def multasAct = planilla.multaIncumplimiento + planilla.multaRetraso + planilla.multaDisposiciones + planilla.multaPlanilla+planilla.multaEspecial
+
+
+//                    println "planilla retraso "+planilla.multaRetraso
+//                    println "planilla inc "+planilla.multaIncumplimiento
                     def multasAcu = multasAnt + multasAct
 
-                    println "multas Ant = " + m1 + " + " + m2 + " + " + m3 + " + " + m4 + " = " + multasAnt
-                    println "multas Act = " + planilla.multaIncumplimiento + " + " + planilla.multaRetraso + " + " + planilla.multaDisposiciones + " + " + planilla.multaPlanilla + " = " + multasAct
-                    println "multas Acu = " + multasAcu
+//                    println "multas Ant = " + m1 + " + " + m2 + " + " + m3 + " + " + m4 + " = " + multasAnt
+//                    println "multas Act = " + planilla.multaIncumplimiento + " + " + planilla.multaRetraso + " + " + planilla.multaDisposiciones + " + " + planilla.multaPlanilla + " = " + multasAct
+//                    println "multas Acu = " + multasAcu
 
                     def totalAnt = cAnt - antAnt - multasAnt
                     def totalAct = cAct - antAct - multasAct
@@ -1136,26 +1163,12 @@ class ReportePlanillas3Controller {
 
                         anteriores.each{
                             rjTotalAnteriorD += it.valorReajustado
+
                         }
                     }else{
                         rjTotalAnteriorD = 0
                     }
 
-                    def numD =reajustesPlanilla.first().id
-                    def ttD = numD - (pagos.size()-1)
-                    def tgD = []
-
-//                    println("ttd " + ttD)
-
-                    while (ttD != numD){
-                        tgD += ttD
-                        ttD++
-                    }
-
-
-//                    tgD.each{
-//                        rjTotalAnteriorD += ReajustePlanilla.get(it).valorReajustado
-//                    }
 
                     pagos.each{ per, pago ->
                         promedioActualD += pago.valor
