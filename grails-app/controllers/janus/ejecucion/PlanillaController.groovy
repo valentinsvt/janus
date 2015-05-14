@@ -4645,7 +4645,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         if (rjpl.save([flush: true])) {
             flash.clase = "alert-success"
-            flash.message = "Rejuste guardado exitosamente."
+            flash.message = "Reajuste guardado exitosamente."
             return 1
         } else {
             flash.clase = "alert-error"

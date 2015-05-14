@@ -765,40 +765,24 @@ class ReportePlanillas3Controller {
         def rjTotalAnteriorD2 = 0
         def promedioActualD2 = 0
         def totalProcesadoD2 = 0
+        def numD3 = 0
+        def anterioresD
 
         def anteriorRjD = reajustesPlanilla.size() - 2
 
-        def numD3 = reajustesPlanilla[anteriorRjD].planillaReajustada
+//        println("---> " + reajustesPlanilla.size())
+//        println("---> " + anteriorRjD)
 
-        def anterioresD = ReajustePlanilla.findAllByPlanilla(numD3)
-
-//                    println("anterioresRj " + anteriorRj)
-//                    println("numD2 " + numD2)
-//                    println("anteriores " + anteriores)
-
-
-        anterioresD.each{
-            rjTotalAnteriorD2 += it.valorReajustado
+        if(anteriorRjD >= 0){
+            numD3 = reajustesPlanilla[anteriorRjD].planillaReajustada
+            anterioresD = ReajustePlanilla.findAllByPlanilla(numD3)
+            anterioresD.each{
+                rjTotalAnteriorD2 += it.valorReajustado
+            }
+        }else{
+            rjTotalAnteriorD2 = 0
         }
 
-
-
-//        while (tt != num){
-//            tg += tt
-//            tt++
-//        }
-
-//        println("planilla actual " + reajustesPlanilla.first().id)
-//        println("planillas Anteriores " + tg)
-
-
-//        def rjTotalAnterior = 0
-//        def promedioActual = 0
-//        def totalProcesado = 0
-
-//         tg.each{
-//            rjTotalAnterior += ReajustePlanilla.get(it).valorReajustado
-//        }
 
         pagos.each{ per, pago ->
             promedioActualD2 += pago.valor
@@ -1141,25 +1125,21 @@ class ReportePlanillas3Controller {
                     def rjTotalAnteriorD = 0
                     def promedioActualD = 0
                     def totalProcesadoD = 0
-
+                    def numD2
+                    def anteriores
 
                     def anteriorRj = reajustesPlanilla.size() - 2
 
-                    def numD2 = reajustesPlanilla[anteriorRj].planillaReajustada
+                    if(anteriorRj >= 0){
+                        numD2 = reajustesPlanilla[anteriorRj].planillaReajustada
+                        anteriores = ReajustePlanilla.findAllByPlanilla(numD2)
 
-                    def anteriores = ReajustePlanilla.findAllByPlanilla(numD2)
-
-//                    println("anterioresRj " + anteriorRj)
-//                    println("numD2 " + numD2)
-//                    println("anteriores " + anteriores)
-
-
-                    anteriores.each{
-                        rjTotalAnteriorD += it.valorReajustado
+                        anteriores.each{
+                            rjTotalAnteriorD += it.valorReajustado
+                        }
+                    }else{
+                        rjTotalAnteriorD = 0
                     }
-
-
-//                    println("reajustes " + reajustesPlanilla)
 
                     def numD =reajustesPlanilla.first().id
                     def ttD = numD - (pagos.size()-1)
@@ -1191,15 +1171,18 @@ class ReportePlanillas3Controller {
                     subtotalActual = (params.act + totalProcesadoD)
                     subtotalAcumulado = (params.acu + promedioActualD)
 
-
-
                     def totalPlanillarAnterior = 0
                     def totalPlanillarActual = 0
                     def totalPlanillarAcumulado = 0
 
-                    totalPlanillarAnterior = (params.ant -  (antAnt + multasAnt))
-                    totalPlanillarActual = (params.act - (antAct + multasAct))
-                    totalPlanillarAcumulado = (params.acu - (antAcu + multasAcu))
+//                    totalPlanillarAnterior = (params.ant -  (antAnt + multasAnt))
+//                    totalPlanillarActual = (params.act - (antAct + multasAct))
+//                    totalPlanillarAcumulado = (params.acu - (antAcu + multasAcu))
+
+
+                    totalPlanillarAnterior = (subtotalAnterior + cpAnt) - (antAnt + multasAnt)
+                    totalPlanillarActual = (subtotalActual + cpAct) - (antAct + multasAct)
+                    totalPlanillarAcumulado = (subtotalAcumulado + cpAcu) - (antAcu + multasAcu)
 
 //                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                     addCellTabla(tablaDetalles, new Paragraph("REAJUSTE DE PRECIOS", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
