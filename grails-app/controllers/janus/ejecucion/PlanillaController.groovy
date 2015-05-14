@@ -4436,7 +4436,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
                     /** recalcula Po **/
 
-                    println "planilla de avance anterior -------------------- ${p.id}"
+//                    println "planilla de avance anterior -------------------- ${p.id}"
 
                     plAcumulado += p.valor
                     /** para cada planilla anterior se debe saber el Po aplicado antes para ingresar la diferencia de aplicarse **/
@@ -4491,17 +4491,17 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //                    println "hay que recalcular reajuste de plnl avance: ${p.id}, tipo: ${p.tipoPlanilla}"
                     prdoInec = indicesDisponibles(p, 'R') /* para recalcular reajuste */
-                    println "********** para plnl: ${p} se retorna de indicesDisponibles: $prdoInec"
+//                    println "********** para plnl: ${p} se retorna de indicesDisponibles: $prdoInec"
                     if(prdoInec && (prdoInec?.fechaInicio <= p.fechaInicio && prdoInec?.fechaFin >= p.fechaFin)) {
                         prmt.periodoInec = prdoInec
                         prmt.planilla = plnl
                         prmt.planillaReajustada = p
-                        println "  inserta avance RR... si hay indices actuales $prmt"
+//                        println "  inserta avance RR... si hay indices actuales $prmt"
                     } else {
                         prmt.periodoInec = prdoInec = indicesDisponibles(plnl, '') /* si no hay indc para recalcular */
                         prmt.planilla = plnl
                         prmt.planillaReajustada = p
-                        println "  inserta avance RR... no hay indices actuales $prmt"
+//                        println "  inserta avance RR... no hay indices actuales $prmt"
                     }
                     insertaRjpl(prmt)
                 }
@@ -4605,7 +4605,7 @@ class PlanillaController extends janus.seguridad.Shield {
             def prin
             if(plnl.tipoPlanilla.toString() == 'A' ){
                 prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(plnl.fechaPago, plnl.fechaPago)
-                println "  recalculo *********** $prin"
+//                println "  recalculo *********** $prin"
                 return preciosService.verificaIndicesPeriodo(plnl.contrato, prin).size() == 0 ? prin : null
             } else if(plnl.tipoPlanilla.toString() == 'P' ){
                 prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(plnl.fechaInicio, plnl.fechaFin)
