@@ -141,7 +141,7 @@
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaFin}" format="dd-MM-yyyy"/>
                             </td>
-                            <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
+                            <td>${planillaInstance.id} ${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
                             <td class="numero">
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>
@@ -154,17 +154,30 @@
                             %{--<i class="icon-pencil icon-large"></i>--}%
                             %{--</g:link>--}%
                             %{--</g:if>--}%
+
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                    <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                        <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                            <i class="icon-gear"></i>
+                                        </div>
+                                    </g:if>
+                                </g:if>
+
+
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
                                     <g:link controller="planilla" action="form" params="[id:planillaInstance.id,contrato:planillaInstance.contrato.id]" rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>
                                     </g:link>
                                 </g:if>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
-                                    %{--<g:if test="${contrato.fiscalizador.id == session.usuario.id}">--}%
+                                    <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
-                                    %{--</g:if>--}%
+                                    <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                         <i class="icon-gear"></i>
+                                    </div>
+                                    </g:if>
                                 </g:if>
 
 %{--
@@ -172,9 +185,11 @@
                                     <i class="icon-gear"></i>
                                 </g:link>
 --}%
+%{--
                                 <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
                                     <i class="icon-gear"></i>
                                 </div>
+--}%
 
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">

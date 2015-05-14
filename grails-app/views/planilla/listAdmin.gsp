@@ -186,10 +186,12 @@
                                                 </g:if>
                 --}%
                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                        <g:link controller="planilla" action="procesar" id="${planillaInstance.id}" rel="tooltip"
-                                title="Procesar" class="btn btn-small">
-                            <i class="icon-table"></i>
-                        </g:link>
+                        <g:if test="${contrato.administrador.id == session.usuario.id}">
+
+                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                            <i class="icon-gear"></i>
+                        </div>
+                        </g:if>
                     </g:if>
 
 
@@ -590,6 +592,23 @@
             });
             return false;
         }); //click btn show
+
+        $(".btnProcesa").click(function () {
+            var id = $(this).data("id");
+            console.log("id:" + id)
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'procesar')}",
+                data    : {
+                    id : id
+                },
+                success : function (msg) {
+                    location.reload();
+                }
+            });
+            return false;
+        }); //click btn show
+
 
         $(".btn-delete").click(function () {
             var id = $(this).data("id");

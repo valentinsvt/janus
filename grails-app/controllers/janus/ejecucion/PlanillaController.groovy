@@ -4490,7 +4490,8 @@ class PlanillaController extends janus.seguridad.Shield {
 
 
 //                    println "hay que recalcular reajuste de plnl avance: ${p.id}, tipo: ${p.tipoPlanilla}"
-                    prdoInec = indicesDisponibles(plnl, 'R') /* para recalcular reajuste */
+                    prdoInec = indicesDisponibles(p, 'R') /* para recalcular reajuste */
+                    println "********** para plnl: ${p} se retorna de indicesDisponibles: $prdoInec"
                     if(prdoInec && (prdoInec?.fechaInicio <= p.fechaInicio && prdoInec?.fechaFin >= p.fechaFin)) {
                         prmt.periodoInec = prdoInec
                         prmt.planilla = plnl
@@ -4563,7 +4564,7 @@ class PlanillaController extends janus.seguridad.Shield {
     /** retorna el id del periodoInec mas reciente**/
     def indicesDisponibles(plnl, tp) {
 //        println "indicesDisponibles para plnl: ${plnl.id}, con ${plnl.periodoIndices}"
-        if (!tp){
+        if (!tp){   /** se refiere al primer pago **/
             def existe = false
             def prin
 //            println "periodo de indices de planilla: ${plnl.periodoIndices}, ${plnl.tipoPlanilla}"
