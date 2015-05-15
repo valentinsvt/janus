@@ -37,7 +37,7 @@ class Reportes4Controller {
         if (fecha) {
             return (fecha.format("dd") + ' de ' + meses[fecha.format("MM").toInteger()] + ' de ' + fecha.format("yyyy"))
         } else {
-            return "Error: no hay fecha que mostrar"
+            return "No hay fecha que mostrar"
         }
     }
 
@@ -4070,16 +4070,17 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(14);
+        PdfPTable tablaRegistradas = new PdfPTable(13);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([15, 30, 25, 20, 8, 15, 30, 15, 9, 20,15,15,12,10]))
+//        tablaRegistradas.setWidths(arregloEnteros([15, 30, 25, 20, 8, 15, 30, 15, 9, 20,15,15,12,10]))
+        tablaRegistradas.setWidths(arregloEnteros([15, 30, 25, 20, 8, 30, 15, 9, 20,15,15,12,10]))
 
         addCellTabla(tablaRegistradas, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Contratista", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Tipo de Garantía", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("N° Garantía", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Rnov", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Original", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Original", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Aseguradora", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Documento", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
@@ -4169,11 +4170,11 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.renovacion, minFractionDigits:
                     0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsCellRight3)
-            if(i.padre){
-                addCellTabla(tablaRegistradas, new Paragraph(janus.pac.Garantia.get(i.padre).codigo, times8normal), prmsCellLeft)
-            }else {
-                addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
-            }
+//            if(i.padre){
+//                addCellTabla(tablaRegistradas, new Paragraph(janus.pac.Garantia.get(i.padre).codigo, times8normal), prmsCellLeft)
+//            }else {
+//                addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+//            }
             addCellTabla(tablaRegistradas, new Paragraph(i.aseguradora, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.documento, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellRight3)
@@ -4315,7 +4316,7 @@ class Reportes4Controller {
         sheet.setColumnView(10, 15)
         sheet.setColumnView(11, 15)
         sheet.setColumnView(12, 15)
-        sheet.setColumnView(13, 15)
+//        sheet.setColumnView(13, 15)
         // inicia textos y numeros para asocias a columnas
 
         def label
@@ -4335,15 +4336,15 @@ class Reportes4Controller {
         label = new Label(2, 4, "Tipo de Garantía", times16format); sheet.addCell(label);
         label = new Label(3, 4, "N° Garantía", times16format); sheet.addCell(label);
         label = new Label(4, 4, "Rnov", times16format); sheet.addCell(label);
-        label = new Label(5, 4, "Original", times16format); sheet.addCell(label);
-        label = new Label(6, 4, "Aseguradora", times16format); sheet.addCell(label);
-        label = new Label(7, 4, "Documento", times16format); sheet.addCell(label);
-        label = new Label(8, 4, "Estado", times16format); sheet.addCell(label);
-        label = new Label(9, 4, "Monto", times16format); sheet.addCell(label);
-        label = new Label(10, 4, "Emisión", times16format); sheet.addCell(label);
-        label = new Label(11, 4, "Vencimiento", times16format); sheet.addCell(label);
-        label = new Label(12, 4, "Cancelación", times16format); sheet.addCell(label);
-        label = new Label(13, 4, "Moneda", times16format); sheet.addCell(label);
+//        label = new Label(5, 4, "Original", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "Aseguradora", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Documento", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
+        label = new Label(8, 4, "Monto", times16format); sheet.addCell(label);
+        label = new Label(9, 4, "Emisión", times16format); sheet.addCell(label);
+        label = new Label(10, 4, "Vencimiento", times16format); sheet.addCell(label);
+        label = new Label(11, 4, "Cancelación", times16format); sheet.addCell(label);
+        label = new Label(12, 4, "Moneda", times16format); sheet.addCell(label);
 
 
         res.eachWithIndex {i, j->
@@ -4353,15 +4354,15 @@ class Reportes4Controller {
             label = new Label(2, fila, i.tipogarantia.toString()); sheet.addCell(label);
             label = new Label(3, fila, i?.codigo?.toString()); sheet.addCell(label);
             number = new jxl.write.Number(4, fila, i.renovacion); sheet.addCell(number);
-            label = new Label(5, fila, ""); sheet.addCell(label);
-            label = new Label(6, fila, i?.aseguradora?.toString()); sheet.addCell(label);
-            label = new Label(7, fila, i?.documento?.toString()); sheet.addCell(label);
-            label = new Label(8, fila, i?.estado?.toString()); sheet.addCell(label);
-            number = new jxl.write.Number(9, fila, i.monto); sheet.addCell(number);
-            label = new Label(10, fila, i?.emision?.toString()); sheet.addCell(label);
-            label = new Label(11, fila, i?.vencimiento?.toString()); sheet.addCell(label);
-            number = new jxl.write.Number(12, fila, i.dias); sheet.addCell(number);
-            label = new Label(13, fila, i?.moneda?.toString()); sheet.addCell(label);
+//            label = new Label(5, fila, ""); sheet.addCell(label);
+            label = new Label(5, fila, i?.aseguradora?.toString()); sheet.addCell(label);
+            label = new Label(6, fila, i?.documento?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.estado?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(8, fila, i.monto); sheet.addCell(number);
+            label = new Label(9, fila, i?.emision?.toString()); sheet.addCell(label);
+            label = new Label(10, fila, i?.vencimiento?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(11, fila, i.dias); sheet.addCell(number);
+            label = new Label(12, fila, i?.moneda?.toString()); sheet.addCell(label);
 
             fila++
         }

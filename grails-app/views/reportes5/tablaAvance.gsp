@@ -40,6 +40,10 @@
                 Imprimir
             </a>
 
+        <a href="#" class="btn hide" id="excel" >
+            <i class="icon-print"></i>
+            Excel
+        </a>
 
         %{--<a href="#" class="btn" id="regresar">--}%
         %{--<i class="icon-arrow-left"></i>--}%
@@ -93,9 +97,10 @@
             <g:each in="${res}" var="fila" status="j">
                 <tr class="obra_row">
                     <td>
-                        <g:link controller="reportesPlanillas" action="reporteAvance" id="${fila.id}">
-                            ${fila.obra_cod}
-                        </g:link>
+                        %{--<g:link controller="reportesPlanillas" action="reporteAvance" id="${fila.id}">--}%
+                            %{--${fila.obra_cod}--}%
+                        %{--</g:link>--}%
+                        ${fila.obra_cod}
                     </td>
                     <td>${fila.obra_nmbr}</td>
                     <td>${fila.canton} - ${fila.parroquia} - ${fila.comunidad}</td>
@@ -139,6 +144,7 @@
 //                clearInterval(interval)
                 $("#detalle").html(msg)
                 $("#imprimir").removeClass("hide");
+                $("#excel").removeClass("hide");
 
             }
         });
@@ -152,11 +158,11 @@
         location.href = "${g.createLink(controller: 'reportes5', action:'reporteAvance' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
     });
 
-    %{--$("#excel").click(function () {--}%
+    $("#excel").click(function () {
 
-    %{--location.href = "${g.createLink(controller: 'reportes4', action:'reporteExcelContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()--}%
+    location.href = "${g.createLink(controller: 'reportes4', action:'reporteExcelContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
 
-    %{--});--}%
+    });
 
 
 </script>

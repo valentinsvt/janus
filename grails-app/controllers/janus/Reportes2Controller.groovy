@@ -1579,7 +1579,15 @@ class Reportes2Controller {
         detalle.each {
             it.refresh()
             def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
-            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//            println("res--> " + res["precio"][0])
+//            println("indirecto " + indirecto)
+            if(res["precio"][0] != null){
+                precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+
+            }else{
+                precios.put(it.id.toString(), (0 * indirecto).toDouble().round(2))
+
+            }
         }
 
         def baos = new ByteArrayOutputStream()

@@ -108,7 +108,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             return pla.contrato?.codigo
         }
 
-        def listaTitulos = ["OBRA", "CONTRATO", "DECRIPCION", "FECHA PRESENTACION", "MEMO PAGO", "MONTO"]
+        def listaTitulos = ["OBRA", "CONTRATO", "DESCRIPCION", "FECHA PRESENTACION", "MEMO PAGO", "MONTO"]
         def listaCampos = ["id", "contrato", "descripcion", "fechaPresentacion", "memoPagoPlanilla", "valor"]
         def funciones = [["closure": [codObra, "&"]], ["closure": [contr, "&"]], null, null, null, null]
         def url = g.createLink(action: "buscarPlanilla", controller: "planilla2")
