@@ -1330,9 +1330,17 @@ class ReportesController {
 //            println "res "+res
 
                 if (r["grpocdgo"] == 3) {
+                    def nombreVaeH = r["itemnmbr"].decodeHTML()
+                    nombreVaeH = nombreVaeH.replaceAll(/</, /&lt;/)
+                    nombreVaeH = nombreVaeH.replaceAll(/&/, /&amp;/)
+                    nombreVaeH = nombreVaeH.replaceAll(/'/, /&apos;/)
+                    nombreVaeH = nombreVaeH.replaceAll(/"/, /&quot;/)
+                    nombreVaeH = nombreVaeH.replaceAll(/>/, /&gt;/)
+
                     tablaHer += "<tr>"
                     tablaHer += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                    tablaHer += "<td>" + r["itemnmbr"] + "</td>"
+//                    tablaHer += "<td>" + r["itemnmbr"] + "</td>"
+                    tablaHer += "<td>" + nombreVaeH + "</td>"
                     tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1342,9 +1350,17 @@ class ReportesController {
                     tablaHer += "</tr>"
                 }
                 if (r["grpocdgo"] == 2) {
+                    def nombreVaeM = r["itemnmbr"].decodeHTML()
+                    nombreVaeM = nombreVaeM.replaceAll(/</, /&lt;/)
+                    nombreVaeM = nombreVaeM.replaceAll(/&/, /&amp;/)
+                    nombreVaeM = nombreVaeM.replaceAll(/'/, /&apos;/)
+                    nombreVaeM = nombreVaeM.replaceAll(/"/, /&quot;/)
+                    nombreVaeM = nombreVaeM.replaceAll(/>/, /&gt;/)
+
                     tablaMano += "<tr>"
                     tablaMano += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMano += "<td>" + r["itemnmbr"] + "</td>"
+//                    tablaMano += "<td>" + r["itemnmbr"] + "</td>"
+                    tablaMano += "<td>" + nombreVaeM + "</td>"
                     tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1355,12 +1371,21 @@ class ReportesController {
                 }
                 if (r["grpocdgo"] == 1) {
 
+
+                    def nombreVaeMat = r["itemnmbr"].decodeHTML()
+                    nombreVaeMat = nombreVaeMat.replaceAll(/</, /&lt;/)
+                    nombreVaeMat = nombreVaeMat.replaceAll(/&/, /&amp;/)
+                    nombreVaeMat = nombreVaeMat.replaceAll(/'/, /&apos;/)
+                    nombreVaeMat = nombreVaeMat.replaceAll(/"/, /&quot;/)
+                    nombreVaeMat = nombreVaeMat.replaceAll(/>/, /&gt;/)
+
                     bandMat = 1
 
                     tablaMat += "<tr>"
                     if (params.desglose != '0') {
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                        tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+//                        tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+                        tablaMat += "<td>" + nombreVaeMat + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1370,7 +1395,8 @@ class ReportesController {
                     if (params.desglose == '0') {
 
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                        tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+//                        tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+                        tablaMat += "<td>" + nombreVaeMat + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1381,9 +1407,18 @@ class ReportesController {
                     tablaMat += "</tr>"
                 }
                 if (r["grpocdgo"] == 1 && params.desglose != '0') {
+
+                    def nombreVaeT = r["itemnmbr"].decodeHTML()
+                    nombreVaeT = nombreVaeT.replaceAll(/</, /&lt;/)
+                    nombreVaeT = nombreVaeT.replaceAll(/&/, /&amp;/)
+                    nombreVaeT = nombreVaeT.replaceAll(/'/, /&apos;/)
+                    nombreVaeT = nombreVaeT.replaceAll(/"/, /&quot;/)
+                    nombreVaeT = nombreVaeT.replaceAll(/>/, /&gt;/)
+
                     tablaTrans += "<tr>"
                     tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                    tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+//                    tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+                    tablaTrans += "<td>" + nombreVaeT + "</td>"
 //                    println " -------------------" + r
                     if (r["tplscdgo"].trim() == 'P' || r["tplscdgo"].trim() == 'P1') {
                         tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"

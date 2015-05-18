@@ -2849,15 +2849,21 @@ class Reportes3Controller {
             rubros = VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique()
 
 //        println rubros.size()
+//        println("rubros " + rubros)
 
             rubros.eachWithIndex {rubro, indice ->
 //            println indice+" "+rubro.nombre
                 def nombre = rubro.nombre.decodeHTML()
+//                def nombre = rubro.nombre.encodeAsHTML4()
 
                 nombre = nombre.replaceAll(/</, /&lt;/)
+                nombre = nombre.replaceAll(/&/, /&amp;/)
+                nombre = nombre.replaceAll(/'/, /&apos;/)
+                nombre = nombre.replaceAll(/"/, /&quot;/)
                 nombre = nombre.replaceAll(/>/, /&gt;/)
 //                nombre = "TEST"
 //            println "\t"+nombre
+//                println("codigo " + rubro.unidad.codigo)
 
                 def header, tablas, footer, nota, salto
                 def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
@@ -2963,13 +2969,27 @@ class Reportes3Controller {
                 tablaMat2 += "<thead><tr><th colspan='12' class='tituloHeader'>MATERIALES</th></tr><tr><th colspan='12' class='theader'></th></tr><tr><th style='width: 100px;' class='padTopBot'>CÓDIGO</th><th style='width:420px'>DESCRIPCIÓN</th><th></th><th style='width: 45px;'>UNIDAD</th><th style='width: 45px;'>CANTIDAD</th><th style='width: 45px;'>UNITARIO(\$)</th><th style='width: 45px;'>C.TOTAL(\$)</th><th style='width: 45px;text-align: center'>PESO RELAT(%)</th><th style='width: 45px; text-align: center'>CPC</th><th style='width: 45px;text-align: center'>NP/EP/  ND</th><th style='width: 45px;text-align: right'>VAE(%)</th><th style='width: 45px; text-align: center'>VAE(%) ELEMENTO</th></tr> <tr><th colspan='12' class='theaderup'></th></tr></thead><tbody>"
 
 
+//                println("-->" + vae)
+
                 vae.eachWithIndex { r, i ->
-//            println "res "+res
+//            println "res "+r
+
+
+
 
                     if (r["grpocdgo"] == 3) {
+
+                        def nombreVaeH = r["itemnmbr"].decodeHTML()
+                        nombreVaeH = nombreVaeH.replaceAll(/</, /&lt;/)
+                        nombreVaeH = nombreVaeH.replaceAll(/&/, /&amp;/)
+                        nombreVaeH = nombreVaeH.replaceAll(/'/, /&apos;/)
+                        nombreVaeH = nombreVaeH.replaceAll(/"/, /&quot;/)
+                        nombreVaeH = nombreVaeH.replaceAll(/>/, /&gt;/)
+
                         tablaHer += "<tr>"
                         tablaHer += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                        tablaHer += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                        tablaHer += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                        tablaHer += "<td style='width: 420px;'>" + nombreVaeH + "</td>"
                         tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaHer += "<td style='width: 65px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaHer += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -2987,9 +3007,17 @@ class Reportes3Controller {
                     }
                     if (r["grpocdgo"] == 2) {
 
+                        def nombreVaeM = r["itemnmbr"].decodeHTML()
+                        nombreVaeM = nombreVaeM.replaceAll(/</, /&lt;/)
+                        nombreVaeM = nombreVaeM.replaceAll(/&/, /&amp;/)
+                        nombreVaeM = nombreVaeM.replaceAll(/'/, /&apos;/)
+                        nombreVaeM = nombreVaeM.replaceAll(/"/, /&quot;/)
+                        nombreVaeM = nombreVaeM.replaceAll(/>/, /&gt;/)
+
                         tablaMano += "<tr>"
                         tablaMano += "<td style='width: 140px;'>" + r["itemcdgo"] + "</td>"
-                        tablaMano += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                        tablaMano += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                        tablaMano += "<td style='width: 420px;'>" + nombreVaeM  + "</td>"
                         tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaMano += "<td style='width: 65px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaMano += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -3007,12 +3035,24 @@ class Reportes3Controller {
                     }
                     if (r["grpocdgo"] == 1) {
 
+
+
+                        def nombreVae = r["itemnmbr"].decodeHTML()
+                        nombreVae = nombreVae.replaceAll(/</, /&lt;/)
+                        nombreVae = nombreVae.replaceAll(/&/, /&amp;/)
+                        nombreVae = nombreVae.replaceAll(/'/, /&apos;/)
+                        nombreVae = nombreVae.replaceAll(/"/, /&quot;/)
+                        nombreVae = nombreVae.replaceAll(/>/, /&gt;/)
+
+//                        println("nombre Vae " + nombreVae)
+
                         bandMat = 1
 
                         tablaMat += "<tr>"
                         if (params.desglose != '0') {
                             tablaMat += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                            tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                            tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                            tablaMat += "<td style='width: 420px;'>" + nombreVae + "</td>"
                             tablaMat += "<td style='width: 50px;'>" + '' +  "</td>"
                             tablaMat += "<td style='width: 65px;text-align: center'>" + r["unddcdgo"] + "</td>"
                             tablaMat += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -3028,8 +3068,19 @@ class Reportes3Controller {
                             totalMatVae += r["vae_vlor"]
                         }
                         if (params.desglose == '0') {
+                            def nombreVaeZ = r["itemnmbr"].decodeHTML()
+
+                            nombreVaeZ = nombreVaeZ.replaceAll(/</, /&lt;/)
+                            nombreVaeZ = nombreVaeZ.replaceAll(/&/, /&amp;/)
+                            nombreVaeZ = nombreVaeZ.replaceAll(/'/, /&apos;/)
+                            nombreVaeZ = nombreVaeZ.replaceAll(/"/, /&quot;/)
+                            nombreVaeZ = nombreVaeZ.replaceAll(/>/, /&gt;/)
+
+//                            println("nombre Vae Z " + nombreVaeZ)
+
                             tablaMat += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                            tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                            tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                            tablaMat += "<td style='width: 420px;'>" + nombreVaeZ + "</td>"
                             tablaMat += "<td style='width: 50px;text-align: right'></td>"
                             tablaMat += "<td style='width: 65px;text-align: center'>" + r["unddcdgo"] + "</td>"
                             tablaMat += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -3047,9 +3098,20 @@ class Reportes3Controller {
                         tablaMat += "</tr>"
                     }
                     if (r["grpocdgo"] == 1 && params.desglose != '0') {
+
+                        def nombreVaeT = r["itemnmbr"].decodeHTML()
+
+                        nombreVaeT = nombreVaeT.replaceAll(/</, /&lt;/)
+                        nombreVaeT = nombreVaeT.replaceAll(/&/, /&amp;/)
+                        nombreVaeT = nombreVaeT.replaceAll(/'/, /&apos;/)
+                        nombreVaeT = nombreVaeT.replaceAll(/"/, /&quot;/)
+                        nombreVaeT = nombreVaeT.replaceAll(/>/, /&gt;/)
+
+
                         tablaTrans += "<tr>"
                         tablaTrans += "<td style='width: 140px;'>" + r["itemcdgo"] + "</td>"
-                        tablaTrans += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                        tablaTrans += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                        tablaTrans += "<td style='width: 420px;'>" + nombreVaeT +"</td>"
 
                         if(r["tplscdgo"].trim() =='P' || r["tplscdgo"].trim() =='P1' ){
                             tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
@@ -3127,6 +3189,7 @@ class Reportes3Controller {
 
                 if (params.desglose == '0') {
                     tablas += tablaHer + tablaMano + tablaMat + tablaIndi
+
                 } else {
                     tablas += tablaHer + tablaMano + tablaMat + tablaTrans + tablaIndi
                 }
@@ -3198,6 +3261,7 @@ class Reportes3Controller {
                                 "                   <b style=\"float:left\">Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales"
 
 
+//                html += "<div class='divRubro'>" + header + tablas + footer + "</div>"
                 html += "<div class='divRubro'>" + header + tablas + footer + "</div>"
             }
             [html: html]
