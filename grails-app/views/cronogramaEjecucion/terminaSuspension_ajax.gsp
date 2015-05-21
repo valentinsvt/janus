@@ -3,6 +3,8 @@
         <h4>Atención</h4>
         <i class="icon-info-sign icon-2x pull-left"></i>
         Una vez terminada la suspensión no se puede deshacer.
+        <br/>
+        ${suspension}
     </div>
 
     <div class="control-group">
@@ -15,9 +17,7 @@
         <div class="controls">
             <elm:datepicker name="fin"  minDate="new Date(${min})"  class="required dateEC" onClose="updateDias"/>
             <span class="mandatory">*</span>
-
-            <p class="help-block">No incluido</p>
-
+            <span style="margin-left: 20px">Dia en el que se reinicia la obra</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>

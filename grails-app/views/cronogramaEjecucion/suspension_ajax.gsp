@@ -15,9 +15,7 @@
         <div class="controls">
             <elm:datepicker name="ini" minDate="new Date(${min})" onClose="updateDias" class="required dateEC"/>
             <span class="mandatory">*</span>
-
-            <p class="help-block">Incluido</p>
-
+            <span style="margin-left: 12px">Dia en el que se inicia la suspensión</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -31,9 +29,7 @@
 
         <div class="controls">
             <elm:datepicker name="fin" class="dateEC" onClose="updateDias"/>
-
-            <p class="help-block">No incluido</p>
-
+            <span style="margin-left: 20px">Dia en el que se reinicia la obra</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>

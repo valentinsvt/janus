@@ -3,7 +3,7 @@ package janus.pac
 import janus.Contrato
 import janus.Obra
 
-class PeriodoEjecucion {
+class PeriodoEjecucionTmp {
 
     Obra obra
     Integer numero
@@ -11,11 +11,10 @@ class PeriodoEjecucion {
     Date fechaInicio
     Date fechaFin
     Contrato contrato
-    double parcialCronograma=0
 
     static auditable = true
     static mapping = {
-        table 'prej'
+        table 'prej_t'
         cache usage: 'read-write', include: 'non-lazy'
         id column: 'prej__id'
         id generator: 'identity'
@@ -28,7 +27,6 @@ class PeriodoEjecucion {
             fechaInicio column: 'prejfcin'
             fechaFin column: 'prejfcfn'
             contrato column: 'cntr__id'
-            parcialCronograma column: 'prejcrpa'
         }
     }
     static constraints = {
@@ -37,7 +35,6 @@ class PeriodoEjecucion {
         fechaInicio(blank: false, nullable: false, attributes: [title: 'fecha inicio'])
         fechaFin(blank: false, nullable: false, attributes: [title: 'fecha fin'])
         contrato(blank: false, nullable: false, attributes: [title: 'contrato'])
-        parcialCronograma(blank: false, nullable: false)
     }
 
 }

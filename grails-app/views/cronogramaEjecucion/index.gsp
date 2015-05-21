@@ -68,7 +68,7 @@
                     <div class="btn-group">
                     <g:if test="${suspensiones.size() == 0}">
                         %{--<a href="../actualizaPems" class="btn btn-info" id="btnPems">--}%
-                        <a href="${g.createLink(action: 'actualizaPems', params: [contrato: contrato?.id])}" class="btn btn-info">
+                        <a href="${g.createLink(action: 'actualizaPrej', params: [contrato: contrato?.id])}" class="btn btn-info">
                             <i class="icon-resize-full"></i>
                             Actualizar Periodos de Ejecución
                         </a>
@@ -113,7 +113,19 @@
             </g:if>
         </div>
 
-        <div>
+    <g:if test="${flash.message}">
+        <div class="row">
+            <div class="span12">
+                <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    ${flash.message}
+                </div>
+            </div>
+        </div>
+    </g:if>
+
+
+    <div>
             La ruta crítica se muestra con los rubros marcados en amarillo
         </div>
 
@@ -308,10 +320,10 @@
                                 if ($("#frmSave-terminaSuspension").valid()) {
                                     btnSave.replaceWith(spinner);
                                     var data = $("#frmSave-terminaSuspension").serialize();
-                                    data += "&obra=${obra.id}";
+                                    data += "&cntr=${contrato.id}";
                                     $.ajax({
                                         type    : "POST",
-                                        url     : "${createLink(action:'terminaSuspension')}",
+                                        url     : "${createLink(action:'terminaSuspensionTemp')}",
                                         data    : data,
                                         success : function (msg) {
 //                                            ////console.log(msg);
@@ -348,6 +360,7 @@
                                     btnSave.replaceWith(spinner);
                                     var data = $("#frmSave-suspension").serialize();
                                     data += "&obra=${obra.id}";
+                                    data += "&cntr=${contrato.id}";
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'suspensionNueva')}",

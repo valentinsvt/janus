@@ -17,6 +17,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def preciosService
     def arreglosService
+    def dbConnectionService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -76,9 +77,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 max("fechaInicio")
             }
         }
-
+        def suspension = "Suspensión iniciada el ${fi.first().format('dd-MM-yyyy'.toString())}"
         def minDate = fi.first().format("yyyy") + "," + (fi.first().format("MM").toInteger() - 1) + "," + fi.first().format("dd")
-        return [min: minDate]
+
+        return [min: minDate, suspension: suspension]
     }
 
     /* Agregado el 25-03-2015 xq quieren hacer suspensiones sin fecha de fin: se divide el proceso en 2 partes:
@@ -87,68 +89,73 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
      */
 
     def suspensionNueva() {
-        println "AQUIIIIII"
-        def obra = Obra.get(params.obra)
+        println "suspensiones, params: $params"
+        def cntr = Contrato.get(params.cntr)
+        def obra = cntr.obra
         def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
-
-        def fin = null, finSusp = null, dias = -1
-
+        def fin = null
+        def finSusp = null
+        def dias = -1
 
         def ini = new Date().parse("dd-MM-yyyy", params.ini)
-        if (params.fin) {
-            fin = new Date().parse("dd-MM-yyyy", params.fin)
 
-            finSusp = fin
-            use(TimeCategory) {
-                finSusp = fin - 1.days
-            }
-            dias = finSusp - ini + 1
-        }
+        def plnl = Planilla.findAllByContratoAndFechaFinGreaterThan(cntr, ini, [sort: 'fechaInicio'])
+        println "planillas: ${plnl.fechaInicio} - ${plnl.fechaFin}"
 
-        def modificacion = new Modificaciones([
-                obra         : obra,
-                tipo         : "S",
-                dias         : dias,
-                fecha        : new Date(),
-                fechaInicio  : ini,
-                fechaFin     : finSusp,
-                motivo       : params.motivo,
-                observaciones: params.observaciones,
-                memo         : params.memo.toUpperCase()
-        ])
 
-        if (!modificacion.save(flush: true)) {
-            println "error modificacion: " + modificacion.errors
+        if (plnl.size() > 0) {
+            flash.message = "La fecha ingresada corresponde a un periodo planillado con la planilla: ${plnl.numero} del " +
+                    "periodo: " + plnl[0].fechaInicio.format("dd-MM-yyyy") + " al " + plnl[0].fechaFin.format("dd-MM-yyyy")
+            render "Error"
         } else {
-            println "modificacion " + modificacion.id + "   ini: " + modificacion.fechaInicio + "    fin: " + modificacion.fechaFin + "     dias: " + modificacion.dias
+
+            if (params.fin) {
+                fin = new Date().parse("dd-MM-yyyy", params.fin)
+                finSusp = fin - 1
+                dias = finSusp - ini + 1
+            }
+
+            def modificacion = new Modificaciones([
+                    contrato     : cntr,
+                    obra         : obra,
+                    tipo         : "S",
+                    dias         : dias,
+                    fecha        : new Date(),
+                    fechaInicio  : ini,
+                    fechaFin     : finSusp,
+                    motivo       : params.motivo,
+                    observaciones: params.observaciones,
+                    memo         : params.memo.toUpperCase()
+            ])
+
+            if (!modificacion.save(flush: true)) {
+                println "error modificacion: " + modificacion.errors
+                render "Error"
+            } else {
+                println "modificacion $modificacion.id ini: $modificacion.fechaInicio fin: $modificacion.fechaFin dias: $modificacion.dias"
+                if (finSusp) { /** si existe fecha de finaliazazcion **/
+                    params.cntr = cntr.id
+                    params.suspension = modificacion.id
+                    terminaSuspension()
+                }
+                render "OK"
+            }
         }
-        render "OK"
     }
 
-    /* Agregado el 25-03-2015 xq quieren hacer suspensiones sin fecha de fin: se divide el proceso en 2 partes:
-            primero el action suspensionNueva hace una modificacion tipo suspension sin fecha de fin y con -1 en dias
-            segundo modifica la modificacino para ponerle fecha fin y dias y recalcula las fechas de periodos del cronograma
+    /* Suspensiones sin fecha de fin: se divide el proceso en 2 partes:
+       1. action suspensionNueva: hace una modificacion tipo suspension sin fecha de fin y con -1 en dias
+       2. terminaSuspension: pone fecha fin y dias a la suspensión y recalcula las fechas de periodos del cronograma
      */
 
     def terminaSuspension() {
-        def obra = Obra.get(params.obra)
+        println "termina suspension params: $params"
+        def cntr = Contrato.get(params.cntr)
+        def obra = cntr.obra
         def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
-        def ini = Modificaciones.withCriteria {
-            eq("obra", obra)
-            eq("tipo", "S")
-            or {
-                isNull("fechaFin")
-                gt("fechaFin", new Date().clearTime())
-            }
-            projections {
-                min("fechaInicio")
-            }
-        }.first()
-        def suspensiones = Modificaciones.withCriteria {
-            eq("obra", obra)
-            eq("tipo", "S")
-            isNull("fechaFin")
-        }
+
+        def suspension = Modificaciones.findAllByContratoAndTipoAndFechaFinIsNull(cntr, "S")
+        println "suspensión: ${suspension.size()}, inicio en ${suspension[0].fechaInicio.format('dd-MMM-yyyy'.toString())}"
 
         def fin = new Date().parse("dd-MM-yyyy", params.fin)
 
@@ -158,19 +165,25 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         }
         def errores = ""
 
-        //1ro cambia fecha fin y cant dias para todas las suspensiones
-        suspensiones.each { sus ->
-            def dias = finSusp - sus.fechaInicio + 1
-            sus.dias = dias
-            sus.fechaFin = finSusp
+        if (suspension.size() > 1) {
+            return "Error... existe mas de una suspension en curso"
+        } else {
+            def dias = finSusp - suspension[0].fechaInicio + 1
+            suspension[0].dias = dias
+            suspension[0].fechaFin = finSusp
             if (params.observaciones && params.observaciones.trim() != "") {
-                sus.observaciones = params.observaciones + "       " + sus.observaciones
+                suspension[0].observaciones = params.observaciones + "       " + suspension[0].observaciones
             }
-            if (!sus.save(flush: true)) {
-                errores += renderErrors(bean: sus)
-                println "EEOR EN TEMINAR SUSSPENSION: " + sus.errors
+/*
+            if (!suspension.save(flush: true)) {
+                errores += renderErrors(bean: suspension)
+                println "EEOR EN TEMINAR SUSSPENSION: " + suspension.errors
             }
+*/
         }
+
+        println "Fin de suspensión actualizada a: ${suspension[0].fechaFin}, dias: ${suspension[0].dias}"
+        //1ro cambia fecha fin y cant dias para todas las suspensiones
 
         //2do recalcula tdod lo q hacia antes la suspension
         def num = 1
@@ -188,16 +201,18 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def dias1 = ini - per.fechaInicio
 
                 //crea el periodo de tipo suspension con fecha inicio y fecha fin
-                def suspension = new PeriodoEjecucion([
+                def suspen = new PeriodoEjecucion([
                         obra       : obra,
                         numero     : num,
                         tipo       : "S",
                         fechaInicio: ini,
                         fechaFin   : finSusp
                 ])
-                if (!suspension.save(flush: true)) {
+/*
+                if (!suspen.save(flush: true)) {
                     println "Error al guardar la suspension: " + suspension.errors
                 }
+*/
 
 //                println "\t\tPARTE 1"
 //                println "\t\tdias: " + dias1
@@ -211,9 +226,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                     per.fechaInicio = nuevoIni
                     per.fechaFin = nuevoFin
+/*
                     if (!per.save(flush: true)) {
                         println "error 1: " + per.errors
                     }
+*/
 //                    println "\t\tSUSPENSION: "
 //                    println "\t\t inicio: " + ini
 //                    println "\t\t fin: " + finSusp
@@ -240,9 +257,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                     per.fechaInicio = nuevoIni
                     per.fechaFin = nuevoFin
+/*
                     if (!per.save(flush: true)) {
                         println "error 2: " + per.errors
                     }
+*/
 
                     // aqui va la suspension
 //                    println "\t\t\tSUSPENSION: "
@@ -273,9 +292,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             fechaInicio: nuevoIni2,
                             fechaFin   : nuevoFin2
                     ])
+/*
                     if (!periodo2.save(flush: true)) {
                         println "Error al guardar el periodo2: " + periodo2.errors
                     }
+*/
 
 //                    println "CRONOGRAMAS AFECTADOS POR LA DIVISION"
                     // itera sobre los cronogramaEjecucion afectados por per: hay q dividir proporcionalmente los valoresy crear otro cronogramaEjecucion con la otra parte
@@ -298,9 +319,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         crono.cantidad = cantidad1
                         crono.porcentaje = porcentaje1
                         crono.precio = precio1
+/*
                         if (!crono.save(flush: true)) {
                             println "error 3: " + crono.errors
                         }
+*/
 
                         def crono2 = new CronogramaEjecucion([
                                 volumenObra: crono.volumenObra,
@@ -309,25 +332,12 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                                 porcentaje : porcentaje2,
                                 cantidad   : cantidad2
                         ])
+/*
                         if (!crono2.save(flush: true)) {
                             println "error 4: " + crono2.errors
                         }
+*/
 
-//                        println "   >> parte 1 <<"
-//                        println "   en " + diasParte1 + " dias"
-//                        println "   cantidad: " + cantidad1
-//                        println "   porcentaje: " + porcentaje1
-//                        println "   precio: " + precio1
-//                        println "   >> parte 2 <<"
-//                        println "   en " + diasParte2 + " dias"
-//                        println "   cantidad: " + cantidad2
-//                        println "   porcentaje: " + porcentaje2
-//                        println "   precio: " + precio2
-//                        println "   == total =="
-//                        println "   en " + (diasParte1 + diasParte2) + " dias"
-//                        println "   cantidad: " + (cantidad1 + cantidad2)
-//                        println "   porcentaje: " + (porcentaje1 + porcentaje2)
-//                        println "   precio: " + (precio1 + precio2)
                     }
 
                 }
@@ -351,9 +361,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
                     per.fechaInicio = nuevoIni
                     per.fechaFin = nuevoFin
+/*
                     if (!per.save(flush: true)) {
                         println "error 1: " + per.errors
                     }
+*/
 //                    println "\t de " + per.fechaInicio + " " + per.fechaFin
 //                    println "\t a " + nuevoIni + " " + nuevoFin
                     anterior = nuevoFin
@@ -1066,7 +1078,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         while (dias > 0) {
             diasMes = fcfm - fcin + 1
-            if (dias > diasMes)  {
+            if (dias > diasMes) {
                 /** nuevo periodo **/
                 def periodo = new PeriodoEjecucion([
                         obra       : obra,
@@ -1769,83 +1781,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             return
         }
 
-/*
-        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
-        def inicioObra = obra.fechaInicio
-
-        def cronogramas = CronogramaEjecucion.countByVolumenObraInList(detalle)
-
-        def continua = true
-        if (cronogramas == 0) {
-            detalle.each { vol ->
-                def cronoCon = CronogramaContrato.findAllByVolumenObra(vol)
-                cronoCon.eachWithIndex { crono, cont ->
-
-                    def dias = (crono.periodo - 1) * 30 //+ (crono.periodo - 1)
-                    def prdo = 0
-                    if((dias + 30) > contrato.plazo){
-                        prdo = contrato.plazo - dias
-                    }else {
-                        prdo = 30
-                    }
-
-                    def ini
-                    def fin
-                    use(TimeCategory) {
-                        ini = inicioObra + dias.days
-                    }
-                    use(TimeCategory) {
-                        fin = ini + (prdo - 1).toInteger().days        // 30 - 1 para contar el dia inicial
-                    }
-
-                    def periodo = PeriodoEjecucion.withCriteria {
-                        eq("obra", obra)
-                        eq("tipo", "P")
-                        eq("numero", crono.periodo)
-                        eq("fechaInicio", ini)
-                        eq("fechaFin", fin)
-                    }
-
-                    if (periodo.size() == 0) {
-                        periodo = new PeriodoEjecucion([
-                                obra       : obra,
-                                numero     : crono.periodo,
-                                tipo       : "P",
-                                fechaInicio: ini,
-                                fechaFin   : fin,
-                                contrato   :  contrato
-                        ])
-                        if (!periodo.save(flush: true)) {
-                            println "Error al guardar el periodo " + periodo.errors
-                            continua = false
-                        }
-                    } else if (periodo.size() == 1) {
-                        println "existe un periodo"
-                        periodo = periodo[0]
-                    } else {
-                        println "WTF existe mas de un periodo"
-                        continua = false
-                    }
-                    if (continua) {
-                        def cronoEjecucion = new CronogramaEjecucion([
-                                volumenObra: vol,
-                                periodo    : periodo,
-                                precio     : crono.precio,
-                                porcentaje : crono.porcentaje,
-                                cantidad   : crono.cantidad
-                        ])
-                        if (!cronoEjecucion.save(flush: true)) {
-                            println "Error al guardar el crono ejecucion del crono " + crono.id
-                            println cronoEjecucion.errors
-                        } else {
-                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
-                        }
-                    }//if continua
-                } //cronogramaContrato.each
-            } //detalles.each
-        } //if cronogramas == 0
-*/
-
         def suspensiones = Modificaciones.withCriteria {
             eq("obra", obra)
             eq("tipo", "S")
@@ -1884,7 +1819,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def cntr = Contrato.get(params.contrato)
         def prej = PeriodoEjecucion.findAllByContrato(cntr)
 
-        prej.each {pe ->
+        prej.each { pe ->
             fcin = pe.fechaInicio
             fcfm = preciosService.ultimoDiaDelMes(fcin)
             fcim = fcfm + 1
@@ -1894,7 +1829,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             if (fcfm < pe.fechaFin) {
                 vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
                 println "valor: ${vlor[0]}"
-                parcial = vlor[0] /(pe.fechaFin - pe.fechaInicio) * (fcfm - fcin)
+                parcial = vlor[0] / (pe.fechaFin - pe.fechaInicio) * (fcfm - fcin)
                 println "parcial: $parcial"
                 prmt = [:]
                 prmt.contrato = cntr
@@ -1936,6 +1871,27 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //        def pems = PeriodoEjecucionMes.
 
 
+        render "ok"
+    }
+
+    def actualizaPrej() {
+        /** en base a prej ingresa o actualiza dato en pems **/
+        println "actualizaPrej params: $params"
+        def cntr = Contrato.get(params.contrato)
+        def prej = PeriodoEjecucion.findAllByContratoAndTipoNotEqual(cntr, 'S')
+        def vlor
+
+        prej.each { pe ->
+            vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
+            def pr = PeriodoEjecucion.get(pe.id)
+            pr.parcialCronograma = vlor[0]
+            if (!pr.save(flush: true)) {
+                flash.message = "No se pudo actualizar prej"
+                println "Error al actualizar pems: " + prej.errors
+            } else {
+                flash.message = "Prej actualizado exitosamente"
+            }
+        }
         render "ok"
     }
 
@@ -2015,13 +1971,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def periodos = CronogramaEjecucion.executeQuery("select max(periodo) from CronogramaContrato where contrato = :c", [c: contrato])
-//        println "periodos: $periodos"
+        println "periodos: $periodos"
 
         def hayPrej = PeriodoEjecucion.findAllByContrato(contrato)
-//        println "hayPrej: $hatPrej"
-        if(!hayPrej){
+        println "hayPrej: $hayPrej"
+        if (!hayPrej) {
             fcin = obra.fechaInicio
-            for (pr in (1 .. periodos[0])) {
+            for (pr in (1..periodos[0])) {
                 def dias = (pr - 1) * 30 //+ (crono.periodo - 1)
                 def prdo = 0
                 println "crear periodo... pr: $pr, dias: $dias, plazo: ${contrato.plazo}"
@@ -2032,10 +1988,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     prdo = 30
                 }
 
-                fcin = fcha? fcha + 1 : obra.fechaInicio
+                fcin = fcha ? fcha + 1 : obra.fechaInicio
                 fcfn = fcin + (prdo - 1).toInteger()      // 30 - 1 para contar el dia inicial
                 fcfm = preciosService.ultimoDiaDelMes(fcin)
-                if (fcfm < fcfn) {   /** sobrepas el mes --> 2 periodos **/
+                if (fcfm < fcfn) {   /** sobrepasa el mes --> 2 periodos **/
                     prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfm)
                     if (!prej) {
                         prej = new PeriodoEjecucion()
@@ -2071,7 +2027,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             flash.message = "Prej actualizado exitosamente"
                         }
                     }
-                }  else {
+                } else {
                     prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfn)
                     if (!prej) {
                         prej = new PeriodoEjecucion()
@@ -2105,21 +2061,35 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     vlor = CronogramaContrato.findByContratoAndVolumenObraAndPeriodo(contrato, vol, crono.periodo)
                     prej = PeriodoEjecucion.findAllByContratoAndNumero(contrato, crono.periodo)
                     /** ingresar la proporcion en los prej existentes conform el número de días **/
-                    println "valores cronograma: ${vlor}, prej: $prej"
+//                    println "valores cronograma: ${vlor}, prej: $prej"
                     def prco = 0.0
                     def pcnt = 0.0
                     def cntd = 0.0
-                    prej.each {pe ->
-                        if (prco > 0 ){
+                    def dias = 0
+                    def mes = 30
+                    def ultimo = contrato.plazo % 30 > 0 ? contrato.plazo % 30 : 30
+                    prej.each { pe ->
+                        /** se debe definir cuantos dias tiene el periodo actual **/
+                        if (ultimo != 30) {
+                            dias += (pe.fechaFin - pe.fechaInicio + 1)
+                            if((prco == 0) && (contrato.plazo - 30 * (crono.periodo -1)) <= ultimo) {
+                                mes = ultimo
+                            } else {
+                                mes = 30
+                            }
+                            println "dias: $dias, restan: ${contrato.plazo - 30 * (crono.periodo -1)}, mes = $mes, ultimo: $ultimo"
+                        }
+
+                        if (prco > 0) {
                             prco = vlor.precio - prco
                             pcnt = vlor.porcentaje - pcnt
                             cntd = vlor.cantidad - cntd
                         } else {
-                            prco = Math.round(vlor.precio/30* (pe.fechaFin - pe.fechaInicio + 1) * 100)/100
-                            pcnt = Math.round(vlor.porcentaje/30* (pe.fechaFin - pe.fechaInicio + 1) *100)/100
-                            cntd = Math.round(vlor.cantidad/30* (pe.fechaFin - pe.fechaInicio + 1)*100)/100
+                            prco = Math.round(vlor.precio / mes * (pe.fechaFin - pe.fechaInicio + 1) * 100) / 100
+                            pcnt = Math.round(vlor.porcentaje / mes * (pe.fechaFin - pe.fechaInicio + 1) * 100) / 100
+                            cntd = Math.round(vlor.cantidad / mes * (pe.fechaFin - pe.fechaInicio + 1) * 100) / 100
                         }
-                        println "crear crej con: ${vol.id}, ${pe.numero}, $prco, $pcnt, $cntd"
+//                        println "crear crej con: ${vol.id}, ${pe.numero}, $prco, $pcnt, $cntd"
                         def cronoEjecucion = new CronogramaEjecucion([
                                 volumenObra: vol,
                                 periodo    : pe,
@@ -2139,7 +2109,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             } //detalles.each
             /** una vez cargado el cronograma ejecuta la creacion de periods mensuales, lo cual puede asimilarse dentro de PREJ **/
             params.contrato = contrato?.id
-            actualizaPems()
+//            actualizaPems()
 //          actualizaPrej()  /** TODO pone para cada prej los valores de cronograma **/
 
         } //if cronogramas == 0
@@ -2172,6 +2142,277 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         } else {
             flash.message = "Pems actualizado exitosamente"
         }
+    }
+
+    /**
+     * copia PREJ actual a prej_t y CREJ actual a crej_t
+     * crea nuevos periodos e inserta los valores correspondientes en el cronograma de acuerdo
+     * a lo que se ejecuta en el periodo correspondiente
+     */
+    def terminaSuspensionTemp() {
+        println "termina suspension temp params: $params"
+        def cn = dbConnectionService.getConnection()
+        def cntr = Contrato.get(params.cntr)
+        def prejActual = PeriodoEjecucion.findAllByContrato(cntr)
+        def tx1 = ""
+        def tx2 = ""
+
+        /**TODO: hacer que cada vez se cargue en prej_t y crej_t el CREJ actual
+         * actualmente, se crea una sola vez, se deberia borrar e insertar el actual
+         * en las tablas temporales **/
+
+/*
+
+        //================== rspalda en Xrej_t valores de cronograma y periodo
+        tx1 = "delete from crej_t where prej__id in (select prej__id from prej_t where cntr__id = ${cntr.id})"
+        tx2 = "delete from prej_t where cntr__id = ${cntr.id}"
+        println "tx1: $tx1"
+        println "tx2: $tx2"
+        cn.execute(tx1.toString())
+        cn.execute(tx2.toString())
+
+        println "ha borrado registros temporales"
+        prejActual.each { pr ->
+            def prejTemp = new PeriodoEjecucionTmp()
+            prejTemp.contrato = pr.contrato
+            prejTemp.obra = pr.obra
+            prejTemp.fechaInicio = pr.fechaInicio
+            prejTemp.fechaFin = pr.fechaFin
+            prejTemp.numero = pr.numero
+            prejTemp.tipo = pr.tipo
+            if (!prejTemp.save(flush: true)) {
+                println "Error al crear prej de suspension: " + prejTemp.errors
+            }
+            def crej = CronogramaEjecucion.findAllByPeriodo(pr)
+            crej.each { ce ->
+                def crejTemp = new CronogramaEjecucionTmp()
+                crejTemp.periodo = prejTemp
+                crejTemp.precio = ce.precio
+                crejTemp.cantidad = ce.cantidad
+                crejTemp.porcentaje = ce.porcentaje
+                crejTemp.volumenObra = ce.volumenObra
+                if (!crejTemp.save(flush: true)) {
+                    println "Error al crear prej de suspension: " + crejTemp.errors
+                }
+            }
+        }
+        println "se ha creado registros temporales en prej_t y crej_t"
+        //=================
+
+*/
+
+        /** borra crej y prej actuales **/
+        cn.execute("delete from crej where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})".toString())
+        cn.execute("delete from pems where cntr__id = ${cntr.id}".toString())
+        cn.execute("delete from prej where cntr__id = ${cntr.id}".toString())
+
+        println "borrado de datos actuales de prej y crej"
+
+        def suspension
+        def diasSusp = 0
+        def suspensiones = Modificaciones.findAllByContratoAndTipoAndFechaFinIsNull(cntr, "S")
+        println "suspensión: ${suspensiones.size()}, inicio en ${suspensiones[0].fechaInicio.format('dd-MMM-yyyy'.toString())}"
+
+        def fin = new Date().parse("dd-MM-yyyy", params.fin)
+        def finSusp = fin - 1
+
+        if (suspensiones.size() > 1) {
+            return "Error... existe mas de una suspension en curso"
+        } else {
+            suspension = suspensiones[0]
+            diasSusp = finSusp - suspension.fechaInicio + 1
+            suspension.dias = diasSusp
+            suspension.fechaFin = finSusp
+            if (params.observaciones && params.observaciones.trim() != "") {
+                suspension.observaciones = params.observaciones + "       " + suspension.observaciones
+            }
+            if (!suspension.save(flush: true)) {
+                println "EEOR EN TEMINAR SUSSPENSION: " + suspension.errors
+            }
+        }
+
+        println "Fin de suspensión actualizada a: ${suspension.fechaFin}, dias: ${suspension.dias}"
+
+        // Los periodos anteriores a la fecha de suspension quedan igual
+        //// arreglar fechas de periodos y numero de dias
+
+        // para cada periodo afectado:
+        // redefine fechas de fin e inicio de los periodos existentes en funcion del plazo actual de la obra.
+
+        def periodos = PeriodoEjecucionTmp.findAllByContrato(cntr, [sort: 'fechaInicio'])
+        // cambia los periodos e inserta la suspension
+        def iniPrej
+        def finPrej
+        def plazoActual = 0
+        def fechaFinal
+        /** calcula fecha final de la obra **/
+        periodos.each { pr ->
+            if (iniPrej == null) {
+                iniPrej = pr.fechaInicio
+            } else {
+                if (iniPrej > pr.fechaInicio) iniPrej = pr.fechaInicio
+            }
+            if (finPrej == null) {
+                finPrej = pr.fechaFin
+            } else {
+                if (finPrej < pr.fechaFin) finPrej = pr.fechaFin
+            }
+            plazoActual = finPrej - iniPrej + 1
+        }
+        fechaFinal = iniPrej + plazoActual + diasSusp - 2 // no cuenta fin de suspension y dia final
+        println "fecha final de la obra: ${fechaFinal.format('dd-MMM-yyyy')}"
+
+        def cambiar = false
+        def fcha = iniPrej
+
+        def i = 0
+        while (fcha < fechaFinal) {
+            def pr = periodos[i]
+            def pe = new PeriodoEjecucion()
+            pe.contrato = pr.contrato
+            pe.obra = pr.obra
+            pe.fechaInicio = pr.fechaInicio
+            pe.fechaFin = pr.fechaFin
+            pe.numero = pr.numero
+            pe.tipo = pr.tipo
+            if (!pe.save(flush: true)) {
+                println "Error al crear prej de suspension: " + pe.errors
+            }
+
+            println "procesa peridodo: $pr.id, cambiar = $cambiar, desde ${pr.fechaInicio.format('dd-MMM-yyyy')} a " +
+                    "${pr.fechaFin.format('dd-MMM-yyyy')}"
+            if (!cambiar) {
+                if (pr.fechaFin > suspension.fechaInicio) {
+                    def prej = PeriodoEjecucion.get(pe.id)
+                    prej.fechaFin = suspension.fechaInicio - 1
+                    println "cambia fecha de fin a: ${pr.fechaFin.format('dd-MMM-yyyy')}"
+                    if (!prej.save(flush: true)) {
+                        println "Error al crear prej de suspension: " + prej.errors
+                    }
+                    cambiar = true
+                    // inserta perdiodo de suspension
+                    def prdoNuevo = new PeriodoEjecucion()
+                    prdoNuevo.fechaInicio = suspension.fechaInicio
+                    prdoNuevo.fechaFin = suspension.fechaFin - 1
+                    prdoNuevo.contrato = cntr
+                    prdoNuevo.obra = cntr.obra
+                    prdoNuevo.numero = pr.numero
+                    prdoNuevo.tipo = "S"
+                    if (!prdoNuevo.save(flush: true)) {
+                        println "Error al crear prej de suspension: " + prdoNuevo.errors
+                    }
+                    fcha = suspension.fechaFin
+                }
+            } else {
+                // cambiar periodos
+                def prej = PeriodoEjecucion.get(pe.id)
+                prej.fechaInicio = fcha
+                if (fechaFinal > preciosService.ultimoDiaDelMes(fcha)) {
+                    prej.fechaFin = preciosService.ultimoDiaDelMes(fcha)
+                    fcha = prej.fechaFin + 1
+                } else {
+                    prej.fechaFin = fechaFinal
+                    fcha = fechaFinal
+                }
+                if (!prej.save(flush: true)) {
+                    println "Error al crear prej de suspension: " + prej.errors
+                }
+            }
+            i++
+        }
+
+        /** ingresar en crej los valores en base a crej_t y periodo por periodo prej **/
+
+
+        def nuevoPrej = PeriodoEjecucion.findAllByContratoAndTipoNotEqual(cntr, 'S', [sort: 'fechaInicio'])
+        def periodoTmpProcesado
+        def fraccionContinua = false
+        def fraccion = 0.0
+        nuevoPrej.each { pe ->
+            //* si existe este periodo igual antes de la suspensión se lo copia **/
+            def prAntes = PeriodoEjecucionTmp.findByContratoAndFechaInicioAndFechaFin(cntr, pe.fechaInicio, pe.fechaFin)
+            if (prAntes) { /** si es el mismo periodo que el original se copia el CREJ **/
+                tx1 = "insert into crej (crejcntd, crejprct, crejprco, vlob__id, prej__id) " +
+                        "select crejcntd, crejprct, crejprco, vlob__id, ${pe.id} " +
+                        "from crej_t where prej__id = ${prAntes.id}"
+                println "inserta periodos iguales: $tx1"
+                cn.execute(tx1.toString())
+                periodoTmpProcesado = prAntes.id
+            } else {
+                println "procesar la suspension...."
+                def prParciales = PeriodoEjecucionTmp.findAllByContratoAndIdGreaterThanAndTipoNotEqualAndFechaFinLessThanEquals(cntr,
+                        periodoTmpProcesado, 'S', pe.fechaFin + diasSusp)
+                println "prparciales: $prParciales"
+                def dias = pe.fechaFin - pe.fechaInicio + 1
+                def p = prParciales.listIterator()
+                def crejNuevo
+                println "****inicia while con dias: $dias y prParciales: ${prParciales.size()} registros"
+                def actual = 0
+                while (p.hasNext()) { //** para cada periodo restante hasta cubrir los "días": inserta proporcion
+                    def prTmp = p.next()
+                    actual = 0
+                    def prNuevos = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndTipoNotEqual(cntr, pe.fechaInicio, 'S')
+                    println "procesa periodo ${prTmp.id} con dias: $dias"
+                    if(fraccionContinua){
+                        fraccion = 1 - fraccion
+                        fraccionContinua = false
+                    } else {
+                        fraccion = dias > (prTmp.fechaFin - prTmp.fechaInicio + 1) ? 1 : dias / (prTmp.fechaFin - prTmp.fechaInicio + 1)
+                    }
+                    println "valor de la fraccion: $fraccion"
+                    // si no existe el vlob se inserta caso contrario se añade
+                    def cr = CronogramaEjecucionTmp.findAllByPeriodo(prTmp)
+                    cr.each { c ->
+                        println "si existe se incrementa si no se inserta, procesa $c.id"
+                        def crej = CronogramaEjecucion.findAllByPeriodoAndVolumenObra(prNuevos[actual], c.volumenObra)
+                        if(crej.size() > 1){
+                            pritln "--------------------Error... existe mas de un regisro de vlob: ${c.volumenObra} en prej: ${prNuevos[actual].id} "
+                        }
+                        println "periodo actual a procesar: ${prNuevos[actual]} con crej: $crej"
+                        if (!crej) {
+                            println "inserta valores .... --> ${c.precio * fraccion}"
+                            crejNuevo = new CronogramaEjecucion()
+                            crejNuevo.periodo = prNuevos[actual]
+                            crejNuevo.volumenObra = c.volumenObra
+                            crejNuevo.cantidad = c.cantidad * fraccion
+                            crejNuevo.porcentaje = c.porcentaje * fraccion
+                            crejNuevo.precio = c.precio * fraccion
+                            crejNuevo.save(flush: true)
+                        } else {
+                            println "incrementa valores .... --> ${c.precio * fraccion}, al vlob: ${c.volumenObra}, actual ${prNuevos[actual]}"
+                            def ac_crej = CronogramaEjecucion.get(crej.first().id)
+                            ac_crej.cantidad   += (c.cantidad * fraccion).toDouble()
+                            ac_crej.porcentaje += (c.porcentaje * fraccion).toDouble()
+                            ac_crej.precio     += (c.precio * fraccion).toDouble()
+                            ac_crej.save(flush: true)
+                        }
+                    }
+                    if (dias < (prTmp.fechaFin - prTmp.fechaInicio + 1)) {
+                        println "sale del while"
+                        if(fraccion < 1) fraccionContinua = true
+                        break
+                    } else {
+                        periodoTmpProcesado = prParciales.first().id
+                        dias -= (prTmp.fechaFin - prTmp.fechaInicio + 1)
+                        println "continua proceso de este periodo: ${pe.fechaInicio.format('dd-MMM-yyyy')} - ${pe.fechaFin.format('dd-MMM-yyyy')} con dias: $dias"
+                        actual++
+                    }
+                }
+            }
+
+            /** TODO: verificar la fraccion y que se recoora en el crej losperiodos porque pone de 1 día lo que
+             debe hacer de 28 **/
+
+        }
+
+
+
+
+
+
+
+        cn.close()
+        render "OK"
     }
 
 

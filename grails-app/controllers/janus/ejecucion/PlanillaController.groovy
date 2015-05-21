@@ -1675,6 +1675,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado"
+        tiposPlanilla = tiposPlanilla.sort{it.codigo}.reverse()
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
                 minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini]
@@ -4449,7 +4450,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
                         poAnteriores.each { poAnterior ->
                             prmt = [:]
-                            def pems = PeriodoEjecucionMes.findAllByContratoAndFechaFinLessThanEquals(p.contrato,
+//                            def pems = PeriodoEjecucionMes.findAllByContratoAndFechaFinLessThanEquals(p.contrato,
+//                                    p.fechaFin, [sort: 'fechaInicio'])
+                            def pems = PeriodoEjecucion.findAllByContratoAndFechaFinLessThanEquals(p.contrato,
                                     p.fechaFin, [sort: 'fechaInicio'])
                             parcial = 0.0
                             total = 0.0
@@ -4512,7 +4515,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
             prdo++
             plAcumulado += plnl.valor
-            def pems = PeriodoEjecucionMes.findAllByContratoAndFechaFinLessThanEquals(plnl.contrato,
+//            def pems = PeriodoEjecucionMes.findAllByContratoAndFechaFinLessThanEquals(plnl.contrato,
+//                    plnl.fechaFin, [sort: 'fechaInicio'])
+            def pems = PeriodoEjecucion.findAllByContratoAndFechaFinLessThanEquals(plnl.contrato,
                     plnl.fechaFin, [sort: 'fechaInicio'])
             parcial = 0.0
             total = 0.0
@@ -4541,8 +4546,20 @@ class PlanillaController extends janus.seguridad.Shield {
             prmt.periodo = prdo
             prmt.mes = componeMes(plnl.fechaInicio.format('MMM-yyyy'))
 
+//            println "****** ----hay anteriores: $hayAnteriores"
             if(hayAnteriores){
-                prmt.valorPo = Math.round((plnl.valor - plAnteriores(plnl))*(1 - cntr.porcentajeAnticipo/100)*100)/100
+
+                def pa = Planilla.findAllByContratoAndTipoPlanillaAndFechaPresentacionLessThan(plnl.contrato,
+                        TipoPlanilla.findByCodigo('P'), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])?.last()
+                def planillado = ReajustePlanilla.findAllByPlanilla(pa, [sort: 'periodo']).last()?.acumuladoPlanillas
+
+                def saldo = cntr.anticipo - planillado * (1 - cntr.porcentajeAnticipo/100)
+//                println "****** saldo: $saldo, planillado: $planillado"
+                if (Math.round((plnl.valor - plAnteriores(plnl))*(1 - cntr.porcentajeAnticipo/100)*100)/100 > saldo) {
+                    prmt.valorPo = Math.round(saldo *100)/100
+                } else {
+                    prmt.valorPo = Math.round((plnl.valor - plAnteriores(plnl))*(1 - cntr.porcentajeAnticipo/100)*100)/100
+                }
             } else {
                 prmt.valorPo = Math.round((plnl.valor)*(1 - cntr.porcentajeAnticipo/100)*100)/100
             }
