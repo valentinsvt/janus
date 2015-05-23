@@ -501,6 +501,7 @@ class ReportePlanillas3Controller {
 
         def totCrono = 0
         def totPlan = 0
+        def totlPo = 0
 
         reajustesPlanilla.each {
             if(it.periodo == 0){
@@ -512,24 +513,23 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaP0, new Paragraph(numero(it.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaP0, new Paragraph(numero(it.acumuladoCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                totCrono += it.acumuladoCronograma
+                totCrono = it.acumuladoCronograma
                 addCellTabla(tablaP0, new Paragraph(numero(it.parcialPlanillas, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaP0, new Paragraph(numero(it.acumuladoPlanillas, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                totPlan += it.acumuladoPlanillas
+                totPlan = it.acumuladoPlanillas
                 addCellTabla(tablaP0, new Paragraph(numero(it.valorPo, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
             }
+            totlPo += it.valorPo
         }
 
 
-/*
         if (periodos.size() > 1) {
             addCellTabla(tablaP0, new Paragraph("TOTAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaP0, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaP0, new Paragraph("" , fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+            addCellTabla(tablaP0, new Paragraph(numero(totCrono, 2) , fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
             addCellTabla(tablaP0, new Paragraph(numero(totPlan, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaP0, new Paragraph("", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaP0, new Paragraph(numero(totlPo, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         }
-*/
 
 
         document.add(tablaP0);
