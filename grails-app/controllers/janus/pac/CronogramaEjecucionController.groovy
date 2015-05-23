@@ -6,7 +6,7 @@ import janus.Modificaciones
 import janus.Obra
 import janus.VolumenesObra
 import janus.ejecucion.MultasPlanilla
-import janus.ejecucion.PeriodoEjecucionMes
+//import janus.ejecucion.PeriodoEjecucionMes
 import janus.ejecucion.PeriodoPlanilla
 import janus.ejecucion.Planilla
 import janus.ejecucion.TipoPlanilla
@@ -1806,8 +1806,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     }
 
 
+/*
     def actualizaPems() {
-        /** en base a prej ingresa o actualiza dato en pems **/
+        */
+/** en base a prej ingresa o actualiza dato en pems **//*
+
         println "actualizaPems params: $params"
         def pems
         def fcin     //fecha de incio periodo pems
@@ -1855,7 +1858,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 prmt.parcialCronograma = parcial
                 insertaPems(prmt)
 
-            } else { /** ingresar solo los dias restantes ver: ../Documentos/pems.sql **/
+            } else { */
+/** ingresar solo los dias restantes ver: ../Documentos/pems.sql **//*
+
                 vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
                 parcial = vlor[0]
                 println "parcial: $parcial"
@@ -1875,6 +1880,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         render "ok"
     }
+*/
 
     def actualizaPrej() {
         /** en base a prej ingresa o actualiza dato en pems **/
@@ -1897,6 +1903,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         render "ok"
     }
 
+/*
     def insertaPems(prmt) {
         def pems = new PeriodoEjecucionMes()
         println "inserta pems del contrato : ${prmt}"
@@ -1924,6 +1931,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             flash.message = "Pems actualizado exitosamente"
         }
     }
+*/
 
 
     def creaCronogramaEjec() {
