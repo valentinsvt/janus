@@ -4140,8 +4140,10 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         def plnl = Planilla.get(params.id)
-        plnl.descuentos = descuentoAnticipo(params.id)
-        plnl.save(flush: true)
+        if(plnl.tipoPlanilla.toString() == 'P') {
+            plnl.descuentos = descuentoAnticipo(params.id)
+            plnl.save(flush: true)
+        }
 
 //        println "2.completa procesaReajuste"
 
@@ -4962,10 +4964,10 @@ class PlanillaController extends janus.seguridad.Shield {
         def plnl = Planilla.get(id)
         def cntr = plnl.contrato
         def valorPo = 0.0
-        def pa = Planilla.findAllByContratoAndTipoPlanillaAndFechaPresentacionLessThan(plnl.contrato,
-                TipoPlanilla.findByCodigo('P'), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])?.last()
-
-        if(pa) {  //* si existe planillas anteriores **/
+        def anteriores = Planilla.findAllByContratoAndTipoPlanillaAndFechaPresentacionLessThan(plnl.contrato,
+                TipoPlanilla.findByCodigo('P'), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])
+        if (anteriores) { //* si existe planillas anteriores **/
+            def pa = anteriores?.last()
             def planillado = ReajustePlanilla.findAllByPlanilla(pa, [sort: 'periodo'])
 //            println "valor anterior:------ planillas anteriores: $planillado"
             def totPlnl = 0.0
