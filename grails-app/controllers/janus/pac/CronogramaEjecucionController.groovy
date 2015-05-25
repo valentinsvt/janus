@@ -137,6 +137,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     params.cntr = cntr.id
                     params.suspension = modificacion.id
                     params.fcfn = finSusp.format("dd-MM-yyyy")
+                    println "registra suspesnió e invoca a terminaSuspensionTemp"
                     terminaSuspensionTemp()
                 }
                 render "OK"
@@ -1883,7 +1884,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 */
 
     def actualizaPrej() {
-        /** en base a prej ingresa o actualiza dato en pems **/
+        /** en base a prej ingresa o actualiza dato en prej **/
         println "actualizaPrej params: $params"
         def cntr = Contrato.get(params.contrato)
         def prej = PeriodoEjecucion.findAllByContratoAndTipoNotEqual(cntr, 'S')
@@ -1895,7 +1896,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             pr.parcialCronograma = vlor[0]
             if (!pr.save(flush: true)) {
                 flash.message = "No se pudo actualizar prej"
-                println "Error al actualizar pems: " + prej.errors
+                println "Error al actualizar prej: " + prej.errors
             } else {
                 flash.message = "Prej actualizado exitosamente"
             }
@@ -2111,7 +2112,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             println "Error al guardar el crono ejecucion del crono " + crono.id
                             println cronoEjecucion.errors
                         } else {
-                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
+//                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
                         }
                     }
 
@@ -2126,27 +2127,27 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     }
 
     def insertaPrej(prmt) {
-        def pems = new PeriodoEjecucion()
-        println "inserta pems del contrato : ${prmt}"
-        def pems_an = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(prmt.contrato, prmt.fechaInicio, prmt.fechaFin)
-        if (pems_an) {
-            pems_an.obra = prmt.obra
-            pems_an.periodoEjecucion = prmt.periodoEjecucion
-            pems_an.parcialCronograma = prmt.parcialCronograma
+        def prej = new PeriodoEjecucion()
+        println "inserta prej del contrato : ${prmt}"
+        def prej_an = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(prmt.contrato, prmt.fechaInicio, prmt.fechaFin)
+        if (prej_an) {
+            prej_an.obra = prmt.obra
+            prej_an.periodoEjecucion = prmt.periodoEjecucion
+            prej_an.parcialCronograma = prmt.parcialCronograma
             println "actualiza valores de: $prmt"
         } else {
-            pems.contrato = prmt.contrato
-            pems.obra = prmt.obra
-            pems.periodoEjecucion = prmt.periodoEjecucion
-            pems.fechaInicio = prmt.fechaInicio
-            pems.fechaFin = prmt.fechaFin
-            pems.parcialCronograma = prmt.parcialCronograma
+            prej.contrato = prmt.contrato
+            prej.obra = prmt.obra
+            prej.periodoEjecucion = prmt.periodoEjecucion
+            prej.fechaInicio = prmt.fechaInicio
+            prej.fechaFin = prmt.fechaFin
+            prej.parcialCronograma = prmt.parcialCronograma
             println "inserta valores de: $prmt"
         }
 
-        if (!pems.save(flush: true)) {
-            flash.message = "No se pudo actualizar pems"
-            println "Error al actualizar pems: " + pems.errors
+        if (!prej.save(flush: true)) {
+            flash.message = "No se pudo actualizar prej"
+            println "Error al actualizar prej: " + prej.errors
         } else {
             flash.message = "Pems actualizado exitosamente"
         }
@@ -2205,7 +2206,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         /** borra crej y prej actuales **/
         cn.execute("delete from crej where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})".toString())
-        cn.execute("delete from pems where cntr__id = ${cntr.id}".toString())
         cn.execute("delete from prej where cntr__id = ${cntr.id}".toString())
 
         println "borrado de datos actuales de prej y crej"
@@ -2236,7 +2236,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             suspension.dias = diasSusp
             suspension.fechaFin = finSusp
             if (params.observaciones && params.observaciones.trim() != "") {
-                suspension.observaciones = params.observaciones + "       " + suspension.observaciones
+                suspension.observaciones = params.observaciones + "||" + suspension.observaciones
             }
             if (!suspension.save(flush: true)) {
                 println "EEOR EN TEMINAR SUSSPENSION: " + suspension.errors

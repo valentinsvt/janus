@@ -4518,7 +4518,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //                println "planilla: ${p.id} tipo: ${p.tipoPlanilla}"
             }
 
-//            println "----planilla actual ${plnl.id} tipo: ${plnl.tipoPlanilla}"
+            println "----planilla actual ${plnl.id} tipo: ${plnl.tipoPlanilla}"
 
             prdo++
             plAcumulado += plnl.valor
@@ -4534,8 +4534,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
                 total += ms.parcialCronograma
             }
-//            println "Cronograma <<<<<<<<<<<<< $pems \n plnl: ${plnl.id} tipo: ${plnl.tipoPlanilla}, " +
-//                    "cronogrmama: $total, $parcial, planillado: ${plnl.valor}, ac: ${plAcumulado}"
+            println "Cronograma <<<<<<<<<<<<< $pems \n plnl: ${plnl.id} tipo: ${plnl.tipoPlanilla}, " +
+                    "cronogrmama: $total, $parcial, planillado: ${plnl.valor}, ac: ${plAcumulado}"
 
             prmt = [:]
             prdoInec = indicesDisponibles(plnl, null) /* para recalcular reajuste */

@@ -212,6 +212,7 @@ class ReportePlanillas3Controller {
             document.add(tablaFirmas)
         }
 
+/*
         def tablaObservaciones = new PdfPTable(3);
         tablaObservaciones.setWidthPercentage(100);
         tablaObservaciones.setSpacingBefore(30)
@@ -221,6 +222,7 @@ class ReportePlanillas3Controller {
         }else{
             addCellTabla(tablaObservaciones, new Paragraph("Observaciones: ", fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
         }
+*/
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
@@ -1316,8 +1318,8 @@ class ReportePlanillas3Controller {
 
             def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
             def height = 12
-            def maxRows = 45
-            def extraRows = 9
+            def maxRows = 46     //45
+            def extraRows = 7    //9
             def currentRows = 0
             def firmaRows = 6
 
@@ -1326,7 +1328,8 @@ class ReportePlanillas3Controller {
 
             def maxRowsLastPag = maxRows - extraRows
 
-            def totalPags = Math.ceil(totalRows / maxRows).toInteger()
+//            def totalPags = Math.ceil(totalRows / maxRows).toInteger()
+            def totalPags = Math.ceil((totalRows + extraRows) / maxRows).toInteger()
 
 //            println "totalRows: " + totalRows + "    maxRows: " + maxRows + "   maxRowsLastPag: " + maxRowsLastPag
 //
@@ -1345,6 +1348,19 @@ class ReportePlanillas3Controller {
             def sumaParcialAcumulado = 0, sumaTotalAcumulado = 0
 
             def rowsCurPag = 1
+
+            /** crea primera página --- revisar --- **/
+/*
+            document.newPage()
+            tablaDetalles = new PdfPTable(11);
+            tablaDetalles.setWidthPercentage(100);
+            tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+            tablaDetalles.setSpacingAfter(1f);
+            printHeaderDetalle([pag: currentPag, total: totalPags])
+            rowsCurPag = 1
+*/
+            /** fin primer página **/
+
             detalle.eachWithIndex { vol, i ->
                 def det = DetallePlanilla.findByPlanillaAndVolumenObra(planilla, vol)
                 def anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasAnteriores[0..planillasAnteriores.size() - 2], vol)
@@ -1355,7 +1371,11 @@ class ReportePlanillas3Controller {
                 totalAnterior += valAnt
                 totalActual += (val.toDouble().round(2))
                 totalAcumulado += (val.toDouble().round(2) + valAnt)
-                if ((currentPag == totalPags && rowsCurPag == maxRowsLastPag) || (currentRows % maxRows == 0)) {
+                println "currentPag: $currentPag totalPags: $totalPags rowsCurPag: $rowsCurPag maxRowsLastPag: $maxRowsLastPag currentRows: $currentRows maxRows: $maxRows"
+//                if (((currentPag == totalPags) && (rowsCurPag == maxRowsLastPag)) || ((currentRows % maxRows == 0) && (rowsCurPag >= maxRowsLastPag))) {
+                if (((currentPag == totalPags) && (rowsCurPag == maxRowsLastPag)) || (currentRows % maxRows == 0)) {
+                    println "crea nueva página por: ${(currentPag == totalPags) && (rowsCurPag == maxRowsLastPag)}, o, ${currentRows % maxRows == 0}"
+
                     document.newPage()
 
                     tablaDetalles = new PdfPTable(11);
@@ -1410,7 +1430,7 @@ class ReportePlanillas3Controller {
 
 //                println "\t" + rowsCurPag
 
-                if ((currentPag == totalPags - 1 && rowsCurPag % maxRowsLastPag == maxRowsLastPag - 1) || (currentRows % maxRows == maxRows - 1)) {
+                if ((currentPag == totalPags - 1 && rowsCurPag % maxRowsLastPag == maxRowsLastPag - 1) || (currentRows % maxRows == maxRows - 1)) {  /** ????? **/
 //                    println "currentPag " + currentPag + "   totalPags " + totalPags + "   currentRows " + currentRows + "   maxRowsLastPag " + maxRowsLastPag + "    maxRows " + maxRows
                     //footer aca
 //                    if (currentPag == totalPags) {
@@ -1442,7 +1462,7 @@ class ReportePlanillas3Controller {
 
                 printFirmas([tipo: "detalle", orientacion: "vertical"])
 
-                document.add(tablaObservaciones)
+//                document.add(tablaObservaciones)
             }
         }
 
@@ -1699,15 +1719,17 @@ class ReportePlanillas3Controller {
             document.add(tablaFirmas)
         }
 
-        def tablaObservaciones = new PdfPTable(3);
-        tablaObservaciones.setWidthPercentage(100);
-        tablaObservaciones.setSpacingBefore(30)
+//        def tablaObservaciones = new PdfPTable(3);
+//        tablaObservaciones.setWidthPercentage(100);
+//        tablaObservaciones.setSpacingBefore(30)
 
+/*
         if(planilla?.observaciones != null){
             addCellTabla(tablaObservaciones, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
         }else{
             addCellTabla(tablaObservaciones, new Paragraph("Observaciones: ", fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
         }
+*/
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
@@ -2980,7 +3002,7 @@ class ReportePlanillas3Controller {
 
                 printFirmas([tipo: "detalle", orientacion: "vertical"])
 
-                document.add(tablaObservaciones)
+//                document.add(tablaObservaciones)
             }
         }
 
