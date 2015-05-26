@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>Reporte de avance</title>
+        <title>Informe de avance</title>
 
         <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
@@ -54,7 +54,7 @@
             </legend>
             %{--<elm:datepicker name="fecha" value="${new Date()}"/>--}%
             <g:select name="fecha" from="${fechas}"/>
-            <g:link class="btn btnVer" action="tablaAvance" id="${contrato.id}" style="margin-bottom:9px;">Ver</g:link>
+            <g:link class="btn btnVer" action="tablaAvance" id="${contrato.id}" style="margin-bottom:9px;">Ver informe</g:link>
         </fieldset>
 
         <fieldset class="hide" id="fsTextos">

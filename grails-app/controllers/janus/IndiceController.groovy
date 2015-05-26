@@ -465,7 +465,6 @@ class IndiceController extends janus.seguridad.Shield {
     }
 
     def actualizaVlin() {
-        /* TODO hacer función y mejorar presentación de valores */
 //        println "actualizaVlin: " + params
 //        println("clase " + params?.item?.class)
         //formato de id:###/new _ prin _ indc _ valor
@@ -480,7 +479,14 @@ class IndiceController extends janus.seguridad.Shield {
             def vlor = it.split("_")
             def nuevo = new ValorIndice()
 //            println "vlor: " + vlor
+            def existe = ValorIndice.get(vlor[1].toInteger())
+/*
+
             if (vlor[0] != "new") {
+                nuevo = ValorIndice.get(vlor[0].toInteger())
+            }
+*/
+            if(existe){
                 nuevo = ValorIndice.get(vlor[0].toInteger())
             }
             nuevo.periodo = PeriodosInec.get(vlor[1])

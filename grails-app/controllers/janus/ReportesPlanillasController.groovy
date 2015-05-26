@@ -472,8 +472,8 @@ class ReportesPlanillasController {
                     le("fechaFin", fecha)
                     order("fechaFin", "desc")
                 }
-                def periodo = PeriodoPlanilla.findAllByPlanilla(planillasAvance[0], [sort: "fechaIncio", order: "desc"])
-                def dia = periodo[0].fechaIncio
+                def periodo = Planilla.findAllById(planillasAvance[0].id, [sort: "fechaInicio", order: "desc"])
+                def dia = periodo[0].fechaInicio
                 def fin = periodo[0].fechaFin
                 while (dia <= fin) {
                     def valM = "", valT = ""
@@ -496,7 +496,7 @@ class ReportesPlanillasController {
             } else {
                 def num = (i + 1).toString().padLeft(2, "0")
                 def val = band == 0 ? avanceContrato["frase" + num] : ""
-                html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, style: "width: 1000px; height:200px;")
+                html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, style: "width: 1000px; height:100px;")
             }
         }
 //        }
@@ -529,8 +529,11 @@ class ReportesPlanillasController {
         params.texto.each { t ->
             //numer^texto
             def parts = t.toString().split("\\^")
+//            println "--------- $parts, ${parts.size()}"
             if (parts.size() == 2) {
                 avanceContrato["frase" + parts[0]] = parts[1]
+            } else if (parts.size() == 1){
+                avanceContrato["frase" + parts[0]] = ""
             }
         }
         if (!avanceContrato.save(flush: true)) {
@@ -852,8 +855,8 @@ class ReportesPlanillasController {
                 document.add(new Paragraph(t, fontTitle))
                 if (i == 2) {
                     //lo del clima
-                    def periodo = PeriodoPlanilla.findAllByPlanilla(planillasAvance.last(), [sort: "fechaIncio", order: "desc"])
-                    def dia = periodo[0].fechaIncio
+                    def periodo = Planilla.findAllById(planillasAvance.last().id, [sort: "fechaInicio", order: "desc"])
+                    def dia = periodo[0].fechaInicio
                     def fin = periodo[0].fechaFin
 
                     def tablaClima = new PdfPTable(3);

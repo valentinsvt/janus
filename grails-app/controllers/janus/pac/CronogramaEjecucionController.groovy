@@ -111,7 +111,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
             if (params.fin) {
                 fin = new Date().parse("dd-MM-yyyy", params.fin)
-                finSusp = fin - 1
+                finSusp = fin
                 dias = finSusp - ini + 1
             }
 
@@ -137,7 +137,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     params.cntr = cntr.id
                     params.suspension = modificacion.id
                     params.fcfn = finSusp.format("dd-MM-yyyy")
-                    println "registra suspesnió e invoca a terminaSuspensionTemp"
+                    println "registra suspesión e invoca a terminaSuspensionTemp con $params.fcfn"
                     terminaSuspensionTemp()
                 }
                 render "OK"
@@ -2226,7 +2226,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //        println "suspensión: ${suspensiones.size()}, inicio en ${suspensiones[0].fechaInicio.format('dd-MMM-yyyy'.toString())}"
 
         def fin = new Date().parse("dd-MM-yyyy", params.fin)
-        def finSusp = fin - 1
+        def finSusp = fin
 
         if (suspensiones.size() > 1) {
             return "Error... existe mas de una suspension en curso"
@@ -2394,16 +2394,16 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             crejNuevo = new CronogramaEjecucion()
                             crejNuevo.periodo = prNuevos[actual]
                             crejNuevo.volumenObra = c.volumenObra
-                            crejNuevo.cantidad = c.cantidad * fraccion
-                            crejNuevo.porcentaje = c.porcentaje * fraccion
-                            crejNuevo.precio = c.precio * fraccion
+                            crejNuevo.cantidad = Math.round(c.cantidad * fraccion *1000) /1000
+                            crejNuevo.porcentaje = Math.round(c.porcentaje * fraccion *100) / 100
+                            crejNuevo.precio = Math.round(c.precio * fraccion *100) / 100
                             crejNuevo.save(flush: true)
                         } else {
 //                            println "incrementa valores .... --> ${c.precio * fraccion}, al vlob: ${c.volumenObra}, actual ${prNuevos[actual]}"
                             def ac_crej = CronogramaEjecucion.get(crej.first().id)
-                            ac_crej.cantidad   += (c.cantidad * fraccion).toDouble()
-                            ac_crej.porcentaje += (c.porcentaje * fraccion).toDouble()
-                            ac_crej.precio     += (c.precio * fraccion).toDouble()
+                            ac_crej.cantidad   += Math.round((c.cantidad * fraccion).toDouble() *1000) / 1000
+                            ac_crej.porcentaje += Math.round((c.porcentaje * fraccion).toDouble() *100) / 100
+                            ac_crej.precio     += Math.round((c.precio * fraccion).toDouble() * 100) / 100
                             ac_crej.save(flush: true)
                         }
                     }

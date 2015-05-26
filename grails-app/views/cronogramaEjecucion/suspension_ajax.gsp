@@ -71,7 +71,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="motivo" class="required span5 "/>
+            <g:textArea name="motivo" class="required span6" style="height: 35px; width: 500px"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -86,7 +86,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="observaciones" class="required span4"/>
+            <g:textField name="observaciones" class="required span5"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>

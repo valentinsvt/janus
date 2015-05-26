@@ -433,7 +433,7 @@
                             %{--<i class=" icon-paperclip"></i> Reporte de avance--}%
                             %{--</a>--}%
                                 <g:link controller="reportesPlanillas" action="reporteAvanceUI" id="${contrato?.id}">
-                                    <i class=" icon-paperclip"></i> Reporte de avance
+                                    <i class=" icon-paperclip"></i> Informe de avance
                                 </g:link>
                             </li>
 

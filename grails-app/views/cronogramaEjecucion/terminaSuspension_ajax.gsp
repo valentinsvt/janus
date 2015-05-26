@@ -30,7 +30,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="observaciones" class="span4"/>
+            <g:textField name="observaciones" class="span5"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
