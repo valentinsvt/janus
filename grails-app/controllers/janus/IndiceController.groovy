@@ -465,7 +465,7 @@ class IndiceController extends janus.seguridad.Shield {
     }
 
     def actualizaVlin() {
-//        println "actualizaVlin: " + params
+        println "actualizaVlin: " + params
 //        println("clase " + params?.item?.class)
         //formato de id:###/new _ prin _ indc _ valor
         if(params?.item?.class == java.lang.String) {
@@ -479,16 +479,17 @@ class IndiceController extends janus.seguridad.Shield {
             def vlor = it.split("_")
             def nuevo = new ValorIndice()
 //            println "vlor: " + vlor
-            def existe = ValorIndice.get(vlor[1].toInteger())
+            def existe = ValorIndice.findByPeriodoAndIndice(PeriodosInec.get(vlor[1].toInteger()), Indice.get(vlor[2].toInteger()))
+            println "inidice: ${existe?.indice}"
 /*
-
             if (vlor[0] != "new") {
                 nuevo = ValorIndice.get(vlor[0].toInteger())
             }
 */
             if(existe){
-                nuevo = ValorIndice.get(vlor[0].toInteger())
+                nuevo = ValorIndice.get(existe.id)
             }
+
             nuevo.periodo = PeriodosInec.get(vlor[1])
             nuevo.indice = Indice.get(vlor[2])
             nuevo.valor = vlor[3].toDouble()

@@ -157,9 +157,11 @@
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                        <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                         <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
                                             <i class="icon-gear"></i>
                                         </div>
+                                        </g:if>
                                     </g:if>
                                 </g:if>
 
@@ -174,9 +176,11 @@
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
+                                    <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                     <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
                                          <i class="icon-gear"></i>
                                     </div>
+                                    </g:if>
                                     </g:if>
                                 </g:if>
 
@@ -216,7 +220,7 @@
                                     </g:if>
                                 </g:if>
                                 <g:if test="${janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
-                                    <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
+                                    <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planillaInstance.id}"
                                             class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
                                     </g:link>
