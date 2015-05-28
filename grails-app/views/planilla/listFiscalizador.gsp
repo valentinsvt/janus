@@ -157,27 +157,32 @@
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
-                                        <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                        %{--<g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">--}%
                                         <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
                                             <i class="icon-gear"></i>
                                         </div>
-                                        </g:if>
+                                        %{--</g:if>--}%
                                     </g:if>
                                 </g:if>
 
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']}">
                                     <g:link controller="planilla" action="form" params="[id:planillaInstance.id,contrato:planillaInstance.contrato.id]" rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>
                                     </g:link>
                                 </g:if>
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']}">
                                     <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
                                     <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                     <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                         <i class="icon-gear"></i>
+                                    </div>
+                                    </g:if>
+                                    <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                    <div data-id="${planillaInstance.id}" rel="tooltip" title="ProcesarQ" class="btn btn-small btnProcesaQ">
                                          <i class="icon-gear"></i>
                                     </div>
                                     </g:if>
@@ -328,7 +333,7 @@
                                             <i class="icon-print"></i>
                                         </a>
                                     </g:if>
-                                    <g:if test="${(planillaInstance.tipoPlanilla.codigo == 'P' || planillaInstance.tipoPlanilla.codigo == 'Q') && Math.abs(lblBtn) > 3}">
+                                    <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['P', 'Q']) && Math.abs(lblBtn) > 3}">
                                         <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
                                             <i class="icon-print"></i>
                                         </a>
@@ -562,6 +567,22 @@
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'procesar')}",
+                        data    : {
+                            id : id
+                        },
+                        success : function (msg) {
+                            location.reload();
+                        }
+                    });
+                    return false;
+                }); //click btn show
+
+                $(".btnProcesaQ").click(function () {
+                    var id = $(this).data("id");
+                    console.log("id:" + id)
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'procesarLq')}",
                         data    : {
                             id : id
                         },

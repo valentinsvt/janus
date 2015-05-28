@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 2/7/13
-  Time: 4:34 PM
-  To change this template use File | Settings | File Templates.
---%>
 
 <%@ page import="janus.ejecucion.TipoPlanilla; janus.ejecucion.Planilla" contentType="text/html;charset=UTF-8" %>
 <html>
@@ -165,16 +158,8 @@
     </div>
 
     <div class="span4">
-%{--
-        <g:if test="${planillaInstance.id}">
-            ${planillaInstance?.numero}
-        </g:if>
-        <g:else>
---}%
             <g:textField name="numero" maxlength="30" class="span3 required allCaps"
                          value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
-        %{--<span class="uneditable-input span3">${planillaInstance.numero}</span>--}%
-        %{--</g:else>--}%
         <p class="help-block ui-helper-hidden"></p>
     </div>
 
@@ -183,11 +168,7 @@
     </div>
 
     <div class="span4">
-        %{--<g:set var="fisc" value="${janus.Departamento.get(1)}"/>--}%
-        %{--<g:select name="fiscalizador.id" from="${janus.Persona.findAllByDepartamento(fisc)}" value="${planillaInstance?.fiscalizador ? planillaInstance.fiscalizadorId : fiscalizadorAnterior}" optionKey="id" optionValue="${{ it.nombre + " " + it.apellido }}"/>--}%
-
         ${contrato.fiscalizador?.titulo} ${contrato.fiscalizador?.nombre} ${contrato.fiscalizador?.apellido}
-
         <p class="help-block ui-helper-hidden"></p>
     </div>
 
