@@ -881,11 +881,10 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaDatos, new Paragraph(fechaConFormato(new Date(), "dd-MMM-yyyy"), fontTd), [border: Color.LIGHT_GRAY, bwr: 0.1, bcr: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatos, new Paragraph("Fuente", fontTh), [border: Color.LIGHT_GRAY, bwl: 0.1, bcl: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatos, new Paragraph("INEC " + PeriodoPlanilla.findAllByPlanilla(planilla, [sort: "id", order: "desc"])[0]?.periodo?.descripcion, fontTd), [border: Color.LIGHT_GRAY, bwr: 0.1, bcr: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatos, new Paragraph("INEC ", fontTh), [border: Color.LIGHT_GRAY, bwr: 0.1, bcr: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatos, new Paragraph("Salarios", fontTh), [border: Color.LIGHT_GRAY, bwl: 0.1, bcl: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaDatos, new Paragraph("C.G.E.", fontTd), [border: Color.LIGHT_GRAY, bwr: 0.1, bcr: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-
 
 
         PdfPTable tablaDatos2 = new PdfPTable(1);
@@ -920,34 +919,85 @@ class ReportePlanillas3Controller {
         def numD3 = 0
         def anterioresD
 
-        def anteriorRjD = reajustesPlanilla.size() - 2
+//        def anteriorRjD = reajustesPlanilla.size() - (reajustesPlanilla.size() -1)
+        def anteriorRjD = 0
 
+//        if(reajustesPlanilla.size() == 1){
+//            anteriorRjD = reajustesPlanilla.size() -2
+//        }
+//        else if(reajustesPlanilla.size() == 2){
+//            anteriorRjD = 0
+//        }else{
+//            anteriorRjD = reajustesPlanilla.size() - (reajustesPlanilla.size() -1)
+//        }
+
+
+//
 //        println("---> " + reajustesPlanilla.size())
 //        println("---> " + anteriorRjD)
 
-        if(anteriorRjD >= 0){
-            numD3 = reajustesPlanilla[anteriorRjD].planillaReajustada
-            anterioresD = ReajustePlanilla.findAllByPlanilla(numD3)
-            anterioresD.each{
-                rjTotalAnteriorD2 += it.valorReajustado
-            }
-        }else{
-            rjTotalAnteriorD2 = 0
-        }
+//        if(anteriorRjD >= 0){
+//            numD3 = reajustesPlanilla[anteriorRjD].planillaReajustada
+//            anterioresD = ReajustePlanilla.findAllByPlanilla(numD3)
+//            anterioresD.each{
+//                rjTotalAnteriorD2 += it.valorReajustado
+//            }
+//        }else{
+//            rjTotalAnteriorD2 = 0
+//        }
 
 
         pagos.each{ per, pago ->
             promedioActualD2 += pago.valor
         }
 
-        totalProcesadoD2 = promedioActualD2 - rjTotalAnteriorD2
+//        totalProcesadoD2 = promedioActualD2 - rjTotalAnteriorD2
 
-//        println("valor reajustado anterior " + rjTotalAnterior)
-//        println("valor actual " + promedioActual)
+//        println("valor reajustado anterior " + rjTotalAnteriorD2)
+//        println("valor actual " + promedioActualD2)
 
-        addCellTabla(tablaDatos4, new Paragraph(numero(rjTotalAnteriorD2 ?: 0,2), fontTh), [border: Color.BLACK, bwt: 0.1, bwb: 0.1, bwl: 0.1, bcl: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+
+
+        //nuevo algoritmo para busqueda de planillas anteriores
+
+        def ultimoReajuste = reajustesPlanilla.last().planillaReajustada
+        def planillasReajuste = []
+        def valoresAnteriores = []
+        def totalAnteriores = 0
+
+        println("ultimo " + ultimoReajuste)
+
+        if(reajustesPlanilla.size() > 1){
+            reajustesPlanilla.each { pl ->
+                if(pl.planillaReajustada != ultimoReajuste){
+                    planillasReajuste += pl.planillaReajustada
+                }
+            }
+        }else{
+            planillasReajuste += -1
+        }
+
+        println("planilla reajuste " + planillasReajuste.last())
+
+        if(planillasReajuste.last() != -1){
+            valoresAnteriores = ReajustePlanilla.findAllByPlanilla(planillasReajuste.last())
+            valoresAnteriores.each {
+                totalAnteriores += it.valorReajustado
+            }
+        }else{
+            println("anticipo")
+        }
+
+        println("anteriores " + valoresAnteriores)
+        println("total " + totalAnteriores)
+
+        totalProcesadoD2 = promedioActualD2 - totalAnteriores
+
+        addCellTabla(tablaDatos4, new Paragraph(numero(totalAnteriores ?: 0,2), fontTh), [border: Color.BLACK, bwt: 0.1, bwb: 0.1, bwl: 0.1, bcl: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaDatos4, new Paragraph(numero(promedioActualD2 ?: 0,2), fontTh), [border: Color.BLACK, bwt: 0.1, bwb: 0.1, bwl: 0.1, bcl: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaDatos4, new Paragraph(numero(totalProcesadoD2 ?: 0,2), fontTh), [border: Color.BLACK, bwt: 0.1, bwb: 0.1, bwl: 0.1, bcl: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
 
 
         addCellTabla(tablaFr, tablaDatos, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -1325,32 +1375,70 @@ class ReportePlanillas3Controller {
                     def numD2
                     def anteriores
 
-                    def anteriorRj = reajustesPlanilla.size() - 2
-
-                    if(anteriorRj >= 0){
-                        numD2 = reajustesPlanilla[anteriorRj].planillaReajustada
-                        anteriores = ReajustePlanilla.findAllByPlanilla(numD2)
-
-                        anteriores.each{
-                            rjTotalAnteriorD += it.valorReajustado
-
-                        }
-                    }else{
-                        rjTotalAnteriorD = 0
-                    }
-
-
+//                    def anteriorRj = reajustesPlanilla.size() - 2
+//
+//                    if(anteriorRj >= 0){
+//                        numD2 = reajustesPlanilla[anteriorRj].planillaReajustada
+//                        anteriores = ReajustePlanilla.findAllByPlanilla(numD2)
+//
+//                        anteriores.each{
+//                            rjTotalAnteriorD += it.valorReajustado
+//
+//                        }
+//                    }else{
+//                        rjTotalAnteriorD = 0
+//                    }
+//
+//
                     pagos.each{ per, pago ->
                         promedioActualD += pago.valor
                     }
 
-                    totalProcesadoD = promedioActualD - rjTotalAnteriorD
+//                    totalProcesadoD = promedioActualD - rjTotalAnteriorD
+
+
+                    //nuevo algoritmo para busqueda de planillas anteriores
+
+                    def ultimoReajusteD = reajustesPlanilla.last().planillaReajustada
+                    def planillasReajusteD = []
+                    def valoresAnterioresD = []
+                    def totalAnterioresD = 0
+
+                    println("ultimo " + ultimoReajusteD)
+
+                    if(reajustesPlanilla.size() > 1){
+                        reajustesPlanilla.each { pl ->
+                            if(pl.planillaReajustada != ultimoReajusteD){
+                                planillasReajusteD += pl.planillaReajustada
+                            }
+                        }
+                    }else{
+                        planillasReajusteD += -1
+                    }
+
+                    println("planilla reajuste " + planillasReajusteD.last())
+
+                    if(planillasReajusteD.last() != -1){
+                        valoresAnterioresD = ReajustePlanilla.findAllByPlanilla(planillasReajusteD.last())
+                        valoresAnterioresD.each {
+                            totalAnterioresD += it.valorReajustado
+                        }
+                    }else{
+                        println("anticipo")
+                    }
+
+                    println("anteriores " + valoresAnterioresD)
+                    println("total " + totalAnterioresD)
+
+                    totalProcesadoD = promedioActualD - totalAnterioresD
+
+
 
                     def subtotalAnterior = 0
                     def subtotalActual = 0
                     def subtotalAcumulado = 0
 
-                    subtotalAnterior = (params.ant + rjTotalAnteriorD)
+                    subtotalAnterior = (params.ant + totalAnterioresD)
                     subtotalActual = (params.act + totalProcesadoD)
                     subtotalAcumulado = (params.acu + promedioActualD)
 
@@ -1369,7 +1457,7 @@ class ReportePlanillas3Controller {
 
 //                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                     addCellTabla(tablaDetalles, new Paragraph("REAJUSTE DE PRECIOS", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
-                    addCellTabla(tablaDetalles, new Paragraph(numero(rjTotalAnteriorD, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(totalAnterioresD, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalProcesadoD, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(promedioActualD, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
