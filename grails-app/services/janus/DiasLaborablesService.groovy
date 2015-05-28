@@ -18,11 +18,11 @@ class DiasLaborablesService {
      *                                     si hubo error (no hay los dias laborables), el año para configurar los días laborables
      */
     def diasLaborablesEntre(Date fecha1, Date fecha2, boolean noLaborables) {
-        println "****"
-        println fecha1
-        println fecha2
-        println noLaborables
-        println "****"
+//        println "****"
+//        println fecha1
+//        println fecha2
+//        println noLaborables
+//        println "****"
         def mensaje = ""
         def dl1 = DiaLaborable.findAllByFecha(fecha1)
         if (dl1.size() == 1) {
@@ -116,7 +116,7 @@ class DiasLaborablesService {
                         ord = dl.ordinal
                     }
                     mensaje += "<li>La fecha " + fecha.format("dd-MM-yyyy") + " no es un día laborable. Se utilizó " + nuevaFecha.format("dd-MM-yyyy") + "</li>"
-                    println mensaje
+//                    println mensaje
                 } else {
                     return [false, "La fecha " + fecha.format("dd-MM-yyyy") + " no es un día laborable. Para calcular con el siguiente dia laborable pasar true como 3r parametro"]
 //                    return false

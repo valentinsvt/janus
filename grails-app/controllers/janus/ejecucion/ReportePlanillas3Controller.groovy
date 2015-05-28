@@ -391,7 +391,7 @@ class ReportePlanillas3Controller {
 
 
         /* ***************************************************** Header planilla **********************************************************/
-        println "header"
+//        println "header"
         def headerPlanilla = { params ->
 
             if (!params.espacio) {
@@ -966,7 +966,7 @@ class ReportePlanillas3Controller {
         def valoresAnteriores = []
         def totalAnteriores = 0
 
-        println("ultimo " + ultimoReajuste)
+//        println("ultimo " + ultimoReajuste)
 
         if(reajustesPlanilla.size() > 1){
             reajustesPlanilla.each { pl ->
@@ -978,7 +978,7 @@ class ReportePlanillas3Controller {
             planillasReajuste += -1
         }
 
-        println("planilla reajuste " + planillasReajuste.last())
+//        println("planilla reajuste " + planillasReajuste.last())
 
         if(planillasReajuste.last() != -1){
             valoresAnteriores = ReajustePlanilla.findAllByPlanilla(planillasReajuste.last())
@@ -989,8 +989,8 @@ class ReportePlanillas3Controller {
             println("anticipo")
         }
 
-        println("anteriores " + valoresAnteriores)
-        println("total " + totalAnteriores)
+//        println("anteriores " + valoresAnteriores)
+//        println("total " + totalAnteriores)
 
         totalProcesadoD2 = promedioActualD2 - totalAnteriores
 
@@ -1155,7 +1155,7 @@ class ReportePlanillas3Controller {
         /* ***************************************************** Detalles *****************************************************************/
 
 
-        println "detalles"
+//        println "detalles"
         if (conDetalles) {
             PdfPTable tablaDetalles = null
             def borderWidth = 1
@@ -1262,7 +1262,7 @@ class ReportePlanillas3Controller {
 
 //                    def bAnt = planillaAnterior.reajuste
                     def bAnt = rjTotalAnteriorD4
-                    println("valor anterior " + bAnt)
+//                    println("valor anterior " + bAnt)
                     def bAct = planilla.reajuste - bAnt
                     def bAcu = bAct + bAnt
 
@@ -1285,7 +1285,7 @@ class ReportePlanillas3Controller {
                         cpAnt = planillasAnterioresCP.sum { it.valor } ?: 0
 
                     } else if (cpPlanilla.size() == 0) {
-                        println "No hay planillas de cp"
+//                        println "No hay planillas de cp"
                     } else {
                         println "WTF hay mas de una planilla cp asociada a esta planilla??? "
                         println "PLANILLA: " + planilla.id
@@ -1404,7 +1404,7 @@ class ReportePlanillas3Controller {
                     def valoresAnterioresD = []
                     def totalAnterioresD = 0
 
-                    println("ultimo " + ultimoReajusteD)
+//                    println("ultimo " + ultimoReajusteD)
 
                     if(reajustesPlanilla.size() > 1){
                         reajustesPlanilla.each { pl ->
@@ -1416,7 +1416,7 @@ class ReportePlanillas3Controller {
                         planillasReajusteD += -1
                     }
 
-                    println("planilla reajuste " + planillasReajusteD.last())
+//                    println("planilla reajuste " + planillasReajusteD.last())
 
                     if(planillasReajusteD.last() != -1){
                         valoresAnterioresD = ReajustePlanilla.findAllByPlanilla(planillasReajusteD.last())
@@ -1427,8 +1427,8 @@ class ReportePlanillas3Controller {
                         println("anticipo")
                     }
 
-                    println("anteriores " + valoresAnterioresD)
-                    println("total " + totalAnterioresD)
+//                    println("anteriores " + valoresAnterioresD)
+//                    println("total " + totalAnterioresD)
 
                     totalProcesadoD = promedioActualD - totalAnterioresD
 

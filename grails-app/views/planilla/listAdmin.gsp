@@ -187,10 +187,11 @@
                 --}%
                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                         <g:if test="${contrato.administrador.id == session.usuario.id}">
-
-                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
-                            <i class="icon-gear"></i>
-                        </div>
+                            <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                <i class="icon-gear"></i>
+                                </div>
+                            </g:if>
                         </g:if>
                     </g:if>
 
@@ -598,7 +599,7 @@
             console.log("id:" + id)
             $.ajax({
                 type    : "POST",
-                url     : "${createLink(action:'procesar')}",
+                url     : "${createLink(action:'procesarLq')}",
                 data    : {
                     id : id
                 },

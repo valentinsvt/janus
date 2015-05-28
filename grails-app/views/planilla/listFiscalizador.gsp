@@ -157,11 +157,11 @@
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
-                                        %{--<g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">--}%
-                                        <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
-                                            <i class="icon-gear"></i>
-                                        </div>
-                                        %{--</g:if>--}%
+                                        <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
+                                                <i class="icon-gear"></i>
+                                            </div>
+                                        </g:if>
                                     </g:if>
                                 </g:if>
 
@@ -177,15 +177,17 @@
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
                                     <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
-                                    <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                    <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
                                          <i class="icon-gear"></i>
                                     </div>
                                     </g:if>
+%{--
                                     <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                     <div data-id="${planillaInstance.id}" rel="tooltip" title="ProcesarQ" class="btn btn-small btnProcesaQ">
                                          <i class="icon-gear"></i>
                                     </div>
                                     </g:if>
+--}%
                                     </g:if>
                                 </g:if>
 
