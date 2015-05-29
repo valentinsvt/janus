@@ -922,42 +922,9 @@ class ReportePlanillas3Controller {
 //        def anteriorRjD = reajustesPlanilla.size() - (reajustesPlanilla.size() -1)
         def anteriorRjD = 0
 
-//        if(reajustesPlanilla.size() == 1){
-//            anteriorRjD = reajustesPlanilla.size() -2
-//        }
-//        else if(reajustesPlanilla.size() == 2){
-//            anteriorRjD = 0
-//        }else{
-//            anteriorRjD = reajustesPlanilla.size() - (reajustesPlanilla.size() -1)
-//        }
-
-
-//
-//        println("---> " + reajustesPlanilla.size())
-//        println("---> " + anteriorRjD)
-
-//        if(anteriorRjD >= 0){
-//            numD3 = reajustesPlanilla[anteriorRjD].planillaReajustada
-//            anterioresD = ReajustePlanilla.findAllByPlanilla(numD3)
-//            anterioresD.each{
-//                rjTotalAnteriorD2 += it.valorReajustado
-//            }
-//        }else{
-//            rjTotalAnteriorD2 = 0
-//        }
-
-
         pagos.each{ per, pago ->
             promedioActualD2 += pago.valor
         }
-
-//        totalProcesadoD2 = promedioActualD2 - rjTotalAnteriorD2
-
-//        println("valor reajustado anterior " + rjTotalAnteriorD2)
-//        println("valor actual " + promedioActualD2)
-
-
-
 
         //nuevo algoritmo para busqueda de planillas anteriores
 
@@ -1032,8 +999,6 @@ class ReportePlanillas3Controller {
             tituloMt.add(new Paragraph("Multas", fontTitle));
             addEmptyLine(tituloMt, 1);
             document.add(tituloMt);
-
-
 
             //planilla 1
 
@@ -1145,11 +1110,6 @@ class ReportePlanillas3Controller {
 
 
 
-
-
-
-
-
         /* ***************************************************** Fin Multa  ********************************************************/
 
         /* ***************************************************** Detalles *****************************************************************/
@@ -1222,7 +1182,6 @@ class ReportePlanillas3Controller {
                     txt = "AVANCE DE OBRA"
                 }
 
-//                addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                 addCellTabla(tablaDetalles, new Paragraph(txt, fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
                 addCellTabla(tablaDetalles, new Paragraph(numero(params.ant, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaDetalles, new Paragraph(numero(params.act, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
@@ -1232,37 +1191,51 @@ class ReportePlanillas3Controller {
                 def planillaAnterior, reajusteAnterior, reajustePlanillar
 
 
-                planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 2)
-                reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
+//                planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 2)
+//                reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
 
 
-                def rjTotalAnteriorD4 = 0
+                //nuevo algoritmo para busqueda de planillas anteriores
                 def promedioActualD4 = 0
                 def totalProcesadoD4 = 0
                 def numD4
                 def anteriores4
 
-                def anteriorRj4 = reajustesPlanilla.size() - 2
+                pagos.each{ per, pago ->
+                    promedioActualD4 += pago.valor
+                }
 
-                if(anteriorRj4 >= 0){
-                    numD4 = reajustesPlanilla[anteriorRj4].planillaReajustada
-                    anteriores4 = ReajustePlanilla.findAllByPlanilla(numD4)
+                def ultimoReajusteD4 = reajustesPlanilla.last().planillaReajustada
+                def planillasReajusteD4 = []
+                def valoresAnterioresD4 = []
+                def totalAnterioresD4 = 0
 
-                    anteriores4.each{
-                        rjTotalAnteriorD4 += it.valorReajustado
-
+                if(reajustesPlanilla.size() > 1){
+                    reajustesPlanilla.each { pl ->
+                        if(pl.planillaReajustada != ultimoReajusteD4){
+                            planillasReajusteD4 += pl.planillaReajustada
+                        }
                     }
                 }else{
-                    rjTotalAnteriorD4 = 0
+                    planillasReajusteD4 += -1
+                }
+
+
+                if(planillasReajusteD4.last() != -1){
+                    valoresAnterioresD4 = ReajustePlanilla.findAllByPlanilla(planillasReajusteD4.last())
+                    valoresAnterioresD4.each {
+                        totalAnterioresD4 += it.valorReajustado
+                    }
+                }else{
+                    println("anticipo")
                 }
 
 
 
                 if (params.completo) {
 
-//                    def bAnt = planillaAnterior.reajuste
-                    def bAnt = rjTotalAnteriorD4
-//                    println("valor anterior " + bAnt)
+//                    def bAnt = rjTotalAnteriorD4
+                    def bAnt = totalAnterioresD4
                     def bAct = planilla.reajuste - bAnt
                     def bAcu = bAct + bAnt
 
@@ -1301,10 +1274,11 @@ class ReportePlanillas3Controller {
                     def cAct = params.act + bAct + cpAct
                     def cAcu = params.acu + bAcu + cpAcu
 
-                    def dAnt = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.descuentos } ?: 0
-//                    def d = (valorObra / planilla.contrato.monto) * planilla.contrato.anticipo - dAnt
-                    def d = planilla.descuentos
+//                    def dAnt = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.descuentos } ?: 0
+                    def dAnt = planillasReajusteD4.sum { it.descuentos } ?: 0
 
+
+                    def d = planilla.descuentos
                     def antAnt = dAnt
                     def antAct = d
                     def antAcu = d + dAnt
@@ -1323,24 +1297,27 @@ class ReportePlanillas3Controller {
 //                    println("multas actuales" + multasAct)
 
                     def listaPlanillasAnt
-                    def planAnteriores = []
-                    def planillaAnteriorMulta = reajustesPlanilla.size() -2
-                    def anteriores1
-                    if(planillaAnteriorMulta >= 0){
-                        listaPlanillasAnt = reajustesPlanilla[planillaAnteriorMulta].planillaReajustada
-                        anteriores1 = ReajustePlanilla.findAllByPlanilla(listaPlanillasAnt)
 
-                        anteriores1.each{
-                            planAnteriores += it.planilla
-                        }
-                    }
+//                    def planAnteriores = []
+//                    def planillaAnteriorMulta = reajustesPlanilla.size() -2
+//                    def anteriores1
+//                    if(planillaAnteriorMulta >= 0){
+//                        listaPlanillasAnt = reajustesPlanilla[planillaAnteriorMulta].planillaReajustada
+//                        anteriores1 = ReajustePlanilla.findAllByPlanilla(listaPlanillasAnt)
+//
+//                        anteriores1.each{
+//                            planAnteriores += it.planilla
+//                        }
+//                    }
 
 
 //                    println("pa " + planAnteriores)
 
-                    def listaMultasAnt = MultasPlanilla.findAllByPlanilla(planAnteriores.unique())
+//                    def listaMultasAnt = MultasPlanilla.findAllByPlanilla(planAnteriores.unique())
+                    def listaMultasAnt = MultasPlanilla.findAllByPlanillaInList(planillasReajusteD4)
 
 //                    println("lista m" + listaMultasAnt)
+
                     def multasAnt = 0
 
                     listaMultasAnt.each {
@@ -1375,27 +1352,9 @@ class ReportePlanillas3Controller {
                     def numD2
                     def anteriores
 
-//                    def anteriorRj = reajustesPlanilla.size() - 2
-//
-//                    if(anteriorRj >= 0){
-//                        numD2 = reajustesPlanilla[anteriorRj].planillaReajustada
-//                        anteriores = ReajustePlanilla.findAllByPlanilla(numD2)
-//
-//                        anteriores.each{
-//                            rjTotalAnteriorD += it.valorReajustado
-//
-//                        }
-//                    }else{
-//                        rjTotalAnteriorD = 0
-//                    }
-//
-//
                     pagos.each{ per, pago ->
                         promedioActualD += pago.valor
                     }
-
-//                    totalProcesadoD = promedioActualD - rjTotalAnteriorD
-
 
                     //nuevo algoritmo para busqueda de planillas anteriores
 
@@ -1556,9 +1515,48 @@ class ReportePlanillas3Controller {
 
             /** fin primer página **/
 
+            //nuevo algoritmo para busqueda de planillas anteriores
+            def promedioActualD5 = 0
+            def totalProcesadoD5 = 0
+            def numD5
+            def anteriores5
+
+            pagos.each{ per, pago ->
+                promedioActualD5 += pago.valor
+            }
+
+            def ultimoReajusteD5 = reajustesPlanilla.last().planillaReajustada
+            def planillasReajusteD5 = []
+            def valoresAnterioresD5 = []
+            def totalAnterioresD5 = 0
+
+            if(reajustesPlanilla.size() > 1){
+                reajustesPlanilla.each { pl ->
+                    if(pl.planillaReajustada != ultimoReajusteD5){
+                        planillasReajusteD5 += pl.planillaReajustada
+                    }
+                }
+            }else{
+                planillasReajusteD5 += -1
+            }
+
+//                    println("planilla reajuste " + planillasReajusteD.last())
+
+            if(planillasReajusteD5.last() != -1){
+                valoresAnterioresD5 = ReajustePlanilla.findAllByPlanilla(planillasReajusteD5.last())
+                valoresAnterioresD5.each {
+                    totalAnterioresD5 += it.valorReajustado
+                }
+            }else{
+                println("anticipo")
+            }
+
             detalle.eachWithIndex { vol, i ->
                 def det = DetallePlanilla.findByPlanillaAndVolumenObra(planilla, vol)
-                def anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasAnteriores[0..planillasAnteriores.size() - 2], vol)
+//                def anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasAnteriores[0..planillasAnteriores.size() - 2], vol)
+
+                def anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasReajusteD5, vol)
+
                 def cantAnt = anteriores.sum { it.cantidad } ?: 0
                 def valAnt = anteriores.sum { it.monto } ?: 0
                 def cant = det?.cantidad ?: 0
@@ -1566,13 +1564,10 @@ class ReportePlanillas3Controller {
                 totalAnterior += valAnt
                 totalActual += (val.toDouble().round(2))
                 totalAcumulado += (val.toDouble().round(2) + valAnt)
-//                println "currentPag: $currentPag totalPags: $totalPags rowsCurPag: $rowsCurPag maxRowsLastPag: $maxRowsLastPag currentRows: $currentRows maxRows: $maxRows"
-//                if (((currentPag == totalPags) && (rowsCurPag == maxRowsLastPag)) || ((currentRows % maxRows == 0) && (rowsCurPag >= maxRowsLastPag))) {
+
                 if ((currentRows % maxRows == 0)) {
-//                    println "crea nueva página por: ${(currentPag == totalPags) && (rowsCurPag == maxRowsLastPag)}, o, ${currentRows % maxRows == 0}"
 
                     document.newPage()
-
                     tablaDetalles = new PdfPTable(11);
                     tablaDetalles.setWidthPercentage(100);
                     tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
@@ -1585,6 +1580,7 @@ class ReportePlanillas3Controller {
                 if (sp != vol.subPresupuestoId) {
 //                    println vol.subPresupuesto.descripcion
                     addCellTabla(tablaDetalles, new Paragraph(vol.subPresupuesto.descripcion, fontThTiny), [height: height, bwr: borderWidth, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+//                    addCellTabla(tablaDetalles, new Paragraph(" ", fontThTiny), [height: height, border: Color.BLACK, bwr: borderWidth, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
                     addCellTabla(tablaDetalles, new Paragraph(" ", fontThTiny), [height: height, border: Color.BLACK, bwr: borderWidth, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
                     addCellTabla(tablaDetalles, new Paragraph(" ", fontThTiny), [height: height, border: Color.BLACK, bwr: borderWidth, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
                     addCellTabla(tablaDetalles, new Paragraph(" ", fontThTiny), [height: height, border: Color.BLACK, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
@@ -1611,6 +1607,7 @@ class ReportePlanillas3Controller {
                 sumaParcialAnterior += valAnt
                 sumaParcialActual += val
                 sumaParcialAcumulado += (val + valAnt)
+
                 sumaTotalAnterior += valAnt
                 sumaTotalActual += val
                 sumaTotalAcumulado += (val + valAnt)
@@ -1620,6 +1617,7 @@ class ReportePlanillas3Controller {
 
                 if ((currentRows % (maxRows -1) == 0)) {
                     printFooterDetalle(ant: sumaParcialAnterior, act: sumaParcialActual, acu: sumaParcialAcumulado)
+
                     sumaParcialAnterior = 0
                     sumaParcialActual = 0
                     sumaParcialAcumulado = 0
