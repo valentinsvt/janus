@@ -1418,6 +1418,265 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def form() {
+        println "form... planillas: $params"
+        def contrato = Contrato.get(params.contrato)
+        def obra = contrato.obra
+
+        /* aqui se valida que haya cronograma de contrato y formula polinomica de contrato */
+        def existeCrng = CronogramaContrato.findAllByContrato(contrato).size()
+        def pcs = FormulaPolinomicaContractual.findAllByContrato(contrato).size()
+        if (existeCrng == 0 || pcs < 8) {
+            flash.message = "<h3>No es posible crear planillas</h3><ul>"
+            if (existeCrng == 0) {
+                flash.message += "<li>No se ha generado el cronograma de contrato.</li>"
+            }
+            if (pcs < 8) {
+                flash.message += "<li>No se ha generado la fórmula polinómica contractual.</li>"
+            }
+            flash.message += "</ul>"
+            redirect(action: "errores")
+            return
+        }
+
+        def hayPlanillas = false;
+        def planillaInstance = new Planilla(params)
+        planillaInstance.contrato = contrato
+        if (params.id) {
+            planillaInstance = Planilla.get(params.id)
+            hayPlanillas = true
+        }
+
+        /*** si no hay planilla de este contrato se presenta solo TPPL: Anticipo **/
+        def tiposPlanilla = []
+        tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["A", "P","C", "Q", "L"], [sort: 'codigo'])
+        println "tipos de planilla: " + tiposPlanilla.codigo
+
+        /***/
+        def anticipo = TipoPlanilla.findByCodigo('A')
+        def avance = TipoPlanilla.findByCodigo('P')
+        def liquidacion = TipoPlanilla.findByCodigo('Q')
+        def liquidacionReajuste = TipoPlanilla.findByCodigo('L')
+        def costoPorcentaje = TipoPlanilla.findByCodigo('C')
+        def resumenMateriales = TipoPlanilla.findByCodigo('M')
+        /***/
+
+
+        def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
+        def anticipoPagado = false
+        if (!pla) {
+            esAnticipo = true
+        } else {
+            if (pla.fechaMemoPagoPlanilla) {
+                anticipoPagado = true
+                tiposPlanilla -= pla.tipoPlanilla
+            }
+        }
+
+        def cPlanillas = Planilla.findAllByContrato(contrato, [sort: 'fechaInicio']).size()
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanilla(contrato, avance, [sort: "fechaInicio"])
+
+        println "---- cPlanillas: $cPlanillas, planillasAvance: $planillasAvance"
+
+        def liquidado = false
+        def esAnticipo = false
+
+        if (cPlanillas == 0) {
+            tiposPlanilla = TipoPlanilla.findAllByCodigo('A')
+            println "3: " + tiposPlanilla.codigo
+            esAnticipo = true
+        } else {
+            if (pla) {
+                tiposPlanilla -= pla.tipoPlanilla
+                println "4: " + tiposPlanilla.codigo
+            }
+            def pll = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacion)
+            if (pll) {
+                tiposPlanilla -= avance
+                tiposPlanilla -= liquidacion
+                println "5: " + tiposPlanilla.codigo
+            }
+            def plr = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacionReajuste)
+            if (plr) {
+                tiposPlanilla -= plr.tipoPlanilla
+                liquidado = true
+                println "7: " + tiposPlanilla.codigo
+            }
+            def plc = Planilla.findByContratoAndTipoPlanilla(contrato, costoPorcentaje)
+            if (plc) {
+                def plcs = Planilla.findAllByContratoAndTipoPlanilla(contrato, costoPorcentaje)
+                def tt = plcs.sum { it.valor }
+                if (tt >= (contrato.monto * 0.1).round(2)) {
+                    tiposPlanilla -= plc.tipoPlanilla
+                    println "8: " + tiposPlanilla.codigo
+                }
+            }
+        }
+
+        def periodosEjec
+        if(planillasAvance.size() == 0) {
+            periodosEjec = PeriodoEjecucion.findAllByContratoAndTipo(contrato, 'P', [sort: "fechaFin"])
+        } else {
+            def hasta = planillasAvance[-1].fechaFin
+            periodosEjec = PeriodoEjecucion.findAllByContratoAndTipoAndFechaInicioGreaterThan(contrato, 'P', hasta, [sort: "fechaFin"])
+        }
+        def finalObra = null
+        println "periodosEjec: ${periodosEjec.size()}"
+        if (periodosEjec.size() > 0) {
+            finalObra = periodosEjec.last().fechaFin
+        }
+        println "fecha de fin de obra: $finalObra, periodos: ${periodosEjec.size()}"
+
+
+        def costo = false
+        if (planillasAvance.size() > 0) {
+            if (planillasAvance.last().fechaFin == finalObra) {
+                def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
+                tiposPlanilla -= plp.tipoPlanilla
+                println "10: " + tiposPlanilla.codigo
+            }
+            planillasAvance.each { pa ->
+                println "busca planillas de avance sin fecha pagado, fecha pago: $pa.fechaMemoPagoPlanilla"
+                if (pa.fechaMemoPagoPlanilla == null) {
+                    println "busca padre sin pago $pa.id"
+                    def costos = Planilla.findAllByPadreCosto(pa)
+                    if (costos.size() == 0) {
+                        costo = true
+                    }
+                }
+            }
+        }
+
+        if (tiposPlanilla.find { it.codigo == "P" }) {
+            tiposPlanilla -= liquidacionReajuste
+            println "9: " + tiposPlanilla.codigo
+        }
+        if (!costo) {
+            tiposPlanilla.remove(TipoPlanilla.findByCodigo("C"))
+            println "11: " + tiposPlanilla.codigo
+        }
+
+        if (!params.id) {
+            planillaInstance.numero = cPlanillas + 1
+        }
+
+
+        def periodos = [:]
+        def dias = 0
+        def fcfm
+        def opcional = false
+        def lleno = false
+        def fecha = ""
+        def texto  = ""
+        def ultimo = ""
+        def prdo = 0
+        // se presenta el o los primeros periodos no planillados, o todos si el presente y último
+        println "---pone periodos"
+        if (planillasAvance.size() == 0) {
+            periodosEjec.each {pe ->
+                ultimo = texto
+                fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
+                if((pe.fechaFin >= pe.fechaInicio) && !lleno) {
+                    if(pe.fechaFin == fcfm) {
+                        texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        if(opcional) {
+//                            periodos.add(fecha, pe.fechaInicio.format("dd-MM-yyyy") + " a " + pe.fechaFin.format("dd-MM-yyyy"))
+                            periodos.put(fecha, fecha.replaceAll('_', ' a '))
+                            periodos.put(texto, texto.replaceAll('_', ' a '))
+                            opcional = false
+                        } else {
+                            periodos.put(texto, texto.replaceAll('_', ' a '))
+                        }
+                        dias = fcfm - pe.fechaInicio + 1
+                        if(dias <= 15) {
+                            opcional = true
+                            lleno = false
+                        } else {
+                            lleno = true
+                            //no deben procesarse mas periodos
+                        }
+
+                    }
+                    // si es el último periodo también es opcional
+                    if(pe.fechaFin == finalObra) {
+                        def desde = periodos[ultimo].split(' a ')[0]
+                        texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
+
+                        periodos.put(texto, texto.replaceAll('_', ' a '))
+                    }
+                }
+            }
+
+        }
+/*
+//        println "PERIODOS: "+periodos
+        if(periodos.size() > 1) {
+            def i = 0
+            def tmp = periodos.clone()
+            periodos = [:]
+            tmp.each { k, v ->
+                if(i++ < 2)
+                    periodos.put(k, v)
+            }
+        }
+
+//        println "PERIODOS: "+periodos
+*/
+
+
+        def now = new Date()
+        def maxDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},"
+        if (now.format("dd").toInteger() > 14) {
+            maxDatePres += "14"
+        } else {
+            maxDatePres += now.format("dd")
+        }
+        maxDatePres += ")"
+
+        def minDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},1)"
+        def fiscalizadorAnterior
+        if (planillasAvance.size() > 0) {
+            fiscalizadorAnterior = planillasAvance.last().fiscalizadorId
+        }
+
+//        liquidado = false
+
+        def fechaMax
+        if (contrato.fechaSubscripcion)
+            fechaMax = contrato.fechaSubscripcion.plus(720)
+        else
+            fechaMax = new Date()
+//        println "fecha max " + fechaMax
+
+        def suspensiones = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            le("fechaInicio", new Date().clearTime())
+            or {
+                isNull("fechaFin")
+                gt("fechaFin", new Date().clearTime())
+            }
+        }
+        def ini = Modificaciones.withCriteria {
+            eq("obra", obra)
+            eq("tipo", "S")
+            le("fechaInicio", new Date().clearTime())
+            or {
+                isNull("fechaFin")
+                gt("fechaFin", new Date().clearTime())
+            }
+            projections {
+                min("fechaInicio")
+            }
+        }
+
+        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado"
+        tiposPlanilla = tiposPlanilla.sort{it.nombre}
+        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
+                periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
+                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini]
+    }
+
+    def form_old() {
 //        println params
         def contrato = Contrato.get(params.contrato)
         def obra = contrato.obra
