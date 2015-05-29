@@ -62,23 +62,6 @@
     </div>
 </g:if>
 
-%{--<g:if test="${alertas != ''}">--}%
-%{--<div class="alert alert-warning alert-block">--}%
-%{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
-
-%{--<h3>Se han generado alertas al generar la planilla</h3>--}%
-%{--${alertas}--}%
-%{--</div>--}%
-%{--</g:if>--}%
-%{--<g:if test="${errores != ''}">--}%
-%{--<div class="alert alert-error alert-block">--}%
-%{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
-
-%{--<h3>Han ocurrido errores graves al generar la planilla</h3>--}%
-%{--${errores}--}%
-%{--</div>--}%
-%{--</g:if>--}%
-
 <div class="row" style="margin-bottom: 10px;">
     <div class="span12 btn-group" role="navigation">
         <g:link controller="contrato" action="verContrato" params="[contrato: planilla.contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
@@ -89,17 +72,11 @@
             <i class="icon-angle-left"></i>
             Planillas
         </g:link>
-    %{--<a href="#" class="btn btn-ajax btn-new" id="btnImprimir" title="Imprimir">--}%
-    %{--<i class="icon-print"></i>--}%
-    %{--Imprimir--}%
-    %{--</a>--}%
+
         <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planilla.id}" class="btn  btn-ajax" rel="tooltip" title="Imprimir">
             <i class="icon-print"></i> Imprimir
         </g:link>
-    %{--<a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">--}%
-    %{--<i class="icon-table"></i>--}%
-    %{--Excel--}%
-    %{--</a>--}%
+
     </div>
 </div>
 

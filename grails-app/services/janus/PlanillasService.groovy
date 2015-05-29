@@ -15,7 +15,7 @@ class PlanillasService {
         cs.each{c->
             valorIndice = ValorIndice.findByPeriodoAndIndice(periodo.periodoReajuste, c.indice)?.valor
             if (!valorIndice) {
-                println "wtf no valor " + p.periodo + "  " + c.indice
+//                println "wtf no valor " + p.periodo + "  " + c.indice
                 valorIndice = 0
             }
             def valor
@@ -27,7 +27,7 @@ class PlanillasService {
                 totalB0+=(valorIndice*c.valor).toDouble().round(3)
                 valor.save(flush: true)
             } else {
-                println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${p.planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}"
+//                println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${p.planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}"
                 /*Aqui recalcular*/
                 valor = -1
             }
@@ -37,6 +37,8 @@ class PlanillasService {
         def periodos = PeriodoPlanilla.findAllByPlanilla(anticipo, [sort: "id"])
         def periodos2 =[]
         periodos2.add(periodo)
+
+        println("ps " + ps)
 
         ps.eachWithIndex { p, i ->
             def vlinOferta = null
@@ -82,7 +84,9 @@ class PlanillasService {
                         vlin = per.total
                     }
                 } else {
-                    vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoReajuste).valor
+
+//                    vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoReajuste).valor
+                    vlin = 0
                 }
                    // println "-->  indice: "+p.indice+" periodo  "+per.periodo.id+" VLIN  "+vlin+"  VLINOFERTA "+vlinOferta+" Valor "+p.valor+"  "
                 def valor = (vlin / vlinOferta * p.valor).round(3)
