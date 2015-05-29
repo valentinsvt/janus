@@ -23,6 +23,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         def contrato = planilla.contrato
         def obra = contrato.obra
+        def rjpl = ReajustePlanilla.findByPlanilla(planilla)
 
         def texto = Pdfs.findAllByPlanilla(planilla)
         def textos = []
@@ -38,15 +39,15 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>(+) Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}</th>"
-        tabla += "<td class='tr'>${numero(planilla.reajuste, 2)}</td>"
+        tabla += "<td class='tr'>${numero(rjpl.valorReajustado, 2)}</td>"
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>SUMA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + rjpl.valorReajustado, 2)}</td>"
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + rjpl.valorReajustado, 2)}</td>"
         tabla += "</tr>"
         tabla += "</table>"
 
@@ -54,7 +55,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         if (texto.size() == 0) {
 
-            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + rjpl?.valorReajustado)
 //            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(numero(planilla.valor + planilla.reajuste, 2).replaceAll(',','').toDouble())
             // prueba de vario números
 //            letras() /* prueba valores */
@@ -104,6 +105,13 @@ class PlanillaController extends janus.seguridad.Shield {
         def contrato = planilla.contrato
         def obra = contrato.obra
 
+        def plnlAnterior = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(planilla.contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P']), planilla.fechaPresentacion, [sort: 'fechaPresentacion']).last()
+        def rjplAnterior = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnlAnterior])
+        def rjpl = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: planilla])
+        def reajuste = rjpl[0] - rjplAnterior[0]
+        println "---reajuste de la planillas: $rjplAnterior, actual $rjpl"
+
         def texto = Pdfs.findAllByPlanilla(planilla)
         def textos = []
 
@@ -121,7 +129,7 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>(+) Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}</th>"
-        tabla += "<td class='tr'>${numero(planilla.reajuste, 2)}</td>"
+        tabla += "<td class='tr'>${numero(reajuste, 2)}</td>"
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>(-) Anticipo</th>"
@@ -133,17 +141,17 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>SUMA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas, 2)}</td>"
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas, 2)}</td>"
         tabla += "</tr>"
         tabla += "</table>"
 
         if (texto.size() == 0) {
 
-            def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas
+            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas
             def neg = ""
             if (totalLetras < 0) {
                 totalLetras = totalLetras * -1
@@ -1421,6 +1429,7 @@ class PlanillaController extends janus.seguridad.Shield {
         println "form... planillas: $params"
         def contrato = Contrato.get(params.contrato)
         def obra = contrato.obra
+        println "obra: $obra.id"
 
         /* aqui se valida que haya cronograma de contrato y formula polinomica de contrato */
         def existeCrng = CronogramaContrato.findAllByContrato(contrato).size()
@@ -1463,6 +1472,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
         def anticipoPagado = false
+        def esAnticipo = false
         if (!pla) {
             esAnticipo = true
         } else {
@@ -1478,7 +1488,6 @@ class PlanillaController extends janus.seguridad.Shield {
         println "---- cPlanillas: $cPlanillas, planillasAvance: $planillasAvance"
 
         def liquidado = false
-        def esAnticipo = false
 
         if (cPlanillas == 0) {
             tiposPlanilla = TipoPlanilla.findAllByCodigo('A')
@@ -1669,7 +1678,7 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado"
+        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado, anticipoPagado: $anticipoPagado"
         tiposPlanilla = tiposPlanilla.sort{it.nombre}
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
@@ -1753,6 +1762,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
         def anticipoPagado = false
+        def esAnticipo = false
         if (!pla) {
             esAnticipo = true
         } else {
@@ -1772,7 +1782,6 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         def cPlanillas = planillas.size()
         def liquidado = false
-        def esAnticipo = false
         if (cPlanillas == 0) {
             tiposPlanilla = TipoPlanilla.findAllByCodigo('A')
             println "3: " + tiposPlanilla.codigo
@@ -2077,7 +2086,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         switch (planillaInstance.tipoPlanilla.codigo) {
             case 'A':
-                redirect(controller: 'planilla2', action: 'anticipo', id: planillaInstance.id)
+                redirect(controller: 'planilla', action: 'listAdmin', id: planillaInstance.contrato.id)
                 break;
             case 'L':
                 redirect(controller: 'planilla2', action: 'liquidacion', id: planillaInstance.id)

@@ -1376,7 +1376,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 def frm = (totalesCoeficientes[per3.key]).round(3)
 //                tr1 += "<th class='number'>${totalesCoeficientes[per3.key]}</th>"
                 tr1 += "<th class='number'>${numero(frm,3)}</th>"
-                tr2 += "<th class='number'>${numero(fr1)}</th>"
+                tr2 += "<th class='number'>${numero(fr1,3)}</th>"
                 tr3 += "<th class='number'>${numero(reajustesPlanilla[0].valorPo, 2)}</th>"
                 def t = (reajustesPlanilla[0].valorPo * fr1).round(2)
                 tr4 += "<th class='number'>${numero(t, 2)}</th>"
@@ -1385,7 +1385,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 def frm = (totalesCoeficientes[per3.key]).round(3)
 //                tr1 += "<th class='number'>${totalesCoeficientes[per3.key]}</th>"
                 tr1 += "<th class='number'>${numero(frm,3)}</th>"
-                tr2 += "<th class='number'>${numero(fr1)}</th>"
+                tr2 += "<th class='number'>${numero(fr1,3)}</th>"
                 tr3 += "<th class='number'>${numero(reajustesPlanilla[per3.key].valorPo, 2)}</th>"
                 def t = (reajustesPlanilla[per3.key].valorPo * fr1).round(2)
                 tr4 += "<th class='number'>${numero(t, 2)}</th>"
@@ -2004,16 +2004,17 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         tr1 += "<th rowspan='4'>1.000</th>"
         tr1 += "<th>F<sub>r</sub></th>"
-        tr2 += "<th>F<sub>r</sub>-1</th>"
+        tr2 += "<th>F<sub>r</sub> -1</th>"
         tr3 += "<th>P<sub>0</sub></th>"
-        tr4 += "<th>P<sub>r</sub>-P</th>"
+        tr4 += "<th>P<sub>r</sub> -Po</th>"
 
         def reajusteTotal = 0
 
         periodosNuevos.eachWithIndex {per3, i->
             if(per3.key == 0){
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
-                tr1 += "<th class='number'>${totalesCoeficientes[per3.key]}</th>"
+                def fr = (totalesCoeficientes[per3.key]).round(3)
+                tr1 += "<th class='number'>${numero(fr,3)}</th>"
                 tr2 += "<th class='number'>${numero(fr1)}</th>"
                 tr3 += "<th class='number'>${numero(reajustesPlanilla[0].valorPo, 2)}</th>"
                 def t = (reajustesPlanilla[0].valorPo * fr1).round(2)

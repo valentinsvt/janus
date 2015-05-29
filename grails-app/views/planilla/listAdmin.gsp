@@ -144,6 +144,14 @@
                                 params="[contrato: contrato.id]" id="${planillaInstance.id}">
                             <i class="icon-pencil icon-large"></i>
                         </g:link>
+                        <g:if test="${contrato.administrador.id == session.usuario.id}">
+                        %{--<g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">--}%
+                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                <i class="icon-gear"></i>
+                            </div>
+                        %{--</g:if>--}%
+                        </g:if>
+
                     </g:if>
                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
                         <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]"
@@ -151,13 +159,11 @@
                             <i class="icon-reorder icon-large"></i>
                         </g:link>
                     </g:if>
-                %{--
-                                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                                    <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                                                        <i class="icon-table icon-large"></i>
-                                                    </g:link>
-                                                </g:if>
-                --}%
+                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                         <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
+                             <i class="icon-table icon-large"></i>
+                         </g:link>
+                    </g:if>
                 %{--
                                                 <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
                                                     <g:link controller="planilla2" action="avance" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
@@ -185,15 +191,6 @@
                                                     </g:link>
                                                 </g:if>
                 --}%
-                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                        <g:if test="${contrato.administrador.id == session.usuario.id}">
-                            <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
-                                <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
-                                <i class="icon-gear"></i>
-                                </div>
-                            </g:if>
-                        </g:if>
-                    </g:if>
 
 
                     <g:if test="${janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
