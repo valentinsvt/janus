@@ -260,12 +260,12 @@ class ReportePlanillas3Controller {
 //            str += 'Anticipo (' + periodoInec?.descripcion + ")"
             periodoPlanilla = 'Anticipo (' + periodoPlanilla.descripcion + ")"
 //            println "bbbbb"
-        } else {
-            if (planilla.tipoPlanilla.codigo == "L") {
-                periodoPlanilla = "Liquidación del reajuste (${fechaConFormato(planilla.fechaPresentacion, 'dd-MMM-yyyy')})"
-            } else {
-                periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy") + " (liquidación)"
-            }
+        } else if (planilla.tipoPlanilla.codigo == "L") {
+            periodoPlanilla = "Liquidación del reajuste (${fechaConFormato(planilla.fechaPresentacion, 'dd-MMM-yyyy')})"
+        } else if (planilla.tipoPlanilla.codigo in ["P", "D"]){
+                periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy")
+        } else if (planilla.tipoPlanilla.codigo == "Q"){
+            periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy") + " (liquidación)"
         }
 
 
@@ -373,10 +373,10 @@ class ReportePlanillas3Controller {
 
         def tablaObservaciones = new PdfPTable(3);
         tablaObservaciones.setWidthPercentage(100);
-        tablaObservaciones.setSpacingBefore(5)
+        tablaObservaciones.setSpacingBefore(0)
 
         if(planilla.observaciones) {
-            addCellTabla(tablaObservaciones, new Paragraph("Observaciones: " + planilla?.observaciones, fontThFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+            addCellTabla(tablaObservaciones, new Paragraph("Observaciones: " + planilla?.observaciones, fontTdFirmas), [border: Color.WHITE, bg: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
         }
 
 
@@ -659,7 +659,7 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaP0, new Paragraph(numero(it.valorPo, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
             } else{
-                addCellTabla(tablaP0, new Paragraph(it?.planilla?.tipoPlanilla?.nombre, fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaP0, new Paragraph(it?.planillaReajustada?.tipoPlanilla?.nombre, fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaP0, new Paragraph(it.mes, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaP0, new Paragraph(numero(it.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaP0, new Paragraph(numero(it.acumuladoCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
@@ -1143,7 +1143,7 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaHeaderDetalles, new Paragraph("Contratista", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaHeaderDetalles, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
                 addCellTabla(tablaHeaderDetalles, new Paragraph("Periodo", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaHeaderDetalles, new Paragraph(periodoPlanilla, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+                addCellTabla(tablaHeaderDetalles, new Paragraph(periodoPlanilla, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                 addCellTabla(tablaHeaderDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
 
@@ -1481,10 +1481,9 @@ class ReportePlanillas3Controller {
 
             def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
             def height = 12
-            def maxRows = 47     //45
-            def extraRows = 9    //9
+            def maxRows = 48     //45
+            def extraRows = 15   //9
             def currentRows = 1
-            def firmaRows = 6
 
             def sps = detalle.subPresupuesto.unique()
             def totalRows = detalle.size() + sps.size()
@@ -1565,8 +1564,9 @@ class ReportePlanillas3Controller {
                 totalActual += (val.toDouble().round(2))
                 totalAcumulado += (val.toDouble().round(2) + valAnt)
 
+/*
                 if ((currentRows % maxRows == 0)) {
-
+                    println("---currentPag: $currentPag totalPags: $totalPags rowsCurPag: $rowsCurPag maxRowsLastPag: $maxRowsLastPag currentRows: $currentRows maxRows: $maxRows")
                     document.newPage()
                     tablaDetalles = new PdfPTable(11);
                     tablaDetalles.setWidthPercentage(100);
@@ -1577,6 +1577,7 @@ class ReportePlanillas3Controller {
                     printHeaderDetalle([pag: currentPag, total: totalPags])
                     rowsCurPag = 1
                 }
+*/
                 if (sp != vol.subPresupuestoId) {
 //                    println vol.subPresupuesto.descripcion
                     addCellTabla(tablaDetalles, new Paragraph(vol.subPresupuesto.descripcion, fontThTiny), [height: height, bwr: borderWidth, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
@@ -1588,7 +1589,7 @@ class ReportePlanillas3Controller {
                     currentRows++
                     rowsCurPag++
                 }
-
+//                println "${vol.orden} : ${vol.item.nombre}"
                 addCellTabla(tablaDetalles, new Paragraph(vol.item.codigo, fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaDetalles, new Paragraph(vol.item.nombre, fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, bwr: borderWidth, border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
@@ -1615,7 +1616,9 @@ class ReportePlanillas3Controller {
                 currentRows++
                 rowsCurPag++
 
-                if ((currentRows % (maxRows -1) == 0)) {
+//                if (currentRows % (maxRows - 1) == 0) {
+                if (currentRows % (maxRows) == 0) {
+//                    println("__currentPag: $currentPag totalPags: $totalPags rowsCurPag: $rowsCurPag maxRowsLastPag: $maxRowsLastPag currentRows: $currentRows maxRows: $maxRows")
                     printFooterDetalle(ant: sumaParcialAnterior, act: sumaParcialActual, acu: sumaParcialAcumulado)
 
                     sumaParcialAnterior = 0
@@ -1627,6 +1630,14 @@ class ReportePlanillas3Controller {
                     printFirmas([tipo: "detalle", orientacion: "vertical"])
                     currentPag++
 
+                    //-------------------
+                    document.newPage()
+                    tablaDetalles = new PdfPTable(11);
+                    tablaDetalles.setWidthPercentage(100);
+                    tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+                    tablaDetalles.setSpacingAfter(1f);
+                    printHeaderDetalle([pag: currentPag, total: totalPags])
+                    rowsCurPag = 1
                 }
             }
             if (currentRows % maxRows < maxRows - 1) {

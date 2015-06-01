@@ -317,7 +317,7 @@
 
                                 <div class="span4">
                                     <g:field type="number" name="avanceFisico" class="input-mini required number"
-                                             value="${planillaInstance.avanceFisico}" maxlength="3"/> %
+                                             value="${planillaInstance.avanceFisico}" max="100"/> %
                                     <p class="help-block ui-helper-hidden"></p>
                                 </div>
                             </div>
