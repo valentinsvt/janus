@@ -1578,6 +1578,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def texto  = ""
         def ultimo = ""
         def prdo = 0
+        def inicio
         // se presenta el o los primeros periodos no planillados, o todos si el presente y último
 //        println "---pone periodos"
 //        if (planillasAvance.size() == 0) {
@@ -1588,7 +1589,11 @@ class PlanillaController extends janus.seguridad.Shield {
                 fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
                 if((pe.fechaFin >= pe.fechaInicio) && !lleno) {
                     if(pe.fechaFin == fcfm) {
-                        texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        if(inicio) {
+                            texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        } else {
+                            texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        }
                         if(opcional) {
 //                            periodos.add(fecha, pe.fechaInicio.format("dd-MM-yyyy") + " a " + pe.fechaFin.format("dd-MM-yyyy"))
                             periodos.put(fecha, fecha.replaceAll('_', ' a '))
@@ -1606,6 +1611,8 @@ class PlanillaController extends janus.seguridad.Shield {
                             //no deben procesarse mas periodos
                         }
 
+                    } else {
+                        inicio = pe.fechaInicio
                     }
                     // si es el último periodo también es opcional
                     if(pe.fechaFin == finalObra) {
