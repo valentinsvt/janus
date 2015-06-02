@@ -247,6 +247,7 @@ class ReportePlanillas3Controller {
             order("id", "asc")
         }
 
+/*
         def periodoPlanilla
         if(!planilla.periodoAnticipo) {
             periodoPlanilla = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
@@ -265,8 +266,10 @@ class ReportePlanillas3Controller {
         } else if (planilla.tipoPlanilla.codigo in ["P", "D"]){
                 periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy")
         } else if (planilla.tipoPlanilla.codigo == "Q"){
-            periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy") + " (liquidación)"
+            periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' +
+                    fechaConFormato(planilla.contrato.fechaPedidoRecepcionFiscalizador, "dd-MMM-yyyy") + " (liquidación)"
         }
+*/
 
 
         def baos = new ByteArrayOutputStream()
@@ -395,7 +398,7 @@ class ReportePlanillas3Controller {
         def headerPlanilla = { params ->
 
             if (!params.espacio) {
-                params.espacio = 2
+                params.espacio = 1
             }
 
             Font fontThUsar = new Font(Font.TIMES_ROMAN, params.size, Font.BOLD);
@@ -438,11 +441,14 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph("Período", fontThUsar), prmsTdNoBorder)
+/*
             if(planilla.fechaInicio && planilla.fechaFin){
                 addCellTabla(tablaHeaderPlanilla, new Paragraph(fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy")+" al "+fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy"), fontTdUsar), prmsTdNoBorder)
             }else{
                 addCellTabla(tablaHeaderPlanilla, new Paragraph(" ", fontTdUsar), prmsTdNoBorder)
             }
+*/
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(ponePeriodoPlanilla(planilla), fontTdUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph("Plazo", fontThUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.plazo, 0) + " días", fontTdUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), prmsTdNoBorder)
@@ -606,7 +612,7 @@ class ReportePlanillas3Controller {
 
 
         document.newPage()
-        headerPlanilla([size: 10, espacio: 3])
+        headerPlanilla([size: 10, espacio: 2])
 
         Paragraph tituloP0 = new Paragraph();
         addEmptyLine(tituloP0, 1);
@@ -690,7 +696,7 @@ class ReportePlanillas3Controller {
         /* ***************************************************** Tabla Fr *****************************************************************/
         document.setPageSize(PageSize.A4);
         document.newPage();
-        headerPlanilla([size: 10, espacio: 3])
+        headerPlanilla([size: 10, espacio: 1])
 
         Paragraph tituloFr = new Paragraph();
         addEmptyLine(tituloFr, 1);
@@ -834,6 +840,7 @@ class ReportePlanillas3Controller {
         }
 
 
+
         PdfPTable inner5 = new PdfPTable(periodos.size());
 
         def cells = [
@@ -974,6 +981,7 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaFr, tablaDatos4, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 1])
 
         document.add(tablaFr);
+        document.add(tablaObservaciones)
 
         printFirmas([tipo: "otro", orientacion: "vertical"])
 
@@ -991,7 +999,7 @@ class ReportePlanillas3Controller {
             document.newPage();
 
 
-            headerPlanilla([size: 10, espacio: 3])
+            headerPlanilla([size: 10, espacio: 2])
 
             Paragraph tituloMt = new Paragraph();
             addEmptyLine(tituloMt, 1);
@@ -1142,8 +1150,8 @@ class ReportePlanillas3Controller {
 
                 addCellTabla(tablaHeaderDetalles, new Paragraph("Contratista", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaHeaderDetalles, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
-                addCellTabla(tablaHeaderDetalles, new Paragraph("Periodo", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaHeaderDetalles, new Paragraph(periodoPlanilla, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5])
+                addCellTabla(tablaHeaderDetalles, new Paragraph("Período", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaHeaderDetalles, new Paragraph(ponePeriodoPlanilla(planilla), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                 addCellTabla(tablaHeaderDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
 
@@ -1481,19 +1489,21 @@ class ReportePlanillas3Controller {
 
             def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
             def height = 12
-            def maxRows = 48     //45
-            def extraRows = 15   //9
+            def maxRows = 46     //45
+            def extraRows = 18   //9
             def currentRows = 1
 
             def sps = detalle.subPresupuesto.unique()
             def totalRows = detalle.size() + sps.size()
 
-            def maxRowsLastPag = maxRows - extraRows
+            def chequeoPg = 0
 
             def totalPags = Math.ceil((totalRows + extraRows) / maxRows).toInteger()
 
-            if (totalRows % maxRows >= maxRowsLastPag) {
-                totalPags++
+//            println "totalRows: $totalRows, extraRows: $extraRows, maxRows: $maxRows, --- totalPags: $totalPags, resto: ${(totalRows + extraRows) % maxRows}"
+
+            if ((totalRows + extraRows) % maxRows <= extraRows) {
+                chequeoPg = totalPags - 1
             }
 
             def currentPag = 1
@@ -1617,8 +1627,8 @@ class ReportePlanillas3Controller {
                 rowsCurPag++
 
 //                if (currentRows % (maxRows - 1) == 0) {
-                if (currentRows % (maxRows) == 0) {
-//                    println("__currentPag: $currentPag totalPags: $totalPags rowsCurPag: $rowsCurPag maxRowsLastPag: $maxRowsLastPag currentRows: $currentRows maxRows: $maxRows")
+                if( ((currentPag == chequeoPg) && ((currentRows + 6) % maxRows == 0)) || (currentRows % (maxRows) == 0)) {
+//                    println("__currentPag: $currentPag chequeoPg: $chequeoPg totalPags: $totalPags rowsCurPag: $rowsCurPag currentRows: $currentRows maxRows: $maxRows")
                     printFooterDetalle(ant: sumaParcialAnterior, act: sumaParcialActual, acu: sumaParcialAcumulado)
 
                     sumaParcialAnterior = 0
@@ -1652,7 +1662,7 @@ class ReportePlanillas3Controller {
 
                 printFirmas([tipo: "detalle", orientacion: "vertical"])
 
-                document.add(tablaObservaciones)
+//                document.add(tablaObservaciones)
             }
 //            println "<<<<< currentPag: $currentPag totalPags: $totalPags rowsCurPag: $rowsCurPag maxRowsLastPag: $maxRowsLastPag currentRows: $currentRows maxRows: $maxRows"
         }
@@ -1665,5 +1675,21 @@ class ReportePlanillas3Controller {
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
+
+    def ponePeriodoPlanilla(plnl) {
+        def periodoPlanilla
+        if (plnl.tipoPlanilla.codigo == "A") {
+            periodoPlanilla = "Anticipo"
+        } else if (plnl.tipoPlanilla.codigo == "L") {
+            periodoPlanilla = "Liquidación del reajuste (${fechaConFormato(plnl.fechaPresentacion, 'dd-MMM-yyyy')})"
+        } else if (plnl.tipoPlanilla.codigo in ["P", "D"]){
+            periodoPlanilla = 'del ' + fechaConFormato(plnl.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(plnl.fechaFin, "dd-MMM-yyyy")
+        } else if (plnl.tipoPlanilla.codigo == "Q"){
+            periodoPlanilla = 'del ' + fechaConFormato(plnl.fechaInicio, "dd-MMM-yyyy") + ' al ' +
+                    fechaConFormato(plnl.contrato.fechaPedidoRecepcionFiscalizador, "dd-MMM-yyyy") + " (liquidación)"
+        }
+        periodoPlanilla
+    }
+
 
 }

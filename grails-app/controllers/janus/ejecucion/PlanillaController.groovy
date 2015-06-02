@@ -1579,10 +1579,12 @@ class PlanillaController extends janus.seguridad.Shield {
         def ultimo = ""
         def prdo = 0
         // se presenta el o los primeros periodos no planillados, o todos si el presente y último
-        println "---pone periodos"
-        if (planillasAvance.size() == 0) {
+//        println "---pone periodos"
+//        if (planillasAvance.size() == 0) {
+        if (tiposPlanilla.codigo.contains("P") || tiposPlanilla.codigo.contains("Q") || tiposPlanilla.codigo.contains("D")) {
             periodosEjec.each {pe ->
                 ultimo = texto
+//                println "procesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')}"
                 fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
                 if((pe.fechaFin >= pe.fechaInicio) && !lleno) {
                     if(pe.fechaFin == fcfm) {
@@ -1677,8 +1679,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 min("fechaInicio")
             }
         }
-
-        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado, anticipoPagado: $anticipoPagado"
+//        println "periodos: $periodos"
+//        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado, anticipoPagado: $anticipoPagado"
         tiposPlanilla = tiposPlanilla.sort{it.nombre}
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
