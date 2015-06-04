@@ -35,7 +35,7 @@
                 <th>Valor</th>
                 <th>Memorando<br/> pedido de pago</th>
                 <th>Fecha <br/>Mem. pedido</th>
-                <th>Fecha de Pago</th>
+                <th>Fecha de acreditación</th>
 
             </tr>
             </thead>

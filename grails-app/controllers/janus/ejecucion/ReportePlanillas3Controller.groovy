@@ -287,7 +287,7 @@ class ReportePlanillas3Controller {
 
         Document document
         document = new Document(PageSize.A4.rotate());
-//        document.setMargins(2.5,2.5,2.5,1)
+        document.setMargins(50,30,30,28)  //se 28 equivale a 1 cm: izq, derecha, arriba y abajo
         def pdfw = PdfWriter.getInstance(document, baos);
         document.resetHeader()
         document.resetFooter()
@@ -303,6 +303,8 @@ class ReportePlanillas3Controller {
         def printFirmas = { params ->
             def tablaFirmas = new PdfPTable(5);
             tablaFirmas.setWidthPercentage(100);
+//            tablaFirmas.setSpacingBefore(0)
+//            tablaFirmas.setSpacingAfter(0)
 
             def parametros = Parametros.get(1)
 
@@ -325,7 +327,7 @@ class ReportePlanillas3Controller {
                 fontThFirmas = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
                 fontTdFirmas = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL);
 
-                tablaFirmas.setWidths(arregloEnteros([35, 5,30,5, 35]))
+                tablaFirmas.setWidths(arregloEnteros([35, 5, 30, 5, 35]))
 
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -407,7 +409,7 @@ class ReportePlanillas3Controller {
             Paragraph preface = new Paragraph();
             addEmptyLine(preface, 1);
             preface.setAlignment(Element.ALIGN_CENTER);
-            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+            preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
             preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, fontTituloGad));
             addEmptyLine(preface, params.espacio);
             Paragraph preface2 = new Paragraph();
@@ -1489,7 +1491,7 @@ class ReportePlanillas3Controller {
 
             def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
             def height = 12
-            def maxRows = 46     //45
+            def maxRows = 48     //45
             def extraRows = 18   //9
             def currentRows = 1
 

@@ -77,7 +77,7 @@
 
             <div class="tituloPdf">
                 <p>
-                    <b style="font-size: 18px">G.A.D. PROVINCIA DE PICHINCHA</b>
+                    <b style="font-size: 18px">SEP - G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
                 <p style="font-size: 14px">

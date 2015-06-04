@@ -23,7 +23,7 @@ class ReportesServiceTestsController {
         def pdfw = PdfWriter.getInstance(document, baos)
 
         reportesPdfService.documentoFooter(document, "Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec")
-        reportesPdfService.documentoHeader(document, "G.A.D. Pichincha", true)
+        reportesPdfService.documentoHeader(document, "SEP - G.A.D. Pichincha", true)
 
         document.open();
         reportesPdfService.propiedadesDocumento(document, "Pruebas " + new Date().format("dd_MM_yyyy"));
@@ -31,7 +31,7 @@ class ReportesServiceTestsController {
         Paragraph preface = new Paragraph();
         reportesPdfService.addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", reportesPdfService.fontTituloGad));
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", reportesPdfService.fontTituloGad));
         preface.add(new Paragraph("PRUEBAS", reportesPdfService.fontTituloGad));
         reportesPdfService.addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();

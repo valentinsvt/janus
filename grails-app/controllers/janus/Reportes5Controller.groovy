@@ -230,7 +230,7 @@ class Reportes5Controller {
         Paragraph headersTitulo = new Paragraph();
         addEmptyLine(headersTitulo, 1)
         headersTitulo.setAlignment(Element.ALIGN_CENTER);
-        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
+        headersTitulo.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
         addEmptyLine(headersTitulo, 1);
         headersTitulo.add(new Paragraph("REPORTE DE AVANCE DE OBRAS", titleFont));
         headersTitulo.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy").toUpperCase(), titleFont3));
@@ -559,7 +559,7 @@ class Reportes5Controller {
 
         def ultimaFila
 
-        label = new Label(1, 2, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(1, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
 
         label = new Label(1, 4, "FÓRMULA POLINÓMICA", times16format); sheet.addCell(label);
 
@@ -796,7 +796,7 @@ class Reportes5Controller {
         Paragraph headersTitulo = new Paragraph();
         addEmptyLine(headersTitulo, 1)
         headersTitulo.setAlignment(Element.ALIGN_CENTER);
-        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
+        headersTitulo.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
         addEmptyLine(headersTitulo, 1);
         headersTitulo.add(new Paragraph("COEFICIENTES DE LA FÓRMULA POLINÓMICA DE LA OBRA ${obra.nombre}", titleFont));
 //        headersTitulo.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy").toUpperCase(), titleFont3));

@@ -143,7 +143,7 @@
 <body>
 <div class="hoja">
     <div class="titulo" style="text-align: center;margin-bottom: 15px;">
-        G.A.D. PROVINCIA DE PICHINCHA <br/>
+        SEP - G.A.D. PROVINCIA DE PICHINCHA <br/>
         GESTIÓN DE PRESUPUESTOS <br/>
         ANÁLISIS DE PRECIOS UNITARIOS  <br/>
     </div>

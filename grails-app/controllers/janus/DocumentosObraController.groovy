@@ -155,7 +155,7 @@ class DocumentosObraController {
 
         def coordinadores = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoordinador, personalDireccion)
 
-        println("Director-->" + firmaDirector)
+//        println("Director-->" + firmaDirector)
 
         //calculo de composición
 
@@ -219,7 +219,7 @@ class DocumentosObraController {
 
         def personalUtfpu =  Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
 
-        println("-->" + personalUtfpu)
+//        println("-->" + personalUtfpu)
 
         def duo = 0
 

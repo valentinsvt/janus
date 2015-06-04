@@ -88,7 +88,7 @@
 
     <body>
         <div class="hoja">
-            <h1 style="font-size: 16px">G.A.D. PROVINCIA DE PICHINCHA</h1>
+            <h1 style="font-size: 16px">SEP - G.A.D. PROVINCIA DE PICHINCHA</h1>
 
             <h2>REPORTE DE COSTOS DE ${grupo?.descripcion?.toUpperCase()}</h2>
 

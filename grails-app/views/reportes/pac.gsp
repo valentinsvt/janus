@@ -123,7 +123,7 @@
 
             <div class="tituloPdf">
                 <p>
-                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>
+                    <b>SEP - G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
                 <p>

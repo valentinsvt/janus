@@ -150,7 +150,7 @@
 
             <div class="tituloPdf tituloHeader">
                 <p class="grande">
-                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>
+                    <b>SEP - G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
                 <p style="font-size: 14px">

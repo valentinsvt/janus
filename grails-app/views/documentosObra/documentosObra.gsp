@@ -78,7 +78,7 @@
     <li><a href="#tab-presupuesto">Presupuesto</a></li>
     <li><a href="#tab-memorando">Memorando</a></li>
     <li><a href="#tab-polinomica">F. Polinómica</a></li>
-    <li><a href="#tab-memorandoPresu">Adm. Directa</a></li>
+    <li><a href="#tab-memorandoPresu">Adm. Directa/Cogestión</a></li>
     <li><a href="#tab-textosFijos">Textos Fijos</a></li>
 
 </ul>

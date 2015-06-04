@@ -716,7 +716,7 @@ class Reportes3Controller {
 
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
-        def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1, "SEP - G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 2, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "ANÁLISIS DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
 
@@ -1430,7 +1430,7 @@ class Reportes3Controller {
             header =
                     "  <div class=\"tituloPdf\">\n" +
                             "                <p style=\"font-size: 18px\">\n" +
-                            "                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
+                            "                    <b>SEP - G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
@@ -1760,7 +1760,7 @@ class Reportes3Controller {
             header =
                     "  <div class=\"tituloPdf tituloHeader\">\n" +
                             "                <p style=\"font-size: 18px\">\n" +
-                            "                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
+                            "                    <b>SEP - G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
@@ -2226,7 +2226,7 @@ class Reportes3Controller {
         Paragraph headers = new Paragraph();
         headers.setAlignment(Element.ALIGN_CENTER);
 
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold))
+        headers.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", times18bold))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE MANO DE OBRA", times14bold ))
         headers.add(new Paragraph(" "))
@@ -2388,7 +2388,7 @@ class Reportes3Controller {
 //        addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
 
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA",times18bold ))
+        headers.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA",times18bold ))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE EQUIPOS", times14bold))
         headers.add(new Paragraph(" "))
@@ -2759,7 +2759,7 @@ class Reportes3Controller {
         Paragraph headers = new Paragraph();
 
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold))
+        headers.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", times18bold))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("REPORTE DE GARANTÍAS", times14bold ))
         headers.add(new Paragraph(" "))
@@ -2871,7 +2871,7 @@ class Reportes3Controller {
                 header =
                         "  <div class=\"tituloPdf tituloHeader\" >\n" +
                                 "                <p style=\"font-size: 18px\">\n" +
-                                "                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
+                                "                    <b>SEP - G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
                                 "                </p>\n" +
                                 "\n" +
                                 "                <p style=\"font-size: 14px\">\n" +
@@ -3285,7 +3285,7 @@ class Reportes3Controller {
         sheet.setColumnView(10, 15)
         sheet.setColumnView(11, 15)
 
-        def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1, "SEP - G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 2, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 

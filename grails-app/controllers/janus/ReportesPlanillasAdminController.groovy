@@ -82,7 +82,7 @@ class ReportesPlanillasAdminController {
 //        Paragraph preface = new Paragraph();
 //        addEmptyLine(preface, 1);
 //        preface.setAlignment(Element.ALIGN_CENTER);
-//        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+//        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
 //        addEmptyLine(preface, 1);
 //        document.add(preface);
 
@@ -384,7 +384,7 @@ class ReportesPlanillasAdminController {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
         preface.add(new Paragraph("Planilla de materiales de " + obra.nombre, fontTituloGad));
         addEmptyLine(preface, 1);
 //        Paragraph preface2 = new Paragraph();

@@ -194,7 +194,7 @@ class ReportesPlanillasController {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
         preface.add(new Paragraph("Cuadro de diferencias de volúmenes entre contratados y ejecutados", fontTituloGad));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
@@ -403,12 +403,16 @@ class ReportesPlanillasController {
 
     def reporteAvanceUI() {
         def contrato = Contrato.get(params.id.toLong())
+        def tppl = TipoPlanilla.findAllByCodigoInList(["P", "Q"])
 
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, tppl, [sort: 'fechaInicio'])
+/*
         def planillasAvance = Planilla.withCriteria {
             eq("contrato", contrato)
             eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
             order("fechaInicio", "asc")
         }
+*/
 
         def fechas = planillasAvance.fechaFin*.format("dd-MM-yyyy")
 
@@ -673,7 +677,7 @@ class ReportesPlanillasController {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
         preface.add(new Paragraph("AVANCE DE LA OBRA " + obra.nombre + " AL " + fechaConFormato(fecha, "dd MMMM yyyy").toUpperCase(), fontTituloGad));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
@@ -1142,7 +1146,7 @@ class ReportesPlanillasController {
 //        Paragraph preface = new Paragraph();
 //        addEmptyLine(preface, 1);
 //        preface.setAlignment(Element.ALIGN_CENTER);
-//        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
+//        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", catFont));
 //        preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, catFont));
 //        addEmptyLine(preface, 1);
 //        Paragraph preface2 = new Paragraph();
@@ -1167,7 +1171,7 @@ class ReportesPlanillasController {
             Paragraph preface = new Paragraph();
             addEmptyLine(preface, 1);
             preface.setAlignment(Element.ALIGN_CENTER);
-            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+            preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
             preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, fontTituloGad));
             addEmptyLine(preface, 1);
             Paragraph preface2 = new Paragraph();
@@ -2063,7 +2067,7 @@ class ReportesPlanillasController {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
         preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, fontTituloGad));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
@@ -2432,7 +2436,7 @@ class ReportesPlanillasController {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
         preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO ", fontTituloGad));
         preface.add(new Paragraph(obra.nombre, fontTituloGad));
         addEmptyLine(preface, 1);
@@ -2702,7 +2706,7 @@ class ReportesPlanillasController {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
         preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO DEL ANTICIPO DE LA OBRA ", fontTituloGad));
         preface.add(new Paragraph(obra.nombre, fontTituloGad));
         addEmptyLine(preface, 1);
@@ -3015,7 +3019,7 @@ class ReportesPlanillasController {
             Paragraph preface = new Paragraph();
             addEmptyLine(preface, 1);
             preface.setAlignment(Element.ALIGN_CENTER);
-            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+            preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
             preface.add(new Paragraph("OFICIO DE INICIO DE LA OBRA " + obra.nombre, fontTituloGad));
             addEmptyLine(preface, 1);
 //        Paragraph preface2 = new Paragraph();
