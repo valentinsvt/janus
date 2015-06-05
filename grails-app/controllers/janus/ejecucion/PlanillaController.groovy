@@ -1474,7 +1474,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def anticipoPagado = false
         def esAnticipo = false
         if (!pla) {
-            esAnticipo = true
+            esAnticipo = false
         } else {
             if (pla.fechaMemoPagoPlanilla) {
                 anticipoPagado = true
@@ -1688,6 +1688,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 //        println "periodos: $periodos"
 //        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado, anticipoPagado: $anticipoPagado"
+        println "es anticipo: $esAnticipo"
         tiposPlanilla = tiposPlanilla.sort{it.nombre}
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,

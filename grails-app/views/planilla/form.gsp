@@ -139,6 +139,7 @@
                             </div>
 
                             <div class="span4">
+                                ${planillaInstance?.tipoPlanilla.id}
                                 <g:if test="${!planillaInstance?.id}">
                                     <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id"
                                               optionValue="nombre"
@@ -270,7 +271,7 @@
                                 <p class="help-block ui-helper-hidden"></p>
                             </div>
                         </div>
-                        <g:if test="${esAnticipo}">
+                        <g:if test="${!esAnticipo}">
                             <div class="row">
                                 <div class="span2 formato">
                                     Periodo para el reajuste
@@ -493,8 +494,10 @@
         });
 
         function checkPeriodo() {
-            if ($("#tipoPlanilla").val() == "3" || "${planillaInstance.tipoPlanilla?.id}" == "3") { //avance
-                %{--if("${planillaInstance.tipoPlanilla?.id}" == "3") {--}%
+            var tppl = $("#tipoPlanilla").val()
+            var tp = ${planillaInstance.tipoPlanilla?.id}
+            %{--console.log("tipo:", $("#tipoPlanilla").val(), ${planillaInstance.tipoPlanilla?.id} )--}%
+            if (tppl == "3" || tppl == "9" || tppl == "6" || (tp == 3 || tp == 6 || tp ==9)) { //avance
                 $(".periodo,.presentacion,#divMultaDisp").show();
             } else {
                 $("#divMultaDisp").hide();
