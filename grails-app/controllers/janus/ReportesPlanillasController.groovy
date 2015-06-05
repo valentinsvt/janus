@@ -601,13 +601,22 @@ class ReportesPlanillasController {
         }
 
         def obra = contrato.oferta.concurso.obra
+//
+//        def planillasAvance = Planilla.withCriteria {
+//            eq("contrato", contrato)
+//            eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
+//            le("fechaFin", fecha)
+//            order("fechaInicio", "asc")
+//        }
 
-        def planillasAvance = Planilla.withCriteria {
-            eq("contrato", contrato)
-            eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
-            le("fechaFin", fecha)
-            order("fechaInicio", "asc")
-        }
+        def tipoP = TipoPlanilla.findByCodigo("P")
+        def tipoQ = TipoPlanilla.findByCodigo("Q")
+        def tipoD = TipoPlanilla.findByCodigo("D")
+        def tipos = [tipoQ, tipoP, tipoD]
+
+
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaFinLessThanEquals(contrato,tipos,fecha)
+
 
         def planillasCosto = Planilla.withCriteria {
             eq("contrato", contrato)
@@ -840,11 +849,11 @@ class ReportesPlanillasController {
         if (avanceContrato) {
             def titulos = [
                     "A.- Resultados de los ensayos de materiales",
-                    "B.- Análisis de la cantidad y calidad de ls equipos y maquinaria en obra",
+                    "B.- Análisis de la cantidad y calidad de los equipos y maquinaria en obra",
                     "C.- Cuadro de las condiciones climáticas del sitio de la obra",
                     "D.- Detalle de la correspondencia intercambiada con el contratista",
                     "E.- Análisis del personal técnico del contratista",
-                    "F.- Actividades más importantes del periodo",
+                    "F.- Actividades más importantes del período",
                     "G.- Seguridad industrial y personal",
                     "H.- Cumplimiento de especificaciones técnicas",
                     "I.- Decisiones importantes",
