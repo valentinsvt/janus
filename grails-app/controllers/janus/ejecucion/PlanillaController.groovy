@@ -1457,7 +1457,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         /*** si no hay planilla de este contrato se presenta solo TPPL: Anticipo **/
         def tiposPlanilla = []
-        tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["A", "P","C", "Q", "L"], [sort: 'codigo'])
+        tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["A", "P","C", "Q", "L", "O"], [sort: 'codigo'])
         println "tipos de planilla: " + tiposPlanilla.codigo
 
         /***/
@@ -1467,6 +1467,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def liquidacionReajuste = TipoPlanilla.findByCodigo('L')
         def costoPorcentaje = TipoPlanilla.findByCodigo('C')
         def resumenMateriales = TipoPlanilla.findByCodigo('M')
+        def obrasAdicionales  = TipoPlanilla.findByCodigo('O')
         /***/
 
 
@@ -1518,6 +1519,11 @@ class PlanillaController extends janus.seguridad.Shield {
                     tiposPlanilla -= plc.tipoPlanilla
                     println "8: " + tiposPlanilla.codigo
                 }
+            }
+            def poa = Planilla.findByContratoAndTipoPlanilla(contrato, obrasAdicionales)
+            if (poa) {
+                tiposPlanilla -= poa.tipoPlanilla
+                println "8a: " + tiposPlanilla.codigo
             }
         }
 
@@ -1978,15 +1984,20 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def save() {  /* guarda planilla */
         println "save "+params
+        def cntr = Contrato.get(params.contrato.id)
         def tipo
         if (params.id) {
             tipo = Planilla.get(params.id).tipoPlanilla
         } else {
             tipo = TipoPlanilla.get(params.tipoPlanilla.id.toLong())
         }
-        if (tipo.codigo == "C" || tipo.codigo == "A") {
+        if (tipo.codigo == "A") {   // anticipo
             params.avanceFisico = 0
         }
+        if (tipo.codigo in ["C", "O"]) {   // costo+%, adicionales
+            params.avanceFisico = Planilla.executeQuery("select max(avanceFisico) from Planilla where contrato = :c", [c: cntr])[0]
+        }
+        println "avance físico: ${params.avanceFisico}"
         /** liquidación**/
         if (tipo.codigo == 'L') {
             def contrato = Contrato.get(params.contrato.id)
@@ -2051,12 +2062,17 @@ class PlanillaController extends janus.seguridad.Shield {
                     println "llego al save !!!!!  "+params.periodoPlan
                     planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
                     break;
-                case 'P':
+                case ['P', 'Q']:
 
                     def periodoPlanilla = params.periodoPlanilla
                     def fechas = periodoPlanilla.split("_")
                     planillaInstance.fechaInicio = new Date().parse("dd-MM-yyyy", fechas[0])
                     planillaInstance.fechaFin = new Date().parse("dd-MM-yyyy", fechas[1])
+                    break;
+                case ['O']:  //obras adicionales pone ultimo mes de la obra <-- prej
+                    def fechaFin = PeriodoEjecucion.findAllByContrato(cntr, [sort: 'fechaFin']).last().fechaFin
+                    planillaInstance.fechaInicio = preciosService.primerDiaDelMes(fechaFin)
+                    planillaInstance.fechaFin = fechaFin
                     break;
                 case "L":
                     //es de liquidacion
@@ -2101,7 +2117,7 @@ class PlanillaController extends janus.seguridad.Shield {
             case 'L':
                 redirect(controller: 'planilla2', action: 'liquidacion', id: planillaInstance.id)
                 break;
-            case 'P':
+            case ['P', 'Q', 'O']:  //avance, liquidación y obras adicionales
                 redirect(action: 'detalle', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])
                 break;
             case 'C':
@@ -4407,29 +4423,6 @@ class PlanillaController extends janus.seguridad.Shield {
         }
     }
 
-//    def procesar() {
-//        println "Inicio de procesar planilla, params: $params"
-//        procesaReajuste(params.id) /** inserta valores de reajuste --> rjpl **/
-//        println "2.completa procesaReajuste"
-//        insertaDetalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
-//
-//        if(Planilla.get(params.id).tipoPlanilla.toString() in ['P', 'Q']){
-//            procesaMultas(params.id)  /* multas */
-//        }
-//
-//        def plnl = Planilla.get(params.id)
-//        if(plnl.tipoPlanilla.toString() == 'P') {
-//            plnl.descuentos = descuentoAnticipo(params.id)
-//            plnl.save(flush: true)
-//        }
-//
-//        println "2.completa procesaReajuste"
-//
-//        render "ok" //debe retornar a planillas y habilitar botón de resumen.
-//
-//    }
-
-
     def procesarLq() {
 //        println "Inicio de procesar planilla Lq, params: $params"
 
@@ -4452,198 +4445,6 @@ class PlanillaController extends janus.seguridad.Shield {
         render "ok" //debe retornar a planillas y habilitar botón de resumen.
     }
 
-    /*---------------------------------------------- borrar -------------------------------*/
-    /* *** Las planillas ya generadas, se ejecuta manualmente el procedimiento insr_pems(cntr__id) ***
-    * calcula los valores Po a aplicarse con esta planilla                                          */
-/*
-    def procesaPlPo(id) {
-        println "procesa planilla, params: $params"
-        def prmt = [:]
-        def plnl = Planilla.get(id)
-        def cntr = Contrato.get(plnl.contrato.id)
-        def prdo = 0
-        def pa
-        def hayAnteriores = false
-        println "tipoPlanilla: $plnl.tipoPlanilla"
-        if (plnl.tipoPlanilla.toString() == 'A'){
-            println " es anticipo"
-            insertaPlAnticipo(plnl, plnl, plnl.valor)
-        } else if (plnl.tipoPlanilla.toString() == "P") {
-            println "Es Avance"
-            //** se selecciona la planilla de anticipo correspondiente y se inserta o actualiza
-            pa = Planilla.findByContratoAndTipoPlanilla(plnl.contrato, TipoPlanilla.findByCodigo('A'))
-            println "planilla de anticipo del contrato: $pa"
-            insertaPlAnticipo(plnl, pa, pa.valor)
-            println ".. procesa anticipo en avance"
-            //** procesa planillas de avance
-            def crParcial = 0.0
-            def crAcumulado = 0.0
-            def plParcial = 0.0
-            def plAcumulado = 0.0
-            def parcial = 0.0
-            def total = 0.0
-            def aDescontar = 0.0
-            def ttDescontar = 0.0
-
-            def pl = Planilla.findAllByContratoAndTipoPlanillaAndFechaPresentacionLessThanEquals(cntr,
-                    TipoPlanilla.findByCodigo('P'), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])
-            pl.each { p ->   //** planillas anteriores
-                println "procesa planilla anterior: ${p.id}"
-                plAcumulado += p.valor
-                //** para cada planilla anterior se debe saber el Po aplicado antes para ingresar la diferencia de aplicarse **
-                if (p.fechaInicio < plnl.fechaInicio) {
-                    prdo++
-                    println "anterior: ${p.id}"
-                    def plpoAnteriores = PlanillaPo.findAllByPlanillaAndPeriodo(p, prdo, [sort: 'periodo'])
-                    println "valores de Po anteriores: ${plpoAnteriores}"
-                    //** insertar Po **
-
-                    plpoAnteriores.each { poAnterior ->
-                        prmt = [:]
-                        def pems = PeriodoEjecucionMes.findAllByContratoAndFechaFinLessThanEquals(p.contrato,
-                                p.fechaFin, [sort: 'fechaInicio'])
-                        parcial = 0.0
-                        total = 0.0
-                        println "pems: $pems"
-                        pems.each {ms ->
-                            if(ms.fechaFin < p.fechaInicio){
-                                total += ms.parcialCronograma
-                            } else {
-                                total += ms.parcialCronograma
-                                parcial += ms.parcialCronograma
-                            }
-                        }
-
-                        println "recalcula Po de: ${poAnterior.valorPo}, con parcial: $parcial, total: $total"
-                        aDescontar = Math.round(poAnterior.parcialCronograma*(1 - cntr.porcentajeAnticipo/100)*100)/100
-                        ttDescontar += aDescontar
-                        println "valor a descaontar: $aDescontar"
-                        if(aDescontar > poAnterior.valorPo) {
-                            prmt.valorPo = aDescontar
-                        }  else
-                            prmt.valorPo = poAnterior.valorPo
-                        prmt.planilla = plnl
-                        prmt.parcialCronograma = parcial
-                        prmt.acumuladoCronograma = total
-                        prmt.parcialPlanillas = p.valor
-                        prmt.acumuladoPlanillas = plAcumulado
-                        prmt.periodo = prdo
-                        prmt.mes = componeMes(p.fechaInicio.format('MMM-yyyy'))
-                        println "Valor de Po para ${pems.last().fechaFin.format('MMM')} es ${prmt.valorPo}"
-                        println " a insertar: $prmt"
-                        println insertaPo(prmt)
-                        hayAnteriores = true
-                        prdo++
-                    }
-                    prdo--
-                } else {  //** planilla actual **
-                    prdo++
-                    def pems = PeriodoEjecucionMes.findAllByContratoAndFechaFinLessThanEquals(plnl.contrato,
-                            plnl.fechaFin, [sort: 'fechaInicio'])
-                    parcial = 0.0
-                    total = 0.0
-                    pems.each {ms ->
-                        if(ms.fechaFin < p.fechaInicio){
-                            total += ms.parcialCronograma
-                        } else {
-                            total += ms.parcialCronograma
-                            parcial += ms.parcialCronograma
-                        }
-                    }
-
-                    //** insertar Po **
-                    prmt = [:]
-                    prmt.planilla = plnl
-                    prmt.parcialCronograma = parcial
-                    prmt.acumuladoCronograma = total
-                    prmt.parcialPlanillas = p.valor
-                    prmt.acumuladoPlanillas = plAcumulado
-                    prmt.periodo = prdo
-                    prmt.mes = componeMes(p.fechaInicio.format('MMM-yyyy'))
-                    if(hayAnteriores){
-                        prmt.valorPo = Math.round((p.valor - plAnteriores(p))*(1 - cntr.porcentajeAnticipo/100)*100)/100
-                    } else {
-                        prmt.valorPo = Math.round((p.valor)*(1 - cntr.porcentajeAnticipo/100)*100)/100
-                    }
-                    println " a insertar: $prmt"
-                    println insertaPo(prmt)
-                }
-            }
-        } else {
-            println "tipo desconocido: ${plnl.tipoPlanilla.toString().size()}"
-        }
-    }
-
-    Integer insertaPo(prm){
-        def plpo = new PlanillaPo()
-        println "insertaPo: planilla : ${prm}"
-        def plpo_an = PlanillaPo.findByPlanillaAndPeriodo(prm.planilla, prm.periodo)
-        if(plpo_an){
-            plpo = PlanillaPo.get(plpo_an.id)
-            plpo.valorPo = prm.valorPo
-            plpo.parcialCronograma = prm.parcialCronograma?: 0
-            plpo.acumuladoCronograma = prm.acumuladoCronograma?: 0
-            plpo.parcialPlanillas = prm.parcialPlanillas?: 0
-            plpo.acumuladoPlanillas = prm.acumuladoPlanillas?: 0
-            println "actualiza valores de: $prm"
-        } else {
-            plpo.planilla = prm.planilla
-            plpo.valorPo = prm.valorPo
-            plpo.parcialCronograma = prm.parcialCronograma?: 0
-            plpo.acumuladoCronograma = prm.acumuladoCronograma?: 0
-            plpo.parcialPlanillas = prm.parcialPlanillas?: 0
-            plpo.acumuladoPlanillas = prm.acumuladoPlanillas?: 0
-            plpo.mes = prm.mes
-            plpo.periodo = prm.periodo
-            println "inserta valores de: $prm"
-        }
-        if (plpo.save([flush: true])) {
-            flash.clase = "alert-success"
-            flash.message = "Orden de inicio de obra guardado exitosamente."
-            return 1
-        } else {
-            flash.clase = "alert-error"
-            flash.message = "Ha ocurrido un error al guardar la orden de inicio de obra."
-            println "errores: " + plpo.errors
-            return 0
-        }
-    }
-
-
-    def insertaPlAnticipo(plnl, pa, valor){
-        println "inicia insertaPlAnticipo"
-        def plpo_pa = PlanillaPo.findByPlanillaAndPeriodoEjecucionMesIsNull(plnl)
-        if (plpo_pa) {
-            if (plpo_pa.valorPo != valor) {
-                plpo_pa.valorPo = valor
-                plpo_pa.save(flush: true)
-                println "actualiza planilla de anticipo con: $plpo_pa.valorPo"
-            }
-        } else {
-            def plpo = new PlanillaPo()
-            plpo.planilla = plnl
-            plpo.valorPo = valor
-            if(plnl.id == pa.id){
-                plpo.mes = componeMes(pa.fechaIngreso.format('MMM-yyyy'))
-            } else {
-                plpo.mes = componeMes(pa.fechaPago.format('MMM-yyyy'))
-            }
-
-            plpo.periodo = 0
-            if (plpo.save([flush: true])) {
-                flash.clase = "alert-success"
-                flash.message = "Orden de inicio de obra guardado exitosamente."
-                return 1
-            } else {
-                flash.clase = "alert-error"
-                flash.message = "Ha ocurrido un error al guardar la orden de inicio de obra."
-                println "errores: " + plpo.errors
-                return 0
-            }
-        }
-    }
-    //*----------------- fin ----------------------------- borrar -------------------------------
-*/
 
 
     /** calcula el valor planilla anterior para determinar el Po

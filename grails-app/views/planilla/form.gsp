@@ -139,7 +139,7 @@
                             </div>
 
                             <div class="span4">
-                                ${planillaInstance?.tipoPlanilla.id}
+                                ${planillaInstance?.tipoPlanilla?.id}
                                 <g:if test="${!planillaInstance?.id}">
                                     <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id"
                                               optionValue="nombre"
@@ -495,21 +495,28 @@
 
         function checkPeriodo() {
             var tppl = $("#tipoPlanilla").val()
-            var tp = ${planillaInstance.tipoPlanilla?.id}
-            %{--console.log("tipo:", $("#tipoPlanilla").val(), ${planillaInstance.tipoPlanilla?.id} )--}%
-            if (tppl == "3" || tppl == "9" || tppl == "6" || (tp == 3 || tp == 6 || tp ==9)) { //avance
+            var tp = "${planillaInstance?.tipoPlanilla?.id}"
+            if(isNaN(tp)) {
+               tp = 0
+            }
+//            console.log("tipo:", tppl + " ---tp:" + tp)
+
+            if (tppl == "3" || tppl == "9" || (tp == "3" || tp == "9")) { //avance
+//                console.log("muestra")
                 $(".periodo,.presentacion,#divMultaDisp").show();
             } else {
+//                console.log("esconde")
                 $("#divMultaDisp").hide();
 //            if ($("#tipoPlanilla").val() == "2" || $("#tipoPlanilla").val() == "5") {
-                if ($("#tipoPlanilla").val() == "2") {
-                    $(".presentacion").show();
+                if (tppl == "1" || tppl == "2") {
                     $(".periodo").hide();
-                } else {
-                    $(".periodo").show();
+                    $(".presentacion").hide();
+                } else if (tppl == "5" || tppl == "6") {
+                    $(".periodo").hide();
                     $(".presentacion").show();
                 }
             }
+
         }
 
         function fechas() {

@@ -643,4 +643,12 @@ class PreciosService {
         return calendar.getTime();
     }
 
+    def primerDiaDelMes(fecha) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
+    }
+
+
 }

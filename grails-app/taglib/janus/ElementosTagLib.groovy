@@ -153,7 +153,12 @@ class ElementosTagLib {
 
         str += "<div class='row'>"
         str += "<div class='span1 bold'>Obra</div>"
-        str += "<div class='span5'>" + obra.nombre + " " + obra?.descripcion + "</div>"
+        str += "<div class='span10'>" + obra.nombre + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Descripción</div>"
+        str += "<div class='span10'>" + obra?.descripcion + "</div>"
         str += "</div>"
 
         str += "<div class='row'>"
