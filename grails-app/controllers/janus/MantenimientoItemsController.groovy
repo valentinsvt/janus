@@ -1517,25 +1517,38 @@ class MantenimientoItemsController extends Shield {
 //        println params
         def lugar = Lugar.get(params.id)
 
-        def precios = PrecioRubrosItems.findAllByLugar(lugar)
-        def cant = 0
-        precios.each { p ->
-            try {
-                p.delete(flush: true)
-//                println "p deleted " + p.id
-                cant++
-            } catch (DataIntegrityViolationException e) {
-                println "mantenimiento items controller l 1177: " + e
-                println "\tp not deleted " + p.id
-            }
-        }
+        def seUsa = Obra.countByListaPeso1(lugar)
+        seUsa += Obra.countByListaVolumen0(lugar)
+        seUsa += Obra.countByListaVolumen1(lugar)
+        seUsa += Obra.countByListaVolumen2(lugar)
+        seUsa += Obra.countByListaManoObra(lugar)
 
-        try {
-            lugar.delete(flush: true)
-            render "OK"
-        } catch (DataIntegrityViolationException e) {
-            println "mantenimiento items controller l 1186: " + e
-            render "NO"
+//        println "esta lis si se usa... $seUsa"
+        if (seUsa > 0) {
+//            render "NO_No esposible borrar la lista, ya está utilizada en Obras"
+            render "NO_No esposible borrar la lista, ya está utilizada en Obras"
+        } else {
+
+            def precios = PrecioRubrosItems.findAllByLugar(lugar)
+            def cant = 0
+            precios.each { p ->
+                try {
+                    p.delete(flush: true)
+//                println "p deleted " + p.id
+                    cant++
+                } catch (DataIntegrityViolationException e) {
+                    println "mantenimiento items controller l 1177: " + e
+                    println "\tp not deleted " + p.id
+                }
+            }
+
+            try {
+                lugar.delete(flush: true)
+                render "OK"
+            } catch (DataIntegrityViolationException e) {
+                println "mantenimiento items controller l 1186: " + e
+                render "NO"
+            }
         }
     }
 

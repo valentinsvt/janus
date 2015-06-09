@@ -364,8 +364,13 @@
                                             $("#" + params.parentStrId).removeClass("hasChildren");
                                         }
                                     } else {
+                                        var tx = parts[1]
                                         $("#modal-tree").modal("hide");
-                                        log("Ha ocurrido un error al eliminar", true);
+                                        if(tx) {
+                                            log("Ha ocurrido un error al eliminar" + "<br>" + tx, true);
+                                        } else {
+                                            log("Ha ocurrido un error al eliminar", true);
+                                        }
                                     }
                                 }
                             });
