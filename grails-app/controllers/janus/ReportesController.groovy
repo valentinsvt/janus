@@ -7988,7 +7988,7 @@ class ReportesController {
                     2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
             addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number: (it?.precio + it?.transporte), minFractionDigits:
-                    2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                    6, maxFractionDigits: 6, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
             addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number:((it?.precio + it?.transporte) * it?.cantidad), minFractionDigits:
                     2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)

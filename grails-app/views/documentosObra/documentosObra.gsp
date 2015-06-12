@@ -2403,7 +2403,7 @@
 
             //memoAdmi
 
-            if (active == 3) {
+            if (active == 3) {   /* administracion directa */
 
                 var materiales = $("#materialesMemo").val()
                 var manoObra = $("#manoObraMemo").val()
