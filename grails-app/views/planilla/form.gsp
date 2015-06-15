@@ -278,7 +278,7 @@
                                 </div>
 
                                 <div class="span4" style="width: 400px">
-                                    <g:select name="periodoPlan"
+                                    <g:select name="periodoIndices.id"
                                               from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin', order: 'desc', max: 20])}"
                                               optionKey="id" style="width: 100%"></g:select>
                                 </div>

@@ -650,5 +650,13 @@ class PreciosService {
         return calendar.getTime();
     }
 
+    def componeMes(mes) {
+        if(mes[0..2] == 'Jan') mes = 'Ene' + mes[3..-1]
+        if(mes[0..2] == 'Apr') mes = 'Abr' + mes[3..-1]
+        if(mes[0..2] == 'Aug') mes = 'Ago' + mes[3..-1]
+        if(mes[0..2] == 'Dec') mes = 'Dic' + mes[3..-1]
+        mes
+    }
+
 
 }

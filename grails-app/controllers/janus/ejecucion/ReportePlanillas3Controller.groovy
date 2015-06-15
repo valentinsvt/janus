@@ -485,7 +485,7 @@ class ReportePlanillas3Controller {
             if(!periodos[key]) {
                 periodos[key] = []
                 pagos[key] = [:]
-                pagos[key].indice = rj.periodoInec.fechaInicio.format("MMM-yyyy")
+                pagos[key].indice = preciosService.componeMes(rj.periodoInec.fechaInicio.format("MMM-yyyy"))
                 pagos[key].valor = rj.valorReajustado
             }
             if(rj.periodo == 0) {
