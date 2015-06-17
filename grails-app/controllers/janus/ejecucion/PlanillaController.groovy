@@ -39,15 +39,15 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>(+) Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}</th>"
-        tabla += "<td class='tr'>${numero(rjpl.valorReajustado, 2)}</td>"
+        tabla += "<td class='tr'>${numero((rjpl?.valorReajustado ?: 0), 2)}</td>"
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>SUMA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + rjpl.valorReajustado, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + (rjpl?.valorReajustado ?: 0), 2)}</td>"
         tabla += "</tr>"
         tabla += "<tr>"
         tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + rjpl.valorReajustado, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + (rjpl?.valorReajustado ?: 0), 2)}</td>"
         tabla += "</tr>"
         tabla += "</table>"
 
@@ -55,7 +55,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         if (texto.size() == 0) {
 
-            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + rjpl?.valorReajustado)
+            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + (rjpl?.valorReajustado ?: 0))
 //            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(numero(planilla.valor + planilla.reajuste, 2).replaceAll(',','').toDouble())
             // prueba de vario números
 //            letras() /* prueba valores */
