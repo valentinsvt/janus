@@ -112,7 +112,8 @@
                 </thead>
                 <tbody class="paginate">
                     <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
-                        <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}"/>
+                        %{--<g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}"/>--}%
+                        <g:set var="periodosOk" value="${janus.ejecucion.ReajustePlanilla.findAllByPlanilla(planillaInstance)}"/>
                         <g:set var="eliminable" value="${planillaInstance.fechaMemoSalidaPlanilla == null}"/>
 
                         <tr style="font-size: 10px">
