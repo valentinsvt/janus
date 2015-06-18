@@ -416,13 +416,14 @@ class ReportesPlanillasController {
 
         def fechas = planillasAvance.fechaFin*.format("dd-MM-yyyy")
 
-        return [contrato: contrato, fechas: fechas]
+        return [contrato: contrato, fechas: fechas, planillas: planillasAvance]
     }
 
     def tablaAvance() {
-        def contrato = Contrato.get(params.id.toLong())
-        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-        def avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
+//        println "tablaAvance...: $params"
+        def contrato = Contrato.get(params.id)
+        def plnl = Planilla.get(params.plnl)
+        def avanceContrato = Avance.findAllByContratoAndPlanilla(contrato, plnl)
         def frases = []
         def band = 0
         if (avanceContrato.size() == 0) {
@@ -431,7 +432,7 @@ class ReportesPlanillasController {
             avanceContrato = avanceContrato[0]
             frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
         } else {
-            println "Hay mas de un avance para el contrato ${contrato.id} para la fecha ${params.fecha}: ${avanceContrato.id}"
+            println "Hay mas de un avance para el contrato ${contrato.id} para la planilla ${params.plnl}: ${avanceContrato.id}"
             avanceContrato = avanceContrato[0]
             frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
         }
@@ -470,6 +471,7 @@ class ReportesPlanillasController {
 //                if (frases.size() > 0) {
 //
 //                } else {
+/*
                 def planillasAvance = Planilla.withCriteria {
                     eq("contrato", contrato)
                     eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
@@ -479,6 +481,9 @@ class ReportesPlanillasController {
                 def periodo = Planilla.findAllById(planillasAvance[0].id, [sort: "fechaInicio", order: "desc"])
                 def dia = periodo[0].fechaInicio
                 def fin = periodo[0].fechaFin
+*/
+                def dia = plnl.fechaInicio
+                def fin = plnl.fechaFin
                 while (dia <= fin) {
                     def valM = "", valT = ""
                     if (frases.size() > 0) {
@@ -500,30 +505,31 @@ class ReportesPlanillasController {
             } else {
                 def num = (i + 1).toString().padLeft(2, "0")
                 def val = band == 0 ? avanceContrato["frase" + num] : ""
-                html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, style: "width: 1000px; height:100px;")
+                html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, "maxLength":511, style: "width: 1000px; height:100px;")
             }
         }
 //        }
         html += "<div style='margin-bottom:10px; margin-top:5px;'>" +
                 "<a href='#' id='btnSave' class='btn btn-success'><i class='icon icon-save'></i>Guardar</a>" +
+                "<a href='#' id='btnSpin' hidden >Procesando</a>" +
                 "<a href='#' id='btnPrint' class='btn btn-primary' style='margin-left:15px;'><i class='icon icon-print'></i>Imprimir</a>" +
                 "</div>"
 
-        return [html: html, contrato: contrato, fecha: params.fecha]
+        return [html: html, contrato: contrato, fecha: params.plnl, plnl: plnl.id]
     }
 
     def saveAvance() {
-//        println params
+//        println "---saveAvance planilla:$params.plnl"
         def contrato = Contrato.get(params.id)
-        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-        def avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
+        def plnl = Planilla.get(params.plnl)
+        def avanceContrato = Avance.findAllByContratoAndPlanilla(contrato, plnl)
         def errores = ""
 
         if (avanceContrato.size() == 0) {
-            println "0"
+//            println "0"
             avanceContrato = new Avance([contrato: contrato, fecha: fecha])
         } else if (avanceContrato.size() == 1) {
-            println "1"
+//            println "1"
             avanceContrato = avanceContrato[0]
         } else {
             println "Hay mas de un avance wtf"
@@ -533,7 +539,7 @@ class ReportesPlanillasController {
         params.texto.each { t ->
             //numer^texto
             def parts = t.toString().split("\\^")
-//            println "--------- $parts, ${parts.size()}"
+//            println "--------- ${parts[0]}: ${parts[1].size()}"
             if (parts.size() == 2) {
                 avanceContrato["frase" + parts[0]] = parts[1]
             } else if (parts.size() == 1){
@@ -547,6 +553,7 @@ class ReportesPlanillasController {
         params.clima.each { c ->
             //fecha^manana^tarde
             def parts = c.toString().split("\\^")
+//            println "clima: $parts"
             if (parts.size() == 3) {
                 def fechaAct = new Date().parse("dd-MM-yyyy", parts[0])
                 def fr = FraseClima.findAllByAvanceAndFecha(avanceContrato, fechaAct)
@@ -574,7 +581,8 @@ class ReportesPlanillasController {
     }
 
     def reporteAvance() {
-        def fecha
+//        println "reporteAvance $params"
+        def plnl = Planilla.get(params.plnl)
 
         if (!params.id) {
             flash.message = "No se puede mostrar el reporte de avance sin seleccionar un contrato."
@@ -582,25 +590,12 @@ class ReportesPlanillasController {
             return
         }
 
-        def contrato = Contrato.get(params.id)
+        def contrato = plnl.contrato
         def avanceContrato
 
-        if (params.fecha) {
-            fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-            avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
-        } else {
-            avanceContrato = Avance.findAllByContrato(contrato, [sort: "fecha", order: "desc"])
-            if (avanceContrato.size() == 0) {
-                flash.message = "No existe un avance de obra para el contrato seleccionado."
-                redirect(action: "errores")
-                return
-            } else {
-                avanceContrato = [avanceContrato.first()]
-                fecha = avanceContrato.first().fecha
-            }
-        }
+        avanceContrato = Avance.findByContratoAndPlanilla(contrato, plnl)
 
-        def obra = contrato.oferta.concurso.obra
+        def obra = contrato.obra
 //
 //        def planillasAvance = Planilla.withCriteria {
 //            eq("contrato", contrato)
@@ -615,13 +610,13 @@ class ReportesPlanillasController {
         def tipos = [tipoQ, tipoP, tipoD]
 
 
-        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaFinLessThanEquals(contrato,tipos,fecha)
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaFinLessThanEquals(contrato,tipos, plnl.fechaFin)
 
 
         def planillasCosto = Planilla.withCriteria {
             eq("contrato", contrato)
             eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
-            le("fechaFin", fecha)
+            le("fechaFin", plnl.fechaFin)
         }
 
         def planillaAnticipo = Planilla.withCriteria {
@@ -643,7 +638,7 @@ class ReportesPlanillasController {
         def crej = CronogramaEjecucion.withCriteria {
             inList("volumenObra", detalles)
             periodo {
-                le("fechaFin", fecha)
+                le("fechaFin", plnl.fechaFin)
             }
         }
 
@@ -687,7 +682,7 @@ class ReportesPlanillasController {
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
-        preface.add(new Paragraph("AVANCE DE LA OBRA " + obra.nombre + " AL " + fechaConFormato(fecha, "dd MMMM yyyy").toUpperCase(), fontTituloGad));
+        preface.add(new Paragraph("AVANCE DE LA OBRA " + obra.nombre + " AL " + fechaConFormato(plnl.fechaFin, "dd MMMM yyyy").toUpperCase(), fontTituloGad));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
         preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
@@ -834,17 +829,21 @@ class ReportesPlanillasController {
         document.add(tablaResumen)
 
         def frases = []
+/*
         if (avanceContrato.size() == 0) {
-            println "No hay un avance para el contrato ${contrato.id} para la fecha ${params.fecha}"
+            println "No hay un avance para el contrato ${contrato.id} para la fecha ${plnl.fechaFin}"
             avanceContrato = null
         } else if (avanceContrato.size() == 1) {
-            avanceContrato = avanceContrato[0]
+//            avanceContrato = avanceContrato[0]
             frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
         } else {
-            println "Hay mas de un avance para el contrato ${contrato.id} para la fecha ${params.fecha}: ${avanceContrato.id}"
+            println "Hay mas de un avance para el contrato ${contrato.id} para la fecha ${plnl.fechaFin}: ${avanceContrato.id}"
             avanceContrato = avanceContrato[0]
             frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
         }
+*/
+        frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
+//        println "frases ok, $avanceContrato.id, $frases"
 
         if (avanceContrato) {
             def titulos = [
@@ -868,9 +867,11 @@ class ReportesPlanillasController {
                 document.add(new Paragraph(t, fontTitle))
                 if (i == 2) {
                     //lo del clima
-                    def periodo = Planilla.findAllById(planillasAvance.last().id, [sort: "fechaInicio", order: "desc"])
-                    def dia = periodo[0].fechaInicio
-                    def fin = periodo[0].fechaFin
+//                    def periodo = Planilla.findAllById(planillasAvance.last().id, [sort: "fechaInicio", order: "desc"])
+//                    def dia = periodo[0].fechaInicio
+//                    def fin = periodo[0].fechaFin
+                    def dia = plnl.fechaInicio
+                    def fin = plnl.fechaFin
 
                     def tablaClima = new PdfPTable(3);
                     tablaClima.setWidths(arregloEnteros([40, 30, 30]))

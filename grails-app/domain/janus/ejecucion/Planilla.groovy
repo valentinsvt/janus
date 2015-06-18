@@ -196,4 +196,8 @@ class Planilla {
         descripcionMulta(blank: true, nullable: true,size: 1..255)
         imprimeReajueste(blank: true, nullable: true)
     }
+
+    String toString() {
+        "Planilla: ${numero} Del período: ${fechaInicio.format("dd-MM-yyyy")} al ${fechaFin.format("dd-MM-yyyy")}"
+    }
 }

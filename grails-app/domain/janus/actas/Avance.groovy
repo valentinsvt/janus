@@ -1,11 +1,13 @@
 package janus.actas
 
 import janus.Contrato
+import janus.ejecucion.Planilla
 
 class Avance {
 
     Contrato contrato
-    Date fecha
+//    Date fecha
+    Planilla planilla
 
     String frase01
     String frase02
@@ -32,7 +34,8 @@ class Avance {
         version false
         columns {
             contrato column: 'cntr__id'
-            fecha column: 'avncfcha'
+            planilla column: 'plnl__id'
+//            fecha column: 'avncfcha'
             frase01 column: 'avncfr01'
             frase02 column: 'avncfr02'
             frase03 column: 'avncfr03'

@@ -3,11 +3,11 @@ ${html}
 <script type="text/javascript">
     $(function () {
         var sep = "^";
-        var $btn = $("#btnSave");
         var $sp = spinner;
-        $btn.click(function () {
-            $(this).replaceWith($sp);
-            var data = "id=${contrato.id}&fecha=${fecha}";
+        $("#btnSave").click(function () {
+//            $(this).replaceWith($sp);
+            $("#btnSpin").show();
+            var data = "id=${contrato.id}&plnl=${plnl}";
             $(".texto").each(function () {
                 data += "&texto=" + $(this).data("num") + sep + $(this).val();
             });
@@ -26,14 +26,14 @@ ${html}
                     } else {
                         log(msg, true);
                     }
-                    $sp.replaceWith($btn);
+                    $("#btnSpin").hide(2000);
                 }
             });
             return false;
         });
 
         $("#btnPrint").click(function () {
-            location.href = "${createLink(action:'reporteAvance', id:contrato.id, params:[fecha:fecha])}";
+            location.href = "${createLink(action:'reporteAvance', id:contrato.id, params:[plnl:plnl])}";
             return false;
         });
 

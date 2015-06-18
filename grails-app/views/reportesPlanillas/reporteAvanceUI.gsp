@@ -50,10 +50,11 @@
 
         <fieldset>
             <legend>
-                Fecha
+                Planilla
             </legend>
             %{--<elm:datepicker name="fecha" value="${new Date()}"/>--}%
-            <g:select name="fecha" from="${fechas}"/>
+            %{--<g:select name="fecha" from="${fechas}"/>--}%
+            <g:select name="plnl" from="${planillas}" optionKey="id" style="width: 600px"/>
             <g:link class="btn btnVer" action="tablaAvance" id="${contrato.id}" style="margin-bottom:9px;">Ver informe</g:link>
         </fieldset>
 
@@ -93,7 +94,7 @@
                         type    : "POST",
                         url     : url,
                         data    : {
-                            fecha : $("#fecha").val()
+                            plnl : $("#plnl").val()
                         },
                         success : function (msg) {
                             $div.html(msg);
