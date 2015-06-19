@@ -7,7 +7,7 @@ class Planilla {
 
     Contrato contrato
     TipoPlanilla tipoPlanilla
-    EstadoPlanilla estadoPlanilla
+//    EstadoPlanilla estadoPlanilla
     PeriodosInec periodoIndices
     String numero
     String numeroFactura
@@ -82,7 +82,7 @@ class Planilla {
 
             contrato column: 'cntr__id'
             tipoPlanilla column: 'tppl__id'
-            estadoPlanilla column: 'edpl__id'
+//            estadoPlanilla column: 'edpl__id'
             periodoIndices column: 'prin__id'
 
             numero column: 'plnlnmro'
@@ -147,7 +147,7 @@ class Planilla {
     static constraints = {
         contrato(blank: true, nullable: true)
         tipoPlanilla(blank: true, nullable: true)
-        estadoPlanilla(blank: true, nullable: true)
+//        estadoPlanilla(blank: true, nullable: true)
         periodoIndices(blank: true, nullable: true)
 
         numero(blank: true, nullable: true, maxSize: 30)
@@ -198,6 +198,6 @@ class Planilla {
     }
 
     String toString() {
-        "Planilla: ${numero} Del período: ${fechaInicio.format("dd-MM-yyyy")} al ${fechaFin.format("dd-MM-yyyy")}"
+        "Planilla: ${this.numero} Del período: ${this.fechaInicio?.format("dd-MM-yyyy")} al ${this.fechaFin?.format("dd-MM-yyyy")}"
     }
 }

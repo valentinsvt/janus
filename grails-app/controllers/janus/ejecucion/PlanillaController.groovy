@@ -4676,7 +4676,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     /** retorna el id del periodoInec mas reciente**/
     def indicesDisponibles(plnl, tp) {
-        println "indicesDisponibles para plnl: ${plnl.id}, con ${plnl.periodoIndices}"
+        println "indicesDisponibles para plnl: ${plnl.id}, con ${plnl.periodoIndices},  tp: $tp"
         if (!tp){   /** se refiere al primer pago **/
             def existe = false
             def prin
@@ -4713,18 +4713,19 @@ class PlanillaController extends janus.seguridad.Shield {
             }
 
         } else if(tp == 'R'){
-            println "Recalcula periodo de reajuste para plnl avance: $plnl, tipo ${plnl.tipoPlanilla}"
+//            println "-------------RRR Recalcula periodo de reajuste para plnl: ${plnl.id}, $plnl"
+//            println "Recalcula periodo de reajuste para plnl avance: ${plnl}, tipo ${plnl.tipoPlanilla.codigo}"
             def existe = false
             def prin
             if(plnl.tipoPlanilla.toString() == 'A' ){
                 prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(plnl.fechaPago, plnl.fechaPago)
-                println "  recalculo *********** $prin"
+//                println "  recalculo *********** $prin"
                 return preciosService.verificaIndicesPeriodo(plnl.contrato, prin).size() == 0 ? prin : null
             } else if(plnl.tipoPlanilla.toString() in ['P', 'Q', 'O'] ){
                 def fcin = preciosService.primerDiaDelMes(plnl.fechaFin)
                 def fcfm = preciosService.ultimoDiaDelMes(fcin)
                 prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fcin, fcfm)
-                println "--va a verificaIndicesPeriodo con: plnl: $fcin - $fcfm --> prin: $prin"
+//                println "--va a verificaIndicesPeriodo con: plnl: $fcin - $fcfm --> prin: $prin"
                 return preciosService.verificaIndicesPeriodo(plnl.contrato, prin).size() == 0 ? prin : null
             }
         }
