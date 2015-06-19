@@ -145,6 +145,7 @@
                         <td class="act num cant" data-valor="${cant}">
                             <g:if test="${editable}">
                                 <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${cant > 0 ? cant : ''}"/>
+                                %{--<g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${0}"/>--}%
                             </g:if>
                             <g:else>
                                 <elm:numero number="${cant}" cero="hide"/>
@@ -206,7 +207,8 @@
                         (ev.keyCode >= 96 && ev.keyCode <= 105) ||
                         ev.keyCode == 190 || ev.keyCode == 110 ||
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
-                        ev.keyCode == 37 || ev.keyCode == 39);
+                        ev.keyCode == 37 || ev.keyCode == 39 ||
+                        ev.keyCode == 173 || ev.keyCode == 109);
             }
 
             function updateRow($row) {
