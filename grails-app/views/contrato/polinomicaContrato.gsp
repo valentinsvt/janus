@@ -39,10 +39,10 @@
             </div>
         </div>
 
-        <div id="tabs" style="width: 700px; height: 700px; text-align: center">
+        <div id="tabs" style="width: 900px; height: 600px; text-align: center">
 
             <ul>
-                <li><a href="#tab-formulaPolinomica">Formula Polinómica</a></li>
+                <li><a href="#tab-formulaPolinomica">Fórmula Polinómica</a></li>
                 <li><a href="#tab-cuadrillaTipo">Cuadrilla Tipo</a></li>
 
             </ul>
@@ -50,19 +50,21 @@
             <div id="tab-formulaPolinomica" class="tab">
                 <div class="formula">
                     <fieldset class="borde">
-                        <legend>Formula Polinómica</legend>
-                        <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPoliContrato">
+                        <legend>Fórmula Polinómica</legend>
+                        <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPoliContrato" width="600px">
                             <thead>
                                 <tr>
-                                    <th style="width: 20px; text-align: center">Coeficiente</th>
-                                    <th style="width: 70px">Nombre del Indice (INEC)</th>
-                                    <th style="width: 40px">Valor</th>
+                                    %{--<th style="width: 260px; text-align: center">Subpresupuesto</th>--}%
+                                    <th style="width: 70px; text-align: center">Coeficiente</th>
+                                    <th style="width: 400px">Nombre del Indice (INEC)</th>
+                                    <th style="width: 70px">Valor</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyPoliContrato">
                                 <g:set var="total" value="${0}"/>
                                 <g:each in="${ps}" var="i">
                                     <tr>
+                                        %{--<td>${i?.subPresupuesto.descripcion}</td>--}%
                                         <td>${i?.numero}</td>
                                         <td>${i?.indice?.descripcion}</td>
                                         <td style="text-align: right; width: 40px">${g.formatNumber(number: i?.valor, maxFractionDigits: 3, minFractionDigits: 3)}</td>
@@ -88,15 +90,17 @@
                     <table class="table table-bordered table-striped table-hover table-condensed" id="tablaCuadrilla">
                         <thead>
                             <tr>
-                                <th style="width: 20px; text-align: center">Coeficiente</th>
-                                <th style="width: 70px">Nombre del Indice (INEC)</th>
-                                <th style="width: 40px">Valor</th>
+                                %{--<th style="width: 260px; text-align: center">Subpresupuesto</th>--}%
+                                <th style="width: 70px; text-align: center">Coeficiente</th>
+                                <th style="width: 400px">Nombre del Indice (INEC)</th>
+                                <th style="width: 70px">Valor</th>
                             </tr>
                         </thead>
                         <tbody id="bodyCuadrilla">
                             <g:set var="total" value="${0}"/>
                             <g:each in="${cuadrilla}" var="i">
                                 <tr>
+                                    %{--<td>${i?.subPresupuesto.descripcion}</td>--}%
                                     <td>${i?.numero}</td>
                                     <td>${i?.indice?.descripcion}</td>
                                     <td style="text-align: right; width: 40px">${g.formatNumber(number: i?.valor, maxFractionDigits: 3, minFractionDigits: 3)}</td>

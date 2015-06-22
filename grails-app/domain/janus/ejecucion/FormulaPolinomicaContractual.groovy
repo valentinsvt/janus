@@ -2,6 +2,7 @@ package janus.ejecucion
 
 import janus.Contrato
 import janus.Indice
+import janus.SubPresupuesto
 
 class FormulaPolinomicaContractual implements Serializable {
 
@@ -10,7 +11,7 @@ class FormulaPolinomicaContractual implements Serializable {
     Indice indice
     String numero
     double valor
-
+//    SubPresupuesto subPresupuesto
 
     static mapping = {
 
@@ -26,6 +27,7 @@ class FormulaPolinomicaContractual implements Serializable {
             indice column: 'indc__id'
             numero column: 'frplnmro'
             valor column: 'frplvlor'
+            subPresupuesto column: 'sbpr__id'
         }
     }
 

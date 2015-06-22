@@ -10,7 +10,7 @@ class Planilla {
 //    EstadoPlanilla estadoPlanilla
     PeriodosInec periodoIndices
     String numero
-    String numeroFactura
+//    String numeroFactura
     Date fechaPresentacion
     Date fechaIngreso
     String descripcion
@@ -68,7 +68,7 @@ class Planilla {
     String descripcionMulta
     Double multaEspecial = 0
     /*Planilla en la que se tienen que imprimir el reajuste del periodo*/
-    Planilla imprimeReajueste
+//    Planilla imprimeReajueste
 
     static auditable = true
     static mapping = {
@@ -86,7 +86,7 @@ class Planilla {
             periodoIndices column: 'prin__id'
 
             numero column: 'plnlnmro'
-            numeroFactura column: 'plnlfctr'
+//            numeroFactura column: 'plnlfctr'
             fechaPresentacion column: 'plnlfcpr'
             fechaIngreso column: 'plnlfcig'
             fechaPago column: 'plnlfcpg'
@@ -140,7 +140,7 @@ class Planilla {
 
             descripcionMulta column: 'plnldsml'
             multaEspecial column: 'plnlmles'
-            imprimeReajueste column: 'plnlimid'
+//            imprimeReajueste column: 'plnlimid'
         }
     }
 
@@ -151,7 +151,7 @@ class Planilla {
         periodoIndices(blank: true, nullable: true)
 
         numero(blank: true, nullable: true, maxSize: 30)
-        numeroFactura(maxSize: 15, blank: true, nullable: true)
+//        numeroFactura(maxSize: 15, blank: true, nullable: true)
         fechaPresentacion(blank: true, nullable: true)
         fechaIngreso(blank: true, nullable: true)
         fechaPago(blank: true, nullable: true)
@@ -194,7 +194,7 @@ class Planilla {
 
         multaEspecial(blank: true, nullable: true)
         descripcionMulta(blank: true, nullable: true,size: 1..255)
-        imprimeReajueste(blank: true, nullable: true)
+//        imprimeReajueste(blank: true, nullable: true)
     }
 
     String toString() {

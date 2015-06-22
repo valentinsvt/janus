@@ -167,8 +167,9 @@
                                 </g:if>
 
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O']}">
-                                    <g:link controller="planilla" action="form" params="[id:planillaInstance.id,contrato:planillaInstance.contrato.id]" rel="tooltip" title="Editar" class="btn btn-small">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O'] && !planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                    <g:link controller="planilla" action="form" params="[id:planillaInstance.id,contrato:planillaInstance.contrato.id]"
+                                            rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>
                                     </g:link>
                                 </g:if>

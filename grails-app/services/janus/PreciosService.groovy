@@ -543,14 +543,20 @@ class PreciosService {
 
     def verificaIndicesPeriodo(contrato, periodo){
         def cn = dbConnectionService.getConnection()
-        def sql = "select * from verifica_indices("+ contrato.id + ","+ periodo.id +") "
-        def result = []
-        cn.eachRow(sql.toString()) { r ->
+        if(periodo) {
+            def sql = "select * from verifica_indices("+ contrato.id + ","+ periodo.id +") "
+            def result = []
+            cn.eachRow(sql.toString()) { r ->
 //            println "res "+r
-            result.add(r.toRowResult())
+                result.add(r.toRowResult())
+            }
+            cn.close()
+            return result
+        } else {
+            return "no hay índices"
         }
-        cn.close()
-        return result
+
+
     }
 
 
