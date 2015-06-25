@@ -48,10 +48,14 @@
             </div>
         </div>
 
+
+    <g:if test="${planillaObras.size() > 0}">
         <fieldset style="margin-bottom: 20px">
             <legend>Obras Adicionales</legend>
             <a href="#" id="btnAdicionales" class="btn btn-default"><i class='icon icon-print'></i> Imprimir</a>
         </fieldset>
+    </g:if>
+
 
         <fieldset>
             <legend>
@@ -72,6 +76,10 @@
         </fieldset>
 
         <script type="text/javascript">
+
+
+
+
             $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
 
             function log(msg, error) {
@@ -89,6 +97,13 @@
                 });
             }
             $(function () {
+
+                $("#btnAdicionales").click(function () {
+                    location.href = "${createLink(action:'reporteObrasAdicionales', id:contrato.id, params:[contrato: contrato.id])}";
+                    return false;
+                });
+
+
                 $(".btnVer").click(function () {
                     var $fs = $("#fsTextos");
                     var $div = $("#divTextos");
