@@ -220,7 +220,7 @@ class ReportePlanillas3Controller {
             }
         }
 
-        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla)
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla, [sort: "periodo", order: "asc"])
 
 
 

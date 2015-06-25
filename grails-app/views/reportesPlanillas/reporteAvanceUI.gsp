@@ -45,16 +45,14 @@
                     <i class="icon-arrow-left"></i>
                     Contrato
                 </g:link>
+                <g:if test="${planillaObras.size() > 0}">
+                    <a href="#" id="btnAdicionales" class="btn btn-default"><i class='icon icon-print'></i> Imprimir informe de Obras Adicionales</a>
+                </g:if>
             </div>
         </div>
 
 
-    <g:if test="${planillaObras.size() > 0}">
-        <fieldset style="margin-bottom: 20px">
-            <legend>Obras Adicionales</legend>
-            <a href="#" id="btnAdicionales" class="btn btn-default"><i class='icon icon-print'></i> Imprimir</a>
-        </fieldset>
-    </g:if>
+
 
 
         <fieldset>
