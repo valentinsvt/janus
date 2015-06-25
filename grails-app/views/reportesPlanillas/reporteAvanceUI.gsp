@@ -48,6 +48,11 @@
             </div>
         </div>
 
+        <fieldset style="margin-bottom: 20px">
+            <legend>Obras Adicionales</legend>
+            <a href="#" id="btnAdicionales" class="btn btn-default"><i class='icon icon-print'></i> Imprimir</a>
+        </fieldset>
+
         <fieldset>
             <legend>
                 Planilla
