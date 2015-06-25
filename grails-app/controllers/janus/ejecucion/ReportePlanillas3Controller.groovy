@@ -1159,7 +1159,6 @@ class ReportePlanillas3Controller {
 
                 addCellTabla(tablaDetalles, logo, [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaDetalles, tablaHeaderDetalles, [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 10, pl: 40])
-
                 addCellTabla(tablaDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 11])
 
 
@@ -1285,7 +1284,15 @@ class ReportePlanillas3Controller {
                     def cAcu = params.acu + bAcu + cpAcu
 
 //                    def dAnt = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.descuentos } ?: 0
-                    def dAnt = planillasReajusteD4.sum { it.descuentos } ?: 0
+//                    def dAnt = planillasReajusteD4.sum { it.descuentos } ?: 0
+                    def dAnt = planillasReajusteD4.last().descuentos ?: 0
+
+
+//                    planillasReajusteD4.each {
+//
+//                        println("anterior desc" + it)
+//
+//                    }
 
 
                     def d = planilla.descuentos
