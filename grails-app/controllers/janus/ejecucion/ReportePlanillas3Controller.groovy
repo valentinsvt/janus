@@ -1219,9 +1219,11 @@ class ReportePlanillas3Controller {
                 def valoresAnterioresD4 = []
                 def totalAnterioresD4 = 0
 
+
                 if(reajustesPlanilla.size() > 1){
                     reajustesPlanilla.each { pl ->
                         if(pl.planillaReajustada != ultimoReajusteD4){
+
                             planillasReajusteD4 += pl.planillaReajustada
                         }
                     }
@@ -1285,13 +1287,28 @@ class ReportePlanillas3Controller {
 
 //                    def dAnt = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.descuentos } ?: 0
 //                    def dAnt = planillasReajusteD4.sum { it.descuentos } ?: 0
-                    def dAnt = planillasReajusteD4.last().descuentos ?: 0
+//                    def dAnt = planillasReajusteD4.last().descuentos ?: 0
+
+
+
+
+                  def dAntPlanilla = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(["P", "Q"]), [sort: "fechaPresentacion"])
+
+                    def dAnt = 0
+
+                    dAntPlanilla.pop()
+
+                    dAntPlanilla.each {
+
+                        dAnt += it.descuentos
+
+                    }
+
 
 
 //                    planillasReajusteD4.each {
-//
-//                        println("anterior desc" + it)
-//
+////                        println("anterior desc" + it)
+//                        dAnt += it.descuentos
 //                    }
 
 
