@@ -355,7 +355,7 @@
                             </div>
                         </div>
                         <g:if test="${!esAnticipo}">
-                            <div class="row" style="margin-bottom: 10px;">
+                            <div class="row hide" style="margin-bottom: 10px;" id="divMulta">
                                 <div class='span2 formato'>
                                     Multa
                                 </div>
@@ -456,41 +456,27 @@
             return validarNum(ev);
 
         }).keyup(function () {
-
             var enteros = $(this).val();
 
             if (parseFloat(enteros) > 100) {
-
                 $(this).val(100)
-
             }
             if (parseFloat(enteros) <= 0) {
-
                 $(this).val(0)
-
             }
-
         });
 
         $("#diasMultaDisposiciones").keydown(function (ev) {
-
             return validarNum(ev);
-
         }).keyup(function () {
-
             var enteros = $(this).val();
 
             if (parseFloat(enteros) > 1000) {
-
                 $(this).val(999)
-
             }
             if (parseFloat(enteros) <= 0) {
-
                 $(this).val(0)
-
             }
-
         });
 
         function checkPeriodo() {
@@ -503,10 +489,11 @@
 
             if (tppl == "3" || tppl == "9" || (tp == "3" || tp == "9")) { //avance
 //                console.log("muestra")
-                $(".periodo,.presentacion,#divMultaDisp").show();
+                $(".periodo,.presentacion,#divMultaDisp, #divMulta").show();
             } else {
 //                console.log("esconde")
                 $("#divMultaDisp").hide();
+                $("#divMulta").hide();
 //            if ($("#tipoPlanilla").val() == "2" || $("#tipoPlanilla").val() == "5") {
                 if (tppl == "1" || tppl == "2") {
                     $(".periodo").hide();

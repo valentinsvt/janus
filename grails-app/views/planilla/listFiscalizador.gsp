@@ -55,11 +55,14 @@
 
         <div class="row">
             <div class="span12" role="navigation">
+%{--
                 <g:if test="${ultimaAvance &&
                         ultimaAvance.fechaFin &&
                         prej[0] &&
                         prej[0]?.fechaFin &&
                         ultimaAvance?.fechaFin >= prej[0]?.fechaFin}">
+--}%
+                <g:if test="${liquidacion}">
                     <div class="btn-group">
                         <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
                         <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
@@ -167,7 +170,7 @@
                                 </g:if>
 
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O'] && !planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C'] && !planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                     <g:link controller="planilla" action="form" params="[id:planillaInstance.id,contrato:planillaInstance.contrato.id]"
                                             rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>

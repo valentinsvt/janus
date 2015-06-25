@@ -14,6 +14,8 @@ class ReajustePlanilla {
     int periodo
     double valorReajustado
     Date fechaReajuste
+    Date fechaInicio
+    Date fechaFin
     double factor
 
     static mapping = {
@@ -38,6 +40,8 @@ class ReajustePlanilla {
             valorReajustado column: 'rjplvlor'
             fechaReajuste column: 'rjplfcha'
             factor column: 'rjplfctr'
+            fechaInicio column: 'rjplfcin'
+            fechaFin column: 'rjplfcfn'
 
         }
 
@@ -56,7 +60,8 @@ class ReajustePlanilla {
         acumuladoPlanillas(blank:false, nullable: false)
         periodo(blank:false, nullable: false)
         mes(blank:false, nullable: false)
-
+        fechaInicio(blank:true, nullable: true)
+        fechaFin(blank:true, nullable: true)
     }
 
 }
