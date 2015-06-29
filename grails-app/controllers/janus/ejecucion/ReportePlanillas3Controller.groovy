@@ -862,7 +862,8 @@ class ReportePlanillas3Controller {
 //                cells[2][i] = new Paragraph(numero(totalesPeriodoFr[per3.key]), fontTd)
                 cells[2][i] = new Paragraph(numero(reajustesPlanilla[0].valorPo,2), fontTd)
                 def t = (reajustesPlanilla[0].valorPo * fr1).round(2)
-                cells[3][i] = new Paragraph(numero(t,2), fontTd)
+//                cells[3][i] = new Paragraph(numero(t,2), fontTd)
+                cells[3][i] = new Paragraph(numero(reajustesPlanilla[0].valorReajustado,2), fontTd)
                 reajusteTotal += t
             }else{
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
@@ -871,7 +872,8 @@ class ReportePlanillas3Controller {
 //                cells[2][i] = new Paragraph(numero(totalesPeriodoFr[per3.key]), fontTd)
                 cells[2][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorPo,2), fontTd)
                 def t = (reajustesPlanilla[per3.key].valorPo * fr1).round(2)
-                cells[3][i] = new Paragraph(numero(t,2), fontTd)
+//                cells[3][i] = new Paragraph(numero(t,2), fontTd)
+                cells[3][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorReajustado), fontTd)
                 reajusteTotal += t
             }
         }
@@ -1441,6 +1443,11 @@ class ReportePlanillas3Controller {
 //                    totalPlanillarActual = (params.act - (antAct + multasAct))
 //                    totalPlanillarAcumulado = (params.acu - (antAcu + multasAcu))
 
+
+//                    println("1 " + subtotalAnterior)
+//                    println("2 " + cpAnt)
+//                    println("3 " + antAnt)
+//                    println("4 " + multasAnt)
 
                     totalPlanillarAnterior = (subtotalAnterior + cpAnt) - (antAnt + multasAnt)
                     totalPlanillarActual = (subtotalActual + cpAct) - (antAct + multasAct)
