@@ -1,5 +1,6 @@
 package janus
 
+import groovy.time.TimeCategory
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.*
@@ -357,6 +358,8 @@ class CronogramaController extends janus.seguridad.Shield {
 
     def cronogramaObra() {
 
+        // debe mostrar los rubros con sus precios unitarios y totales
+        def inicio = new Date()
         def obra = Obra.get(params.id)
         def subpres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
         def persona = Persona.get(session.usuario.id)
@@ -377,26 +380,23 @@ class CronogramaController extends janus.seguridad.Shield {
             detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         }
 
-        def detalleP = VolumenesObra.findAllByObra(obra, [sort: "orden"])
-
-
         def precios = [:]
         def indirecto = obra.totales / 100
 
         preciosService.ac_rbroObra(obra.id)
 
+        //TODO: mostrar precio unitario, armar respuesta como pcun_totl desde preciosService.rbro_pcun_v2_item
         detalle.each {
             it.refresh()
-
-//            println "detalle:" + it.subPresupuesto.id
-//            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
             def res = preciosService.rbro_pcun_v2_item(obra.id, it.subPresupuesto.id, it.item.id)
-//            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
             precios.put(it.id.toString(), res)
-//            println res
-//            precios.put(it.id.toString(), res)
         }
-        return [detalle: detalle, detalleP: detalleP, precios: precios, obra: obra, subpres: subpres, subpre: subpre, persona: persona, duenoObra: duenoObra]
+
+        def fin = new Date()
+        println "cronogramaObra: precios $precios"
+        println "${TimeCategory.minus(fin, inicio)}"
+
+        return [detalle: detalle, precios: precios, obra: obra, subpres: subpres, subpre: subpre, persona: persona, duenoObra: duenoObra]
     }
 
     def cronogramaObra_antesPresupuestos() {

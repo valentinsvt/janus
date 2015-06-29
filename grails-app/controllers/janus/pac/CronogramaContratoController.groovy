@@ -147,7 +147,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         def precios = [:]
         def indirecto = obra.totales / 100
 
-        preciosService.ac_rbroObra(obra.id)
+//        preciosService.ac_rbroObra(obra.id)
 
         detalle.each {
             it.refresh()
