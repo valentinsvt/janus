@@ -139,7 +139,7 @@
                             </div>
 
                             <div class="span4">
-                                ${planillaInstance?.tipoPlanilla?.id}
+                                %{--${planillaInstance?.tipoPlanilla?.id}--}%
                                 <g:if test="${!planillaInstance?.id}">
                                     <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id"
                                               optionValue="nombre"
@@ -165,6 +165,30 @@
                                     <p class="help-block ui-helper-hidden"></p>
                                 </div>
                             </g:if>
+                        </div>
+
+                        <div class="row">
+                            %{--${planillaInstance?.tipoPlanilla?.codigo}--}%
+                        <g:if test="${planillaInstance?.id && planillaInstance?.tipoPlanilla?.codigo == "C"}">
+                            <div class='span2 formato hide planillaAsociada'>
+                                Planilla Asociada
+                            </div>
+                            <div class="span10 hide planillaAsociada">
+                                <g:select name="asociada" from="${planillas}" optionKey="id" style="width: 600px" value="${planillaInstance?.padreCosto?.id}"/>
+                                <span class="mandatory">*</span>
+                            </div>
+                        </g:if>
+                        <g:else>
+                            <div class='span2 hide formato planillaAsociada'>
+                                Planilla Asociada
+                            </div>
+                            <div class="span10 hide planillaAsociada">
+                                <g:select name="asociada" from="${planillas}" optionKey="id" style="width: 600px" />
+                                <span class="mandatory">*</span>
+
+                                <p class="help-block ui-helper-hidden"></p>
+                            </div>
+                        </g:else>
                         </div>
 
                         <div class="row">
@@ -504,6 +528,27 @@
                 }
             }
 
+
+
+        }
+
+        function cargarAsociada () {
+
+            var tppl = $("#tipoPlanilla").val();
+
+            if(${planillaInstance?.id && planillaInstance?.tipoPlanilla?.codigo == 'C'}){
+                $(".planillaAsociada").show();
+            }else{
+                if(tppl == '5'){
+                    $(".planillaAsociada").show();
+                }else{
+                    $(".planillaAsociada").hide();
+                }
+            }
+
+
+
+
         }
 
         function fechas() {
@@ -514,6 +559,7 @@
 
         $(function () {
             checkPeriodo();
+            cargarAsociada();
 
             $("#frmSave-Planilla").validate({
                 errorPlacement: function (error, element) {
@@ -531,6 +577,7 @@
 
             $("#tipoPlanilla").change(function () {
                 checkPeriodo();
+                cargarAsociada();
             });
         });
 

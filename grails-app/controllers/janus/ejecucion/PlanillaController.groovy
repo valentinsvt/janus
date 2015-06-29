@@ -1456,7 +1456,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         /*** si no hay planilla de este contrato se presenta solo TPPL: Anticipo **/
         def tiposPlanilla = []
-        tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["A", "P","C", "Q", "L", "O"], [sort: 'codigo'])
+        tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["A", "P","C", "Q", "L", "O"], [sort: 'codigo', order: "asc"])
         println "tipos de planilla: " + tiposPlanilla.codigo
 
         /***/
@@ -1694,10 +1694,17 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println "periodos: $periodos"
 //        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado, anticipoPagado: $anticipoPagado"
         println "es anticipo: $esAnticipo"
-        tiposPlanilla = tiposPlanilla.sort{it.nombre}
+        tiposPlanilla = tiposPlanilla.sort{it.codigo}
+
+
+        //planilla asociada
+        def tiposPlan = TipoPlanilla.findAllByCodigoInList(["P", "Q", "O"])
+        def planillasAvanceAsociada = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, tiposPlan, [sort: 'fechaInicio'])
+
+
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
-                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini]
+                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini, planillas: planillasAvanceAsociada]
     }
 
     def form_old() {
@@ -1985,6 +1992,7 @@ class PlanillaController extends janus.seguridad.Shield {
         println "save "+params
         def cntr = Contrato.get(params.contrato.id)
         def tipo
+
         if (params.id) {
             tipo = Planilla.get(params.id).tipoPlanilla
         } else {
@@ -2005,6 +2013,7 @@ class PlanillaController extends janus.seguridad.Shield {
             def ultimaAvance = planillasAvance.last()
             params.avanceFisico = ultimaAvance.avanceFisico
         }
+
         if (!params.diasMultaDisposiciones) params.diasMultaDisposiciones = 0
 
         if (params.fechaPresentacion) params.fechaPresentacion = new Date().parse("dd-MM-yyyy", params.fechaPresentacion)
@@ -2092,6 +2101,11 @@ class PlanillaController extends janus.seguridad.Shield {
                     //es de costo y porcentaje: fecha inicio y fecha fin se ponen la fecha de presentacion (?)
                     planillaInstance.fechaInicio = planillaInstance.fechaPresentacion
                     planillaInstance.fechaFin = planillaInstance.fechaPresentacion
+
+                    def planillaPorAsociar = Planilla.get(params.asociada)
+                    planillaInstance.padreCosto = planillaPorAsociar
+                println("params asociada " + params.asociada)
+                println("padre " + planillaInstance.padreCosto)
                     break;
             }
 
