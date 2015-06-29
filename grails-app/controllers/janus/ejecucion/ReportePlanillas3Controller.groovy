@@ -1300,11 +1300,8 @@ class ReportePlanillas3Controller {
 //                    dAntPlanilla.pop()
 
                     dAntPlanilla.each {
-
                         dAnt += it.descuentos
-
                     }
-
 
 
 //                    planillasReajusteD4.each {
