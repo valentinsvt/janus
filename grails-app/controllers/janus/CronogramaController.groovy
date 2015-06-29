@@ -373,30 +373,40 @@ class CronogramaController extends janus.seguridad.Shield {
         }
 
         def detalle
-
         if (subpre != "-1") {
             detalle = VolumenesObra.findAllByObraAndSubPresupuesto(obra, SubPresupuesto.get(subpre), [sort: "orden"])
         } else {
             detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         }
 
+        def preciosVlob
+        if (subpre == '-1'){
+            preciosVlob = preciosService.rbro_pcun_v2(obra?.id)
+        }else {
+            preciosVlob = preciosService.rbro_pcun_v3(obra?.id, subpre)
+        }
+
+
         def precios = [:]
+        def pcun = [:]
         def indirecto = obra.totales / 100
 
         preciosService.ac_rbroObra(obra.id)
 
         //TODO: mostrar precio unitario, armar respuesta como pcun_totl desde preciosService.rbro_pcun_v2_item
-        detalle.each {
-            it.refresh()
-            def res = preciosService.rbro_pcun_v2_item(obra.id, it.subPresupuesto.id, it.item.id)
-            precios.put(it.id.toString(), res)
+        detalle.each { dt ->
+//            it.refresh()
+//            def res = preciosService.rbro_pcun_v2_item(obra.id, it.subPresupuesto.id, it.item.id)
+//            precios.put(it.id.toString(), res)
+            precios.put(dt.id.toString(), preciosVlob.find { it.vlob__id == dt.id}.totl)
+            pcun.put(dt.id.toString(), preciosVlob.find { it.vlob__id == dt.id}.pcun)
         }
 
         def fin = new Date()
-        println "cronogramaObra: precios $precios"
-        println "${TimeCategory.minus(fin, inicio)}"
+//        println "cronogramaObra: precios $precios"
+//        println "${TimeCategory.minus(fin, inicio)}"
 
-        return [detalle: detalle, precios: precios, obra: obra, subpres: subpres, subpre: subpre, persona: persona, duenoObra: duenoObra]
+        return [detalle: detalle, precios: precios, pcun: pcun, obra: obra, subpres: subpres, subpre: subpre, persona: persona, duenoObra: duenoObra]
     }
 
     def cronogramaObra_antesPresupuestos() {

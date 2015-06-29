@@ -170,7 +170,8 @@
                                         <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                     </td>
                                     <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
-                                        <g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                        %{--<g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                                        <g:formatNumber number="${pcun[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                     </td>
                                     %{--<g:set var="parcial" value="${precios[vol.id.toString()] * vol.cantidad}"/>--}%
                                     <g:set var="parcial" value="${precios[vol.id.toString()]}"/>
