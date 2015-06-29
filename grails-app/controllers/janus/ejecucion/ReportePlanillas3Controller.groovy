@@ -1292,11 +1292,12 @@ class ReportePlanillas3Controller {
 
 
 
-                  def dAntPlanilla = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(["P", "Q"]), [sort: "fechaPresentacion"])
+                  def dAntPlanilla = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(contrato,
+                          TipoPlanilla.findAllByCodigoInList(["P", "Q"]), planilla.fechaPresentacion, [sort: "fechaPresentacion"])
 
                     def dAnt = 0
 
-                    dAntPlanilla.pop()
+//                    dAntPlanilla.pop()
 
                     dAntPlanilla.each {
 
