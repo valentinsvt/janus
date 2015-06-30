@@ -4223,7 +4223,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def iva = Parametros.get(1).iva
         def dets = []
 
-        def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla)
+        def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla , [sort: "id"])
         /*"planilla.id"   :${planilla.id},
             factura         : factura,
             rubro           : rubro,

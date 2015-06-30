@@ -2474,7 +2474,7 @@ class ReportesPlanillasController {
             addCellTabla(tabla, new Paragraph(det.factura, fontTd), prmsTabla)
             addCellTabla(tabla, new Paragraph(det.rubro, fontTd), prmsTabla)
             addCellTabla(tabla, new Paragraph(det.unidad.codigo, fontTd), prmsTabla)
-            addCellTabla(tabla, new Paragraph(numero(det.cantidad,2), fontTd), prmsTabla)
+            addCellTabla(tabla, new Paragraph(numero(det.cantidad,2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(det.monto, 2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(det.montoIva, 2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(det.montoIndirectos, 2), fontTd), prmsTablaNum)

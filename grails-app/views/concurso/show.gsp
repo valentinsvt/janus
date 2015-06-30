@@ -16,6 +16,10 @@
         td {
             line-height : 12px !important;
         }
+
+            .largo{
+                width: 250px;
+            }
         </style>
     </head>
 
@@ -30,12 +34,12 @@
             </div>
         </div>
 
-        <div id="show-concurso" class="span5" role="main">
+        <div id="show-concurso" class="span12" role="main">
             <form class="form-horizontal">
                 <g:if test="${concursoInstance?.obra}">
                     <div class="control-group">
                         <div>
-                            <span id="obra-label" class="control-label label label-inverse">
+                            <span id="obra-label" class="control-label label label-inverse" style="width: 250px">
                                 Obra
                             </span>
                         </div>
@@ -55,7 +59,7 @@
                 <g:if test="${concursoInstance?.administracion}">
                     <div class="control-group">
                         <div>
-                            <span id="administracion-label" class="control-label label label-inverse">
+                            <span id="administracion-label" class="control-label label label-inverse" style="width: 250px">
                                 Administracion
                             </span>
                         </div>
@@ -75,7 +79,7 @@
                 <g:if test="${concursoInstance?.pac}">
                     <div class="control-group">
                         <div>
-                            <span id="pac-label" class="control-label label label-inverse">
+                            <span id="pac-label" class="control-label label label-inverse" style="width: 250px">
                                 Pac
                             </span>
                         </div>
@@ -95,7 +99,7 @@
                 <g:if test="${concursoInstance?.codigo}">
                     <div class="control-group">
                         <div>
-                            <span id="codigo-label" class="control-label label label-inverse">
+                            <span id="codigo-label" class="control-label label label-inverse" style="width: 250px">
                                 Codigo
                             </span>
                         </div>
@@ -113,7 +117,7 @@
                 <g:if test="${concursoInstance?.objeto}">
                     <div class="control-group">
                         <div>
-                            <span id="objeto-label" class="control-label label label-inverse">
+                            <span id="objeto-label" class="control-label label label-inverse" style="width: 250px" >
                                 Objeto
                             </span>
                         </div>
@@ -131,7 +135,7 @@
                 <g:if test="${concursoInstance?.costoBases}">
                     <div class="control-group">
                         <div>
-                            <span id="costoBases-label" class="control-label label label-inverse">
+                            <span id="costoBases-label" class="control-label label label-inverse" style="width: 250px">
                                 Costo Bases
                             </span>
                         </div>
@@ -148,7 +152,7 @@
                 <g:if test="${concursoInstance?.fechaInicio}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaInicio-label" class="control-label label label-inverse">
+                            <span id="fechaInicio-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Inicio
                             </span>
                         </div>
@@ -166,7 +170,7 @@
                 <g:if test="${concursoInstance?.fechaPublicacion}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaPublicacion-label" class="control-label label label-inverse">
+                            <span id="fechaPublicacion-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Publicacion
                             </span>
                         </div>
@@ -184,7 +188,7 @@
                 <g:if test="${concursoInstance?.fechaLimitePreguntas}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaLimitePreguntas-label" class="control-label label label-inverse">
+                            <span id="fechaLimitePreguntas-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Limite Preguntas
                             </span>
                         </div>
@@ -202,7 +206,7 @@
                 <g:if test="${concursoInstance?.fechaLimiteRespuestas}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaLimiteRespuestas-label" class="control-label label label-inverse">
+                            <span id="fechaLimiteRespuestas-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Limite Respuestas
                             </span>
                         </div>
@@ -220,7 +224,7 @@
                 <g:if test="${concursoInstance?.fechaLimiteEntregaOfertas}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaLimiteEntregaOfertas-label" class="control-label label label-inverse">
+                            <span id="fechaLimiteEntregaOfertas-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Limite Entrega Ofertas
                             </span>
                         </div>
@@ -238,7 +242,7 @@
                 <g:if test="${concursoInstance?.fechaLimiteSolicitarConvalidacion}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaLimiteSolicitarConvalidacion-label" class="control-label label label-inverse">
+                            <span id="fechaLimiteSolicitarConvalidacion-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Limite Solicitar Convalidacion
                             </span>
                         </div>
@@ -255,7 +259,7 @@
                 <g:if test="${concursoInstance?.fechaLimiteRespuestaConvalidacion}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaLimiteRespuestaConvalidacion-label" class="control-label label label-inverse">
+                            <span id="fechaLimiteRespuestaConvalidacion-label" class="control-label label label-inverse largo" style="width: 250px">
                                 Fecha Limite Respuesta Convalidacion
                             </span>
                         </div>
@@ -272,7 +276,7 @@
                 <g:if test="${concursoInstance?.fechaCalificacion}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaCalificacion-label" class="control-label label label-inverse">
+                            <span id="fechaCalificacion-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Calificacion
                             </span>
                         </div>
@@ -290,7 +294,7 @@
                 <g:if test="${concursoInstance?.fechaInicioPuja}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaInicioPuja-label" class="control-label label label-inverse">
+                            <span id="fechaInicioPuja-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Inicio Puja
                             </span>
                         </div>
@@ -308,7 +312,7 @@
                 <g:if test="${concursoInstance?.fechaFinPuja}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaFinPuja-label" class="control-label label label-inverse">
+                            <span id="fechaFinPuja-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Fin Puja
                             </span>
                         </div>
@@ -326,7 +330,7 @@
                 <g:if test="${concursoInstance?.fechaAdjudicacion}">
                     <div class="control-group">
                         <div>
-                            <span id="fechaAdjudicacion-label" class="control-label label label-inverse">
+                            <span id="fechaAdjudicacion-label" class="control-label label label-inverse" style="width: 250px">
                                 Fecha Adjudicacion
                             </span>
                         </div>
@@ -344,7 +348,7 @@
                 <g:if test="${concursoInstance?.estado}">
                     <div class="control-group">
                         <div>
-                            <span id="estado-label" class="control-label label label-inverse">
+                            <span id="estado-label" class="control-label label label-inverse" style="width: 250px">
                                 Estado
                             </span>
                         </div>
@@ -362,7 +366,7 @@
                 <g:if test="${concursoInstance?.observaciones}">
                     <div class="control-group">
                         <div>
-                            <span id="observaciones-label" class="control-label label label-inverse">
+                            <span id="observaciones-label" class="control-label label label-inverse" style="width: 250px">
                                 Observaciones
                             </span>
                         </div>
