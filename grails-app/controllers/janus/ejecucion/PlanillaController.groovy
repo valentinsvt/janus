@@ -4191,7 +4191,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def addDetalleCosto() {
-        println("params dettale costo" + params)
+//        println("params dettale costo" + params)
         def detalle = new DetallePlanillaCosto()
         if (params.id) {
             detalle = DetallePlanillaCosto.get(params.id)
@@ -4247,7 +4247,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     monto          : dp.monto,
                     montoIva       : dp.montoIva,
                     montoIndirectos: dp.montoIndirectos,
-                    indirectos     : dp.indirectos,
+//                    indirectos     : dp.indirectos,
                     total          : dp.montoIva + dp.montoIndirectos
             ])
         }
@@ -4259,15 +4259,17 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def totalAnterior = anteriores.size() > 0 ? anteriores.sum { it.valor } : 0
 
-        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 25
+//        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 21
         def max = contrato.monto * 0.1  /* máximo valor a consderar de las planillas costo + porcentae */
         max -= totalAnterior
 
         def json = new JsonBuilder(dets)
 //        println json.toPrettyString()
 
+//        return [planilla: planilla, obra: obra, contrato: contrato,
+//                editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
         return [planilla: planilla, obra: obra, contrato: contrato,
-                editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
+                editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), max: max]
     }
 
 

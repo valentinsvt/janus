@@ -581,7 +581,7 @@
                                             data.id = parts[1];
                                             addRow(data, true);
                                             reset();
-                                            $("#indirectos").hide().after($("<span>" + $("#thIndirectos").data("indi") + "</span>"));
+//                                            $("#indirectos").hide().after($("<span>" + $("#thIndirectos").data("indi") + "</span>"));
                                             spinner.remove();
                                             $("#btnAdd").show();
                                             updateTotal();

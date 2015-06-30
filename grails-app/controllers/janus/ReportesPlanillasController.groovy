@@ -2369,6 +2369,7 @@ class ReportesPlanillasController {
 
         def prmsTablaHead = [bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsTabla = [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def centrado  = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsTablaNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
@@ -2473,7 +2474,7 @@ class ReportesPlanillasController {
 
             addCellTabla(tabla, new Paragraph(det.factura, fontTd), prmsTabla)
             addCellTabla(tabla, new Paragraph(det.rubro, fontTd), prmsTabla)
-            addCellTabla(tabla, new Paragraph(det.unidad.codigo, fontTd), prmsTabla)
+            addCellTabla(tabla, new Paragraph(det.unidad.codigo, fontTd), centrado)
             addCellTabla(tabla, new Paragraph(numero(det.cantidad,2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(det.monto, 2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(det.montoIva, 2), fontTd), prmsTablaNum)

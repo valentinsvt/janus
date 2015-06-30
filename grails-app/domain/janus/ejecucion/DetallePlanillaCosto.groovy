@@ -8,7 +8,7 @@ class DetallePlanillaCosto {
     String factura
     String rubro
     Unidad unidad
-    double indirectos       // porcentaje de costos indirectos
+//    double indirectos       // porcentaje de costos indirectos
     double monto            // monto del rubro sin iva
     double montoIva         // monto del rubro incluido iva
     double montoIndirectos  // monto de los costos indirectos
@@ -25,7 +25,7 @@ class DetallePlanillaCosto {
             planilla column: 'plnl__id'
             rubro column: 'dpcsrbro'
             unidad column: 'undd__id'
-            indirectos column: 'dpcsindr'
+//            indirectos column: 'dpcsindr'
             monto column: 'dpcsmnto'
             montoIva column: 'dpcsmniv'
             montoIndirectos column: 'dpcsmnin'
