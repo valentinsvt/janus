@@ -12,6 +12,7 @@ class DetallePlanillaCosto {
     double monto            // monto del rubro sin iva
     double montoIva         // monto del rubro incluido iva
     double montoIndirectos  // monto de los costos indirectos
+    double cantidad         // monto de los costos indirectos
 
     static mapping = {
         table 'dpcs'
@@ -28,6 +29,7 @@ class DetallePlanillaCosto {
             monto column: 'dpcsmnto'
             montoIva column: 'dpcsmniv'
             montoIndirectos column: 'dpcsmnin'
+            cantidad column: 'dpcscntd'
         }
     }
 
