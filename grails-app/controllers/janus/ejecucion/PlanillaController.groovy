@@ -4191,6 +4191,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def addDetalleCosto() {
+        println("params dettale costo" + params)
         def detalle = new DetallePlanillaCosto()
         if (params.id) {
             detalle = DetallePlanillaCosto.get(params.id)
@@ -4242,6 +4243,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     rubro          : dp.rubro,
                     "unidad.id"    : dp.unidadId,
                     unidadText     : dp.unidad.codigo,
+                    cantidad       : dp.cantidad,
                     monto          : dp.monto,
                     montoIva       : dp.montoIva,
                     montoIndirectos: dp.montoIndirectos,

@@ -77,6 +77,7 @@
                         <th>Factura N.</th>
                         <th>Descripción del rubro</th>
                         <th>Unidad</th>
+                        <th>Cantidad</th>
                         <th>Valor sin IVA</th>
                         <th>
                             Valor con IVA<br/>
@@ -103,10 +104,13 @@
                             <input type="text" id="txtFactura" class="input-small int" style="width: 120px;"/>
                         </td>
                         <td id="tdRubro">
-                            <input type="text" id="txtRubro" class="input-xlarge" style="width: 360px;"/>
+                            <input type="text" id="txtRubro" class="input-xlarge" style="width: 300px;"/>
                         </td>
                         <td id="tdUnidad">
                             <g:select class="input-mini" name="selUnidad" from="${janus.Unidad.list([sort: 'descripcion'])}" optionKey="id" optionValue="codigo"/>
+                        </td>
+                        <td id="tdCantidad">
+                            <input type="text" id="txtCantidad" class="input-small number"/>
                         </td>
                         <td id="tdValor">
                             <input type="text" id="txtValor" class="input-small number"/>
@@ -139,6 +143,7 @@
                     <th style="width: 80px;">Factura N.</th>
                     <th>Descripción del rubro</th>
                     <th style="width: 70px;">U.</th>
+                    <th style="width: 70px;">Cantidad</th>
                     <th style="width: 100px;">Valor sin IVA</th>
                     <th style="width: 100px;">Valor con IVA</th>
                     <th style="width: 100px;">% de indirectos</th>
@@ -153,7 +158,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="6">TOTAL</th>
+                    <th colspan="7">TOTAL</th>
                     <td id="tdTotalFinal" class="num bold" data-max="${max}" data-val= ${0}>0.00</td>
                     <g:if test="${editable}">
                         <td></td>
@@ -240,6 +245,8 @@
                 $("#tdTotal").text("0.00");
                 $("#trRubro").removeData();
                 $("#btnSave").hide();
+                $("#btnAdd").show();
+
             }
 
             function updateVal(tipo) {
@@ -286,6 +293,7 @@
                 var rubro = $.trim($("#txtRubro").val());
                 var unidadId = $("#selUnidad").val();
                 var unidadText = $("#selUnidad option:selected").text();
+                var cantidad = parseFloat($.trim($("#txtCantidad").val()));
                 var valor = parseFloat($.trim($("#txtValor").val()));
                 var valorIva = parseFloat($.trim($("#txtValorIva").val()));
                 var valorIndi = parseFloat($.trim($("#txtIndirectos").val()));
@@ -303,6 +311,7 @@
                         factura         : factura,
                         rubro           : rubro,
                         "unidad.id"     : unidadId,
+                        cantidad        : cantidad,
                         unidadText      : unidadText,
                         monto           : valor,
                         montoIva        : valorIva,
@@ -356,6 +365,7 @@
                 $("#txtRubro").val(data.rubro);
                 $("#selUnidad").val(data["unidad.id"]);
                 $("#txtValor").val(data.monto);
+                $("#txtCantidad").val(data.cantidad);
                 $("#txtValorIva").val(data.montoIva);
                 $("#txtIndirectos").val(data.montoIndirectos);
                 $("#tdTotal").text(number_format(data.total, 2, ".", ","));
@@ -389,6 +399,7 @@
                 $("<td>" + data.factura + "</td>").appendTo($tr);
                 $("<td>" + data.rubro + "</td>").appendTo($tr);
                 $("<td>" + data.unidadText + "</td>").appendTo($tr);
+                $("<td class='num'>" + number_format(data.cantidad, 2, ".", ",") + "</td>").appendTo($tr);
                 $("<td class='num'>" + number_format(data.monto, 2, ".", ",") + "</td>").appendTo($tr);
                 $("<td class='num'>" + number_format(data.montoIva, 2, ".", ",") + "</td>").appendTo($tr);
                 $("<td class='num'>" + number_format(data.montoIndirectos, 2, ".", ",") + "</td>").appendTo($tr);
@@ -451,6 +462,7 @@
                 initRows();
 
                 $("#btnReset").click(function () {
+
                     reset();
                 });
 

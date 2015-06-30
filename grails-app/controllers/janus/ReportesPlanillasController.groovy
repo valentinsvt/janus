@@ -2494,7 +2494,7 @@ class ReportesPlanillasController {
         tablaResumen1.setSpacingAfter(1f);
         tablaResumen1.setSpacingBefore(10f);
 
-        def totalCostoPorcentaje = totalSinIva+totalConIva+totalIndirectos
+        def totalCostoPorcentaje = totalConIva+totalIndirectos
 
         addCellTabla(tablaResumen1, new Paragraph("TOTAL OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE (INCLUYE IVA)", fontResumen), [padding: 5, bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 //        addCellTabla(tablaResumen1, new Paragraph(numero(total, 2), fontResumen), [padding: 5, border: 2, bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
