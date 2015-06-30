@@ -1989,7 +1989,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def save() {  /* guarda planilla */
-        println "save "+params
+//        println "save "+params
         def cntr = Contrato.get(params.contrato.id)
         def tipo
 
@@ -2035,7 +2035,10 @@ class PlanillaController extends janus.seguridad.Shield {
         def planillaInstance
         session.override = false
         if (params.id) {
+//            println("entro")
             params.fechaPresentacion = params.fechaIngreso
+            def planillaPorAsociar = Planilla.get(params.asociada)
+
             planillaInstance = Planilla.get(params.id)
             if (!planillaInstance) {
                 flash.clase = "alert-error"
@@ -2047,6 +2050,7 @@ class PlanillaController extends janus.seguridad.Shield {
             println "es update "+params.valor_multa+"  "+params.multaDescripcion
             println "es update "+params
             planillaInstance.properties = params
+            planillaInstance.padreCosto = planillaPorAsociar
             if(!params.valor_multa ||  params.valor_multa=="")
                 params.valor_multa =0
 //            planillaInstance.descripcionMulta = params.multaDescripcion

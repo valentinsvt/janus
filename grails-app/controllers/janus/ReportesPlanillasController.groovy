@@ -2441,9 +2441,9 @@ class ReportesPlanillasController {
         /* ************************************************************* FIN HEADER PLANILLA ***************************************************************************/
 
         /* ************************************************************* TABLA DE DATOS ***************************************************************************/
-        def tabla = new PdfPTable(7);
+        def tabla = new PdfPTable(8);
         tabla.setWidthPercentage(100);
-        tabla.setWidths(arregloEnteros([10, 40, 10, 10, 10, 10, 10]))
+        tabla.setWidths(arregloEnteros([10, 40, 10, 10, 10, 10, 10, 10]))
         tabla.setWidthPercentage(100);
         tabla.setSpacingAfter(1f);
         tabla.setSpacingBefore(10f);
@@ -2451,27 +2451,39 @@ class ReportesPlanillasController {
         addCellTabla(tabla, new Paragraph("Factura N.", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("Descripción del rubro", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("U.", fontTh), prmsTablaHead)
+        addCellTabla(tabla, new Paragraph("Cantidad", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("Valor sin IVA", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("Valor con IVA", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("% de indirectos (" + numero(detalles[0].indirectos, 0) + "%)", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("Valor total", fontTh), prmsTablaHead)
 
         def total = 0
+        def totalSinIva = 0
+        def totalConIva = 0
+        def totalIndirectos = 0
 
         detalles.each { det ->
-            def tot = det.montoIndirectos + det.montoIva
+//            def tot = det.montoIndirectos + det.montoIva
+            def tot = det.monto + det.montoIndirectos
             total += tot
+            totalSinIva += det.monto
+            totalConIva += det.montoIva
+            totalIndirectos += det.montoIndirectos
+
             addCellTabla(tabla, new Paragraph(det.factura, fontTd), prmsTabla)
             addCellTabla(tabla, new Paragraph(det.rubro, fontTd), prmsTabla)
             addCellTabla(tabla, new Paragraph(det.unidad.codigo, fontTd), prmsTabla)
+            addCellTabla(tabla, new Paragraph(numero(det.cantidad,2), fontTd), prmsTabla)
             addCellTabla(tabla, new Paragraph(numero(det.monto, 2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(det.montoIva, 2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(det.montoIndirectos, 2), fontTd), prmsTablaNum)
             addCellTabla(tabla, new Paragraph(numero(tot, 2), fontTd), prmsTablaNum)
         }
-        addCellTabla(tabla, new Paragraph("TOTAL", fontTh), [bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 6])
+        addCellTabla(tabla, new Paragraph("TOTALES", fontTh), [bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 4])
+        addCellTabla(tabla, new Paragraph(numero(totalSinIva, 2), fontTh), [bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph(numero(totalConIva, 2), fontTh), [bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph(numero(totalIndirectos, 2), fontTh), [bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tabla, new Paragraph(numero(total, 2), fontTh), [bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-
         document.add(tabla)
         /* ************************************************************* FIN TABLA DE DATOS ***************************************************************************/
 
@@ -2482,8 +2494,11 @@ class ReportesPlanillasController {
         tablaResumen1.setSpacingAfter(1f);
         tablaResumen1.setSpacingBefore(10f);
 
-        addCellTabla(tablaResumen1, new Paragraph("TOTAL OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE", fontResumen), [padding: 5, bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaResumen1, new Paragraph(numero(total, 2), fontResumen), [padding: 5, border: 2, bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        def totalCostoPorcentaje = totalSinIva+totalConIva+totalIndirectos
+
+        addCellTabla(tablaResumen1, new Paragraph("TOTAL OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE (INCLUYE IVA)", fontResumen), [padding: 5, bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaResumen1, new Paragraph(numero(total, 2), fontResumen), [padding: 5, border: 2, bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaResumen1, new Paragraph(numero(totalCostoPorcentaje, 2), fontResumen), [padding: 5, border: 2, bg: Color.LIGHT_GRAY, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaResumen1)
 
