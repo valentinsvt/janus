@@ -2454,7 +2454,8 @@ class ReportesPlanillasController {
         addCellTabla(tabla, new Paragraph("Cantidad", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("Valor sin IVA", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("Valor con IVA", fontTh), prmsTablaHead)
-        addCellTabla(tabla, new Paragraph("% de indirectos (" + numero(detalles[0].indirectos, 0) + "%)", fontTh), prmsTablaHead)
+//        addCellTabla(tabla, new Paragraph("% de indirectos (" + numero(detalles[0].indirectos, 0) + "%)", fontTh), prmsTablaHead)
+        addCellTabla(tabla, new Paragraph("% de indirectos (" + contrato?.indirectos + "%)", fontTh), prmsTablaHead)
         addCellTabla(tabla, new Paragraph("Valor total", fontTh), prmsTablaHead)
 
         def total = 0

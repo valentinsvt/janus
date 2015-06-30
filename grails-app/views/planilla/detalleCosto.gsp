@@ -84,13 +84,13 @@
                             (${iva}%)
                         </th>
                         <th id="thIndirectos" data-indi="${indirectos}">
-                            % de indirectos<br/>
-                            <g:if test="${detallesSize == 0}">
-                                <g:select name="indirectos" class="input-mini" value="${indirectos}" from="${0..100}"/>%
-                            </g:if>
-                            <g:else>
-                                ${indirectos}%
-                            </g:else>
+                            % de indirectos ${contrato?.indirectos}<br/>
+                            %{--<g:if test="${detallesSize == 0}">--}%
+                                %{--<g:select name="indirectos" class="input-mini" value="${indirectos}" from="${0..100}"/>%--}%
+                            %{--</g:if>--}%
+                            %{--<g:else>--}%
+                                %{--${indirectos}%--}%
+                            %{--</g:else>--}%
                         </th>
                         <th>Valor total</th>
                         <th style="width: 110px;">
@@ -250,8 +250,8 @@
             }
 
             function updateVal(tipo) {
-//                var indi = parseInt($("#indirectos").val()) / 100;
-                var indi = parseInt($("#thIndirectos").data("indi")) / 100;
+//                var indi = parseInt($("#thIndirectos").data("indi")) / 100;
+                var indi = ${contrato?.indirectos/100}
                 var valorNoIva = parseFloat($.trim($("#txtValor").val()));
 
                 var valorIva = valorNoIva + (valorNoIva * iva);

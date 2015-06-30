@@ -117,42 +117,29 @@ class DocumentosObraController {
         }
 
         detalle.each {
-
             def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
 
+//            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+
+            if(res["precio"][0]){
+                precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+            }else{
+                precios.put(it.id.toString(),0)
+            }
 
             totales =  precios[it.id.toString()]*it.cantidad
-
-
             totalPresupuesto+=totales;
-
         }
 
-
-
         def firmasAdicionales = Persona.findAllByDepartamento(departamento)
-
-
         def funcionFirmar = Funcion.findByCodigo("F")
-
         def funcionDirector = Funcion.findByCodigo("D")
-
         def funcionCoordinador = Funcion.findByCodigo("O")
-
-
         def direccion = departamento.direccion
-
-
         def dptoDireccion = Departamento.findAllByDireccion(direccion)
-
         def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
-
-
         def firmas = PersonaRol.findAllByFuncionAndPersonaInList(funcionFirmar, firmasAdicionales)
-
         def firmaDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
-
         def coordinadores = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoordinador, personalDireccion)
 
 //        println("Director-->" + firmaDirector)

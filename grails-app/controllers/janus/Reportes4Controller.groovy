@@ -37,7 +37,7 @@ class Reportes4Controller {
         if (fecha) {
             return (fecha.format("dd") + ' de ' + meses[fecha.format("MM").toInteger()] + ' de ' + fecha.format("yyyy"))
         } else {
-            return "No hay fecha que mostrar"
+            return ""
         }
     }
 
