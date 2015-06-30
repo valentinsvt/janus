@@ -50,6 +50,8 @@ class Contrato implements Serializable {
     String clausula
     String numeralPlazo
     String numeralAnticipo
+    Double indirectos
+
     static auditable = true
     static mapping = {
 
@@ -103,6 +105,7 @@ class Contrato implements Serializable {
             clausula column: 'cntrclsl'
             numeralPlazo column: 'cntrnmpl'
             numeralAnticipo column: 'cntrnman'
+            indirectos column: 'cntrindi'
         }
     }
 
@@ -143,6 +146,7 @@ class Contrato implements Serializable {
         clausula(blank: true, nullable: true, maxSize: 20)
         numeralAnticipo(blank: true, nullable: true, maxSize: 10)
         numeralPlazo(blank: true, nullable: true, maxSize: 10)
+        indirectos(blank: true, nullable: true)
     }
 
     def getObra() {

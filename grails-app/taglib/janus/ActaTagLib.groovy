@@ -27,6 +27,7 @@ class ActaTagLib {
                 "&Oacute;": "Ó",
                 "&Uacute;": "Ú",
                 "&Ntilde;": "Ñ",
+                "&deg;"   : "°",
         ]
         def str = attrs.str
 
@@ -352,7 +353,8 @@ class ActaTagLib {
                     tabla += "<tr>"
                     tabla += "<td>${fechaConFormato(fecha: planilla.fechaIngreso)}</td>"
                     tabla += "<td>${planilla.numero}</td>"
-                    tabla += "<td>${periodos.last().periodo.descripcion}</td>"
+//                    tabla += "<td>${periodos.last().periodo.descripcion}</td>"
+                    tabla += "<td>periordo</td>"
                     tabla += "<td class='tar'>${numero(numero: valor)}</td>"
                     tabla += "<td class='tar'>${numero(numero: indi)}</td>"
                     tabla += "<td class='tar'>${numero(numero: valor + indi)}</td>"

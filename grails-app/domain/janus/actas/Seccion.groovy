@@ -17,7 +17,7 @@ class Seccion {
         version false
         columns {
             numero column: "sccnnmro"
-            titulo column: "sccntitulo"
+            titulo column: "sccnttlo"
             acta column: "acta__id"
         }
     }

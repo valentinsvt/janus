@@ -170,7 +170,7 @@
                                 </g:if>
 
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C'] && !planillaInstance.fechaMemoPedidoPagoPlanilla && contrato.fiscalizador.id == session.usuario.id}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato.fiscalizador.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id:planillaInstance.id,contrato:planillaInstance.contrato.id]"
                                             rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>
@@ -181,7 +181,7 @@
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
-                                    <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                    <g:if test="${!planillaInstance.fechaMemoSalidaPlanilla}">
                                     <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
                                          <i class="icon-gear"></i>
                                     </div>

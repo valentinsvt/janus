@@ -454,6 +454,14 @@
                                 </a>
                                 </g:if>
                             </li>
+                            <li>
+                                <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                %{--<g:if test="${esDirector == 'N'}">--}%
+                                <a href="#" id="btnIndi">
+                                    <i class="icon-user"></i> Indirectos
+                                </a>
+                                </g:if>
+                            </li>
 
                             <li>
                                 <g:if test="${esDirector == 'S'}">
@@ -669,6 +677,7 @@
                 return false;
             });
 
+
             $("#btnPref").click(function () {
                 $.ajax({
                     type    : "POST",
@@ -702,6 +711,31 @@
                 });
                 return false;
             });
+
+            $("#btnIndi").click(function () {
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(controller: 'fiscalizadorContrato', action: 'indirectos')}",
+                    data    : {
+                        contrato : "${contrato?.id}"
+                    },
+                    success : function (msg) {
+                        var $btnOk = $('<a href="#" class="btn">Aceptar</a>');
+                        $btnOk.click(function () {
+                            $(this).replaceWith(spinner);
+                            $("#frmaIndi").submit();
+                            location.reload(true);
+                        });
+                        $("#modal_tittle_var").text("Costos Indirectos");
+                        $("#modal_body_var").html(msg);
+                        $("#fiscalizador").data("contrato", "${contrato?.id}");
+                        $("#modal_footer_var").html($btnOk);
+                        $("#modal-var").modal("show");
+                    }
+                });
+                return false;
+            });
+
 
             //            $("#btnAvance").click(function () {
             ////                $("#modal-fecha").modal("show");

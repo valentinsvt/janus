@@ -19,7 +19,7 @@ class Parrafo {
         version false
         columns {
             numero column: "prrfnmro"
-            contenido column: "prrfcntd"
+            contenido column: "prrfcont"
             contenido type: "text"
             tipoTabla column: "prrftptb"
             seccion column: "sccn__id"

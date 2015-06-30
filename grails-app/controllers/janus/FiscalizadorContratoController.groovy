@@ -79,6 +79,26 @@ class FiscalizadorContratoController extends janus.seguridad.Shield {
         [administradorContratoInstanceList: AdministradorContrato.list(params), params: params]
     } //list
 
+    def indirectos() {
+//        println "params: $params"
+        def cntr = Contrato.get(params.contrato)
+        [cntr: cntr]
+    } //list
+
+    def guardarIndirectos() {
+//        println "guardar indirectos, params: $params"
+        def cntr = Contrato.get(params.cntr)
+        def pcnt = params.indirectos.trim().toDouble()
+        if((pcnt >= 0.0) && (pcnt < 100.0)) {
+            cntr.indirectos = pcnt
+            cntr.save(flush: true)
+        } else {
+            flash.clase = "alert-error"
+            flash.message = "Valor no válido: $params.indirectos"
+        }
+        render "ok"
+    }
+
     def list() {
         [fiscalizadorContratoInstanceList: FiscalizadorContrato.list(params), params: params]
     } //list
