@@ -1989,7 +1989,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def save() {  /* guarda planilla */
-//        println "save "+params
+        println "save "+params
         def cntr = Contrato.get(params.contrato.id)
         def tipo
 
@@ -4179,9 +4179,11 @@ class PlanillaController extends janus.seguridad.Shield {
 
     private boolean updatePlanilla(planilla) {
         def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla)
-        def totalMonto = detalles.size() > 0 ? detalles.sum { it.montoIva } : 0
+//        def totalMonto = detalles.size() > 0 ? detalles.sum { it.montoIva } : 0
+        def totalMonto = detalles.size() > 0 ? detalles.sum { it.monto} : 0
         def totalIndi = detalles.size() > 0 ? detalles.sum { it.montoIndirectos } : 0
         def total = totalMonto + totalIndi
+        println("total monto " + total)
         planilla.valor = total
         if (!planilla.save(flush: true)) {
             println "error al actualizar el valor de la planilla " + planilla.errors
@@ -4191,7 +4193,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def addDetalleCosto() {
-//        println("params dettale costo" + params)
+        println("params dettale costo" + params)
         def detalle = new DetallePlanillaCosto()
         if (params.id) {
             detalle = DetallePlanillaCosto.get(params.id)
