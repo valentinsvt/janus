@@ -188,10 +188,13 @@
                 </g:else>
                 efectuada el
                 <g:if test="${editable}">
-                    %{--<elm:datepicker name="fecha" class="input-small required" value="${actaInstance?.fecha}"/>--}%
+                    %{--<elm:datepicker name="fecha" class=" input-small required" value="${actaInstance?.fecha}"--}%
+                                    %{--minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"--}%
+                                    %{--maxDate="new Date()"/>--}%
                     <elm:datepicker name="fecha" class=" input-small required" value="${actaInstance?.fecha}"
-                                    minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
-                                    maxDate="new Date()"/>
+                                    minDate="new Date(${contrato.fechaPedidoRecepcionFiscalizador.format('yyyy')},${contrato.fechaPedidoRecepcionFiscalizador.format('MM').toInteger() - 1},
+                                    ${contrato.fechaPedidoRecepcionFiscalizador.format('dd')},0,0,0,0)"
+                                    maxDate=""/>
 
                 </g:if>
                 <g:else>
