@@ -359,7 +359,7 @@ class CronogramaController extends janus.seguridad.Shield {
     def cronogramaObra() {
 
         // debe mostrar los rubros con sus precios unitarios y totales
-        def inicio = new Date()
+//        def inicio = new Date()
         def obra = Obra.get(params.id)
         def subpres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
         def persona = Persona.get(session.usuario.id)
@@ -402,7 +402,7 @@ class CronogramaController extends janus.seguridad.Shield {
             pcun.put(dt.id.toString(), preciosVlob.find { it.vlob__id == dt.id}.pcun)
         }
 
-        def fin = new Date()
+//        def fin = new Date()
 //        println "cronogramaObra: precios $precios"
 //        println "${TimeCategory.minus(fin, inicio)}"
 

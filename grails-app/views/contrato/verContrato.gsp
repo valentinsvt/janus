@@ -244,7 +244,7 @@
                 <div class="span12" style="margin-top: 5px">
                     <div class="span2 formato">Objeto del Contrato</div>
 
-                    <div class="span7">${contrato?.objeto}</div>
+                    <div class="span9">${contrato?.objeto}</div>
                 </div>
             </fieldset>
 
@@ -458,7 +458,7 @@
                                 <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
                                 <a href="#" id="btnIndi">
-                                    <i class="icon-user"></i> Indirectos
+                                    <i class="icon-file"></i> Indirectos
                                 </a>
                                 </g:if>
                             </li>
@@ -720,7 +720,8 @@
                         contrato : "${contrato?.id}"
                     },
                     success : function (msg) {
-                        var $btnOk = $('<a href="#" class="btn">Aceptar</a>');
+                        var $btnOk = $('<a href="#" class="btn">Actualizar Valor</a>');
+                        var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
                         $btnOk.click(function () {
                             $(this).replaceWith(spinner);
                             $("#frmaIndi").submit();
@@ -729,7 +730,8 @@
                         $("#modal_tittle_var").text("Costos Indirectos");
                         $("#modal_body_var").html(msg);
                         $("#fiscalizador").data("contrato", "${contrato?.id}");
-                        $("#modal_footer_var").html($btnOk);
+                        $("#modal_footer_var").html($btnCerrar).append($btnOk);
+//                        $("#modal_footer_var").html($btnOk);
                         $("#modal-var").modal("show");
                     }
                 });
