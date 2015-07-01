@@ -196,6 +196,8 @@
                                     ${contrato.fechaPedidoRecepcionFiscalizador.format('dd')},0,0,0,0)"
                                     maxDate=""/>
 
+
+
                 </g:if>
                 <g:else>
                     <g:formatDate date="${actaInstance.fecha}" format="dd-MM-yyyy"/>
