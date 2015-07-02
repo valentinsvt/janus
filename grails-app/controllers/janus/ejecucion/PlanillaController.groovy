@@ -4456,7 +4456,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def procesarLq() {
-        println "Inicio de procesar planilla Lq, params: $params"
+//        println "Inicio de procesar planilla Lq, params: $params"
         def plnl = Planilla.get(params.id)
 
         if(plnl.tipoPlanilla.codigo == 'O') {
@@ -4466,7 +4466,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         else {
             procesaReajusteLq(params.id) /** inserta valores de reajuste --> rjpl **/
-            println "1.completa procesaReajuste"
+//            println "1.completa procesaReajuste"
             insertaDetalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
 
             if(Planilla.get(params.id).tipoPlanilla.toString() in ['P', 'Q']){
@@ -4922,7 +4922,7 @@ class PlanillaController extends janus.seguridad.Shield {
             prmt.planillaReajustada = plnl
             fcha = plnl.periodoIndices? plnl.periodoIndices.fechaInicio : plnl.fechaIngreso
             def prin = indicesDisponibles(plnl, fcha, null)
-//            println "++++indice disponible: $prin"
+            println "++++indice disponible: $prin"
             prmt.periodoInec = prin
             prmt.parcialCronograma = 0
             prmt.acumuladoCronograma = 0
@@ -4983,7 +4983,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //                            println "acCr: $po.acumuladoCronograma, acPl: $po.acumuladoPlanillas, valor: $plnl.valor, dsct: $dsct"
                             if(po.acumuladoCronograma > po.acumuladoPlanillas) {
                                 if((po.acumuladoCronograma - po.acumuladoPlanillas)*dsct <= (plnl.valor - plParaPo)) {
-//                                    println "pone el nuevo Po a: ${Math.round(po.parcialCronograma * dsct * 100)/100}"
+                                    println "pone el nuevo Po a: ${Math.round(po.parcialCronograma * dsct * 100)/100}"
                                     prmt.valorPo = Math.round(po.parcialCronograma * dsct * 100)/100
                                     plParaPo += prmt.valorPo - po.valorPo
                                 } else {
@@ -5000,10 +5000,10 @@ class PlanillaController extends janus.seguridad.Shield {
                             prmt.fechaFin = po.fechaFin                      //igual
 
 
-//                            println "ecalcula reajuste de plnl avance: ${po.planillaReajustada.id}, tipo: ${po.planillaReajustada.tipoPlanilla}"
+//                            println "ecalcula reajuste de plnl avance: ${po.planillaReajustada.id}, tipo: ${po.planillaReajustada.tipoPlanilla}, Po: $po.valorPo"
                             //todo: para recalcular el prin se requiere la fecha a la que corresponde el reajuste po.fechaInicio, po.fechaFin ok
                             prdoInec = indicesDisponibles(po.planillaReajustada, po.fechaInicio, 'R') /* para recalcular reajuste */
-//                            println "********** para plnl: ${po} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec"
+//                            println "********** para plnl: ${po.id} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec, fcha: $po.fechaInicio "
                             prmt.periodoInec = prdoInec?: indicesDisponibles(po.planillaReajustada, po.fechaInicio, '')
 
 //                            println "  inserta avance RR... si hay indices actuales $prmt"
