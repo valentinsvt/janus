@@ -4456,7 +4456,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def procesarLq() {
-//        println "Inicio de procesar planilla Lq, params: $params"
+        println "Inicio de procesar planilla Lq, params: $params"
         def plnl = Planilla.get(params.id)
 
         if(plnl.tipoPlanilla.codigo == 'O') {
@@ -4466,7 +4466,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         else {
             procesaReajusteLq(params.id) /** inserta valores de reajuste --> rjpl **/
-//            println "1.completa procesaReajuste"
+            println "1.completa procesaReajuste"
             insertaDetalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
 
             if(Planilla.get(params.id).tipoPlanilla.toString() in ['P', 'Q']){

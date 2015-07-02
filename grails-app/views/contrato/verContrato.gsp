@@ -720,7 +720,7 @@
                         contrato : "${contrato?.id}"
                     },
                     success : function (msg) {
-                        var $btnOk = $('<a href="#" class="btn">Actualizar Valor</a>');
+                        var $btnOk = $('<a href="#" class="btn">Actualizar Valorobras</a>');
                         var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
                         $btnOk.click(function () {
                             $(this).replaceWith(spinner);

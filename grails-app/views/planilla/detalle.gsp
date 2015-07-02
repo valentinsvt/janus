@@ -144,7 +144,8 @@
 
                         <td class="act num cant" data-valor="${cant}">
                             <g:if test="${editable}">
-                                <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${cant > 0 ? cant : ''}"/>
+                                <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${cant
+                                }"/>
                                 %{--<g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${0}"/>--}%
                             </g:if>
                             <g:else>

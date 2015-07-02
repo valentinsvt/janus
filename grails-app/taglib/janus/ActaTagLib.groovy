@@ -320,7 +320,8 @@ class ActaTagLib {
         def tabla = ""
         def prct
         if (p1) {
-            prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
+//            prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
+            prct = p1.contrato?.indirectos
             tabla = "<table class='table table-bordered table-condensed'>"
 
             tabla += "<thead>"

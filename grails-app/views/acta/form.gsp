@@ -993,7 +993,7 @@
 //                });
 
                 $("#btnPrint").click(function () {
-                    var url = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
+                    var url = "${createLink(controller: 'pdf', action: 'pdfLink')}?url=${createLink(controller: 'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
 //                    console.log(url);
                     location.href = url;
                 });
