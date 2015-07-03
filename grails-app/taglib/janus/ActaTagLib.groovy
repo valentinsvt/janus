@@ -28,6 +28,7 @@ class ActaTagLib {
                 "&Uacute;": "Ú",
                 "&Ntilde;": "Ñ",
                 "&deg;"   : "°",
+                "&nbsp;"  : " ",
         ]
         def str = attrs.str
 
