@@ -118,6 +118,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def textos = []
 
         def multas = 0
+        // TODO: revisar si estos valores afectan al valor a pagar, si si, tomar de MLPL
         multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
 
         def tabla = "<table border='0'>"
@@ -434,6 +435,7 @@ class PlanillaController extends janus.seguridad.Shield {
         texto.fecha = new Date()
 
         def multas = 0
+        // TODO: actualizar esta línea al igual que en la 122 (configPedidoPago)
         multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
 
         def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas
@@ -4487,6 +4489,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //
 //          println "2.completa procesaReajuste"
         }
+        poneTotalReajuste(plnl) // actualiza en plnlrjst el valor a reconocer de reajuste de esta planilla: actual - diferencias de anteriores
         render "ok" //debe retornar a planillas y habilitar botón de resumen.
     }
 
@@ -5358,4 +5361,28 @@ class PlanillaController extends janus.seguridad.Shield {
         insertaRjpl(prmt)
     }
 
+    def poneTotalReajuste(plnl) {
+        if(plnl.tipoPlanilla.codigo in ['A', 'P', 'Q', 'O']) {
+            def valorAnt = 0.0
+            def anteriores = ReajustePlanilla.findAllByPlanilla(plnl, [sort: 'periodo'])
+            def anterior
+//            println "antrerioesr: antes .. ${anteriores.size()}, planilla: ${anteriores[-1].planilla.id}"
+
+            if(anteriores.size() > 1) {
+                anteriores.pop()
+                anterior = anteriores.pop().planillaReajustada
+                if(plnl.id == anterior.id) anterior = anteriores.pop().planillaReajustada
+
+//                println "anteriores... ${anteriores.size()}, anterior: $anterior.id"
+                valorAnt = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla " +
+                        "where planilla = :p", [p: anterior])[0]
+            }
+            def valor = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
+
+            def pl = Planilla.get(plnl.id)
+//            println "actual: ${valor[0]}, anterior:$valorAnt, diferencia: ${valor[0] - valorAnt}"
+            pl.reajuste = valor[0] - valorAnt
+            pl.save(flush: true)
+        }
+    }
 }

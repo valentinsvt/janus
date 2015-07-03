@@ -773,7 +773,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def contrato = planilla.contrato
 
         def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
-        def liquidacion = planilla.fechaFin >= prej[0].fechaFin
+//        def liquidacion = planilla.fechaFin >= prej[0].fechaFin
+        def liquidacion = planilla.tipoPlanilla.codigo == 'Q'
         def planillaDeAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato,TipoPlanilla.findByCodigo("A"))
         println "anticipo  "+planillaDeAnticipo+"  fecha de pago " + planillaDeAnticipo.fechaPago
         def perAnticipo
@@ -878,6 +879,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 order("numero", "asc")
             }
         }
+
+        // TODO: eliminar la tabla y refencias a PeriodoPlanilla
 
         def periodos = PeriodoPlanilla.findAllByPlanillaInList(planillasAnteriores, [sort: "id"])
         periodos = periodos.sort { it.fechaIncio }

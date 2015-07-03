@@ -205,6 +205,16 @@ class ReportePlanillas3Controller {
 
     def reportePlanilla() {
         def planilla = Planilla.get(params.id)
+
+        if (planilla.tipoPlanilla.codigo == 'Q') {
+            if (!planilla.contrato.fechaPedidoRecepcionContratista || !planilla.contrato.fechaPedidoRecepcionFiscalizador) {
+                flash.message = "Por favor ingrese las fechas de pedido de recepción para generar la planilla final de avance (liquidación)"
+                flash.clase = "alert-error"
+                redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: planilla.contrato.id)
+                return
+            }
+        }
+
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
 
