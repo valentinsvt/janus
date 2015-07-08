@@ -46,6 +46,7 @@ class Contrato implements Serializable {
 
 //    Persona administrador
     Persona delegadoPrefecto
+    Persona delegadoFiscalizacion
 
     String clausula
     String numeralPlazo
@@ -101,6 +102,7 @@ class Contrato implements Serializable {
 
 //            administrador column: 'prsnadmn'
             delegadoPrefecto column: 'prsndlpr'
+            delegadoFiscalizacion column: 'prsndlfs'
 
             clausula column: 'cntrclsl'
             numeralPlazo column: 'cntrnmpl'
@@ -142,6 +144,7 @@ class Contrato implements Serializable {
 
 //        administrador(blank: true, nullable: true)
         delegadoPrefecto(blank: true, nullable: true)
+        delegadoFiscalizacion(blank: true, nullable: true)
 
         clausula(blank: true, nullable: true, maxSize: 20)
         numeralAnticipo(blank: true, nullable: true, maxSize: 10)

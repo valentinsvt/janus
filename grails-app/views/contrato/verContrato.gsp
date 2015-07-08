@@ -50,9 +50,9 @@
                         <i class="icon-book"></i> Biblioteca
                     </g:link>
 
-                <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
-                    <i class="icon-pencil"></i> Garantías
-                </g:link>
+                    <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
+                        <i class="icon-pencil"></i> Garantías
+                    </g:link>
                     <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}" class="btn">
                         <i class="icon-superscript"></i> Fórmula Polinómica
                     </a>
@@ -60,7 +60,7 @@
                 </g:if>
 
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
-                    %{--<g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">--}%
+                %{--<g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">--}%
                     <g:link controller="cronogramaEjecucion" class="btn" action="creaCronogramaEjec" id="${contrato?.id}">
                         <i class="icon-th"></i> Cronograma ejecucion
                     </g:link>
@@ -76,16 +76,16 @@
                         <i class="icon-print"></i>
                         Imprimir Rubros con o sin desglose VAE
                     </a>
-%{--
-                    <a href="#" class="btn  " id="imprimir_sub">
-                        <i class="icon-print"></i>
-                        Imprimir Presupuesto VAE
-                    </a>
-                    <a href="#" class="btn  " id="btnRubros">
-                        <i class="icon-print"></i>
-                        Rubros VAE
-                    </a>
---}%
+                %{--
+                                    <a href="#" class="btn  " id="imprimir_sub">
+                                        <i class="icon-print"></i>
+                                        Imprimir Presupuesto VAE
+                                    </a>
+                                    <a href="#" class="btn  " id="btnRubros">
+                                        <i class="icon-print"></i>
+                                        Rubros VAE
+                                    </a>
+                --}%
                 </g:if>
 
             </div>
@@ -131,6 +131,7 @@
                 <g:if test="${contrato?.codigo != null}">
                     <div class="span12">
                         <div class="span1 formato">Obra</div>
+
                         <div class="span10 formato">${contrato?.oferta?.concurso?.obra?.codigo} - ${contrato?.oferta?.concurso?.obra?.nombre}
                         (${contrato?.oferta?.concurso?.obra?.departamento?.direccion?.nombre})</div>
                     </div>
@@ -172,9 +173,10 @@
                         <div class="span2 formato">Contratista</div>
 
                         <div class="span3">${contrato?.oferta?.proveedor?.nombre}</div>
+
                         <div class="span1 formato">Estado</div>
 
-                        <div class="span2">${(contrato.estado=="R")?"Registrado":"No registrado"}</div>
+                        <div class="span2">${(contrato.estado == "R") ? "Registrado" : "No registrado"}</div>
                     </div>
                 </g:if>
 
@@ -319,6 +321,10 @@
                     <div class="span2 formato">Delegado del prefecto</div>
 
                     <div class="span3">${contrato?.delegadoPrefecto?.titulo} ${contrato?.delegadoPrefecto?.nombre} ${contrato?.delegadoPrefecto?.apellido}</div>
+
+                    <div class="span2 formato">Delegado de fiscalización</div>
+
+                    <div class="span3">${contrato?.delegadoFiscalizacion?.titulo} ${contrato?.delegadoFiscalizacion?.nombre} ${contrato?.delegadoFiscalizacion?.apellido}</div>
                 </div>
 
             </fieldset>
@@ -384,11 +390,11 @@
                                         <i class=" icon-file-alt"></i> Planillas
                                     </g:link>
                                 </g:if>
-                                %{--<g:else>--}%
-                                    %{--<g:link controller="planilla" action="listDirecta" id="${contrato?.id}">--}%
-                                        %{--<i class=" icon-file-alt"></i> Planillas Directas--}%
-                                    %{--</g:link>--}%
-                                %{--</g:else>--}%
+                            %{--<g:else>--}%
+                            %{--<g:link controller="planilla" action="listDirecta" id="${contrato?.id}">--}%
+                            %{--<i class=" icon-file-alt"></i> Planillas Directas--}%
+                            %{--</g:link>--}%
+                            %{--</g:else>--}%
                             </li>
 
                             %{--<li>--}%
@@ -440,35 +446,44 @@
                             <li>
                                 <g:if test="${esDirector == 'S'}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
-                                <a href="#" id="btnAdmin">
-                                    <i class="icon-user"></i> Administrador
-                                </a>
+                                    <a href="#" id="btnAdmin">
+                                        <i class="icon-user"></i> Administrador
+                                    </a>
                                 </g:if>
                             </li>
 
                             <li>
                                 <g:if test="${esDirFis == 'S'}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
-                                <a href="#" id="btnFisc">
-                                    <i class="icon-user"></i> Fiscalizador
-                                </a>
+                                    <a href="#" id="btnFisc">
+                                        <i class="icon-user"></i> Fiscalizador
+                                    </a>
+                                </g:if>
+                            </li>
+
+                            <li>
+                                <g:if test="${esDirFis == 'S'}">
+                                %{--<g:if test="${esDirector == 'N'}">--}%
+                                    <a href="#" id="btnDelFisc">
+                                        <i class="icon-user"></i> Delegado fiscalización
+                                    </a>
                                 </g:if>
                             </li>
                             <li>
                                 <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
-                                <a href="#" id="btnIndi">
-                                    <i class="icon-file"></i> Indirectos
-                                </a>
+                                    <a href="#" id="btnIndi">
+                                        <i class="icon-file"></i> Indirectos
+                                    </a>
                                 </g:if>
                             </li>
 
                             <li>
                                 <g:if test="${esDirector == 'S'}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
-                                <a href="#" id="btnPref">
-                                    <i class="icon-user"></i> Delegado del Prefecto
-                                </a>
+                                    <a href="#" id="btnPref">
+                                        <i class="icon-user"></i> Delegado del Prefecto
+                                    </a>
                                 </g:if>
                             </li>
 
@@ -677,7 +692,6 @@
                 return false;
             });
 
-
             $("#btnPref").click(function () {
                 $.ajax({
                     type    : "POST",
@@ -712,6 +726,40 @@
                 return false;
             });
 
+            $("#btnDelFisc").click(function () {
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(action: 'delegadoFiscalizacion')}",
+                    data    : {
+                        id : "${contrato?.id}"
+                    },
+                    success : function (msg) {
+                        var $btnSave = $('<a href="#" class="btn btn-success"><i class="icon icon-save"></i> Guardar</a>');
+                        var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                        $btnSave.click(function () {
+                            $(this).replaceWith(spinner);
+                            var pref = $("#delegadoFisc").val();
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'saveDelegadoFisc')}",
+                                data    : {
+                                    id   : "${contrato?.id}",
+                                    pref : pref
+                                },
+                                success : function (msg) {
+                                    location.reload(true);
+                                }
+                            });
+                        });
+                        $("#modal_tittle_var").text("Delegado de fiscalización");
+                        $("#modal_body_var").html(msg);
+                        $("#modal_footer_var").html($btnCerrar).append($btnSave);
+                        $("#modal-var").modal("show");
+                    }
+                });
+                return false;
+            });
+
             $("#btnIndi").click(function () {
                 $.ajax({
                     type    : "POST",
@@ -738,7 +786,6 @@
                 return false;
             });
 
-
             //            $("#btnAvance").click(function () {
             ////                $("#modal-fecha").modal("show");
             //
@@ -758,47 +805,47 @@
             $("#plazo").keydown(function (ev) {
                 return validarInt(ev);
             }).keyup(function () {
-                        var enteros = $(this).val();
-                    });
+                var enteros = $(this).val();
+            });
 
             $("#monto").keydown(function (ev) {
                 return validarNum(ev);
             }).keyup(function () {
-                        var enteros = $(this).val();
-                    });
+                var enteros = $(this).val();
+            });
 
             $("#porcentajeAnticipo").keydown(function (ev) {
                 return validarNum(ev);
             }).keyup(function () {
-                        var enteros = $(this).val();
-                        if (parseFloat(enteros) > 100) {
-                            $(this).val(100)
-                        }
-                        updateAnticipo();
-                    });
+                var enteros = $(this).val();
+                if (parseFloat(enteros) > 100) {
+                    $(this).val(100)
+                }
+                updateAnticipo();
+            });
 
             $("#anticipo").keydown(function (ev) {
                 return validarNum(ev);
             }).keyup(function () {
-                        var enteros = $(this).val();
-                        updateAnticipo();
+                var enteros = $(this).val();
+                updateAnticipo();
 //                        var porcentaje = $("#porcentajeAnticipo").val();
 //                        var monto = $("#monto").val();
 //                        var anticipoValor = (porcentaje * (monto)) / 100;
 //                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ""));
-                    }).click(function () {
-                        updateAnticipo();
+            }).click(function () {
+                updateAnticipo();
 //                        var porcentaje = $("#porcentajeAnticipo").val();
 //                        var monto = $("#monto").val();
 //                        var anticipoValor = (porcentaje * (monto)) / 100;
 //                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
-                    });
+            });
 
             $("#financiamiento").keydown(function (ev) {
                 return validarNum(ev);
             }).keyup(function () {
-                        var enteros = $(this).val();
-                    });
+                var enteros = $(this).val();
+            });
 
             $("#codigo").click(function () {
                 $("#btn-aceptar").attr("disabled", false)
@@ -833,9 +880,10 @@
                     data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" + $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
                 }
                 data += "&ordenado=" + $("#campoOrdn :selected").val() + "&orden=" + $("#orden :selected").val();
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'contrato',action:'buscarObra')}",
-                    data     : data,
-                    success  : function (msg) {
+                $.ajax({
+                    type    : "POST", url : "${g.createLink(controller: 'contrato',action:'buscarObra')}",
+                    data    : data,
+                    success : function (msg) {
                         $("#spinner").hide();
                         $("#buscarDialog").show();
                         $(".contenidoBuscador").html(msg).show("slide");
@@ -1014,15 +1062,14 @@
             //                }
             //            })
 
+            $("#imprimir_sub").click(function () {
 
-        $("#imprimir_sub").click(function () {
+                var subpre = -1
+                var datos = "?obra=${contrato?.oferta?.concurso?.obra?.id}Wsub=" + subpre
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}" + datos
+                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
 
-            var subpre = -1
-            var datos = "?obra=${contrato?.oferta?.concurso?.obra?.id}Wsub=" + subpre
-            var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}" + datos
-            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-
-        });
+            });
 
             $("#btnRubros").click(function () {
                 var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
@@ -1039,28 +1086,28 @@
                         height    : 280,
                         buttons   : {
 
-                            "Con desglose de Trans."                               : function () {
+                            "Con desglose de Trans."     : function () {
                                 url += "1";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                             },
-                            "Sin desglose de Trans."                               : function () {
+                            "Sin desglose de Trans."     : function () {
                                 url += "0";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                             },
-                            "Exportar Rubros a Excel"                 : function () {
+                            "Exportar Rubros a Excel"    : function () {
                                 var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${contrato?.oferta?.concurso?.obra?.id}&transporte=";
                                 url += "1";
                                 location.href = url;
                             },
-                            "VAE con desglose de Trans."                               : function () {
+                            "VAE con desglose de Trans." : function () {
                                 urlVae += "1";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                             },
-                            "VAE sin desglose de Trans."                               : function () {
+                            "VAE sin desglose de Trans." : function () {
                                 urlVae += "0";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                             },
-                            "Exportar VAE a Excel"                               : function () {
+                            "Exportar VAE a Excel"       : function () {
                                 var urlVaeEx = "${createLink(controller:'reportes3', action:'imprimirRubrosVaeExcel')}?obra=${contrato?.oferta?.concurso?.obra?.id}&transporte=";
                                 urlVaeEx += "1";
                                 location.href = urlVaeEx;

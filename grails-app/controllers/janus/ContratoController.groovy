@@ -76,13 +76,13 @@ class ContratoController extends janus.seguridad.Shield {
             def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion)
             def directores = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalDireccion).persona.id
 //            println "directores:" + directores + "  usurio: $session.usuario id:" + session.usuario.id
-            def esDirector = directores.contains(session.usuario.id)? "S": "N"
+            def esDirector = directores.contains(session.usuario.id) ? "S" : "N"
 //            println "esDirector:" + esDirector
 
 
             def personalFis = Persona.findAllByDepartamento(Departamento.findByCodigo('FISC'))
             def directoresFis = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalFis).persona.id
-            def esDirFis = directoresFis.contains(session.usuario.id)? "S": "N"
+            def esDirFis = directoresFis.contains(session.usuario.id) ? "S" : "N"
 
             def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
 
@@ -100,11 +100,29 @@ class ContratoController extends janus.seguridad.Shield {
         return [contrato: contrato]
     }
 
+    def delegadoFiscalizacion() {
+        def contrato = Contrato.get(params.id)
+        return [contrato: contrato]
+    }
+
     def saveDelegado() {
+        println "AQUI: "+params
         def contrato = Contrato.get(params.id)
         def delegado = Persona.get(params.pref)
 
         contrato.delegadoPrefecto = delegado
+        if (!contrato.save(flush: true)) {
+            render "NO_" + contrato.errors
+        } else {
+            render "OK"
+        }
+    }
+
+    def saveDelegadoFisc() {
+        def contrato = Contrato.get(params.id)
+        def delegado = Persona.get(params.pref)
+
+        contrato.delegadoFiscalizacion = delegado
         if (!contrato.save(flush: true)) {
             render "NO_" + contrato.errors
         } else {
@@ -122,7 +140,7 @@ class ContratoController extends janus.seguridad.Shield {
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def cronos = CronogramaContrato.findAllByVolumenObraInList(detalle)
 //        println "suma de la obra: ${cronos.precio.sum()}, valor de la obra: ${contrato.monto}"
-        if (cronos.precio.sum().round(2) != contrato.monto.round(2)){
+        if (cronos.precio.sum().round(2) != contrato.monto.round(2)) {
             errores += "<li>No cuadra los totales del cronograma ${cronos.precio.sum()} con el valor del contrato: ${contrato.monto}</li>"
         }
         def pcs = FormulaPolinomicaContractual.withCriteria {
@@ -216,8 +234,9 @@ class ContratoController extends janus.seguridad.Shield {
 
         def contrato = Contrato.get(params.id)
         contrato.estado = "N"
-        if (contrato.save(flush: true))
+        if (contrato.save(flush: true)) {
             render "ok"
+        }
         return
 
     }
@@ -398,10 +417,11 @@ class ContratoController extends janus.seguridad.Shield {
                     }
 
                 }
-                if (extraObra.size() < 1)
+                if (extraObra.size() < 1) {
                     extraObra = "-1"
-                else
-                    extraObra = extraObra.substring(0,extraObra.size()-1)
+                } else {
+                    extraObra = extraObra.substring(0, extraObra.size() - 1)
+                }
                 params.campos = ""
                 params.operadores = ""
                 // println "extra obra nombre "+extraObra
@@ -416,10 +436,11 @@ class ContratoController extends janus.seguridad.Shield {
                         extraObra += ","
                     }
                 }
-                if (extraObra.size() < 1)
+                if (extraObra.size() < 1) {
                     extraObra = "-1"
-                else
-                    extraObra = extraObra.substring(0,extraObra.size()-1)
+                } else {
+                    extraObra = extraObra.substring(0, extraObra.size() - 1)
+                }
                 params.campos = ""
                 params.operadores = ""
             }
@@ -443,10 +464,11 @@ class ContratoController extends janus.seguridad.Shield {
                         }
 
                     }
-                    if (extraObra.size() < 1)
+                    if (extraObra.size() < 1) {
                         extraObra = "-1"
-                    else
-                        extraObra = extraObra.substring(0,extraObra.size()-1)
+                    } else {
+                        extraObra = extraObra.substring(0, extraObra.size() - 1)
+                    }
 
                 }
                 if (p == "prov") {
@@ -459,10 +481,11 @@ class ContratoController extends janus.seguridad.Shield {
                             extraObra += ","
                         }
                     }
-                    if (extraObra.size() < 1)
+                    if (extraObra.size() < 1) {
                         extraObra = "-1"
-                    else
-                        extraObra = extraObra.substring(0,extraObra.size()-1)
+                    } else {
+                        extraObra = extraObra.substring(0, extraObra.size() - 1)
+                    }
                 }
             }
             remove.each {
@@ -499,15 +522,17 @@ class ContratoController extends janus.seguridad.Shield {
         funcionJs += '}'
         def numRegistros = 20
         def extras = " "
-        if (extraObra.size() > 0)
+        if (extraObra.size() > 0) {
             extras += " and oferta in (${extraObra})"
-        println "extras "+extras
+        }
+        println "extras " + extras
 
         if (!params.reporte) {
-            if(params.excel) {
+            if (params.excel) {
                 session.dominio = Contrato
                 session.funciones = funciones
-                def anchos = [10, 20, 10, 10, 5, 10, 20, 10, 5] /*anchos para el set column view en excel (no son porcentajes)*/
+                def anchos = [10, 20, 10, 10, 5, 10, 20, 10, 5]
+                /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Contrato", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Contratos", anchos: anchos, extras: extras, landscape: true])
 
             } else {
@@ -542,15 +567,17 @@ class ContratoController extends janus.seguridad.Shield {
                             def ofertas = janus.pac.Oferta.findAllByConcurso(co)
                             ofertas.eachWithIndex { o, k ->
                                 extraObra += "" + o.id
-                                if (k < ofertas.size() - 1)
+                                if (k < ofertas.size() - 1) {
                                     extraObra += ","
+                                }
                             }
 
                         }
 
                     }
-                    if (extraObra.size() < 1)
+                    if (extraObra.size() < 1) {
                         extraObra = "-1"
+                    }
                     params.campos = ""
                     params.operadores = ""
                 }
@@ -564,12 +591,14 @@ class ContratoController extends janus.seguridad.Shield {
                         def ofertas = janus.pac.Oferta.findAllByProveedor(p)
                         ofertas.eachWithIndex { o, k ->
                             extraObra += "" + o.id
-                            if (k < ofertas.size() - 1)
+                            if (k < ofertas.size() - 1) {
                                 extraObra += ","
+                            }
                         }
                     }
-                    if (extraObra.size() < 1)
+                    if (extraObra.size() < 1) {
                         extraObra = "-1"
+                    }
                     params.campos = ""
                     params.operadores = ""
                 }
@@ -586,16 +615,18 @@ class ContratoController extends janus.seguridad.Shield {
                             def ofertas = janus.pac.Oferta.findAllByConcurso(co)
                             ofertas.eachWithIndex { o, k ->
                                 extraObra += "" + o.id
-                                if (k < ofertas.size() - 1)
+                                if (k < ofertas.size() - 1) {
                                     extraObra += ","
+                                }
                                 remove.add(i)
                             }
 
                         }
 
                     }
-                    if (extraObra.size() < 1)
+                    if (extraObra.size() < 1) {
                         extraObra = "-1"
+                    }
 
                 }
                 if (p == "prov" && params.criterios[i].trim() != "") {
@@ -605,12 +636,14 @@ class ContratoController extends janus.seguridad.Shield {
                         def ofertas = janus.pac.Oferta.findAllByProveedor(pr)
                         ofertas.eachWithIndex { o, k ->
                             extraObra += "" + o.id
-                            if (k < ofertas.size() - 1)
+                            if (k < ofertas.size() - 1) {
                                 extraObra += ","
+                            }
                         }
                     }
-                    if (extraObra.size() < 1)
+                    if (extraObra.size() < 1) {
                         extraObra = "-1"
+                    }
                 }
             }
             remove.each {
@@ -652,17 +685,19 @@ class ContratoController extends janus.seguridad.Shield {
         funcionJs += '}'
         def numRegistros = 20
         def extras = " and estado='R' "
-        if (extraObra.size() > 0)
+        if (extraObra.size() > 0) {
             extras += "and oferta in (${extraObra})"
+        }
 //        println "extras "+extras
 
         if (!params.reporte) {
-            if(params.excel){
+            if (params.excel) {
                 session.dominio = Contrato
                 session.funciones = funciones
-                def anchos = [10, 20, 10, 10, 5, 10, 20, 10, 5] /*anchos para el set column view en excel (no son porcentajes)*/
+                def anchos = [10, 20, 10, 10, 5, 10, 20, 10, 5]
+                /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Contrato", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Contratos", anchos: anchos, extras: extras, landscape: true])
-            }else{
+            } else {
                 def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
                 /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
@@ -713,7 +748,7 @@ class ContratoController extends janus.seguridad.Shield {
             def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
             /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
-           // println "lista "+lista
+            // println "lista "+lista
             for (int i = lista.size() - 1; i > -1; i--) {
                 def concurso = janus.pac.Concurso.findByObra(lista[i])
                 if (concurso) {
@@ -750,7 +785,6 @@ class ContratoController extends janus.seguridad.Shield {
 //        println "concurso " + concurso
         def ofertas = janus.pac.Oferta.findAllByConcurso(concurso)
 
-
 //        new Date('dd-MM-yyyy', ofertas?.fechaEntrega)
 //        println ofertas
 //        println ofertas.monto
@@ -765,7 +799,7 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
 
-    def getFecha () {
+    def getFecha() {
 
         def fechaOferta = Oferta.get(params.id).fechaEntrega?.format('dd-MM-yyyy')
 
@@ -773,7 +807,7 @@ class ContratoController extends janus.seguridad.Shield {
 
     }
 
-    def getIndice () {
+    def getIndice() {
 
 
         def fechaOferta = Oferta.get(params.id).fechaEntrega?.format('dd-MM-yyyy')
@@ -915,7 +949,7 @@ class ContratoController extends janus.seguridad.Shield {
         try {
 
             def fpId = FormulaPolinomicaContractual.findAllByContrato(contratoInstance).id
-            fpId.each {id->
+            fpId.each { id ->
 
                 FormulaPolinomicaContractual.get(id).delete(flush: true)
             }
@@ -941,10 +975,10 @@ class ContratoController extends janus.seguridad.Shield {
         render("Se ha generado la obra para la fórmula polinómica de liquidación")
     }
 
-    def planillasSinPago(){
+    def planillasSinPago() {
 
         def planillas = Planilla.list([sort: 'fechaIngreso'])
-        [planillas:planillas]
+        [planillas: planillas]
 
     }
 
