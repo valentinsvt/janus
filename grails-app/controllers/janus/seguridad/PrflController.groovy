@@ -125,16 +125,35 @@ class PrflController extends janus.seguridad.Shield  {
 
     def grabaPrfl = {
       //println "+++++parametros: ${params}"
-      //println "+++++parametros: ${params.codigo}"
+      println "+++++parametros: $params"
       if (!params.id) {
         def prflInstance = new Prfl()
         params.controllerName = controllerName
         params.actionName = "save"
         prflInstance.properties = params
         prflInstance.save()
+        println "creando Prfl"
         render ("ok")
+
+          if (prflInstance.save([flush: true])) {
+              if (prflInstance.padre) {
+                  def prms = Prms.findAllByPerfil(prflInstance.padre)
+                  def prmsNuevo = new Prms()
+                  prms.each {
+                      prmsNuevo = new Prms(['perfil.id': prflInstance.id, 'accion.id': it.accion.id])
+                      prmsNuevo.save(failOnError: true)
+                  }
+              }
+              render ("ok")
+          } else {
+              flash.clase = "alert-error"
+              flash.message = "Ha ocurrido un error al guardar el perfil"
+              println "errores: " + prflInstance.errors
+          }
+
+/*
         if (prflInstance.properties.errors.getErrorCount() > 0) {
-          //println "---- save ${bancoInstance}"
+          println "----error: save ${prflInstance}"
           println("El perfil no ha podido crearse: " + prflInstance.properties.errors)
         } else {
           if (prflInstance.padre) {
@@ -145,8 +164,10 @@ class PrflController extends janus.seguridad.Shield  {
               prmsNuevo.save(failOnError: true)
             }
           }
+          println "se ha creado correctamente el perfil"
           render("El perfil ${params.nmbr} ha sido grabado en el sistema")
         }
+*/
       } else {
 //        println "<<< Update >>> : ${params.id}"
         def prflInstance = Prfl.get(params.id)

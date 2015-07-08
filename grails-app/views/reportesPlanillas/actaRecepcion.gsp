@@ -18,7 +18,7 @@
 
         html {
             font-family : Verdana, Arial, sans-serif;
-            font-size   : 8px;
+            font-size   : 10px;
         }
 
         .hoja {
@@ -63,7 +63,8 @@
         }
 
         .contParrafo {
-            width : 575px;
+            /*width : 575px;*/
+            width : 600px;
         }
 
         .tal {
@@ -329,35 +330,35 @@
             <div id="firmas">
                 <div class="firma">
                     <g:if test="${actaInstance.contrato.administrador}">
-                        ${actaInstance.contrato.administrador.titulo ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}
+                        ${actaInstance.contrato.administrador.titulo.toUpperCase() ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}
                     %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
                     </g:if>
                     <br/>
-                    Administrador/Delegado por el Sr. Prefecto Provincial
+                    DELEGADO ADMINISTRADOR POR EL SR. PREFECTO PROVINCIAL
                 </div>
 
                 <div class="firma">
                     <g:if test="${directorDeFiscalizacion}">
                     %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
                     %{--${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido}--}%
-                        ${directorDeFiscalizacion.titulo ?: ""} ${directorDeFiscalizacion.nombre} ${directorDeFiscalizacion.apellido}
+                        ${directorDeFiscalizacion.titulo.toUpperCase() ?: ""} ${directorDeFiscalizacion.nombre} ${directorDeFiscalizacion.apellido}
                     </g:if>
                     <br/>
-                    Por el Ing. Director de Fiscalización
+                    DELEGADO DIRECCIÓN DE FISCALIZACIÓN
                 </div>
 
                 <div class="firma">
                     <g:if test="${actaInstance.contrato.oferta.proveedor}">
-                        ${actaInstance.contrato.oferta.proveedor.titulo ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
+                        ${actaInstance.contrato.oferta.proveedor.titulo.toUpperCase() ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
                     </g:if>
                     <br/>
-                    Contratista
+                    CONTRATISTA
                 </div>
             </div>
 
             <div id="sumillas">
                 <div class="left">
-                    <div class="row" style="height: 20px;">
+                    <div class="row" style="height: 20px; margin-top: 20px;">
                         <div class="sumilla">
                             Elaborado por:
                             ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre}
@@ -374,7 +375,7 @@
 --}%
                 </div>
 
-                <div class="left">
+                <div class="left" style="margin-top: 20px">
                     <div class="firma"></div>
                 </div>
 
