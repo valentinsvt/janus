@@ -379,7 +379,7 @@
                             %{--</li>--}%
 
                             <li>
-                                <g:if test="${contrato.obra.tipo != 'D'}">
+                                <g:if test="${contrato.obra?.tipo != 'D'}">
                                     <g:link controller="planilla" action="list" id="${contrato?.id}">
                                         <i class=" icon-file-alt"></i> Planillas
                                     </g:link>
@@ -455,7 +455,7 @@
                                 </g:if>
                             </li>
                             <li>
-                                <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
                                 <a href="#" id="btnIndi">
                                     <i class="icon-file"></i> Indirectos

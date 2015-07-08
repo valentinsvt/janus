@@ -51,14 +51,14 @@ class ContratoController extends janus.seguridad.Shield {
 
     def verContrato() {
         def contrato
-
+//        println "params de verContrato: $params"
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
 //            println "ANT " + contrato.anticipo
             if (!contrato.anticipo) {
-                println "...no tiene anticipo....."
+//                println "...no tiene anticipo....."
                 if (contrato.monto && contrato.porcentajeAnticipo) {
-                    println "\ttiene monto y porcentaje de anticipo....calcula el monto del anticipo...."
+//                    println "\ttiene monto y porcentaje de anticipo....calcula el monto del anticipo...."
                     def anticipo = contrato.monto * (contrato.porcentajeAnticipo / 100)
                     contrato.anticipo = anticipo
                     contrato.save(flush: true)
@@ -68,13 +68,14 @@ class ContratoController extends janus.seguridad.Shield {
             }
 
             /* sólo si el usaurio es un Directos puede acceder al os botones de Adminsitrador, Fiscalizador y Delegado */
-            def obra = contrato.oferta.concurso.obra
+//            def obra = contrato.oferta.concurso.obra
+            def obra = contrato.obra
 //            println ".........." + obra
             def dptoDireccion = Departamento.findAllByDireccion(obra.departamento.direccion)
 //            println "departamentos... a listar:" + dptoDireccion
             def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion)
             def directores = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalDireccion).persona.id
-//            println "directores:" + directores + "  usurio: " + session.usuario.id
+//            println "directores:" + directores + "  usurio: $session.usuario id:" + session.usuario.id
             def esDirector = directores.contains(session.usuario.id)? "S": "N"
 //            println "esDirector:" + esDirector
 
@@ -84,6 +85,9 @@ class ContratoController extends janus.seguridad.Shield {
             def esDirFis = directoresFis.contains(session.usuario.id)? "S": "N"
 
             def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
+
+//            println "+++contrato: $contrato, $contrato.id tipo: ${contrato.obra.tipo}"
+
             [campos: campos, contrato: contrato, esDirector: esDirector, esDirFis: esDirFis]
         } else {
             def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
