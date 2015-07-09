@@ -153,7 +153,14 @@
             width           : 640px;
             /*margin-left     : 30px;*/
             /*margin-bottom   : 10px;*/
+            margin          : 10px 0 25px 10px;
+        }
+
+        .tablaPq {
+            border-collapse : collapse;
+            width           : 640px;
             margin          : 10px 0 16px 10px;
+            page-break-inside : avoid;
         }
 
         .table th,

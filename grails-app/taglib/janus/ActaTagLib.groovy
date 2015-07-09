@@ -31,6 +31,7 @@ class ActaTagLib {
                 "&Ntilde;": "Ñ",
                 "&deg;"   : "°",
                 "&nbsp;"  : " ",
+                "&acute;" : "",
         ]
         def str = attrs.str
 
@@ -278,7 +279,7 @@ class ActaTagLib {
             order("fechaIngreso", "asc")
         }
 
-        def tabla = "<table class='table table-bordered table-condensed'>"
+        def tabla = "<table class='table table-bordered table-condensed tablaPq'>"
 
         tabla += "<thead>"
         tabla += "<tr>"
@@ -345,7 +346,7 @@ class ActaTagLib {
         if (planillasCosto.size() > 0) {
 //            prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
             prct = planillasCosto.first().contrato?.indirectos
-            tabla = "<table class='table table-bordered table-condensed'>"
+            tabla = "<table class='table table-bordered table-condensed tabalPq'>"  // tablaPq hace que no se parta la tabla
 
             tabla += "<thead>"
             tabla += "<tr>"

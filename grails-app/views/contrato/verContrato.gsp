@@ -454,7 +454,6 @@
 
                             <li>
                                 <g:if test="${esDirFis == 'S'}">
-                                %{--<g:if test="${esDirector == 'N'}">--}%
                                     <a href="#" id="btnFisc">
                                         <i class="icon-user"></i> Fiscalizador
                                     </a>
@@ -462,27 +461,28 @@
                             </li>
 
                             <li>
-                                <g:if test="${esDirFis == 'S'}">
-                                %{--<g:if test="${esDirector == 'N'}">--}%
+                                %{--<g:if test="${esDirFis == 'S'}">--}%
+                                <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
                                     <a href="#" id="btnDelFisc">
                                         <i class="icon-user"></i> Delegado fiscalización
                                     </a>
                                 </g:if>
                             </li>
+
                             <li>
+                                %{--<g:if test="${esDirector == 'S'}">--}%
                                 <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
-                                %{--<g:if test="${esDirector == 'N'}">--}%
-                                    <a href="#" id="btnIndi">
-                                        <i class="icon-file"></i> Indirectos
+                                    <a href="#" id="btnPref">
+                                        <i class="icon-user"></i> Delegado del Prefecto
                                     </a>
                                 </g:if>
                             </li>
 
                             <li>
-                                <g:if test="${esDirector == 'S'}">
+                                <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
-                                    <a href="#" id="btnPref">
-                                        <i class="icon-user"></i> Delegado del Prefecto
+                                    <a href="#" id="btnIndi">
+                                        <i class="icon-file"></i> % de Indirectos
                                     </a>
                                 </g:if>
                             </li>
