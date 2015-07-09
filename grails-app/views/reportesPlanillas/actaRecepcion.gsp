@@ -153,7 +153,7 @@
             width           : 640px;
             /*margin-left     : 30px;*/
             /*margin-bottom   : 10px;*/
-            margin          : 10px 0 10px 10px;
+            margin          : 10px 0 16px 10px;
         }
 
         .table th,
