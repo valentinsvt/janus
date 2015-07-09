@@ -842,7 +842,7 @@ class ReportesPlanillasController {
         PdfPTable tablaEconomico = new PdfPTable(2);
 
         tablaEconomico.setWidthPercentage(100);
-        tablaEconomico.setWidths(arregloEnteros([35, 65]))
+        tablaEconomico.setWidths(arregloEnteros([60, 40]))
         tablaEconomico.setSpacingBefore(5f);
 
         addCellTabla(tablaEconomico, new Paragraph("4.- AVANCE ECONÓMICO", fontTitle), [padding: 3, pb: 5, border: Color.WHITE, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
@@ -1215,7 +1215,7 @@ class ReportesPlanillasController {
         PdfPTable tablaEconomico = new PdfPTable(2);
 
         tablaEconomico.setWidthPercentage(100);
-        tablaEconomico.setWidths(arregloEnteros([35, 65]))
+        tablaEconomico.setWidths(arregloEnteros([60, 40]))
         tablaEconomico.setSpacingBefore(5f);
 
         addCellTabla(tablaEconomico, new Paragraph("4.- AVANCE ECONÓMICO", fontTitle), [padding: 3, pb: 5, border: Color.WHITE, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])

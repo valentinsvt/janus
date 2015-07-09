@@ -46,7 +46,9 @@
                     Contrato
                 </g:link>
                 <g:if test="${planillaObras.size() > 0}">
-                    <a href="#" id="btnAdicionales" class="btn btn-default"><i class='icon icon-print'></i> Imprimir informe de Obras Adicionales</a>
+                    <span style="margin-left: 20px">
+                    <a href="#" id="btnAdicionales" class="btn btn-info"><i class='icon icon-print'></i> Imprimir informe de Obras Adicionales</a>
+                    </span>
                 </g:if>
             </div>
         </div>
@@ -57,7 +59,7 @@
 
         <fieldset>
             <legend>
-                Planilla
+                Planillas de Avance de Obra
             </legend>
             %{--<elm:datepicker name="fecha" value="${new Date()}"/>--}%
             %{--<g:select name="fecha" from="${fechas}"/>--}%
