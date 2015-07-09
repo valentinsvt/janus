@@ -998,6 +998,8 @@ class ReportesPlanillasController {
         def tipoP = TipoPlanilla.findByCodigo("P")
         def tipoQ = TipoPlanilla.findByCodigo("Q")
         def tipoD = TipoPlanilla.findByCodigo("D")
+        def tipoO = TipoPlanilla.findByCodigo("O")
+        def tipoC = TipoPlanilla.findByCodigo("C")
         def tipos = [tipoQ, tipoP, tipoD]
 
 
@@ -1010,10 +1012,23 @@ class ReportesPlanillasController {
             le("fechaFin", plnl.fechaFin)
         }
 
+        def plncto = Planilla.findByContratoAndTipoPlanilla(contrato,tipoC)
+
+        println("costo " + plncto)
+
         def planillaAnticipo = Planilla.withCriteria {
             eq("contrato", contrato)
             eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
         }[0]
+
+        //planilla obras adicionales
+
+        def planillaObrasAdicionales = Planilla.withCriteria {
+            eq("contrato", contrato)
+            eq("tipoPlanilla", TipoPlanilla.findByCodigo("O"))
+        }
+
+        def planoa = Planilla.findByContratoAndTipoPlanilla(contrato,tipoO)
 
         def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio', order: "asc"])
 
@@ -1212,7 +1227,10 @@ class ReportesPlanillasController {
         addCellTabla(tablaEconomico, new Paragraph(numero(inversionReal, 2) + ' $', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaEconomico, new Paragraph("VALOR POR COSTO + PORCENTAJE ACUMULADO", fontTh), [pl: 20, border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaEconomico, new Paragraph(numero(costoPorcentaje, 2) + ' $', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaEconomico, new Paragraph(numero(plncto?.valor, 2) + ' $', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaEconomico, new Paragraph("VALOR DE OBRAS ADICIONALES CONTRACTUALES", fontTh), [pl: 20, border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaEconomico, new Paragraph(numero(planoa?.valor, 2) + ' $', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaEconomico, new Paragraph("MULTAS ACUMULADAS", fontTh), [pl: 20, border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaEconomico, new Paragraph(numero(multas, 2) + ' $', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
