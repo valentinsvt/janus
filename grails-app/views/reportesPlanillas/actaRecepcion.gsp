@@ -30,6 +30,14 @@
             min-height : 200px;
         }
 
+        @page {
+            @bottom-center {
+                content   : 'Acta de ${actaInstance?.nombre} ${actaInstance?.tipo == 'P' ? 'Provisional' : 'Definitiva'} N. ${actaInstance?.numero} pág.' counter(page) ' de ' counter(pages);
+                font-size : 6pt;
+                color     : #777;
+            }
+        }
+
         .titulo {
             font-size : 14px;
         }
@@ -42,10 +50,14 @@
             font-weight : bold;
         }
 
+        .tituloParrafo {
+            vertical-align : top;
+        }
+
         .seccion {
             /*background    : rgba(50, 100, 150, 0.3);*/
             padding       : 2px;
-            margin-bottom : 5px;
+            margin-bottom : 15px;
             clear         : both;
             /*position      : relative;*/
         }
@@ -62,9 +74,14 @@
             width : 600px;
         }
 
+        .parrafo {
+            margin-top : 10px;
+        }
+
         .contParrafo {
             /*width : 575px;*/
-            width : 600px;
+            width      : 600px;
+            text-align : justify;
         }
 
         .tal {
@@ -92,19 +109,21 @@
         }
 
         .span10, .span9, .span1 {
-            float : left;
+            /*float : left;*/
+            display : inline-block;
         }
 
         .span1 {
-            width : 50px;
+            width : 70px;
         }
 
         .span10 {
-            width : 595px;
+            width : 575px;
         }
 
         .numero {
-            width : 35px !important;
+            width          : 35px !important;
+            vertical-align : top;
         }
 
         .lblSeccion {
@@ -125,6 +144,10 @@
             margin-bottom : 0 !important;
         }
 
+        .table, .table thead, .table tr, .table td, .table th {
+            border : 1px solid #555;
+        }
+
         .table {
             border-collapse : collapse;
             width           : 640px;
@@ -139,7 +162,7 @@
             line-height    : 20px;
             text-align     : left;
             vertical-align : top;
-            border-top     : 1px solid #dddddd;
+            /*border-top     : 1px solid #dddddd;*/
         }
 
         .table th {
@@ -159,12 +182,12 @@
             border          : 1px solid #dddddd;
             /*border-collapse       : separate;*/
             border-collapse : collapse;
-            border-left     : 0;
+            /*border-left     : 0;*/
         }
 
         .table-bordered th,
         .table-bordered td {
-            border-left : 1px solid #dddddd;
+            /*border-left : 1px solid #dddddd;*/
         }
 
         th, td {
@@ -366,13 +389,13 @@
                         </div>
                     </div>
 
-%{--
-                    <div class="row">
-                        <div class="">
-                            FISCALIZADOR
-                        </div>
-                    </div>
---}%
+                    %{--
+                                        <div class="row">
+                                            <div class="">
+                                                FISCALIZADOR
+                                            </div>
+                                        </div>
+                    --}%
                 </div>
 
                 <div class="left" style="margin-top: 20px">
