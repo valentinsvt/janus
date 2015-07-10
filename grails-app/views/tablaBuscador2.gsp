@@ -6,7 +6,7 @@
                 <g:set var="planilla" value="${["OBRA", "CONTRATO", "DECRIPCION", "FECHA PRESENTACION", "MEMO PAGO", "MONTO"]}"/>
                 <g:set var="titulos" value="${listaTitulos}"/>
 
-                <th style="width: 40px"></th>
+                %{--<th style="width: 40px"></th>--}%
                 <g:each in="${listaTitulos}">
                     <th>${it}</th>
                 </g:each>
@@ -16,13 +16,13 @@
                 <g:each var="reg" in="${lista}" status="i">
                     <g:set var="propiedades" value=""></g:set>
                     <tr style="font-size: 10px !important;">
-                        <td style="text-align: right;width: 50px">
-                            <g:if test="${planilla != titulos}">
+                        %{--<td style="text-align: right;width: 50px">--}%
+                            %{--<g:if test="${planilla != titulos}">--}%
                                 %{--<a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>--}%
                                     %{--<i class="icon-share"></i>--}%
                                 %{--</a>--}%
-                            </g:if>
-                        </td>
+                            %{--</g:if>--}%
+                        %{--</td>--}%
                         <g:each in="${listaCampos}" var="nombre" status="j">
                             <g:set var="propiedades" value="${propiedades += " prop_" + nombre + "='" + reg.properties[nombre] + "'"}"></g:set>
                             <g:if test="${funciones}">
