@@ -2787,7 +2787,7 @@ class Reportes3Controller {
 
         garantias.each {
             addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.codigo, times8normal), prmsCellHead4)
-            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre + " " + it?.contrato?.oferta?.proveedor?.apellidoContacto, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre, times8normal), prmsCellHead4)
             addCellTabla(tablaGarantia, new Paragraph(it?.tipoGarantia?.descripcion, times8normal), prmsCellHead4)
             addCellTabla(tablaGarantia, new Paragraph(it?.codigo, times8normal), prmsCellHead4)
             addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.numeroRenovaciones, format: "###,###", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8normal), prmsCellHead3)

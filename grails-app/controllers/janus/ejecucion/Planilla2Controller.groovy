@@ -113,6 +113,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def funciones = [["closure": [codObra, "&"]], ["closure": [contr, "&"]], null, null, null, null]
         def url = g.createLink(action: "buscarPlanilla", controller: "planilla2")
         def funcionJs = "function(){"
+//        funcionJs += '$("#modal-busqueda").modal("hide");'
+//        funcionJs += 'location.href="' + g.createLink(action: 'verContrato', controller: 'contrato') + '/"+$(this).attr("regId");'
         funcionJs += '}'
         def numRegistros = 20
         def extras = " and fechaPago is not null "
@@ -131,7 +133,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 def lista = buscadorService.buscar(Planilla, "Planilla", "excluyente", params, true, extras)
                 /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
-                render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "planilla2", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+                render(view: '../tablaBuscador2', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "planilla2", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
             }
 
         } else {

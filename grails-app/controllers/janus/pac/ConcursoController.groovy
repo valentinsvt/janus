@@ -115,7 +115,7 @@ class ConcursoController extends janus.seguridad.Shield {
         def extras = " "
         if (extraObra.size() > 0)
             extras += " and obra in (${extraObra})"
-        println "extras " + extras
+//        println "extras " + extras
 
         if (!params.reporte) {
             if (params.excel) {
