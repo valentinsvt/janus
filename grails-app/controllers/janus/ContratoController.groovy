@@ -1,6 +1,7 @@
 package janus
 
 import janus.ejecucion.FormulaPolinomicaContractual
+import janus.ejecucion.PeriodosInec
 import janus.ejecucion.Planilla
 import janus.ejecucion.TipoFormulaPolinomica
 import janus.pac.Concurso
@@ -845,7 +846,7 @@ class ContratoController extends janus.seguridad.Shield {
     def save() {
         def contratoInstance
 
-//        println("-->>" + params)
+//        println("-->> save" + params)
 
         if (params.codigo) {
             params.codigo = params.codigo.toString().toUpperCase()
@@ -860,14 +861,11 @@ class ContratoController extends janus.seguridad.Shield {
             params.fechaSubscripcion = new Date().parse("dd-MM-yyyy", params.fechaSubscripcion)
         }
 
-
-
-
-
-
+        def indice = PeriodosInec.get(params."periodoValidez.id")
 
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
+
             if (!contratoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Contrato con id " + params.id
@@ -875,6 +873,7 @@ class ContratoController extends janus.seguridad.Shield {
                 return
             }//no existe el objeto
             contratoInstance.properties = params
+            contratoInstance.periodoInec = indice
         }//es edit
         else {
 
@@ -893,6 +892,7 @@ class ContratoController extends janus.seguridad.Shield {
 
 
             contratoInstance = new Contrato(params)
+            contratoInstance.periodoInec = indice
 
         } //es create
         if (!contratoInstance.save(flush: true)) {
