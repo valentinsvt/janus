@@ -877,7 +877,12 @@
 
             $("#btn-aceptar").click(function () {
 
-                $("#frm-registroContrato").submit();
+                if($(".indiceOferta").val()){
+                    $("#frm-registroContrato").submit();
+                }else{
+                    alert("No ha seleccionado un indice!")
+                }
+
 
             });
 
