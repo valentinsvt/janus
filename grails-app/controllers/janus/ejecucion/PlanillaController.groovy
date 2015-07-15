@@ -4467,6 +4467,11 @@ class PlanillaController extends janus.seguridad.Shield {
             insertaDetalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
         }
         else {
+
+
+
+
+
             procesaReajusteLq(params.id) /** inserta valores de reajuste --> rjpl **/
 //            println "1.completa procesaReajuste"
             insertaDetalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
@@ -4482,6 +4487,17 @@ class PlanillaController extends janus.seguridad.Shield {
                 plnl.save(flush: true)
             }
             if(plnl.tipoPlanilla.toString() == 'Q') {
+
+                if (!plnl.contrato.fechaPedidoRecepcionContratista || !plnl.contrato.fechaPedidoRecepcionFiscalizador) {
+                    flash.message = "Por favor ingrese las fechas de pedido de recepción para procesar la planilla de liquidación"
+                    flash.clase = "alert-error"
+//                    redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: plnl.contrato.id)
+                    render "fechas"
+                    return
+                }
+
+
+
                 def anteriores = Planilla.findAllByContratoAndTipoPlanilla(plnl.contrato, TipoPlanilla.findByCodigo('P')).sum{it.descuentos}
                 plnl.descuentos = plnl.contrato.anticipo - anteriores
                 plnl.save(flush: true)

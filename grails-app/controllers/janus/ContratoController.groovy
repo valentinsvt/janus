@@ -28,6 +28,7 @@ class ContratoController extends janus.seguridad.Shield {
     } //list
 
     def fechasPedidoRecepcion() {
+        println("params f" + params)
         def contrato = Contrato.get(params.id)
         return [contrato: contrato]
     }

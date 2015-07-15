@@ -570,7 +570,7 @@
 
                 $(".btnProcesa").click(function () {
                     var id = $(this).data("id");
-                    console.log("id:" + id)
+//                    console.log("id:" + id)
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'procesar')}",
@@ -586,7 +586,7 @@
 
                 $(".btnProcesaQ").click(function () {
                     var id = $(this).data("id");
-                    console.log("id:" + id)
+//                    console.log("id:" + id)
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'procesarLq')}",
@@ -594,7 +594,11 @@
                             id : id
                         },
                         success : function (msg) {
-                            location.reload();
+                            if(msg == 'fechas'){
+                                location.href="${g.createLink(controller: 'contrato', action: 'fechasPedidoRecepcion' )}?id=" + ${contrato?.id}
+                            }else{
+                                location.reload();
+                            }
                         }
                     });
                     return false;
