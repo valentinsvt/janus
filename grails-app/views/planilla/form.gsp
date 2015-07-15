@@ -89,6 +89,7 @@
                         <g:hiddenField id="contrato" name="contrato.id" value="${planillaInstance?.contrato?.id}"/>
                         %{--<g:hiddenField name="numero" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>--}%
 
+%{--
                         <div class="alert alert-info">
                             <g:if test="${tipos.find { it.codigo == 'A' }}">
                                 <p>
@@ -98,13 +99,6 @@
                                 </p>
                             </g:if>
 
-                            <g:if test="${tipos.find { it.codigo == 'P' }}">
-                                <p>
-                                    Las planillas de tipo "${tipos.find {
-                                        it.codigo == 'P'
-                                    }.nombre}" se utilizan para registrar el avance de la obra. La última de este tipo es considerada como planilla de liquidación
-                                </p>
-                            </g:if>
                             <g:if test="${tipos.find { it.codigo == 'L' }}">
                                 <p>
                                     La planilla de tipo "${tipos.find {
@@ -116,10 +110,11 @@
                                 <p>
                                     Las planillas de tipo "${tipos.find {
                                         it.codigo == 'C'
-                                    }.nombre}" se utilizan para registrar costos por rubros no incluídos en el volumen de obra
+                                    }.nombre}" se utilizan para registrar costos por rubros no contractuales y deben asociarse a otra de contractuales
                                 </p>
                             </g:if>
                         </div>
+--}%
 
                         <div class="row">
                             <div class='span2 formato'>

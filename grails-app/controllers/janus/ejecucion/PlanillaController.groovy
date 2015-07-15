@@ -1696,7 +1696,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println "periodos: $periodos"
 //        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado, anticipoPagado: $anticipoPagado"
 //        println "es anticipo: $esAnticipo"
-        tiposPlanilla = tiposPlanilla.sort{it.codigo}
+        tiposPlanilla = tiposPlanilla.sort{it.nombre}
 
 
         //planilla asociada
