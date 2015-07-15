@@ -41,8 +41,10 @@ class ContratoController extends janus.seguridad.Shield {
         contrato.obra.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
 
         def liquidacion = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('Q'))
-        liquidacion?.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
-        liquidacion.save(flush: true)
+        if(liquidacion){
+            liquidacion?.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
+            liquidacion.save(flush: true)
+        }
 
         contrato.obra.save(flush: true)
         if (!contrato.save(flush: true)) {
