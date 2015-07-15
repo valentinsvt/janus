@@ -4,6 +4,7 @@ import janus.ejecucion.FormulaPolinomicaContractual
 import janus.ejecucion.PeriodosInec
 import janus.ejecucion.Planilla
 import janus.ejecucion.TipoFormulaPolinomica
+import janus.ejecucion.TipoPlanilla
 import janus.pac.Concurso
 import janus.pac.CronogramaContrato
 import janus.pac.DocumentoProceso
@@ -38,6 +39,11 @@ class ContratoController extends janus.seguridad.Shield {
         contrato.fechaPedidoRecepcionContratista = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionContratista)
         contrato.fechaPedidoRecepcionFiscalizador = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionFiscalizador)
         contrato.obra.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
+
+        def liquidacion = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('Q'))
+        liquidacion?.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
+        liquidacion.save(flush: true)
+
         contrato.obra.save(flush: true)
         if (!contrato.save(flush: true)) {
             println "Error al guardar fechas de pedido de recepcion (contrato controller l.33): " + contrato.errors

@@ -34,9 +34,13 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
+                <g:link controller="contrato" action="verContrato" params="[id: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
                     <i class="icon-double-angle-left"></i>
                     Contrato
+                </g:link>
+                <g:link controller="planilla" action="listFiscalizador" id="${contrato?.id}" class="btn" title="Planillas">
+                    <i class="icon-arrow-left"></i>
+                    Planillas
                 </g:link>
                 <a href="#" class="btn btn-success" id="btnSave"><i class="icon-save"></i> Guardar</a>
             </div>

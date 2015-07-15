@@ -47,6 +47,7 @@
                         </g:link>
                         </g:if>
                     </g:if>
+
                 </div>
             </div>
 
