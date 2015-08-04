@@ -256,9 +256,11 @@
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
+%{--
                                 <g:link controller="reajustePlanilla" action="index" id="${planillaInstance.id}" class="btn btn-small" rel="tooltip" title="Reajustar índices">
                                     <i class="icon-trello"></i>
                                 </g:link>
+--}%
                             %{--<g:if test="${!planillaInstance.fechaOrdenPago}">--}%
                             %{--<g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">--}%
                             %{--<i class="icon-money icon-large"></i>--}%

@@ -25,7 +25,7 @@ si<%--
         }
 
         .table th {
-            font-size : 11pt;
+            font-size : 12pt;
         }
 
         .table td {
@@ -37,7 +37,7 @@ si<%--
         }
 
         .table .num {
-            height        : 11px;
+            height        : 12px;
             margin-bottom : 0;
         }
 

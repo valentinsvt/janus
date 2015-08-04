@@ -41,7 +41,7 @@
             <g:set var="valor" value="${g.formatNumber(number: det.valor, maxFractionDigits: 3, minFractionDigits: 3)}"/>
             <g:set var="indice" value="${g.formatNumber(number: det.fpContractual.valor, maxFractionDigits: 3, minFractionDigits: 3)}"/>
 
-            <tr data-id="${det.id}" data-indice="${indice}">
+            <tr data-id="${det.id}" data-indice="${indice}" style="height: 20px">
                 <td>${det.fpContractual.indice.descripcion} (${indice})</td>
                 <td>
                     <input class="span2 num mask io" type="text" value="${indiceOferta}" data-original="${indiceOferta}" data-tipo="io">
