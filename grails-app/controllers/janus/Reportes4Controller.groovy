@@ -1638,21 +1638,12 @@ class Reportes4Controller {
 
 
     def contratadas () {
-
         def perfil = session.perfil.id
-
         return [perfil: perfil]
-
-
-
-
     }
 
     def tablaContratadas () {
-
-
-//                println("paramsCont" + params)
-
+//        println("paramsCont" + params)
         def obras = []
 
         def sql
@@ -1750,7 +1741,7 @@ class Reportes4Controller {
 
         res = cn.rows(sql.toString())
 
-//        println(sql)
+//        println "sqlBase: $sqlBase, filtroBuscador: $filtroBuscador"
 //        println(res)
 
 
@@ -1762,13 +1753,12 @@ class Reportes4Controller {
 
         def bandera = 0
 
-        res.each{ i->
-
-
+        res.each { i ->
+//            println "tablaContratadas 1 con i: ${i.id}"
             obra = Obra.get(i.id)
-
+//            println "tablaContratadas 2 con obra: ${obra.codigo}"
             concurso = janus.pac.Concurso.findByObra(obra)
-
+//            println "tablaContratadas 3"
 
             if(concurso){
                 oferta = janus.pac.Oferta.findAllByConcurso(concurso)
@@ -1781,18 +1771,12 @@ class Reportes4Controller {
                         obras += i
                         contratos += contrato
                     }
-
                 }
-
-
             }
-
-
-
         }
 
 
-
+        println "tablaContratadas inicia obras..."
 
         obras.each{
 
@@ -1813,11 +1797,7 @@ class Reportes4Controller {
                         totales = it.totl
                         totalPresupuestoBien = (total1 += totales)
                     }
-
-
                 }
-
-
             }
 
 //           println("--->>" + totalPresupuestoBien)
@@ -1840,9 +1820,6 @@ class Reportes4Controller {
         }
 
         return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params, contratos: contratos, bandera: bandera]
-
-
-
     }
 
 
@@ -2003,7 +1980,7 @@ class Reportes4Controller {
             case "mmsl":
             case "frpl":
             case "tipo":
-                params.buscador = "obra"+params.buscador
+                params.buscador = "obra" + params.buscador
                 filtroBuscador =" where ${params.buscador} ILIKE ('%${params.criterio}%') "
                 break;
             case "cmnd":
@@ -2019,7 +1996,6 @@ class Reportes4Controller {
             case "rvsr":
                 filtroBuscador = " where (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
                 break;
-
         }
 
 

@@ -90,24 +90,19 @@
 
     <g:if test="${params.buscador != 'undefined'}">
 
-    <g:each in="${obras}" var="obra" status="j">
-        <tr class="obra_row" id="${obra.id}">
-            <td>${obra.codigo}</td>
-            <td>${obra.nombre}</td>
-            <td>${obra.tipoobra}</td>
-            <td><g:formatDate date="${obra.fecha}" format="dd-MM-yyyy"/></td>
-            <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
-            <td style="text-align: right">${valoresTotales[j]}</td>
-            <td>${obra.elaborado}</td>
-            <td>${contratos[j].codigo}</td>
-
-        </tr>
-
-
-    </g:each>
-
+        <g:each in="${obras}" var="obra" status="j">
+            <tr class="obra_row" id="${obra.id}">
+                <td>${obra.codigo}</td>
+                <td>${obra.nombre}</td>
+                <td>${obra.tipoobra}</td>
+                <td><g:formatDate date="${obra.fecha}" format="dd-MM-yyyy"/></td>
+                <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
+                <td style="text-align: right">${valoresTotales[j]}</td>
+                <td>${obra.elaborado}</td>
+                <td>${contratos[j].codigo}</td>
+            </tr>
+        </g:each>
     </g:if>
-
 
     </tbody>
 </table>
