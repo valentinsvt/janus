@@ -65,7 +65,7 @@ class ContratoController extends janus.seguridad.Shield {
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
 //            println "ANT " + contrato.anticipo
-            if (!contrato.anticipo) {
+            if (!contrato?.anticipo) {
 //                println "...no tiene anticipo....."
                 if (contrato.monto && contrato.porcentajeAnticipo) {
 //                    println "\ttiene monto y porcentaje de anticipo....calcula el monto del anticipo...."

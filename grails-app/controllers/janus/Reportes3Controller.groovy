@@ -154,14 +154,11 @@ class Reportes3Controller {
 
         if (params.sub)
             if (params.sub == '-1'){
-//                valores = preciosService.rbro_pcun_v2(obra?.id)
                 valores = preciosService.rbro_pcun_vae(obra?.id)
             }else {
-//               valores = preciosService.rbro_pcun_v3(obra?.id, params.sub)
                 valores = preciosService.rbro_pcun_vae2(obra?.id, params.sub)
             }
         else
-//            valores = preciosService.rbro_pcun_v2(obra.id)
             valores = preciosService.rbro_pcun_vae(obra.id)
 
         def nombres = []
@@ -197,15 +194,11 @@ class Reportes3Controller {
 
 
         valores.eachWithIndex{ j,i->
-
-
             j.rbronmbr = corregidos[i]
-
         }
 
         valores.each {
             prueba += it.rbronmbr
-
         }
 
 //

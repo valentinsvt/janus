@@ -25,6 +25,7 @@ import java.awt.Color
 class Reportes5Controller {
 
     def dbConnectionService
+    def preciosService
 
     def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 
@@ -850,6 +851,201 @@ class Reportes5Controller {
         response.setHeader("Content-disposition", "attachment; filename=" + name)
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
+    }
+
+
+
+    def reporteVaeExcel () {
+
+//        println("params " + params)
+
+        def obra = Obra.get(params.id)
+        def detalle
+        detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+
+        def subPre
+        def valores
+        def fechaNueva = obra?.fechaCreacionObra?.format("dd-MM-yyyy");
+        def fechaPU = (obra?.fechaPreciosRubros?.format("dd-MM-yyyy"));
+
+        if (params.sub) {
+            if (params.sub == '-1') {
+                valores = preciosService.rbro_pcun_vae(obra?.id)
+            } else {
+                valores = preciosService.rbro_pcun_vae2(obra?.id, params.sub)
+            }
+        }
+        else {
+            valores = preciosService.rbro_pcun_vae(obra.id)
+        }
+
+        if (params.sub != '-1'){
+
+            subPre= SubPresupuesto.get(params.sub).descripcion
+
+        }else {
+            subPre= -1
+        }
+
+        def nombres = []
+        def corregidos = []
+        def prueba = []
+        valores.each {
+            nombres += it.rbronmbr
+        }
+
+        nombres.each {
+            def text = (it ?: '')
+            text = text.decodeHTML()
+            text = text.replaceAll(/</, /&lt;/);
+            text = text.replaceAll(/>/, /&gt;/);
+            text = text.replaceAll(/"/, /&quot;/);
+            corregidos += text
+        }
+
+        valores.eachWithIndex{ j,i->
+            j.rbronmbr = corregidos[i]
+        }
+
+        valores.each {
+            prueba += it.rbronmbr
+        }
+
+        def indirecto = obra.totales / 100
+        def c;
+        def total1 = 0;
+        def totales = 0
+        def totalPresupuesto = 0;
+        def vaeTotal = 0
+        def vaeTotal1 = 0
+        def totalVae= 0
+
+        //excel
+
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+
+
+        params.id = params.id.split(",")
+        if (params.id.class == java.lang.String) {
+            params.id = [params.id]
+        }
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        sheet.setColumnView(0, 12)
+        sheet.setColumnView(1, 25)
+        sheet.setColumnView(2, 25)
+        sheet.setColumnView(3, 60)
+        sheet.setColumnView(4, 25)
+        sheet.setColumnView(5, 25)
+        sheet.setColumnView(6, 25)
+        sheet.setColumnView(7, 25)
+
+        def label
+        def number
+        def nmro
+        def numero = 1;
+        def fila = 18;
+        def filaSub = 17
+        def ultimaFila
+
+
+        //cabecera
+        label = new Label(2, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
+        label = new Label(2, 6, "PRESUPUESTO", times16format); sheet.addCell(label);
+        label = new Label(2, 8, "REQUIRENTE: " + obra?.departamento?.direccion?.nombre, times16format); sheet.addCell(label);
+        label = new Label(2, 9, "FECHA: " + fechaNueva, times16format);
+        sheet.addCell(label);
+        label = new Label(2, 10, "FECHA Act. P.U.: " + fechaPU, times16format);
+        sheet.addCell(label);
+        label = new Label(2, 11, "NOMBRE: " + obra?.nombre, times16format); sheet.addCell(label);
+        label = new Label(2, 12, "MEMO CANT. DE OBRA: " + obra?.memoCantidadObra, times16format); sheet.addCell(label);
+        label = new Label(2, 13, "CÓDIGO OBRA: " + obra?.codigo, times16format); sheet.addCell(label);
+        label = new Label(2, 14, "DOC. REFERENCIA: " + obra?.oficioIngreso + "  " + obra?.referencia, times16format); sheet.addCell(label);
+
+        //columnas
+        label = new Label(0, 16, "N°", times16format); sheet.addCell(label);
+        label = new Label(1, 16, "CÓDIGO", times16format); sheet.addCell(label);
+        label = new Label(2, 16, "ESPEC", times16format); sheet.addCell(label);
+        label = new Label(3, 16, "RUBRO", times16format); sheet.addCell(label);
+        label = new Label(4, 16, "DESCRIPCIÓN", times16format); sheet.addCell(label);
+        label = new Label(5, 16, "UNIDAD", times16format); sheet.addCell(label);
+        label = new Label(6, 16, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new Label(7, 16, "P.U.", times16format); sheet.addCell(label);
+        label = new Label(8, 16, "C.TOTAL", times16format); sheet.addCell(label);
+        label = new Label(9, 16, "PESO RELATIVO", times16format); sheet.addCell(label);
+        label = new Label(10, 16, "VAE RUBRO", times16format); sheet.addCell(label);
+        label = new Label(11, 16, "VAE TOTAL", times16format); sheet.addCell(label);
+
+
+        subPres.each {sp->
+
+
+                label = new Label(0, filaSub, sp?.descripcion?.toString()); sheet.addCell(label);
+
+            valores.each {val->
+
+            if(val.sbpr__id == sp.id){
+                number = new Number(0, fila, val.vlobordn); sheet.addCell(number);
+                label = new Label(1, fila, val.rbrocdgo.toString()); sheet.addCell(label);
+                label = new Label(2, fila, val?.itemcdes?.toString() ?: ''); sheet.addCell(label);
+                label = new Label(3, fila, val.rbronmbr.toString()); sheet.addCell(label);
+                label = new Label(4, fila, val?.vlobdscr?.toString() ?: ''); sheet.addCell(label);
+                label = new Label(5, fila, val.unddcdgo.toString()); sheet.addCell(label);
+                number = new Number(6, fila, val.vlobcntd); sheet.addCell(number);
+                number = new Number(7, fila, val.pcun); sheet.addCell(number);
+                number = new Number(8, fila, val.totl); sheet.addCell(number);
+                number = new Number(9, fila, val.relativo); sheet.addCell(number);
+                number = new Number(10, fila, val.vae_rbro); sheet.addCell(number);
+                number = new Number(11, fila, val.vae_totl); sheet.addCell(number);
+
+                fila++
+                filaSub++
+                totales = val.totl
+                vaeTotal = val.vae_totl
+                totalPresupuesto = (total1 += totales);
+                totalVae = (vaeTotal1 += vaeTotal)
+                ultimaFila = fila
+
+            }
+            }
+
+            fila++
+            filaSub++
+
+        }
+
+        label = new Label(7, ultimaFila, "TOTAL ", times16format); sheet.addCell(label);
+        number = new Number(8, ultimaFila, totalPresupuesto); sheet.addCell(number);
+        number = new Number(9, ultimaFila, 100); sheet.addCell(number);
+        number = new Number(11, ultimaFila, totalVae); sheet.addCell(number);
+
+        label = new Label(2, ultimaFila+1, "CONDICIONES DEL CONTRATO ", times16format); sheet.addCell(label);
+        label = new Label(2, ultimaFila+2, "Plazo de Ejecución: " + obra?.plazoEjecucionMeses + " mes(meses)", times16format); sheet.addCell(label);
+        label = new Label(2, ultimaFila+3, "Anticipo: " + obra?.porcentajeAnticipo + " %", times16format); sheet.addCell(label);
+        label = new Label(2, ultimaFila+4, "Elaboró: " + (obra?.responsableObra?.titulo ?: '') + (obra?.responsableObra?.nombre ?: '') + ' ' + (obra?.responsableObra?.apellido ?: ''), times16format); sheet.addCell(label);
+
+
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "VaeExcel.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
     }
 
 }

@@ -2979,6 +2979,7 @@ class ReportesPlanillasController {
 
     def memoPedidoPagoAnticipo() {
         def planilla = Planilla.get(params.id)
+        println("planilla " + params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
 //        def tramite = Tramite.findByPlanilla(planilla)

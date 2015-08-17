@@ -32,7 +32,7 @@
         </a>
         <a href="#" class="btn  " id="imprimir_sub">
             <i class="icon-print"></i>
-            Impr. Subpresupuesto
+            Impr. Subpre.
         </a>
         <a href="#" class="btn  " id="imprimir_excel" style="margin-left:-7px">
             <i class="icon-table"></i>
@@ -41,7 +41,11 @@
 
         <a href="#" class="btn  " id="imprimir_sub_vae">
             <i class="icon-print"></i>
-            Subpresupuesto VAE
+            Subpre. VAE
+        </a>
+        <a href="#" class="btn  " id="imprimir_vae_excel">
+            %{--<i class="icon-table"></i>--}%
+           VAE Excel
         </a>
     </div>
 </div>
@@ -338,6 +342,28 @@
             alert("Escoja un subpresupuesto")
         }
 
+
+    });
+
+    $("#imprimir_vae_excel").click(function () {
+        var valorSub = $("#subPres_desc").val()
+        if ($("#subPres_desc").val() != '') {
+            $("#dlgLoad").dialog("open");
+            $.ajax({
+                type: 'POST',
+                url: "${g.createLink(controller: 'reportes5',action: 'reporteVaeExcel')}",
+                data: {
+                    id: '${obra?.id}',
+                    sub: valorSub
+                },
+                success: function (msg) {
+                    location.href = "${g.createLink(controller: 'reportes5',action: 'reporteVaeExcel',id: obra?.id)}?sub=" + $("#subPres_desc").val();
+                    $("#dlgLoad").dialog("close");
+                }
+            });
+        } else {
+            alert("Escoja un subpresupuesto")
+        }
 
     });
 
