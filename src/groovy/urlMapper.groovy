@@ -1,13 +1,3 @@
-
-/**
- * Created with IntelliJ IDEA.
- * User: svt
- * Date: 9/5/12
- * Time: 11:37 AM
- * To change this template use File | Settings | File Templates.
- */
-
-
 class Arbol{
     def url = ""
     def links = []
@@ -100,5 +90,11 @@ if(inicio.links.size()>0){
 }
 
 inicio.imprimir(1)
+
+
+
+
+
+
 
 // titleBytes example

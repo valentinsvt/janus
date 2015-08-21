@@ -30,6 +30,7 @@ class Reportes4Controller {
     def dbConnectionService
     def preciosService
     def buscadorService
+    def reportesService
 
     def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 
@@ -1642,7 +1643,7 @@ class Reportes4Controller {
         return [perfil: perfil]
     }
 
-    def tablaContratadas () {
+    def tablaContratadas_old () {
 //        println("paramsCont" + params)
         def obras = []
 
@@ -1820,6 +1821,51 @@ class Reportes4Controller {
         }
 
         return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params, contratos: contratos, bandera: bandera]
+    }
+
+    def tablaContratadas () {
+//        println "tablaContratadas ok $params , ${reportesService.obrasContratadas()}"
+        def cn = dbConnectionService.getConnection()
+        def campos = reportesService.obrasContratadas()
+
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
+
+        def sql = armaSqlContratadas(params)
+        def obras = cn.rows(sql)
+
+//        println "registro retornados del sql: ${obras.size()}"
+        params.criterio = params.old
+        return [obras: obras, params: params]
+    }
+
+    def armaSqlContratadas(params){
+        def campos = reportesService.obrasContratadas()
+        def operador = reportesService.operadores()
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
+
+        def sqlSelect = "select obra.obra__id, obracdgo, obranmbr, tpobdscr, obrafcha, cntnnmbr, parrnmbr, cmndnmbr, " +
+                "cntrmnto, dptodscr, cntrcdgo " +
+                "from obra, tpob, cntn, parr, cmnd, cncr, ofrt, cntr, dpto "
+        def sqlWhere = "where tpob.tpob__id = obra.tpob__id and cmnd.cmnd__id = obra.cmnd__id and " +
+                "parr.parr__id = obra.parr__id and cntn.cntn__id = parr.cntn__id  and " +
+                "cncr.obra__id = obra.obra__id and ofrt.cncr__id = cncr.cncr__id and " +
+                "cntr.ofrt__id = ofrt.ofrt__id and dpto.dpto__id = obra.dpto__id "
+
+        def sqlOrder = "order by obracdgo"
+
+        println "llega params: $params"
+        params.nombre = "Código"
+        if(campos.find {it.campo == params.buscador}?.size() > 0) {
+            def op = operador.find {it.valor == params.operador}
+            println "op: $op"
+            sqlWhere += " and ${params.buscador} ${op.operador} ${op.strInicio}${params.criterio}${op.strFin}";
+        }
+        println "txWhere: $sqlWhere"
+//        println "sql armado: sqlSelect: ${sqlSelect} \n sqlWhere: ${sqlWhere} \n sqlOrder: ${sqlOrder}"
+        //retorna sql armado:
+        "$sqlSelect $sqlWhere $sqlOrder".toString()
     }
 
 

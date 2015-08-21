@@ -1,11 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 8/23/13
-  Time: 11:26 AM
---%>
-
-
+<%@ page import="janus.utilitarios.reportesService" %>
+<%
+    def reportesServ = grailsApplication.classLoader.loadClass('janus.utilitarios.reportesService').newInstance()
+%>
 
 <g:if test="${flash.message}">
     <div class="span12" style="height: 35px;margin-bottom: 10px; margin-left: -25px">
@@ -21,31 +17,25 @@
     <div class="span12">
 
         <b>Buscar Por: </b>
-        <g:select name="buscador" from="${['cdgo':'Codigo', 'nmbr':'Nombre', 'tipo': 'Tipo', 'cntn': 'Cantón', 'parr': 'Parroquia'
-                , 'cmnd': 'Comunidad', 'insp':'Inspector', 'rvsr':'Revisor', 'ofig':'Of. Ingreso', 'ofsl': 'Of. Salida'
-                ,'mmsl':'Memo Salida', 'frpl':'F. Polinómica']}" value="${params.buscador}"
-                  optionKey="key" optionValue="value" id="buscador_con" style="width: 150px"/>
-        %{--<b style="margin-left: 10px">Estado: </b>--}%
-        %{--<g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"--}%
-                  %{--optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>--}%
-        <b>Criterio: </b>
-        <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}" id="criterio_con"/>
+        <elm:select name="buscador" from = "${reportesServ.obrasContratadas()}" value="${params.buscador}"
+                  optionKey="campo" optionValue="nombre" optionClass="operador" id="buscador_con" style="width: 160px" />
+
+        <b>Operación:</b>
+        <span id="selOpt"></span>
+        <b style="margin-left: 20px">Criterio: </b>
+        <g:textField name="criterio" style="width: 200px; margin-right: 10px" value="${params.criterio}" id="criterio_con"/>
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
         </a>
-        <a href="#" class="btn  hide" id="imprimir">
+        <a href="#" class="btn" id="imprimir">
             <i class="icon-print"></i>
             Imprimir
         </a>
-        <a href="#" class="btn  hide" id="excel">
+        <a href="#" class="btn" id="excel">
             <i class="icon-print"></i>
             Excel
         </a>
-        %{--<a href="#" class="btn" id="regresar">--}%
-            %{--<i class="icon-arrow-left"></i>--}%
-            %{--Regresar--}%
-        %{--</a>--}%
     </div>
 
 </div>
@@ -88,21 +78,21 @@
 
     <tbody id="tabla_material">
 
-    <g:if test="${params.buscador != 'undefined'}">
+    %{--<g:if test="${params.buscador != 'undefined'}">--}%
 
         <g:each in="${obras}" var="obra" status="j">
-            <tr class="obra_row" id="${obra.id}">
-                <td>${obra.codigo}</td>
-                <td>${obra.nombre}</td>
-                <td>${obra.tipoobra}</td>
-                <td><g:formatDate date="${obra.fecha}" format="dd-MM-yyyy"/></td>
-                <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
-                <td style="text-align: right">${valoresTotales[j]}</td>
-                <td>${obra.elaborado}</td>
-                <td>${contratos[j].codigo}</td>
+            <tr class="obra_row" id="${obra.obra__id}">
+                <td>${obra.obracdgo}</td>
+                <td>${obra.obranmbr}</td>
+                <td>${obra.tpobdscr}</td>
+                <td><g:formatDate date="${obra.obrafcha}" format="dd-MM-yyyy"/></td>
+                <td>${obra.cntnnmbr} - ${obra.parrnmbr} - ${obra.cmndnmbr}</td>
+                <td style="text-align: right">${obra.cntrmnto}</td>
+                <td>${obra.dptodscr}</td>
+                <td>${obra.cntrcdgo}</td>
             </tr>
         </g:each>
-    </g:if>
+    %{--</g:if>--}%
 
     </tbody>
 </table>
@@ -114,15 +104,16 @@
 
     $("#buscar").click(function(){
 
-        var datos = "si=${"si"}&buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
+        var datos = "si=${"si"}&buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val() +
+                "&operador=" + $("#oprd").val()
         var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaContratadas')}",
             data     : datos,
             success  : function (msg) {
                 clearInterval(interval)
                 $("#detalle").html(msg)
-                $("#imprimir").removeClass("hide");
-                $("#excel").removeClass("hide");
+//                $("#imprimir").removeClass("hide");
+//                $("#excel").removeClass("hide");
             }
         });
     });
@@ -130,25 +121,40 @@
 
 
     $("#regresar").click(function () {
-
         location.href = "${g.createLink(controller: 'reportes', action: 'index')}"
-
     });
 
 
     $("#imprimir").click(function () {
-
-
         location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
-
     });
 
     $("#excel").click(function () {
-
-
         location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
-
     });
 
+    $("#buscador_con").change(function(){
+        var anterior = "${params.operador}"
+        var opciones = $(this).find("option:selected").attr("class").split(",");
+        poneOperadores(opciones);
+        /* regresa a la opción seleccionada */
+        $("#oprd option[value=" + anterior + "]").prop('selected', true);
+    });
+
+
+    function poneOperadores (opcn) {
+        var $sel = $("<select name='operador' id='oprd' style='width: 160px'}>");
+        for(var i=0; i<opcn.length; i++) {
+            var opt = opcn[i].split(":");
+            var $opt = $("<option value='"+opt[0]+"'>"+opt[1]+"</option>");
+            $sel.append($opt);
+        }
+        $("#selOpt").html($sel);
+    };
+
+    /* inicializa el select de oprd con la primea opción de busacdor */
+    $( document ).ready(function() {
+        $("#buscador_con").change();
+    });
 
 </script>
