@@ -21,8 +21,25 @@ class reportesService {
          [valor: 'gt', operador: '>', strInicio: '', strFin: ''],
          [valor: 'gteq', operador: '>=', strInicio: '', strFin: ''],
          [valor: 'lt', operador: '<', strInicio: '', strFin: ''],
-         [valor: 'lteq', operador: '<=', strInicio: '', strFin: '']]
+         [valor: 'lteq', operador: '<=', strInicio: '', strFin: ''],
+         [valor: 'gtfc', operador: '>', strInicio: "'", strFin: "'"],
+         [valor: 'ltfc', operador: '>', strInicio: "'", strFin: "'"]
+        ]
     }
+
+    /* las opciones de operador no pueden ir separadas con espacios, no se puede usar caractreres especiales como =><% */
+    def obrasAvance() {   // A: string, N: numerico, F: fecha
+        [[campo: 'obracdgo', nombre: 'Código',         operador: "contiene:contiene,inicia:inicia con"],
+         [campo: 'obranmbr', nombre: 'Nombre de Obra', operador: "contiene:contiene"],
+         [campo: 'cntnnmbr', nombre: 'Cantón',         operador: "contiene:contiene"],
+         [campo: 'parrnmbr', nombre: 'Parroquia',      operador: "contiene:contiene"],
+         [campo: 'cmndnmbr', nombre: 'Comunidad',      operador: "contiene:contiene"],
+         [campo: 'cntrcdgo', nombre: 'Contrato No.',   operador: "contiene:contiene"],
+         [campo: 'cntrfcha', nombre: 'Fecha de subscripción', operador:"gtfc:mayor que,ltfc:menor que"],
+         [campo: 'cntrplzo', nombre: 'Plazo (dias)',   operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"],
+         [campo: 'cntrmnto', nombre: 'Valor',          operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"]]
+    }
+
 
 
     HashMap toMap(dominio) {

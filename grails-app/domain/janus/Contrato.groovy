@@ -2,6 +2,7 @@ package janus
 
 import janus.pac.Oferta
 import janus.ejecucion.PeriodosInec
+import janus.pac.Proveedor
 import janus.pac.TipoContrato
 import janus.pac.TipoPlazo
 
@@ -52,6 +53,9 @@ class Contrato implements Serializable {
     String numeralPlazo
     String numeralAnticipo
     Double indirectos
+
+    Obra obraContratada
+    Proveedor contratista
 
     static auditable = true
     static mapping = {
@@ -108,6 +112,8 @@ class Contrato implements Serializable {
             numeralPlazo column: 'cntrnmpl'
             numeralAnticipo column: 'cntrnman'
             indirectos column: 'cntrindi'
+            obraContratada column: 'obra__id'
+            contratista column: 'prve__id'
         }
     }
 
@@ -150,16 +156,23 @@ class Contrato implements Serializable {
         numeralAnticipo(blank: true, nullable: true, maxSize: 10)
         numeralPlazo(blank: true, nullable: true, maxSize: 10)
         indirectos(blank: true, nullable: true)
+        obraContratada(blank: true, nullable: true)
+        contratista(blank: true, nullable: true)
     }
 
     def getObra() {
-
-        def tmp_obra = Obra.findByCodigo(this.oferta?.concurso?.obra.codigo+"-OF")
-        if(!tmp_obra) {
-            return this.oferta?.concurso?.obra
-        } else {
-            return tmp_obra
+        if(this.obraContratada == null){
+            def tmp_obra = Obra.findByCodigo(this.oferta?.concurso?.obra.codigo+"-OF")
+            if(!tmp_obra) {
+                if(this.obraContratada == null) this.obraContratada = this.oferta?.concurso?.obra
+            } else {
+                if(this.obraContratada == null) this.obraContratada = tmp_obra
+            }
         }
+        if(this.contratista == null){
+            this.contratista = this.oferta.proveedor
+        }
+        return this.obraContratada
     }
 
     def getAdministradorContrato() {

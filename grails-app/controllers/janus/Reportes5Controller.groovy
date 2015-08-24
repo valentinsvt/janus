@@ -26,6 +26,7 @@ class Reportes5Controller {
 
     def dbConnectionService
     def preciosService
+    def reportesService
 
     def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 
@@ -159,7 +160,7 @@ class Reportes5Controller {
         return [perfil: perfil]
     }
 
-    def tablaAvance() {
+    def tablaAvance_old() {
         params.old = params.criterio
         params.criterio = cleanCriterio(params.criterio)
 
@@ -190,6 +191,58 @@ class Reportes5Controller {
 
         return [res: obrasFiltradas, params: params]
     }
+
+    def tablaAvance() {
+//        println "tablaContratadas ok $params , ${reportesService.obrasContratadas()}"
+        def cn = dbConnectionService.getConnection()
+        def campos = reportesService.obrasAvance()
+
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
+
+        def sql = armaSqlAvance(params)
+        def obras = cn.rows(sql)
+
+//        println "registro retornados del sql: ${obras.size()}"
+        params.criterio = params.old
+        return [obras: obras, params: params]
+    }
+
+    def armaSqlAvance(params){
+        def campos = reportesService.obrasAvance()
+        def operador = reportesService.operadores()
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
+
+        def sqlSelect = "select obra.obra__id, obracdgo, obranmbr, cntnnmbr, parrnmbr, cmndnmbr, c.cntrcdgo, " +
+                "c.cntrmnto, c.cntrfcsb, prvenmbr, c.cntrplzo, obrafcin, cntrfcfs," +
+                "(select(coalesce(sum(plnlmnto), 0)) / cntrmnto av_economico " +
+                "from plnl where cntr__id = c.cntr__id and tppl__id > 1), " +
+                "(select(coalesce(max(plnlavfs), 0)) av_fisico " +
+                "from plnl where cntr__id = c.cntr__id and tppl__id > 1) " +  // no cuenta el anticipo
+                "from obra, cntn, parr, cmnd, cncr, ofrt, cntr c, dpto, prve "
+        def sqlWhere = "where cmnd.cmnd__id = obra.cmnd__id and " +
+                "parr.parr__id = obra.parr__id and cntn.cntn__id = parr.cntn__id and " +
+                "cncr.obra__id = obra.obra__id and ofrt.cncr__id = cncr.cncr__id and " +
+                "c.ofrt__id = ofrt.ofrt__id and dpto.dpto__id = obra.dpto__id and " +
+                "prve.prve__id = c.prve__id"
+        def sqlOrder = "order by obracdgo"
+
+        println "llega params: $params"
+        params.nombre = "Código"
+        if(campos.find {it.campo == params.buscador}?.size() > 0) {
+            def op = operador.find {it.valor == params.operador}
+            println "op: $op"
+            sqlWhere += " and ${params.buscador} ${op.operador} ${op.strInicio}${params.criterio}${op.strFin}";
+        }
+//        println "txWhere: $sqlWhere"
+//        println "sql armado: sqlSelect: ${sqlSelect} \n sqlWhere: ${sqlWhere} \n sqlOrder: ${sqlOrder}"
+        println "sql: ${sqlSelect} ${sqlWhere} ${sqlOrder}"
+        //retorna sql armado:
+        "$sqlSelect $sqlWhere $sqlOrder".toString()
+    }
+
+
 
     def reporteAvance() {
         println("params-->" + params)

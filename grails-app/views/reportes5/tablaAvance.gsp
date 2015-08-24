@@ -1,12 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 8/23/13
-  Time: 11:26 AM
---%>
-
-
-
 <g:if test="${flash.message}">
     <div class="span12" style="height: 35px;margin-bottom: 10px; margin-left: -25px">
         <div class="alert ${flash.clase ?: 'alert-info'}" role="status" style="text-align: center">
@@ -94,29 +85,29 @@
 
         <g:if test="${params.buscador != 'undefined'}">
 
-            <g:each in="${res}" var="fila" status="j">
+            <g:each in="${obras}" var="fila" status="j">
                 <tr class="obra_row">
                     <td>
                         %{--<g:link controller="reportesPlanillas" action="reporteAvance" id="${fila.id}">--}%
                             %{--${fila.obra_cod}--}%
                         %{--</g:link>--}%
-                        ${fila.obra_cod}
+                        ${fila.obracdgo}
                     </td>
-                    <td>${fila.obra_nmbr}</td>
-                    <td>${fila.canton} - ${fila.parroquia} - ${fila.comunidad}</td>
-                    <td>${fila.num_contrato}</td>
-                    <td>${fila.proveedor}</td>
-                    <td><g:formatNumber number="${fila.monto}" maxFractionDigits="2" minFractionDigits="2" format="##,##0.##" locale="ec"/></td>
-                    <td><g:formatDate date="${fila.fecha}" format="dd-MM-yyyy"/></td>
-                    <td><g:formatNumber number="${fila.plazo}" maxFractionDigits="0" minFractionDigits="0"/> días</td>
-                    <td><g:formatNumber number="${(fila.sum / fila.monto) * 100}" maxFractionDigits="2" minFractionDigits="2"/>%</td>
-                    <td><g:formatNumber number="${fila.fisico}" maxFractionDigits="2" minFractionDigits="2"/></td>
+                    <td>${fila.obranmbr}</td>
+                    <td>${fila.cntnnmbr} - ${fila.parrnmbr} - ${fila.cmndnmbr}</td>
+                    <td>${fila.cntrcdgo}</td>
+                    <td>${fila.prvenmbr}</td>
+                    <td><g:formatNumber number="${fila.cntrmnto}" maxFractionDigits="2" minFractionDigits="2" format="##,##0.##" locale="ec"/></td>
+                    <td><g:formatDate date="${fila.cntrfcsb}" format="dd-MM-yyyy"/></td>
+                    <td><g:formatNumber number="${fila.cntrplzo}" maxFractionDigits="0" minFractionDigits="0"/> días</td>
+                    <td><g:formatNumber number="${(fila.av_economico) * 100}" maxFractionDigits="2" minFractionDigits="2"/>%</td>
+                    <td><g:formatNumber number="${fila.av_fisico}" maxFractionDigits="2" minFractionDigits="2"/></td>
                     <td>
                         <g:set var="estado" value=""/>
-                        <g:if test="${fila.inicio}">
-                            <g:set var="estado" value="Iniciada el ${fila.inicio?.format('dd-MM-yyyy')}"/>
-                            <g:if test="${fila.recepcion_contratista && fila.recepcion_fisc}">
-                                <g:set var="estado" value="Finalizada el ${fila.recepcion_fisc?.format('dd-MM-yyyy')}"/>
+                        <g:if test="${fila.obrafcin}">
+                            <g:set var="estado" value="Iniciada el ${fila.obrafcin?.format('dd-MM-yyyy')}"/>
+                            <g:if test="${fila.cntrfcfs}">
+                                <g:set var="estado" value="Finalizada el ${fila.cntrfcfc?.format('dd-MM-yyyy')}"/>
                             </g:if>
                         </g:if>
                         ${estado}
