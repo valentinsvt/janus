@@ -126,7 +126,10 @@
 
 
     $("#imprimir").click(function () {
-        location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
+
+        var busca = $("#buscador_con").val();
+
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + busca + "&operador=" + $("#oprd").val()
     });
 
     $("#excel").click(function () {

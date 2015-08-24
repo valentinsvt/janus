@@ -37,27 +37,59 @@
     </div>
 </g:if>
 
-<div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
+%{--<div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>--}%
+
+%{--<div class="row-fluid">--}%
+    %{--<div class="span12">--}%
+        %{--<g:if test="${perfil == 2}">--}%
+
+        %{--</g:if>--}%
+        %{--<a href="#" class="btn" id="regresar">--}%
+            %{--<i class="icon-arrow-left"></i>--}%
+            %{--Regresar--}%
+        %{--</a>--}%
+    %{--</div>--}%
+
+%{--</div>--}%
+
 
 <div class="row-fluid">
     <div class="span12">
-<g:if test="${perfil == 2}">
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
-        %{--</a>--}%
-        %{--<a href="#" class="btn  " id="excel">--}%
-            %{--<i class="icon-table"></i>--}%
-            %{--Excel--}%
-        %{--</a>--}%
-    </g:if>
-        <a href="#" class="btn" id="regresar">
-            <i class="icon-arrow-left"></i>
-            Regresar
+
+        <b>Buscar Por: </b>
+        <g:select name="buscador" from="${['cdgo':'Codigo', 'nmbr':'Nombre', 'tipo': 'Tipo', 'cntn': 'Cantón', 'parr': 'Parroquia'
+                                           , 'cmnd': 'Comunidad', 'insp':'Inspector', 'rvsr':'Revisor', 'ofig':'Of. Ingreso', 'ofsl': 'Of. Salida'
+                                           ,'mmsl':'Memo Salida', 'frpl':'F. Polinómica']}" value="${params.buscador}"
+                  optionKey="key" optionValue="value" id="buscador_reg1" style="width: 150px"/>
+        <b>Contiene: </b>
+        <g:select name="buscador" from="${['mayor':'>', 'menor':'>', 'igual': '=', 'maig': '>=', 'meig': '<='
+                                          ]}" value="${params.buscador}"
+                  optionKey="key" optionValue="value" id="buscador_reg1" style="width: 150px"/>
+
+        <b>Criterio: </b>
+        <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+       <b>Ordenado Por: </b>
+        <g:select name="buscador" from="${['cdgo':'Codigo', 'nmbr':'Nombre', 'tipo': 'Tipo', 'cntn': 'Cantón', 'parr': 'Parroquia'
+                                           , 'cmnd': 'Comunidad', 'insp':'Inspector', 'rvsr':'Revisor', 'ofig':'Of. Ingreso', 'ofsl': 'Of. Salida'
+                                           ,'mmsl':'Memo Salida', 'frpl':'F. Polinómica']}" value="${params.buscador}"
+                  optionKey="key" optionValue="value" id="buscador_reg1" style="width: 150px"/>
+
+        <a href="#" class="btn" id="buscar1">
+            <i class="icon-search"></i>
+            Buscar
+        </a>
+        <a href="#" class="btn hide" id="imprimir">
+            <i class="icon-print"></i>
+            Imprimir
+        </a>
+        <a href="#" class="btn hide" id="excel">
+            <i class="icon-table"></i>
+            Excel
         </a>
     </div>
 
 </div>
+
 
 <script type="text/javascript">
 
@@ -89,13 +121,13 @@
     }
 
 
-    $(function () {
-
-
-
-        cargarTabla();
-
-    });
+    //    $(function () {
+    //
+    //
+    //
+    //        cargarTabla();
+    //
+    //    });
 
 
 
