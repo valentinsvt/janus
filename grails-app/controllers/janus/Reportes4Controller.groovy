@@ -671,24 +671,27 @@ class Reportes4Controller {
 //        println(sql)
 //        println(res)
 
-        res.each{
-
-            totales = 0
-            total1=0
-
-            valores =  preciosService.rbro_pcun_v2(it.id)
-            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-            subPres.each { s->
-                valores.each {
-                    if(it.sbprdscr == s.descripcion){
-                        totales = it.totl
-                        totalPresupuestoBien = (total1 += totales)
-                    }
-                }
-            }
-//           println("--->>" + totalPresupuestoBien)
-            valoresTotales += totalPresupuestoBien
-        }
+//        res.each{
+//
+////            println("res " + it)
+//
+//            totales = 0
+//            total1=0
+//
+//            valores =  preciosService.rbro_pcun_v2(it.id)
+//            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
+//            println("sub " + subPres.size())
+//            subPres.each { s->
+//                valores.each {
+//                    if(it?.sbprdscr == s?.descripcion){
+//                        totales = it?.totl
+//                        totalPresupuestoBien = (total1 += totales)
+//                    }
+//                }
+//            }
+////           println("--->>" + totalPresupuestoBien)
+//            valoresTotales += totalPresupuestoBien
+//        }
 
 //        println("##" + valoresTotales)
 
@@ -1072,27 +1075,27 @@ class Reportes4Controller {
         sql = sqlBase + filtro + filtroBuscador
         cn = dbConnectionService.getConnection()
         res = cn.rows(sql.toString())
-        res.each{
-
-            totales = 0
-            total1=0
-
-            valores =  preciosService.rbro_pcun_v2(it.id)
-
-            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-
-            subPres.each { s->
-
-                valores.each {
-                    if(it.sbprdscr == s.descripcion){
-
-                        totales = it.totl
-                        totalPresupuestoBien = (total1 += totales)
-                    }
-                }
-            }
-            valoresTotales += totalPresupuestoBien
-        }
+//        res.each{
+//
+//            totales = 0
+//            total1=0
+//
+//            valores =  preciosService.rbro_pcun_v2(it.id)
+//
+//            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
+//
+//            subPres.each { s->
+//
+//                valores.each {
+//                    if(it.sbprdscr == s.descripcion){
+//
+//                        totales = it.totl
+//                        totalPresupuestoBien = (total1 += totales)
+//                    }
+//                }
+//            }
+//            valoresTotales += totalPresupuestoBien
+//        }
 
         //reporte
 
