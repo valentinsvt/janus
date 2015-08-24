@@ -1874,7 +1874,6 @@ class Reportes4Controller {
 
 //        println("params contratadas " + params)
 
-        def cn
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
@@ -1956,7 +1955,7 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Coordinación", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Contrato", times8bold), prmsCellHead2)
 
-        cn = dbConnectionService.getConnection()
+        def cn = dbConnectionService.getConnection()
 
         params.old = params.criterio
         params.criterio = cleanCriterio(params.criterio)
@@ -1993,9 +1992,7 @@ class Reportes4Controller {
     def reporteExcelContratadas () {
 
 
-        def cn
-
-        cn = dbConnectionService.getConnection()
+        def cn = dbConnectionService.getConnection()
 
         params.old = params.criterio
         params.criterio = cleanCriterio(params.criterio)

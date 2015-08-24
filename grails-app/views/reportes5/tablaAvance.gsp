@@ -107,7 +107,7 @@
                         <g:if test="${fila.obrafcin}">
                             <g:set var="estado" value="Iniciada el ${fila.obrafcin?.format('dd-MM-yyyy')}"/>
                             <g:if test="${fila.cntrfcfs}">
-                                <g:set var="estado" value="Finalizada el ${fila.cntrfcfc?.format('dd-MM-yyyy')}"/>
+                                <g:set var="estado" value="Finalizada el ${fila.cntrfcfs?.format('dd-MM-yyyy')}"/>
                             </g:if>
                         </g:if>
                         ${estado}
