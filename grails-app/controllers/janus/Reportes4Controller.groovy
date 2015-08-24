@@ -1806,6 +1806,12 @@ class Reportes4Controller {
 
         }
 
+
+
+
+
+
+
 //        println("##" + valoresTotales)
 
 
