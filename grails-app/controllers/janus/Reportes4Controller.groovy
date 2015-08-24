@@ -56,9 +56,9 @@ class Reportes4Controller {
     def registradas () {
 
 
-     def perfil = session.perfil.id
+        def perfil = session.perfil.id
 
-      return [perfil: perfil]
+        return [perfil: perfil]
     }
 
     def presuestadasFinal () {
@@ -870,17 +870,17 @@ class Reportes4Controller {
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellHead3 = [border: Color.WHITE,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -889,13 +889,13 @@ class Reportes4Controller {
         def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
 
         def baos = new ByteArrayOutputStream()
         def name = "registradas_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -909,7 +909,7 @@ class Reportes4Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4.rotate());
@@ -956,11 +956,11 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.nombre, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.tipoobra, times8normal), prmsCellLeft)
 //            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i?.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
-           if(i?.fecha == null){
-               addCellTabla(tablaRegistradas, new Paragraph( "", times8normal), prmsCellLeft)
-           }else {
-            addCellTabla(tablaRegistradas, new Paragraph( i?.fecha.toString(), times8normal), prmsCellLeft)
-           }
+            if(i?.fecha == null){
+                addCellTabla(tablaRegistradas, new Paragraph( "", times8normal), prmsCellLeft)
+            }else {
+                addCellTabla(tablaRegistradas, new Paragraph( i?.fecha.toString(), times8normal), prmsCellLeft)
+            }
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
             if(valoresTotales[j] != null){
                 addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
@@ -1100,17 +1100,17 @@ class Reportes4Controller {
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellHead3 = [border: Color.WHITE,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -1119,13 +1119,13 @@ class Reportes4Controller {
         def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
 
         def baos = new ByteArrayOutputStream()
         def name = "presupuestadas_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -1139,7 +1139,7 @@ class Reportes4Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4.rotate());
@@ -1781,7 +1781,7 @@ class Reportes4Controller {
 
         obras.each{
 
-           bandera = 1
+            bandera = 1
 
             totales = 0
             total1=0
@@ -1805,12 +1805,6 @@ class Reportes4Controller {
             valoresTotales += totalPresupuestoBien
 
         }
-
-
-
-
-
-
 
 //        println("##" + valoresTotales)
 
@@ -1848,6 +1842,7 @@ class Reportes4Controller {
     def armaSqlContratadas(params){
         def campos = reportesService.obrasContratadas()
         def operador = reportesService.operadores()
+        println("operador " + operador)
         params.old = params.criterio
         params.criterio = cleanCriterio(params.criterio)
 
@@ -1877,66 +1872,27 @@ class Reportes4Controller {
 
     def reporteContratadas () {
 
+        println("params contratadas " + params)
 
-        def obras = []
-
-        def sql
         def cn
-        def res
-        def total1 = 0;
-        def totales
-        def totalPresupuestoBien=[];
-        def valoresTotales = []
 
-        def valores
-        def subPres
-
-        def sqlBase =  "SELECT\n" +
-                "  o.obra__id    id,\n" +
-                "  o.obracdgo    codigo, \n" +
-                "  o.obranmbr    nombre,\n" +
-                "  o.obratipo    tipo,\n" +
-                "  o.obrafcha    fecha,\n" +
-                "  c.cmndnmbr    comunidad,\n" +
-                "  p.parrnmbr    parroquia,\n" +
-                "  n.cntnnmbr    canton,\n" +
-                "  o.obraofsl    oficio,\n" +
-                "  o.obrammsl    memo,\n" +
-                "  e.dptodscr    elaborado,\n" +
-                "  d.dptodscr    destino,\n" +
-                "  o.obraofig    ingreso,\n" +
-                "  o.obraetdo    estado,\n" +
-                "  s.prsnnmbr    personan,\n" +
-                "  s.prsnapll    personaa,\n" +
-                "  t.tpobdscr    tipoobra\n" +
-                "FROM obra o\n" +
-                "  LEFT JOIN dpto d ON o.dptodstn = d.dpto__id\n" +
-                "  LEFT JOIN dpto e ON o.dpto__id = e.dpto__id\n" +
-                "  LEFT JOIN cmnd c ON o.cmnd__id = c.cmnd__id\n" +
-                "  LEFT JOIN parr p ON c.parr__id = p.parr__id\n" +
-                "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
-                "  LEFT JOIN prsn s ON o.obrainsp = s.prsn__id\n" +
-                "  LEFT JOIN tpob t ON o.tpob__id = t.tpob__id\n"
-
-        def filtroBuscador = ""
-
-        params.criterio = params.criterio.trim();
+//        params.criterio = params.criterio.trim();
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellHead3 = [border: Color.WHITE,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -1945,13 +1901,13 @@ class Reportes4Controller {
         def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
 
         def baos = new ByteArrayOutputStream()
         def name = "contratadas_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -1965,7 +1921,7 @@ class Reportes4Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4.rotate());
@@ -1978,8 +1934,6 @@ class Reportes4Controller {
         document.addKeywords("documentosObra, janus, presupuesto");
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
-
-
 
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
@@ -1994,17 +1948,7 @@ class Reportes4Controller {
 
         PdfPTable tablaRegistradas = new PdfPTable(8);
         tablaRegistradas.setWidthPercentage(100);
-//        tablaRegistradas.setWidths(arregloEnteros([14, 30, 15, 8, 25, 10, 20, 10]))
         tablaRegistradas.setWidths(arregloEnteros([14, 30, 15, 25, 15, 10, 15, 10]))
-
-//        addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Tipo", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Fecha Reg.", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Contrato", times8bold), prmsCellHead2)
 
         addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
@@ -2017,53 +1961,47 @@ class Reportes4Controller {
 
 
 
-
-//        println "\n\nREPORTE "+params
-//        println "SQL   "+sql+"\n\n"
-
-//        if(params.criterio != '') {
-
-
-        switch (params.buscador) {
-            case "cdgo":
-            case "nmbr":
-            case "ofig":
-            case "ofsl":
-            case "mmsl":
-            case "frpl":
-            case "tipo":
-                params.buscador = "obra" + params.buscador
-                filtroBuscador =" where ${params.buscador} ILIKE ('%${params.criterio}%') "
-                break;
-            case "cmnd":
-                filtroBuscador = " where c.cmndnmbr ILIKE ('%${params.criterio}%') "
-                break;
-            case "parr":
-                filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
-                break;
-            case "cntn":
-                filtroBuscador = " where n.cntnnmbr ILIKE ('%${params.criterio}%') "
-                break;
-            case "insp":
-            case "rvsr":
-                filtroBuscador = " where (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
-                break;
-        }
+//        switch (params.buscador) {
+//            case "cdgo":
+//            case "nmbr":
+//            case "ofig":
+//            case "ofsl":
+//            case "mmsl":
+//            case "frpl":
+//            case "tipo":
+//                params.buscador = "obra" + params.buscador
+//                filtroBuscador =" where ${params.buscador} ILIKE ('%${params.criterio}%') "
+//                break;
+//            case "cmnd":
+//                filtroBuscador = " where c.cmndnmbr ILIKE ('%${params.criterio}%') "
+//                break;
+//            case "parr":
+//                filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
+//                break;
+//            case "cntn":
+//                filtroBuscador = " where n.cntnnmbr ILIKE ('%${params.criterio}%') "
+//                break;
+//            case "insp":
+//            case "rvsr":
+//                filtroBuscador = " where (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
+//                break;
+//        }
 
 
 
-        sql = sqlBase + filtroBuscador
-
-//            println "++++++++ SQL   "+sql+"\n\n"
-
-
+//        sql = sqlBase + filtroBuscador
         cn = dbConnectionService.getConnection()
+//        res = cn.rows(sql.toString())
 
-        res = cn.rows(sql.toString())
 
-//            println(sql)
-//        println(res)
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
 
+        def sql2 = armaSqlContratadas(params)
+
+        def nuevoRes = cn.rows(sql2)
+
+        params.criterio = params.old
 
         def concurso
         def obra
@@ -2072,84 +2010,83 @@ class Reportes4Controller {
         def contratos = []
 
 
-        res.each{ i->
+//        println("res " + nuevoRes)
 
-            obra = Obra.get(i.id)
+//        res.each{ i->
+//
+//            obra = Obra.get(i.id)
+//
+//            concurso = janus.pac.Concurso.findByObra(obra)
+//
+//
+//            if(concurso){
+//                oferta = janus.pac.Oferta.findAllByConcurso(concurso)
+//
+//                if(oferta != [] && concurso != null){
+//
+//                    oferta.each {j->
+//
+//                        contrato = Contrato.findByOferta(j)
+//                        obras += i
+//                        contratos += contrato
+//                    }
+//
+//                }
+//
+//
+//            }
+//
+//        }
 
-            concurso = janus.pac.Concurso.findByObra(obra)
-
-
-            if(concurso){
-                oferta = janus.pac.Oferta.findAllByConcurso(concurso)
-
-                if(oferta != [] && concurso != null){
-
-                    oferta.each {j->
-
-                        contrato = Contrato.findByOferta(j)
-                        obras += i
-                        contratos += contrato
-                    }
-
-                }
-
-
-            }
-
-        }
-
-        obras.each{
-
-            totales = 0
-            total1=0
-
-            valores =  preciosService.rbro_pcun_v2(it.id)
-
-            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-
-            subPres.each { s->
-
-                valores.each {
-                    if(it.sbprdscr == s.descripcion){
-
-                        totales = it.totl
-                        totalPresupuestoBien = (total1 += totales)
-                    }
-
-
-                }
-
-
-            }
-
-//           println("--->>" + totalPresupuestoBien)
-            valoresTotales += totalPresupuestoBien
-
-        }
+//        obras.each{
+//
+//            totales = 0
+//            total1=0
+//
+//            valores =  preciosService.rbro_pcun_v2(it.id)
+//
+//            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
+//
+//            subPres.each { s->
+//
+//                valores.each {
+//                    if(it.sbprdscr == s.descripcion){
+//
+//                        totales = it.totl
+//                        totalPresupuestoBien = (total1 += totales)
+//                    }
+//                }
+//            }
+//            valoresTotales += totalPresupuestoBien
+//
+//        }
 
 
 //            println("-->" + obras)
         //reporte
 
-        obras.eachWithIndex {i,j->
+//        obras.eachWithIndex {i,j->
+        nuevoRes.eachWithIndex {i,j->
 
-            addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.nombre, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.tipoobra, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
-            if(valoresTotales[j] != null){
-                addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
-                        5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
-            }else {
+            addCellTabla(tablaRegistradas, new Paragraph(i.obracdgo, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.obranmbr, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.tpobdscr, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.cntnnmbr + "-" + i.parrnmbr + "-" + i.cmndnmbr, times8normal), prmsCellLeft)
+//            if(valoresTotales[j] != null){
+//                addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
+//                        5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+//            }else {
+//
+//                addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+//
+//            }
 
-                addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.cntrmnto.toDouble(), minFractionDigits:
+                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
-            }
-            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.elaborado, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(contratos[j].codigo, times8normal), prmsCellLeft)
-
-
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.obrafcha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.cntrcdgo, times8normal), prmsCellLeft)
 
         }
 
@@ -2501,17 +2438,17 @@ class Reportes4Controller {
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
         def prmsHeaderHoja4 = [border: Color.WHITE, colspan: 3]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellHead3 = [border: Color.WHITE,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -2520,13 +2457,13 @@ class Reportes4Controller {
         def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
 
         def baos = new ByteArrayOutputStream()
         def name = "contratadas_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -2541,7 +2478,7 @@ class Reportes4Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4);
@@ -2905,17 +2842,17 @@ class Reportes4Controller {
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
         def prmsHeaderHoja4 = [border: Color.WHITE, colspan: 3]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellHead3 = [border: Color.WHITE,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -2924,13 +2861,13 @@ class Reportes4Controller {
         def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
 
         def baos = new ByteArrayOutputStream()
         def name = "contratistas_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -2945,7 +2882,7 @@ class Reportes4Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4);
@@ -3423,17 +3360,17 @@ class Reportes4Controller {
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellHead3 = [border: Color.WHITE,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -3442,13 +3379,13 @@ class Reportes4Controller {
         def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
 
         def baos = new ByteArrayOutputStream()
         def name = "contratos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -3462,7 +3399,7 @@ class Reportes4Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4.rotate());
@@ -3969,7 +3906,7 @@ class Reportes4Controller {
 
         }
 
-       params.criterio = params.old
+        params.criterio = params.old
 
 
         sql = sqlBase + filtroBuscador
@@ -4031,17 +3968,17 @@ class Reportes4Controller {
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellHead3 = [border: Color.WHITE,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -4051,13 +3988,13 @@ class Reportes4Controller {
         def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
 
         def baos = new ByteArrayOutputStream()
         def name = "contratos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -4071,7 +4008,7 @@ class Reportes4Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4.rotate());
@@ -4299,7 +4236,7 @@ class Reportes4Controller {
                 if(!params.criterio){
                     params.criterio=0
                 }
-               filtroBuscador =" where g.grntnmrv = ${params.criterio} "
+                filtroBuscador =" where g.grntnmrv = ${params.criterio} "
                 break;
             case "mnda":
                 filtroBuscador = " where m.mndacdgo ILIKE ('%${params.criterio}%') "
