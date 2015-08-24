@@ -163,7 +163,7 @@ class Reportes5Controller {
 
     def tablaAvance_old() {
         params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
+        params.criterio = reportesService(params.criterio)
 
         def res = filasAvance(params)
 
@@ -199,7 +199,7 @@ class Reportes5Controller {
         def campos = reportesService.obrasAvance()
 
         params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sql = armaSqlAvance(params)
         def obras = cn.rows(sql)
@@ -212,8 +212,6 @@ class Reportes5Controller {
     def armaSqlAvance(params){
         def campos = reportesService.obrasAvance()
         def operador = reportesService.operadores()
-        params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
 
         def sqlSelect = "select obra.obra__id, obracdgo, obranmbr, cntnnmbr, parrnmbr, cmndnmbr, c.cntrcdgo, " +
                 "c.cntrmnto, c.cntrfcsb, prvenmbr, c.cntrplzo, obrafcin, cntrfcfs," +
@@ -229,7 +227,7 @@ class Reportes5Controller {
                 "prve.prve__id = c.prve__id"
         def sqlOrder = "order by obracdgo"
 
-        println "llega params: $params"
+//        println "llega params: $params"
         params.nombre = "Código"
         if(campos.find {it.campo == params.buscador}?.size() > 0) {
             def op = operador.find {it.valor == params.operador}
@@ -238,7 +236,7 @@ class Reportes5Controller {
         }
 //        println "txWhere: $sqlWhere"
 //        println "sql armado: sqlSelect: ${sqlSelect} \n sqlWhere: ${sqlWhere} \n sqlOrder: ${sqlOrder}"
-        println "sql: ${sqlSelect} ${sqlWhere} ${sqlOrder}"
+//        println "sql: ${sqlSelect} ${sqlWhere} ${sqlOrder}"
         //retorna sql armado:
         "$sqlSelect $sqlWhere $sqlOrder".toString()
     }
@@ -296,14 +294,13 @@ class Reportes5Controller {
         document.add(headersTitulo)
 
         params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
+//        params.criterio = cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
 //        def res = filasAvance(params)
 
         def cn = dbConnectionService.getConnection()
         def campos = reportesService.obrasAvance()
-        params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
         def sql = armaSqlAvance(params)
         def obras = cn.rows(sql)
         params.criterio = params.old
@@ -368,7 +365,7 @@ class Reportes5Controller {
         def cn = dbConnectionService.getConnection()
         def campos = reportesService.obrasAvance()
         params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
         def sql = armaSqlAvance(params)
         def obras = cn.rows(sql)
         params.criterio = params.old
@@ -456,32 +453,6 @@ class Reportes5Controller {
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
-    }
-
-
-
-    private String cleanCriterio(String criterio) {
-        if (!criterio) {
-            criterio = ""
-        }
-//        println "entra: "+criterio
-        criterio = criterio.toLowerCase()
-        criterio = criterio.replaceAll(";", "")
-        criterio = criterio.replaceAll(":", "")
-        criterio = criterio.replaceAll("select", "")
-        criterio = criterio.replaceAll("\\*", "")
-        criterio = criterio.replaceAll("#", "")
-        criterio = criterio.replaceAll("%", "")
-        criterio = criterio.replaceAll("/", "")
-        criterio = criterio.replaceAll("drop", "")
-        criterio = criterio.replaceAll("table", "")
-        criterio = criterio.replaceAll("from", "")
-        criterio = criterio.replaceAll("'", "")
-        criterio = criterio.replaceAll('"', "")
-        criterio = criterio.replaceAll("\\\\", "")
-        criterio = criterio.trim()
-//        println "sale: "+criterio
-        return criterio
     }
 
     private String fechaConFormato(fecha, formato) {

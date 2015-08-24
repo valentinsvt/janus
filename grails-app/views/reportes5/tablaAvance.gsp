@@ -41,7 +41,7 @@
 </div>
 
 
-<div class="row-fluid"  style="width: 99.7%;height: 400px;overflow-y: auto;float: right;">
+<div class="row-fluid"  style="width: 99.7%;height: 600px;overflow-y: auto;float: right;">
     <div class="span12">
 
 <table class="table table-bordered table-striped table-condensed table-hover">

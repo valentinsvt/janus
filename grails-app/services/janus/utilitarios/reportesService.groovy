@@ -35,11 +35,34 @@ class reportesService {
          [campo: 'parrnmbr', nombre: 'Parroquia',      operador: "contiene:contiene"],
          [campo: 'cmndnmbr', nombre: 'Comunidad',      operador: "contiene:contiene"],
          [campo: 'cntrcdgo', nombre: 'Contrato No.',   operador: "contiene:contiene"],
-         [campo: 'cntrfcsb', nombre: 'Fecha de subscripción', operador:"gtfc:mayor que,ltfc:menor que"],
+         [campo: 'cntrfcsb', nombre: 'Fecha (aaaa/mm/dd) de subscripción', operador:"gtfc:mayor que,ltfc:menor que"],
          [campo: 'cntrplzo', nombre: 'Plazo (dias)',   operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"],
          [campo: 'cntrmnto', nombre: 'Valor',          operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"]]
     }
 
+    def limpiaCriterio(criterio) {
+        if (!criterio) {
+            criterio = ""
+        }
+//        println "limpiaCriterio: entra: "+criterio
+        criterio = criterio.toLowerCase()
+        criterio = criterio.replaceAll(";", "")
+        criterio = criterio.replaceAll(":", "")
+        criterio = criterio.replaceAll("select", "")
+        criterio = criterio.replaceAll("\\*", "")
+        criterio = criterio.replaceAll("#", "")
+//        criterio = criterio.replaceAll("%", "")
+//        criterio = criterio.replaceAll("/", "")
+        criterio = criterio.replaceAll("drop", "")
+        criterio = criterio.replaceAll("table", "")
+        criterio = criterio.replaceAll("from", "")
+        criterio = criterio.replaceAll("'", "")
+        criterio = criterio.replaceAll('"', "")
+        criterio = criterio.replaceAll("\\\\", "")
+        criterio = criterio.trim()
+//        println "sale: "+criterio
+        return criterio
+    }
 
 
     HashMap toMap(dominio) {

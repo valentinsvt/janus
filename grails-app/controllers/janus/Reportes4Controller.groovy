@@ -419,7 +419,7 @@ class Reportes4Controller {
 
         params.old = params.criterio
 
-        params.criterio=cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
                 "  o.obra__id    id,\n" +
@@ -585,7 +585,7 @@ class Reportes4Controller {
 
         params.old = params.criterio
 
-        params.criterio=cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
                 "  o.obra__id    id,\n" +
@@ -1667,7 +1667,7 @@ class Reportes4Controller {
 
         params.old = params.criterio
 
-        params.criterio=cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
                 "  o.obra__id    id,\n" +
@@ -1829,7 +1829,7 @@ class Reportes4Controller {
         def campos = reportesService.obrasContratadas()
 
         params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sql = armaSqlContratadas(params)
         def obras = cn.rows(sql)
@@ -1843,8 +1843,6 @@ class Reportes4Controller {
         def campos = reportesService.obrasContratadas()
         def operador = reportesService.operadores()
 //        println("operador " + operador)
-        params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
 
         def sqlSelect = "select obra.obra__id, obracdgo, obranmbr, tpobdscr, obrafcha, cntnnmbr, parrnmbr, cmndnmbr, " +
                 "cntrmnto, dptodscr, cntrcdgo " +
@@ -1958,7 +1956,7 @@ class Reportes4Controller {
         def cn = dbConnectionService.getConnection()
 
         params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
         def sql2 = armaSqlContratadas(params)
         def nuevoRes = cn.rows(sql2)
         params.criterio = params.old
@@ -1995,7 +1993,7 @@ class Reportes4Controller {
         def cn = dbConnectionService.getConnection()
 
         params.old = params.criterio
-        params.criterio = cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
         def sql2 = armaSqlContratadas(params)
         def nuevoRes = cn.rows(sql2)
         params.criterio = params.old
@@ -2093,7 +2091,7 @@ class Reportes4Controller {
 
         params.old = params.criterio
 
-        params.criterio=cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
                 "  a.asgr__id    id,\n" +
@@ -2490,7 +2488,7 @@ class Reportes4Controller {
 
         params.old = params.criterio
 
-        params.criterio=cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
                 "  p.prve__id    id,\n" +
@@ -2918,7 +2916,7 @@ class Reportes4Controller {
 
         params.old = params.criterio
 
-        params.criterio=cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
 
         def sqlBase =  "SELECT\n" +
@@ -3511,30 +3509,6 @@ class Reportes4Controller {
         return [perfil: perfil]
     }
 
-    private String cleanCriterio(String criterio) {
-        if(!criterio) {
-            criterio = ""
-        }
-//        println "entra: "+criterio
-        criterio = criterio.toLowerCase()
-        criterio = criterio.replaceAll(";","")
-        criterio = criterio.replaceAll(":","")
-        criterio = criterio.replaceAll("select","")
-        criterio = criterio.replaceAll("\\*","")
-        criterio = criterio.replaceAll("#","")
-        criterio = criterio.replaceAll("%","")
-        criterio = criterio.replaceAll("/","")
-        criterio = criterio.replaceAll("drop","")
-        criterio = criterio.replaceAll("table","")
-        criterio = criterio.replaceAll("from","")
-        criterio = criterio.replaceAll("'","")
-        criterio = criterio.replaceAll('"',"")
-        criterio = criterio.replaceAll("\\\\","")
-        criterio=criterio.trim()
-//        println "sale: "+criterio
-        return criterio
-    }
-
 
     def tablaGarantias () {
         println(params)
@@ -3544,7 +3518,7 @@ class Reportes4Controller {
 
         params.old = params.criterio
 
-        params.criterio=cleanCriterio(params.criterio)
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
                 "  g.grnt__id    id,\n" +
