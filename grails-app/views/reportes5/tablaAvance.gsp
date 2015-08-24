@@ -18,11 +18,11 @@
 
         <b>Buscar Por:</b>
         <elm:select name="buscador" from = "${reportesServ.obrasAvance()}" value="${params.buscador}"
-                    optionKey="campo" optionValue="nombre" optionClass="operador" id="buscador_con" style="width: 160px" />
+                    optionKey="campo" optionValue="nombre" optionClass="operador" id="buscador_con" style="width: 240px" />
         <b>Operación:</b>
         <span id="selOpt"></span>
         <b style="margin-left: 20px">Criterio: </b>
-        <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}" id="criterio_con"/>
+        <g:textField name="criterio" style="width: 160px; margin-right: 10px" value="${params.criterio}" id="criterio_con"/>
         <a href="#" class="btn" id="buscar">
             <i class="icon-search"></i>
             Buscar

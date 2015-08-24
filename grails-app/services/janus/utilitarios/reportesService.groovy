@@ -40,6 +40,19 @@ class reportesService {
          [campo: 'cntrmnto', nombre: 'Valor',          operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"]]
     }
 
+    /* las opciones de operador no pueden ir separadas con espacios, no se puede usar caractreres especiales como =><% */
+    def obrasPresupuestadas() {   // A: string, N: numerico, F: fecha
+        [[campo: 'obracdgo', nombre: 'Código',         operador: "contiene:contiene,inicia:inicia con"],
+         [campo: 'obranmbr', nombre: 'Nombre de Obra', operador: "contiene:contiene"],
+         [campo: 'tpobdscr', nombre: 'Tipo de obra',   operador: "contiene:contiene"],
+         [campo: 'obrafcha', nombre: 'Fecha (aaaa/mm/dd) de registro', operador:"gtfc:mayor que,ltfc:menor que"],
+         [campo: 'cntnnmbr', nombre: 'Cantón',         operador: "contiene:contiene"],
+         [campo: 'parrnmbr', nombre: 'Parroquia',      operador: "contiene:contiene"],
+         [campo: 'cmndnmbr', nombre: 'Comunidad',      operador: "contiene:contiene"],
+         [campo: 'obravlor', nombre: 'Valor',          operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"],
+         [campo: 'dptodscr', nombre: 'Elaborado por',  operador: "contiene:contiene"]]
+    }
+
     def limpiaCriterio(criterio) {
         if (!criterio) {
             criterio = ""

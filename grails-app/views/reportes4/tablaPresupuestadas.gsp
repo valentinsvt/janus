@@ -88,17 +88,17 @@
     %{--<g:if test="${params.criterio || bandera == 1}">--}%
     <g:if test="${params.buscador != 'undefined'}">
 
-        <g:each in="${res}" var="obra" status="j">
-            <tr class="obra_row" id="${obra.id}">
-                <td>${obra.codigo}</td>
-                <td>${obra.nombre}</td>
-                <td>${obra.tipoobra}</td>
-                <td><g:formatDate date="${obra.fecha}" format="dd-MM-yyyy"/></td>
-                <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
-                <td style="text-align: right">${valoresTotales[j]}</td>
-                <td>${obra.elaborado}</td>
-                <td>${obra.ingreso}</td>
-                <td>${obra.estado == "R"? "Registrada":"No registrada"}</td>
+        <g:each in="${obras}" var="obra" status="j">
+            <tr class="obra_row" id="${obra.obra__id}">
+                <td>${obra.obracdgo}</td>
+                <td>${obra.obranmbr}</td>
+                <td>${obra.tpobdscr}</td>
+                <td><g:formatDate date="${obra.obrafcha}" format="dd-MM-yyyy"/></td>
+                <td>${obra.cntnnmbr} - ${obra.parrnmbr} - ${obra.cmndnmbr}</td>
+                <td>${obra.obravlor}</td>
+                <td>${obra.dptodscr}</td>
+                <td>${obra.obrarefe}</td>
+                <td>${obra.estado}</td>
 
             </tr>
 
