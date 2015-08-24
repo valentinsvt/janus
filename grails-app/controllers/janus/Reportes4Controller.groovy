@@ -1842,7 +1842,7 @@ class Reportes4Controller {
     def armaSqlContratadas(params){
         def campos = reportesService.obrasContratadas()
         def operador = reportesService.operadores()
-        println("operador " + operador)
+//        println("operador " + operador)
         params.old = params.criterio
         params.criterio = cleanCriterio(params.criterio)
 
@@ -1860,10 +1860,10 @@ class Reportes4Controller {
         params.nombre = "Código"
         if(campos.find {it.campo == params.buscador}?.size() > 0) {
             def op = operador.find {it.valor == params.operador}
-            println "op: $op"
+//            println "op: $op"
             sqlWhere += " and ${params.buscador} ${op.operador} ${op.strInicio}${params.criterio}${op.strFin}";
         }
-        println "txWhere: $sqlWhere"
+//        println "txWhere: $sqlWhere"
 //        println "sql armado: sqlSelect: ${sqlSelect} \n sqlWhere: ${sqlWhere} \n sqlOrder: ${sqlOrder}"
         //retorna sql armado:
         "$sqlSelect $sqlWhere $sqlOrder".toString()
@@ -1872,12 +1872,9 @@ class Reportes4Controller {
 
     def reporteContratadas () {
 
-        println("params contratadas " + params)
+//        println("params contratadas " + params)
 
         def cn
-
-//        params.criterio = params.criterio.trim();
-
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
@@ -1959,140 +1956,29 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Coordinación", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Contrato", times8bold), prmsCellHead2)
 
-
-
-//        switch (params.buscador) {
-//            case "cdgo":
-//            case "nmbr":
-//            case "ofig":
-//            case "ofsl":
-//            case "mmsl":
-//            case "frpl":
-//            case "tipo":
-//                params.buscador = "obra" + params.buscador
-//                filtroBuscador =" where ${params.buscador} ILIKE ('%${params.criterio}%') "
-//                break;
-//            case "cmnd":
-//                filtroBuscador = " where c.cmndnmbr ILIKE ('%${params.criterio}%') "
-//                break;
-//            case "parr":
-//                filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
-//                break;
-//            case "cntn":
-//                filtroBuscador = " where n.cntnnmbr ILIKE ('%${params.criterio}%') "
-//                break;
-//            case "insp":
-//            case "rvsr":
-//                filtroBuscador = " where (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
-//                break;
-//        }
-
-
-
-//        sql = sqlBase + filtroBuscador
         cn = dbConnectionService.getConnection()
-//        res = cn.rows(sql.toString())
-
 
         params.old = params.criterio
         params.criterio = cleanCriterio(params.criterio)
-
         def sql2 = armaSqlContratadas(params)
-
         def nuevoRes = cn.rows(sql2)
-
         params.criterio = params.old
 
-        def concurso
-        def obra
-        def oferta
-        def contrato
-        def contratos = []
-
-
-//        println("res " + nuevoRes)
-
-//        res.each{ i->
-//
-//            obra = Obra.get(i.id)
-//
-//            concurso = janus.pac.Concurso.findByObra(obra)
-//
-//
-//            if(concurso){
-//                oferta = janus.pac.Oferta.findAllByConcurso(concurso)
-//
-//                if(oferta != [] && concurso != null){
-//
-//                    oferta.each {j->
-//
-//                        contrato = Contrato.findByOferta(j)
-//                        obras += i
-//                        contratos += contrato
-//                    }
-//
-//                }
-//
-//
-//            }
-//
-//        }
-
-//        obras.each{
-//
-//            totales = 0
-//            total1=0
-//
-//            valores =  preciosService.rbro_pcun_v2(it.id)
-//
-//            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-//
-//            subPres.each { s->
-//
-//                valores.each {
-//                    if(it.sbprdscr == s.descripcion){
-//
-//                        totales = it.totl
-//                        totalPresupuestoBien = (total1 += totales)
-//                    }
-//                }
-//            }
-//            valoresTotales += totalPresupuestoBien
-//
-//        }
-
-
-//            println("-->" + obras)
         //reporte
 
-//        obras.eachWithIndex {i,j->
         nuevoRes.eachWithIndex {i,j->
 
             addCellTabla(tablaRegistradas, new Paragraph(i.obracdgo, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.obranmbr, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.tpobdscr, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.cntnnmbr + "-" + i.parrnmbr + "-" + i.cmndnmbr, times8normal), prmsCellLeft)
-//            if(valoresTotales[j] != null){
-//                addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
-//                        5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
-//            }else {
-//
-//                addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
-//
-//            }
-
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.cntrmnto.toDouble(), minFractionDigits:
-                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
-
-            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.obrafcha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+                    2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.obrafcha, format: "dd-MM-yyyy"), times8normal), prmsCellRight)
+            addCellTabla(tablaRegistradas, new Paragraph(i.dptodscr, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.cntrcdgo, times8normal), prmsCellLeft)
 
         }
-
-//        }
-
-
         document.add(tablaRegistradas);
         document.close();
         pdfw.close()
@@ -2107,142 +1993,15 @@ class Reportes4Controller {
     def reporteExcelContratadas () {
 
 
-
-
-        def obras = []
-
-        def sql
         def cn
-        def res
-        def total1 = 0;
-        def totales
-        def totalPresupuestoBien=[];
-        def valoresTotales = []
-
-        def valores
-        def subPres
-
-        def sqlBase =  "SELECT\n" +
-                "  o.obra__id    id,\n" +
-                "  o.obracdgo    codigo, \n" +
-                "  o.obranmbr    nombre,\n" +
-                "  o.obratipo    tipo,\n" +
-                "  o.obrafcha    fecha,\n" +
-                "  c.cmndnmbr    comunidad,\n" +
-                "  p.parrnmbr    parroquia,\n" +
-                "  n.cntnnmbr    canton,\n" +
-                "  o.obraofsl    oficio,\n" +
-                "  o.obrammsl    memo,\n" +
-                "  e.dptodscr    elaborado,\n" +
-                "  d.dptodscr    destino,\n" +
-                "  o.obraofig    ingreso,\n" +
-                "  o.obraetdo    estado,\n" +
-                "  s.prsnnmbr    personan,\n" +
-                "  s.prsnapll    personaa,\n" +
-                "  t.tpobdscr    tipoobra\n" +
-                "FROM obra o\n" +
-                "  LEFT JOIN dpto d ON o.dptodstn = d.dpto__id\n" +
-                "  LEFT JOIN dpto e ON o.dpto__id = e.dpto__id\n" +
-                "  LEFT JOIN cmnd c ON o.cmnd__id = c.cmnd__id\n" +
-                "  LEFT JOIN parr p ON c.parr__id = p.parr__id\n" +
-                "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
-                "  LEFT JOIN prsn s ON o.obrainsp = s.prsn__id\n" +
-                "  LEFT JOIN tpob t ON o.tpob__id = t.tpob__id\n"
-
-        def filtroBuscador = ""
-
-        params.criterio = params.criterio.trim();
-
-
-        switch (params.buscador) {
-            case "cdgo":
-            case "nmbr":
-            case "ofig":
-            case "ofsl":
-            case "mmsl":
-            case "frpl":
-            case "tipo":
-                params.buscador = "obra"+params.buscador
-                filtroBuscador =" where ${params.buscador} ILIKE ('%${params.criterio}%') "
-                break;
-            case "cmnd":
-                filtroBuscador = " where c.cmndnmbr ILIKE ('%${params.criterio}%') "
-                break;
-            case "parr":
-                filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
-                break;
-            case "cntn":
-                filtroBuscador = " where n.cntnnmbr ILIKE ('%${params.criterio}%') "
-                break;
-            case "insp":
-            case "rvsr":
-                filtroBuscador = " where (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
-                break;
-
-        }
-
-
-
-        sql = sqlBase + filtroBuscador
-
-//            println "++++++++ SQL   "+sql+"\n\n"
 
         cn = dbConnectionService.getConnection()
-        res = cn.rows(sql.toString())
 
-
-//        println(sql)
-
-        //valor
-
-        def concurso
-        def obra
-        def oferta
-        def contrato
-        def contratos = []
-
-
-        res.each{ i->
-            obra = Obra.get(i.id)
-            concurso = janus.pac.Concurso.findByObra(obra)
-
-            if(concurso){
-                oferta = janus.pac.Oferta.findAllByConcurso(concurso)
-
-                if(oferta != [] && concurso != null){
-
-                    oferta.each {j->
-
-                        contrato = Contrato.findByOferta(j)
-                        obras += i
-                        contratos += contrato
-                    }
-
-                }
-
-
-            }
-
-        }
-
-        obras.each{
-
-            totales = 0
-            total1=0
-
-            valores =  preciosService.rbro_pcun_v2(it.id)
-            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-            subPres.each { s->
-                valores.each {
-                    if(it.sbprdscr == s.descripcion){
-                        totales = it.totl
-                        totalPresupuestoBien = (total1 += totales)
-                    }
-                }
-            }
-//           println("--->>" + totalPresupuestoBien)
-            valoresTotales += totalPresupuestoBien
-        }
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
+        def sql2 = armaSqlContratadas(params)
+        def nuevoRes = cn.rows(sql2)
+        params.criterio = params.old
 
 
         //excel
@@ -2286,33 +2045,25 @@ class Reportes4Controller {
         label = new Label(1, 1, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
         label = new Label(1, 2, "REPORTE EXCEL OBRAS CONTRATADAS", times16format); sheet.addCell(label);
 
-
         label = new Label(0, 4, "Código: ", times16format); sheet.addCell(label);
         label = new Label(1, 4, "Nombre", times16format); sheet.addCell(label);
         label = new Label(2, 4, "Tipo", times16format); sheet.addCell(label);
-        label = new Label(3, 4, "Fecha Reg.", times16format); sheet.addCell(label);
-        label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
-        label = new Label(5, 4, "Valor", times16format); sheet.addCell(label);
-        label = new Label(6, 4, "Elaborado", times16format); sheet.addCell(label);
+        label = new Label(3, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
+        label = new Label(4, 4, "Valor", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "Fecha Contrato", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Coordinación", times16format); sheet.addCell(label);
         label = new Label(7, 4, "Contrato", times16format); sheet.addCell(label);
 
-        obras.eachWithIndex {i, j->
+        nuevoRes.eachWithIndex {i, j->
 
-
-            label = new Label(0, fila, i.codigo.toString()); sheet.addCell(label);
-            label = new Label(1, fila, i?.nombre.toString()); sheet.addCell(label);
-            label = new Label(2, fila, i?.tipoobra?.toString()); sheet.addCell(label);
-            label = new Label(3, fila, i?.fecha?.toString()); sheet.addCell(label);
-            label = new Label(4, fila, i?.canton?.toString() + " " + i?.parroquia?.toString() + " " + i?.comunidad?.toString()); sheet.addCell(label);
-            if(valoresTotales[j]!= null){
-                number = new jxl.write.Number(5, fila, valoresTotales[j]); sheet.addCell(number);
-            }else{
-                label = new Label(5, fila, " "); sheet.addCell(label);
-            }
-
-            label = new Label(6, fila, i?.elaborado?.toString()); sheet.addCell(label);
-            label = new Label(7, fila, " "); sheet.addCell(label);
-            label = new Label(7, fila, contratos[j]?.codigo); sheet.addCell(label);
+            label = new Label(0, fila, i.obracdgo.toString()); sheet.addCell(label);
+            label = new Label(1, fila, i?.obranmbr.toString()); sheet.addCell(label);
+            label = new Label(2, fila, i?.tpobdscr?.toString()); sheet.addCell(label);
+            label = new Label(3, fila, i?.cntnnmbr?.toString() + " " + i?.parrnmbr?.toString() + " " + i?.cmndnmbr?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(4, fila, i.cntrmnto); sheet.addCell(number);
+            label = new Label(5, fila, i?.obrafcha?.toString()); sheet.addCell(label);
+            label = new Label(6, fila, i?.dptodscr?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i.cntrcdgo?.toString()); sheet.addCell(label);
             fila++
 
         }

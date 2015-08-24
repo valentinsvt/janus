@@ -126,14 +126,12 @@
 
 
     $("#imprimir").click(function () {
-
         var busca = $("#buscador_con").val();
-
-        location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + busca + "&operador=" + $("#oprd").val()
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + busca + "&operador=" + $("#oprd").val() + "&criterio=" + $("#criterio_con").val()
     });
 
     $("#excel").click(function () {
-        location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val() + "&operador=" + $("#oprd").val()
     });
 
     $("#buscador_con").change(function(){
