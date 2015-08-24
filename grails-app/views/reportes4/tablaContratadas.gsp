@@ -40,7 +40,8 @@
 
 </div>
 
-
+<div class="row-fluid"  style="width: 99.7%;height: 400px;overflow-y: auto;float: right;">
+    <div class="span12">
 
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>
@@ -97,6 +98,10 @@
     </tbody>
 </table>
 
+    </div>
+
+</div>
+
 
 <script type="text/javascript">
 
@@ -112,8 +117,6 @@
             success  : function (msg) {
                 clearInterval(interval)
                 $("#detalle").html(msg)
-//                $("#imprimir").removeClass("hide");
-//                $("#excel").removeClass("hide");
             }
         });
     });

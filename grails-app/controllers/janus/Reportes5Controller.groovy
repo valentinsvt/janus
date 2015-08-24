@@ -15,6 +15,7 @@ import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.Label
 import jxl.write.Number
+import jxl.write.NumberFormat
 import jxl.write.WritableCellFormat
 import jxl.write.WritableFont
 import jxl.write.WritableSheet
@@ -246,6 +247,7 @@ class Reportes5Controller {
 
     def reporteAvance() {
         println("params-->" + params)
+
         def baos = new ByteArrayOutputStream()
         def name = "avance_obras_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
 //            println "name "+name
@@ -296,11 +298,20 @@ class Reportes5Controller {
         params.old = params.criterio
         params.criterio = cleanCriterio(params.criterio)
 
-        def res = filasAvance(params)
+//        def res = filasAvance(params)
 
-        def tablaDatos = new PdfPTable(11);
+        def cn = dbConnectionService.getConnection()
+        def campos = reportesService.obrasAvance()
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
+        def sql = armaSqlAvance(params)
+        def obras = cn.rows(sql)
+        params.criterio = params.old
+
+
+        def tablaDatos = new PdfPTable(10);
         tablaDatos.setWidthPercentage(100);
-        tablaDatos.setWidths(arregloEnteros([7, 18, 13, 9, 14, 7, 9, 6, 7, 8,10]))
+        tablaDatos.setWidths(arregloEnteros([7, 18, 13, 9, 14, 10, 9, 6, 5, 5]))
 
         def paramsHead = [border: Color.BLACK,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
@@ -317,27 +328,27 @@ class Reportes5Controller {
         addCellTabla(tablaDatos, new Paragraph("Plazo", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("% Avance", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("Avance Físico", fontTh), paramsHead)
-        addCellTabla(tablaDatos, new Paragraph("Estado", fontTh), paramsHead)
+//        addCellTabla(tablaDatos, new Paragraph("Estado", fontTh), paramsHead)
 
-        res.each { fila ->
-            def estado = ""
-            if (fila.inicio) {
-                estado = "Iniciada el " + (fila.inicio.format("dd-MM-yyyy"))
-                if (fila.recepcion_contratista && fila.recepcion_fisc) {
-                    estado = "Finalizada el " + (fila.recepcion_fisc.format("dd-MM-yyyy"))
-                }
-            }
-            addCellTabla(tablaDatos, new Paragraph(fila.obra_cod, fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(fila.obra_nmbr, fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(fila.canton + " - " + fila.parroquia + " - " + fila.comunidad, fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(fila.num_contrato, fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(fila.proveedor, fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(numero(fila.monto, 2), fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(fila.fecha.format("dd-MM-yyyy"), fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(numero(fila.plazo, 0) + " días", fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(numero((fila.sum / fila.monto) * 100, 2) + "%", fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(numero(fila.fisico, 2), fontTd), prmsCellLeft)
-            addCellTabla(tablaDatos, new Paragraph(estado, fontTd), prmsCellLeft)
+        obras.each { fila ->
+//            def estado = ""
+//            if (fila.inicio) {
+//                estado = "Iniciada el " + (fila.inicio.format("dd-MM-yyyy"))
+//                if (fila.recepcion_contratista && fila.recepcion_fisc) {
+//                    estado = "Finalizada el " + (fila.recepcion_fisc.format("dd-MM-yyyy"))
+//                }
+//            }
+            addCellTabla(tablaDatos, new Paragraph(fila.obracdgo, fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(fila.obranmbr, fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(fila.cntnnmbr + " - " + fila.parrnmbr + " - " + fila.cmndnmbr, fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(fila.cntrcdgo, fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(fila.prvenmbr, fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(numero(fila.cntrmnto, 2), fontTd), prmsCellRight)
+            addCellTabla(tablaDatos, new Paragraph(fila.cntrfcsb.format("dd-MM-yyyy"), fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(numero(fila.cntrplzo, 0) + " días", fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(numero( (fila.av_economico) * 100, 2) + "%", fontTd), prmsCellRight)
+            addCellTabla(tablaDatos, new Paragraph(numero(fila.av_fisico, 2), fontTd), prmsCellRight)
+//            addCellTabla(tablaDatos, new Paragraph(estado, fontTd), prmsCellLeft)
         }
 
         document.add(tablaDatos)
@@ -350,6 +361,104 @@ class Reportes5Controller {
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
+
+
+    def reporteExcelAvance () {
+
+        def cn = dbConnectionService.getConnection()
+        def campos = reportesService.obrasAvance()
+        params.old = params.criterio
+        params.criterio = cleanCriterio(params.criterio)
+        def sql = armaSqlAvance(params)
+        def obras = cn.rows(sql)
+        params.criterio = params.old
+
+
+        //excel
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+//        def file = File.createTempFile('myExcelDocument', '.ods')
+        file.deleteOnExit()
+
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+        // fija el ancho de la columna
+        // sheet.setColumnView(1,40)
+
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        sheet.setColumnView(0, 12)
+        sheet.setColumnView(1, 60)
+        sheet.setColumnView(2, 30)
+        sheet.setColumnView(3, 20)
+        sheet.setColumnView(4, 40)
+        sheet.setColumnView(5, 15)
+        sheet.setColumnView(6, 17)
+        sheet.setColumnView(7, 10)
+        sheet.setColumnView(8, 15)
+        sheet.setColumnView(9, 15)
+        // inicia textos y numeros para asocias a columnas
+
+        def label
+        def nmro
+        def number
+
+        def fila = 6;
+
+
+        NumberFormat nf = new NumberFormat("#.##");
+        WritableCellFormat cf2obj = new WritableCellFormat(nf);
+
+        label = new Label(1, 1, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(1, 2, "REPORTE EXCEL AVANCE DE OBRAS", times16format); sheet.addCell(label);
+
+        label = new Label(0, 4, "Código: ", times16format); sheet.addCell(label);
+        label = new Label(1, 4, "Nombre", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
+        label = new Label(3, 4, "Num. Contrato", times16format); sheet.addCell(label);
+        label = new Label(4, 4, "Contratista", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "Monto", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Fecha suscripción", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Plazo", times16format); sheet.addCell(label);
+        label = new Label(8, 4, "% Avance", times16format); sheet.addCell(label);
+        label = new Label(9, 4, "Avance Físico", times16format); sheet.addCell(label);
+
+        obras.eachWithIndex {i, j->
+
+            label = new Label(0, fila, i.obracdgo.toString()); sheet.addCell(label);
+            label = new Label(1, fila, i?.obranmbr?.toString()); sheet.addCell(label);
+            label = new Label(2, fila, i?.cntnnmbr?.toString() + " " + i?.parrnmbr?.toString() + " " + i?.cmndnmbr?.toString()); sheet.addCell(label);
+            label = new Label(3, fila, i?.cntrcdgo?.toString()); sheet.addCell(label);
+            label = new Label(4, fila, i?.prvenmbr?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(5, fila, i.cntrmnto); sheet.addCell(number);
+            label = new Label(6, fila, i?.cntrfcsb?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(7, fila, i.cntrplzo); sheet.addCell(number);
+            number = new jxl.write.Number(8, fila, (i.av_economico * 100)); sheet.addCell(number);
+            number = new jxl.write.Number(9, fila, (i.av_fisico * 100)); sheet.addCell(number);
+
+
+            fila++
+
+        }
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "DocumentosObraExcel.xls";
+//        def header = "attachment; filename=" + "AvancesObraExcel.ods";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+    }
+
+
 
     private String cleanCriterio(String criterio) {
         if (!criterio) {

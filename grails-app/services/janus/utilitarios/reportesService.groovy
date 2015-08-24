@@ -35,7 +35,7 @@ class reportesService {
          [campo: 'parrnmbr', nombre: 'Parroquia',      operador: "contiene:contiene"],
          [campo: 'cmndnmbr', nombre: 'Comunidad',      operador: "contiene:contiene"],
          [campo: 'cntrcdgo', nombre: 'Contrato No.',   operador: "contiene:contiene"],
-         [campo: 'cntrfcha', nombre: 'Fecha de subscripción', operador:"gtfc:mayor que,ltfc:menor que"],
+         [campo: 'cntrfcsb', nombre: 'Fecha de subscripción', operador:"gtfc:mayor que,ltfc:menor que"],
          [campo: 'cntrplzo', nombre: 'Plazo (dias)',   operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"],
          [campo: 'cntrmnto', nombre: 'Valor',          operador: "eq:igual a,gt:mayor que,lt:menor que,gteq:mayor o igual a"]]
     }
