@@ -2268,7 +2268,12 @@ class ReportesController {
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
 //        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
-        headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+        if(session.perfil.id == 16){
+            headers.add(new Paragraph(obra?.departamento?.codigo + " - Presupuesto borrador", times12bold));
+        }else{
+            headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+        }
+
 
         if (obra?.oficioSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
@@ -3173,7 +3178,12 @@ class ReportesController {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+
+        if(session.perfil.id == 16){
+            headers.add(new Paragraph(obra?.departamento?.codigo + " - Presupuesto borrador", times12bold));
+        }else{
+            headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+        }
 
         if (obra?.oficioSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
