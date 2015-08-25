@@ -54,10 +54,7 @@ class Reportes4Controller {
 
 
     def registradas () {
-
-
         def perfil = session.perfil.id
-
         return [perfil: perfil]
     }
 
@@ -391,12 +388,9 @@ class Reportes4Controller {
         response.getOutputStream().write(b)
     }
 
-    def tablaRegistradas () {
-
+    def tablaRegistradas_old() {
         println("paramsReg" + params)
-
         def obras
-
         def sql
         def cn
         def res
@@ -555,6 +549,53 @@ class Reportes4Controller {
 //        println("obras filtradas " + obrasFiltradas)
         return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params]
     }
+
+    def tablaRegistradas() {
+
+//        println("presu " + params)
+
+        def cn = dbConnectionService.getConnection()
+        def campos = reportesService.obrasPresupuestadas()
+
+        params.old = params.criterio
+        params.criterio = reportesService.limpiaCriterio(params.criterio)
+
+        def sql = armaSqlRegistradas(params)
+        def obras = cn.rows(sql)
+
+//        println "registro retornados del sql: ${obras.size()}"
+        params.criterio = params.old
+        return [obras: obras, params: params]
+    }
+
+    def armaSqlRegistradas(params){
+        def campos = reportesService.obrasPresupuestadas()
+        def operador = reportesService.operadores()
+//        println("operador " + operador)
+
+        def sqlSelect = "select obra.obra__id, obracdgo, obranmbr, tpobdscr, obrafcha, cntnnmbr, parrnmbr, cmndnmbr, " +
+                "dptodscr, obrarefe, obravlor, case when obraetdo = 'N' THEN 'No registrada' end estado " +
+                "from obra, tpob, cntn, parr, cmnd, dpto "
+        def sqlWhere = "where tpob.tpob__id = obra.tpob__id and cmnd.cmnd__id = obra.cmnd__id and " +
+                "parr.parr__id = obra.parr__id and cntn.cntn__id = parr.cntn__id  and " +
+                "dpto.dpto__id = obra.dpto__id and obraetdo = 'N'"
+
+        def sqlOrder = "order by obracdgo"
+
+        println "llega params: $params"
+        params.nombre = "Código"
+        if(campos.find {it.campo == params.buscador}?.size() > 0) {
+            def op = operador.find {it.valor == params.operador}
+//            println "op: $op"
+            sqlWhere += " and ${params.buscador} ${op.operador} ${op.strInicio}${params.criterio}${op.strFin}";
+        }
+//        println "txWhere: $sqlWhere"
+//        println "sql armado: sqlSelect: ${sqlSelect} \n sqlWhere: ${sqlWhere} \n sqlOrder: ${sqlOrder}"
+        println "sql: ${sqlSelect} ${sqlWhere} ${sqlOrder}"
+        //retorna sql armado:
+        "$sqlSelect $sqlWhere $sqlOrder".toString()
+    }
+
 
 
     def tablaPresupuestadas_old () {
