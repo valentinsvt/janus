@@ -710,7 +710,9 @@ class Reportes4Controller {
 
 
     def tablaPresupuestadas() {
-//        println "tablaPresupuestadas ok $params , ${reportesService.obrasContratadas()}"
+
+//        println("presu " + params)
+
         def cn = dbConnectionService.getConnection()
         def campos = reportesService.obrasPresupuestadas()
 
