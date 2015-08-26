@@ -27,21 +27,10 @@
     </div>
 </g:if>
 
-<div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
+<div id="detalle"></div>
 
 <div class="row-fluid">
     <div class="span12">
-<g:if test="${perfil == 2}">
-
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
-        %{--</a>--}%
-        %{--<a href="#" class="btn  " id="excel">--}%
-            %{--<i class="icon-table"></i>--}%
-            %{--Excel--}%
-        %{--</a>--}%
-        </g:if>
         <a href="#" class="btn" id="regresar">
             <i class="icon-arrow-left"></i>
             Regresar
@@ -69,7 +58,8 @@
     function cargarTabla() {
         var interval = loading("detalle")
         var datos = ""
-        datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val()
+        %{--datos = "si=${"si"}&buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val() + "&operador=" + $("#oprd").val()--}%
+        datos = "si=${"si"}&buscador=" + $("#buscador_reg1").val() + "&estado=" + $("#estado_reg1").val()
         $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaRegistradas')}",
             data     : datos,
             success  : function (msg) {
