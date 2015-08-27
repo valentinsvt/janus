@@ -9,6 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="tedein">
 
+        <elm:favicon/>
         %{--<script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.8.2.js')}"></script>--}%
         %{--<script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.9.1.custom.min.js')}"></script>--}%
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.9.1.js')}"></script>

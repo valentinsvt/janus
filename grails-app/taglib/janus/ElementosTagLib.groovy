@@ -895,4 +895,13 @@ class ElementosTagLib {
         }
     }
 
+    /**
+     * pone el favicon
+     */
+    def favicon = { attrs ->
+        def html = "     <link rel=\"shortcut icon\" href=\"${resource(dir: 'images/ico', file: 'janus_16.png')}\">"
+        out << html
+    }
+
+
 }
