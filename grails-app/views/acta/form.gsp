@@ -204,6 +204,11 @@
                     y registrada el
                     <g:formatDate date="${actaInstance.fechaRegistro}" format="dd-MM-yyyy"/>
                 </g:else>
+
+                <span style="margin-left:100px"> Insertar espacios Extra:
+                    <g:textField name="espacios" maxlength="1" class="input-medium" style="width: 30px;" value="${actaInstance?.espacios}"/>
+                </span>
+
             </div>
 
             <g:if test="${!actaInstance.id && actaInstance.tipo == 'D'}">
@@ -993,7 +998,8 @@
 //                });
 
                 $("#btnPrint").click(function () {
-                    var url = "${createLink(controller: 'pdf', action: 'pdfLink')}?url=${createLink(controller: 'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
+                    var url = "${createLink(controller: 'pdf', action: 'pdfLink')}?url=${createLink(controller:
+                      'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
 //                    console.log(url);
                     location.href = url;
                 });

@@ -13,6 +13,7 @@ class Acta {
 
     Integer registrada = 0   //0: no, 1:si
     Date fechaRegistro
+    int espacios = 0
 
     static hasMany = [secciones: Seccion]
     static auditable = true
@@ -34,6 +35,7 @@ class Acta {
             fecha column: 'actafcha'
             registrada column: 'actargst'
             fechaRegistro column: 'actafcrg'
+            espacios column: 'actaespc'
         }
     }
 
@@ -46,5 +48,6 @@ class Acta {
         fecha(blank: true, nullable: true)
         registrada(blank: true, nullable: true)
         fechaRegistro(blank: true, nullable: true)
+        espacios(blank: true, nullable: true)
     }
 }

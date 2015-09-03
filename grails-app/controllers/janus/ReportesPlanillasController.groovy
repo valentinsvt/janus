@@ -79,6 +79,13 @@ class ReportesPlanillasController {
         if(acta.contrato.delegadoFiscalizacion) {
             delegadoFiscalizacion = acta.contrato.delegadoFiscalizacion
         }
+        def espacios = ""
+        if(acta.espacios > 0) {
+            acta.espacios.times {
+               espacios += "<br/>"
+            }
+        }
+//        println "espacios: $espacios"
 //        println "---pasa delegado Fis: $delegadoFiscalizacion"
 /*
         if (direccion.size() == 0) {
@@ -92,7 +99,7 @@ class ReportesPlanillasController {
             delegadoFiscalizacion = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)?.persona
         }
 */
-        return [actaInstance: acta, directorDeFiscalizacion: delegadoFiscalizacion]
+        return [actaInstance: acta, directorDeFiscalizacion: delegadoFiscalizacion, espacios: espacios]
     }
 
     def reporteDiferencias() {

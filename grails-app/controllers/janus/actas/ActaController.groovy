@@ -549,6 +549,7 @@ class ActaController extends janus.seguridad.Shield {
     }
 
     def save() {
+        println "params save acta: $params"
         if (params.fecha) {
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         }

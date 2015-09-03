@@ -282,7 +282,9 @@
                 Acta de ${actaInstance?.nombre} ${actaInstance?.tipo == 'P' ? 'Provisional' : 'Definitiva'} N. ${actaInstance?.numero}
             </div>
 
+            ${espacios}
             <div class="tituloChevere bold upper">
+                ${espacios}
                 Datos generales
             </div>
             <g:set var="garantias" value="${Garantia.findAllByContrato(actaInstance.contrato)}"/>
@@ -342,13 +344,14 @@
                 </div>
 
             </div> %{-- well contrato --}%
-
+            ${espacios}
             <div class="well">
                 <acta:clean str="${actaInstance.descripcion}"/>
             </div>
-
+            ${espacios}
             <div id="secciones">
                 <g:each in="${actaInstance.secciones}" var="seccion">
+                    ${espacios}
                     <div class="seccion ui-corner-all">
                         <div class="row tituloSeccion">
                             <div class="span1 numero lvl1 bold">${seccion.numero}.-</div>
