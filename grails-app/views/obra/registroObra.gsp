@@ -1889,7 +1889,6 @@
             $("#busqueda").dialog("open");
             $(".ui-dialog-titlebar-close").html("x")
             return false;
-//
         });
 
         $("#departamento").change(function () {

@@ -216,7 +216,7 @@ class BuscadorService {
             else
                 sql+= " where "+extras.replaceFirst(" and ","")
         }
-       // println "sql " + sql  + orderby+" --> pars "+res
+       println "sql " + sql  + orderby+" --> pars "+res
         lista = dominio.findAll((sql+orderby).toString(), res,[max: 200])
         lista.add(lista.size())
         if (lista.size() < 1 && tipo != "excluyente") {

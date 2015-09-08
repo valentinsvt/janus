@@ -1586,13 +1586,20 @@ class PlanillaController extends janus.seguridad.Shield {
         def ultimo = ""
         def prdo = 0
         def inicio
+        def planillasAnt = Planilla.findAllByContratoAndTipoPlanillaNotEqual(contrato, anticipo, [sort: 'fechaPresentacion'])
+        if(planillasAnt) {
+            inicio = planillasAnt.pop().fechaFin + 1
+        }
         // se presenta el o los primeros periodos no planillados, o todos si el presente y último
 //        println "---pone periodos"
 //        if (planillasAvance.size() == 0) {
         if (tiposPlanilla.codigo.contains("P") || tiposPlanilla.codigo.contains("Q") || tiposPlanilla.codigo.contains("D")) {
             periodosEjec.each {pe ->
                 ultimo = texto
-//                println "procesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')}"
+
+                println "procesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')}"
+
+
                 fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
                 if((pe.fechaFin >= pe.fechaInicio) && !lleno) {
                     if(pe.fechaFin == fcfm) {
@@ -1609,6 +1616,8 @@ class PlanillaController extends janus.seguridad.Shield {
                         } else {
                             periodos.put(texto, texto.replaceAll('_', ' a '))
                         }
+
+                        println "periodos: $periodos"
                         dias = fcfm - pe.fechaInicio + 1
                         if(dias <= 15) {
                             opcional = true
@@ -1619,33 +1628,29 @@ class PlanillaController extends janus.seguridad.Shield {
                         }
 
                     } else {
+                        texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        periodos.put(texto, texto.replaceAll('_', ' a '))
                         inicio = pe.fechaInicio
                     }
                     // si es el último periodo también es opcional
+                    println "periodos: $periodos, ultimo: $ultimo"
+                    println "periodos ultimo: ${periodos[ultimo]}"
                     if(pe.fechaFin == finalObra) {
-                        def desde = periodos[ultimo].split(' a ')[0]
-                        texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        if(ultimo) {
+                            def desde = periodos[ultimo].split(' a ')[0]
+                            texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
 
-                        periodos.put(texto, texto.replaceAll('_', ' a '))
+                            periodos.put(texto, texto.replaceAll('_', ' a '))
+                        } else {
+                            def desde = periodos[texto].split(' a ')[0]
+                            texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                            periodos.put(texto, texto.replaceAll('_', ' a '))
+                        }
                     }
                 }
             }
 
         }
-/*
-//        println "PERIODOS: "+periodos
-        if(periodos.size() > 1) {
-            def i = 0
-            def tmp = periodos.clone()
-            periodos = [:]
-            tmp.each { k, v ->
-                if(i++ < 2)
-                    periodos.put(k, v)
-            }
-        }
-
-//        println "PERIODOS: "+periodos
-*/
 
 
         def now = new Date()
@@ -4502,6 +4507,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
 
                 def anteriores = Planilla.findAllByContratoAndTipoPlanilla(plnl.contrato, TipoPlanilla.findByCodigo('P')).sum{it.descuentos}
+                if(anteriores == null) anteriores = 0
                 plnl.descuentos = plnl.contrato.anticipo - anteriores
                 plnl.save(flush: true)
             }
