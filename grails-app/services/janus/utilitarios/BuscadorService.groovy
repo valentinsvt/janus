@@ -18,7 +18,7 @@ class BuscadorService {
     }
 
     def filtro(operador, parametros, common, mapa, ignoreCase) {
-        // println "mapa "+mapa
+//        println "en filtro: operador: $operador, parametros $parametros, common $common"
         def parts = []
         parts.add(" where ")
         def comparador =""
@@ -168,8 +168,8 @@ class BuscadorService {
         return  parts
     }
 
-    List buscar(dominio, tabla, tipo, params, ignoreCase,extras="") {
-//        println "params "+params
+    List buscar(dominio, tabla, tipo, params, ignoreCase, extras="") {
+//        println "dominio: $dominio params $params"
         def sql = "from " + tabla
         def mapa = toMap(dominio)
         def parametros =[:]
@@ -216,11 +216,15 @@ class BuscadorService {
             else
                 sql+= " where "+extras.replaceFirst(" and ","")
         }
-       println "sql " + sql  + orderby+" --> pars "+res
-        lista = dominio.findAll((sql+orderby).toString(), res,[max: 200])
+//        lista = dominio.findAll((sql+orderby).toString(), res,[max: 200])
+//        println "crea lista con: ${sql+orderby}"
+//        println "....ok"
+        lista = dominio.findAll((sql+orderby).toString(), [max: 200])
         lista.add(lista.size())
+//        println "dominio. $dominio sql $sql  orderby: $orderby  lista: $lista, size: ${lista.size()}, tipo: $tipo"
         if (lista.size() < 1 && tipo != "excluyente") {
             res = filtro("or", parametros, common, mapa, ignoreCase)
+            println "retorna de filtro: $res"
             sql ="from " + tabla+" "+res[0]
             res.remove(0)
             lista = dominio.refresh().findAll(sql+orderby, res,[max: 200])
@@ -228,6 +232,7 @@ class BuscadorService {
         }
         return lista
     }
+
 
     List buscarSQL(qry, qrwh = 'w', campos, orden, tpOrdn, numero, qord) {
         def m = []

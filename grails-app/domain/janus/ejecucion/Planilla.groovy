@@ -67,8 +67,8 @@ class Planilla {
 
     String descripcionMulta
     Double multaEspecial = 0
-    /*Planilla en la que se tienen que imprimir el reajuste del periodo*/
-//    Planilla imprimeReajueste
+
+    String logPagos
 
     static auditable = true
     static mapping = {
@@ -140,6 +140,7 @@ class Planilla {
 
             descripcionMulta column: 'plnldsml'
             multaEspecial column: 'plnlmles'
+            logPagos column: 'plnl_log'
 //            imprimeReajueste column: 'plnlimid'
         }
     }
@@ -194,6 +195,7 @@ class Planilla {
 
         multaEspecial(blank: true, nullable: true)
         descripcionMulta(blank: true, nullable: true,size: 1..255)
+        logPagos(blank: true, nullable: true,size: 1..255)
 //        imprimeReajueste(blank: true, nullable: true)
     }
 

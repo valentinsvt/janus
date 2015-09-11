@@ -541,7 +541,7 @@ class ContratoController extends janus.seguridad.Shield {
         if (extraObra.size() > 0) {
             extras += " and oferta in (${extraObra})"
         }
-        println "extras " + extras
+//        println "extras " + extras
 
         if (!params.reporte) {
             if (params.excel) {
@@ -569,7 +569,7 @@ class ContratoController extends janus.seguridad.Shield {
 
     def buscarContrato2() {
 
-        println "buscar contrato 2 " + params
+//        println "buscar contrato 2 " + params
 
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {

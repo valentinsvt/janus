@@ -66,7 +66,7 @@
                 </span>
             </td>
             <td>
-                <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id" class="many-to-one span2 required"
+                <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list([sort:'descripcion'])}" optionKey="id" class="many-to-one span2 required"
                           value="${personaInstance?.departamento?.id}" noSelection="['': '']" optionValue="descripcion"/>
                 <span class="mandatory">*</span>
 

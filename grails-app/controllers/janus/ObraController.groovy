@@ -1500,17 +1500,11 @@ class ObraController extends janus.seguridad.Shield {
 
 
         } else {
-
 //            println("entro2")
-
-
             obraInstance = new Obra()
             obraInstance.properties = obra.properties
             obraInstance.codigo = nuevoCodigo
             obraInstance.estado = 'N'
-
-
-
 
             if (!obraInstance.save(flush: true)) {
                 flash.clase = "alert-error"

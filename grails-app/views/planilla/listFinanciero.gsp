@@ -24,7 +24,7 @@
         </g:if>
 
         <div class="tituloTree">
-            Planillas del contrato de la obra ${obra.descripcion}
+            Planillas del contrato de la obra ${obra?.descripcion}
         </div>
 
         <div class="row">
@@ -44,7 +44,7 @@
 
         <div class="row">
             <div class="span12" role="navigation">
-                <g:if test="${obra.fechaInicio}">
+                <g:if test="${obra?.fechaInicio}">
                     <a href="#" class="btn  " id="imprimir">
                         <i class="icon-print"></i>
                         Imprimir Orden de Inicio de Obra
@@ -70,8 +70,8 @@
                         <g:sortableColumn property="fechaFin" title="Fecha fin"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="valor" title="Valor"/>
-                        <th width="160">Acciones</th>
-                        <th>Pagos</th>
+                        <th width="80px">Acciones</th>
+                        <th width="120px">Pagos</th>
                     </tr>
                 </thead>
                 <g:set var="cont" value="${1}"/>
@@ -197,6 +197,9 @@
                                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && planillaInstance.contrato.oferta.concurso.obra.fechaInicio}">
                                         <g:set var="lblBtn" value="${-6}"/>
                                     </g:if>
+                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && !planillaInstance.contrato.oferta.concurso.obra.fechaInicio}">
+                                        <g:set var="lblBtn" value="${-7}"/>
+                                    </g:if>
 
                                     <g:if test="${lblBtn > 0}">
                                         <g:if test="${lblBtn == 2}">
@@ -223,6 +226,9 @@
                                             </a>
                                         </g:if>
                                         <g:elseif test="${lblBtn == 5}">
+                                            <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${4}">
+                                                Corregir pago
+                                            </a>
                                             <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                                 Iniciar Obra
                                             </g:if>
@@ -232,6 +238,12 @@
                                         </g:elseif>
                                     </g:if>
                                     <g:elseif test="${lblBtn == -6}">
+                                        <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
+                                    </g:elseif>
+                                    <g:elseif test="${lblBtn == -7}">
+                                        <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${4}">
+                                            Corregir pago
+                                        </a>
                                         <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                     </g:elseif>
 
@@ -337,21 +349,6 @@
                                 return false;
                             });
                             $("#modalTitle").html($btn.text());
-//                            switch (tipo) {
-//                                case "2":
-//                                    $("#modalTitle").html("Enviar reajuste");
-//                                    break;
-//                                case "3":
-//                                    $("#modalTitle").html("Pedir pago");
-//                                    break;
-//                                case "4":
-//                                    $("#modalTitle").html("Informar pago");
-//                                    break;
-//                                case "5":
-//                                    $("#modalTitle").html("Iniciar obra");
-//                                    break;
-//                            }
-
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
 
                             if (msg == "NO") {
@@ -373,6 +370,7 @@
                     });
                     return false;
                 }); //click btn new
+
 
                 $(".btn-devolver").click(function () {
                     var $btn = $(this);

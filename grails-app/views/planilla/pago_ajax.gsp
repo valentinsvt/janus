@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="span4">
-                    <g:textField name="memo" class="span3 required allCaps" maxlength="20"/>
+                    <g:textField name="memo" class="span3 required allCaps" maxlength="20" value="${planilla.memoPagoPlanilla}"/>
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>

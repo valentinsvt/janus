@@ -624,13 +624,14 @@ class PlanillaController extends janus.seguridad.Shield {
                 return
         }
         def contrato = Contrato.get(params.id)
-        def obra = contrato.oferta.concurso.obra
+//        def obra = contrato.oferta.concurso.obra
+        def obra = contrato?.obra
 
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
 
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
-        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
+        return [contrato: contrato, obra: obra, planillaInstanceList: planillaInstanceList]
 
     }
 
@@ -871,7 +872,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
-//        println "PARAMS: " + params
+//        println "pago_ajax: PARAMS: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -880,6 +881,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def tipo = params.tipo
         def lblMemo, lblFecha, extra, nombres = ""
         def tiposTramite, tipoTramite
+        def tramite
 
 //        def obraDpto = obra.departamento
         def adminContrato = contrato.administrador
@@ -1097,7 +1099,11 @@ class PlanillaController extends janus.seguridad.Shield {
                 lblMemo = "Memo de pago"
                 lblFecha = "Fecha acreditación del pago"
                 fechaMin = planilla.fechaMemoPedidoPagoPlanilla
-                fecha = planilla.fechaMemoPedidoPagoPlanilla
+                if(planilla.fechaPago) {
+                    fecha = planilla.fechaPago
+                } else {
+                    fecha = planilla.fechaMemoPedidoPagoPlanilla
+                }
                 extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")
 //                tipoTramite = TipoTramite.findByCodigo("INPG")
                 tiposTramite = TipoTramite.findAllByCodigo("INPG")
@@ -1189,9 +1195,14 @@ class PlanillaController extends janus.seguridad.Shield {
                 break;
         }
 
-        def roles = DepartamentoTramite.findAllByTipoTramite(tipoTramite)
+        tramite = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo('INPG'))
+        def envia = PersonasTramite.findByTramiteAndRolTramite(tramite, RolTramite.findByCodigo('DE'))
+        println "pago_ajax: persona que envía: ${envia?.persona?.id}, trmaite: ${tramite?.id}"
 
-        roles.each { rol ->
+
+        def roles = DepartamentoTramite.findAllByTipoTramite(tipoTramite)
+//        println "roles: $roles"
+        roles.each { rol ->    // procesa para quien envia y quien recibe
             def personas = Persona.findAllByDepartamento(rol.departamento)
 
             if (rol.rolTramite.codigo.trim() == especial.trim()) {
@@ -1201,9 +1212,10 @@ class PlanillaController extends janus.seguridad.Shield {
                 personas = [fiscContrato]
             }
 
+
             def sel = g.select(from: personas, class: "span3", optionKey: "id", optionValue: {
                 it.nombre + " " + it.apellido
-            }, name: "persona_" + rol.rolTramite.id)
+            }, name: "persona_" + rol.rolTramite.id, value: envia?.persona?.id)
 
             nombres += '<div class="row">'
             nombres += '<div class="span2 formato">'
@@ -1216,7 +1228,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         nombres += '<div class="row">'
         nombres += '<div class="span2 formato">Asunto</div>'
-        nombres += '<div class="span4">' + g.textArea(name: 'asunto', style: "width:410px;") + '</div>'
+        nombres += '<div class="span4">' + g.textArea(name: 'asunto', value: tramite?.descripcion, style: "width:410px;") + '</div>'
         nombres += '</div>'
 
 //        println tipo + "  " + fechaMin
@@ -1227,7 +1239,8 @@ class PlanillaController extends janus.seguridad.Shield {
         fechaMin = "new Date(${y},${m},${d})"
         fechaMax = "new Date(${y + 2},${m},${d})"
 
-        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha, nombres: nombres]
+        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax,
+         extra: extra, fecha: fecha, nombres: nombres]
     }
 
     def inicioObra_ajax() {
@@ -1235,7 +1248,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
-        def obra = planilla.contrato.oferta.concurso.obra
+        //def obra = planilla.contrato.oferta.concurso.obra
         def tipo = params.tipo
         def lblMemo, lblFecha, extra, nombres = ""
 
@@ -1258,14 +1271,17 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def savePagoPlanilla() {
+//        println "savePagoPlanilla params: $params"
         def planilla = Planilla.get(params.id)
         def tipo = params.tipo
         def memo = params.memo.toString().toUpperCase()
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
 
         def tipoTramite, tramitePadre
-
         def str = "", str2 = ""
+        def hoy = new Date()
+        def lgpl = "Corrige pago ${hoy.format('dd-MM-yyyy HH:mm')} anterior: ${planilla.memoPagoPlanilla} - " +
+                "${planilla.fechaMemoPagoPlanilla?.format('dd-MM-yyyy')} - ${planilla.fechaPago?.format('dd-MM-yyyy')}"
 
         switch (tipo) {
             case "2":
@@ -1276,7 +1292,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 tipoTramite = TipoTramite.findByCodigo("ENRJ")
                 tramitePadre = null
                 break;
-            case "3":
+            case "3":  //pedir pago
                 planilla.memoPedidoPagoPlanilla = memo
                 planilla.fechaMemoPedidoPagoPlanilla = fecha
                 if (planilla.tipoPlanilla.codigo == 'A') {
@@ -1288,21 +1304,16 @@ class PlanillaController extends janus.seguridad.Shield {
 //                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("ENRJ"))
                 tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("ENRJ"), [sort: 'fechaEnvio', order: "desc"])[0]
                 break;
-            case "4":
+            case "4":  //informar pago
                 planilla.memoPagoPlanilla = memo
                 planilla.fechaMemoPagoPlanilla = fecha
                 planilla.fechaPago = fecha
-//                def obra = Obra.get(planilla.contrato.obra.id)
-//                obra.fechaInicio = fechaObra
-//                if (!obra.save(flush: true)) {
-//                    println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors
-//                }
                 str = "Pago informado exitosamente"
                 str2 = "No se pudo informar el pago"
                 tipoTramite = TipoTramite.findByCodigo("INPG")
-//                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
                 tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"), [sort: 'fechaEnvio', order: "desc"])[0]
                 break;
+
             case "5":
                 def obra = Obra.get(planilla.contrato.obra.id)
                 obra.fechaInicio = fecha
@@ -1320,56 +1331,79 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = str
 
+            def trmt = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo('INPG'))
+
             def estadoTramite = EstadoTramite.findByCodigo("C")
-            def tramite = new Tramite([
-                    planilla    : planilla,
-                    tipoTramite : tipoTramite,
-                    tramitePadre: tramitePadre,
-                    estado      : estadoTramite,
-                    descripcion : params.asunto,
-                    memo        : memo,
-                    fecha       : fecha,
-                    fechaEnvio  : new Date()
-            ])
-            if (!tramite.save(flush: true)) {
-                println "Error al guardar el tramite: "
-                println tramite.errors
-                str2 += "<li>Ha ocurrido un error al guardar el trámite</li>"
-
-                flash.clase = "alert-error"
-                str = "<h4>" + str2 + "</h4>"
-                str += g.renderErrors(bean: tramite)
-                flash.message = str
-            } else {
-
-                if (tramitePadre) {
-                    tramitePadre.fechaRespuesta = fecha
-                    if (!tramitePadre.save(flush: true)) {
-                        println "error al guardar la fecha de respuesta del tramite padre...."
-                        println tramitePadre.errors
-                    }
+            if(trmt) {
+                // TODO: actualiza el trami te existente y no cre otro
+                println "trmite id: ${trmt.id}"
+                trmt.descripcion = params.asunto
+                trmt.fecha = fecha   //params.fecha corregido
+                trmt.fechaEnvio = new Date()   //ahora
+                trmt.memo = memo
+                trmt.save(flush: true)
+                if(planilla.logPagos) {
+                    planilla.logPagos = lgpl + "|| " + planilla.logPagos
+                } else {
+                    planilla.logPagos = lgpl
                 }
+                planilla.save(flush: true)
 
-                def personas = params.findAll { it.key.contains("persona") }
-                personas.each { key, val ->
-                    def parts = key.split("_")
-                    def rolId = parts[1]
-                    def rol = RolTramite.get(rolId.toLong())
-                    def pers = Persona.get(val.toLong())
-                    def personaTramite = new PersonasTramite([
-                            tramite     : tramite,
-                            rolTramite  : rol,
-                            persona     : pers,
-                            departamento: pers.departamento
-                    ])
-                    if (!personaTramite.save(flush: true)) {
-                        println "Error al guardar persona tramite: "
-                        println personaTramite.errors
-                        str += "<li>Ha ocurrido un error al guardar el trámite</li>"
+                def envia = PersonasTramite.findByTramiteAndRolTramite(trmt, RolTramite.findByCodigo('DE'))
+                envia.persona  = Persona.get(params.persona_2)
+                envia.save(flush: true)
 
-                        flash.clase = "alert-error"
-                        str = "<h4>" + str2 + "</h4>"
-                        str += g.renderErrors(bean: tramite)
+            } else {
+                def tramite = new Tramite([
+                        planilla    : planilla,
+                        tipoTramite : tipoTramite,
+                        tramitePadre: tramitePadre,
+                        estado      : estadoTramite,
+                        descripcion : params.asunto,
+                        memo        : memo,
+                        fecha       : fecha,
+                        fechaEnvio  : new Date()
+                ])
+                if (!tramite.save(flush: true)) {
+                    println "Error al guardar el tramite: "
+                    println tramite.errors
+                    str2 += "<li>Ha ocurrido un error al guardar el trámite</li>"
+
+                    flash.clase = "alert-error"
+                    str = "<h4>" + str2 + "</h4>"
+                    str += g.renderErrors(bean: tramite)
+                    flash.message = str
+                } else {
+
+                    if (tramitePadre) {
+                        tramitePadre.fechaRespuesta = fecha
+                        if (!tramitePadre.save(flush: true)) {
+                            println "error al guardar la fecha de respuesta del tramite padre...."
+                            println tramitePadre.errors
+                        }
+                    }
+
+                    def personas = params.findAll { it.key.contains("persona") }
+                    personas.each { key, val ->
+                        def parts = key.split("_")
+                        def rolId = parts[1]
+                        def rol = RolTramite.get(rolId.toLong())
+                        def pers = Persona.get(val.toLong())
+                        def personaTramite = new PersonasTramite([
+                                tramite     : tramite,
+                                rolTramite  : rol,
+                                persona     : pers,
+                                departamento: pers.departamento
+                        ])
+                        if (!personaTramite.save(flush: true)) {
+                            println "Error al guardar persona tramite: "
+                            println personaTramite.errors
+                            str += "<li>Ha ocurrido un error al guardar el trámite</li>"
+
+                            flash.clase = "alert-error"
+                            str = "<h4>" + str2 + "</h4>"
+                            str += g.renderErrors(bean: tramite)
+                        }
                     }
                 }
             }
