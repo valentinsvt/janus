@@ -358,21 +358,6 @@ class NotaController extends janus.seguridad.Shield {
             return
         }
 
-//        def grabado = ''
-//
-//        if (params.id) {
-//            flash.clase = "alert-success"
-//            flash.message = "Se ha actualizado correctamente la Nota " + notaInstance.descripcion
-//
-//            grabado = '1'
-//
-//        } else {
-//            flash.clase = "alert-success"
-//            flash.message = "Se ha creado correctamente la Nota " + notaInstance.descripcion
-//            grabado = '2'
-//        }
-//        render grabado
-
         if (notaInstance && notaInstance.save(flush: true)) {
 
             render "ok_"+notaInstance?.id

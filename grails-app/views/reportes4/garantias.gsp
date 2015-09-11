@@ -35,7 +35,7 @@
     </div>
 </g:if>
 
-<div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
+<div style="width: 99.7%;height: 550px;float: right;" id="detalle"></div>
 
 <div class="row-fluid">
     <div class="span12">
@@ -60,6 +60,11 @@
 
 <script type="text/javascript">
 
+    $(function () {
+
+        cargarTabla();
+
+    });
 
     function loading(div) {
         y = 0;
@@ -74,6 +79,7 @@
         }, 500);
         return interval
     }
+
     function cargarTabla() {
         var interval = loading("detalle")
         var datos = ""
@@ -88,11 +94,6 @@
     }
 
 
-    $(function () {
-
-        cargarTabla();
-
-    });
 
 
 

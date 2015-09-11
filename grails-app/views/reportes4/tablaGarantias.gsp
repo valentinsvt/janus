@@ -49,10 +49,13 @@
 
 </div>
 
-<div style="width: 1000px; height: 500px; overflow-y:hidden; overflow-x: auto" >
+%{--<div style="width: 1000px; height: 600px; overflow-y:hidden; overflow-x: auto" >--}%
+
+<div class="row-fluid"  style="width: 99.7%;height: 500px;overflow-y: auto;float: right;">
+    <div class="span12">
 
 
-    <div style="width: 1800px; height: 500px; overflow-y: hidden" >
+    <div style="width: 1800px; height: 500px;">
         <table class="table table-bordered table-striped table-condensed table-hover">
             <thead>
             <tr>
@@ -103,7 +106,7 @@
             <tbody id="tabla_material">
 
             %{--<g:if test="${params.criterio || params.fecha}">--}%
-            <g:if test="${params.buscador != 'undefined'}">
+            %{--<g:if test="${params.buscador != 'undefined'}">--}%
 
 
                 <g:each in="${res}" var="cont" status="j">
@@ -123,13 +126,13 @@
                         <td>${cont.dias}</td>
                     </tr>
                 </g:each>
-            </g:if>
+            %{--</g:if>--}%
             </tbody>
         </table>
 
     </div>
 </div>
-
+</div>
 
 
 <script type="text/javascript">
@@ -149,45 +152,27 @@
         });
     });
 
-
-
     $("#regresar").click(function () {
-
         location.href = "${g.createLink(controller: 'reportes', action: 'index')}"
-
     });
 
-
     $("#imprimir").click(function () {
-
-
         location.href="${g.createLink(controller: 'reportes4', action:'reporteGarantias' )}?buscador=" + $("#buscador_gar").val() + "&criterio=" + $("#criterio_gar").val()
-
     });
 
     $("#excel").click(function () {
-
-
         location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelGarantias' )}?buscador=" + $("#buscador_gar").val() + "&criterio=" + $("#criterio_gar").val()
-
     });
 
     $("#buscador_gar").change(function () {
-
         if($(this).val() == 'fcin' || $(this).val() == 'fcfn'){
-
             $("#fecha_gar").removeAttr("disabled")
             $("#criterio_gar").attr("readonly", true).val("")
-
         }
         else {
-
             $("#fecha_gar").attr("disabled", true).val("")
             $("#criterio_gar").attr("readonly", false).val("")
-
         }
-
-
     })
 
 </script>

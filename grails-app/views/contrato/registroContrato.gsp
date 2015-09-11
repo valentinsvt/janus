@@ -590,7 +590,7 @@
 
 
 
-    </div>
+    %{--</div>--}%
 
 
         <div id="borrarContrato">

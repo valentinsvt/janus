@@ -5916,9 +5916,9 @@ class ReportesController {
         sheet.addCell(label);
 
         label = new Label(2, 10, "NOMBRE: " + obra?.nombre, times16format); sheet.addCell(label);
-        label = new Label(2, 11, "DOC. REFERENCIA: " + obra?.oficioIngreso + "  " + obra?.referencia, times16format); sheet.addCell(label);
+        label = new Label(2, 11, "DOC. REFERENCIA: " + (obra?.oficioIngreso ?: '') + "  " + (obra?.referencia ?: ''), times16format); sheet.addCell(label);
 //        label = new Label(2, 12, "REFERENCIA: " + obra?.referencia, times16format); sheet.addCell(label);
-        label = new Label(2, 12, "MEMO CANT. DE OBRA: " + obra?.memoCantidadObra, times16format); sheet.addCell(label);
+        label = new Label(2, 12, "MEMO CANT. DE OBRA: " + (obra?.memoCantidadObra ?: ''), times16format); sheet.addCell(label);
 
 
 

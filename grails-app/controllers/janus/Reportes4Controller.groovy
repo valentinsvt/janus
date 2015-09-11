@@ -2985,7 +2985,6 @@ class Reportes4Controller {
         def cn
 
         params.old = params.criterio
-
         params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
@@ -3098,15 +3097,14 @@ class Reportes4Controller {
 
         params.criterio = params.old
 
-
         sql = sqlBase + filtroBuscador
-
         cn = dbConnectionService.getConnection()
-
         res = cn.rows(sql.toString())
 
-
 //        println(sql)
+
+//        println("res" + res)
+
 
         return [res: res, params:params]
 

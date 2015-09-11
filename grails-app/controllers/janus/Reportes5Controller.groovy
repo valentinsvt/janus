@@ -630,6 +630,14 @@ class Reportes5Controller {
         def banderafp = 0
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor;
+        def nota
+
+
+        if(params.notaPoli != '-1' || params.notaPoli != -1){
+            nota = Nota.get(params.notaPoli)?.texto
+        }else {
+            nota = ''
+        }
 
         if (params.firmasIdFormu.trim().size() > 0) {
             firma = params.firmasIdFormu.split(",")
@@ -845,7 +853,7 @@ class Reportes5Controller {
         label = new Label(1, salto3 + 2, "SUMAN : " + g.formatNumber(number: valorTotalCuadrilla, format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times16format);
         sheet.addCell(label);
 
-        label = new Label(1, salto3 + 4, auxiliarFijo?.notaFormula, times16format); sheet.addCell(label);
+        label = new Label(1, salto3 + 4, nota, times16format); sheet.addCell(label);
 
         label = new Label(1, salto3 + 6, "Fecha de actualización", times16format); sheet.addCell(label);
         label = new Label(2, salto3 + 6, printFecha(obra?.fechaPreciosRubros), times16format); sheet.addCell(label);
@@ -1014,9 +1022,7 @@ class Reportes5Controller {
         }
 
         if (params.sub != '-1'){
-
             subPre= SubPresupuesto.get(params.sub).descripcion
-
         }else {
             subPre= -1
         }
@@ -1077,12 +1083,12 @@ class Reportes5Controller {
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 12)
-        sheet.setColumnView(1, 25)
-        sheet.setColumnView(2, 25)
+        sheet.setColumnView(1, 20)
+        sheet.setColumnView(2, 35)
         sheet.setColumnView(3, 60)
         sheet.setColumnView(4, 25)
-        sheet.setColumnView(5, 25)
-        sheet.setColumnView(6, 25)
+        sheet.setColumnView(5, 15)
+        sheet.setColumnView(6, 15)
         sheet.setColumnView(7, 25)
 
         def label
@@ -1106,7 +1112,7 @@ class Reportes5Controller {
         label = new Label(2, 11, "NOMBRE: " + obra?.nombre, times16format); sheet.addCell(label);
         label = new Label(2, 12, "MEMO CANT. DE OBRA: " + obra?.memoCantidadObra, times16format); sheet.addCell(label);
         label = new Label(2, 13, "CÓDIGO OBRA: " + obra?.codigo, times16format); sheet.addCell(label);
-        label = new Label(2, 14, "DOC. REFERENCIA: " + obra?.oficioIngreso + "  " + obra?.referencia, times16format); sheet.addCell(label);
+        label = new Label(2, 14, "DOC. REFERENCIA: " + (obra?.oficioIngreso ?: '') + "  " + (obra?.referencia ?: ''), times16format); sheet.addCell(label);
 
         //columnas
         label = new Label(0, 16, "N°", times16format); sheet.addCell(label);
@@ -1166,9 +1172,12 @@ class Reportes5Controller {
         number = new Number(11, ultimaFila, totalVae); sheet.addCell(number);
 
         label = new Label(2, ultimaFila+1, "CONDICIONES DEL CONTRATO ", times16format); sheet.addCell(label);
-        label = new Label(2, ultimaFila+2, "Plazo de Ejecución: " + obra?.plazoEjecucionMeses + " mes(meses)", times16format); sheet.addCell(label);
-        label = new Label(2, ultimaFila+3, "Anticipo: " + obra?.porcentajeAnticipo + " %", times16format); sheet.addCell(label);
-        label = new Label(2, ultimaFila+4, "Elaboró: " + (obra?.responsableObra?.titulo ?: '') + (obra?.responsableObra?.nombre ?: '') + ' ' + (obra?.responsableObra?.apellido ?: ''), times16format); sheet.addCell(label);
+        label = new Label(2, ultimaFila+2, "Plazo de Ejecución: ", times16format); sheet.addCell(label);
+        label = new Label(3, ultimaFila+2,  obra?.plazoEjecucionMeses + " mes(meses)", times16format); sheet.addCell(label);
+        label = new Label(2, ultimaFila+3, "Anticipo: ", times16format); sheet.addCell(label);
+        label = new Label(3, ultimaFila+3,  obra?.porcentajeAnticipo + " %", times16format); sheet.addCell(label);
+        label = new Label(2, ultimaFila+4, "Elaboró: ", times16format); sheet.addCell(label);
+        label = new Label(3, ultimaFila+4, (obra?.responsableObra?.titulo ?: '') + (obra?.responsableObra?.nombre ?: '') + ' ' + (obra?.responsableObra?.apellido ?: ''), times16format); sheet.addCell(label);
 
 
 
