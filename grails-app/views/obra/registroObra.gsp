@@ -19,7 +19,8 @@
     <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
     <script src="${resource(dir: 'js/jquery/plugins/editable/bootstrap-editable/js', file: 'bootstrap-editable.js')}"></script>
-    <link href="${resource(dir: 'js/jquery/plugins/editable/bootstrap-editable/css', file: 'bootstrap-editable.css')}" rel="stylesheet"/>
+    <link href="${resource(dir: 'js/jquery/plugins/editable/bootstrap-editable/css', file: 'bootstrap-editable.css')}"
+          rel="stylesheet"/>
 
     <script src="${resource(dir: 'js/jquery/plugins/editable/inputs-ext/coords', file: 'coords.js')}"></script>
     <link href="${resource(dir: 'js/jquery/plugins/editable/inputs-ext/coords', file: 'coords.css')}" rel="stylesheet"/>
@@ -31,15 +32,15 @@
     <style type="text/css">
 
     .formato {
-        font-weight : bolder;
+        font-weight: bolder;
     }
 
     .titulo {
-        font-size : 20px;
+        font-size: 20px;
     }
 
     .error {
-        background : #c17474;
+        background: #c17474;
     }
 
     .mover {
@@ -47,26 +48,26 @@
     }
 
     .editable {
-        border-bottom : 1px dashed;
+        border-bottom: 1px dashed;
     }
 
     .error {
         /*background  : inherit !important;*/
-        background  : #D7D7D7;
-        border      : solid 2px #C17474;
-        font-weight : bold;
-        padding     : 10px;
+        background: #D7D7D7;
+        border: solid 2px #C17474;
+        font-weight: bold;
+        padding: 10px;
     }
 
     .ui-dialog-titlebar-close {
-        background-color : white !important;
-        color            : black;
-        padding          : 2px;
-        padding-top      : -5px !important;
+        background-color: white !important;
+        color: black;
+        padding: 2px;
+        padding-top: -5px !important;
     }
 
     .navbar .nav > li > a {
-        padding : 10px 10px !important;
+        padding: 10px 10px !important;
     }
     </style>
 
@@ -102,77 +103,75 @@
     <button class="btn" id="listaLq"><i class="icon-book"></i> Liquidación</button>
     <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
 
-  <g:if test="${persona?.departamento?.codigo != 'UTFPU'}">
+    <g:if test="${persona?.departamento?.codigo != 'UTFPU'}">
 
+        <g:if test="${obra?.estado != 'R'}">
+            <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null}">
+                <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
+                </button>
+            </g:if>
+        </g:if>
 
-      <g:if test="${obra?.estado != 'R'}">
-          <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
-              <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
+        <g:if test="${obra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id || obra?.id == null}">
+            <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
+        </g:if>
+        <g:if test="${obra?.liquidacion == 0}">
+            <g:if test="${obra?.estado != 'R'}">
+                <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null}">
+                    <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+                </g:if>
+            </g:if>
+
+        </g:if>
+        <g:if test="${obra?.id != null}">
+
+            <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+        </g:if>
+        <g:if test="${obra?.liquidacion == 0}">
+            <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) && Concurso.countByObra(obra) == 0}">
+                <g:if test="${obra?.fechaInicio == null}">
+                    <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+                </g:if>
+            </g:if>
+
+            <g:if test="${obra?.id != null}">
+            %{--<g:if test="${duenoObra == 1 || obra?.id == null}">--}%
+                <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+            %{--</g:if>--}%
+            </g:if>
+
+            <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
+                <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
+                </button>
+            </g:if>
+        </g:if>
+    %{--
+          <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
+              <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
               </button>
           </g:if>
-      </g:if>
+    --}%
+        <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
+            <g:if test="${!obra?.fechaInicio}">
+                <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+                </button>
+            </g:if>
+        </g:if>
+        <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
+            <g:if test="${!obra?.fechaInicio}">
+                <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
+                </button>
+            </g:if>
+            <g:if test="${obra?.memoSif != "" && obra?.estadoSif != 'R'}">
+                <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
+                </button>
+            </g:if>
+        </g:if>
+    </g:if>
+    <g:else>%{-- usuarurio de UTFPU --}%
 
-      <g:if test="${obra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id || obra?.id == null}">
-          <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar </button>
-      </g:if>
-      <g:if test="${obra?.liquidacion == 0}">
-          <g:if test="${obra?.estado != 'R'}">
-              <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null}">
-                  <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
-              </g:if>
-          </g:if>
-
-      </g:if>
-      <g:if test="${obra?.id != null}">
-
-          <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-      </g:if>
-      <g:if test="${obra?.liquidacion == 0}">
-          <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) && Concurso.countByObra(obra) == 0}">
-              <g:if test="${obra?.fechaInicio == null}">
-                  <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
-              </g:if>
-          </g:if>
-
-          <g:if test="${obra?.id != null}">
-              %{--<g:if test="${duenoObra == 1 || obra?.id == null}">--}%
-                  <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
-              %{--</g:if>--}%
-          </g:if>
-
-          <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
-              <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
-              </button>
-          </g:if>
-      </g:if>
-%{--
-      <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
-          <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
-          </button>
-      </g:if>
---}%
-      <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
-          <g:if test="${!obra?.fechaInicio}">
-              <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
-              </button>
-          </g:if>
-      </g:if>
-      <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
-          <g:if test="${!obra?.fechaInicio}">
-              <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
-              </button>
-          </g:if>
-          <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
-              <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
-              </button>
-          </g:if>
-      </g:if>
-  </g:if>
-    <g:else>
-    %{--//botones utfpu--}%
-
-           <g:if test="${obra?.estado != 'R'}">
-            <g:if test="${duenoObra == 1 || obra?.id == null }">
+        <g:if test="${obra?.estado != 'R'}">
+            <g:if test="${duenoObra == 1 || obra?.id == null}">
                 <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
                 </button>
             </g:if>
@@ -202,9 +201,9 @@
             </g:if>
 
             <g:if test="${obra?.id != null}">
-                <g:if test="${duenoObra == 1 || obra?.id == null}">
+                %{--<g:if test="${duenoObra == 1 || obra?.id == null}">--}%
                     <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
-                </g:if>
+                %{--</g:if>--}%
             </g:if>
 
             <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
@@ -213,12 +212,12 @@
             </g:if>
         </g:if>
 
-%{--
-        <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
-            <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
-            </button>
-        </g:if>
---}%
+    %{--
+            <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
+                <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
+                </button>
+            </g:if>
+    --}%
         <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
             <g:if test="${!obra?.fechaInicio}">
                 <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
@@ -230,466 +229,563 @@
                 <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
                 </button>
             </g:if>
-            <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
+            <g:if test="${obra?.memoSif != "" && obra?.estadoSif != 'R'}">
                 <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
                 </button>
             </g:if>
         </g:if>
-
 
     </g:else>
 
 </div>
 
 <g:form class="registroObra" name="frm-registroObra" action="save">
-<g:hiddenField name="crono" value="0"/>
-<fieldset class="borde" style="position: relative;float: left">
-    <g:hiddenField name="id" value="${obra?.id}"/>
-    <div class="span12" style="margin-top: 15px" align="center">
+    <g:hiddenField name="crono" value="0"/>
+    <fieldset class="borde" style="position: relative;float: left">
+        <g:hiddenField name="id" value="${obra?.id}"/>
+        <div class="span12" style="margin-top: 15px" align="center">
 
-        <p class="css-vertical-text">Ingreso</p>
+            <p class="css-vertical-text">Ingreso</p>
 
-        <div class="linea" style="height: 85%;"></div>
+            <div class="linea" style="height: 85%;"></div>
 
-    </div>
+        </div>
 
     %{--${obra?.tipo}--}%
     %{--${session.perfil.codigo}--}%
-    <g:if test="${obra?.tipo == 'D'}">
-        <g:if test="${session.perfil.codigo == 'ADDI'}">
-            <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
-        </g:if>
-        <g:else>
-            <g:if test="${session.perfil.codigo == 'COGS'}">
-                <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">COGESTIÓN</div>
+        <g:if test="${obra?.tipo == 'D'}">
+            <g:if test="${session.perfil.codigo == 'ADDI'}">
+                <div class="span 12"
+                     style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
             </g:if>
             <g:else>
-            <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA / COGESTIÓN</div>
+                <g:if test="${session.perfil.codigo == 'COGS'}">
+                    <div class="span 12"
+                         style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">COGESTIÓN</div>
+                </g:if>
+                <g:else>
+                    <div class="span 12"
+                         style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA / COGESTIÓN</div>
+                </g:else>
             </g:else>
-        </g:else>
-    %{--<g:if test="${session.perfil.codigo == 'ADDI'}">--}%
-    </g:if>
+        %{--<g:if test="${session.perfil.codigo == 'ADDI'}">--}%
+        </g:if>
 
-    <div class="span12" style="margin-top: 0px">
-        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-            <div class="span 1 formato">REQUIRENTE</div>
-            <div class="span3">
-                <g:if test="${obra?.id}">
-                    <g:if test="${duenoObra == 1}">
-                        <elm:select name="departamento.id" from="${Departamento.findAllByRequirente(1,[sort:'direccion'])}" id="departamento" value="${obra?.departamento?.id}"
-                                    optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
+        <div class="span12" style="margin-top: 0px">
+            <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                <div class="span 1 formato">REQUIRENTE</div>
 
+                <div class="span3">
+                    <g:if test="${obra?.id}">
+                        <g:if test="${duenoObra == 1}">
+                            <elm:select name="departamento.id"
+                                        from="${Departamento.findAllByRequirente(1, [sort: 'direccion'])}"
+                                        id="departamento" value="${obra?.departamento?.id}"
+                                        optionKey="id" optionValue="${{ it.direccion.nombre + ' - ' + it.descripcion }}"
+                                        optionClass="${{ it.direccion.id }}" style="width: 670px; margin-left: 40px"/>
+
+                        </g:if>
+                        <g:else>
+                            <g:hiddenField name="departamento.id" id="departamentoDire"
+                                           value="${obra?.departamento?.direccion?.id}"/>
+                            <g:hiddenField name="departamentoId" id="departamentoId" value="${obra?.departamento?.id}"/>
+
+                            <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
+                                         style="width: 670px; margin-left: 40px" readonly="true"
+                                         title="Dirección actual del usuario"/>
+                        </g:else>
                     </g:if>
                     <g:else>
-                        <g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>
-                        <g:hiddenField name="departamentoId" id="departamentoId" value="${obra?.departamento?.id}"/>
-
-                        <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
-                                     style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                        <elm:select name="departamento.id"
+                                    from="${Departamento.findAllByRequirente(1, [sort: 'direccion'])}" id="departamento"
+                                    value="${persona?.departamento?.id}"
+                                    optionKey="id" optionValue="${{ it.direccion.nombre + ' - ' + it.descripcion }}"
+                                    optionClass="${{ it.direccion.id }}" style="width: 670px; margin-left: 40px"/>
                     </g:else>
-                </g:if>
-                <g:else>
-                    <elm:select name="departamento.id" from="${Departamento.findAllByRequirente(1,[sort:'direccion'])}" id="departamento" value="${persona?.departamento?.id}"
-                                optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
-                </g:else>
-            </div>
-        </g:if>
-        <g:else>
-            <div class="span 1 formato">DIRECCIÓN</div>
-            <div class="span3">
-                <g:if test="${obra?.id}">
-                    <g:hiddenField name="departamento.id" id="departamentoObra" value="${obra?.departamento?.id}"/>
-                    %{--<g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>--}%
-                    <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
+                </div>
+            </g:if>
+            <g:else>
+                <div class="span 1 formato">DIRECCIÓN</div>
 
-                    <g:textField name="departamentoText" id="departamentoText" value="${obra?.departamento}"
-                                 style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
-                </g:if>
-                <g:else>
+                <div class="span3">
+                    <g:if test="${obra?.id}">
+                        <g:hiddenField name="departamento.id" id="departamentoObra" value="${obra?.departamento?.id}"/>
+                    %{--<g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>--}%
+                        <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
+
+                        <g:textField name="departamentoText" id="departamentoText" value="${obra?.departamento}"
+                                     style="width: 670px; margin-left: 40px" readonly="true"
+                                     title="Dirección actual del usuario"/>
+                    </g:if>
+                    <g:else>
 
                     %{--<g:hiddenField name="departamento.id" id="departamentoDire" value="${persona?.departamento?.direccion?.id}"/>--}%
-                    <g:hiddenField name="departamento.id" id="departamentoObra" value="${persona?.departamento?.id}"/>
-                    <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
-                    <g:textField name="departamentoText" id="departamentoText" value="${persona?.departamento}"
-                                 style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                        <g:hiddenField name="departamento.id" id="departamentoObra"
+                                       value="${persona?.departamento?.id}"/>
+                        <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
+                        <g:textField name="departamentoText" id="departamentoText" value="${persona?.departamento}"
+                                     style="width: 670px; margin-left: 40px" readonly="true"
+                                     title="Dirección actual del usuario"/>
+                    </g:else>
+                </div>
+            </g:else>
+
+
+            <div class="span1" style="margin-left: 506px; font-weight: bold">ESTADO</div>
+
+            <div class="span1">
+
+                <g:if test="${obra?.estado == null}">
+
+                    <g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"
+                                 style="width: 30px; font-weight: bold" title="Estado de la Obra"/>
+                    <g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>
+
+                </g:if>
+
+                <g:else>
+
+                    <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"
+                                 style="width: 30px; font-weight: bold" title="Estado de la Obra"/>
+                    <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
+
                 </g:else>
             </div>
-        </g:else>
+
+        </div>
+
+        <div class="span12" style="margin-top: 10px">
+
+            <div class="span1 formato" style="width: 200px;">DOCUMENTO DE REFERENCIA</div>
+
+            <div class="span2">
+                <g:textField name="oficioIngreso" class="memo allCaps" value="${obra?.oficioIngreso}" maxlength="20"
+                             style="width: 120px; margin-left: -10px" title="Número del Oficio de Ingreso"/>
+                <g:if test="${obra}">
+                    <a class="btn btn-small btn-info " id="tramites"
+                       href="${g.createLink(action: 'verTramites', controller: 'tramite', id: obra?.oficioIngreso)}"
+                       rel="tooltip" title="Ver tramites" style="margin-top: -10px;">
+                        <i class="icon-file-alt"></i></a>
+                </g:if>
+            </div>
+
+            <div class="span1 formato" style="width: 220px; margin-left: 40px;">MEMORANDO CANTIDAD DE OBRA</div>
+
+            <div class="span2"><g:textField name="memoCantidadObra" class="cantidad allCaps"
+                                            value="${obra?.memoCantidadObra}" maxlength="20"
+                                            style="width: 120px; margin-left: 0px"
+                                            title="Memorandum u oficio de cantidad de obra"/></div>
+
+            <div class="span1 formato" style="margin-left: 20px;">FECHA</div>
+
+            <div class="span2" style="margin-left: 10px">
+                <elm:datepicker name="fechaCreacionObra" class="fechaCreacionObra datepicker input-small required"
+                                value="${obra?.fechaCreacionObra}" title="Fecha Registro de la Obra"/>
+            </div>
+
+        </div>
+
+    </fieldset>
+    <fieldset class="borde" style="position: relative;float: left">
+        <g:if test="${obra?.tipo == 'D'}">
+            <div class="span12" style="margin-top: 15px" align="center">
+                <p class="css-vertical-text">Administración Directa</p>
+
+                <div class="linea" style="height: 90%;"></div>
+            </div>
+        </g:if>
+        <div class="span12" style="margin-top: 10px">
+            <div class="span1">Código:</div>
+
+            <g:if test="${obra?.codigo != null}">
+                <div class="span3"><g:textField name="codigo" class="codigo required allCaps" value="${obra?.codigo}"
+                                                readonly="readonly" maxlength="20" title="Código de la Obra"/></div>
+            </g:if>
+            <g:else>
+                <div class="span3"><g:textField name="codigo" class="codigo required allCaps" value="${obra?.codigo}"
+                                                maxlength="20" title="Código de la Obra"/></div>
+            </g:else>
+
+            <div class="span1" style="margin-left: -20px;">Nombre</div>
+
+            <div class="span6"><g:textField name="nombre" class="nombre required"
+                                            style="margin-left: -40px; width: 700px" value="${obra?.nombre}"
+                                            maxlength="127" title="Nombre de la Obra"/></div>
+        </div>
+
+        <div class="span12">
+            <div class="span1">Programa</div>
+
+            <div class="span3">
+            %{--<g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list([sort: 'descripcion'])}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>--}%
+
+            %{--<g:if test="${programa != -1}">--}%
+
+            %{--<g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>--}%
+            %{--<a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">--}%
+            %{--<i class="icon-plus-sign"></i>--}%
+            %{--</a>--}%
+
+            %{--</g:if>--}%
+            %{--<g:else>--}%
+
+            %{--<g:textField name="programacion" class="programacion" value="${obra?.programacion?.descripcion}" readonly="true"/>--}%
+            %{--</g:else>--}%
+
+            %{--${persona?.departamento?.codigo}--}%
+
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+
+                    <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}"
+                              value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id"
+                              title="Programa"/>
+                    <a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa"
+                       style="margin-top: -10px;">
+                        <i class="icon-plus-sign"></i>
+                    </a>
+
+                </g:if>
+                <g:else>
+                    <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}"
+                              value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id"
+                              title="Programa"/>
+                </g:else>
+
+            </div>
+
+            <div class="span1" style="margin-left: 0;">Tipo</div>
+
+            <div class="span3" id="divTipoObra">
+            %{--<g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>--}%
+
+            %{--<g:if test="${tipoObra != -1}">--}%
+            %{--<g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>--}%
+            %{--<a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">--}%
+            %{--<i class="icon-plus-sign"></i>--}%
+            %{--</a>--}%
+            %{--</g:if>--}%
+            %{--<g:else>--}%
+            %{--<g:textField name="tipoObra" class="tipoObra" value="${obra?.tipoObjetivo?.descripcion}"  style="margin-left: -60px; width: 280px" title="Tipo de Obra" readonly="true"/>--}%
+            %{--</g:else>--}%
+
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}"
+                              value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id"
+                              style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
+                    <a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo"
+                       style="margin-top: -10px;">
+                        <i class="icon-plus-sign"></i>
+                    </a>
+                </g:if>
+                <g:else>
+                    <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}"
+                              value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id"
+                              style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
+                </g:else>
+
+            </div>
 
 
-        <div class="span1" style="margin-left: 506px; font-weight: bold">ESTADO</div>
+            <div class="span1" style="margin-left: 10px">Clase</div>
 
-        <div class="span1">
+            <div class="span3">
+            %{--<g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list([sort: 'descripcion'])}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>--}%
 
-            <g:if test="${obra?.estado == null}">
+            %{--<g:if  test="${claseObra != -1}">--}%
+            %{--<g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>--}%
+            %{--<a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">--}%
+            %{--<i class="icon-plus-sign"></i>--}%
+            %{--</a>--}%
+            %{--</g:if>--}%
+            %{--<g:else>--}%
+            %{--<g:textField name="claseObra" class="claseObra" value="${obra?.claseObra?.descripcion}" style="margin-left: -35px; width: 230px" title="Clase de Obra" readonly="true"/>--}%
+            %{--</g:else>--}%
 
-                <g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true" style="width: 30px; font-weight: bold" title="Estado de la Obra"/>
-                <g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}"
+                              value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id"
+                              style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
+                    <a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase"
+                       style="margin-top: -10px;">
+                        <i class="icon-plus-sign"></i>
+                    </a>
+                </g:if>
+                <g:else>
+                    <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}"
+                              value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id"
+                              style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
 
+                </g:else>
+
+            </div>
+        </div>
+
+
+        <div class="span12">
+            <div class="span1">Descripción de la Obra</div>
+
+            <div class="span6"><g:textArea name="descripcion" rows="5" cols="5" class="required"
+                                           style="width: 1007px; height: 40px; resize: none" maxlength="511"
+                                           value="${obra?.descripcion}" title="Descripción"/></div>
+        </div>
+
+        <div class="span12">
+            <div class="span3" style="width: 185px;">Referencia (Gestión/Disposición):</div>
+
+            <div class="span5"><g:textField name="referencia" class="referencia"
+                                            style="width: 470px; margin-left: -20px" value="${obra?.referencia}"
+                                            maxlength="127"
+                                            title="Referencia de la disposición para realizar la Obra"/></div>
+
+            <div class="span1" style="width: 120px;">Longitud de la vía(m):</div>
+
+            <div class="span1"><g:textField name="longitudVia" class="referencia number" type="number"
+                                            style="width: 60px; margin-left: -20px" maxlength="9"
+                                            value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}"
+                                            title="Longitud de la vía en metros. Sólo obras viales"/></div>
+
+            <div class="span1" style="width: 110px; margin-left: -10px">Ancho de la vía(m):</div>
+
+            <div class="span1"><g:textField name="anchoVia" class="referencia number" type="number"
+                                            style="width: 50px; margin-left: -10px" maxlength="4"
+                                            value="${g.formatNumber(number: obra?.anchoVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}"
+                                            title="Ancho de la vía en metros. Sólo obras viales"/></div>
+        </div>
+
+        <div class="span12" id="filaPersonas">
+        </div>
+
+        <div class="span12">
+
+            <div class="span1" style="margin-top: 15px; width: 90px;"><button class="btn btn-buscar btn-info"
+                                                                              id="btn-buscar"><i
+                        class="icon-globe"></i> Buscar
+            </button>
+            </div>
+
+            <div class="span2" style="width: 220px; margin-left: 10px;">Cantón
+            <g:hiddenField name="canton.id" id="hiddenCanton" value="${obra?.comunidad?.parroquia?.canton?.id}"/>
+            %{--<div class="span2"><g:textField name="cantonkk.id" id="cantNombre" class="canton required error" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" readonly="true" title="Cantón"/></div>--}%
+            <g:textField style="width: 210px;" name="cantonkk.id" id="cantNombre" class="canton required"
+                         value="${obra?.comunidad?.parroquia?.canton?.nombre}" readonly="true" title="Cantón"/>
+            </div>
+
+            <div class="span2" style="width: 200px; margin-left: 10px;">Parroquia
+            <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
+            %{--<div class="span2"><g:textField name="parroquiakk.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" readonly="true" title="Parroquia"/>--}%
+            <g:textField style="width: 190px;" name="parroquiakk.id" id="parrNombre" class="parroquia required"
+                         value="${obra?.comunidad?.parroquia?.nombre}" readonly="true" title="Parroquia"/>
+            </div>
+
+            <div class="span2" style="width: 200px; margin-left: 10px;">Comunidad
+            <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
+            %{--<div class="span2"><g:textField name="comunidadkk.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" style="width: 175px" readonly="true" title="Comunidad"/>--}%
+            <g:textField style="width: 190px;" name="comunidadkk.id" id="comuNombre" class="comunidad required"
+                         value="${obra?.comunidad?.nombre}" readonly="true" title="Comunidad"/>
+            </div>
+
+            <div class="span2" style="width: 355px; margin-left: 10px;">Sitio
+            %{--<div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 200px; margin-left: 0px;" maxlength="63" title="Sitio urbano o rural"/></div>--}%
+            <g:textField style="width: 355px;margin-left:0px;" name="sitio" class="sitio" value="${obra?.sitio}" maxlength="63" title="Sitio urbano o rural"/>
+            </div>
+
+        </div>
+
+        <div class="span12" style="margin-top: 10px;">
+
+            <div class="span2">Localidad</div>
+
+            <div class="span4" style="margin-left: -70px; width: 480px;"><g:textField style="width: 440px;"
+                                                                                      name="barrio" class="barrio"
+                                                                                      value="${obra?.barrio}"
+                                                                                      maxlength="127"
+                                                                                      title="Barrio, asentamiento, recinto o localidad"/></div>
+
+            <div class="span1" style="margin-left: 40px; width: 50px;">Anticipo</div>
+
+            <div class="span2" style="margin-left: 10px; width: 120px;"><g:textField name="porcentajeAnticipo"
+                                                                                     type="number"
+                                                                                     class="anticipo number required"
+                                                                                     style="width: 40px"
+                                                                                     value="${obra?.porcentajeAnticipo}"
+                                                                                     maxlength="3"
+                                                                                     title="Porcentaje de Anticipo"/> %</div>
+
+
+            <g:if test="${matrizOk}">
+                <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null}">
+                    <div class="span1" style="margin-left: 0px; width: 100px;"><g:link action="calculaPlazo"
+                                                                                       id="${obra.id}"
+                                                                                       style="margin-left: 0px;"
+                                                                                       class="btn btn-info">Calcular</g:link></div>
+                </g:if>
             </g:if>
 
+            <div class="span1" style="margin-left: 10px; width:50px;">Plazo</div>
+
+            <g:if test="${obra?.plazoEjecucionMeses == null}">
+                <div class="span2" style="margin-left: -10px; width: 130px;">
+                    <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px"
+                                 data-original="${obra?.plazoEjecucionMeses}"
+                                 maxlength="3" type="number" value="${'1'}" title="Plazo de ejecución en meses"/> Meses
+                </div>
+            </g:if>
             <g:else>
-
-                <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true" style="width: 30px; font-weight: bold" title="Estado de la Obra"/>
-                <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
-
+                <div class="span2" style="margin-left: -10px; width: 120px;">
+                    <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px"
+                                 data-original="${obra?.plazoEjecucionMeses}"
+                                 maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}"
+                                 title="Plazo de ejecución en meses"/> Meses
+                </div>
+            </g:else>
+            <g:if test="${obra?.plazoEjecucionDias == null}">
+                <div class="span2" style="margin-left: -30px; width: 100px;">
+                    <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29"
+                                 style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
+                                 maxlength="2" type="number" value="${'0'}" title="Plazo de ejecución en días"/> Días
+                </div>
+            </g:if>
+            <g:else>
+                <div class="span2" style="margin-left: -30px; width: 100px;">
+                    <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29"
+                                 style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
+                                 maxlength="2" type="number" value="${obra?.plazoEjecucionDias}"
+                                 title="Plazo de ejecución en días"/> Días
+                </div>
             </g:else>
         </div>
 
-    </div>
+        <div class="span12">
+            <div class="span1">Observaciones</div>
 
-    <div class="span12" style="margin-top: 10px">
+            <div class="span6" style="width: 400px;"><g:textField name="observaciones" class="observaciones"
+                                                                  style="width: 400px;" value="${obra?.observaciones}"
+                                                                  maxlength="127" title="Observaciones"/></div>
+            %{--</div>--}%
+            %{--<div class="span12">--}%
+            <div class="span1" style="width: 100px;">Anexos y planos:</div>
 
-        <div class="span1 formato" style="width: 200px;">DOCUMENTO DE REFERENCIA</div>
-
-        <div class="span2">
-            <g:textField name="oficioIngreso" class="memo allCaps" value="${obra?.oficioIngreso}" maxlength="20" style="width: 120px; margin-left: -10px" title="Número del Oficio de Ingreso"/>
-            <g:if test="${obra}">
-                <a class="btn btn-small btn-info " id="tramites" href="${g.createLink(action: 'verTramites', controller: 'tramite', id: obra?.oficioIngreso)}" rel="tooltip" title="Ver tramites" style="margin-top: -10px;">
-                    <i class="icon-file-alt"></i></a>
-            </g:if>
+            <div class="span6" style="width: 400px;"><g:textField name="anexos" class="referencia"
+                                                                  style="width: 475px; margin-left: -30px;"
+                                                                  value="${obra?.anexos}" maxlength="127"
+                                                                  title="Detalle de anexos y planos ingresados en la biblioteca de la obra"/></div>
         </div>
 
-        <div class="span1 formato" style="width: 220px; margin-left: 40px;">MEMORANDO CANTIDAD DE OBRA</div>
+        <div class="span12">
 
-        <div class="span2"><g:textField name="memoCantidadObra" class="cantidad allCaps" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 120px; margin-left: 0px" title="Memorandum u oficio de cantidad de obra"/></div>
+            <div class="span2" style="width: 200px;">Lista de precios: MO y Equipos</div>
+            %{--todo esto es un combo--}%
+            %{--<div class="span2" style="margin-right: 70px"><g:textField name="lugar.id" class="lugar" value="${obra?.lugar?.id}" optionKey="id"/></div>--}%
 
-        <div class="span1 formato" style="margin-left: 20px;">FECHA</div>
-
-        <div class="span2" style="margin-left: 10px"><elm:datepicker name="fechaCreacionObra" class="fechaCreacionObra datepicker input-small required" value="${obra?.fechaCreacionObra}" title="Fecha Registro de la Obra"/></div>
-
-    </div>
-
-</fieldset>
-<fieldset class="borde" style="position: relative;float: left">
-<g:if test="${obra?.tipo == 'D'}">
-    <div class="span12" style="margin-top: 15px" align="center">
-        <p class="css-vertical-text">Administración Directa</p>
-
-        <div class="linea" style="height: 90%;"></div>
-    </div>
-</g:if>
-<div class="span12" style="margin-top: 10px">
-    <div class="span1">Código:</div>
-
-    <g:if test="${obra?.codigo != null}">
-        <div class="span3"><g:textField name="codigo" class="codigo required allCaps" value="${obra?.codigo}" readonly="readonly" maxlength="20" title="Código de la Obra"/></div>
-    </g:if>
-    <g:else>
-        <div class="span3"><g:textField name="codigo" class="codigo required allCaps" value="${obra?.codigo}" maxlength="20" title="Código de la Obra"/></div>
-    </g:else>
-
-    <div class="span1" style="margin-left: -20px;">Nombre</div>
-
-    <div class="span6"><g:textField name="nombre" class="nombre required" style="margin-left: -40px; width: 700px" value="${obra?.nombre}" maxlength="127" title="Nombre de la Obra"/></div>
-</div>
-
-<div class="span12">
-    <div class="span1">Programa</div>
-
-    <div class="span3">
-    %{--<g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list([sort: 'descripcion'])}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>--}%
-
-    %{--<g:if test="${programa != -1}">--}%
-
-    %{--<g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>--}%
-    %{--<a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">--}%
-    %{--<i class="icon-plus-sign"></i>--}%
-    %{--</a>--}%
-
-    %{--</g:if>--}%
-    %{--<g:else>--}%
-
-    %{--<g:textField name="programacion" class="programacion" value="${obra?.programacion?.descripcion}" readonly="true"/>--}%
-    %{--</g:else>--}%
-
-        %{--${persona?.departamento?.codigo}--}%
-
-        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-
-            <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
-            <a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">
-                <i class="icon-plus-sign"></i>
-            </a>
-
-        </g:if>
-        <g:else>
-            <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
-        </g:else>
+            <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 300px;"><g:select
+                    style="width: 300px;" name="listaManoObra.id"
+                    from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id"
+                    optionValue="descripcion" value="${obra?.listaManoObra?.id}"
+                    title="Precios para Mano de Obra y Equipos"/></div>
 
 
+            <div class="span1">Fecha</div>
 
-    </div>
+            <div class="span2" style="margin-left: 0;"><elm:datepicker name="fechaPreciosRubros"
+                                                                       class="fechaPreciosRubros datepicker input-small required"
+                                                                       value="${obra?.fechaPreciosRubros ?: fcha}"
+                                                                       title="Fecha Precios"/></div>
 
-    <div class="span1" style="margin-left: 0;">Tipo</div>
+            <div class="span1" style="margin-left: -20px">Coordenadas WGS84</div>
 
-    <div class="span3" id="divTipoObra">
-    %{--<g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>--}%
+            <div class="span2">
+                <g:set var="coords" value="${obra?.coordenadas}"/>
+                <g:if test="${obra?.id == null || coords == null || coords?.trim() == ''}">
+                    <g:set var="coords" value="${'S 0 12.5999999 W 78 31.194'}"/>
+                </g:if>
+                <g:hiddenField name="coordenadas" value="${coords}"/>
+                <a href="#" id="coords" class="editable">
+                    ${coords}
+                </a>
+                <g:set var="coordsParts" value="${coords.split(' ')}"/>
+            </div>
+            %{--<g:if test="${obra?.id != null}">--}%
 
-    %{--<g:if test="${tipoObra != -1}">--}%
-    %{--<g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>--}%
-    %{--<a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">--}%
-    %{--<i class="icon-plus-sign"></i>--}%
-    %{--</a>--}%
-    %{--</g:if>--}%
-    %{--<g:else>--}%
-    %{--<g:textField name="tipoObra" class="tipoObra" value="${obra?.tipoObjetivo?.descripcion}"  style="margin-left: -60px; width: 280px" title="Tipo de Obra" readonly="true"/>--}%
-    %{--</g:else>--}%
+            %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
 
-        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-            <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
-            <a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">
-                <i class="icon-plus-sign"></i>
-            </a>
-        </g:if>
-        <g:else>
-            <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
-        </g:else>
+            %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number: obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Latitud de la Obra"/></div>--}%
 
-    </div>
+            %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
 
+            %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number: obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Longitud de la Obra"/></div>--}%
 
-    <div class="span1" style="margin-left: 10px">Clase</div>
+            %{--</g:if>--}%
+            %{--<g:else>--}%
 
-    <div class="span3">
-    %{--<g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list([sort: 'descripcion'])}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>--}%
+            %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
 
-    %{--<g:if  test="${claseObra != -1}">--}%
-    %{--<g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>--}%
-    %{--<a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">--}%
-    %{--<i class="icon-plus-sign"></i>--}%
-    %{--</a>--}%
-    %{--</g:if>--}%
-    %{--<g:else>--}%
-    %{--<g:textField name="claseObra" class="claseObra" value="${obra?.claseObra?.descripcion}" style="margin-left: -35px; width: 230px" title="Clase de Obra" readonly="true"/>--}%
-    %{--</g:else>--}%
+            %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}" style="width: 100px" maxlength="11" title="Latitud de la Obra"/></div>--}%
 
-        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-            <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
-            <a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">
-                <i class="icon-plus-sign"></i>
-            </a>
-        </g:if>
-        <g:else>
-            <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
+            %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
 
-        </g:else>
+            %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11" title="Longitud de la Obra"/></div>--}%
 
-    </div>
-</div>
+            %{--</g:else>--}%
 
-
-<div class="span12">
-    <div class="span1">Descripción de la Obra</div>
-
-    <div class="span6"><g:textArea name="descripcion" rows="5" cols="5" class="required"
-                                   style="width: 1007px; height: 40px; resize: none" maxlength="511" value="${obra?.descripcion}" title="Descripción"/></div>
-</div>
-
-<div class="span12">
-    <div class="span3" style="width: 185px;">Referencia (Gestión/Disposición):</div>
-
-    <div class="span5"><g:textField name="referencia" class="referencia" style="width: 470px; margin-left: -20px" value="${obra?.referencia}" maxlength="127" title="Referencia de la disposición para realizar la Obra"/></div>
-
-    <div class="span1" style="width: 120px;">Longitud de la vía(m):</div>
-
-    <div class="span1"><g:textField name="longitudVia" class="referencia number" type="number" style="width: 60px; margin-left: -20px" maxlength="9" value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Longitud de la vía en metros. Sólo obras viales"/></div>
-
-    <div class="span1" style="width: 110px; margin-left: -10px">Ancho de la vía(m):</div>
-
-    <div class="span1"><g:textField name="anchoVia" class="referencia number" type="number" style="width: 50px; margin-left: -10px" maxlength="4" value="${g.formatNumber(number: obra?.anchoVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Ancho de la vía en metros. Sólo obras viales"/></div>
-</div>
-
-<div class="span12" id="filaPersonas">
-</div>
-
-<div class="span12">
-
-    <div class="span1" style="margin-top: 15px; width: 90px;"><button class="btn btn-buscar btn-info" id="btn-buscar"><i class="icon-globe"></i> Buscar
-    </button>
-    </div>
-
-    <div class="span2" style="width: 220px; margin-left: 10px;">Cantón
-    <g:hiddenField name="canton.id" id="hiddenCanton" value="${obra?.comunidad?.parroquia?.canton?.id}"/>
-    %{--<div class="span2"><g:textField name="cantonkk.id" id="cantNombre" class="canton required error" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" readonly="true" title="Cantón"/></div>--}%
-    <g:textField style="width: 210px;" name="cantonkk.id" id="cantNombre" class="canton required" value="${obra?.comunidad?.parroquia?.canton?.nombre}" readonly="true" title="Cantón"/>
-    </div>
-
-    <div class="span2" style="width: 200px; margin-left: 10px;">Parroquia
-    <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
-    %{--<div class="span2"><g:textField name="parroquiakk.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" readonly="true" title="Parroquia"/>--}%
-    <g:textField style="width: 190px;" name="parroquiakk.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" readonly="true" title="Parroquia"/>
-    </div>
-
-    <div class="span2" style="width: 200px; margin-left: 10px;">Comunidad
-    <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
-    %{--<div class="span2"><g:textField name="comunidadkk.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" style="width: 175px" readonly="true" title="Comunidad"/>--}%
-    <g:textField style="width: 190px;" name="comunidadkk.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" readonly="true" title="Comunidad"/>
-    </div>
-
-    <div class="span2" style="width: 355px; margin-left: 10px;">Sitio
-    %{--<div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 200px; margin-left: 0px;" maxlength="63" title="Sitio urbano o rural"/></div>--}%
-    <g:textField style="width: 355px;" name="sitio" class="sitio" value="${obra?.sitio}" margin-left: 0px;" maxlength="63" title="Sitio urbano o rural"/>
-    </div>
-
-</div>
-
-<div class="span12" style="margin-top: 10px;">
-
-    <div class="span2">Localidad</div>
-
-    <div class="span4" style="margin-left: -70px; width: 480px;"><g:textField style="width: 440px;" name="barrio" class="barrio" value="${obra?.barrio}" maxlength="127" title="Barrio, asentamiento, recinto o localidad"/></div>
-
-    <div class="span1" style="margin-left: 40px; width: 50px;">Anticipo</div>
-
-    <div class="span2" style="margin-left: 10px; width: 120px;"><g:textField name="porcentajeAnticipo" type="number" class="anticipo number required" style="width: 40px" value="${obra?.porcentajeAnticipo}" maxlength="3" title="Porcentaje de Anticipo"/> %</div>
-
-
-    <g:if test="${matrizOk}">
-        <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
-        <div class="span1" style="margin-left: 0px; width: 100px;"><g:link action="calculaPlazo" id="${obra.id}" style="margin-left: 0px;" class="btn btn-info">Calcular</g:link></div>
-        </g:if>
-    </g:if>
-
-    <div class="span1" style="margin-left: 10px; width:50px;">Plazo</div>
-
-    <g:if test="${obra?.plazoEjecucionMeses == null}">
-        <div class="span2" style="margin-left: -10px; width: 130px;">
-            <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
-                         maxlength="3" type="number" value="${'1'}" title="Plazo de ejecución en meses"/> Meses
         </div>
-    </g:if>
-    <g:else>
-        <div class="span2" style="margin-left: -10px; width: 120px;">
-            <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
-                         maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}" title="Plazo de ejecución en meses"/> Meses
+
+    </fieldset>
+
+    <fieldset class="borde" style="position: relative;float: left">
+
+        <div class="span12" style="margin-top: 10px">
+
+            <p class="css-vertical-text">Salida</p>
+
+            <div class="linea" style="height: 85%;"></div>
+
         </div>
-    </g:else>
-    <g:if test="${obra?.plazoEjecucionDias == null}">
-        <div class="span2" style="margin-left: -30px; width: 100px;">
-            <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
-                         maxlength="2" type="number" value="${'0'}" title="Plazo de ejecución en días"/> Días
-        </div>
-    </g:if>
-    <g:else>
-        <div class="span2" style="margin-left: -30px; width: 100px;">
-            <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
-                         maxlength="2" type="number" value="${obra?.plazoEjecucionDias}" title="Plazo de ejecución en días"/> Días
-        </div>
-    </g:else>
-</div>
-
-<div class="span12">
-    <div class="span1">Observaciones</div>
-
-    <div class="span6" style="width: 400px;"><g:textField name="observaciones" class="observaciones" style="width: 400px;" value="${obra?.observaciones}" maxlength="127" title="Observaciones"/></div>
-    %{--</div>--}%
-    %{--<div class="span12">--}%
-    <div class="span1" style="width: 100px;">Anexos y planos:</div>
-
-    <div class="span6" style="width: 400px;"><g:textField name="anexos" class="referencia" style="width: 475px; margin-left: -30px;" value="${obra?.anexos}" maxlength="127" title="Detalle de anexos y planos ingresados en la biblioteca de la obra"/></div>
-</div>
-
-<div class="span12">
-
-    <div class="span2" style="width: 200px;">Lista de precios: MO y Equipos</div>
-    %{--todo esto es un combo--}%
-    %{--<div class="span2" style="margin-right: 70px"><g:textField name="lugar.id" class="lugar" value="${obra?.lugar?.id}" optionKey="id"/></div>--}%
-
-    <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 300px;"><g:select style="width: 300px;" name="listaManoObra.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" value="${obra?.listaManoObra?.id}" title="Precios para Mano de Obra y Equipos"/></div>
 
 
-    <div class="span1">Fecha</div>
-
-    <div class="span2" style="margin-left: 0;"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small required" value="${obra?.fechaPreciosRubros?:fcha}" title="Fecha Precios"/></div>
-
-    <div class="span1" style="margin-left: -20px">Coordenadas WGS84</div>
-
-    <div class="span2">
-        <g:set var="coords" value="${obra?.coordenadas}"/>
-        <g:if test="${obra?.id == null || coords == null || coords?.trim() == ''}">
-            <g:set var="coords" value="${'S 0 12.5999999 W 78 31.194'}"/>
-        </g:if>
-        <g:hiddenField name="coordenadas" value="${coords}"/>
-        <a href="#" id="coords" class="editable">
-            ${coords}
-        </a>
-        <g:set var="coordsParts" value="${coords.split(' ')}"/>
-    </div>
-    %{--<g:if test="${obra?.id != null}">--}%
-
-    %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
-
-    %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number: obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Latitud de la Obra"/></div>--}%
-
-    %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
-
-    %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number: obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Longitud de la Obra"/></div>--}%
-
-    %{--</g:if>--}%
-    %{--<g:else>--}%
-
-    %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
-
-    %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}" style="width: 100px" maxlength="11" title="Latitud de la Obra"/></div>--}%
-
-    %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
-
-    %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11" title="Longitud de la Obra"/></div>--}%
-
-    %{--</g:else>--}%
-
-</div>
-
-</fieldset>
-
-<fieldset class="borde" style="position: relative;float: left">
-
-    <div class="span12" style="margin-top: 10px">
-
-        <p class="css-vertical-text">Salida</p>
-
-        <div class="linea" style="height: 85%;"></div>
-
-    </div>
-
-
-    %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
+        %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
         %{--<div class="span12" style="margin-top: 10px" id="dirSalida">--}%
 
         %{--</div>--}%
-    %{--</g:if>--}%
-    %{--<g:else>--}%
+        %{--</g:if>--}%
+        %{--<g:else>--}%
         <div class="span12" style="margin-top: 10px" id="dirSalida">
             <div class="span2 formato" style="width: 230px;">Destino: Dirección
-            <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+            <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id"
+                      optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos"
+                      noSelection="['null': 'Seleccione ...']"/>
 
             </div>
 
             <div class="span2 formato" style="width: 230px;">Destino: Coordinación
-            <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+            <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id"
+                      optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos"
+                      noSelection="['null': 'Seleccione ...']"/>
             </div>
 
             <div class="span1 formato" style="width: 120px;margin-left: 30px;">Informe
-            <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
+            <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20"
+                         title="Número Oficio de Salida" style="width: 120px;"/>
             </div>
 
             <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
-            <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
+            <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20"
+                         title="Memorandum de salida" style="width: 120px;"/>
             </div>
 
             <g:if test="${obra?.id && obra?.tipo != 'D'}">
                 <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                    <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
-                        %{--<div style="font-weight: normal;">${obra?.formulaPolinomica}</div>--}%
-                        <g:textField name="formulaPolinomica" class="span2 allCaps"  maxlength="20" title="Fórmula Polinómica" style="width: 120px;" value="${obra?.formulaPolinomica}"/>
-                    </g:if>
-                    <g:else>
-                        %{--<a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">--}%
-                            %{--Generar--}%
-                        %{--</a>--}%
-                        <g:textField name="formulaPolinomica" class="span2 allCaps"  maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
-                    </g:else>
+                <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
+                %{--<div style="font-weight: normal;">${obra?.formulaPolinomica}</div>--}%
+                    <g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"
+                                 title="Fórmula Polinómica" style="width: 120px;" value="${obra?.formulaPolinomica}"/>
+                </g:if>
+                <g:else>
+                %{--<a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">--}%
+                %{--Generar--}%
+                %{--</a>--}%
+                    <g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"
+                                 title="Fórmula Polinómica" style="width: 120px;"/>
+                </g:else>
                 </div>
             </g:if>
 
@@ -698,19 +794,19 @@
                             value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
             </div>
         </div>
-    %{--</g:else>--}%
+        %{--</g:else>--}%
 
-    <div class="span12" style="margin-top: 10px">
+        <div class="span12" style="margin-top: 10px">
 
-        %{--<div class="span1 formato">DESTINO</div>--}%
+            %{--<div class="span1 formato">DESTINO</div>--}%
 
-        %{--<div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>--}%
-        %{--<div class="span3"><g:select name="departamento.id" class="departamento" value="${obra?.departamento?.id}" from="${janus.Departamento?.list()}"--}%
-        %{--optionKey="id" optionValue="descripcion" style="width: 350px"/></div>--}%
+            %{--<div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>--}%
+            %{--<div class="span3"><g:select name="departamento.id" class="departamento" value="${obra?.departamento?.id}" from="${janus.Departamento?.list()}"--}%
+            %{--optionKey="id" optionValue="descripcion" style="width: 350px"/></div>--}%
 
-    </div>
+        </div>
 
-</fieldset>
+    </fieldset>
 
 </g:form>
 
@@ -808,7 +904,8 @@
 
     <fieldset>
         <div class="span3">
-            Por favor ingrese un nuevo código para la copia de la obra: <div style="font-weight: bold">${obra?.nombre}</div>
+            Por favor ingrese un nuevo código para la copia de la obra: <div
+                style="font-weight: bold">${obra?.nombre}</div>
         </div>
 
         <div class="span3" style="margin-top: 10px">
@@ -828,7 +925,8 @@
 
         <div class="span3" style="margin-top: 10px">
             <div class="span3">
-                <g:select name="oferenteCopia" from="${janus.Persona.findAll('from Persona where departamento=13')}" optionKey="id" optionValue="${{
+                <g:select name="oferenteCopia" from="${janus.Persona.findAll('from Persona where departamento=13')}"
+                          optionKey="id" optionValue="${{
                     it.nombre + ' ' + it.apellido
                 }}"/>
                 %{--<g:select name="oferenteCopia" from="${janus.Persona.list()}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>--}%
@@ -859,26 +957,29 @@
 
                 <ul class="nav">
                     <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
-                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra
+                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i
+                            class="icon-list-alt"></i>Vol. Obra
                     </a></li>
                     <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
                     <li>
-%{--
-                        <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btnFormula" params="[obra: obra?.id]" title="Coeficientes">
-                            Fórmula Pol.
-                        </g:link>
---}%
+                        %{--
+                                                <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btnFormula" params="[obra: obra?.id]" title="Coeficientes">
+                                                    Fórmula Pol.
+                                                </g:link>
+                        --}%
                         <a href="#" id="btnFormula"><i class="icon-money"></i>Fórmula Pol.</a>
 
-                   </li>
+                    </li>
                     %{--<li><a href="#">FP Liquidación</a></li>--}%
                     <li><a href="#" id="btnRubros"><i class="icon-money"></i>Rubros</a></li>
                     <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
                     %{--<li><a href="${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>--}%
-                    <li><a href="${g.createLink(controller: 'cronograma', action: 'cronogramaObra', id: obra?.id)}"><i class="icon-calendar"></i>Cronograma
+                    <li><a href="${g.createLink(controller: 'cronograma', action: 'cronogramaObra', id: obra?.id)}"><i
+                            class="icon-calendar"></i>Cronograma
                     </a></li>
                     <li>
-                        <g:link controller="variables" action="composicion" id="${obra?.id}"><i class="icon-paste"></i>Composición
+                        <g:link controller="variables" action="composicion" id="${obra?.id}"><i
+                                class="icon-paste"></i>Composición
                         </g:link>
                     </li>
                     <li>
@@ -894,14 +995,16 @@
                     </li>
                     <g:if test="${obra?.tipo != 'D'}">
                         <li>
-                            <g:link controller="variables" action="composicionVae" id="${obra?.id}"><i class="icon-paste"></i>Fijar VAE
+                            <g:link controller="variables" action="composicionVae" id="${obra?.id}"><i
+                                    class="icon-paste"></i>Fijar VAE
                             </g:link>
                         </li>
                     </g:if>
 
                     <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D' && obra?.fechaInicio}">
                         <li>
-                            <a href="${g.createLink(controller: 'planillasAdmin', action: 'list', id: obra?.id)}" id="btnPlanillas">
+                            <a href="${g.createLink(controller: 'planillasAdmin', action: 'list', id: obra?.id)}"
+                               id="btnPlanillas">
                                 <i class="icon-file-alt"></i>Planillas
                             </a>
                         </li>
@@ -958,7 +1061,8 @@
     </div>
 
     <div class="modal-body" id="modalBody">
-        <bsc:buscador name="obra?.buscador.id" value="" accion="buscarObra" controlador="obra" campos="${campos}" label="Obra" tipo="lista"/>
+        <bsc:buscador name="obra?.buscador.id" value="" accion="buscarObra" controlador="obra" campos="${campos}"
+                      label="Obra" tipo="lista"/>
     </div>
 
     <div class="modal-footer" id="modalFooter_busqueda">
@@ -987,13 +1091,13 @@
                     </g:if>
                 </g:else>
 
-                %{--${sbprMF}--}%
+            %{--${sbprMF}--}%
                 <span style="margin-left: 100px;">Generada para:</span>
                 <g:select name="matriz_gen" from="${sbprMF}" optionKey="key" optionValue="value"
                           style="margin-right: 20px; width: 400px"></g:select>
 
                 %{--<g:each var="sb" in="${sbprMF}" status="i">--}%
-                    %{--${sb.key} ${sb.value}<br/>--}%
+                %{--${sb.key} ${sb.value}<br/>--}%
                 %{--</g:each>--}%
 
                 <p style="margin-top: 20px">Desea volver a generar la matriz? o generar otra matriz</p>
@@ -1005,14 +1109,16 @@
 
             <div id="datos_matriz" style="text-align: center">
                 <span>Seleccione el subpresupuesto:</span>
-                <g:select name="matriz_sub" from="${subs}" noSelection="['0': 'Todos los subpresupuestos']" optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
-                <p>Generar con desglose de Transporte <input type="checkbox" id="si_trans" style="margin-top: -3px" checked="true">
+                <g:select name="matriz_sub" from="${subs}" noSelection="['0': 'Todos los subpresupuestos']"
+                          optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
+            <p>Generar con desglose de Transporte <input type="checkbox" id="si_trans" style="margin-top: -3px"
+                                                         checked="true">
 
                 %{--"FP.... ${FormulaPolinomica.countByObra(janus.Obra.get(obra?.id))}"--}%
                 <g:if test="${FormulaPolinomica.countByObra(janus.Obra.get(obra?.id)) > 0}">
-                     <p>Borrar la Fórmula Polinómica<input type="checkbox" id="borra_fp" style="margin-top: -3px" checked="true">
+                    <p>Borrar la Fórmula Polinómica<input type="checkbox" id="borra_fp" style="margin-top: -3px" checked="true">
                 </g:if>
-                </p>
+            </p>
                 <a href="#" class="btn btn-success" id="ok_matiz">Generar</a>
             </div>
         </div>
@@ -1033,13 +1139,13 @@
                     <p style="font-size: 14px; text-align: center;">No existe una matriz de la fórmula polinómica</p>
                 </g:if>
                 <g:else>
-            %{--${sbprMF}--}%
-                <span style="margin-left: 100px;">Subpresupuesto:</span>
-                <g:select name="matriz_genFP" from="${sbprMF}" optionKey="key" optionValue="value"
-                          style="margin-right: 20px; width: 400px"></g:select>
+                %{--${sbprMF}--}%
+                    <span style="margin-left: 100px;">Subpresupuesto:</span>
+                    <g:select name="matriz_genFP" from="${sbprMF}" optionKey="key" optionValue="value"
+                              style="margin-right: 20px; width: 400px"></g:select>
 
-                <a href="#" class="btn btn-info" id="irFP">Ir a la Fórmula Polinómica</a>
-                <a href="#" class="btn btn-info" id="cancelaFP" style="margin-left: 360px;">Cancelar</a>
+                    <a href="#" class="btn btn-info" id="irFP">Ir a la Fórmula Polinómica</a>
+                    <a href="#" class="btn btn-info" id="cancelaFP" style="margin-left: 360px;">Cancelar</a>
                 </g:else>
 
             </div>
@@ -1083,10 +1189,10 @@
             theme = "error";
         }
         $.jGrowl(msg, {
-            speed      : 'slow',
-            sticky     : sticky,
-            theme      : theme,
-            themeState : ''
+            speed: 'slow',
+            sticky: sticky,
+            theme: theme,
+            themeState: ''
         });
     }
 
@@ -1103,9 +1209,10 @@
             data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" + $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
         }
         data += "&ordenado=" + $("#campoOrdn :selected").val() + "&orden=" + $("#orden :selected").val();
-        $.ajax({type : "POST", url : "${g.createLink(controller: 'obra',action:'buscarObraLq')}",
-            data     : data,
-            success  : function (msg) {
+        $.ajax({
+            type: "POST", url: "${g.createLink(controller: 'obra',action:'buscarObraLq')}",
+            data: data,
+            success: function (msg) {
                 $("#spinner").hide();
                 $("#buscarDialog").show();
                 $(".contenidoBuscador").html(msg).show("slide");
@@ -1130,9 +1237,9 @@
          39         -> flecha der
          */
         return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
-                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
-                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
-                ev.keyCode == 37 || ev.keyCode == 39);
+        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+        ev.keyCode == 37 || ev.keyCode == 39);
     }
 
     $("#porcentajeAnticipo").keydown(function (ev) {
@@ -1152,7 +1259,7 @@
     });
 
     $("#longitudVia").bind({
-        keydown : function (ev) {
+        keydown: function (ev) {
             // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
             if (ev.keyCode == 190 || ev.keyCode == 110) {
                 var val = $(this).val();
@@ -1165,7 +1272,7 @@
                 return validarNum(ev);
             }
         }, //keydown
-        keyup   : function () {
+        keyup: function () {
             var val = $(this).val();
             // esta parte valida q no ingrese mas de 2 decimales
             var parts = val.split(".");
@@ -1182,7 +1289,7 @@
     });
 
     $("#anchoVia").bind({
-        keydown : function (ev) {
+        keydown: function (ev) {
             // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
             if (ev.keyCode == 190 || ev.keyCode == 110) {
                 var val = $(this).val();
@@ -1195,7 +1302,7 @@
                 return validarNum(ev);
             }
         }, //keydown
-        keyup   : function () {
+        keyup: function () {
             var val = $(this).val();
             // esta parte valida q no ingrese mas de 2 decimales
             var parts = val.split(".");
@@ -1222,7 +1329,7 @@
     });
 
     $("#latitud").bind({
-        keydown : function (ev) {
+        keydown: function (ev) {
             // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
             if (ev.keyCode == 190 || ev.keyCode == 110) {
                 var val = $(this).val();
@@ -1235,7 +1342,7 @@
                 return validarNum(ev);
             }
         }, //keydown
-        keyup   : function () {
+        keyup: function () {
             var val = $(this).val();
             // esta parte valida q no ingrese mas de 2 decimales
             var parts = val.split(".");
@@ -1252,7 +1359,7 @@
     });
 
     $("#longitud").bind({
-        keydown : function (ev) {
+        keydown: function (ev) {
             // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
             if (ev.keyCode == 190 || ev.keyCode == 110) {
                 var val = $(this).val();
@@ -1265,7 +1372,7 @@
                 return validarNum(ev);
             }
         }, //keydown
-        keyup   : function () {
+        keyup: function () {
             var val = $(this).val();
             // esta parte valida q no ingrese mas de 2 decimales
             var parts = val.split(".");
@@ -1307,56 +1414,54 @@
         var idDep1
 
 
-
-
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-               <g:if test="${obra}">
-                    <g:if test="${duenoObra == 1}">
-                idP = $("#departamento option:selected").attr("class");
-                idDep1 = $("#departamento option:selected").val();
-                    </g:if>
-                    <g:else>
-                idP = $("#departamentoDire").val();
-                idDep1 = $("#departamentoId").val();
-                    </g:else>
-              </g:if>
-              <g:else>
-                idP = $("#departamento option:selected").attr("class");
-                idDep1 = $("#departamento option:selected").val();
-             </g:else>
+        <g:if test="${obra}">
+        <g:if test="${duenoObra == 1}">
+        idP = $("#departamento option:selected").attr("class");
+        idDep1 = $("#departamento option:selected").val();
         </g:if>
         <g:else>
-               <g:if test="${obra}">
+        idP = $("#departamentoDire").val();
+        idDep1 = $("#departamentoId").val();
+        </g:else>
+        </g:if>
+        <g:else>
+        idP = $("#departamento option:selected").attr("class");
+        idDep1 = $("#departamento option:selected").val();
+        </g:else>
+        </g:if>
+        <g:else>
+        <g:if test="${obra}">
 //               idP = $("#departamentoDire").val();
-                 idP = ${persona?.departamento?.direccion?.id}
-                 idDep1 = ${persona?.departamento?.id}
-              </g:if>
-              <g:else>
-                idP = ${persona?.departamento?.direccion?.id}
+        idP = ${persona?.departamento?.direccion?.id}
                 idDep1 = ${persona?.departamento?.id}
-              </g:else>
+                        </g:if>
+                        <g:else>
+                        idP = ${persona?.departamento?.direccion?.id}
+                                idDep1 =
+        ${persona?.departamento?.id}
+        </g:else>
 
         </g:else>
 
 
-
         var idObra = ${obra?.id}
                 $.ajax({
-                    type    : "POST",
-                    url     : "${g.createLink(action:'getPersonas2')}",
-                    data    : {id : idP,
+                    type: "POST",
+                    url: "${g.createLink(action:'getPersonas2')}",
+                    data: {
+                        id: idP,
                         %{--idDep : ${persona?.departamento?.id},--}%
-                        idDep : idDep1,
-                        obra      : idObra
+                        idDep: idDep1,
+                        obra: idObra
 
                     },
-                    success : function (msg) {
+                    success: function (msg) {
 
                         $("#filaPersonas").html(msg);
                     }
                 });
     }
-
 
 
     $("#departamentoObra").change(function () {
@@ -1367,13 +1472,14 @@
 
         var idObra = ${obra?.id}
                 $.ajax({
-                    type    : "POST",
-                    url     : "${g.createLink(action:'getPersonas2')}",
-                    data    : {id : idDep,
-                        obra      : idObra
+                    type: "POST",
+                    url: "${g.createLink(action:'getPersonas2')}",
+                    data: {
+                        id: idDep,
+                        obra: idObra
 
                     },
-                    success : function (msg) {
+                    success: function (msg) {
 
                         $("#filaPersonas").html(msg);
                     }
@@ -1383,27 +1489,27 @@
 
     $(function () {
         var memoSIF = "${obra?.memoSif?:''}";
-        $("#btn-aprobarSif").click(function(){
+        $("#btn-aprobarSif").click(function () {
             $.box({
-                imageClass : "box_light",
-                input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' disabled value='" + memoSIF + "' />",
-                type       : "prompt",
-                title      : "Memo S.I.F.",
-                text       : "Desea aprobar el memorando S.I.F.",
-                dialog     : {
-                    open    : function (event, ui) {
+                imageClass: "box_light",
+                input: "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' disabled value='" + memoSIF + "' />",
+                type: "prompt",
+                title: "Memo S.I.F.",
+                text: "Desea aprobar el memorando S.I.F.",
+                dialog: {
+                    open: function (event, ui) {
                         $(".ui-dialog-titlebar-close").html("X");
                     },
-                    buttons : {
-                        "Aprobar" : function (r) {
+                    buttons: {
+                        "Aprobar": function (r) {
                             $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(action:'aprobarSif')}",
-                                data    : {
-                                    obra : "${obra?.id}"
+                                type: "POST",
+                                url: "${createLink(action:'aprobarSif')}",
+                                data: {
+                                    obra: "${obra?.id}"
                                 },
-                                success : function (msg) {
-                                    if (msg== "ok") {
+                                success: function (msg) {
+                                    if (msg == "ok") {
                                         window.reload(true);
                                     }
                                 }
@@ -1416,18 +1522,18 @@
 
         $("#btn-setAdminDirecta").click(function () {
             $.box({
-                imageClass : "box_info",
-                title      : "Confirmación",
-                text       : "<span style='font-size:larger; font-weight: bold;'>¿Está seguro de querer cambiar el tipo de la obra a administración directa?<br/>Recuerde que una vez cambiado el tipo no podrá revertir el cambio.</span>",
-                iconClose  : false,
-                dialog     : {
-                    resizable : false,
-                    draggable : false,
-                    buttons   : {
-                        "Cambiar"  : function () {
+                imageClass: "box_info",
+                title: "Confirmación",
+                text: "<span style='font-size:larger; font-weight: bold;'>¿Está seguro de querer cambiar el tipo de la obra a administración directa?<br/>Recuerde que una vez cambiado el tipo no podrá revertir el cambio.</span>",
+                iconClose: false,
+                dialog: {
+                    resizable: false,
+                    draggable: false,
+                    buttons: {
+                        "Cambiar": function () {
                             location.href = "${createLink(action:'cambiarAdminDir', id:obra?.id)}";
                         },
-                        "Cancelar" : function () {
+                        "Cancelar": function () {
                         }
                     }
                 }
@@ -1437,36 +1543,36 @@
 
         $("#btn-memoSIF").click(function () {
             $.box({
-                imageClass : "box_light",
-                input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' ${(obra?.estadoSif=='R')?'disabled':''} value='" + memoSIF + "' />",
-                type       : "prompt",
-                title      : "Memo S.I.F.",
+                imageClass: "box_light",
+                input: "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' ${(obra?.estadoSif=='R')?'disabled':''} value='" + memoSIF + "' />",
+                type: "prompt",
+                title: "Memo S.I.F.",
                 <g:if test="${obra?.estadoSif=='R'}">
-                text       : "Memorando S.I.F. aprobado",
+                text: "Memorando S.I.F. aprobado",
                 </g:if>
                 <g:else>
-                text       : "Ingrese el número de memorando de envío al S.I.F.",
+                text: "Ingrese el número de memorando de envío al S.I.F.",
                 </g:else>
-                dialog     : {
-                    open    : function (event, ui) {
+                dialog: {
+                    open: function (event, ui) {
                         $(".ui-dialog-titlebar-close").html("X");
                     },
-                    buttons : {
+                    buttons: {
                         <g:if test="${obra?.estadoSif=='R'}">
-                        "Cerrar" :function(r){
+                        "Cerrar": function (r) {
 
                         }
                         </g:if>
                         <g:else>
-                        "Guardar" : function (r) {
+                        "Guardar": function (r) {
                             $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(action:'saveMemoSIF')}",
-                                data    : {
-                                    obra : "${obra?.id}",
-                                    memo : r
+                                type: "POST",
+                                url: "${createLink(action:'saveMemoSIF')}",
+                                data: {
+                                    obra: "${obra?.id}",
+                                    memo: r
                                 },
-                                success : function (msg) {
+                                success: function (msg) {
                                     var parts = msg.split("_");
                                     if (parts[0] == "OK") {
                                         memoSIF = parts[1];
@@ -1488,16 +1594,16 @@
             $(".ui-dialog-titlebar-close").html("X");
         });
         $("#admDirecta").dialog({
-            autoOpen : false,
-            width    : 500,
-            height   : 400,
-            title    : "Iniciar obra",
-            modal    : true,
-            buttons  : {
-                "Cerrar"       : function () {
+            autoOpen: false,
+            width: 500,
+            height: 400,
+            title: "Iniciar obra",
+            modal: true,
+            buttons: {
+                "Cerrar": function () {
                     $(this).dialog('close');
                 },
-                "Iniciar obra" : function () {
+                "Iniciar obra": function () {
                     var obs = $("#descAdm").val()
                     var fec = $("#fechaInicio").val()
                     var msg = ""
@@ -1508,33 +1614,33 @@
                     }
                     if (msg != "") {
                         $.box({
-                            imageClass : "box_info",
-                            text       : msg,
-                            title      : "Errores",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable : false,
-                                draggable : false
+                            imageClass: "box_info",
+                            text: msg,
+                            title: "Errores",
+                            iconClose: false,
+                            dialog: {
+                                resizable: false,
+                                draggable: false
                             }
                         });
                     } else {
                         $.ajax({
-                            type    : "POST",
-                            url     : "${g.createLink(action:'iniciarObraAdm' )}",
-                            data    : "obra=${obra?.id}&fecha=" + fec + "&obs=" + obs,
-                            success : function (msg) {
+                            type: "POST",
+                            url: "${g.createLink(action:'iniciarObraAdm' )}",
+                            data: "obra=${obra?.id}&fecha=" + fec + "&obs=" + obs,
+                            success: function (msg) {
                                 if (msg == "ok")
                                     location.reload(true)
                                 else {
                                     $.box({
-                                        imageClass : "box_info",
+                                        imageClass: "box_info",
 //                                                text       : "Ha ocurrido un error, revice la fecha de incio de obra",
-                                        text       : msg,
-                                        title      : "Errores",
-                                        iconClose  : false,
-                                        dialog     : {
-                                            resizable : false,
-                                            draggable : false
+                                        text: msg,
+                                        title: "Errores",
+                                        iconClose: false,
+                                        dialog: {
+                                            resizable: false,
+                                            draggable: false
                                         }
                                     });
                                 }
@@ -1547,18 +1653,18 @@
         });
 
         $('#coords').editable({
-            type      : 'coords',
-            emptytext : 'Ingrese las coordenadas',
-            title     : 'Registre las coordenadas de la obra',
-            value     : {
-                NS : "${coordsParts[0]}",
-                NG : "${coordsParts[1]}",
-                NM : "${coordsParts[2]}",
-                EW : "${coordsParts[3]}",
-                EG : "${coordsParts[4]}",
-                EM : "${coordsParts[5]}"
+            type: 'coords',
+            emptytext: 'Ingrese las coordenadas',
+            title: 'Registre las coordenadas de la obra',
+            value: {
+                NS: "${coordsParts[0]}",
+                NG: "${coordsParts[1]}",
+                NM: "${coordsParts[2]}",
+                EW: "${coordsParts[3]}",
+                EG: "${coordsParts[4]}",
+                EM: "${coordsParts[5]}"
             },
-            validate  : function (value) {
+            validate: function (value) {
                 var ns = $.trim(value.NS);
                 var ng = $.trim(value.NG);
                 var nm = $.trim(value.NM);
@@ -1582,7 +1688,7 @@
                     return "El valor de los minutos debe ser inferior a 60";
                 }
             },
-            success   : function (response, newValue) {
+            success: function (response, newValue) {
                 var val = newValue.NS + ' ' + newValue.NG + ' ' + newValue.NM + ' ' + newValue.EW + ' ' + newValue.EG + ' ' + newValue.EM;
                 $("#coordenadas").val(val);
             }
@@ -1611,23 +1717,23 @@
                 $("#crono").val(0);
             } else {
                 $.box({
-                    imageClass : "box_info",
-                    text       : "Si cambia el plazo de la obra y guarda se eliminará el cronograma.<br/>Desea continuar?",
-                    title      : "Confirmación",
-                    iconClose  : false,
-                    dialog     : {
-                        resizable : false,
-                        draggable : false,
-                        buttons   : {
-                            "Cancelar" : function () {
+                    imageClass: "box_info",
+                    text: "Si cambia el plazo de la obra y guarda se eliminará el cronograma.<br/>Desea continuar?",
+                    title: "Confirmación",
+                    iconClose: false,
+                    dialog: {
+                        resizable: false,
+                        draggable: false,
+                        buttons: {
+                            "Cancelar": function () {
                                 $m.val(oriM);
                                 $d.val(oriD);
                             },
-                            "Sí"       : function () {
+                            "Sí": function () {
                                 $("#crono").val(1);
                                 $("#frm-registroObra").submit();
                             },
-                            "No"       : function () {
+                            "No": function () {
                                 $m.val(oriM);
                                 $d.val(oriD);
                             }
@@ -1646,7 +1752,7 @@
 
         $("#no").click(function () {
             var sb = $("#matriz_gen").val();
-            location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',id: obra?.id)}?sbpr="+sb
+            location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',id: obra?.id)}?sbpr=" + sb
         });
         $("#si").click(function () {
             $("#datos_matriz").show();
@@ -1661,35 +1767,35 @@
             var btn = $(this);
             var $btn = btn.clone(true);
             $.box({
-                imageClass : "box_info",
-                text       : "Una vez generado el número de fórmula polinómica no se puede revertir y se utlizará el siguiente de la secuencia. ¿Está seguro de querer continuar?",
-                title      : "Alerta",
-                iconClose  : false,
-                dialog     : {
-                    resizable : false,
-                    draggable : false,
-                    buttons   : {
-                        "Generar"  : function () {
+                imageClass: "box_info",
+                text: "Una vez generado el número de fórmula polinómica no se puede revertir y se utlizará el siguiente de la secuencia. ¿Está seguro de querer continuar?",
+                title: "Alerta",
+                iconClose: false,
+                dialog: {
+                    resizable: false,
+                    draggable: false,
+                    buttons: {
+                        "Generar": function () {
                             btn.replaceWith(spinner);
                             $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(action: 'generaNumeroFP')}",
-                                data    : "obra=${obra.id}",
-                                success : function (msg) {
+                                type: "POST",
+                                url: "${createLink(action: 'generaNumeroFP')}",
+                                data: "obra=${obra.id}",
+                                success: function (msg) {
                                     var parts = msg.split("_");
                                     if (parts[0] == "OK") {
                                         spinner.replaceWith("<div style='font-weight: normal;'>" + parts[1] + "</div>");
                                     } else {
                                         $.box({
-                                            imageClass : "box_info",
-                                            text       : parts[1],
-                                            title      : "Errores",
-                                            iconClose  : false,
-                                            dialog     : {
-                                                resizable : false,
-                                                draggable : false,
-                                                buttons   : {
-                                                    "Aceptar" : function () {
+                                            imageClass: "box_info",
+                                            text: parts[1],
+                                            title: "Errores",
+                                            iconClose: false,
+                                            dialog: {
+                                                resizable: false,
+                                                draggable: false,
+                                                buttons: {
+                                                    "Aceptar": function () {
                                                     }
                                                 }
                                             }
@@ -1699,7 +1805,7 @@
                                 }
                             });
                         },
-                        "Cancelar" : function () {
+                        "Cancelar": function () {
                         }
                     }
                 }
@@ -1718,10 +1824,10 @@
             $("#dlgLoad").dialog("open");
 
             $.ajax({
-                type    : "POST",
-                url     : "${createLink(action: 'validaciones', controller: 'obraFP')}",
-                data    : "obra=${obra.id}&sub=" + sp + "&trans=" + tr + "&borraFP=" + borrar,
-                success : function (msg) {
+                type: "POST",
+                url: "${createLink(action: 'validaciones', controller: 'obraFP')}",
+                data: "obra=${obra.id}&sub=" + sp + "&trans=" + tr + "&borraFP=" + borrar,
+                success: function (msg) {
                     $("#dlgLoad").dialog("close");
                     $("#modal-matriz").modal("hide")
 //                    console.log(msg)
@@ -1731,39 +1837,39 @@
 //                    console.log(arr, ok_msg, sbpr)
                     if (ok_msg != "ok") {
                         $.box({
-                            imageClass : "box_info",
-                            text       : msg,
-                            title      : "Errores",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable : false,
-                                draggable : false,
-                                width     : 900,
-                                buttons   : {
-                                    "Aceptar" : function () {
+                            imageClass: "box_info",
+                            text: msg,
+                            title: "Errores",
+                            iconClose: false,
+                            dialog: {
+                                resizable: false,
+                                draggable: false,
+                                width: 900,
+                                buttons: {
+                                    "Aceptar": function () {
                                     }
                                 }
                             }
                         });
                     } else {
                         location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',
-                        params:[id:obra.id,inicio:0,limit:40])}&sbpr="+sbpr
+                        params:[id:obra.id,inicio:0,limit:40])}&sbpr=" + sbpr
                     }
                 },
-                error : function () {
+                error: function () {
                     $("#dlgLoad").dialog("close");
                     $("#modal-matriz").modal("hide");
                     $.box({
-                        imageClass : "box_info",
-                        text       : "Ha ocurrido un error interno, comuniquese con el administrador del sistema.",
-                        title      : "Errores",
-                        iconClose  : false,
-                        dialog     : {
-                            resizable : false,
-                            draggable : false,
-                            width     : 700,
-                            buttons   : {
-                                "Aceptar" : function () {
+                        imageClass: "box_info",
+                        text: "Ha ocurrido un error interno, comuniquese con el administrador del sistema.",
+                        title: "Errores",
+                        iconClose: false,
+                        dialog: {
+                            resizable: false,
+                            draggable: false,
+                            width: 700,
+                            buttons: {
+                                "Aceptar": function () {
                                 }
                             }
                         }
@@ -1892,8 +1998,8 @@
         });
 
         $("#departamento").change(function () {
-          loadSalida();
-          loadPersonas();
+            loadSalida();
+            loadPersonas();
         });
 
 
@@ -1919,7 +2025,8 @@
             direccionEl = $("#departamentoDire").val();
             </g:if>
             <g:else>
-            direccionEl = ${persona?.departamento?.direccion?.id}
+            direccionEl =
+            ${persona?.departamento?.direccion?.id}
             </g:else>
 
             </g:else>
@@ -1931,12 +2038,13 @@
 //                    console.log("ID:" + idObra)
 
                     $.ajax({
-                        type    : "POST",
-                        url     : "${g.createLink(action:'getSalida')}",
-                        data    : {direccion : direccionEl,
-                            obra      : idObra
+                        type: "POST",
+                        url: "${g.createLink(action:'getSalida')}",
+                        data: {
+                            direccion: direccionEl,
+                            obra: idObra
                         },
-                        success : function (msg) {
+                        success: function (msg) {
 
                             $("#dirSalida").html(msg);
                         }
@@ -1955,49 +2063,49 @@
             var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
             var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${obra?.id}Wdesglose=";
             $.box({
-                imageClass : "box_info",
-                text       : "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br><span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
-                title      : "Imprimir Rubros de la Obra",
-                iconClose  : true,
-                dialog     : {
-                    resizable : false,
-                    draggable : false,
-                    width     : 600,
-                    height    : 280,
-                    buttons   : {
+                imageClass: "box_info",
+                text: "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br><span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
+                title: "Imprimir Rubros de la Obra",
+                iconClose: true,
+                dialog: {
+                    resizable: false,
+                    draggable: false,
+                    width: 600,
+                    height: 280,
+                    buttons: {
 
-                        "Con desglose de Trans."                               : function () {
+                        "Con desglose de Trans.": function () {
                             url += "1";
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                         },
-                        "Sin desglose de Trans."                               : function () {
+                        "Sin desglose de Trans.": function () {
                             url += "0";
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                         },
-                        "Exportar Rubros a Excel"                 : function () {
+                        "Exportar Rubros a Excel": function () {
                             var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
                             url += "1";
                             location.href = url;
                         },
-                        "VAE con desglose de Trans."                               : function () {
+                        "VAE con desglose de Trans.": function () {
                             urlVae += "1";
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                         },
-                        "VAE sin desglose de Trans."                               : function () {
+                        "VAE sin desglose de Trans.": function () {
                             urlVae += "0";
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                         },
-                        "Exportar VAE a Excel"                               : function () {
+                        "Exportar VAE a Excel": function () {
                             var urlVaeEx = "${createLink(controller:'reportes3', action:'imprimirRubrosVaeExcel')}?obra=${obra?.id}&transporte=";
                             urlVaeEx += "1";
                             location.href = urlVaeEx;
                         },
-                        "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra" : function () {
+                        "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra": function () {
                             var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
                             location.href = url;
                         },
 
-                        "Cancelar" : function () {
+                        "Cancelar": function () {
 
                         }
                     }
@@ -2026,12 +2134,12 @@
         $("#btnVar").click(function () {
 
             $.ajax({
-                type    : "POST",
-                url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
-                data    : {
-                    obra : "${obra?.id}"
+                type: "POST",
+                url: "${createLink(controller: 'variables', action:'variables_ajax')}",
+                data: {
+                    obra: "${obra?.id}"
                 },
-                success : function (msg) {
+                success: function (msg) {
 
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
@@ -2050,10 +2158,10 @@
 //                                ////console.log(data);
 
                         $.ajax({
-                            type    : "POST",
-                            url     : url,
-                            data    : data,
-                            success : function (msg) {
+                            type: "POST",
+                            url: url,
+                            data: data,
+                            success: function (msg) {
 //                                ////console.log("Data Saved: " + msg);
                                 $("#modal-var").modal("hide");
                             }
@@ -2085,16 +2193,16 @@
         });
 
         $("#copiarDialog").dialog({
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 380,
-            height    : 280,
-            position  : 'center',
-            title     : 'Copiar la obra',
-            buttons   : {
-                "Aceptar"  : function () {
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 380,
+            height: 280,
+            position: 'center',
+            title: 'Copiar la obra',
+            buttons: {
+                "Aceptar": function () {
                     %{--var data = $("#frm-registroObra").serialize();--}%
                     %{--data+="&nuevoCodigo="+ $.trim($("#nuevoCodigo").val());--}%
 
@@ -2108,14 +2216,14 @@
                     var nuevoCodigo = $.trim($("#nuevoCodigo").val());
 
                     $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action: 'saveCopia')}",
-                        data    : {
-                            id          : originalId,
-                            nuevoCodigo : nuevoCodigo
+                        type: "POST",
+                        url: "${createLink(action: 'saveCopia')}",
+                        data: {
+                            id: originalId,
+                            nuevoCodigo: nuevoCodigo
 
                         },
-                        success : function (msg) {
+                        success: function (msg) {
 
                             $("#copiarDialog").dialog("close")
                             var parts = msg.split('_')
@@ -2135,7 +2243,7 @@
                     });
 
                 },
-                "Cancelar" : function () {
+                "Cancelar": function () {
 
                     $("#copiarDialog").dialog("close");
 
@@ -2144,29 +2252,29 @@
         });
 
         $("#copiarDialogOfe").dialog({
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 380,
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 380,
 //                    height    : 250,
-            position  : 'center',
-            title     : 'Copiar la obra al sistema de oferentes',
-            buttons   : {
-                "Aceptar"  : function () {
+            position: 'center',
+            title: 'Copiar la obra al sistema de oferentes',
+            buttons: {
+                "Aceptar": function () {
                     $("#dlgLoad").dialog("open");
                     $("#divOk").hide();
                     $("#divError").hide();
                     var originalId = "${obra?.id}";
                     var oferente = $("#oferenteCopia").val();
                     $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(controller: "export", action: 'exportObra')}",
-                        data    : {
-                            obra     : originalId,
-                            oferente : oferente
+                        type: "POST",
+                        url: "${createLink(controller: "export", action: 'exportObra')}",
+                        data: {
+                            obra: originalId,
+                            oferente: oferente
                         },
-                        success : function (msg) {
+                        success: function (msg) {
 //                                    console.log(msg)
                             $("#dlgLoad").dialog("close");
                             $("#copiarDialogOfe").dialog("close");
@@ -2182,7 +2290,7 @@
                         }
                     });
                 },
-                "Cancelar" : function () {
+                "Cancelar": function () {
                     $("#copiarDialogOfe").dialog("close");
                 }
             }
@@ -2190,29 +2298,29 @@
 
         $("#busqueda").dialog({
 
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 800,
-            height    : 600,
-            position  : 'center',
-            title     : 'Datos de Situación Geográfica'
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 800,
+            height: 600,
+            position: 'center',
+            title: 'Datos de Situación Geográfica'
 
         });
 
         $("#estadoDialog").dialog({
 
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 350,
-            height    : 260,
-            position  : 'center',
-            title     : 'Cambiar estado de la Obra',
-            buttons   : {
-                "Aceptar"  : function () {
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 350,
+            height: 260,
+            position: 'center',
+            title: 'Cambiar estado de la Obra',
+            buttons: {
+                "Aceptar": function () {
 
                     $("#dlgLoad").dialog("open");
 //
@@ -2221,23 +2329,23 @@
                     if (estadoCambiado == 'N') {
                         estadoCambiado = 'R';
                         $.ajax({
-                            type    : "POST",
-                            url     : "${g.createLink(action: 'regitrarObra')}",
-                            data    : "id=${obra?.id}",
-                            success : function (msg) {
+                            type: "POST",
+                            url: "${g.createLink(action: 'regitrarObra')}",
+                            data: "id=${obra?.id}",
+                            success: function (msg) {
 //                                ////console.log(msg)
                                 if (msg != "ok") {
                                     $.box({
-                                        imageClass : "box_info",
-                                        text       : msg,
-                                        title      : "Errores",
-                                        iconClose  : false,
-                                        dialog     : {
-                                            resizable : false,
-                                            draggable : false,
-                                            width     : 900,
-                                            buttons   : {
-                                                "Aceptar" : function () {
+                                        imageClass: "box_info",
+                                        text: msg,
+                                        title: "Errores",
+                                        iconClose: false,
+                                        dialog: {
+                                            resizable: false,
+                                            draggable: false,
+                                            width: 900,
+                                            buttons: {
+                                                "Aceptar": function () {
                                                     $("#dlgLoad").dialog("close");
                                                 }
                                             }
@@ -2253,22 +2361,22 @@
                     } else {
 
                         $.ajax({
-                            type    : "POST",
-                            url     : "${g.createLink(action: 'desregitrarObra')}",
-                            data    : "id=${obra?.id}",
-                            success : function (msg) {
+                            type: "POST",
+                            url: "${g.createLink(action: 'desregitrarObra')}",
+                            data: "id=${obra?.id}",
+                            success: function (msg) {
                                 if (msg != "ok") {
                                     $.box({
-                                        imageClass : "box_info",
-                                        text       : msg,
-                                        title      : "Errores",
-                                        iconClose  : false,
-                                        dialog     : {
-                                            resizable : false,
-                                            draggable : false,
-                                            width     : 900,
-                                            buttons   : {
-                                                "Aceptar" : function () {
+                                        imageClass: "box_info",
+                                        text: msg,
+                                        title: "Errores",
+                                        iconClose: false,
+                                        dialog: {
+                                            resizable: false,
+                                            draggable: false,
+                                            width: 900,
+                                            buttons: {
+                                                "Aceptar": function () {
                                                     $("#dlgLoad").dialog("close");
                                                 }
                                             }
@@ -2287,7 +2395,7 @@
                     $("#estadoDialog").dialog("close");
 //
                 },
-                "Cancelar" : function () {
+                "Cancelar": function () {
                     $("#estadoDialog").dialog("close");
                 }
             }
@@ -2296,16 +2404,16 @@
 
         $("#documentosDialog").dialog({
 
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 350,
-            height    : 180,
-            position  : 'center',
-            title     : 'Imprimir Documentos de la Obra',
-            buttons   : {
-                "Aceptar" : function () {
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 350,
+            height: 180,
+            position: 'center',
+            title: 'Imprimir Documentos de la Obra',
+            buttons: {
+                "Aceptar": function () {
 
                     $("#documentosDialog").dialog("close");
 
@@ -2317,10 +2425,10 @@
         function fp(url) {
             $("#dlgLoad").dialog("open");
             $.ajax({
-                async   : false,
-                type    : "POST",
-                url     : url,
-                success : function (msg2) {
+                async: false,
+                type: "POST",
+                url: url,
+                success: function (msg2) {
                     if (msg2 == "ok" || msg2 == "OK") {
                         location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra?.id)}";
                     }
@@ -2337,7 +2445,7 @@
 
         $("#irFP").click(function () {
             var sb = $("#matriz_genFP").val();
-            location.href = "${g.createLink(controller: 'formulaPolinomica',action: 'coeficientes',id: obra?.id)}?sbpr="+sb
+            location.href = "${g.createLink(controller: 'formulaPolinomica',action: 'coeficientes',id: obra?.id)}?sbpr=" + sb
         });
         $("#cancelaFP").click(function () {
             $("#modal-formula").modal("hide")
@@ -2348,32 +2456,32 @@
 
 
             $.ajax({
-                type    : "POST",
-                async   : false,
-                url     : "${createLink(action: 'existeFP')}",
-                data    : {
-                    obra : "${obra?.id}"
+                type: "POST",
+                async: false,
+                url: "${createLink(action: 'existeFP')}",
+                data: {
+                    obra: "${obra?.id}"
                 },
-                success : function (msg) {
+                success: function (msg) {
                     if (msg == "true" || msg == true) {
                         //ya hay la fp
                         fp(url);
                     } else {
                         //no hay la fp
                         $.box({
-                            imageClass : "box_info",
-                            text       : "Asegúrese de que ya ha ingresado todos los rubros para generar la fórmula polinómica.",
-                            title      : "Confirmación",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable     : false,
-                                draggable     : false,
-                                closeOnEscape : false,
-                                buttons       : {
-                                    "Continuar" : function () {
+                            imageClass: "box_info",
+                            text: "Asegúrese de que ya ha ingresado todos los rubros para generar la fórmula polinómica.",
+                            title: "Confirmación",
+                            iconClose: false,
+                            dialog: {
+                                resizable: false,
+                                draggable: false,
+                                closeOnEscape: false,
+                                buttons: {
+                                    "Continuar": function () {
                                         fp(url);
                                     },
-                                    "Cancelar"  : function () {
+                                    "Cancelar": function () {
                                     }
                                 }
                             }
@@ -2397,10 +2505,10 @@
         $("#btnCrearTipoObra").click(function () {
 
             $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'crearTipoObra')}",
-                data    : "grupo=${grupoDir?.id}",
-                success : function (msg) {
+                type: "POST",
+                url: "${createLink(action:'crearTipoObra')}",
+                data: "grupo=${grupoDir?.id}",
+                success: function (msg) {
                     var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
@@ -2408,16 +2516,16 @@
 //                            submitForm(btnSave);
                         $(this).replaceWith(spinner);
                         $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(controller: 'tipoObra', action:'saveTipoObra')}",
-                            data    : $("#frmSave-TipoObra").serialize(),
-                            success : function (msg) {
+                            type: "POST",
+                            url: "${createLink(controller: 'tipoObra', action:'saveTipoObra')}",
+                            data: $("#frmSave-TipoObra").serialize(),
+                            success: function (msg) {
                                 if (msg != 'error') {
 //                                            $("#divTipoObra").html(msg);
                                     $("#tipoObra").replaceWith(msg);
                                     alert('Tipo de obra creada!')
-                                }else{
-                                  alert('No se pudo grabar el tipo de obra')
+                                } else {
+                                    alert('No se pudo grabar el tipo de obra')
                                 }
 
                                 $("#modal-TipoObra").modal("hide");
@@ -2442,31 +2550,31 @@
         $("#btnCrearClase").click(function () {
 
             $.ajax({
-                type    : "POST",
-                url     : "${createLink(controller: "claseObra", action:'form_ext_ajax')}",
-                data    : "grupo=${grupoDir?.id}",
-                success : function (msg) {
+                type: "POST",
+                url: "${createLink(controller: "claseObra", action:'form_ext_ajax')}",
+                data: "grupo=${grupoDir?.id}",
+                success: function (msg) {
                     var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                     btnSave.click(function () {
 //                        if($("#codigo1").val()){
-                            $(this).replaceWith(spinner);
-                            $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(controller: 'claseObra', action:'save_ext')}",
-                                data    : $("#frmSave-claseObraInstance").serialize(),
-                                success : function (msg) {
-                                    if (msg.lastIndexOf("No", 0) == 0) {
-                                        alert (msg)
-                                    }else{
-                                        $("#claseObra").replaceWith(msg);
-                                        alert('Clase de obra creada!')
-                                    }
-                                    $("#modal-TipoObra").modal("hide");
+                        $(this).replaceWith(spinner);
+                        $.ajax({
+                            type: "POST",
+                            url: "${createLink(controller: 'claseObra', action:'save_ext')}",
+                            data: $("#frmSave-claseObraInstance").serialize(),
+                            success: function (msg) {
+                                if (msg.lastIndexOf("No", 0) == 0) {
+                                    alert(msg)
+                                } else {
+                                    $("#claseObra").replaceWith(msg);
+                                    alert('Clase de obra creada!')
                                 }
-                            });
-                            return false;
+                                $("#modal-TipoObra").modal("hide");
+                            }
+                        });
+                        return false;
 //                        }else{
 //                            alert('No ingreso ningun código!')
 //                        }
@@ -2487,24 +2595,24 @@
         $("#btnCrearPrograma").click(function () {
 
             $.ajax({
-                type    : "POST",
-                url     : "${createLink(controller:'programacion', action:'form_ext_ajax')}",
-                data    : "grupo=${grupoDir?.id}",
-                success : function (msg) {
+                type: "POST",
+                url: "${createLink(controller:'programacion', action:'form_ext_ajax')}",
+                data: "grupo=${grupoDir?.id}",
+                success: function (msg) {
                     var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                     btnSave.click(function () {
                         $(this).replaceWith(spinner);
                         $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(controller: 'programacion', action:'save_ext')}",
-                            data    : $("#frmSave-Programacion").serialize(),
-                            success : function (msg) {
+                            type: "POST",
+                            url: "${createLink(controller: 'programacion', action:'save_ext')}",
+                            data: $("#frmSave-Programacion").serialize(),
+                            success: function (msg) {
                                 if (msg != 'error') {
                                     $("#programacion").replaceWith(msg);
                                     alert("Programa creado!")
-                                }else{
+                                } else {
                                     alert("No se pudo guardar el programa!")
                                 }
                                 $("#modal-TipoObra").modal("hide");
@@ -2527,16 +2635,16 @@
 
         $("#eliminarObraDialog").dialog({
 
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 350,
-            height    : 220,
-            position  : 'center',
-            title     : 'Eliminar Obra',
-            buttons   : {
-                "Aceptar"  : function () {
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 350,
+            height: 220,
+            position: 'center',
+            title: 'Eliminar Obra',
+            buttons: {
+                "Aceptar": function () {
 
                     if (${volumen?.id != null || formula?.id != null}) {
 
@@ -2547,10 +2655,10 @@
                     else {
 
                         $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(action: 'delete')}",
-                            data    : "id=${obra?.id}",
-                            success : function (msg) {
+                            type: "POST",
+                            url: "${createLink(action: 'delete')}",
+                            data: "id=${obra?.id}",
+                            success: function (msg) {
 
                                 if (msg == 'ok') {
 
@@ -2568,7 +2676,7 @@
                     $("#eliminarObraDialog").dialog("close")
 
                 },
-                "Cancelar" : function () {
+                "Cancelar": function () {
 
                     $("#eliminarObraDialog").dialog("close")
 
@@ -2580,16 +2688,16 @@
 
         $("#noEliminarDialog").dialog({
 
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 350,
-            height    : 220,
-            position  : 'center',
-            title     : 'No se puede Eliminar la Obra!',
-            buttons   : {
-                "Aceptar" : function () {
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 350,
+            height: 220,
+            position: 'center',
+            title: 'No se puede Eliminar la Obra!',
+            buttons: {
+                "Aceptar": function () {
 
                     $("#eliminarObraDialog").dialog("close");
                     $("#noEliminarDialog").dialog("close");
@@ -2602,16 +2710,16 @@
 
         $("#dlgVerificacion").dialog({
 
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 350,
-            height    : 220,
-            position  : 'center',
-            title     : 'No se ha generado la Matriz!',
-            buttons   : {
-                "Aceptar" : function () {
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 350,
+            height: 220,
+            position: 'center',
+            title: 'No se ha generado la Matriz!',
+            buttons: {
+                "Aceptar": function () {
 
                     $("#dlgVerificacion").dialog("close");
 
@@ -2633,15 +2741,15 @@
 //                    ////console.log("ordenar" + ordenar)
 
             $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'situacionGeografica')}",
-                data    : {
-                    buscarPor : buscarPor,
-                    criterio  : criterio,
-                    ordenar   : ordenar
+                type: "POST",
+                url: "${createLink(action:'situacionGeografica')}",
+                data: {
+                    buscarPor: buscarPor,
+                    criterio: criterio,
+                    ordenar: ordenar
 
                 },
-                success : function (msg) {
+                success: function (msg) {
 
                     $("#divTabla").html(msg);
                     $("#dlgLoad").dialog("close");
@@ -2654,17 +2762,17 @@
 
     $("#errorDialog").dialog({
 
-        autoOpen  : false,
-        resizable : false,
-        modal     : true,
-        draggable : false,
-        width     : 350,
-        height    : 180,
-        zIndex    : 1060,
-        position  : 'center',
-        title     : 'Error',
-        buttons   : {
-            "Aceptar" : function () {
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        width: 350,
+        height: 180,
+        zIndex: 1060,
+        position: 'center',
+        title: 'Error',
+        buttons: {
+            "Aceptar": function () {
 
                 $("#errorDialog").dialog("close");
 

@@ -437,9 +437,8 @@ class ObraController extends janus.seguridad.Shield {
 //        println "---" + params
 //        println "---" + params
         def obra
-        def usuario = session.usuario.id
         def perfil = session.perfil
-        def persona = Persona.get(usuario)
+        def persona = Persona.get(session.usuario.id)
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
         def grupo = Grupo.findByDireccion(direccion)
         def departamentos = Departamento.findAllByDireccion(direccion)
@@ -1475,29 +1474,20 @@ class ObraController extends janus.seguridad.Shield {
         }
 
         def obraInstance
-
         def volumenInstance
-
-        def copiaObra
-
+      //  def copiaObra
         def obra = Obra.get(params.id);
-
         def nuevoCodigo = params.nuevoCodigo
-
         def volumenes = VolumenesObra.findAllByObra(obra);
 
         obraInstance = Obra.get(params.id)
 
-
         def revisarCodigo = Obra.findByCodigo(nuevoCodigo)
 
         if (revisarCodigo != null) {
-
 //            println("entro1")
-
             render "NO_No se puede copiar la Obra " + " " + obra.nombre + " " + "porque posee un codigo ya existente."
             return
-
 
         } else {
 //            println("entro2")
@@ -1524,17 +1514,11 @@ class ObraController extends janus.seguridad.Shield {
 //            return(action: 'registroObra')
                 return
             }
-
             volumenes.each { volOr ->
                 volumenInstance = new VolumenesObra()
-
 //                println("VO:" + volOr)
-
                 volumenInstance.properties = volOr.properties
-
 //                println("VI:" + volumenInstance)
-                //
-
                 volumenInstance.obra = obraInstance
                 volumenInstance.save(flush: true)
             }
