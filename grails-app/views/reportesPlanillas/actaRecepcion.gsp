@@ -42,10 +42,21 @@
         }
 
         @page {
-            @bottom-center {
-                content   : 'Acta de ${actaInstance?.nombre} ${actaInstance?.tipo == 'P' ? 'Provisional' : 'Definitiva'} N. ${actaInstance?.numero} pág.' counter(page) ' de ' counter(pages);
-                font-size : 6pt;
-                color     : #777;
+            /*@bottom-center {*/
+            @bottom-left {
+                %{--content   : 'Acta de ${actaInstance?.nombre} ${actaInstance?.tipo == 'P' ? 'Provisional' : 'Definitiva'} N. ${actaInstance?.numero} pág.' counter(page) ' de ' counter(pages);--}%
+                content   : 'Página ' counter(page) ' de ' counter(pages);
+                font-size : 8pt;
+                /*color     : #777;*/
+                color     : #000;
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content   : 'Elaborado por: ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido} (FISCALIZADOR) ______________';
+                font-size : 8pt;
+                color     : #000;
             }
         }
 
@@ -224,7 +235,7 @@
         }
 
         #firmas {
-            margin-top : 55px;
+            margin-top : 100px;
             width      : 100%;
         }
 
@@ -412,6 +423,7 @@
                     </div>
                 </div>
 
+%{--
                 <div id="sumillas">
                     <div class="left">
                         <div class="row" style="height: 20px; margin-top: 20px;">
@@ -421,29 +433,13 @@
                                 ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido} (FISCALIZADOR)
                             </div>
                         </div>
-
-                        %{--
-                                            <div class="row">
-                                                <div class="">
-                                                    FISCALIZADOR
-                                                </div>
-                                            </div>
-                        --}%
                     </div>
-
                     <div class="left" style="margin-top: 20px">
                         <div class="firma"></div>
                     </div>
-
-                    %{--<div class="firma">--}%
-                    %{--<g:if test="${actaInstance.contrato.administrador}">--}%
-                    %{--${actaInstance.contrato.administrador.titulo ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}--}%
-                    %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
-                    %{--</g:if>--}%
-                    %{--<br/>--}%
-                    %{--Delegado por el administrador por el Sr. Prefecto Provincial--}%
-                    %{--</div>--}%
                 </div>
+--}%
+
             </div>
         </div>
     </body>
