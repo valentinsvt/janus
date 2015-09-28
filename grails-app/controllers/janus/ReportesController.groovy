@@ -7661,7 +7661,9 @@ class ReportesController {
         def firmaFijaMP
         def firma
         def firmas
+        def fina = params.financiero.toDouble()/100 + 1
 
+        println "----- $fina"
 
         if (params.firmasIdMP.trim().size() > 0) {
             firma = params.firmasIdMP.split(",")
@@ -7997,26 +7999,27 @@ class ReportesController {
             addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
                     2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
-            addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number: (it?.precio + it?.transporte), minFractionDigits:
+            addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number: (it?.precio + it?.transporte)*fina, minFractionDigits:
                     6, maxFractionDigits: 6, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
-            addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number:((it?.precio + it?.transporte) * it?.cantidad), minFractionDigits:
+            addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number:((it?.precio + it?.transporte) * it?.cantidad)*fina, minFractionDigits:
                     2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
 
-            totales2 = (it?.precio * it?.cantidad)
+            totales2 = (it?.precio * it?.cantidad) * fina
             totalPrueba2 = totalP2 += totales2
 
-            trans = (it?.cantidad * it?.transporte)
+            trans = (it?.cantidad * it?.transporte)  * fina
             totalTrans = tra += trans
         }
+
 
         addCellTabla(tablaComMateriales, new Paragraph("", times8bold), prmsCellRight2)
         addCellTabla(tablaComMateriales, new Paragraph("", times8bold), prmsCellRight2)
         addCellTabla(tablaComMateriales, new Paragraph("", times8bold), prmsCellRight2)
         addCellTabla(tablaComMateriales, new Paragraph("", times8bold), prmsCellRight2)
         addCellTabla(tablaComMateriales, new Paragraph("Total:", times8bold), prmsCellRight2)
-        addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number: totalPrueba2+totalTrans, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
+        addCellTabla(tablaComMateriales, new Paragraph(g.formatNumber(number: (totalPrueba2+totalTrans), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
 
         addCellTabla(tablaComMateriales, new Paragraph("", times8bold), prmsCellHead4)
         addCellTabla(tablaComMateriales, new Paragraph("", times8bold), prmsCellHead4)
@@ -8513,7 +8516,8 @@ class ReportesController {
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+params.equipos+params.manoObra)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaLeft)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+totalPrueba3+totalPrueba4)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+        println "total.... ${totalPrueba2+totalTrans} + $totalTrans + $totalPrueba3 + $totalPrueba4 + ${params?.costo}"
+        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+totalPrueba3+totalPrueba4+params?.costo)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
@@ -8525,7 +8529,7 @@ class ReportesController {
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph("Materiales", times8bold), prmsHeaderHojaRight)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph(g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+        addCellTabla(tablaValoresMemoPresu1, new Paragraph(g.formatNumber(number: (totalPrueba2+totalTrans), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8normal), prmsHeaderHoja)
@@ -8545,7 +8549,7 @@ class ReportesController {
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph("TOTAL", times8bold), prmsHeaderHojaRight)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph(g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+totalPrueba3+totalPrueba4)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+        addCellTabla(tablaValoresMemoPresu1, new Paragraph(g.formatNumber(number: (params?.total ?: ((totalPrueba2+totalTrans) + totalPrueba3+totalPrueba4+params?.costo)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
@@ -8553,6 +8557,7 @@ class ReportesController {
 
         Paragraph pie = new Paragraph();
         pie.setAlignment(Element.ALIGN_LEFT);
+        pie.add(new Paragraph("Nota: Para Administración Direta, a los costos de los materiales  se incrementa el porcentaje de Timbres Provinciales y el de gastos financieros", times8normal ))
         pie.add(new Paragraph("PLAZO: " + obra?.plazoEjecucionMeses + "mes(es) " + obra?.plazoEjecucionDias + " días calendario", times8normal ))
         if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
             addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Cogestión:", times10bold), prmsHeaderHoja)

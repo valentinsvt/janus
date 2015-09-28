@@ -1061,8 +1061,8 @@
 
         <div class="span7">
             %{--<div class="span3">Presupuesto Referencial por administración directa:</div>--}%
-            <div class="span7">
-                <div class="span3">Presupuesto Referencial por Contrato:</div>
+            <div class="span8">
+                <div class="span4">Presupuesto Referencial por Contrato:</div>
 
                 <div class="span2">
                     <g:textField name="baseMemoPresu" style="width: 100px" disabled="true"
@@ -1070,8 +1070,8 @@
                 </div>
             </div>
 
-            <div class="span7">
-                <div class="span3">Materiales:</div>
+            <div class="span8">
+                <div class="span4">Materiales:</div>
 
                 <g:set var="totalMaterial" value="${0}"/>
                 <g:each in="${resComp}" var="r">
@@ -1083,8 +1083,8 @@
                 </div>
             </div>
 
-            <div class="span7">
-                <div class="span3">Mano de Obra:</div>
+            <div class="span8">
+                <div class="span4">Mano de Obra:</div>
                 <g:set var="totalMano" value="${0}"/>
                 <g:each in="${resMano}" var="r">
                     <g:set var="totalMano" value="${totalMano + ((r.transporte + r.precio) * r.cantidad)}"/>
@@ -1095,8 +1095,8 @@
                 </div>
             </div>
 
-            <div class="span7">
-                <div class="span3">Equipos:</div>
+            <div class="span8">
+                <div class="span4">Equipos:</div>
                 <g:set var="totalEquipo" value="${0}"/>
                 <g:each in="${resEq}" var="r">
                     <g:set var="totalEquipo" value="${totalEquipo + ((r.transporte + r.precio) * r.cantidad)}"/>
@@ -1107,9 +1107,9 @@
                 </div>
             </div>
 
-            <div class="span7">
+            <div class="span8">
 
-                <div class="span2">Costos Indirectos:</div>
+                <div class="span3">Costos Indirectos:</div>
 
                 <div class="span3" style="margin-left: 62px">
                     %{--<div class="input-append">--}%
@@ -1119,10 +1119,20 @@
                     <g:textField name="costoMemo" style="width: 100px" disabled="true"/>
                 </div>
 
+                <div class="span3">Timbres y costos financieros:</div>
+
+                <div class="span3" style="margin-left: 62px">
+                    %{--<div class="input-append">--}%
+                    <g:textField name="pcntFinanciero" type="number" style="width: 30px" maxlength="3"/>
+                    <span class="add-on">%</span>
+                    %{--</div>--}%
+                    <g:textField name="costoFinanciero" style="width: 100px" disabled="true"/>
+                </div>
+
             </div>
 
-            <div class="span7">
-                <div class="span3">TOTAL:</div>
+            <div class="span8">
+                <div class="span4">TOTAL:</div>
 
                 <div class="span2"><g:textField name="totalMemoPresu" style="width: 100px" disabled="true"/></div>
             </div>
@@ -2271,6 +2281,7 @@
                 var de = $("#deMemoPresu").val()
                 var fecha = $("#fechaMemoPresu").val()
                 var asunto = $("#asuntoMemoPresu").val()
+                var financiero = $("#pcntFinanciero").val()
 
                 firmasIdMP = [];
                 firmasFijasMP = [];
@@ -2286,7 +2297,7 @@
                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reportedocumentosObraMemoAdmi',id: obra?.id)}?firmasIdMP=" +
                         firmasIdMP + "&totalPresupuesto=" + totalPres + "&firmasFijasMP=" + firmasFijasMP + "&materiales=" + materiales +
                         "&manoObra=" + manoObra + "&equipos=" + equipos + "&costoPorcentaje=" + costoPorcentaje + "&costo=" + costo + "&total=" + total +
-                        "&texto=" + texto + "&para=" + para + "&de=" + de + "&fecha=" + fecha + "&asunto=" + asunto
+                        "&texto=" + texto + "&para=" + para + "&de=" + de + "&fecha=" + fecha + "&asunto=" + asunto + "&financiero=" + financiero
             }
         }
         return false;
@@ -3132,49 +3143,40 @@
         });
 
         $("#costoPorcentaje").keydown(function (ev) {
-
             return validarNum(ev);
-
         }).keyup(function () {
-
             calculoPorcentaje();
             sumaTotal();
+        });
 
+        $("#pcntFinanciero").keydown(function (ev) {
+            return validarNum(ev);
+        }).keyup(function () {
+            calculoPorcentaje();
+            sumaTotal();
         });
 
         function calculoPorcentaje() {
-
             var porcentaje = 0
-//         porcentaje = ((parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) + parseFloat($("#equiposMemo").val()))*($("#costoPorcentaje").val()))/100
+            var financiero = 0
             porcentaje = ((parseFloat($("#tMaterial").val()) + parseFloat($("#tMano").val()) + parseFloat($("#tEquipo").val())) * ($("#costoPorcentaje").val())) / 100
-
-//         //console.log("%:" + porcentaje)
+            financiero = (parseFloat($("#tMaterial").val()) * ($("#pcntFinanciero").val())) / 100
 
             $("#costoMemo").val(number_format(porcentaje, 2, ".", ""));
+            $("#costoFinanciero").val(number_format(financiero, 2, ".", ""));
         }
 
-//
-
         function sumaTotal() {
-
             var total = 0.0
 
-//       total = parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) +
-//               parseFloat($("#equiposMemo").val()) + parseFloat($("#costoMemo").val())
-
             total = parseFloat($("#tMaterial").val()) + parseFloat($("#tMano").val()) +
-                    parseFloat($("#tEquipo").val()) + parseFloat($("#costoMemo").val())
+                    parseFloat($("#tEquipo").val()) + parseFloat($("#costoMemo").val()) +
+                    parseFloat($("#costoFinanciero").val())
 
             $("#totalMemoPresu").val(number_format(total, 2, ".", ""))
-
         }
 
     });
-
-
-
-
-
 </script>
 
 </body>
