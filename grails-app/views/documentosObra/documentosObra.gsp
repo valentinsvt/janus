@@ -1061,47 +1061,47 @@
 
         <div class="span7">
             %{--<div class="span3">Presupuesto Referencial por administración directa:</div>--}%
-            <div class="span8">
-                <div class="span4">Presupuesto Referencial por Contrato:</div>
+            <div class="span7">
+                <div class="span5">Presupuesto Referencial por Contrato:</div>
 
-                <div class="span2">
+                <div>
                     <g:textField name="baseMemoPresu" style="width: 100px" disabled="true"
                                  value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
                 </div>
             </div>
 
-            <div class="span8">
-                <div class="span4">Materiales:</div>
+            <div class="span7">
+                <div class="span5">Materiales:</div>
 
                 <g:set var="totalMaterial" value="${0}"/>
                 <g:each in="${resComp}" var="r">
                     <g:set var="totalMaterial" value="${totalMaterial + ((r.transporte + r.precio) * r.cantidad)}"/>
                 </g:each>
-                <div class="span2">
+                <div>
                     <g:hiddenField name="tMaterial" value="${totalMaterial}"/>
                     <g:textField name="materialesMemo" style="width: 100px" value="${formatNumber(number: totalMaterial, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
                 </div>
             </div>
 
-            <div class="span8">
-                <div class="span4">Mano de Obra:</div>
+            <div class="span7">
+                <div class="span5">Mano de Obra:</div>
                 <g:set var="totalMano" value="${0}"/>
                 <g:each in="${resMano}" var="r">
                     <g:set var="totalMano" value="${totalMano + ((r.transporte + r.precio) * r.cantidad)}"/>
                 </g:each>
-                <div class="span2">
+                <div>
                     <g:hiddenField name="tMano" value="${totalMano}"/>
                     <g:textField name="manoObraMemo" style="width: 100px" value="${formatNumber(number: totalMano, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
                 </div>
             </div>
 
-            <div class="span8">
-                <div class="span4">Equipos:</div>
+            <div class="span7">
+                <div class="span5">Equipos:</div>
                 <g:set var="totalEquipo" value="${0}"/>
                 <g:each in="${resEq}" var="r">
                     <g:set var="totalEquipo" value="${totalEquipo + ((r.transporte + r.precio) * r.cantidad)}"/>
                 </g:each>
-                <div class="span2">
+                <div>
                     <g:hiddenField name="tEquipo" value="${totalEquipo}"/>
                     <g:textField name="equiposMemo" style="width: 100px" value="${formatNumber(number: totalEquipo, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
                 </div>
@@ -1109,34 +1109,34 @@
 
             <div class="span8">
 
-                <div class="span3">Costos Indirectos:</div>
+                <div class="span5">Costos Indirectos:</div>
 
-                <div class="span3" style="margin-left: 62px">
+                <div class="span3" style="margin-left: -100px; width: 240px">
                     %{--<div class="input-append">--}%
                     %{--<g:textField name="costoPorcentaje" type="number" style="width: 30px" maxlength="3"/>--}%
-                    <input id="costoPorcentaje" name="costoPorcentaje" type="number" style="width: 30px" maxlength="3" max="25" min="0"/>
+                    <input id="costoPorcentaje" name="costoPorcentaje" type="number" style="width: 60px" maxlength="3" max="25" min="0" step="0.1"/>
                     <span class="add-on">%</span>
                     %{--</div>--}%
                     <g:textField name="costoMemo" style="width: 100px" disabled="true"/>
                 </div>
 
-                <div class="span3" style="width: 320px">Timbres y costos financieros (para materiales):</div>
+                <div class="span5">Timbres y costos financieros (para materiales):</div>
 
-                <div class="span3" style="margin-left: 12px">
+                <div class="span3" style="margin-left: -90px; width: 240px" >
                     %{--<div class="input-append">--}%
                     %{--<g:textField name="pcntFinanciero" type="number" style="width: 30px" maxlength="3" max="5" min="0"/>--}%
-                    <input id="pcntFinanciero" name="pcntFinanciero" type="number" style="width: 30px" maxlength="3" max="5" min="0"/>
+                    <input id="pcntFinanciero" name="pcntFinanciero" type="number" style="width: 50px" maxlength="3" max="5" min="0" step="0.1"/>
                     <span class="add-on">%</span>
                     %{--</div>--}%
-                    <g:textField name="costoFinanciero" style="width: 100px" disabled="true"/>    máximo 5%
+                    <g:textField name="costoFinanciero" style="width: 100px" disabled="true"/>
                 </div>
 
             </div>
 
             <div class="span8">
-                <div class="span4">TOTAL:</div>
+                <div class="span5">TOTAL:</div>
 
-                <div class="span2"><g:textField name="totalMemoPresu" style="width: 100px" disabled="true"/></div>
+                <div class="span2" style="margin-left: 0px"><g:textField name="totalMemoPresu" style="width: 100px" disabled="true"/></div>
             </div>
         </div>
 
