@@ -1113,20 +1113,22 @@
 
                 <div class="span3" style="margin-left: 62px">
                     %{--<div class="input-append">--}%
-                    <g:textField name="costoPorcentaje" type="number" style="width: 30px" maxlength="3"/>
+                    %{--<g:textField name="costoPorcentaje" type="number" style="width: 30px" maxlength="3"/>--}%
+                    <input id="costoPorcentaje" name="costoPorcentaje" type="number" style="width: 30px" maxlength="3" max="25" min="0"/>
                     <span class="add-on">%</span>
                     %{--</div>--}%
                     <g:textField name="costoMemo" style="width: 100px" disabled="true"/>
                 </div>
 
-                <div class="span3">Timbres y costos financieros:</div>
+                <div class="span3" style="width: 320px">Timbres y costos financieros (para materiales):</div>
 
-                <div class="span3" style="margin-left: 62px">
+                <div class="span3" style="margin-left: 12px">
                     %{--<div class="input-append">--}%
-                    <g:textField name="pcntFinanciero" type="number" style="width: 30px" maxlength="3"/>
+                    %{--<g:textField name="pcntFinanciero" type="number" style="width: 30px" maxlength="3" max="5" min="0"/>--}%
+                    <input id="pcntFinanciero" name="pcntFinanciero" type="number" style="width: 30px" maxlength="3" max="5" min="0"/>
                     <span class="add-on">%</span>
                     %{--</div>--}%
-                    <g:textField name="costoFinanciero" style="width: 100px" disabled="true"/>
+                    <g:textField name="costoFinanciero" style="width: 100px" disabled="true"/>    máximo 5%
                 </div>
 
             </div>
@@ -3142,16 +3144,12 @@
 
         });
 
-        $("#costoPorcentaje").keydown(function (ev) {
-            return validarNum(ev);
-        }).keyup(function () {
+        $("#costoPorcentaje").change(function () {
             calculoPorcentaje();
             sumaTotal();
         });
 
-        $("#pcntFinanciero").keydown(function (ev) {
-            return validarNum(ev);
-        }).keyup(function () {
+        $("#pcntFinanciero").change(function() {
             calculoPorcentaje();
             sumaTotal();
         });

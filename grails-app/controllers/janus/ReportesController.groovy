@@ -8557,7 +8557,7 @@ class ReportesController {
 
         Paragraph pie = new Paragraph();
         pie.setAlignment(Element.ALIGN_LEFT);
-        pie.add(new Paragraph("Nota: Para Administración Direta, a los costos de los materiales  se incrementa el porcentaje de Timbres Provinciales y el de gastos financieros", times8normal ))
+        pie.add(new Paragraph("Nota: Para Administración Directa, a los costos de los materiales se incrementa el porcentaje de Timbres Provinciales y el de gastos financieros", times8normal ))
         pie.add(new Paragraph("PLAZO: " + obra?.plazoEjecucionMeses + "mes(es) " + obra?.plazoEjecucionDias + " días calendario", times8normal ))
         if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
             addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Cogestión:", times10bold), prmsHeaderHoja)

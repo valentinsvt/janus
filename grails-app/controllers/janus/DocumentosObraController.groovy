@@ -55,7 +55,7 @@ class DocumentosObraController {
 //        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra,'c%')
 //        println("cuadrilla:" + cuadrilla)
         def departamento = Departamento.get(obra?.departamento?.id)
-        println("departamento: " + obra?.departamento?.descripcion)
+//        println("departamento: " + obra?.departamento?.descripcion)
 //        def personas = Persona.list()
         def departamentos = Departamento.list()
 
@@ -179,7 +179,7 @@ class DocumentosObraController {
             firmantes.add([persona: puc, rol:'DIRECTOR'])
         }
 
-        println "lista de personas" + firmantes
+//        println "lista de personas" + firmantes
 
 //        personasUtfpuDire.add(personasUtfpuCoor)
         personasUtfpuDire+=personasUtfpuCoor
@@ -195,7 +195,7 @@ class DocumentosObraController {
 
         def directorUtfpu = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDirUtfpu)
 
-        println("Dire " + directorUtfpu?.persona?.nombre)
+//        println("Dire " + directorUtfpu?.persona?.nombre)
 
         //coordinador
 
