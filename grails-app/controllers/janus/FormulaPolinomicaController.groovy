@@ -82,7 +82,11 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         def formula = FormulaPolinomica.get(params.id)
         def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(formula)
         def total = children.sum { it.valor }
-        return [formula: formula, total: total]
+        def cn = dbConnectionService.getConnection()
+        def indices = cn.rows("select indc__id id, indcdscr descripcion from indc where indc__id in " +
+                "(select indc__id from vlin) order by tpin__id desc, indcdscr")
+        cn.close()
+        return [formula: formula, total: total, indices: indices]
     }
 
     def guardarGrupo() {
@@ -244,9 +248,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                         "where itfp.fpob__id = fpob.fpob__id and obra__id = ${params.id} and sbpr__id = ${sbpr.id}) " +
                         "order by valor desc"
             }
-            println "SQL items: " + sql
+//            println "SQL items: " + sql
             def rows = cn.rows(sql.toString())
-            println "rows: $rows"
+//            println "rows: $rows"
             [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total]
         }
     }

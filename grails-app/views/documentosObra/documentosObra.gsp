@@ -3134,14 +3134,10 @@
         $(".uno").prop("checked", true)
 
         $("#equiposMemo,#manoObraMemo,#materialesMemo").keydown(function (ev) {
-
             return validarNum(ev);
-
         }).keyup(function () {
-
             calculoPorcentaje();
             sumaTotal()
-
         });
 
         $("#costoPorcentaje").change(function () {
@@ -3150,6 +3146,13 @@
         });
 
         $("#pcntFinanciero").change(function() {
+            calculoPorcentaje();
+            sumaTotal();
+        });
+
+        $(document).ready(function(){
+            $("#costoPorcentaje").val(0);
+            $("#pcntFinanciero").val(0);
             calculoPorcentaje();
             sumaTotal();
         });

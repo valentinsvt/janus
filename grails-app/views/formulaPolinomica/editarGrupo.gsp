@@ -8,7 +8,8 @@
     <div class="row">
         <div class="span">
             por
-            <g:select name="indice" from="${janus.Indice.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" class="span4" value="${formula.indiceId}"/>
+            %{--<g:select name="indice" from="${janus.Indice.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" class="span4" value="${formula.indiceId}"/>--}%
+            <g:select name="indice" from="${indices}" optionKey="id" optionValue="descripcion" class="span4" value="${formula.indiceId}"/>
         </div>
     </div>
 
