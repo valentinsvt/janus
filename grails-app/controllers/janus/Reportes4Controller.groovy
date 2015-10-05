@@ -1286,8 +1286,10 @@ class Reportes4Controller {
 
 
     def contratadas () {
+/*
         def perfil = session.perfil.id
         return [perfil: perfil]
+*/
     }
 
 

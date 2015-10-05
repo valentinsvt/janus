@@ -136,7 +136,7 @@
                                 </th>
                                 <g:each in="${0..meses - 1}" var="i">
                                     <th class="meses">
-                                        Mes ${i + 1}
+                                        Periodo ${i + 1}
                                     </th>
                                 </g:each>
                                 <th class="totalRubro">
