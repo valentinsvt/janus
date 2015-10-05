@@ -1477,7 +1477,7 @@ class ObraController extends janus.seguridad.Shield {
         def volumenInstance
       //  def copiaObra
         def obra = Obra.get(params.id);
-        def nuevoCodigo = params.nuevoCodigo
+        def nuevoCodigo = params.nuevoCodigo.toUpperCase()
         def volumenes = VolumenesObra.findAllByObra(obra);
 
         obraInstance = Obra.get(params.id)
@@ -1495,6 +1495,25 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.properties = obra.properties
             obraInstance.codigo = nuevoCodigo
             obraInstance.estado = 'N'
+            obraInstance.departamento = session.usuario.departamento
+
+//            println "busca direccion de usuario ${session.usuario}"
+
+            def persona = Persona.get(session.usuario.id)
+            def direccion = Direccion.get(persona.departamento.direccion.id)
+            def departamentos = Departamento.findAllByDireccion(direccion)
+            def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+            def funcionInsp = Funcion.findByCodigo('I')
+            def funcionRevi = Funcion.findByCodigo('R')
+            def funcionElab = Funcion.findByCodigo('E')
+            def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
+            def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
+            def personasRolElab = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personas)
+
+            obraInstance.inspector = personasRolInsp.first().persona
+            obraInstance.revisor = personasRolRevi.first().persona
+            obraInstance.responsableObra = personasRolElab.first().persona
 
             if (!obraInstance.save(flush: true)) {
                 flash.clase = "alert-error"

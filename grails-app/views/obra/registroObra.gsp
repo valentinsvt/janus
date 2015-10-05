@@ -911,7 +911,7 @@
         <div class="span3" style="margin-top: 10px">
             <div class="span2">Nuevo Código:</div>
 
-            <div class="span3"><g:textField name="nuevoCodigo" value="${obra?.codigo}" maxlength="20"/></div>
+            <div class="span3"><g:textField name="nuevoCodigo" value="${obra?.codigo}" maxlength="20" class="allCaps" /></div>
         </div>
     </fieldset>
 
