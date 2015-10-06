@@ -106,11 +106,12 @@ class ReportesPlanillasController {
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
-        def planillasAvance = Planilla.withCriteria {
-            eq("contrato", contrato)
-            eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
-            order("fechaInicio", "asc")
-        }
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(["P", "Q"]), [sort: 'fechaInicio'])
+//        def planillasAvance = Planilla.withCriteria {
+//            eq("contrato", contrato)
+//            eq("tipoPlanilla", TipoPlanilla.findAllByCodigo("P"))
+//            order("fechaInicio", "asc")
+//        }
 
         def planillasCosto = Planilla.withCriteria {
             eq("contrato", contrato)
