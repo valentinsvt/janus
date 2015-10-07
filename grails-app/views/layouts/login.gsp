@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            <g:layoutTitle default="${g.message(code: 'default.app.name', default: 'Películas')}"/>
+            <g:layoutTitle default="${g.message(code: 'default.app.name', default: 'Janus')}"/>
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
@@ -14,20 +14,14 @@
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.9.1.js')}"></script>
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.10.2.custom.min.js')}"></script>
 
-        <!-- Le styles -->
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
-
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">
 
         %{--<link href="${resource(dir: 'js/jquery/css/twitBoot', file: 'jquery-ui-1.9.1.custom.min.css')}" rel="stylesheet">--}%
         <link href="${resource(dir: 'js/jquery/css/bw', file: 'jquery-ui-1.10.2.custom.min.css')}" rel="stylesheet">
 
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
-        <!-- Le fav and touch icons -->
         <link rel="shortcut icon" href="${resource(dir: 'images/ico', file: 'janus_16.png')}">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="${resource(dir: 'images/ico', file: 'janus_144.png')}">
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="${resource(dir: 'images/ico', file: 'janus_114.png')}">
@@ -44,10 +38,6 @@
             <g:layoutBody/>
         </div>
 
-
-        <!-- Le javascript
-    ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
         <script src="${resource(dir: 'css/bootstrap/js', file: 'bootstrap.js')}"></script>
         <script type="text/javascript">
             %{--var url = "${resource(dir:'images', file:'spinner_24.gif')}";--}%
