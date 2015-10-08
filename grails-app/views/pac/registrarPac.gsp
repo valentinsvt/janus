@@ -210,7 +210,7 @@
             function cargarTecho() {
                 if ($("#item_prsp").val() * 1 > 0) {
                     $.ajax({type : "POST", url : "${g.createLink(controller: 'pac',action:'cargarTecho')}",
-                        data     : "id=" + $("#item_prsp").val() + "&anio=" + $("#item_anio").val(),
+                        data     : "id=" + $("#item_prsp").val() + "&anio=" + $("#item_anio").val() + "&pac_id=" + $("#item_id").val(),
                         success  : function (msg) {
                             var parts = msg.split(";")
                             $("#techo").val(number_format(parts[0], 2, ".", ""))

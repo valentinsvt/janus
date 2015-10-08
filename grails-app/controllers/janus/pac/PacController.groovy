@@ -409,6 +409,7 @@ class PacController extends janus.seguridad.Shield {
 
 
     def cargarTecho() {
+        println "cargarTecho params: $params"
         def prsp = janus.Presupuesto.get(params.id)
         def anio = Anio.get(params.anio)
         def techo = Asignacion.findByAnioAndPrespuesto(anio, prsp)
@@ -417,10 +418,15 @@ class PacController extends janus.seguridad.Shield {
         else
             techo = techo.valor
         def pacs = Pac.findAllByPresupuestoAndAnio(prsp, anio)
+        println "uso de asignación: $pacs.costo"
         def usado = 0
         pacs.each {
-            usado += it.costo * it.cantidad
+            println "procesa: ${it.id}, ${it.costo} con ${params.pac_id}"
+            if(it.id != params.pac_id.toInteger()) {
+                usado += it.costo * it.cantidad
+            }
         }
+        println "techo: $techo, usado: $usado"
         render "" + techo + ";" + usado
     }
 

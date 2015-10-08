@@ -1499,21 +1499,22 @@ class ObraController extends janus.seguridad.Shield {
 
 //            println "busca direccion de usuario ${session.usuario}"
 
-            def persona = Persona.get(session.usuario.id)
-            def direccion = Direccion.get(persona.departamento.direccion.id)
-            def departamentos = Departamento.findAllByDireccion(direccion)
-            def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+            if(session.usuario.departamento?.codigo != 'UTFPU'){
+                def persona = Persona.get(session.usuario.id)
+                def direccion = Direccion.get(persona.departamento.direccion.id)
+                def departamentos = Departamento.findAllByDireccion(direccion)
+                def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+                def funcionInsp = Funcion.findByCodigo('I')
+                def funcionRevi = Funcion.findByCodigo('R')
+                def funcionElab = Funcion.findByCodigo('E')
+                def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
+                def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
+                def personasRolElab = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personas)
 
-            def funcionInsp = Funcion.findByCodigo('I')
-            def funcionRevi = Funcion.findByCodigo('R')
-            def funcionElab = Funcion.findByCodigo('E')
-            def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
-            def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
-            def personasRolElab = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personas)
-
-            obraInstance.inspector = personasRolInsp.first().persona
-            obraInstance.revisor = personasRolRevi.first().persona
-            obraInstance.responsableObra = personasRolElab.first().persona
+                obraInstance.inspector = personasRolInsp.first().persona
+                obraInstance.revisor = personasRolRevi.first().persona
+                obraInstance.responsableObra = personasRolElab.first().persona
+            }
 
             if (!obraInstance.save(flush: true)) {
                 flash.clase = "alert-error"
