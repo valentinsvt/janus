@@ -73,1383 +73,1383 @@
 
 <div id="tabs" style="width: 800px; height: 1060px">
 
-<ul>
+    <ul>
 
-    <li><a href="#tab-presupuesto">Presupuesto</a></li>
-    <li><a href="#tab-memorando">Memorando</a></li>
-    <li><a href="#tab-polinomica">F. Polinómica</a></li>
-    <li><a href="#tab-memorandoPresu">Adm. Directa/Cogestión</a></li>
-    <li><a href="#tab-textosFijos">Textos Fijos</a></li>
+        <li><a href="#tab-presupuesto">Presupuesto</a></li>
+        <li><a href="#tab-memorando">Memorando</a></li>
+        <li><a href="#tab-polinomica">F. Polinómica</a></li>
+        <li><a href="#tab-memorandoPresu">Adm. Directa/Cogestión</a></li>
+        <li><a href="#tab-textosFijos">Textos Fijos</a></li>
 
-</ul>
+    </ul>
 
-<div id="tab-presupuesto" class="tab">
+    <div id="tab-presupuesto" class="tab">
 
-<div class="tipoReporte">
+        <div class="tipoReporte">
 
-    <fieldset class="borde">
+            <fieldset class="borde">
 
-        <legend>Tipo de Reporte</legend>
+                <legend>Tipo de Reporte</legend>
 
-        <div class="span6" style="margin-bottom: 10px; margin-top: -20px">
+                <div class="span6" style="margin-bottom: 10px; margin-top: -20px">
 
-            <input type="radio" name="tipoPresupuesto" class="radioPresupuesto uno" value="1" checked="true"/>  Base de Contrato
+                    <input type="radio" name="tipoPresupuesto" class="radioPresupuesto uno" value="1" checked="true"/>  Base de Contrato
 
-            <input type="radio" name="tipoPresupuesto" class="radioPresupuesto" value="2"
-                   style="margin-left: 220px"/> Presupuesto Referencial
+                    <input type="radio" name="tipoPresupuesto" class="radioPresupuesto" value="2"
+                           style="margin-left: 220px"/> Presupuesto Referencial
 
-        </div>
-        <div class="span6" style="margin-bottom: 10px; ">
-
-            <input type="radio" name="encabezado" class="encabezado uno" value="1" checked="true"/>  Con encabezado
-
-            <input type="radio" name="encabezado" class="encabezado" value="0"
-                   style="margin-left: 220px"/> Sin encabezado
-
-        </div>
-    </fieldset>
-
-</div>
-
-
-<div class="piePagina" style="margin-bottom: 10px">
-
-    <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
-        <fieldset class="borde">
-
-            %{--<div style="margin-top: -20px; margin-bottom: 20px; margin-left: 30px">--}%
-
-            %{--<g:checkBox name="forzar" checked="false"/> Forzar nueva Página para las Notas de Pie de Página--}%
-
-            %{--</div>--}%
-
-            <legend>Pie de Página</legend>
-
-            <div class="span6" style="margin-top: -10px">
-
-                <div id="div_sel">
-                    <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion"
-                              optionKey="id" style="width: 300px;" noSelection="['-1': 'Seleccione una nota...']"/>
                 </div>
+                <div class="span6" style="margin-bottom: 10px; ">
 
-                <div class="btn-group" style="margin-left: 310px; margin-top: -60px; margin-bottom: 10px">
-                    <a class="btn" id="btnNuevo"><i class="icon-pencil"></i> Nuevo</a>
-                    <a class="btn" id="btnCancelar"><i class="icon-eraser"></i> Cancelar</a>
-                    <a class="btn" id="btnAceptar"><i class="icon-ok"></i> Grabar</a>
-                    <a class="btn" id="btnEliminar"><i class="icon-remove"></i> Eliminar</a>
+                    <input type="radio" name="encabezado" class="encabezado uno" value="1" checked="true"/>  Con encabezado
+
+                    <input type="radio" name="encabezado" class="encabezado" value="0"
+                           style="margin-left: 220px"/> Sin encabezado
+
                 </div>
-
-            </div>
-            <g:hiddenField name="obra" value="${obra?.id}"/>
-
-            <div class="span7">
-                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" class="required" maxlength="253"/></div>
-            </div>
-
-
-            <div class="span6">
-                <div class="span2" style="margin-left: -1px">Descripción de la Nota</div>
-
-                <g:textArea name="texto" value="${nota?.texto}" rows="5" cols="5"
-                            style="height: 125px; width:685px ; resize: none" maxlength="1023"/>
-            </div>
-
-            <div class="span6" style="margin-top: 5px; margin-bottom: 10px">
-
-                %{--<g:checkBox name="notaAdicional" checked="false"--}%
-                %{--/> --}%
-                Nota al Pie Adicional (15 líneas aprox)
-
-            </div>
-
-            <div class="span6">
-                <g:textArea name="adicional" value="${nota?.adicional}" rows="5" cols="5"
-                            style="height: 125px; width:685px ; resize: none" maxlength="1023"/>
-            </div>
-
-            <g:hiddenField name="obraTipo" value="${obra?.claseObra?.tipo}"/>
-
-        </fieldset>
-
-    </g:form>
-
-</div>
-
-<div class="setFirmas" style="margin-top: -20px">
-
-<fieldset class="borde">
-
-<legend>Firmas</legend>
-
-
-%{--<div class="span6" style="margin-top: -20px">--}%
-%{--from="${firmas}"--}%
-%{--<elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmaDirector}"--}%
-%{--optionClass="${{ it?.cargo }}"--}%
-%{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}" style="width: 350px"/>--}%
-
-
-%{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
-%{--<button class="btn btnAdicionar" id="presupuesto">Adicionar</button>--}%
-
-%{--</div>--}%
-
-%{--</div>--}%
-
-<div class="span6" style="width: 700px; margin-top: -20px">
-
-<table class="table table-bordered table-striped table-hover table-condensed " id="tablaFirmas">
-
-<thead>
-<tr>
-    %{--<th style="width: 50px">N°</th>--}%
-    <th style="width: 350px">Nombre</th>
-    <th style="width: 250px">Rol</th>
-    %{--<th style="width: 20px"></th>--}%
-
-</tr>
-
-</thead>
-
-
-<tbody id="firmasFijasPresu">
-%{--<g:if test="${firmaDirector != null}">--}%
-%{--<tr data-id="${firmaDirector?.persona?.id}">--}%
-%{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
-
-%{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
-%{--</td>--}%
-%{--<td>--}%
-%{--DIRECTOR                           --}%
-%{--</td>--}%
-%{--</tr>--}%
-%{--</g:if>--}%
-%{--<g:else>--}%
-%{--<tr>--}%
-%{--<td style="color: #ff2a08">--}%
-%{--DIRECCIÓN SIN DIRECTOR--}%
-%{--</td>--}%
-%{--<td>--}%
-%{--DIRECTOR--}%
-%{--</td>--}%
-%{--</tr>--}%
-%{--</g:else>--}%
-
-%{--<g:if test="${obra?.inspector?.id != null}">--}%
-%{--<tr data-id="${obra?.inspector?.id}">--}%
-
-%{--<td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">--}%
-%{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}--}%
-%{--</td>--}%
-%{--<td>--}%
-
-%{--RESPONSABLE DEL PROYECTO--}%
-%{--</td>--}%
-%{--</tr>--}%
-%{--</g:if>--}%
-%{--<g:else>--}%
-
-%{--<tr>--}%
-%{--<td style="color: #ff2a08">--}%
-
-%{--SIN RESPONSABLE DEL PROYECTO--}%
-%{--</td>--}%
-%{--<td>--}%
-%{--RESPONSABLE DEL PROYECTO--}%
-%{--</td>--}%
-
-%{--</tr>--}%
-%{--</g:else>--}%
-
-
-%{--//nuevo--}%
-
-<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-    <g:if test="${duenoObra == 1}">
-        <tr>
-            <td>
-                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
-            </td>
-            <td>
-                COORDINADOR
-            </td>
-        </tr>
-    </g:if>
-    <g:else>
-        <g:if test="${cordinadorOtros[0]}">
-            <tr>
-                <td style="color: #ff2a08">
-                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
-                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
-                </td>
-                <td>
-                    COORDINADOR
-                </td>
-            </tr>
-        </g:if>
-        <g:else>
-            <tr>
-                <td style="color: #ff2a08">
-                    SIN COORDINADOR
-                </td>
-                <td>
-                    COORDINADOR
-                </td>
-            </tr>
-        </g:else>
-
-    </g:else>
-
-</g:if>
-<g:else>
-    <g:if test="${duo == 1}">
-
-        <tr>
-            <td style="color: #ff2a08">
-                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
-                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
-            </td>
-            <td>
-                COORDINADOR
-            </td>
-        </tr>
-
-    </g:if>
-    <g:else>
-        <g:if test="${coordinadores}">
-            <tr>
-                <td style="color: #ff2a08">
-                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                </td>
-                <td>
-                    COORDINADOR
-                </td>
-            </tr>
-        </g:if>
-        <g:else>
-            <tr>
-                <td style="color: #ff2a08">
-                    SIN COORDINADOR
-                </td>
-                <td>
-                    COORDINADOR
-                </td>
-            </tr>
-        </g:else>
-
-    </g:else>
-</g:else>
-
-
-
-
-%{--//old--}%
-%{--<g:if test="${coordinadores != null}">--}%
-%{--<g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">--}%
-%{--<tr>--}%
-%{--<td>--}%
-%{--<g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
-%{--</td>--}%
-%{--<td>--}%
-%{--COORDINADOR--}%
-%{--</td>--}%
-%{--</tr>--}%
-%{--</g:if>--}%
-%{--<g:else>--}%
-%{--<tr>--}%
-%{--<td>--}%
-%{--<g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
-%{--</td>--}%
-%{--<td>--}%
-%{--COORDINADOR--}%
-%{--</td>--}%
-%{--</tr>--}%
-%{--</g:else>--}%
-
-%{--</g:if>--}%
-%{--<g:else>--}%
-%{--<tr>--}%
-%{--<td style="color: #ff2a08">--}%
-%{--SIN COORDINADOR--}%
-%{--</td>--}%
-%{--<td>--}%
-%{--COORDINADOR--}%
-%{--</td>--}%
-%{--</tr>--}%
-%{--</g:else>--}%
-
-
-
-
-
-%{--<tr data-id="${obra?.revisor?.id}">--}%
-
-%{----}%
-%{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-%{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
-%{--</td>--}%
-%{--<td>--}%
-
-%{--SUPERVISIÓN--}%
-%{--</td>--}%
-%{----}%
-
-%{--</tr>--}%
-
-
-%{--<tr data-id="${obra?.responsableObra?.id}">--}%
-
-%{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
-%{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
-%{--</td>--}%
-%{--<td>--}%
-%{--ELABORÓ--}%
-%{--</td>                     --}%
-%{--</tr>--}%
-
-</tbody>
-
-<tbody id="bodyFirmas_presupuesto">
-
-</tbody>
-
-</table>
-
-</div>
-
-</fieldset>
-
-</div>
-
-</div>
-
-<div id="tab-memorando" class="tab" style="">
-
-<div class="tipoReporteMemo">
-
-    <fieldset class="borde">
-
-        <legend>Tipo de Reporte</legend>
-
-        <div class="span6" style="margin-bottom: 10px; margin-top: -20px">
-
-            <input type="radio" name="tipoPresupuestoMemo" class="radioPresupuestoMemo" value="1"
-                   checked="true"/>  Base de Contrato
-
-        %{--<input type="radio" name="tipoPresupuestoMemo" class="radioPresupuestoMemo" value="2"--}%
-        %{--style="margin-left: 220px"/> Presupuesto Referencial--}%
-
-        </div>
-    </fieldset>
-</div>
-
-<div class="cabecera">
-
-    <fieldset class="borde">
-        <legend>Cabecera</legend>
-
-        <div class="span6">
-            <div class="span1">Memo N°</div>
-
-            <div class="span3"><g:textField name="numeroMemo" value="${obra?.memoSalida}" disabled="true"/></div>
-        </div>
-
-        <div class="span6">
-            <div class="span1">DE:</div>
-
-
-            %{--<div class="span3"><g:textField name="deMemo" style="width: 470px"--}%
-            %{--value="${obra?.departamento?.direccion?.nombre}"--}%
-            %{--disabled="true"/></div>--}%
-
-
-            <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS'}" disabled="true"/></div>
+            </fieldset>
 
         </div>
 
-        <div class="span6">
-            <div class="span1">PARA:</div>
 
-            <div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.direccion?.nombre + ' - ' + obra?.departamento?.descripcion}"
-                                            style="width: 470px" disabled="true"/></div>
+        <div class="piePagina" style="margin-bottom: 10px">
 
-            %{--<div class="span3"><g:select name="paraMemo" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>--}%
-        </div>
+            <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
+                <fieldset class="borde">
 
-        <div class="span7">
-            <div class="span1">Valor de la Base:</div>
+                    %{--<div style="margin-top: -20px; margin-bottom: 20px; margin-left: 30px">--}%
 
-            <div class="span2">
-                <g:textField name="baseMemo" style="width: 100px" disabled="true" value="${totalPresupuestoBien}"/>
-            </div>
-        </div>
+                    %{--<g:checkBox name="forzar" checked="false"/> Forzar nueva Página para las Notas de Pie de Página--}%
 
-    </fieldset>
+                    %{--</div>--}%
 
-</div>
+                    <legend>Pie de Página</legend>
 
-<div class="texto">
+                    <div class="span6" style="margin-top: -10px">
 
-    <fieldset class="borde">
-        <legend>Texto</legend>
+                        <div id="div_sel">
+                            <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion"
+                                      optionKey="id" style="width: 300px;" noSelection="['-1': 'Seleccione una nota...']"/>
+                        </div>
 
-        <g:form class="memoGrabar" name="frm-memo" controller="auxiliar" action="saveDoc">
+                        <div class="btn-group" style="margin-left: 310px; margin-top: -60px; margin-bottom: 10px">
+                            <a class="btn" id="btnNuevo"><i class="icon-pencil"></i> Nuevo</a>
+                            <a class="btn" id="btnCancelar"><i class="icon-eraser"></i> Cancelar</a>
+                            <a class="btn" id="btnAceptar"><i class="icon-ok"></i> Grabar</a>
+                            <a class="btn" id="btnEliminar"><i class="icon-remove"></i> Eliminar</a>
+                        </div>
 
-            <g:hiddenField name="id" value="${"1"}"/>
-
-            <g:hiddenField name="obra" value="${obra?.id}"/>
-
-            <div class="span6" style="margin-top: -10px; margin-left: 110px">
-                <div id="divSelMemo">
-                    <g:select name="selMemo" from="${notaMemo}" value="${nota?.id}" optionValue="descripcion"
-                              optionKey="id" style="width: 300px;" noSelection="['-1': 'Seleccione una nota...']"/>
-                </div>
-
-                <div class="span6" style="margin-top: 10px">
-                    <div class="btn-group" style="margin-left: 310px; margin-bottom: 10px; margin-top: -80px">
-                        %{--<button class="btn" id="btnEditarMemo"><i class="icon-pencil"></i> Editar</button>--}%
-                        %{--<button class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Aceptar</button>--}%
-                        <a class="btn" id="btnNuevoMemo"><i class="icon-pencil"></i> Nuevo</a>
-                        %{--<a class="btn" id="btnCancelarMemo"><i class="icon-eraser"></i> Cancelar</a>--}%
-                        <a class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Grabar</a>
-                        <a class="btn" id="btnEliminarMemo"><i class="icon-remove"></i> Eliminar</a>
                     </div>
+                    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+                    <div class="span7">
+                        <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" class="required" maxlength="253"/></div>
+                    </div>
+
+
+                    <div class="span6">
+                        <div class="span2" style="margin-left: -1px">Descripción de la Nota</div>
+
+                        <g:textArea name="texto" value="${nota?.texto}" rows="5" cols="5"
+                                    style="height: 125px; width:685px ; resize: none" maxlength="1023"/>
+                    </div>
+
+                    <div class="span6" style="margin-top: 5px; margin-bottom: 10px">
+
+                        %{--<g:checkBox name="notaAdicional" checked="false"--}%
+                        %{--/> --}%
+                        Nota al Pie Adicional (15 líneas aprox)
+
+                    </div>
+
+                    <div class="span6">
+                        <g:textArea name="adicional" value="${nota?.adicional}" rows="5" cols="5"
+                                    style="height: 125px; width:685px ; resize: none" maxlength="1023"/>
+                    </div>
+
+                    <g:hiddenField name="obraTipo" value="${obra?.claseObra?.tipo}"/>
+
+                </fieldset>
+
+            </g:form>
+
+        </div>
+
+        <div class="setFirmas" style="margin-top: -20px">
+
+            <fieldset class="borde">
+
+                <legend>Firmas</legend>
+
+
+                %{--<div class="span6" style="margin-top: -20px">--}%
+                %{--from="${firmas}"--}%
+                %{--<elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmaDirector}"--}%
+                %{--optionClass="${{ it?.cargo }}"--}%
+                %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}" style="width: 350px"/>--}%
+
+
+                %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                %{--<button class="btn btnAdicionar" id="presupuesto">Adicionar</button>--}%
+
+                %{--</div>--}%
+
+                %{--</div>--}%
+
+                <div class="span6" style="width: 700px; margin-top: -20px">
+
+                    <table class="table table-bordered table-striped table-hover table-condensed " id="tablaFirmas">
+
+                        <thead>
+                        <tr>
+                            %{--<th style="width: 50px">N°</th>--}%
+                            <th style="width: 350px">Nombre</th>
+                            <th style="width: 250px">Rol</th>
+                            %{--<th style="width: 20px"></th>--}%
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody id="firmasFijasPresu">
+                        %{--<g:if test="${firmaDirector != null}">--}%
+                        %{--<tr data-id="${firmaDirector?.persona?.id}">--}%
+                        %{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
+
+                        %{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--DIRECTOR                           --}%
+                        %{--</td>--}%
+                        %{--</tr>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                        %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                        %{--DIRECCIÓN SIN DIRECTOR--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--DIRECTOR--}%
+                        %{--</td>--}%
+                        %{--</tr>--}%
+                        %{--</g:else>--}%
+
+                        %{--<g:if test="${obra?.inspector?.id != null}">--}%
+                        %{--<tr data-id="${obra?.inspector?.id}">--}%
+
+                        %{--<td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">--}%
+                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+
+                        %{--RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
+                        %{--</tr>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+
+                        %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+
+                        %{--SIN RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
+
+                        %{--</tr>--}%
+                        %{--</g:else>--}%
+
+
+                        %{--//nuevo--}%
+
+                        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                            <g:if test="${duenoObra == 1}">
+                                <tr>
+                                    <td>
+                                        <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                    </td>
+                                    <td>
+                                        COORDINADOR
+                                    </td>
+                                </tr>
+                            </g:if>
+                            <g:else>
+                                <g:if test="${cordinadorOtros[0]}">
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                            <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            SIN COORDINADOR
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:else>
+
+                            </g:else>
+
+                        </g:if>
+                        <g:else>
+                            <g:if test="${duo == 1}">
+
+                                <tr>
+                                    <td style="color: #ff2a08">
+                                        <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                        <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                    </td>
+                                    <td>
+                                        COORDINADOR
+                                    </td>
+                                </tr>
+
+                            </g:if>
+                            <g:else>
+                                <g:if test="${coordinadores}">
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            SIN COORDINADOR
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:else>
+
+                            </g:else>
+                        </g:else>
+
+
+
+
+                        %{--//old--}%
+                        %{--<g:if test="${coordinadores != null}">--}%
+                        %{--<g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">--}%
+                        %{--<tr>--}%
+                        %{--<td>--}%
+                        %{--<g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--COORDINADOR--}%
+                        %{--</td>--}%
+                        %{--</tr>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                        %{--<tr>--}%
+                        %{--<td>--}%
+                        %{--<g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--COORDINADOR--}%
+                        %{--</td>--}%
+                        %{--</tr>--}%
+                        %{--</g:else>--}%
+
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                        %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                        %{--SIN COORDINADOR--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--COORDINADOR--}%
+                        %{--</td>--}%
+                        %{--</tr>--}%
+                        %{--</g:else>--}%
+
+
+
+
+
+                        %{--<tr data-id="${obra?.revisor?.id}">--}%
+
+                        %{----}%
+                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                        %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+
+                        %{--SUPERVISIÓN--}%
+                        %{--</td>--}%
+                        %{----}%
+
+                        %{--</tr>--}%
+
+
+                        %{--<tr data-id="${obra?.responsableObra?.id}">--}%
+
+                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
+                        %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--ELABORÓ--}%
+                        %{--</td>                     --}%
+                        %{--</tr>--}%
+
+                        </tbody>
+
+                        <tbody id="bodyFirmas_presupuesto">
+
+                        </tbody>
+
+                    </table>
+
                 </div>
-            </div>
 
-            <div class="span7" style="margin-left: 100px">
-                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionMemo" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" maxlength="253"/></div>
-            </div>
-
-
-            <div class="span6">
-
-                <div class="span1">Texto</div>
-
-                <div class="span3"><g:textArea name="memo1" value="${auxiliarFijo?.memo1}" rows="4" cols="4"
-                                               style="width: 600px; height: 55px; margin-left: -50px;resize: none;" maxlength="1023"/></div>
-
-            </div>
-
-
-            <div class="span6">
-                <div class="span1">Pie</div>
-
-                <div class="span3"><g:textArea name="memo2" value="${auxiliarFijo?.memo2}" rows="4" cols="4"
-                                               style="width: 600px; height: 55px; margin-left: -50px; resize: none;" maxlength="1023"/></div>
-
-            </div>
-
-        </g:form>
-
-    </fieldset>
-
-</div>
-
-
-<div class="setFirmas" style="margin-top: -10px">
-
-    <fieldset class="borde">
-
-        <legend>Firmas</legend>
-
-        %{--<div class="span6">--}%
-
-        %{--<elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"--}%
-        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
-        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
-
-
-        %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
-        %{--<button class="btn btnAdicionar" id="memo">Adicionar</button>--}%
-
-        %{--</div>--}%
-
-        %{--</div>--}%
-
-        <div class="span6" style="width: 700px; margin-top: -20px">
-
-            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasMemo">
-
-                <thead>
-                <tr>
-                    <th style="width: 350px">Nombre</th>
-                    <th style="width: 250px">Rol</th>
-                </tr>
-
-                </thead>
-
-                <tbody id="firmasFijasMemo">
-
-                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-                    <g:if test="${duenoObra == 1}">
-                        <tr>
-                            <td>
-                                <g:select name="coordinador" from="${personasUtfpuDire}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                            </td>
-                            <td>
-                                DIRECTOR/COORDINADOR
-                            </td>
-                        </tr>
-                    </g:if>
-                    <g:else>
-                        <g:if test="${cordinadorOtros[0]}">
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
-                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:if>
-                        <g:else>
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    SIN COORDINADOR
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:else>
-
-                    </g:else>
-
-                </g:if>
-                <g:else>
-                    <g:if test="${duo == 1}">
-
-                        <tr>
-                            <td style="color: #ff2a08">
-                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
-                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
-                            </td>
-                            <td>
-                                COORDINADOR
-                            </td>
-                        </tr>
-
-                    </g:if>
-                    <g:else>
-                        <g:if test="${coordinadores}">
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:if>
-                        <g:else>
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    SIN COORDINADOR
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:else>
-
-                    </g:else>
-                </g:else>
-
-                </tbody>
-
-                <tbody id="bodyFirmas_memo">
-
-                </tbody>
-
-            </table>
+            </fieldset>
 
         </div>
 
-    </fieldset>
+    </div>
 
-</div>
+    <div id="tab-memorando" class="tab" style="">
 
-</div>
+        <div class="tipoReporteMemo">
 
-<div id="tab-polinomica" class="tab" style="">
+            <fieldset class="borde">
 
-<div class="textoFormula">
+                <legend>Tipo de Reporte</legend>
 
-    <fieldset class="borde">
+                <div class="span6" style="margin-bottom: 10px; margin-top: -20px">
 
-        <div class="span6" style="margin-top: 10px">
-            <div class="span2">Fórmula Polinómica N°</div>
+                    <input type="radio" name="tipoPresupuestoMemo" class="radioPresupuestoMemo" value="1"
+                           checked="true"/>  Base de Contrato
 
-            <div class="span3"><g:textField name="numeroFor" value="${obra?.formulaPolinomica}"
-                                            disabled="true"/></div>
-        </div>
+                %{--<input type="radio" name="tipoPresupuestoMemo" class="radioPresupuestoMemo" value="2"--}%
+                %{--style="margin-left: 220px"/> Presupuesto Referencial--}%
 
-        <div class="span6">
-            <div class="span2">Fecha de Lista de Precios:</div>
-
-            <div class="span3"><g:textField name="fechaFor"
-                                            value="${formatDate(date: obra?.fechaPreciosRubros, format: "yyyy-MM-dd")}"
-                                            style="width: 100px" disabled="true"/></div>
-        </div>
-
-        <div class="span6">
-            <div class="span2">Monto del Contrato:</div>
-
-            <div class="span3">
-                <g:textField name="montoFor"
-                             value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"
-                             disabled="true"/>
-            </div>
-        </div>
-
-    </fieldset>
-
-</div>
-
-
-<div class="texto">
-
-    <fieldset class="borde">
-        <legend>Nota</legend>
-
-        <g:form class="memoGrabar" name="frm-formula" controller="auxiliar" action="saveDoc">
-
-            <g:hiddenField name="id" value="${"1"}"/>
-
-            <g:hiddenField name="obra" value="${obra?.id}"/>
-
-        </g:form>
-        <div class="span6">
-
-            <div id="divSelFormu">
-                <g:select name="selFormu" from="${notaFormu}" value="${nota?.id}" optionValue="descripcion"
-                          optionKey="id" style="width: 300px;" noSelection="['-1': 'Seleccione una nota...']"/>
-            </div>
-
-            <div class="span6">
-                <div class="btn-group" style="margin-left: 310px; margin-bottom: 10px; margin-top: -60px">
-                    <a class="btn" id="btnNuevoFormu"><i class="icon-pencil"></i> Nuevo</a>
-                    <a class="btn" id="btnAceptarFormu"><i class="icon-ok"></i> Grabar</a>
-                    <a class="btn" id="btnEliminarFormu"><i class="icon-remove"></i> Eliminar</a>
                 </div>
-            </div>
+            </fieldset>
         </div>
 
+        <div class="cabecera">
 
-        <div class="span7" style="margin-left: 30px">
-            <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionFormu" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" maxlength="253"/></div>
-        </div>
-
-
-        <div class="span6">
-            <div class="span3"><g:textArea name="notaFormula" rows="4" value="${notaFormu}"
-                                           cols="4"
-                                           style="width: 690px; margin-left: -30px; height: 70px; resize: none" maxlength="1022"/></div>
-
-        </div>
-    </fieldset>
-
-</div>
-
-
-<div class="setFirmas" style="margin-top: -10px">
-
-    <fieldset class="borde">
-
-        <legend>Firmas</legend>
-
-        <div class="span6" style="width: 700px; margin-top: -20px">
-
-            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasFor">
-
-                <thead>
-                <tr>
-                    %{--<th style="width: 50px">N°</th>--}%
-                    <th style="width: 350px">Nombre</th>
-                    <th style="width: 250px">Rol</th>
-                    %{--<th style="width: 20px"></th>--}%
-
-                </tr>
-
-                </thead>
-
-                <tbody id="firmasFijasPoli">
-
-                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-                    <g:if test="${duenoObra == 1}">
-                        <tr>
-                            <td>
-                                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                            </td>
-                            <td>
-                                COORDINADOR
-                            </td>
-                        </tr>
-                    </g:if>
-                    <g:else>
-                        <g:if test="${cordinadorOtros[0]}">
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
-                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:if>
-                        <g:else>
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    SIN COORDINADOR
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:else>
-                    </g:else>
-                </g:if>
-                <g:else>
-                    <g:if test="${duo == 1}">
-                        <tr>
-                            <td style="color: #ff2a08">
-                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
-                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
-                            </td>
-                            <td>
-                                COORDINADOR
-                            </td>
-                        </tr>
-                    </g:if>
-                    <g:else>
-                        <g:if test="${coordinadores}">
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:if>
-                        <g:else>
-                            <tr>
-                                <td style="color: #ff2a08">
-                                    SIN COORDINADOR
-                                </td>
-                                <td>
-                                    COORDINADOR
-                                </td>
-                            </tr>
-                        </g:else>
-
-                    </g:else>
-                </g:else>
-
-                </tbody>
-
-                <tbody id="bodyFirmas_polinomica">
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </fieldset>
-
-</div>
-
-</div>
-
-<div id="tab-textosFijos" class="tab" style="">
-
-    <div class="cabecera">
-
-        <fieldset class="borde">
-
-            <legend>Cabecera</legend>
-
-
-            <g:form class="memoGrabar" name="frm-textoFijo" controller="auxiliar" action="saveTextoFijo">
-
-                <g:hiddenField name="id" value="${"1"}"/>
-
-                <g:hiddenField name="obra" value="${obra?.id}"/>
-
+            <fieldset class="borde">
+                <legend>Cabecera</legend>
 
                 <div class="span6">
-                    <div class="span1">Título</div>
+                    <div class="span1">Memo N°</div>
 
-                    <div class="span3"><g:textField name="titulo" value="${auxiliarFijo?.titulo}" style="width: 560px"
+                    <div class="span3"><g:textField name="numeroMemo" value="${obra?.memoSalida}" disabled="true"/></div>
+                </div>
+
+                <div class="span6">
+                    <div class="span1">DE:</div>
+
+
+                    %{--<div class="span3"><g:textField name="deMemo" style="width: 470px"--}%
+                    %{--value="${obra?.departamento?.direccion?.nombre}"--}%
+                    %{--disabled="true"/></div>--}%
+
+
+                    <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS'}" disabled="true"/></div>
+
+                </div>
+
+                <div class="span6">
+                    <div class="span1">PARA:</div>
+
+                    <div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.direccion?.nombre + ' - ' + obra?.departamento?.descripcion}"
+                                                    style="width: 470px" disabled="true"/></div>
+
+                    %{--<div class="span3"><g:select name="paraMemo" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>--}%
+                </div>
+
+                <div class="span7">
+                    <div class="span1">Valor de la Base:</div>
+
+                    <div class="span2">
+                        <g:textField name="baseMemo" style="width: 100px" disabled="true" value="${totalPresupuestoBien}"/>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+
+        <div class="texto">
+
+            <fieldset class="borde">
+                <legend>Texto</legend>
+
+                <g:form class="memoGrabar" name="frm-memo" controller="auxiliar" action="saveDoc">
+
+                    <g:hiddenField name="id" value="${"1"}"/>
+
+                    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+                    <div class="span6" style="margin-top: -10px; margin-left: 110px">
+                        <div id="divSelMemo">
+                            <g:select name="selMemo" from="${notaMemo}" value="${nota?.id}" optionValue="descripcion"
+                                      optionKey="id" style="width: 300px;" noSelection="['-1': 'Seleccione una nota...']"/>
+                        </div>
+
+                        <div class="span6" style="margin-top: 10px">
+                            <div class="btn-group" style="margin-left: 310px; margin-bottom: 10px; margin-top: -80px">
+                                %{--<button class="btn" id="btnEditarMemo"><i class="icon-pencil"></i> Editar</button>--}%
+                                %{--<button class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Aceptar</button>--}%
+                                <a class="btn" id="btnNuevoMemo"><i class="icon-pencil"></i> Nuevo</a>
+                                %{--<a class="btn" id="btnCancelarMemo"><i class="icon-eraser"></i> Cancelar</a>--}%
+                                <a class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Grabar</a>
+                                <a class="btn" id="btnEliminarMemo"><i class="icon-remove"></i> Eliminar</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="span7" style="margin-left: 100px">
+                        <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionMemo" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" maxlength="253"/></div>
+                    </div>
+
+
+                    <div class="span6">
+
+                        <div class="span1">Texto</div>
+
+                        <div class="span3"><g:textArea name="memo1" value="${auxiliarFijo?.memo1}" rows="4" cols="4"
+                                                       style="width: 600px; height: 55px; margin-left: -50px;resize: none;" maxlength="1023"/></div>
+
+                    </div>
+
+
+                    <div class="span6">
+                        <div class="span1">Pie</div>
+
+                        <div class="span3"><g:textArea name="memo2" value="${auxiliarFijo?.memo2}" rows="4" cols="4"
+                                                       style="width: 600px; height: 55px; margin-left: -50px; resize: none;" maxlength="1023"/></div>
+
+                    </div>
+
+                </g:form>
+
+            </fieldset>
+
+        </div>
+
+
+        <div class="setFirmas" style="margin-top: -10px">
+
+            <fieldset class="borde">
+
+                <legend>Firmas</legend>
+
+                %{--<div class="span6">--}%
+
+                %{--<elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"--}%
+                %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
+                %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
+
+
+                %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                %{--<button class="btn btnAdicionar" id="memo">Adicionar</button>--}%
+
+                %{--</div>--}%
+
+                %{--</div>--}%
+
+                <div class="span6" style="width: 700px; margin-top: -20px">
+
+                    <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasMemo">
+
+                        <thead>
+                        <tr>
+                            <th style="width: 350px">Nombre</th>
+                            <th style="width: 250px">Rol</th>
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="firmasFijasMemo">
+
+                        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                            <g:if test="${duenoObra == 1}">
+                                <tr>
+                                    <td>
+                                        <g:select name="coordinador" from="${personasUtfpuDire}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                    </td>
+                                    <td>
+                                        DIRECTOR/COORDINADOR
+                                    </td>
+                                </tr>
+                            </g:if>
+                            <g:else>
+                                <g:if test="${cordinadorOtros[0]}">
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                            <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            SIN COORDINADOR
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:else>
+
+                            </g:else>
+
+                        </g:if>
+                        <g:else>
+                            <g:if test="${duo == 1}">
+
+                                <tr>
+                                    <td style="color: #ff2a08">
+                                        <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                        <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                    </td>
+                                    <td>
+                                        COORDINADOR
+                                    </td>
+                                </tr>
+
+                            </g:if>
+                            <g:else>
+                                <g:if test="${coordinadores}">
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            SIN COORDINADOR
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:else>
+
+                            </g:else>
+                        </g:else>
+
+                        </tbody>
+
+                        <tbody id="bodyFirmas_memo">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </fieldset>
+
+        </div>
+
+    </div>
+
+    <div id="tab-polinomica" class="tab" style="">
+
+        <div class="textoFormula">
+
+            <fieldset class="borde">
+
+                <div class="span6" style="margin-top: 10px">
+                    <div class="span2">Fórmula Polinómica N°</div>
+
+                    <div class="span3"><g:textField name="numeroFor" value="${obra?.formulaPolinomica}"
                                                     disabled="true"/></div>
                 </div>
 
                 <div class="span6">
-                    <div class="span2">Base de Contratos</div>
+                    <div class="span2">Fecha de Lista de Precios:</div>
+
+                    <div class="span3"><g:textField name="fechaFor"
+                                                    value="${formatDate(date: obra?.fechaPreciosRubros, format: "yyyy-MM-dd")}"
+                                                    style="width: 100px" disabled="true"/></div>
                 </div>
 
                 <div class="span6">
-                    <div class="span3"><g:textArea name="baseCont" value="${auxiliarFijo?.baseCont}" rows="4" cols="4"
-                                                   style="width: 665px; height: 35px; resize: none;"
-                                                   disabled="true"/></div>
+                    <div class="span2">Monto del Contrato:</div>
 
+                    <div class="span3">
+                        <g:textField name="montoFor"
+                                     value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"
+                                     disabled="true"/>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+
+
+        <div class="texto">
+
+            <fieldset class="borde">
+                <legend>Nota</legend>
+
+                <g:form class="memoGrabar" name="frm-formula" controller="auxiliar" action="saveDoc">
+
+                    <g:hiddenField name="id" value="${"1"}"/>
+
+                    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+                </g:form>
+                <div class="span6">
+
+                    <div id="divSelFormu">
+                        <g:select name="selFormu" from="${notaFormu}" value="${nota?.id}" optionValue="descripcion"
+                                  optionKey="id" style="width: 300px;" noSelection="['-1': 'Seleccione una nota...']"/>
+                    </div>
+
+                    <div class="span6">
+                        <div class="btn-group" style="margin-left: 310px; margin-bottom: 10px; margin-top: -60px">
+                            <a class="btn" id="btnNuevoFormu"><i class="icon-pencil"></i> Nuevo</a>
+                            <a class="btn" id="btnAceptarFormu"><i class="icon-ok"></i> Grabar</a>
+                            <a class="btn" id="btnEliminarFormu"><i class="icon-remove"></i> Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="span7" style="margin-left: 30px">
+                    <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionFormu" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" maxlength="253"/></div>
                 </div>
 
 
                 <div class="span6">
-                    <div class="span2">Presupuesto Referencial</div>
+                    <div class="span3"><g:textArea name="notaFormula" rows="4" value="${notaFormu}"
+                                                   cols="4"
+                                                   style="width: 690px; margin-left: -30px; height: 70px; resize: none" maxlength="1022"/></div>
+
+                </div>
+            </fieldset>
+
+        </div>
+
+
+        <div class="setFirmas" style="margin-top: -10px">
+
+            <fieldset class="borde">
+
+                <legend>Firmas</legend>
+
+                <div class="span6" style="width: 700px; margin-top: -20px">
+
+                    <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasFor">
+
+                        <thead>
+                        <tr>
+                            %{--<th style="width: 50px">N°</th>--}%
+                            <th style="width: 350px">Nombre</th>
+                            <th style="width: 250px">Rol</th>
+                            %{--<th style="width: 20px"></th>--}%
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="firmasFijasPoli">
+
+                        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                            <g:if test="${duenoObra == 1}">
+                                <tr>
+                                    <td>
+                                        <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                    </td>
+                                    <td>
+                                        COORDINADOR
+                                    </td>
+                                </tr>
+                            </g:if>
+                            <g:else>
+                                <g:if test="${cordinadorOtros[0]}">
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                            <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            SIN COORDINADOR
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:else>
+                            </g:else>
+                        </g:if>
+                        <g:else>
+                            <g:if test="${duo == 1}">
+                                <tr>
+                                    <td style="color: #ff2a08">
+                                        <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                        <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                    </td>
+                                    <td>
+                                        COORDINADOR
+                                    </td>
+                                </tr>
+                            </g:if>
+                            <g:else>
+                                <g:if test="${coordinadores}">
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td style="color: #ff2a08">
+                                            SIN COORDINADOR
+                                        </td>
+                                        <td>
+                                            COORDINADOR
+                                        </td>
+                                    </tr>
+                                </g:else>
+
+                            </g:else>
+                        </g:else>
+
+                        </tbody>
+
+                        <tbody id="bodyFirmas_polinomica">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </fieldset>
+
+        </div>
+
+    </div>
+
+    <div id="tab-textosFijos" class="tab" style="">
+
+        <div class="cabecera">
+
+            <fieldset class="borde">
+
+                <legend>Cabecera</legend>
+
+
+                <g:form class="memoGrabar" name="frm-textoFijo" controller="auxiliar" action="saveTextoFijo">
+
+                    <g:hiddenField name="id" value="${"1"}"/>
+
+                    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+
+                    <div class="span6">
+                        <div class="span1">Título</div>
+
+                        <div class="span3"><g:textField name="titulo" value="${auxiliarFijo?.titulo}" style="width: 560px"
+                                                        disabled="true"/></div>
+                    </div>
+
+                    <div class="span6">
+                        <div class="span2">Base de Contratos</div>
+                    </div>
+
+                    <div class="span6">
+                        <div class="span3"><g:textArea name="baseCont" value="${auxiliarFijo?.baseCont}" rows="4" cols="4"
+                                                       style="width: 665px; height: 35px; resize: none;"
+                                                       disabled="true"/></div>
+
+                    </div>
+
+
+                    <div class="span6">
+                        <div class="span2">Presupuesto Referencial</div>
+                    </div>
+
+                    <div class="span6">
+                        <div class="span3"><g:textArea name="presupuestoRef" value="${auxiliarFijo?.presupuestoRef}"
+                                                       rows="4" cols="4" style="width: 665px; height: 35px; resize: none;"
+                                                       disabled="true"/></div>
+
+                    </div>
+                </g:form>
+                <div class="span6" style="margin-top: 10px">
+                    <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+                        <button class="btn" id="btnEditarTextoF"><i class="icon-pencil"></i> Editar</button>
+                        <button class="btn" id="btnAceptarTextoF"><i class="icon-ok"></i> Aceptar</button>
+                    </div>
+                </div>
+            </fieldset>
+
+        </div>
+
+        <div class="cabecera">
+
+            <fieldset class="borde">
+                <legend>Pie de Página</legend>
+
+            %{--<g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="saveDoc">--}%
+                <g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="savePiePaginaTF">
+
+                    <g:hiddenField name="id" value="${"1"}"/>
+                    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+                    <div class="span6">
+                        <div class="span3">NOTA (15 líneas aproximadamente)</div>
+                    </div>
+
+                    <div class="span6">
+                        <div class="span3"><g:textArea name="notaAuxiliar" value="${auxiliarFijo?.notaAuxiliar}" rows="4"
+                                                       cols="4" style="width: 665px; height: 130px; resize: none;"
+                                                       disabled="true"/></div>
+                    </div>
+
+                </g:form>
+
+                <div class="span6" style="margin-top: 10px">
+                    <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+                        <button class="btn" id="btnEditarTextoRet"><i class="icon-pencil"></i> Editar</button>
+                        <button class="btn" id="btnAceptarTextoRet"><i class="icon-ok"></i> Aceptar</button>
+
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+
+    </div>
+
+
+    <div id="tab-memorandoPresu" class="tab" style="">
+
+        <div class="cabecera">
+
+            <fieldset class="borde" style="margin-top: -10px">
+                <legend>Cabecera</legend>
+
+                <div class="span6" style="margin-top: -10px">
+                    <div class="span1">PARA:</div>
+
+                    <div class="span3"><g:select name="paraMemoPresu" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>
                 </div>
 
                 <div class="span6">
-                    <div class="span3"><g:textArea name="presupuestoRef" value="${auxiliarFijo?.presupuestoRef}"
-                                                   rows="4" cols="4" style="width: 665px; height: 35px; resize: none;"
-                                                   disabled="true"/></div>
+                    <div class="span1">DE:</div>
+
+
+                    <div class="span3"><g:textField name="deMemoPresu" style="width: 470px"
+                                                    value="${persona?.departamento?.descripcion}"
+                                                    disabled="true"/></div>
 
                 </div>
-            </g:form>
-            <div class="span6" style="margin-top: 10px">
-                <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                    <button class="btn" id="btnEditarTextoF"><i class="icon-pencil"></i> Editar</button>
-                    <button class="btn" id="btnAceptarTextoF"><i class="icon-ok"></i> Aceptar</button>
+
+                <div class="span6">
+                    <div class="span1">FECHA:</div>
+                    <div class="span3"><g:textField name="fechaMemoPresu" style="width: 200px" value="${new java.util.Date().format("dd-MM-yyyy")}" disabled="true"/></div>
                 </div>
+
+                <div class="span6">
+                    <div class="span1">ASUNTO:</div>
+                    <div class="span3"><g:textField name="asuntoMemoPresu" style="width: 470px" value="" maxlength="100"/></div>
+                </div>
+
+            </fieldset>
+
+        </div>
+
+        <div class="texto">
+
+            <fieldset class="borde">
+                <legend>Texto</legend>
+
+                <g:form class="memoGrabarPresu" name="frm-memoPresu" controller="auxiliar" action="saveMemoPresu">
+
+                    <g:hiddenField name="id" value="${"1"}"/>
+
+                    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+                    <div class="span6" style="margin-top: -10px">
+
+                        <div class="span1">Texto</div>
+
+                        <div class="span3"><g:textArea name="notaMemoAd" value="${auxiliarFijo?.notaMemoAd}" rows="4" cols="4"
+                                                       style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
+                                                       disabled="true"/></div>
+                    </div>
+                </g:form>
+
+                <div class="span6">
+                    <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+                        <button class="btn" id="btnEditarMemoPresu"><i class="icon-pencil"></i> Editar</button>
+                        <button class="btn" id="btnAceptarMemoPresu"><i class="icon-ok"></i> Aceptar</button>
+
+                    </div>
+                </div>
+
+                <g:form class="memoGrabarAdjunto" name="frm-memoAdj" controller="auxiliar" action="saveMemoAdj">
+
+                    <g:hiddenField name="id" value="${"1"}"/>
+
+                    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+                    <div class="span6">
+
+                        <div class="span1">Adjunto</div>
+
+                        <div class="span3"><g:textArea name="notaPieAd" value="${auxiliarFijo?.notaPieAd}" rows="4" cols="4"
+                                                       style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
+                                                       disabled="true"/></div>
+
+                    </div>
+
+                </g:form>
+
+                <div class="span6">
+                    <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+                        <button class="btn" id="btnEditarAdjunto"><i class="icon-pencil"></i> Editar</button>
+                        <button class="btn" id="btnAceptarAdjunto"><i class="icon-ok"></i> Aceptar</button>
+
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+
+        <div class="valores">
+            <fieldset class="borde">
+                <legend>Valores</legend>
+
+                <div class="span7">
+                    %{--<div class="span3">Presupuesto Referencial por administración directa:</div>--}%
+                    <div class="span7">
+                        <div class="span5">Presupuesto Referencial por Contrato:</div>
+
+                        <div>
+                            <g:textField name="baseMemoPresu" style="width: 100px" disabled="true"
+                                         value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
+                        </div>
+                    </div>
+
+                    <div class="span7">
+                        <div class="span5">Materiales:</div>
+
+                        <g:set var="totalMaterial" value="${0}"/>
+                        <g:each in="${resComp}" var="r">
+                            <g:set var="totalMaterial" value="${totalMaterial + ((r.transporte + r.precio) * r.cantidad)}"/>
+                        </g:each>
+                        <div>
+                            <g:hiddenField name="tMaterial" value="${totalMaterial}"/>
+                            <g:textField name="materialesMemo" style="width: 100px" value="${formatNumber(number: totalMaterial, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
+                        </div>
+                    </div>
+
+                    <div class="span7">
+                        <div class="span5">Mano de Obra:</div>
+                        <g:set var="totalMano" value="${0}"/>
+                        <g:each in="${resMano}" var="r">
+                            <g:set var="totalMano" value="${totalMano + ((r.transporte + r.precio) * r.cantidad)}"/>
+                        </g:each>
+                        <div>
+                            <g:hiddenField name="tMano" value="${totalMano}"/>
+                            <g:textField name="manoObraMemo" style="width: 100px" value="${formatNumber(number: totalMano, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
+                        </div>
+                    </div>
+
+                    <div class="span7">
+                        <div class="span5">Equipos:</div>
+                        <g:set var="totalEquipo" value="${0}"/>
+                        <g:each in="${resEq}" var="r">
+                            <g:set var="totalEquipo" value="${totalEquipo + ((r.transporte + r.precio) * r.cantidad)}"/>
+                        </g:each>
+                        <div>
+                            <g:hiddenField name="tEquipo" value="${totalEquipo}"/>
+                            <g:textField name="equiposMemo" style="width: 100px" value="${formatNumber(number: totalEquipo, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
+                        </div>
+                    </div>
+
+                    <div class="span8">
+
+                        <div class="span5">Costos Indirectos:</div>
+
+                        <div class="span3" style="margin-left: -100px; width: 240px">
+                            %{--<div class="input-append">--}%
+                            %{--<g:textField name="costoPorcentaje" type="number" style="width: 30px" maxlength="3"/>--}%
+                            <input id="costoPorcentaje" name="costoPorcentaje" type="number" style="width: 60px" maxlength="3" max="25" min="0" step="0.1"/>
+                            <span class="add-on">%</span>
+                            %{--</div>--}%
+                            <g:textField name="costoMemo" style="width: 100px" disabled="true"/>
+                        </div>
+
+                        <div class="span5">Timbres y costos financieros (para materiales):</div>
+
+                        <div class="span3" style="margin-left: -90px; width: 240px" >
+                            %{--<div class="input-append">--}%
+                            %{--<g:textField name="pcntFinanciero" type="number" style="width: 30px" maxlength="3" max="5" min="0"/>--}%
+                            <input id="pcntFinanciero" name="pcntFinanciero" type="number" style="width: 50px" maxlength="3" max="5" min="0" step="0.1"/>
+                            <span class="add-on">%</span>
+                            %{--</div>--}%
+                            <g:textField name="costoFinanciero" style="width: 100px" disabled="true"/>
+                        </div>
+
+                    </div>
+
+                    <div class="span8">
+                        <div class="span5">TOTAL:</div>
+
+                        <div class="span2" style="margin-left: 0px"><g:textField name="totalMemoPresu" style="width: 100px" disabled="true"/></div>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+
+
+        <div class="setFirmas" style="margin-top: -10px">
+
+            <fieldset class="borde">
+
+                <legend>Firmas</legend>
+
+                %{--<div class="span6">--}%
+
+                %{--<elm:select name="setFirmas" id="cmb_memoPresu" class="selFirmas" from="${firmas}"--}%
+                %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
+                %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
+
+
+                %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                %{--<button class="btn btnAdicionar" id="memoPresu">Adicionar</button>--}%
+
+                %{--</div>--}%
+
+                %{--</div>--}%
+
+                <div class="span6" style="width: 700px; margin-top: -20px">
+
+                    <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasMemoPresu">
+
+                        <thead>
+                        <tr>
+                            %{--<th style="width: 50px">N°</th>--}%
+                            <th style="width: 350px">Nombre</th>
+                            <th style="width: 250px">Rol</th>
+                            %{--<th style="width: 20px"></th>--}%
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="firmasFijasMemoPresu">
+
+                        %{--<g:if test="${obra?.inspector}">--}%
+
+                        %{--<tr data-id="${obra?.inspector?.id}">--}%
+                        <g:if test="${firmaDirector != null}">
+                            <tr data-id="${firmaDirector?.persona?.id}">
+
+                                %{--<td>--}%
+
+                                %{--</td>--}%
+
+                                %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
+
+                                %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+
+                                %{--</td>--}%
+                                %{--<td>--}%
+                                %{--${obra?.inspector?.cargo}--}%
+
+                                %{--</td>--}%
+                                %{--<td>--}%
+                                %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                                %{--</td>--}%
+
+                                <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
+
+                                    ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
+
+                                </td>
+                                <td>
+
+                                    DIRECTOR
+
+                                </td>
+
+                            </tr>
+                        %{--</g:if>--}%
+                        </g:if>
+                        <g:else>
+
+                            <tr>
+                                <td style="color: #ff2a08">
+
+                                    DIRECCIÓN SIN DIRECTOR
+                                </td>
+                                <td>
+                                    DIRECTOR
+                                </td>
+
+                            </tr>
+
+                        </g:else>
+
+                        %{--<g:if test="${obra?.revisor}">--}%
+                        <tr data-id="${obra?.revisor?.id}">
+
+                            %{--<td>--}%
+
+                            %{--</td>--}%
+                            %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                            %{--${obra?.revisor?.cargo}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--</td>--}%
+
+                            <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
+                                ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
+                            </td>
+                            <td>
+                                SUPERVISIÓN
+                            </td>
+
+                        </tr>
+                        %{--</g:if>--}%
+                        %{--<g:if test="${obra?.responsableObra}">--}%
+
+                        <tr data-id="${obra?.responsableObra?.id}">
+
+                            %{--<td>--}%
+
+                            %{--</td>--}%
+                            %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                            %{--${obra?.responsableObra?.cargo}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--</td>--}%
+
+
+
+                            <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
+                                ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
+                            </td>
+                            <td>
+                                ELABORÓ
+                            </td>
+                        </tr>
+
+                        %{--</g:if>--}%
+
+                        </tbody>
+
+
+
+                        <tbody id="bodyFirmas_memoPresu">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </fieldset>
+
+        </div>
+
+    </div>
+
+
+    <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 180px; text-align: center">
+        <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
+        <a href="#" class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</a>
+        <a href="#" class="btn" id="btnImprimirDscr"><i class="icon-print"></i> con descripción</a>
+        <a href="#" class="btn" id="btnImprimirVae"><i class="icon-print"></i> Imprimir VAE</a>
+        <button class="btn aparecer" id="btnDocExcel"><i class="icon-list-alt"></i> Excel</button>
+
+    </div>
+
+
+    <div id="tipoReporteDialog">
+
+        <fieldset>
+            <div class="span3">
+
+                Debe elegir un Tipo de Reporte antes de imprimir el documento!!
+
             </div>
         </fieldset>
-
     </div>
 
-    <div class="cabecera">
+    <div id="reajustePresupuestoDialog" class="texto">
 
-        <fieldset class="borde">
-            <legend>Pie de Página</legend>
+        <fieldset>
+            <div class="span3" style="margin-top: 10px">
 
-        %{--<g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="saveDoc">--}%
-            <g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="savePiePaginaTF">
+                Incluir Iva <g:checkBox name="reajusteIva" style="margin-left: 132px"/>
 
-                <g:hiddenField name="id" value="${"1"}"/>
-                <g:hiddenField name="obra" value="${obra?.id}"/>
+            </div>
 
-                <div class="span6">
-                    <div class="span3">NOTA (15 líneas aproximadamente)</div>
-                </div>
+            <div class="span3" style="margin-top: 10px">
+                Incluir Proyección del reajuste <g:checkBox name="proyeccionReajuste" style="margin-left: 20px"/>
 
-                <div class="span6">
-                    <div class="span3"><g:textArea name="notaAuxiliar" value="${auxiliarFijo?.notaAuxiliar}" rows="4"
-                                                   cols="4" style="width: 665px; height: 130px; resize: none;"
-                                                   disabled="true"/></div>
-                </div>
+            </div>
 
-            </g:form>
+            <div class="span3" style="margin-top: 10px">
 
-            <div class="span6" style="margin-top: 10px">
-                <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                    <button class="btn" id="btnEditarTextoRet"><i class="icon-pencil"></i> Editar</button>
-                    <button class="btn" id="btnAceptarTextoRet"><i class="icon-ok"></i> Aceptar</button>
-
-                </div>
+                Meses: <g:textField name="mesesReajuste" style="width: 55px; margin-left: 20px"/>
             </div>
 
         </fieldset>
-
     </div>
 
-</div>
 
+    <div id="maxFirmasDialog">
 
-<div id="tab-memorandoPresu" class="tab" style="">
+        <fieldset>
+            <div class="span3">
 
-<div class="cabecera">
-
-    <fieldset class="borde" style="margin-top: -10px">
-        <legend>Cabecera</legend>
-
-        <div class="span6" style="margin-top: -10px">
-            <div class="span1">PARA:</div>
-
-            <div class="span3"><g:select name="paraMemoPresu" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>
-        </div>
-
-        <div class="span6">
-            <div class="span1">DE:</div>
-
-
-            <div class="span3"><g:textField name="deMemoPresu" style="width: 470px"
-                                            value="${persona?.departamento?.descripcion}"
-                                            disabled="true"/></div>
-
-        </div>
-
-        <div class="span6">
-            <div class="span1">FECHA:</div>
-            <div class="span3"><g:textField name="fechaMemoPresu" style="width: 200px" value="${new java.util.Date().format("dd-MM-yyyy")}" disabled="true"/></div>
-        </div>
-
-        <div class="span6">
-            <div class="span1">ASUNTO:</div>
-            <div class="span3"><g:textField name="asuntoMemoPresu" style="width: 470px" value="" maxlength="100"/></div>
-        </div>
-
-    </fieldset>
-
-</div>
-
-<div class="texto">
-
-    <fieldset class="borde">
-        <legend>Texto</legend>
-
-        <g:form class="memoGrabarPresu" name="frm-memoPresu" controller="auxiliar" action="saveMemoPresu">
-
-            <g:hiddenField name="id" value="${"1"}"/>
-
-            <g:hiddenField name="obra" value="${obra?.id}"/>
-
-            <div class="span6" style="margin-top: -10px">
-
-                <div class="span1">Texto</div>
-
-                <div class="span3"><g:textArea name="notaMemoAd" value="${auxiliarFijo?.notaMemoAd}" rows="4" cols="4"
-                                               style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
-                                               disabled="true"/></div>
-            </div>
-        </g:form>
-
-        <div class="span6">
-            <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarMemoPresu"><i class="icon-pencil"></i> Editar</button>
-                <button class="btn" id="btnAceptarMemoPresu"><i class="icon-ok"></i> Aceptar</button>
+                A ingresado el número máximo de firmas para este documento.
 
             </div>
-        </div>
-
-        <g:form class="memoGrabarAdjunto" name="frm-memoAdj" controller="auxiliar" action="saveMemoAdj">
-
-            <g:hiddenField name="id" value="${"1"}"/>
-
-            <g:hiddenField name="obra" value="${obra?.id}"/>
-
-            <div class="span6">
-
-                <div class="span1">Adjunto</div>
-
-                <div class="span3"><g:textArea name="notaPieAd" value="${auxiliarFijo?.notaPieAd}" rows="4" cols="4"
-                                               style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
-                                               disabled="true"/></div>
-
-            </div>
-
-        </g:form>
-
-        <div class="span6">
-            <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarAdjunto"><i class="icon-pencil"></i> Editar</button>
-                <button class="btn" id="btnAceptarAdjunto"><i class="icon-ok"></i> Aceptar</button>
-
-            </div>
-        </div>
-
-    </fieldset>
-
-</div>
-
-<div class="valores">
-    <fieldset class="borde">
-        <legend>Valores</legend>
-
-        <div class="span7">
-            %{--<div class="span3">Presupuesto Referencial por administración directa:</div>--}%
-            <div class="span7">
-                <div class="span5">Presupuesto Referencial por Contrato:</div>
-
-                <div>
-                    <g:textField name="baseMemoPresu" style="width: 100px" disabled="true"
-                                 value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
-                </div>
-            </div>
-
-            <div class="span7">
-                <div class="span5">Materiales:</div>
-
-                <g:set var="totalMaterial" value="${0}"/>
-                <g:each in="${resComp}" var="r">
-                    <g:set var="totalMaterial" value="${totalMaterial + ((r.transporte + r.precio) * r.cantidad)}"/>
-                </g:each>
-                <div>
-                    <g:hiddenField name="tMaterial" value="${totalMaterial}"/>
-                    <g:textField name="materialesMemo" style="width: 100px" value="${formatNumber(number: totalMaterial, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
-                </div>
-            </div>
-
-            <div class="span7">
-                <div class="span5">Mano de Obra:</div>
-                <g:set var="totalMano" value="${0}"/>
-                <g:each in="${resMano}" var="r">
-                    <g:set var="totalMano" value="${totalMano + ((r.transporte + r.precio) * r.cantidad)}"/>
-                </g:each>
-                <div>
-                    <g:hiddenField name="tMano" value="${totalMano}"/>
-                    <g:textField name="manoObraMemo" style="width: 100px" value="${formatNumber(number: totalMano, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
-                </div>
-            </div>
-
-            <div class="span7">
-                <div class="span5">Equipos:</div>
-                <g:set var="totalEquipo" value="${0}"/>
-                <g:each in="${resEq}" var="r">
-                    <g:set var="totalEquipo" value="${totalEquipo + ((r.transporte + r.precio) * r.cantidad)}"/>
-                </g:each>
-                <div>
-                    <g:hiddenField name="tEquipo" value="${totalEquipo}"/>
-                    <g:textField name="equiposMemo" style="width: 100px" value="${formatNumber(number: totalEquipo, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
-                </div>
-            </div>
-
-            <div class="span8">
-
-                <div class="span5">Costos Indirectos:</div>
-
-                <div class="span3" style="margin-left: -100px; width: 240px">
-                    %{--<div class="input-append">--}%
-                    %{--<g:textField name="costoPorcentaje" type="number" style="width: 30px" maxlength="3"/>--}%
-                    <input id="costoPorcentaje" name="costoPorcentaje" type="number" style="width: 60px" maxlength="3" max="25" min="0" step="0.1"/>
-                    <span class="add-on">%</span>
-                    %{--</div>--}%
-                    <g:textField name="costoMemo" style="width: 100px" disabled="true"/>
-                </div>
-
-                <div class="span5">Timbres y costos financieros (para materiales):</div>
-
-                <div class="span3" style="margin-left: -90px; width: 240px" >
-                    %{--<div class="input-append">--}%
-                    %{--<g:textField name="pcntFinanciero" type="number" style="width: 30px" maxlength="3" max="5" min="0"/>--}%
-                    <input id="pcntFinanciero" name="pcntFinanciero" type="number" style="width: 50px" maxlength="3" max="5" min="0" step="0.1"/>
-                    <span class="add-on">%</span>
-                    %{--</div>--}%
-                    <g:textField name="costoFinanciero" style="width: 100px" disabled="true"/>
-                </div>
-
-            </div>
-
-            <div class="span8">
-                <div class="span5">TOTAL:</div>
-
-                <div class="span2" style="margin-left: 0px"><g:textField name="totalMemoPresu" style="width: 100px" disabled="true"/></div>
-            </div>
-        </div>
-
-    </fieldset>
-
-</div>
-
-
-<div class="setFirmas" style="margin-top: -10px">
-
-    <fieldset class="borde">
-
-        <legend>Firmas</legend>
-
-        %{--<div class="span6">--}%
-
-        %{--<elm:select name="setFirmas" id="cmb_memoPresu" class="selFirmas" from="${firmas}"--}%
-        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
-        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
-
-
-        %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
-        %{--<button class="btn btnAdicionar" id="memoPresu">Adicionar</button>--}%
-
-        %{--</div>--}%
-
-        %{--</div>--}%
-
-        <div class="span6" style="width: 700px; margin-top: -20px">
-
-            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasMemoPresu">
-
-                <thead>
-                <tr>
-                    %{--<th style="width: 50px">N°</th>--}%
-                    <th style="width: 350px">Nombre</th>
-                    <th style="width: 250px">Rol</th>
-                    %{--<th style="width: 20px"></th>--}%
-
-                </tr>
-
-                </thead>
-
-                <tbody id="firmasFijasMemoPresu">
-
-                %{--<g:if test="${obra?.inspector}">--}%
-
-                %{--<tr data-id="${obra?.inspector?.id}">--}%
-                <g:if test="${firmaDirector != null}">
-                    <tr data-id="${firmaDirector?.persona?.id}">
-
-                        %{--<td>--}%
-
-                        %{--</td>--}%
-
-                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
-
-                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
-
-                        %{--</td>--}%
-                        %{--<td>--}%
-                        %{--${obra?.inspector?.cargo}--}%
-
-                        %{--</td>--}%
-                        %{--<td>--}%
-                        %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
-
-                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
-
-                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-
-                        </td>
-                        <td>
-
-                            DIRECTOR
-
-                        </td>
-
-                    </tr>
-                %{--</g:if>--}%
-                </g:if>
-                <g:else>
-
-                    <tr>
-                        <td style="color: #ff2a08">
-
-                            DIRECCIÓN SIN DIRECTOR
-                        </td>
-                        <td>
-                            DIRECTOR
-                        </td>
-
-                    </tr>
-
-                </g:else>
-
-                %{--<g:if test="${obra?.revisor}">--}%
-                <tr data-id="${obra?.revisor?.id}">
-
-                    %{--<td>--}%
-
-                    %{--</td>--}%
-                    %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                    %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--${obra?.revisor?.cargo}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
-                    %{--</td>--}%
-
-                    <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                        ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
-                    </td>
-                    <td>
-                        SUPERVISIÓN
-                    </td>
-
-                </tr>
-                %{--</g:if>--}%
-                %{--<g:if test="${obra?.responsableObra}">--}%
-
-                <tr data-id="${obra?.responsableObra?.id}">
-
-                    %{--<td>--}%
-
-                    %{--</td>--}%
-                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
-                    %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--${obra?.responsableObra?.cargo}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
-                    %{--</td>--}%
-
-
-
-                    <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
-                        ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
-                    </td>
-                    <td>
-                        ELABORÓ
-                    </td>
-                </tr>
-
-                %{--</g:if>--}%
-
-                </tbody>
-
-
-
-                <tbody id="bodyFirmas_memoPresu">
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </fieldset>
-
-</div>
-
-</div>
-
-
-<div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 180px; text-align: center">
-    <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
-    <a href="#" class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</a>
-    <a href="#" class="btn" id="btnImprimirDscr"><i class="icon-print"></i> con descripción</a>
-    <a href="#" class="btn" id="btnImprimirVae"><i class="icon-print"></i> Imprimir VAE</a>
-    <button class="btn aparecer" id="btnDocExcel"><i class="icon-list-alt"></i> Excel</button>
-
-</div>
-
-
-<div id="tipoReporteDialog">
-
-    <fieldset>
-        <div class="span3">
-
-            Debe elegir un Tipo de Reporte antes de imprimir el documento!!
-
-        </div>
-    </fieldset>
-</div>
-
-<div id="reajustePresupuestoDialog" class="texto">
-
-    <fieldset>
-        <div class="span3" style="margin-top: 10px">
-
-            Incluir Iva <g:checkBox name="reajusteIva" style="margin-left: 132px"/>
-
-        </div>
-
-        <div class="span3" style="margin-top: 10px">
-            Incluir Proyección del reajuste <g:checkBox name="proyeccionReajuste" style="margin-left: 20px"/>
-
-        </div>
-
-        <div class="span3" style="margin-top: 10px">
-
-            Meses: <g:textField name="mesesReajuste" style="width: 55px; margin-left: 20px"/>
-        </div>
-
-    </fieldset>
-</div>
-
-
-<div id="maxFirmasDialog">
-
-    <fieldset>
-        <div class="span3">
-
-            A ingresado el número máximo de firmas para este documento.
-
-        </div>
-    </fieldset>
-</div>
-
-
-<div id="mesesCeroDialog">
-
-    <fieldset>
-        <div class="span3">
-            <br>
-            Es necesario colocar un número válido en el campo <b>Meses</b> !!
-        </div>
-    </fieldset>
-</div>
-
-
-<div id="cambioMonedaExcel">
-
-    <fieldset>
-        <div class="span3" style="margin-bottom: 20px">
-
-            Coloque la tasa de cambio que se aplicará a los valores del reporte en excel.
-
-        </div>
-
-        <div class="span3">
-
-            Tasa de Cambio: <g:textField name="cambioMoneda" style="width: 55px; margin-left: 20px"/>
-
-        </div>
-
-    </fieldset>
-</div>
-
-
-<div id="tasaCeroDialog">
-
-    <fieldset>
-        <div class="span3">
-
-            Si desea que su reporte sea calculado con una tasa de cambio se debe colocar un número válido en el campo Tasa!!
-
-        </div>
-    </fieldset>
-</div>
-
-
-<div id="borrarFirmaPresuDialog">
-    <fieldset>
-        <div class="span3">
-            Está seguro que desea remover esta firma del documento a ser impreso?
-        </div>
-    </fieldset>
-</div>
-
-
-<div class="modal hide fade" id="modal-borrarFirma">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-
-        <div id="modalTitle"></div>
+        </fieldset>
     </div>
 
-    <div class="modal-body" id="modalBody">
+
+    <div id="mesesCeroDialog">
+
+        <fieldset>
+            <div class="span3">
+                <br>
+                Es necesario colocar un número válido en el campo <b>Meses</b> !!
+            </div>
+        </fieldset>
     </div>
 
-    <div class="modal-footer" id="modalFooter">
+
+    <div id="cambioMonedaExcel">
+
+        <fieldset>
+            <div class="span3" style="margin-bottom: 20px">
+
+                Coloque la tasa de cambio que se aplicará a los valores del reporte en excel.
+
+            </div>
+
+            <div class="span3">
+
+                Tasa de Cambio: <g:textField name="cambioMoneda" style="width: 55px; margin-left: 20px"/>
+
+            </div>
+
+        </fieldset>
     </div>
-</div>
 
 
-<div id="reajusteMemoDialog" class="texto">
+    <div id="tasaCeroDialog">
 
-    <fieldset>
-        <div class="span3" style="margin-top: 10px">
+        <fieldset>
+            <div class="span3">
 
-            Incluir Iva <g:checkBox name="reajusteIvaMemo" style="margin-left: 132px"/>
+                Si desea que su reporte sea calculado con una tasa de cambio se debe colocar un número válido en el campo Tasa!!
 
+            </div>
+        </fieldset>
+    </div>
+
+
+    <div id="borrarFirmaPresuDialog">
+        <fieldset>
+            <div class="span3">
+                Está seguro que desea remover esta firma del documento a ser impreso?
+            </div>
+        </fieldset>
+    </div>
+
+
+    <div class="modal hide fade" id="modal-borrarFirma">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+
+            <div id="modalTitle"></div>
         </div>
 
-        <div class="span3" style="margin-top: 10px">
-            Incluir Proyección del reajuste <g:checkBox name="proyeccionReajusteMemo" style="margin-left: 20px"/>
-
+        <div class="modal-body" id="modalBody">
         </div>
 
-        <div class="span3" style="margin-top: 10px">
-
-            Meses: <g:textField name="mesesReajusteMemo" style="width: 55px; margin-left: 20px"/>
+        <div class="modal-footer" id="modalFooter">
         </div>
+    </div>
 
-    </fieldset>
-</div>
+
+    <div id="reajusteMemoDialog" class="texto">
+
+        <fieldset>
+            <div class="span3" style="margin-top: 10px">
+
+                Incluir Iva <g:checkBox name="reajusteIvaMemo" style="margin-left: 132px"/>
+
+            </div>
+
+            <div class="span3" style="margin-top: 10px">
+                Incluir Proyección del reajuste <g:checkBox name="proyeccionReajusteMemo" style="margin-left: 20px"/>
+
+            </div>
+
+            <div class="span3" style="margin-top: 10px">
+
+                Meses: <g:textField name="mesesReajusteMemo" style="width: 55px; margin-left: 20px"/>
+            </div>
+
+        </fieldset>
+    </div>
 
 </div>
 
@@ -1524,9 +1524,9 @@
          39         -> flecha der
          */
         return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
-                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
-                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
-                ev.keyCode == 37 || ev.keyCode == 39);
+        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+        ev.keyCode == 37 || ev.keyCode == 39);
     }
 
     function validarNumDec(ev) {
@@ -1543,9 +1543,9 @@
          39         -> flecha der
          */
         return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
-                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
-                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
-                ev.keyCode == 37 || ev.keyCode == 39 || ev.keyCode == 190 || ev.keyCode == 110);
+        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+        ev.keyCode == 37 || ev.keyCode == 39 || ev.keyCode == 190 || ev.keyCode == 110);
     }
 
     $("#mesesReajuste").keydown(function (ev) {
@@ -2117,10 +2117,10 @@
 //                                $("#divOk").show(msg);
                                 //console.log($(".encabezado:checked").val());
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte +
-                                        "&forzarValue=" + forzarValue + "&notaValue=" + part[1] + "&firmasId=" + firmasId +
-                                        "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses +
-                                        "&firmasFijas=" + firmasFijas + "&firmaCoordinador=" + firmaCoordinador +
-                                        "&firmaElaboro=" + firmaElaboro + "&encabezado=" + $(".encabezado:checked").val();
+                                "&forzarValue=" + forzarValue + "&notaValue=" + part[1] + "&firmasId=" + firmasId +
+                                "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses +
+                                "&firmasFijas=" + firmasFijas + "&firmaCoordinador=" + firmaCoordinador +
+                                "&firmaElaboro=" + firmaElaboro + "&encabezado=" + $(".encabezado:checked").val();
 
                             }
                         }
@@ -2201,10 +2201,10 @@
                                 %{--+ "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador--}%
 //                                //console.log("LINK 1")
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte +
-                                        "&firmasIdMemo=" + firmasIdMemo  + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo +
-                                        "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +
-                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador+"&firmaNueva="+$("#tab-memorando").find("#coordinador").val()
+                                "&firmasIdMemo=" + firmasIdMemo  + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
+                                "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo +
+                                "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +
+                                "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador+"&firmaNueva="+$("#tab-memorando").find("#coordinador").val()
                             }
                         }
                     });
@@ -2262,7 +2262,7 @@
 //                            //console.log(msg)
                         if (part[0] == 'ok') {
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
-                                    + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id} +"&firmaCoordinador=" + firmaCoordinador
+                            + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id} +"&firmaCoordinador=" + firmaCoordinador
                         }
                     }
                 });
@@ -2297,9 +2297,9 @@
                     firmasFijasMP[i] = $(this).data("id")
                 });
                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reportedocumentosObraMemoAdmi',id: obra?.id)}?firmasIdMP=" +
-                        firmasIdMP + "&totalPresupuesto=" + totalPres + "&firmasFijasMP=" + firmasFijasMP + "&materiales=" + materiales +
-                        "&manoObra=" + manoObra + "&equipos=" + equipos + "&costoPorcentaje=" + costoPorcentaje + "&costo=" + costo + "&total=" + total +
-                        "&texto=" + texto + "&para=" + para + "&de=" + de + "&fecha=" + fecha + "&asunto=" + asunto + "&financiero=" + financiero
+                firmasIdMP + "&totalPresupuesto=" + totalPres + "&firmasFijasMP=" + firmasFijasMP + "&materiales=" + materiales +
+                "&manoObra=" + manoObra + "&equipos=" + equipos + "&costoPorcentaje=" + costoPorcentaje + "&costo=" + costo + "&total=" + total +
+                "&texto=" + texto + "&para=" + para + "&de=" + de + "&fecha=" + fecha + "&asunto=" + asunto + "&financiero=" + financiero
             }
         }
         return false;
@@ -2492,31 +2492,55 @@
             var notaPoli = $("#selFormu").val()
 
             if (active == 2) {
-
                 firmasIdFormu = [];
                 firmasFijasFormu = [];
 
                 $("#bodyFirmas_polinomica").children("tr").each(function (i) {
                     firmasIdFormu[i] = $(this).data("id")
-
-                })
+                });
 
                 $("#firmasFijasPoli").children("tr").each(function (i) {
-
                     firmasFijasFormu[i] = $(this).data("id")
-
                 });
 
                 if (firmasIdFormu.length == 0) {
                     firmasIdFormu = "";
                 }
                 if (firmasFijasFormu.length == 0) {
-
                     firmasFijasFormu = "";
-
                 }
 
-                location.href = "${g.createLink(controller: 'reportes5' ,action: 'reporteFormulaExcel',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu + "&notaPoli=" + notaPoli
+                var idCoordinador = $("#coordinador").val()
+
+
+                if (idCoordinador != null) {
+                    idFirmaCoor = $("#coordinador").val()
+                } else {
+                    idFirmaCoor = ''
+                }
+
+                firmaCoordinador = idFirmaCoor
+
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(controller: 'nota', action: 'saveNotaFormu')}",
+                    data    : {
+                        selFormu    : $("#selFormu").val(),
+                        obra        : ${obra?.id},
+                        descripcion : $("#descripcionFormu").val(),
+                        texto       : $("#notaFormula").val(),
+                        obraTipo    : "${obra?.claseObra?.tipo}"
+                    },
+                    success : function (msg) {
+                        var part = msg.split('_');
+                        if (part[0] == 'ok') {
+                            location.href = "${g.createLink(controller: 'reportes5' ,action: 'reporteFormulaExcel',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu="
+                            + firmasFijasFormu + "&notaPoli=" + part[1] +  "&notaFormula=" + $("#notaFormula").val() +"&firmaCoordinador=" + firmaCoordinador
+                        }
+                    }
+                });
+
+                %{--location.href = "${g.createLink(controller: 'reportes5' ,action: 'reporteFormulaExcel',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu + "&notaPoli=" + notaPoli--}%
 
             }
 
@@ -2876,7 +2900,7 @@
                 else {
                     var tipoReporte = tipoClick;
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
-                            + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" + firmasFijas + "&firmaCoordinador=" + firmaCoordinador
+                    + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" + firmasFijas + "&firmaCoordinador=" + firmaCoordinador
                     $("#reajustePresupuestoDialog").dialog("close");
                 }
             },
@@ -2942,10 +2966,10 @@
                             if (part[0] == 'ok') {
 //                                //console.log("LINK 3 : ", $("#tab-memorando").find("#coordinador"), );
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 +
-                                        "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() + "&notaValue=" + part[1] +
-                                        "&firmaCoordinador=" + firmaCoordinador+"&firmaNueva="+$("#tab-memorando").find("#coordinador").val()
+                                + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
+                                "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 +
+                                "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() + "&notaValue=" + part[1] +
+                                "&firmaCoordinador=" + firmaCoordinador+"&firmaNueva="+$("#tab-memorando").find("#coordinador").val()
 
                             }
                         }
@@ -3171,8 +3195,8 @@
             var total = 0.0
 
             total = parseFloat($("#tMaterial").val()) + parseFloat($("#tMano").val()) +
-                    parseFloat($("#tEquipo").val()) + parseFloat($("#costoMemo").val()) +
-                    parseFloat($("#costoFinanciero").val())
+            parseFloat($("#tEquipo").val()) + parseFloat($("#costoMemo").val()) +
+            parseFloat($("#costoFinanciero").val())
 
             $("#totalMemoPresu").val(number_format(total, 2, ".", ""))
         }

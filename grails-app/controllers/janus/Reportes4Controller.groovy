@@ -1949,15 +1949,10 @@ class Reportes4Controller {
 
     def tablaContratistas (){
 
-
-
-
         def sql
         def cn
         def res
-
         params.old = params.criterio
-
         params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sqlBase =  "SELECT\n" +
@@ -1981,13 +1976,8 @@ class Reportes4Controller {
                 "  LEFT JOIN ofrt o ON p.prve__id = o.prve__id\n"+
                 "  LEFT JOIN cntr f ON o.ofrt__id = f.ofrt__id\n"
 
-
-
-
         def filtroBuscador = ""
         def buscador=""
-
-
 
         switch (params.buscador) {
             case "cdgo":
@@ -1999,8 +1989,6 @@ class Reportes4Controller {
             case "espe":
                 filtroBuscador = " where e.espcdscr ILIKE ('%${params.criterio}%') "
                 break;
-
-
         }
 
         params.criterio = params.old
@@ -2012,8 +2000,6 @@ class Reportes4Controller {
 
 //        println(sql)
 //        println(res)
-
-
 
         return [res: res, params:params]
 

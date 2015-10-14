@@ -615,6 +615,7 @@ class Reportes5Controller {
 
 
     def reporteFormulaExcel() {
+        println("params " + params)
         def auxiliar = Auxiliar.get(1)
         def auxiliarFijo = Auxiliar.get(1)
         def obra = Obra.get(params.id)
@@ -863,33 +864,54 @@ class Reportes5Controller {
 
         label = new Label(1, salto3 + 8, "Atentamente,  ", times16format); sheet.addCell(label);
 
-        if (cuenta == 3) {
-            label = new Label(1, salto3 + 13, "______________________________________", times16format);
+        label = new Label(1, salto3 + 13, "______________________________________", times16format);
+        sheet.addCell(label);
+
+        def firmaC
+
+
+        if(params.firmaCoordinador != ''){
+            def personaRol = PersonaRol.get(params.firmaCoordinador)
+            firmaC = personaRol.persona
+
+            label = new Label(1, salto3 + 14, firmaC?.titulo?.toUpperCase() ?: '' + " " + (firmaC?.nombre?.toUpperCase() ?: '' + " " + firmaC?.apellido?.toUpperCase() ?: ''), times16format);
             sheet.addCell(label);
-            label = new Label(2, salto3 + 13, "______________________________________", times16format);
+
+        }else{
+            label = new Label(1, salto3 + 14, "Coordinador no asignado", times16format);
             sheet.addCell(label);
-            label = new Label(3, salto3 + 13, "______________________________________", times16format);
-            sheet.addCell(label);
-            def salto4 = salto3 + 13
-
-            firmaFijaFormu.eachWithIndex { f, h ->
-
-                if (f != '') {
-
-                    firmas = Persona.get(f)
-
-                    label = new Label(h + 1, salto4 + 1, firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times16format);
-                    sheet.addCell(label);
-                } else {
-                    label = new Label(h + 1, salto4 + 1, "Sin asignar,  ", times16format); sheet.addCell(label);
-                }
-            }
-
-            firmas = Persona.get(firmaFijaFormu[0])
-            label = new Label(1, salto4 + 2, firmas?.cargo, times16format); sheet.addCell(label);
-            label = new Label(2, salto4 + 2, "REVISOR", times16format); sheet.addCell(label);
-            label = new Label(3, salto4 + 2, "ELABORÓ", times16format); sheet.addCell(label);
         }
+
+//        label = new Label(1, salto3 + 14, "", times16format);
+//        sheet.addCell(label);
+
+//        if (cuenta == 3) {
+//            label = new Label(1, salto3 + 13, "______________________________________", times16format);
+//            sheet.addCell(label);
+//            label = new Label(2, salto3 + 13, "______________________________________", times16format);
+//            sheet.addCell(label);
+//            label = new Label(3, salto3 + 13, "______________________________________", times16format);
+//            sheet.addCell(label);
+//            def salto4 = salto3 + 13
+//
+//            firmaFijaFormu.eachWithIndex { f, h ->
+//
+//                if (f != '') {
+//
+//                    firmas = Persona.get(f)
+//
+//                    label = new Label(h + 1, salto4 + 1, firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times16format);
+//                    sheet.addCell(label);
+//                } else {
+//                    label = new Label(h + 1, salto4 + 1, "Sin asignar,  ", times16format); sheet.addCell(label);
+//                }
+//            }
+//
+//            firmas = Persona.get(firmaFijaFormu[0])
+//            label = new Label(1, salto4 + 2, firmas?.cargo, times16format); sheet.addCell(label);
+//            label = new Label(2, salto4 + 2, "REVISOR", times16format); sheet.addCell(label);
+//            label = new Label(3, salto4 + 2, "ELABORÓ", times16format); sheet.addCell(label);
+//        }
 
         workbook.write();
         workbook.close();

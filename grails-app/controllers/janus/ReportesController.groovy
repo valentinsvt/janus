@@ -2284,6 +2284,8 @@ class ReportesController {
         }
 //        headers.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times12bold));
 
+        println("obra " + obra.id)
+
         Paragraph headerFecha = new Paragraph();
         headerFecha.setAlignment(Element.ALIGN_RIGHT);
         addEmptyLine(headerFecha, 1);
@@ -4192,6 +4194,9 @@ class ReportesController {
         def totalVae2 = 0
         def finalVae = 0
 //        def valores = preciosService.rbro_pcun_v2(obra.id)
+
+        println("id " + obra.id)
+
         def valores = preciosService.rbro_pcun_vae(obra.id)
 
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
@@ -4232,9 +4237,9 @@ class ReportesController {
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
                     addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.relativo, minFractionDigits:
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
-                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vae_rbro, minFractionDigits:
+                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.vae_rbro ?: 0, minFractionDigits:
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
-                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vae_totl, minFractionDigits:
+                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.vae_totl ?: 0, minFractionDigits:
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
                     totales = it.totl
                     totalPrueba = total2 += totales
@@ -4243,7 +4248,14 @@ class ReportesController {
                     totalRelativo1 = it.relativo
                     finalRelativo = (totalRelativo2 += totalRelativo1)
 
-                    totalVae1= it.vae_totl
+
+                    if(it.vae_totl){
+                        totalVae1= it.vae_totl
+                    }else{
+                        totalVae1= 0
+                    }
+
+
                     finalVae = (totalVae2 += totalVae1)
                 } else {  }
             }
@@ -4651,10 +4663,6 @@ class ReportesController {
         apendice.setKeepTogether(true);
         document.add(apendice)
 
-        ///
-
-//        document.add(table3);
-
         document.close();
         pdfw.close()
         byte[] b = baos.toByteArray();
@@ -4666,7 +4674,7 @@ class ReportesController {
 
 
     def reporteDocumentosObraMemo() {
-        println("-memo-->>" + params)
+//        println("-memo-->>" + params)
         def cd
         def auxiliar = Auxiliar.get(1)
         def auxiliarFijo = Auxiliar.get(1)
@@ -4694,7 +4702,14 @@ class ReportesController {
         def direccion = Direccion.get(obra?.departamento?.direccion?.id)
         def nota
 
-        def firmaNueva = PersonaRol.get(params.firmaNueva).persona
+        def firmaNueva
+
+        if(params.firmaCoordinador){
+
+            firmaNueva = PersonaRol.get(params.firmaCoordinador)
+        }else {
+            firmaNueva = null
+        }
 
         if (params.notaValue && params.notaValue != '' && params.notaValue != 'null' && params.notaValue != 'undefined') {
             nota = Nota.get(params.notaValue)
@@ -4725,8 +4740,6 @@ class ReportesController {
         } else {
             firmaFijaMemo = []
         }
-
-//        cuenta = firma.size() + firmaFijaMemo.size()
 
         cuenta = 3
         def prmsHeaderHoja = [border: Color.WHITE]
@@ -4830,7 +4843,7 @@ class ReportesController {
         addCellTabla(tablaDatosMemo, new Paragraph(persona?.departamento?.descripcion, times10bold), prmsHeaderHoja)
 
 
-//        if (obra?.departamento?.descripcion == null) {
+
         if(obra?.direccionDestino){
             addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph("PARA", times10bold), prmsHeaderHoja)
@@ -4847,6 +4860,16 @@ class ReportesController {
             addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph("No se ha seleccionado una dirección de destino, en la pantalla de Registro de Obra", times10bold), prmsHeaderHoja)
         }
+
+
+
+//        addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaDatosMemo, new Paragraph("PARA", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaDatosMemo, new Paragraph(obra?.departamento?.direccion?.nombre + ' - ' + obra?.departamento?.descripcion, times10bold), prmsHeaderHoja)
+
+
+
 
         PdfPTable tablaLinea = new PdfPTable(2);
         tablaLinea.setWidthPercentage(100);

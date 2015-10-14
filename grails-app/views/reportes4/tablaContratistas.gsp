@@ -40,10 +40,10 @@
 
 </div>
 
-<div style="width: 1000px; height: 500px; overflow-y:hidden; overflow-x: auto" >
+<div style="width: 1000px; height: 500px; overflow-y:auto; overflow-x: auto" >
 
 
-<div style="width: 1800px; height: 500px; overflow-y: hidden" >
+<div style="width: 1800px; height: 500px;">
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>
     <tr>

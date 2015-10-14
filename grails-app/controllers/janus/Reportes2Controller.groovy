@@ -14,6 +14,7 @@ import jxl.write.WritableCellFormat
 import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
+import org.springframework.dao.DataIntegrityViolationException
 
 import java.awt.Color
 
@@ -370,6 +371,72 @@ class Reportes2Controller {
         response.setHeader("Content-disposition", "attachment; filename=" + name)
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
+    }
+
+
+    def comprobarIlustracion (){
+        def obra = Obra.get(params.id)
+        def persona = Persona.get(session.usuario.id)
+        def rubros = VolumenesObra.findAllByObra(obra).item.unique()
+
+        def baos = new ByteArrayOutputStream()
+        def arrIl = []
+        def arrIe = []
+
+
+        def pagAct = 1
+
+        def tipo = params.tipo //i: ilustraciones, e: especificaciones, ie: ambas
+
+        rubros.each { rubro ->
+
+            def extIlustracion = "", extEspecificacion = "", pagesEspecificacion = 0, pagesIlustracion = 0, pathEspecificacion, pathIlustracion
+            PdfReader readerEspecificacion
+            PdfReader readerIlustracion
+
+            if (rubro.foto && tipo.contains("i")) {
+                extIlustracion = rubro.foto.split("\\.")
+                extIlustracion = extIlustracion[extIlustracion.size() - 1]
+
+                pathIlustracion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.foto
+
+                arrIl += (rubro?.foto+"*")
+
+                def il
+
+                if (extIlustracion.toLowerCase() == "pdf") {
+                    try{
+                        il = new FileInputStream(pathIlustracion)
+
+                        render "SI"
+                    }
+                  catch(e){
+                      render "NO_"+arrIl[0]
+                  }
+                }
+            }
+            if (rubro.especificaciones && tipo.contains("e")) {
+                extEspecificacion = rubro.especificaciones.split("\\.")
+                extEspecificacion = extEspecificacion[extEspecificacion.size() - 1]
+
+                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.especificaciones
+
+                arrIe += (rubro?.especificaciones+"*")
+
+                def fi
+                if (extEspecificacion.toLowerCase() == "pdf") {
+                    try {
+                        fi = new FileInputStream(pathEspecificacion)
+
+                        render "SI"
+                    }
+                     catch (e){
+
+                         render "NO*"+arrIe[0]
+                     }
+                }
+            }
+        }
     }
 
     def reporteRubroIlustracion_bck() {

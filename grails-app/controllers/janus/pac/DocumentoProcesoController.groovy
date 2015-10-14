@@ -39,7 +39,12 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             response.getOutputStream().write(b)
         } else {
 
+//            redirect(action: "errores")
+            flash.clase = "alert-error"
+            flash.message = "No se encontró el archivo " + " '" + doc.path + "'"
             redirect(action: "errores")
+
+
         }
     }
 

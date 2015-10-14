@@ -2062,6 +2062,10 @@
         $("#btnRubros").click(function () {
             var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
             var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${obra?.id}Wdesglose=";
+
+
+            var idObra = ${obra?.id}
+
             $.box({
                 imageClass: "box_info",
                 text: "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br><span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
@@ -2101,8 +2105,32 @@
                             location.href = urlVaeEx;
                         },
                         "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra": function () {
-                            var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
-                            location.href = url;
+                            %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";--}%
+                            %{--location.href = url;--}%
+
+                            $.ajax({
+                                type: "POST",
+                                url: "${createLink(controller:'reportes2', action:'comprobarIlustracion')}",
+                                data: {
+                                    id: idObra,
+                                    tipo: "ie"
+                                },
+                                success: function (msg) {
+
+                                    var parts = msg.split('*');
+
+                                    if (parts[0] == 'SI') {
+                                        $("#divError").hide();
+                                        var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
+                                        location.href = url;
+                                    } else {
+                                        $("#spanError").html("El archivo  '" + parts[1] + "'  no ha sido encontrado");
+                                        $("#divError").show()
+                                    }
+
+                                }
+                            });
+
                         },
 
                         "Cancelar": function () {
