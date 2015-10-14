@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 11/6/12
-  Time: 3:01 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -13,24 +5,24 @@
         <title>REGISTRO Y MANT. DE ITEMS</title>
 
         <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jquery.jstree.js')}"></script>
-        <script type="text/javascript" src="${resource(dir: 'js/jquery/css', file: 'jquery.jstree.js')}"></script>
-        <link href="${resource(dir: 'js/jquery/css/bw', file: 'jquery-ui-1.10.2.custom.min.css')}" rel="stylesheet"/>
-        <script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.10.2.custom.min.js')}"></script>
-        %{--<script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>--}%
+        <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>
 
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
-        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'custom-methods.js')}"></script>
 
         <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
-        <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
-        <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet"/>
-
         <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
 
+        %{--<script type="text/javascript" src="${resource(dir: 'js/jquery/css', file: 'jquery.jstree.js')}"></script>--}%
+        %{--<link href="${resource(dir: 'js/jquery/css/bw', file: 'jquery-ui-1.10.2.custom.min.css')}" rel="stylesheet"/>--}%
+        %{--<script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.10.2.custom.min.js')}"></script>--}%
+        %{--<script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>--}%
+        %{--<script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'custom-methods.js')}"></script>--}%
+        %{--<script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>--}%
+        %{--<link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet"/>--}%
     </head>
 
     <body>
@@ -57,6 +49,15 @@
                 <i class="icon-truck"></i>
                 Equipos
             </a>
+            <form class="form-search" style="width: 700px; margin-left: 380px; margin-top: -30px;">
+                <div class="input-append">
+                    <input type="text" class="input-medium search-query" id="search"/>
+                    <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
+                </div>
+                <span id="cantRes"></span>
+                <input type="button" class="btn " value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
+            </form>
+
         </div>
 
         <div id="loading" style="text-align:center;">
@@ -67,19 +68,6 @@
 
 
         <div id="treeArea" class="hide">
-            <form class="form-search" style="width: 500px;">
-                <div class="input-append">
-                    <input type="text" class="input-medium search-query" id="search"/>
-                    <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
-                </div>
-                <span id="cantRes"></span>
-                <input type="button" class="btn pull-right" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
-            </form>
-
-            %{--<div class="btn-group">--}%
-            %{--<input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">--}%
-            %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
-            %{--</div>--}%
 
             <div id="tree" class="ui-corner-all"></div>
 
@@ -975,6 +963,7 @@
                 $("#btnSearch").click(function () {
                     doSearch();
                 });
+
                 $("#search").keyup(function (ev) {
                     if (ev.keyCode == 13) {
                         doSearch();

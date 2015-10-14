@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 11/6/12
-  Time: 3:01 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -20,7 +12,6 @@
 
         <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
-        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
         <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
@@ -55,7 +46,7 @@
                 Equipos
             </a>
 
-            <form class="form-search" style="width: 740px; margin-left: 380px; margin-top: -22px; ">
+            <form class="form-search" style="width: 740px; margin-left: 380px; margin-top: -30px; ">
                 <div class="input-append">
                     <input type="text" class="input-medium search-query" id="search"/>
                     <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
