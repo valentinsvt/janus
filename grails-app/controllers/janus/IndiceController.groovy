@@ -2,6 +2,7 @@ package janus
 
 import janus.ejecucion.PeriodosInec
 import janus.ejecucion.ValorIndice
+import janus.pac.Anio
 import jxl.Cell
 
 //import janus.pac.PeriodoValidez
@@ -355,17 +356,16 @@ class IndiceController extends janus.seguridad.Shield {
     } //delete
 
     def valorIndice = {
-        println params
         def cn = dbConnectionService.getConnection()
-        def tx_sql = "select * from sp_vlin(${janus.pac.Anio.get(params.anio?:3).anio})"
-        def datos = []
-        cn.eachRow(tx_sql.toString()) { row ->
-            datos.add(row.toRowResult())
-        }
+        def anio = Anio.findByAnio(new Date().format('yyyy'))
+
+        def tx_sql = "select * from sp_vlin(${janus.pac.Anio.get(params.anio?: anio.id).anio})"
+        def datos = cn.rows(tx_sql.toString())
+
         cn.close()
 
-        //println datos
-        [datos: datos, anio: params.anio?:3]
+        //println "año: $anio.id"
+        [datos: datos, anio: params.anio?: anio.id]
     }
 
     def editarIndices() {
