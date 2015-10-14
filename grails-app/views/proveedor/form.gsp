@@ -61,6 +61,7 @@
             <select name="tipo">
                 <option value="N" ${(proveedorInstance?.tipo=="N")?"selected":""}>Natural</option>
                 <option value="J" ${(proveedorInstance?.tipo=="J")?"selected":""}>Jurídica</option>
+                <option value="E" ${(proveedorInstance?.tipo=="E")?"selected":""}>Empresa Pública</option>
             </select>
 
             <p class="help-block ui-helper-hidden"></p>

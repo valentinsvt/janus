@@ -56,7 +56,7 @@ class Proveedor {
     }
     static constraints = {
         especialidad(blank: true, nullable: true)
-        tipo(blank: true, nullable: true, maxSize: 1, inList: ['N', 'J'])
+        tipo(blank: true, nullable: true, maxSize: 1, inList: ['N', 'J', 'E'])
         ruc(blank: true, nullable: true, maxSize: 13)
         nombre(blank: true, nullable: true, maxSize: 63)
         nombreContacto(blank: true, nullable: true, maxSize: 31)

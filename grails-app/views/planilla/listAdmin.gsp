@@ -95,7 +95,7 @@
             <g:sortableColumn property="descripcion" title="Descripcion"/>
             <g:sortableColumn property="valor" title="Valor"/>
             <th width="160">Acciones</th>
-            <th>Pagos</th>
+            <th width="130">Pagos</th>
         </tr>
         </thead>
         <g:set var="cont" value="${1}"/>

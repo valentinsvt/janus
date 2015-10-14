@@ -795,7 +795,8 @@
             //            });
             $("#btnVerAvance").click(function () {
                 $(this).replaceWith(spinner);
-                location.href = "${createLink(controller: 'reportesPlanillas', action: 'reporteAvance', id:contrato?.id)}?fecha=" + $("#fechaAvance").val();
+                location.href = "${createLink(controller: 'reportesPlanillas', action: 'reporteAvance', id:contrato?.id)}?fecha=" +
+                  $("#fechaAvance").val();
             });
 
             $(".number").keydown(function (ev) {

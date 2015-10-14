@@ -471,7 +471,9 @@ class ReportesPlanillasController {
                 "Observaciones",
                 "Conclusiones y recomendaciones"
         ]
-        def html = ""
+        def html = "<legend>Textos del informe de avance<span style='margin-left: 180px'>" +
+                "<a href='#' class='btn btn-success btnSave'><i class='icon icon-save'></i>Guardar</a> </span>" +
+                "<a href='#' class='btn btn-primary btnPrint'><i class='icon icon-print'></i>Imprimir</a></legend>"
 //        if (band == 1) {
         def dateFormat = new SimpleDateFormat("EEEE dd-MM-yyyy", new Locale("es"))
         titulos.eachWithIndex { t, i ->
@@ -487,20 +489,6 @@ class ReportesPlanillasController {
                 html += "<th>Tarde</th>"
                 html += "</tr>"
                 html += "</thead>"
-//                if (frases.size() > 0) {
-//
-//                } else {
-/*
-                def planillasAvance = Planilla.withCriteria {
-                    eq("contrato", contrato)
-                    eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
-                    le("fechaFin", fecha)
-                    order("fechaFin", "desc")
-                }
-                def periodo = Planilla.findAllById(planillasAvance[0].id, [sort: "fechaInicio", order: "desc"])
-                def dia = periodo[0].fechaInicio
-                def fin = periodo[0].fechaFin
-*/
                 def dia = plnl.fechaInicio
                 def fin = plnl.fechaFin
                 while (dia <= fin) {
@@ -512,14 +500,11 @@ class ReportesPlanillasController {
                     }
                     html += "<tr>"
                     html += "<td>${dateFormat.format(dia).capitalize()}</td>"
-//                    html += "<td>${g.textField(name: 'clima_m_' + dia.format('dd-MM-yyyy'), value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
-//                    html += "<td>${g.textField(name: 'clima_t_' + dia.format('dd-MM-yyyy'), value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
                     html += "<td>${g.select(name: 'clima_m_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
                     html += "<td>${g.select(name: 'clima_t_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
                     html += "</tr>"
                     dia++
                 }
-//                }
                 html += "</table>"
             } else {
                 def num = (i + 1).toString().padLeft(2, "0")
@@ -527,11 +512,10 @@ class ReportesPlanillasController {
                 html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, "maxLength":511, style: "width: 1000px; height:100px;")
             }
         }
-//        }
         html += "<div style='margin-bottom:10px; margin-top:5px;'>" +
-                "<a href='#' id='btnSave' class='btn btn-success'><i class='icon icon-save'></i>Guardar</a>" +
+                "<a href='#' class='btn btn-success btnSave'><i class='icon icon-save'></i>Guardar</a>" +
                 "<a href='#' id='btnSpin' hidden >Procesando</a>" +
-                "<a href='#' id='btnPrint' class='btn btn-primary' style='margin-left:15px;'><i class='icon icon-print'></i>Imprimir</a>" +
+                "<a href='#' class='btn btn-primary btnPrint' style='margin-left:15px;'><i class='icon icon-print'></i>Imprimir</a>" +
                 "</div>"
 
         return [html: html, contrato: contrato, fecha: params.plnl, plnl: plnl.id]
@@ -545,13 +529,14 @@ class ReportesPlanillasController {
         def errores = ""
 
         if (avanceContrato.size() == 0) {
-//            println "0"
-            avanceContrato = new Avance([contrato: contrato, fecha: fecha])
+//            println "0 -- crea avance"
+            avanceContrato = new Avance([contrato: contrato, planilla: plnl])
+//            println "avance: $avanceContrato"
         } else if (avanceContrato.size() == 1) {
 //            println "1"
             avanceContrato = avanceContrato[0]
         } else {
-            println "Hay mas de un avance wtf"
+            println "error... hay mas de un avance"
             avanceContrato = avanceContrato[0]
         }
 
@@ -566,7 +551,7 @@ class ReportesPlanillasController {
             }
         }
         if (!avanceContrato.save(flush: true)) {
-            println "Error: " + avanceContrato.errors
+            println "Error saveAvance: " + avanceContrato.errors
             errores += "<li>Ha ocurrido un error: " + renderErrors(bean: avanceContrato) + "</li>"
         }
         params.clima.each { c ->

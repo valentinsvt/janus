@@ -60,18 +60,14 @@
         <fieldset>
             <legend>
                 Planillas de Avance de Obra
-            </legend>
             %{--<elm:datepicker name="fecha" value="${new Date()}"/>--}%
             %{--<g:select name="fecha" from="${fechas}"/>--}%
             <g:select name="plnl" from="${planillas}" optionKey="id" style="width: 600px"/>
             <g:link class="btn btnVer" action="tablaAvance" id="${contrato.id}" style="margin-bottom:9px;">Ver informe</g:link>
+            </legend>
         </fieldset>
 
         <fieldset class="hide" id="fsTextos">
-            <legend>
-                Textos
-            </legend>
-
             <div id="divTextos"></div>
         </fieldset>
 
@@ -96,6 +92,7 @@
                     themeState : ''
                 });
             }
+
             $(function () {
 
                 $("#btnAdicionales").click(function () {

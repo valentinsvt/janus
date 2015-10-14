@@ -69,7 +69,7 @@
                         %{--<td>${fieldValue(bean: proveedorInstance, field: "especialidad")}</td>--}%
                         <td>${proveedorInstance?.especialidad?.descripcion}</td>
 
-                        <td>${(proveedorInstance.tipo=="N")?"Natural":"Jurídica"}</td>
+                        <td>${(proveedorInstance.tipo=="N")?"Natural": (proveedorInstance.tipo=="J")? "Jurídica":"Empresa Pública"}</td>
                     
                         <td>${fieldValue(bean: proveedorInstance, field: "ruc")}</td>
                     

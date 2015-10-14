@@ -204,7 +204,7 @@ class ReportePlanillas3Controller {
     }
 
     def reportePlanilla() {
-        println("params " + params.id)
+        println("reportePlanilla params " + params.id)
         def planilla = Planilla.get(params.id)
 
         if (planilla.tipoPlanilla.codigo == 'Q') {

@@ -4,7 +4,7 @@ ${html}
     $(function () {
         var sep = "^";
         var $sp = spinner;
-        $("#btnSave").click(function () {
+        $(".btnSave").click(function () {
 //            $(this).replaceWith($sp);
             $("#btnSpin").show();
             var data = "id=${contrato.id}&plnl=${plnl}";
@@ -32,7 +32,7 @@ ${html}
             return false;
         });
 
-        $("#btnPrint").click(function () {
+        $(".btnPrint").click(function () {
             location.href = "${createLink(action:'reporteAvance', id:contrato.id, params:[plnl:plnl])}";
             return false;
         });
