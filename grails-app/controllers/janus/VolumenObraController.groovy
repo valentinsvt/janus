@@ -72,11 +72,18 @@ class VolumenObraController extends janus.seguridad.Shield {
         } catch (e) {
             tot = 0
         }
+//        println " total de la obra:; $tot"
         def obra = Obra.get(params.obra)
         if (obra.valor != tot) {
             obra.valor = tot
             obra.save(flush: true)
         }
+
+        // actualiza el rendimiento de rubros transporte TR%
+        /** existe el peligro de que este rubro sea actualizado en otra obra mientras se procesa la obra actual **/
+        preciosService.ac_transporteDesalojo(obra.id)
+
+        render "ok"
     }
 
     def cargaCombosEditar() {
@@ -217,22 +224,16 @@ class VolumenObraController extends janus.seguridad.Shield {
 
 
     def tabla() {
-
-
+        println "params tabla Vlob--->>>> "+params
         def usuario = session.usuario.id
         def persona = Persona.get(usuario)
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
         def grupo = Grupo.findAllByDireccion(direccion)
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
-//
-//        println "params --->>>> "+params
         def obra = Obra.get(params.obra)
 
-
-        def volumenes = VolumenesObra.findAllByObra(obra);
+//        def volumenes = VolumenesObra.findAllByObra(obra);
         def duenoObra = 0
-
-        def detalle
         def valores
         def orden
 
@@ -243,39 +244,34 @@ class VolumenObraController extends janus.seguridad.Shield {
         }
 
         preciosService.ac_rbroObra(obra.id)
+        // actualiza el rendimiento de rubros transporte TR%
+        preciosService.ac_transporteDesalojo(obra.id)
+
         if (params.sub && params.sub != "-1") {
-//            println("entro1")
-//        detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
             valores = preciosService.rbro_pcun_v5(obra.id, params.sub, orden)
-//          detalle= VolumenesObra.findAllBySubPresupuesto(SubPresupuesto.get(params.sub))
-//            println("detalle" + detalle)
         } else {
-//            println("entro2")
-//        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
             valores = preciosService.rbro_pcun_v4(obra.id, orden)
         }
-
-
 //        println("-->>" + valores)
 
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
-        def precios = [:]
-        def fecha = obra.fechaPreciosRubros
-        def dsps = obra.distanciaPeso
-        def dsvl = obra.distanciaVolumen
-        def lugar = obra.lugar
+//        def precios = [:]
+//        def fecha = obra.fechaPreciosRubros
+//        def dsps = obra.distanciaPeso
+//        def dsvl = obra.distanciaVolumen
+//        def lugar = obra.lugar
         def estado = obra.estado
-        def prch = 0
-        def prvl = 0
+//        def prch = 0
+//        def prvl = 0
 
-//        /*Todo ver como mismo es esta suma*/
-        def indirecto = obra.totales / 100
+//        def indirecto = obra.totales / 100
 
         duenoObra = esDuenoObra(obra)? 1 : 0
 
 
-        [subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores,
+//        [subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores,
+        [subPres: subPres, subPre: params.sub, obra: obra, valores: valores,
          subPresupuesto1: subPresupuesto1, estado: estado, msg: params.msg, persona: persona, duenoObra: duenoObra]
 
     }

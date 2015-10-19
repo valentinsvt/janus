@@ -117,6 +117,7 @@ class Obra implements Serializable {
     String memoSif
     String estadoSif
     Persona oferente=null
+    double distanciaDesalojo = 0
 
     static auditable = true
     static mapping = {
@@ -240,6 +241,7 @@ class Obra implements Serializable {
             oferente column: 'ofrt__id'
             memoSif column: 'obrammsf'
             estadoSif column: 'obraetsf'
+            distanciaDesalojo column: 'obradsda'
 
         }
     }
@@ -359,6 +361,7 @@ class Obra implements Serializable {
         memoSif(blank: true, maxSize: 20, nullable: true)
         estadoSif(blank: true, maxSize: 1, nullable: true)
         oferente(blank:true,nullable:true)
+        distanciaDesalojo(blank:true,nullable:true)
     }
 
     String toString() {

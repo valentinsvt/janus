@@ -1,3 +1,7 @@
+<style>
+.desalojo { color: #4d2868; }
+</style>
+
 <div class="row-fluid" style="margin-left: 0px">
     <g:if test="${msg}">
         <div class="alert ${flash.clase ?: 'alert-info'}" role="status" style="width: 80%">${msg}</div>
@@ -23,8 +27,6 @@
         %{--<button type="button" id="ver_todos" class="btn btn-tabla ${(!subPre)?'active':''} " style="font-size: 10px">Ver todos</button>--}%
 
         %{--</div>--}%
-
-
 
         <a href="#" class="btn  " id="copiar_rubros">
             <i class="icon-copy"></i>
@@ -84,7 +86,7 @@
 
     <g:each in="${valores}" var="val" status="j">
     %{--<tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">--}%
-        <tr class="item_row" id="${val.vlob__id}" item="${val}"  dscr="${val.vlobdscr}" sub="${val.sbpr__id}" cdgo="${val.item__id}" title="${val.vlobdscr}">
+        <tr class="item_row ${val.rbrocdgo[0..1] == 'TR'? 'desalojo':''}" id="${val.vlob__id}" item="${val}"  dscr="${val.vlobdscr}" sub="${val.sbpr__id}" cdgo="${val.item__id}" title="${val.vlobdscr}">
 
             <td style="width: 20px" class="orden">${val.vlobordn}</td>
             <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
@@ -132,9 +134,7 @@
     $.contextMenu({
         selector: '.item_row',
         callback: function (key, options) {
-
             var m = "clicked: " + $(this).attr("id");
-
             if (key == "print") {
 
             }
@@ -159,45 +159,32 @@
             }
 
             if (key == 'print-key1') {
-
-
                 var dsps =
                 ${obra.distanciaPeso}
                 var dsvs =
                 ${obra.distanciaVolumen}
-                var volqueta =
-                ${precioVol}
-                var chofer =
-                ${precioChof}
+                %{--var volqueta = ${precioVol}--}%
+                %{--var chofer = ${precioChof}--}%
                 var clickImprimir = $(this).attr("id");
 
 //                console.log("c" + clickImprimir)
 
                 var fechaSalida1 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
 
-
                 %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"--}%
                 var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "WfechaSalida=" + fechaSalida1
-
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}" + datos
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-
-
             }
 
             if (key == 'print-key2') {
-
-
                 var dsps =
                 ${obra.distanciaPeso}
                 var dsvs =
                 ${obra.distanciaVolumen}
-                var volqueta =
-                ${precioVol}
-                var chofer =
-                ${precioChof}
+                %{--var volqueta = ${precioVol}--}%
+                %{--var chofer = ${precioChof}--}%
                 var clickImprimir = $(this).attr("id");
-
                 var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
 
                 %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
@@ -205,144 +192,94 @@
 
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}" + datos
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-
-
             }
 
             if (key == 'print-key3') {
-
-
                 var dsps =
                 ${obra.distanciaPeso}
                 var dsvs =
                 ${obra.distanciaVolumen}
-                var volqueta =
-                ${precioVol}
-                var chofer =
-                ${precioChof}
+                %{--var volqueta = ${precioVol}--}%
+                %{--var chofer = ${precioChof}--}%
                 var clickImprimir = $(this).attr("id");
-
 //                console.log("c" + clickImprimir)
 
                 var fechaSalida1 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
-
-
                 %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"--}%
                 var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "WfechaSalida=" + fechaSalida1
 
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObraVae')}" + datos
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-
-
             }
 
             if (key == 'print-key4') {
-
-
                 var dsps =
                 ${obra.distanciaPeso}
                 var dsvs =
                 ${obra.distanciaVolumen}
-                var volqueta =
-                ${precioVol}
-                var chofer =
-                ${precioChof}
+                %{--var volqueta = ${precioVol}--}%
+                %{--var chofer = ${precioChof}--}%
                 var clickImprimir = $(this).attr("id");
-
                 var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}';
-
                 %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
                 var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "Wdesglose=${1}" + "WfechaSalida=" + fechaSalida2
-
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObraVae')}" + datos;
 //                console.log("url "  + url)
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-
-
             }
         },
+
         %{--<g:if test="${obra?.estado!='R'}">--}%
         items: {
 //            "edit": {name: "Editar", icon: "edit"},
             "print": {name: "Imprimir", icon: "print",
-
                 items: {
-
                     "print-key1": {"name": "Imprimir sin Desglose", icon: "print"
-
                     },
                     "print-key2": {"name": "Imprimir con Desglose", icon: "print"},
                     "print-key3": {"name": "Imprimir VAE sin Desglose", icon: "print"},
                     "print-key4": {"name": "Imprimir VAE con Desglose", icon: "print"}
-
-
                 }
-
             },
             "foto": {name: "Ilustración", icon: "doc"},
             "espc": {name: "Especificaciones", icon: "doc"}
         }
-        %{--</g:if>--}%
-        %{--<g:else>--}%
-        %{--items: {--}%
-        %{--"print": {name: "Imprimir", icon: "print"},--}%
-        %{--"foto": {name: "Foto", icon: "doc"}--}%
-        %{--}--}%
-        %{--</g:else>--}%
     });
 
     $("#imprimir_sub").click(function () {
-
         if ($("#subPres_desc").val() != '') {
-
             var dsps =
             ${obra.distanciaPeso}
             var dsvs =
             ${obra.distanciaVolumen}
-            var volqueta =
-            ${precioVol}
-            var chofer =
-            ${precioChof}
+            %{--var volqueta = ${precioVol}--}%
+            %{--var chofer = ${precioChof}--}%
             %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
             %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
             var datos = "?obra=${obra.id}Wsub=" + $("#subPres_desc").val()
             var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}" + datos
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-
-
         } else {
-
             alert("Escoja un subpresupuesto")
         }
-
-
     });
 
 
     $("#imprimir_sub_vae").click(function () {
-
         if ($("#subPres_desc").val() != '') {
-
             var dsps =
             ${obra.distanciaPeso}
             var dsvs =
             ${obra.distanciaVolumen}
-            var volqueta =
-            ${precioVol}
-            var chofer =
-            ${precioChof}
+            %{--var volqueta = ${precioVol}--}%
+            %{--var chofer = ${precioChof}--}%
             var datos = "?obra=${obra.id}Wsub=" + $("#subPres_desc").val()
             var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSubVae')}" + datos
             console.log(url)
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-
-
         } else {
-
             alert("Escoja un subpresupuesto")
         }
-
-
     });
 
     $("#imprimir_vae_excel").click(function () {
@@ -382,27 +319,17 @@
         $("#dlgLoad").dialog("open");
 
         $.ajax({
-
             type: 'POST',
             url: "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra')}",
             data: {
-
                 id: '${obra?.id}'
-
             },
             success: function (msg) {
                 location.href = "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra',id: obra?.id)}?sub=" + $("#subPres_desc").val();
                 $("#dlgLoad").dialog("close");
-
 //                spinner.replaceWith($boton);
-
             }
-
-
-
         });
-
-
     });
 
     $("#subPres_desc").change(function () {
@@ -411,8 +338,6 @@
         $("#calcular").removeClass("active")
 
         var datos = "obra=${obra.id}&sub=" + $("#subPres_desc").val() + "&ord=" + 1
-
-
         var interval = loading("detalle")
         $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'tabla')}",
             data: datos,
@@ -451,41 +376,28 @@
         });
 //        //console.log($(this).attr("id"))
     });
+
     $(".borrarItem").click(function () {
-
-
-
         if (confirm("Esta seguro de eliminar el rubro?")) {
             $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",
                 data: "id=" + $(this).attr("iden"),
                 success: function (msg) {
                     $("#detalle").html(msg)
-
                 }
             });
         }
     });
 
     $("#copiar_rubros").click(function () {
-
-
         location.href = "${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" +
         ${obra?.id}
-
     });
 
     $("#ordenarAsc").click(function () {
-
-
         $("#divTotal").html("")
         $("#calcular").removeClass("active")
-
-
         var orden = 1;
-
         var datos = "obra=${obra.id}&sub=" + $("#subPres_desc").val() + "&ord=" + orden
-
-
         var interval = loading("detalle")
         $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'tabla')}",
             data: datos,
@@ -494,23 +406,13 @@
                 $("#detalle").html(msg)
             }
         });
-
-
-//     }
-
-
     });
 
     $("#ordenarDesc").click(function () {
-
         $("#divTotal").html("")
         $("#calcular").removeClass("active")
-
         var orden = 2;
-
         var datos = "obra=${obra.id}&sub=" + $("#subPres_desc").val() + "&ord=" + orden
-
-
         var interval = loading("detalle")
         $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'tabla')}",
             data: datos,
@@ -519,12 +421,9 @@
                 $("#detalle").html(msg)
             }
         });
-
     });
 
     $("#borrarDialog").dialog({
-
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -535,32 +434,21 @@
         title: 'Borrar',
         buttons: {
             "Aceptar": function () {
-
 //                   console.log("-->>" + $(this).attr("iden"));
-
                     $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",
                         data: "id=" + $(this).attr("iden"),
                         success: function (msg) {
                             clearInterval(interval)
                             $("#detalle").html(msg)
-
                         }
                     });
-
-
-
                 $("#borrarDialog").dialog("close");
-
             },
 
            "Cancelar" : function () {
-
-
                $("#borrarDialog").dialog("close");
-
            }
         }
-
     });
 
 </script>

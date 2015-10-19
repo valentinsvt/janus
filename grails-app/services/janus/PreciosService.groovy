@@ -664,5 +664,12 @@ class PreciosService {
         mes
     }
 
+    def ac_transporteDesalojo(obra) {
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from ac_desalojo(" + obra + ") "
+        cn.execute(sql.toString())
+        cn.close()
+    }
+
 
 }

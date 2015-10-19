@@ -315,7 +315,7 @@
                         })
                         if ($("#subPres_desc").val() == "-1") {
                             $.ajax({
-                                type    : "POST", url : "${g.createLink(controller: 'volumenObra',action:'setMontoObra')}",
+                                type    : "POST", url : "${g.createLink(controller: 'volumenObra', action:'setMontoObra')}",
                                 data    : "obra=${obra?.id}&monto=" + total,
                                 success : function (msg) {
 
