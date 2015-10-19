@@ -511,7 +511,7 @@
             </div>
         </div>
 
-        <div class="row-fluid" style="border-bottom: 1px solid black;margin-bottom: 10px">
+        <div class="row-fluid" style="border-bottom: 1px solid black;margin-bottom: 5px">
             <div class="span6">
                 <b>Distancia peso</b>
                 %{--<input type="text" style="width: 50px;" id="dist_peso" value="0.00">--}%
@@ -634,7 +634,7 @@
     <div class="modal-footer" id="modal_trans_footer">
         <a href="#" data-dismiss="modal" class="btn btn-primary">OK</a>
     </div>
-03.001.00
+%{--03.001.00--}%
     <div id="imprimirTransporteDialog">
 
         <fieldset>
@@ -989,7 +989,7 @@
         var chofer = $("#costo_chofer").val()
 
         $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'transporte')}",
-            data     : "dsp0=" + dsp0 + "&dsp1=" + dsp1 + "&dsv0=" + dsv0 + "&dsv1=" + dsv1 + "&dsv2=" + dsv2 + "&prvl=" + volqueta + "&prch=" + chofer + "&fecha=" + $("#fecha_precios").val() + "&id=${rubro?.id}&lugar=" + $("#ciudad").val() + "&listas=" + listas + "&chof=" + $("#cmb_chof").val() + "&volq=" + $("#cmb_vol").val(),
+            data     : "dsp0=" + dsp0 + "&dsp1=" + dsp1 + "&dsv0=" + dsv0 + "&dsv1=" + dsv1 + "&dsv2=" + dsv2  + "&prvl=" + volqueta + "&prch=" + chofer + "&fecha=" + $("#fecha_precios").val() + "&id=${rubro?.id}&lugar=" + $("#ciudad").val() + "&listas=" + listas + "&chof=" + $("#cmb_chof").val() + "&volq=" + $("#cmb_vol").val(),
             success  : function (msg) {
                 $("#tabla_transporte").html(msg)
                 tablaIndirectos();

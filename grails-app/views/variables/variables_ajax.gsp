@@ -580,11 +580,25 @@
                     <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}" readonly="true" style="width: 30px; margin-left: 5px"/>
                 </div>
             </div>
+        <div class="row-fluid">
+            <div class="span9">
+                Distancia de desalojo de materiales
+            </div>
+
+            <div class="span2">
+                <g:textField class="inputVar num3" name="distanciaDesalojo" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaDesalojo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            </div>
+
+            <div class="span1">
+                <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}" readonly="true" style="width: 30px; margin-left: 5px"/>
+            </div>
+        </div>
 
         </div>
 
     </div>
 </g:form>
+
 
 
 
