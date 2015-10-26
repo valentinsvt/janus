@@ -443,6 +443,7 @@
             }
 
             function numerosSecciones() {
+
                 var cont = 1;
 
                 $(".seccion").each(function () {
@@ -467,6 +468,37 @@
                     cont++;
                 });
             }
+
+            function numerosSeccionesBajar() {
+
+                var cont = 1;
+
+                $(".seccion").each(function () {
+                    var $sec = $(this);
+                    var $titulo = $sec.find(".tituloSeccion");
+                    var $num = $titulo.find(".numero");
+                    var num = $.trim($num.text());
+                    num = $.trim(str_replace(".-", "", num));
+                    console.log("num " + num)
+
+                    if (parseInt(num) != cont) {
+                        num = cont;
+                        console.log("num " + num)
+                        $num.text(num + ".-");
+                    }
+
+                    var titulo = CKEDITOR.instances["seccion_" + $sec.data("id")].getData();
+
+                    $sec.data({
+                        numero : num,
+                        titulo : titulo
+                    });
+                    numerosParrafos($sec);
+                    cont++;
+                });
+            }
+
+
 
             function tipoTabla(tipo, $div) {
                 var $tabla = $("<table class='table table-bordered table-condensed'></table>");
@@ -555,10 +587,11 @@
             }
 
             function numerosParrafos($seccion) {
+
                 var cont = 1;
 
                 var numSec = $seccion.data("numero");
-
+//                console.log("numero par " + numSec )
                 $seccion.find(".parrafo").each(function () {
                     var $par = $(this);
 
@@ -708,12 +741,15 @@
                 var $btnEliminarSeccion = $('<a href="#" class="btn btn-danger btn-mini pull-right" style="margin-left: 10px;"><i class="icon-minus"></i> Eliminar sección</a>');
 
                 var $btnSubir = $('<a href="#" class="btn btn-bajar btn-mini"><i class="icon-arrow-up"></i></a>');
-                var $btnBajar = $('<a href="#" class="btn btn-bajar btn-mini"><i class="icon-arrow-down"></i></a>');
+//                var $btnBajar = $('<a href="#" class="btn btn-bajar btn-mini"><i class="icon-arrow-down"></i></a>');
+
                 var $botones = $("<div class='botones'></div>");
-                $botones.append($btnSubir).append($btnBajar);
+//                $botones.append($btnSubir).append($btnBajar);
+                $botones.append($btnSubir);
 
                 $btnSubir.click(function () {
                     var $prev = $seccion.prev();
+
                     if ($prev) {
                         $.ajax({
                             type    : "POST",
@@ -736,30 +772,30 @@
                     }
                     return false;
                 });
-                $btnBajar.click(function () {
-                    var $next = $seccion.next();
-                    if ($next) {
-                        $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(controller:'seccion', action: 'updateNumeros')}",
-                            data    : {
-                                acta   : "${actaInstance.id}",
-                                id     : data.id,
-                                numero : $seccion.data("numero") + 1
-                            },
-                            success : function (msg) {
-                                var p = msg.split("_");
-                                if (p[0] == "OK") {
-                                    $next.after($seccion);
-                                    numerosSecciones();
-                                } else {
-                                    log(p[1], true);
-                                }
-                            }
-                        });
-                    }
-                    return false;
-                });
+                %{--$btnBajar.click(function () {--}%
+                    %{--var $next = $seccion.next();--}%
+                    %{--if ($next) {--}%
+                        %{--$.ajax({--}%
+                            %{--type    : "POST",--}%
+                            %{--url     : "${createLink(controller:'seccion', action: 'updateNumeros')}",--}%
+                            %{--data    : {--}%
+                                %{--acta   : "${actaInstance.id}",--}%
+                                %{--id     : data.id,--}%
+                                %{--numero : $seccion.data("numero") + 1--}%
+                            %{--},--}%
+                            %{--success : function (msg) {--}%
+                                %{--var p = msg.split("_");--}%
+                                %{--if (p[0] == "OK") {--}%
+                                    %{--$next.after($seccion);--}%
+                                    %{--numerosSeccionesBajar();--}%
+                                %{--} else {--}%
+                                    %{--log(p[1], true);--}%
+                                %{--}--}%
+                            %{--}--}%
+                        %{--});--}%
+                    %{--}--}%
+                    %{--return false;--}%
+                %{--});--}%
 
                 if (!data.parrafos) {
                     data.parrafos = [];
@@ -894,6 +930,7 @@
 
                     $("#txtDescripcion").val(CKEDITOR.instances.descripcion.getData());
                     $("#frmSave-Acta").submit();
+                    numerosSecciones();
 //                    var data = $("#frmSave-Acta").serialize();
 //                    data += "&descripcion=" + CKEDITOR.instances.descripcion.getData();
 //                    var secc = getSecciones();

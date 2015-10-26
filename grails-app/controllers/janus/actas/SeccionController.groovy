@@ -30,11 +30,16 @@ class SeccionController extends janus.seguridad.Shield {
     } //form_ajax
 
     def updateNumeros() {
-//        println params
+        println params
         def msg = "OK"
         def acta = Acta.get(params.acta)
         def seccion = Seccion.get(params.id)
         seccion.numero = params.numero.toInteger()
+
+        if(seccion.numero < 1){
+            seccion.numero = 1
+        }
+
         if (!seccion.save(flush: true)) {
             println "error al renumerar la seccion " + seccion.errors
             msg = "NO"
