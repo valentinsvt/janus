@@ -645,9 +645,15 @@ class ReportesPlanillasController {
         def detalles = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def crej = CronogramaEjecucion.withCriteria {
             inList("volumenObra", detalles)
-            periodo {
-                le("fechaFin", plnl.fechaFin)
+            if(plnl.tipoPlanilla.id != tipoQ.id) {
+                periodo {
+                    le("fechaFin", plnl.fechaFin)
+                }
             }
+
+//            periodo {
+//                le("fechaFin", plnl.fechaFin)
+//            }
         }
 
         def inversionProgramada = crej.sum { it.precio } ?: 0
