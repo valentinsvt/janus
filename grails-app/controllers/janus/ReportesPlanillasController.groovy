@@ -618,7 +618,7 @@ class ReportesPlanillasController {
         def tipos = [tipoQ, tipoP, tipoD]
 
 
-        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaFinLessThanEquals(contrato,tipos, plnl.fechaFin)
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaFinLessThanEquals(contrato,tipos, plnl.fechaFin, [sort: 'fechaFin'])
 
 
         def planillasCosto = Planilla.withCriteria {
