@@ -23,6 +23,7 @@ class Proveedor {
     String observaciones
     static auditable = true
     String origen       //Nacional, Extranjero o Mixto (N,E,M)
+    String pagarNombre       //Nacional, Extranjero o Mixto (N,E,M)
 
     static mapping = {
         table 'prve'
@@ -52,6 +53,7 @@ class Proveedor {
             observaciones column: 'prveobsr'
 
             origen column: 'prveorgn'
+            pagarNombre column: 'prvepago'
         }
     }
     static constraints = {
@@ -72,6 +74,7 @@ class Proveedor {
         titulo(blank: true, nullable: true, maxSize: 4)
         estado(blank: true, nullable: true, maxSize: 1)
         observaciones(blank: true, nullable: true, maxSize: 127)
+        pagarNombre(blank: true, nullable: true, maxSize: 127)
 
         origen(blank: true, nullable: true, maxSize: 1, inList: ['N', 'E', 'M'])
     }

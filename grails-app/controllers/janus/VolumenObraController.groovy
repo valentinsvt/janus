@@ -17,11 +17,8 @@ class VolumenObraController extends janus.seguridad.Shield {
 //        println("-->>" + subpreFiltrado)
 
         def usuario = session.usuario.id
-
         def persona = Persona.get(usuario)
-
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
-
         def grupo = Grupo.findAllByDireccion(direccion)
 //
 //        println("direccion:" + direccion)
@@ -32,9 +29,8 @@ class VolumenObraController extends janus.seguridad.Shield {
         def obra = Obra.get(params.id)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
-
-        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
-        def responsableObra = obra?.responsableObra?.id
+//        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+//        def responsableObra = obra?.responsableObra?.id
         def duenoObra = 0
 
 //        personasUtfpu.each{
@@ -222,9 +218,9 @@ class VolumenObraController extends janus.seguridad.Shield {
     }
 
 
-
+    /** carga tabla de detalle de volúmenes de obra **/
     def tabla() {
-        println "params tabla Vlob--->>>> "+params
+//        println "params tabla Vlob--->>>> "+params
         def usuario = session.usuario.id
         def persona = Persona.get(usuario)
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
@@ -243,9 +239,13 @@ class VolumenObraController extends janus.seguridad.Shield {
             orden = 'desc'
         }
 
-        preciosService.ac_rbroObra(obra.id)
-        // actualiza el rendimiento de rubros transporte TR%
-        preciosService.ac_transporteDesalojo(obra.id)
+
+        // actualiza el rendimiento de rubros transporte TR% si la obra no está registrada y herr. menor
+        if(obra.estado != 'R') {
+            println "actualiza desalojo y herramienta menor"
+            preciosService.ac_transporteDesalojo(obra.id)
+            preciosService.ac_rbroObra(obra.id)
+        }
 
         if (params.sub && params.sub != "-1") {
             valores = preciosService.rbro_pcun_v5(obra.id, params.sub, orden)

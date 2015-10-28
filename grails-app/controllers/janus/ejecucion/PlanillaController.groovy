@@ -67,7 +67,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
                     "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
 
-            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+//            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% " +
+                    "del anticipo, a favor de ${contrato?.oferta?.proveedor.pagarNombre} "
             def editParrafo2 = "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
 
             def strParrafo3 = "Son ${numerosALetras}"
@@ -167,7 +169,8 @@ class PlanillaController extends janus.seguridad.Shield {
                     "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
                     "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
 
-            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+//            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${contrato?.oferta?.proveedor.pagarNombre} "
             def editParrafo2 = "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
 
             def strParrafo3 = "Son ${neg}${numerosALetras}"
@@ -387,7 +390,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
                 "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
 
-        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+//        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del " +
+                "anticipo, a favor de ${contrato?.oferta?.proveedor.pagarNombre} "
 
         def strParrafo3 = "Son ${numerosALetras}"
 
@@ -1611,8 +1616,10 @@ class PlanillaController extends janus.seguridad.Shield {
             planillaInstance.numero = cPlanillas + 1
         }
 
+        def periodos = ponePeriodos(tiposPlanilla, contrato, anticipo, periodosEjec, finalObra)
+        println "retorna periodos: $periodos"
 
-        def periodos = [:]
+/*        def periodos = [:]
         def dias = 0
         def fcfm
         def opcional = false
@@ -1627,33 +1634,33 @@ class PlanillaController extends janus.seguridad.Shield {
             inicio = planillasAnt.pop().fechaFin + 1
         }
         // se presenta el o los primeros periodos no planillados, o todos si el presente y último
-//        println "---pone periodos"
-//        if (planillasAvance.size() == 0) {
+        // println "---pone periodos"
         if (tiposPlanilla.codigo.contains("P") || tiposPlanilla.codigo.contains("Q") || tiposPlanilla.codigo.contains("D")) {
             periodosEjec.each {pe ->
                 ultimo = texto
 
-                println "procesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')}"
+//                println "procesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')}"
 
 
                 fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
                 if((pe.fechaFin >= pe.fechaInicio) && !lleno) {
                     if(pe.fechaFin == fcfm) {
                         if(inicio) {
+//                            println "si hay inicio, dias: $dias"
                             texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                         } else {
+//                            println "no hay inicio, dias: $dias"
                             texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                         }
                         if(opcional) {
-//                            periodos.add(fecha, pe.fechaInicio.format("dd-MM-yyyy") + " a " + pe.fechaFin.format("dd-MM-yyyy"))
-                            periodos.put(fecha, fecha.replaceAll('_', ' a '))
+//                            periodos.put(fecha, fecha.replaceAll('_', ' a '))
                             periodos.put(texto, texto.replaceAll('_', ' a '))
                             opcional = false
                         } else {
                             periodos.put(texto, texto.replaceAll('_', ' a '))
                         }
 
-                        println "periodos: $periodos"
+//                        println "periodos: $periodos"
                         dias = fcfm - pe.fechaInicio + 1
                         if(dias <= 15) {
                             opcional = true
@@ -1669,8 +1676,8 @@ class PlanillaController extends janus.seguridad.Shield {
                         inicio = pe.fechaInicio
                     }
                     // si es el último periodo también es opcional
-                    println "periodos: $periodos, ultimo: $ultimo"
-                    println "periodos ultimo: ${periodos[ultimo]}"
+//                    println "periodos: $periodos, ultimo: $ultimo"
+//                    println "periodos ultimo: ${periodos[ultimo]}"
                     if(pe.fechaFin == finalObra) {
                         if(ultimo) {
                             def desde = periodos[ultimo].split(' a ')[0]
@@ -1687,6 +1694,7 @@ class PlanillaController extends janus.seguridad.Shield {
             }
 
         }
+        */
 
 
         def now = new Date()
@@ -5413,4 +5421,104 @@ class PlanillaController extends janus.seguridad.Shield {
             pl.save(flush: true)
         }
     }
+
+    /**
+     * se presenta el o losp eriodos a planillarse, si no se ajuste el mes se crea un periodo opcional que
+     * abarca el mes inicial y el siguiente
+     * @param tipos         tipos de planilla
+     * @param cntr          contrato
+     * @param antc          tipo de planilla anticipo
+     * @param periodosEjec  periodos de ejecución del cronograma
+     * @param finalObra     fecha de fin de obra
+     * @return              periodos
+     */
+
+    def ponePeriodos(tipos, cntr, antc, periodosEjec, finalObra) {
+
+        def periodos = [:]
+        def dias = 0
+        def diasMes = 0
+        def fcim
+        def fcfm
+        def opcional = false
+        def lleno = false
+        def texto = ""
+        def ultimo = ""
+        def inicio
+        def planillasAnt = Planilla.findAllByContratoAndTipoPlanillaNotEqual(cntr, antc, [sort: 'fechaPresentacion'])
+        if (planillasAnt) {
+            inicio = planillasAnt.pop().fechaFin + 1
+        }
+        // hay periodos para tipos de planilla: P, Q, D
+        if (tipos.codigo.contains("P") || tipos.codigo.contains("Q") || tipos.codigo.contains("D")) {
+            periodosEjec.each { pe ->
+                ultimo = texto
+
+//                println "xxprocesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')} " +
+//                        "fin de obra: $finalObra"
+
+                fcim = preciosService.primerDiaDelMes(pe.fechaInicio)
+                fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
+                diasMes = fcfm -fcim + 1
+
+//                println "xxel mes de ${pe.fechaInicio} tiene $diasMes dias"
+
+                if(!lleno) {  // ya se completó los días del mes en curso
+                    if (pe.fechaFin == fcfm) {
+                        if (inicio) { // viene de un periodo anterior
+//                            println "xxsi hay inicio, dias: $dias"
+                            texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        } else {
+//                            println "xxno hay inicio, dias: $dias"
+                            texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                            inicio = pe.fechaInicio
+                        }
+
+                        if (opcional) {
+                            periodos.put(texto, texto.replaceAll('_', ' a '))
+                            opcional = false
+                        } else {
+                            periodos.put(texto, texto.replaceAll('_', ' a '))
+                        }
+
+                        dias = fcfm - inicio + 1
+                        if (dias < diasMes) {
+                            opcional = true
+                            lleno = false
+                        } else {
+                            lleno = true
+                            //no deben procesarse mas periodos
+                        }
+
+                    } else { // pe.fechaFin no es fin de mes
+                        if(opcional){
+                            texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                        } else {
+                            texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                            inicio = pe.fechaInicio
+                        }
+                        // si es el último periodo también es opcional
+                        if (pe.fechaFin == finalObra) {
+                            if (ultimo) {
+                                def desde = periodos[ultimo].split(' a ')[0]
+                                texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                                periodos.put(texto, texto.replaceAll('_', ' a '))
+                            } else if(periodos){
+                                def desde = periodos[texto].split(' a ')[0]
+                                texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
+                                periodos.put(texto, texto.replaceAll('_', ' a '))
+                            } else {
+                                periodos.put(texto, texto.replaceAll('_', ' a '))
+                            }
+                        }
+//                        println "xxperiodos: $periodos, ultimo: $ultimo"
+//                        println "xxperiodos ultimo: ${periodos[ultimo]}"
+                    }
+                }
+            }
+        }
+        return periodos
+    }
+
+
 }

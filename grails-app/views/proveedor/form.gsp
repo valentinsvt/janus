@@ -266,6 +266,20 @@
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Pagar a nombre de:
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="pagarNombre" maxlength="127" class="" value="${proveedorInstance?.pagarNombre}" style="width: 400px;"/>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 </div>
 
 
