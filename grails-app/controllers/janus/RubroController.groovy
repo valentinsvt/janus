@@ -1,6 +1,6 @@
 package janus
 
-import org.apache.tools.ant.types.resources.comparators.Date
+//import org.apache.tools.ant.types.resources.comparators.Date
 import org.springframework.dao.DataIntegrityViolationException
 
 class RubroController extends janus.seguridad.Shield {
@@ -97,6 +97,7 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.idRubro)
             def items = Rubro.findAllByRubro(rubro)
             items.sort { it.item.codigo }
+            println "items: $items"
             [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
         } else {
             [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
@@ -529,16 +530,18 @@ class RubroController extends janus.seguridad.Shield {
     } //delete
 
     def getPrecios() {
-//        println "get precios " + params
+//        println "get precios " + params.fecha
         def lugar = Lugar.get(params.ciudad)
-        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+//        println ".........1"
+        def fecha = new Date().parse('dd-MM-yyyy', params.fecha)
+//        println "frecha convertida: $fecha"
         def tipo = params.tipo
         def items = []
         def parts = params.ids.split("#")
         def listas = []
         def conLista = []
         listas = params.listas.split("#")
-//        println "listas " + listas
+//        println "listas...: " + listas
         parts.each {
             if (it.size() > 0) {
                 def item = Rubro.get(it).item
@@ -613,7 +616,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def getPreciosTransporte() {
-       // println "get precios "+params
+//       println "get precios fecha: "+params.fecha
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo

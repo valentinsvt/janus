@@ -203,8 +203,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     data.add(mapFormula)
                 }
             }
-            println "data: " + data
-            println "sbpr: " + sbpr
+//            println "data: " + data
+//            println "sbpr: " + sbpr
             def json = new JsonBuilder(data)
 //            println json.toPrettyString()
 /*
