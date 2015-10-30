@@ -32,11 +32,16 @@ class ActaTagLib {
                 "&deg;"   : "°",
                 "&nbsp;"  : " ",
                 "&acute;" : "",
+
+                ">" : "&gt;",
+                "<" : "&lt;",
         ]
         def str = attrs.str
-
+//        println "attrs.... ${attrs.str}"
         replace.each { busca, nuevo ->
-            str = str.replaceAll(busca, nuevo)
+            if(str){
+                str = str.replaceAll(busca, nuevo)
+            }
         }
         out << str
     }
@@ -152,6 +157,12 @@ class ActaTagLib {
             tabla += "</tr>"
             det.each { k, elem ->
                 def nombre = elem.nombre.size() > maxLength ? elem.nombre[0..maxLength] : elem.nombre
+
+                nombre = nombre.decodeHTML()
+                nombre = nombre.replaceAll(/</, /&lt;/);
+                nombre = nombre.replaceAll(/>/, /&gt;/);
+                nombre = nombre.replaceAll(/"/, /&quot;/);
+
                 total += elem.valor.ejecutado
                 tabla += "<tr>"
                 tabla += "<td>${elem.codigo}</td>"
@@ -162,10 +173,12 @@ class ActaTagLib {
                 tabla += "<td class='tar'>${numero(numero: elem.cantidad.ejecutado)}</td>"
                 tabla += "<td class='tar'>${numero(numero: elem.valor.ejecutado)}</td>"
                 tabla += "</tr>"
+//                println "++++ ${elem.nombre}"
             }
-        }
-        tabla += "</tbody>"
 
+        }
+
+        tabla += "</tbody>"
         tabla += "<tfoot>"
         tabla += "<tr>"
         tabla += "<th colspan='6' class='tal'>TOTAL OBRA EJECUTADA</th>"
@@ -174,6 +187,8 @@ class ActaTagLib {
         tabla += "</tfoot>"
 
         tabla += "</table>"
+
+//        println "tabla2:" + tabla
         return tabla
     }
 
