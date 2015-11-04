@@ -102,7 +102,8 @@
         <g:set var="prej" value="${janus.pac.PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])}"/>
         <tbody class="paginate">
         <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
-            <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}"/>
+            %{--<g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}"/>--}%
+            %{--<g:set var="planillas" value="${planillaInstance.size()}"/>--}%
             <g:set var="eliminable" value="${planillaInstance.fechaMemoSalidaPlanilla == null}"/>
             <tr style="font-size: 10px">
                 <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
@@ -235,9 +236,11 @@
                 %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
                 %{--<i class="icon-trash icon-large"></i>--}%
                 %{--</a>--}%
+
                 </td>
                 <td style="text-align: center;">
-                    <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C' || planillaInstance.tipoPlanilla.codigo == 'L'}">
+                    %{--<g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C' || planillaInstance.tipoPlanilla.codigo == 'L'}">--}%
+                    %{--<g:if test="${planillaInstance.tipoPlanilla.codigo in ['A','C', 'L', 'P', 'Q']}">--}%
                         <g:set var="lblBtn" value="${-1}"/>
                         <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
                             <g:set var="lblBtn" value="${2}"/>
@@ -326,12 +329,12 @@
                     %{--<a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">--}%
                     %{--Iniciar Obra--}%
                     %{--</a>--}%
-                    </g:if>
-                    <g:else>
+                    %{--</g:if>--}%
+                    %{--<g:else>--}%
                     %{--<div class="badge badge-important">--}%
                     %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
                     %{--</div>--}%
-                    </g:else>
+                    %{--</g:else>--}%
                 </td>
             </tr>
         </g:each>
