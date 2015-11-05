@@ -5112,7 +5112,7 @@ class ReportesController {
             personaRol = PersonaRol.get(params.firmaCoordinador)
             firmaCoordinador = personaRol?.persona
             if(firmaNueva) {
-                firmaCoordinador = firmaNueva
+                firmaCoordinador = firmaNueva.persona
             }
 
             addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
@@ -5126,8 +5126,8 @@ class ReportesController {
         def rolPrint = "COORDINADOR"
         println "firma nueva "+firmaNueva
         if(firmaNueva) {
-            firmaCoordinador = firmaNueva
-            def rol = PersonaRol.findAllByPersona(firmaNueva)
+            firmaCoordinador = firmaNueva.persona
+            def rol = PersonaRol.findAllByPersona(firmaNueva.persona)
             rol.each {
                 if(it.funcion.codigo=="D"){
                     if(firmaNueva.sexo=="M"){
