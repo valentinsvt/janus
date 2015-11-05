@@ -3442,7 +3442,7 @@ class ReportesController {
                     totalRelativo1 = it.relativo
                     finalRelativo = (totalRelativo2 += totalRelativo1)
 
-                    totalVae1= it.vae_totl
+                    totalVae1= it.vae_totl?:0
                     finalVae = (totalVae2 += totalVae1)
                 } else {  }
             }

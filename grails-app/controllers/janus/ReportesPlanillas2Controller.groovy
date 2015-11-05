@@ -27,6 +27,10 @@ class ReportesPlanillas2Controller {
     def preciosService
     def diasLaborablesService
 
+    /**
+     * Ya no se usa este reporte: reportePlanilla
+     * @return
+     */
     def reportePlanilla() {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
@@ -353,7 +357,7 @@ class ReportesPlanillas2Controller {
                 if (vlrj.size() > 0) {
                     valor = vlrj.pop().valor
                 } else {
-                    println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}"
+//                    println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${per.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${c.id}"
                     valor = -1
                 }
                 addCellTabla(tablaB0, new Paragraph(numero(valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
@@ -1212,11 +1216,10 @@ class ReportesPlanillas2Controller {
             }
         }
 
-        if(planilla.tipoPlanilla.codigo == "A")
-            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo?.descripcion}", fontTitle1))
-
-        if(planilla.tipoPlanilla.codigo == "P" )
-            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${PeriodoPlanilla.findByPlanilla(planilla).periodo.descripcion}", fontTitle1))
+        if(planilla.tipoPlanilla.codigo in ["A", 'P']) {
+            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: " +
+                    "${PeriodoPlanilla.findByPlanilla(planilla).periodo.descripcion}", fontTitle1))
+        }
         /* ***************************************************** Fin Detalles *************************************************************/
 
         document.close();
