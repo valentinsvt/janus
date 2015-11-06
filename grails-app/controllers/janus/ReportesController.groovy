@@ -4674,7 +4674,7 @@ class ReportesController {
 
 
     def reporteDocumentosObraMemo() {
-//        println("-memo-->>" + params)
+        println("-memo-->>" + params)
         def cd
         def auxiliar = Auxiliar.get(1)
         def auxiliarFijo = Auxiliar.get(1)
@@ -4704,9 +4704,9 @@ class ReportesController {
 
         def firmaNueva
 
-        if(params.firmaCoordinador){
+        if(params.firmaNueva){
 
-            firmaNueva = PersonaRol.get(params.firmaCoordinador)
+            firmaNueva = PersonaRol.get(params.firmaNueva)
         }else {
             firmaNueva = null
         }
@@ -5088,24 +5088,24 @@ class ReportesController {
 
 //        if (cuenta == 3) {
 
-        PdfPTable tablaFirmas = new PdfPTable(3)
+        PdfPTable tablaFirmas = new PdfPTable(2)
         tablaFirmas.setWidthPercentage(90);
 
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         //nuevas
         def personaRol=null
         if(params.firmaCoordinador != ''){
@@ -5117,11 +5117,11 @@ class ReportesController {
 
             addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }else{
             addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
         def rolPrint = "COORDINADOR"
         println "firma nueva "+firmaNueva
@@ -5129,8 +5129,8 @@ class ReportesController {
             firmaCoordinador = firmaNueva.persona
             def rol = PersonaRol.findAllByPersona(firmaNueva.persona)
             rol.each {
-                if(it.funcion.codigo=="D"){
-                    if(firmaNueva.sexo=="M"){
+                if(it.funcion.codigo == "D"){
+                    if(firmaNueva.persona.sexo == "M"){
                         rolPrint="DIRECTOR"
                     }else{
                         rolPrint="DIRECTORA"
@@ -5140,15 +5140,15 @@ class ReportesController {
         }
         addCellTabla(tablaFirmas, new Paragraph(rolPrint, times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph('', times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph('', times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         document.add(tablaFirmas);
 
