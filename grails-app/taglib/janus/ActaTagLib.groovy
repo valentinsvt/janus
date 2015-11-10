@@ -31,10 +31,9 @@ class ActaTagLib {
                 "&Ntilde;": "Ñ",
                 "&deg;"   : "°",
                 "&nbsp;"  : " ",
-                "&acute;" : "",
-
-                ">" : "&gt;",
-                "<" : "&lt;",
+                "&acute;" : ""
+//                ">" : "&gt;",   -- no usar en texto html
+//                "<" : "&lt;",
         ]
         def str = attrs.str
 //        println "attrs.... ${attrs.str}"
@@ -159,7 +158,7 @@ class ActaTagLib {
                 def nombre = elem.nombre.size() > maxLength ? elem.nombre[0..maxLength] : elem.nombre
 
                 nombre = nombre.decodeHTML()
-                nombre = nombre.replaceAll(/</, /&lt;/);
+                nombre = nombre.replaceAll(/</, /&lt;/);    /** < como parte del nombre del rubro **/
                 nombre = nombre.replaceAll(/>/, /&gt;/);
                 nombre = nombre.replaceAll(/"/, /&quot;/);
 

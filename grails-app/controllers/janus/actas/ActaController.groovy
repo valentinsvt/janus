@@ -468,7 +468,7 @@ class ActaController extends janus.seguridad.Shield {
             } //es create
             def jsonSecciones = new JsonBuilder(secciones)
 
-//            println jsonSecciones.toPrettyString()
+            println jsonSecciones.toPrettyString()
 
             def editable = actaInstance.registrada == 0 && !actaInstance.fechaRegistro
 //            println "#################################"
