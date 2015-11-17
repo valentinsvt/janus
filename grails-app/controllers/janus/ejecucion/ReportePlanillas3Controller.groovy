@@ -869,6 +869,7 @@ class ReportePlanillas3Controller {
         ]
 
         def reajusteTotal = 0
+        println "periodos: $periodos"
 
         periodos.eachWithIndex { per3, i ->
             if(per3.key == 0){

@@ -416,7 +416,7 @@
 
                     <div class="firma">
                         <g:if test="${actaInstance.contrato.oferta.proveedor}">
-                            ${actaInstance.contrato.oferta.proveedor.titulo.toUpperCase() ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
+                           ${actaInstance.contrato.oferta.proveedor.titulo.toUpperCase() ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
                         </g:if>
                         <br/>
                         CONTRATISTA

@@ -23,7 +23,7 @@ class ConcursoController extends janus.seguridad.Shield {
 //        println lst
         if (lst.size() > 1) {
             def last = lst[1].codigo?.split("-")
-//            println last
+            println "... last: $last"
             if (last?.size() > 2) {
 //                def cod = last[2].toInteger()
                 def cod = last[1].toInteger()

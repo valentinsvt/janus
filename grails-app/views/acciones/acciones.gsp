@@ -2,6 +2,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="admin"/>
+    %{--<meta name="layout" content="main"/>--}%
     <title>Acciones</title>
     <g:set var="entityName" value="Perfiles"/>
     <title>Estructura del Menú y Procesos</title>
