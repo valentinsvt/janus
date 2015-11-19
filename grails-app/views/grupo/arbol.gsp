@@ -275,6 +275,7 @@
 
     <div class="modal-footer" id="modal_trans_footer">
         <g:hiddenField name="nodeId" val=""/>
+        <g:hiddenField name="nodeGrupo" val=""/>
         <a href="#" data-dismiss="modal" class="btn btn-primary" id="print_totales" data-transporte="true"><i class="icon-print"></i> Consolidado</a>
         <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="si"><i class="icon-print"></i> Con </br>transporte</a>
         <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="no"><i class="icon-print"></i> Sin </br>transporte</a>
@@ -393,6 +394,11 @@
 
     function imprimir(params) {
         $("#nodeId").val(params.id);
+        if(params.grupo) {
+            $("#nodeGrupo").val(params.grupo);
+        } else {
+            $("#nodeGrupo").val();
+        }
         var obj = {
             label            : params.label,
             separator_before : params.sepBefore, // Insert a separator before the item
@@ -654,6 +660,14 @@
                     log       : "Subgrupo ",
                     title     : "Nuevo Grupo"
                 });
+                menuItems.print = imprimir({
+                    id        : nodeStrId,
+                    label     : "Imprimir",
+                    sepBefore : true,
+                    sepAfter  : false,
+                    icon      : icons.print
+                });
+
                 break;
 
             case "subgrupo":
@@ -1015,7 +1029,10 @@
             var trans = $(this).data("transporte");
             var nodeId = $("#nodeId").val();
 
-            var datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=" + nodeId + "Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
+            var datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 +
+                    "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=" + nodeId +
+                    "Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() +
+                    "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
             var url = "${g.createLink(controller: 'reportes2',action: 'imprimirRubrosConsolidado')}?" + datos;
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=rubros_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
 

@@ -640,12 +640,18 @@ class Reportes2Controller {
     }
 
     def imprimirRubrosConsolidado() {
-//        println "rep rubros "+params
+        println "rep rubros consolidado: "+params
         def rubros = []
 
         def parts = params.id.split("_")
 
         switch (parts[0]) {
+            case "gr":
+                def subGrupo = SubgrupoItems.findAllByGrupo(Grupo.get(parts[1].toLong()))
+                println "subgrupos: $subGrupo"
+                def departamentos = DepartamentoItem.findAllBySubgrupoInList(subGrupo)
+                rubros = Item.findAllByDepartamentoInList(departamentos, [sort: "nombre"])
+                break;
             case "sg":
                 def departamentos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(parts[1].toLong()))
                 rubros = Item.findAllByDepartamentoInList(departamentos, [sort: "nombre"])
