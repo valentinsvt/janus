@@ -4240,7 +4240,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def totalAnterior = anteriores.size() > 0 ? anteriores.sum { it.valor } : 0
 
-//        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 21
+        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 21
         def max = contrato.monto * 0.1  /* máximo valor a consderar de las planillas costo + porcentae */
         max -= totalAnterior
 
@@ -4249,7 +4249,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //        return [planilla: planilla, obra: obra, contrato: contrato,
 //                editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
-        return [planilla: planilla, obra: obra, contrato: contrato,
+        return [planilla: planilla, obra: obra, contrato: contrato, indirectos: indirectos,
                 editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), max: max]
     }
 

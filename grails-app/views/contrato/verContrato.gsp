@@ -137,9 +137,9 @@
                     </div>
 
                     <div class="span12" style="margin-top: 5px">
-                        <div class="span2 formato">Parroquia</div>
+                        <div class="span1 formato">Parroquia</div>
 
-                        <div class="span3">${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}</div>
+                        <div class="span4">${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}</div>
 
                         <div class="span1 formato">Cantón</div>
 
@@ -147,9 +147,9 @@
                     </div>
 
                     <div class="span12" style="margin-top: 5px">
-                        <div class="span2 formato">Comunidad</div>
+                        <div class="span1 formato">Comunidad</div>
 
-                        <div class="span3">${contrato?.oferta?.concurso?.obra?.comunidad?.nombre}</div>
+                        <div class="span4">${contrato?.oferta?.concurso?.obra?.comunidad?.nombre}</div>
 
                         <div class="span1 formato">Sitio</div>
 
@@ -157,22 +157,22 @@
                     </div>
 
                     <div class="span12" style="margin-top: 5px">
-                        <div class="span2 formato">Localidad</div>
+                        <div class="span1 formato">Localidad</div>
 
-                        <div class="span3">${contrato?.oferta?.concurso?.obra?.barrio}</div>
+                        <div class="span4">${contrato?.oferta?.concurso?.obra?.barrio}</div>
 
                     </div>
 
                     <div class="span12" style="margin-top: 5px">
-                        <div class="span2 formato">Clase Obra</div>
+                        <div class="span1 formato">Clase Obra</div>
 
-                        <div class="span3">${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}</div>
+                        <div class="span4">${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}</div>
                     </div>
 
                     <div class="span12" style="margin-top: 5px">
-                        <div class="span2 formato">Contratista</div>
+                        <div class="span1 formato">Contratista</div>
 
-                        <div class="span3">${contrato?.oferta?.proveedor?.nombre}</div>
+                        <div class="span4">${contrato?.oferta?.proveedor?.nombre}</div>
 
                         <div class="span1 formato">Estado</div>
 
@@ -234,47 +234,48 @@
 
             <fieldset class="" style="position: relative;  border-bottom: 1px solid black;padding: 10px;">
                 <div class="span12" style="margin-top: 10px">
-                    <div class="span2 formato">Tipo</div>
+                    <div class="span1 formato">Tipo</div>
 
-                    <div class="span3">${contrato?.tipoContrato?.descripcion}</div>
+                    <div class="span4">${contrato?.tipoContrato?.descripcion}</div>
 
                     <div class="span2 formato">Fecha de Suscripción</div>
-
                     <div class="span2">${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}</div>
+                    <div class="span1 formato">Indirectos</div>
+                    <div class="span1">${contrato?.indirectos?:'__'}%</div>
                 </div>
 
                 <div class="span12" style="margin-top: 5px">
-                    <div class="span2 formato">Objeto del Contrato</div>
+                    <div class="span2 formato" style="margin-left:0px;">Objeto del Contrato</div>
 
-                    <div class="span9">${contrato?.objeto}</div>
+                    <div class="span10" style="margin-left: -40px">${contrato?.objeto}</div>
                 </div>
             </fieldset>
 
             <fieldset class="" style="position: relative;  padding: 10px;border-bottom: 1px solid black;">
                 <div class="span12" style="margin-top: 10px">
-                    <div class="span2 formato">Multa por retraso</div>
+                    <div class="span3 formato">Multa por retraso</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         ${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
 
-                    <div class="span2 formato">Multa por no presentación de planilla</div>
+                    <div class="span4 formato">Multa por no presentación de planilla</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         ${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
                 </div>
 
                 <div class="span12" style="margin-top: 10px">
-                    <div class="span2 formato">Multa por incumplimiento del cronograma</div>
+                    <div class="span3 formato">Multa por incumplimiento del cronograma</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         ${g.formatNumber(number: contrato?.multaIncumplimiento, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
 
-                    <div class="span2 formato">Multa por no acatar disposiciones del fiscalizador</div>
+                    <div class="span4 formato">Multa por no acatar disposiciones del fiscalizador</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         ${g.formatNumber(number: contrato?.multaDisposiciones, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
                 </div>
@@ -284,9 +285,9 @@
 
                     <div class="span3">${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}</div>
 
-                    <div class="span2 formato">Plazo</div>
+                    <div class="span4 formato">Plazo</div>
 
-                    <div class="span3">${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} Días</div>
+                    <div class="span2">${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} Días</div>
                 </div>
 
                 <div class="span12" style="margin-top: 10px">
@@ -300,18 +301,20 @@
                         ${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}
                     </div>
 
-                    <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
+                    <div class="span4 formato">Indices 30 días antes de la presentación de la oferta</div>
 
-                    <div class="span3">${contrato?.periodoInec?.descripcion}</div>
+                    <div class="span2">${contrato?.periodoInec?.descripcion}</div>
                 </div>
 
+            </fieldset>
+            <fieldset class="" style="position: relative; padding: 10px;border-bottom: 1px solid black; margin-top: -10px">
 
                 <div class="span12" style="margin-top: 10px">
                     <div class="span2 formato">Administrador delegado</div>
 
                     <div class="span3">${contrato?.administrador?.titulo} ${contrato?.administrador?.nombre} ${contrato?.administrador?.apellido}</div>
 
-                    <div class="span2 formato">Fiscalizador delegado</div>
+                    <div class="span3 formato">Fiscalizador delegado</div>
 
                     <div class="span3">${contrato?.fiscalizador?.titulo} ${contrato?.fiscalizador?.nombre} ${contrato?.fiscalizador?.apellido}</div>
                 </div>
@@ -322,7 +325,7 @@
 
                     <div class="span3">${contrato?.delegadoPrefecto?.titulo} ${contrato?.delegadoPrefecto?.nombre} ${contrato?.delegadoPrefecto?.apellido}</div>
 
-                    <div class="span2 formato">Delegado de fiscalización </div>
+                    <div class="span3 formato">Delegado de fiscalización </div>
 
                     <div class="span3">${contrato?.delegadoFiscalizacion?.titulo} ${contrato?.delegadoFiscalizacion?.nombre} ${contrato?.delegadoFiscalizacion?.apellido}</div>
                 </div>

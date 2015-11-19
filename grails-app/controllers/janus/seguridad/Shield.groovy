@@ -45,12 +45,15 @@ class Shield {
                     return true
                 }
 //            println "is allowed Accion: ${actionName.toLowerCase()} ---  Controlador: ${controllerName.toLowerCase()} --- Permisos de ese controlador: "+session.permisos[controllerName.toLowerCase()]
-                if (!session.permisos[controllerName.toLowerCase()])
+                if (!session.permisos[controllerName.toLowerCase()]) {
+                    println "----> x <--- ${controllerName.toLowerCase()}/${actionName.toLowerCase()}"
                     return false
+                }
                 else {
                     if (session.permisos[controllerName.toLowerCase()].contains(actionName.toLowerCase()))
                         return true
                     else
+                        println "----> x <--- ${controllerName.toLowerCase()}/${actionName.toLowerCase()}"
                         return false
                 }
 

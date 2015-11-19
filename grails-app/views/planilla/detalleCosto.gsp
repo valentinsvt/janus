@@ -251,7 +251,7 @@
 
             function updateVal(tipo) {
 //                var indi = parseInt($("#thIndirectos").data("indi")) / 100;
-                var indi = ${contrato?.indirectos/100}
+                var indi = ${contrato?.indirectos?:21/100}
                 var valorNoIva = parseFloat($.trim($("#txtValor").val()));
 
                 var valorIva = valorNoIva + (valorNoIva * iva);
