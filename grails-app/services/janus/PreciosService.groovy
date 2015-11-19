@@ -284,6 +284,17 @@ class PreciosService {
         return result
     }
 
+    def nv_rubros(parametros){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rubros(" + parametros + ") "
+//        println "sql " + sql
+        def result = []
+        cn.eachRow(sql) { r ->
+            result.add(r.toRowResult())
+        }
+        return result
+    }
+
     def rb_preciosAsc(parametros, condicion) {
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rb_precios_v2(" + parametros + ") order by itemcdgo asc " + condicion

@@ -276,7 +276,7 @@
     <div class="modal-footer" id="modal_trans_footer">
         <g:hiddenField name="nodeId" val=""/>
         <g:hiddenField name="nodeGrupo" val=""/>
-        <a href="#" data-dismiss="modal" class="btn btn-primary" id="print_totales" data-transporte="true"><i class="icon-print"></i> Consolidado</a>
+        <a href= "#" data-dismiss="modal" class="btn btn-primary" id="print_totales" data-transporte="true"><i class="icon-print"></i> Consolidado</a>
         <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="si"><i class="icon-print"></i> Con </br>transporte</a>
         <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="no"><i class="icon-print"></i> Sin </br>transporte</a>
         <a href="#" data-dismiss="modal" class="btn btn-primary btnPrintVae" data-transporte="si"><i class="icon-print"></i> VAE con </br>transporte</a>
@@ -284,6 +284,208 @@
         <a href="#" data-dismiss="modal" class="btn" id="btnCancel">Cancelar</a>
     </div>
 </div>
+
+
+
+<div class="modal large hide fade " id="modal-transporte2" style="overflow: hidden;">
+    <div class="modal-header btn-primary">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modal_trans_title2">
+            Variables de transporte
+        </h3>
+    </div>
+
+    <div class="modal-body" id="modal_trans_body2">
+        <div class="row-fluid">
+
+            <div class="span2">
+                Lista de precios: MO y Equipos
+            </div>
+
+            <div class="span3">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" id="ciudad" style="width: 170px"/>
+            </div>
+
+            <div class="span1">
+                Fecha
+            </div>
+
+            <div class="span2">
+                <elm:datepicker name="item.fecha" class="" style="width: 90px;" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
+            </div>
+
+            <div class="span2" style="width: 120px;">
+                % costos indirectos
+            </div>
+
+            <div class="span1">
+                <input type="text" style="width: 30px;" id="costo_indi" value="21">
+            </div>
+        </div>
+        <hr style="margin: 5px 0 10px 0;"/>
+
+        <div class="row-fluid">
+            <div class="span1">
+                Volquete
+            </div>
+
+            <div class="span3" style="margin-left: 10px;">
+                <g:select style="width: 165px;" name="volquetes" from="${volquetes2}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1': 'Seleccione']}" value="${aux.volquete.id}"/>
+            </div>
+
+            <div class="span1" style="width: 35px; margin-left: 5px;">
+                Costo
+            </div>
+
+            <div class="span1" style="margin-left: 5px; width: 90px;">
+                <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_volqueta">
+            </div>
+
+            <div class="span1" style="margin-left: 5px;">
+                Chofer
+            </div>
+
+            <div class="span3" style="margin-left: 5px;">
+                <g:select style="width: 165px;" name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" noSelection="${['-1': 'Seleccione']}" value="${aux.chofer.id}"/>
+            </div>
+
+            <div class="span1" style="width: 35px;margin-left: 5px;">
+                Costo
+            </div>
+
+            <div class="span1" style="margin-left: 5px; width: 90px;">
+                <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_chofer">
+            </div>
+        </div>
+
+        <div class="row-fluid" style="border-bottom: 1px solid black;margin-bottom: 10px">
+            <div class="span6">
+                <b>Distancia peso</b>
+                %{--<input type="text" style="width: 50px;" id="dist_peso" value="0.00">--}%
+            </div>
+
+            <div class="span5" style="margin-left: 30px;">
+                <b>Distancia volumen</b>
+                %{--<input type="text" style="width: 50px;" id="dist_vol" value="0.00">--}%
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span2">
+                Canton
+            </div>
+
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_p1" value="10.00">
+            </div>
+
+            <div class="span4">
+                Materiales Petreos Hormigones
+            </div>
+
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_v1" value="20.00">
+            </div>
+
+        </div>
+
+        <div class="row-fluid">
+            <div class="span2">
+                Especial
+            </div>
+
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_p2" value="10.00">
+            </div>
+
+            <div class="span4">
+                Materiales Mejoramiento
+            </div>
+
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_v2" value="20.00">
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span5">
+
+            </div>
+
+            <div class="span4">
+                Materiales Carpeta Asfáltica
+            </div>
+
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_v3" value="20.00">
+            </div>
+        </div>
+
+        <div class="row-fluid" style="border-bottom: 1px solid black;margin-bottom: 10px">
+            <div class="span6">
+                <b>Listas de precios</b>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span1">
+                Cantón
+            </div>
+
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_1"/>
+            </div>
+
+            <div class="span3">
+                Petreos Hormigones
+            </div>
+
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_3"/>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span1">
+                Especial
+            </div>
+
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_2"/>
+            </div>
+
+            <div class="span3">
+                Mejoramiento
+            </div>
+
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_4"/>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span5"></div>
+
+            <div class="span3">
+                Carpeta Asfáltica
+            </div>
+
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_5"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer" id="modal_trans_footer2">
+        <g:hiddenField name="nodeId" val=""/>
+        <g:hiddenField name="nodeGrupo" val=""/>
+        <a href= "#" data-dismiss="modal" class="btn btn-primary" id="imp_consolidado" data-transporte="true"><i class="icon-print"></i> Consolidado</a>
+        <a href="#" data-dismiss="modal" class="btn" id="btnCancel">Cancelar</a>
+    </div>
+</div>
+
+
 
 <script type="text/javascript">
 
@@ -406,6 +608,25 @@
             icon             : params.icon,
             action           : function (obj) {
                 $("#modal-transporte").modal("show");
+            }
+        };
+        return obj;
+    }
+
+    function imprimirConsolidado(params) {
+        $("#nodeId").val(params.id);
+        if(params.grupo) {
+            $("#nodeGrupo").val(params.grupo);
+        } else {
+            $("#nodeGrupo").val();
+        }
+        var obj = {
+            label            : params.label,
+            separator_before : params.sepBefore, // Insert a separator before the item
+            separator_after  : params.sepAfter, // Insert a separator after the item
+            icon             : params.icon,
+            action           : function (obj) {
+                $("#modal-transporte2").modal("show");
             }
         };
         return obj;
@@ -660,7 +881,7 @@
                     log       : "Subgrupo ",
                     title     : "Nuevo Grupo"
                 });
-                menuItems.print = imprimir({
+                menuItems.print = imprimirConsolidado({
                     id        : nodeStrId,
                     label     : "Imprimir",
                     sepBefore : true,
@@ -1028,17 +1249,52 @@
             var chofer = $("#costo_chofer").val();
             var trans = $(this).data("transporte");
             var nodeId = $("#nodeId").val();
+            var principal = false;
 
             var datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 +
                     "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=" + nodeId +
                     "Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() +
-                    "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
+                    "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wprincipal=" + principal +"Wtrans=" + trans;
             var url = "${g.createLink(controller: 'reportes2',action: 'imprimirRubrosConsolidado')}?" + datos;
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=rubros_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
 
             $("#modal-transporte").modal("hide");
             return false;
         });
+
+
+        $("#imp_consolidado").click(function () {
+            var dsp0 = $("#dist_p1").val();
+            var dsp1 = $("#dist_p2").val();
+            var dsv0 = $("#dist_v1").val();
+            var dsv1 = $("#dist_v2").val();
+            var dsv2 = $("#dist_v3").val();
+            var lista1 = $("#lista_1").val();
+            var lista2 = $("#lista_2").val();
+            var lista3 = $("#lista_3").val();
+            var lista4 = $("#lista_4").val();
+            var lista5 = $("#lista_5").val();
+            var lista6 = $("#ciudad").val();
+            var volqueta = $("#costo_volqueta").val();
+            var chofer = $("#costo_chofer").val();
+            var trans = $(this).data("transporte");
+            var nodeId = $("#nodeId").val();
+            var principal = true;
+
+            var datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 +
+                    "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=" + nodeId +
+                    "Wlugar=" + $("#ciudad").val() + "Wlista1=" + lista1 + "Wlista2=" + lista2 + "Wlista3=" + lista3 +
+                    "Wlista4=" + lista4 + "Wlista5=" + lista5 + "Wlista6=" + lista6 + "Wprincipal=" + principal
+                    + "Wchof=" + $("#cmb_chof").val() +
+                    "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
+            var url = "${g.createLink(controller: 'reportes2',action: 'imprimirRubrosConsolidado2')}?" + datos;
+            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=rubros_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
+            $("#modal-transporte2").modal("hide");
+            return false;
+        });
+
+
+
 
         var cache = {};
         $("#search").autocomplete({

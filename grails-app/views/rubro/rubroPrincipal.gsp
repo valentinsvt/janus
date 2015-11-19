@@ -1601,6 +1601,7 @@
             } else {
                 $(this).addClass("active")
                 var fecha = $("#fecha_precios").val()
+
                 if (fecha.length < 8) {
                     $.box({
                         imageClass : "box_info",

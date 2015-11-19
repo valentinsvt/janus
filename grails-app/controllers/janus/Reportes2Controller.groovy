@@ -640,7 +640,7 @@ class Reportes2Controller {
     }
 
     def imprimirRubrosConsolidado() {
-        println "rep rubros consolidado: "+params
+//        println "rep rubros consolidado: "+params
         def rubros = []
 
         def parts = params.id.split("_")
@@ -648,7 +648,7 @@ class Reportes2Controller {
         switch (parts[0]) {
             case "gr":
                 def subGrupo = SubgrupoItems.findAllByGrupo(Grupo.get(parts[1].toLong()))
-                println "subgrupos: $subGrupo"
+//                println "subgrupos: $subGrupo"
                 def departamentos = DepartamentoItem.findAllBySubgrupoInList(subGrupo)
                 rubros = Item.findAllByDepartamentoInList(departamentos, [sort: "nombre"])
                 break;
@@ -667,7 +667,11 @@ class Reportes2Controller {
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def lugar = params.lugar
         def indi = params.indi
-        def listas = params.listas
+        def listas
+        if(params.listas){
+            listas = params.listas
+        }
+
         try {
             indi = indi.toDouble()
         } catch (e) {
@@ -678,32 +682,31 @@ class Reportes2Controller {
         def datos = []
         def nombresTodos = []
         def corregidos = []
-        rubros.each { rubro ->
-            def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
-            preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
-            def res = preciosService.rb_precios(parametros, "")
+
+            rubros.each { rubro ->
+                def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
+                preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
+                def res = preciosService.rb_precios(parametros, "")
 
 //            println("res" + res)
-
 //            println("rubro " + rubro)
 
-            nombresTodos += rubro.nombre
-
-            def temp = [:]
-            def total = 0
-            res.each { r ->
-                total += r["parcial"] + r["parcial_t"]
-            }
-            total = total * (1 + indi / 100)
-            temp.put("codigo", rubro.codigo)
-            temp.put("nombre", rubro.nombre)
-            temp.put("unidad", rubro.unidad.codigo)
-            temp.put("total", total)
-            datos.add(temp)
+                nombresTodos += rubro.nombre
+                def temp = [:]
+                def total = 0
+                res.each { r ->
+                    total += r["parcial"] + r["parcial_t"]
+                }
+                total = total * (1 + indi / 100)
+                temp.put("codigo", rubro.codigo)
+                temp.put("nombre", rubro.nombre)
+                temp.put("unidad", rubro.unidad.codigo)
+                temp.put("total", total)
+                datos.add(temp)
 //            println "res "+res
-
 //            println("datos " + datos)
-        }
+            }
+
         def l = listas.split(",")
 //        println "listas str "+listas+" "+l
         listas = []
@@ -727,6 +730,102 @@ class Reportes2Controller {
 
         [datos: datos, fecha: fecha, indi: indi, params: params, listas: listas, nombres: corregidos]
     }
+
+
+
+    def imprimirRubrosConsolidado2() {
+//        println "consolidado 2: "+params
+        def rubros = []
+
+        def parts = params.id.split("_")
+
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def lugar = params.lugar
+        def indi = params.indi
+
+        try {
+            indi = indi.toDouble()
+        } catch (e) {
+            println "error parse " + e
+            indi = 21.5
+        }
+
+        def datos = []
+        def nombresTodos = []
+        def corregidos = []
+
+
+        switch (parts[0]) {
+            case "gr":
+                def subGrupo = SubgrupoItems.findAllByGrupo(Grupo.get(parts[1].toLong()))
+//                println "subgrupos: $subGrupo"
+                def departamentos = DepartamentoItem.findAllBySubgrupoInList(subGrupo)
+                rubros = Item.findAllByDepartamentoInList(departamentos, [sort: "nombre"])
+                break;
+            case "sg":
+                def departamentos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(parts[1].toLong()))
+                rubros = Item.findAllByDepartamentoInList(departamentos, [sort: "nombre"])
+                break;
+            case "dp":
+                rubros = Item.findAllByDepartamento(DepartamentoItem.get(parts[1].toLong()), [sort: "nombre"])
+                break;
+            case "rb":
+                rubros = [Item.get(parts[1].toLong())]
+                break;
+        }
+
+
+//          rubros.each { rubro ->
+//                def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," + params.lista3 + "," + params.lista4 + "," + params.lista5 + "," + params.lista6 + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
+//                preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
+//                def res = preciosService.nv_rubros(parametros)
+//
+////            println("res" + res)
+////            println("rubro " + rubro)
+//
+//                nombresTodos += rubro.nombre
+//                def temp = [:]
+//                def total = 0
+//                res.each { r ->
+//                    total += r["parcial"] + r["parcial_t"]
+//                }
+//                total = total * (1 + indi / 100)
+//                temp.put("codigo", rubro.codigo)
+//                temp.put("nombre", rubro.nombre)
+//                temp.put("unidad", rubro.unidad.codigo)
+//                temp.put("total", total)
+//                datos.add(temp)
+////            println "res "+res
+////            println("datos " + datos)
+//            }
+
+
+        def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," + params.lista3 + "," + params.lista4 + "," + params.lista5 + "," + params.lista6 + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
+//        preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
+        def res = preciosService.nv_rubros(parametros)
+
+        res.each { t->
+            nombresTodos += t.rbronmbr
+        }
+
+//        println("res  " + res)
+
+        nombresTodos.each {
+            def text = (it ?: '')
+            text = text.decodeHTML()
+            text = text.replaceAll(/</, /&lt;/);
+            text = text.replaceAll(/>/, /&gt;/);
+            text = text.replaceAll(/"/, /&quot;/);
+            corregidos += text
+        }
+//        println("nombres " +corregidos)
+
+        [datos: datos, fecha: fecha, indi: indi, params: params, nombres: corregidos, lista1: params.lista1, lista2: params.lista2, lista3: params.lista3, lista4: params.lista4, lista5: params.lista5,lista6: params.lista6, res: res]
+    }
+
+
+
+
 
 
     def tablasPlanilla_bck() {
