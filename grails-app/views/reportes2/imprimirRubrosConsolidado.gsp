@@ -134,6 +134,11 @@
         width: 120px;
 
     }
+
+
+    .small2 {
+        width: 150px;
+    }
     .half{
         width: 50px;
     }
@@ -187,10 +192,10 @@
             <div class="label">Chofer: </div> <div class="dato large"> No seleccionado Chofer <b>($${params.prch.toDouble().round(2)})</b></div>
         </g:else>
         <g:if test="${params.volq != '-1'}">
-            <div class="label half">Volquete: </div> <div class="dato small">${janus.Item.get(params.volq).nombre} <b>($${params.prvl.toDouble().round(2)})</b></div>
+            <div class="label half">Volquete: </div> <div class="dato small2">${janus.Item.get(params.volq).nombre} <b>($${params.prvl.toDouble().round(2)})</b></div>
         </g:if>
         <g:else>
-            <div class="label half">Volquete: </div> <div class="dato small"> No seleccionada Volqueta <b>($${params.prvl.toDouble().round(2)})</b></div>
+            <div class="label half">Volquete: </div> <div class="dato small2"> No seleccionada Volqueta <b>($${params.prvl.toDouble().round(2)})</b></div>
         </g:else>
 
 
