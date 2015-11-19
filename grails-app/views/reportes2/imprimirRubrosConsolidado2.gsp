@@ -195,6 +195,8 @@
             <th>NOMBRE</th>
             <th>UNIDAD</th>
             <th>PRECIO</th>
+            <th>ESPECIFI.</th>
+            <th>PLANO DE DETALLE</th>
         </tr>
         </thead>
         <tbody>
@@ -205,7 +207,8 @@
                 <td>${nombres[j]}</td>
                 <td>${rubro.unddcdgo}</td>
                 <td style="text-align: right"><g:formatNumber number="${rubro.rbropcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                %{--<g:set var="total" value="${total+rubro.rbropcun}"></g:set>--}%
+                <td style="text-align: center">${rubro.rbroespc}</td>
+                <td style="text-align: center">${rubro.rbrofoto}</td>
             </tr>
         </g:each>
         </tbody>
