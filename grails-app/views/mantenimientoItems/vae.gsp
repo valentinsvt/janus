@@ -41,6 +41,9 @@
             </g:if>
         </div>
 
+
+
+
         <div class="span12 btn-group" data-toggle="buttons-radio">
             <a href="#" id="1" class="btn btn-info toggle active" data-reporte="materiales">
                 <i class="icon-folder-open-alt"></i>
@@ -54,7 +57,7 @@
                 <i class="icon-truck"></i>
                 Equipos
             </a>
-            <a href="#" id="4" class="btn btn-info toggle">
+            <a href="#" id="ev" class="btn btn-info btnExcelVae">
                 <i class="icon-print"></i>
                 Excel
             </a>
@@ -107,6 +110,12 @@
         </div>
 
         <script type="text/javascript">
+
+
+            $(".btnExcelVae").click(function () {
+                var fecha = $("#fcDefecto").val();
+                location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelItemsVae' )}?fecha=" + fecha
+            });
 
 
             $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
@@ -867,7 +876,10 @@
                     }
                 });
 
+
             });
+
+
         </script>
 
     </body>

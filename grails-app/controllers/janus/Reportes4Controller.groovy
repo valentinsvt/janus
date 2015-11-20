@@ -3677,23 +3677,18 @@ class Reportes4Controller {
 
     def reporteExcelItemsVae () {
 
-
         def sql
         def cn
         def res
 
+        def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
 
-        def sqlBase =
+        fecha = fecha.format("yyyy/MM/dd")
 
-
-
-
-        sql = sqlBase + filtroBuscador
+        sql = "select * from items_ver_vae( cast( '${fecha}' as date))"
 
         cn = dbConnectionService.getConnection()
-
         res = cn.rows(sql.toString())
-
 
 
         WorkbookSettings workbookSettings = new WorkbookSettings()
@@ -3714,25 +3709,16 @@ class Reportes4Controller {
 
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
-        sheet.setColumnView(0, 12)
-        sheet.setColumnView(1, 20)
-        sheet.setColumnView(2, 25)
-        sheet.setColumnView(3, 25)
-        sheet.setColumnView(4, 40)
-        sheet.setColumnView(5, 25)
-        sheet.setColumnView(8, 20)
-        sheet.setColumnView(9, 10)
-        sheet.setColumnView(10, 10)
-        sheet.setColumnView(11, 15)
-        sheet.setColumnView(12, 15)
-        sheet.setColumnView(13, 15)
-        sheet.setColumnView(14, 10)
+        sheet.setColumnView(0, 25)
+        sheet.setColumnView(1, 80)
+        sheet.setColumnView(2, 20)
+        sheet.setColumnView(3, 20)
+
         // inicia textos y numeros para asocias a columnas
 
         def label
         def nmro
         def number
-
         def fila = 6;
 
 
@@ -3742,39 +3728,24 @@ class Reportes4Controller {
         label = new Label(1, 1, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
         label = new Label(1, 2, "REPORTE EXCEL ITEMS VAE", times16format); sheet.addCell(label);
 
-
-
         label = new Label(0, 4, "Código: ", times16format); sheet.addCell(label);
         label = new Label(1, 4, "Nombre", times16format); sheet.addCell(label);
         label = new Label(2, 4, "Unidad", times16format); sheet.addCell(label);
-        label = new Label(3, 4, "Vae", times16format); sheet.addCell(label);
-
-
+        label = new Label(3, 4, "VAE", times16format); sheet.addCell(label);
 
 
         res.eachWithIndex {i, j->
-            label = new Label(0, fila, i?.codigo?.toString()); sheet.addCell(label);
-            label = new Label(1, fila, i?.fechasu?.toString()); sheet.addCell(label);
-            label = new Label(2, fila, i.concurso.toString()); sheet.addCell(label);
-            label = new Label(3, fila, i?.obracodigo?.toString()); sheet.addCell(label);
-            label = new Label(4, fila, i?.obranombre?.toString()); sheet.addCell(label);
-            label = new Label(5, fila, i?.canton?.toString() + " " + i?.parroquia?.toString()); sheet.addCell(label);
-            label = new Label(6, fila, i?.tipoobra?.toString()); sheet.addCell(label);
-            label = new Label(7, fila, i?.tipocontrato?.toString()); sheet.addCell(label);
-            label = new Label(8, fila, i?.nombrecontra?.toString()); sheet.addCell(label);
-            number = new jxl.write.Number(9, fila, i.monto); sheet.addCell(number);
-            number = new jxl.write.Number(10, fila, i.porcentaje); sheet.addCell(number);
-            number = new jxl.write.Number(11, fila, i.anticipo); sheet.addCell(number);
-            label = new Label(12, fila, i?.fechainicio?.toString()); sheet.addCell(label);
-            label = new Label(13, fila, i?.fechafin?.toString()); sheet.addCell(label);
-            label = new Label(14, fila, i?.plazo); sheet.addCell(label);
-
+            label = new Label(0, fila, i?.itemcdgo?.toString()); sheet.addCell(label);
+            label = new Label(1, fila, i?.itemnmbr?.toString()); sheet.addCell(label);
+            label = new Label(2, fila, i?.unddcdgo.toString()); sheet.addCell(label);
+            label = new Label(3, fila, i?.item_vae?.toString()); sheet.addCell(label);
+//            number = new jxl.write.Number(9, fila, i.monto); sheet.addCell(number);
             fila++
         }
         workbook.write();
         workbook.close();
         def output = response.getOutputStream()
-        def header = "attachment; filename=" + "ContratosExcel.xls";
+        def header = "attachment; filename=" + "ItemsVae.xls";
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
