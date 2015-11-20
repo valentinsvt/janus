@@ -137,23 +137,20 @@
 
                 <g:if test="${contrato?.codigo != null}">
 
-                    <div class="span12" align="center">
+                    <div class="span12">
 
-                        <div class="span2 formato">Obra</div>
-
-                        <div class="span3"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
+                        <div class="span1 formato">Obra</div>
+                        <div class="span4"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
 
                         <div class="span1 formato">Nombre</div>
-
-                        <div class="span3"><g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}" style="width: 400px" disabled="true"/></div>
+                        <div class="span3"><g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}" style="width: 500px" disabled="true"/></div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
-                        <div class="span2 formato">Parroquia</div>
-
-                        <div class="span3"><g:textField name="parroquia" class="parroquia" value="${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}" disabled="true"/></div>
+                        <div class="span1 formato">Parroquia</div>
+                        <div class="span4"><g:textField name="parroquia" class="parroquia" value="${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}" disabled="true"/></div>
 
                         <div class="span1 formato">Cantón</div>
 
@@ -161,23 +158,23 @@
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
-                        <div class="span2 formato">Clase Obra</div>
+                        <div class="span1 formato">Clase Obra</div>
 
                         <div class="span3"><g:textField name="claseObra" class="claseObra" value="${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}" disabled="true"/></div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
-                        <div class="span2 formato">Contratista</div>
+                        <div class="span1 formato">Contratista</div>
 
-                        <div class="span3"><g:textField name="contratista" class="contratista" value="${contrato?.oferta?.proveedor?.nombre}" disabled="true"/></div>
+                        <div class="span4"><g:textField name="contratista" class="contratista" value="${contrato?.oferta?.proveedor?.nombre}" disabled="true"  style="width: 320px"/></div>
 
-                        <div class="span3 formato" style="margin-left: -1px">Fecha presentación de la Oferta</div>
+                        <div class="span4 formato">Fecha presentación de la Oferta</div>
 
-                        <div class="span2"><g:textField name="fechaPresentacion" class="fechaPresentacion" value="${contrato?.oferta?.fechaEntrega?.format('dd-MM-yyyy') ?: ''}"
+                        <div class="span1"><g:textField name="fechaPresentacion" class="fechaPresentacion" value="${contrato?.oferta?.fechaEntrega?.format('dd-MM-yyyy') ?: ''}"
                                                         disabled="true" style="width: 100px; margin-left: -180px"/></div>
 
                     </div>
@@ -260,29 +257,29 @@
 
             <fieldset class="" style="position: relative; height: 150px; border-bottom: 1px solid black;padding: 10px;">
 
-                <div class="span12" style="margin-top: 10px" align="center">
+                <div class="span12" style="margin-top: 10px">
 
                     <div class="span2 formato">Tipo de contrato</div>
 
-                    <div class="span3"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContratoId}" optionKey="id" optionValue="descripcion"/></div>
+                    <div class="span4" style="margin-left:-20px"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContratoId}" optionKey="id" optionValue="descripcion"/></div>
 
-                    <div class="span2 formato">Fecha de Suscripción</div>
+                    <div class="span2 formato" style="margin-left:-20px">Fecha de Suscripción</div>
 
-                    <div class="span2"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
+                    <div class="span3"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
                 </div>
 
-                <div class="span12" style="margin-top: 5px" align="center">
+                <div class="span12" style="margin-top: 5px">
 
                     <div class="span2 formato">Objeto del Contrato</div>
 
-                    <div class="span3"><g:textArea name="objeto" class="activo" rows="5" cols="5" style="height: 79px; width: 800px; resize: none" value="${contrato?.objeto}"/></div>
+                    <div class="span9" style="margin-left: -20px"><g:textArea name="objeto" class="activo" rows="5" cols="5" style="height: 79px; width: 900px; resize: none" value="${contrato?.objeto}"/></div>
 
                 </div>
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 240px; padding: 10px;border-bottom: 1px solid black;">
+            <fieldset class="" style="position: relative; padding: 10px;border-bottom: 1px solid black;">
 
                 <div class="span12" style="margin-top: 10px">
 

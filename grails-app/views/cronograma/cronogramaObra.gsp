@@ -19,10 +19,11 @@
 
     <body>
         <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
-        <g:set var="plazoOk" value="${detalle.findAll { it.dias && it.dias > 0 }.size() > 0}"/>
+        <g:set var="plazoOk" value="${detalle.findAll { it.dias > 0 }.size() > 0}"/>
         <g:set var="matrizOk" value="${obra.desgloseTransporte != null}"/>
         <g:set var="sum" value="${0}"/>
 
+        mmmmmm${meses} plazo: ${plazoOk} matriz:${matrizOk}
         <div class="tituloTree">
             CRONOGRAMA DE LA OBRA: ${obra.nombre?.toUpperCase()} (${meses} mes${meses == 1 ? "" : "es"})
         </div>
@@ -336,11 +337,9 @@
         </g:if>
         <g:else>
             <div class="alert alert-error">
-                <i class="icon-warning-sign icon-2x pull-left"></i>
-                <h4>Error</h4>
-
-                <p>
-                    No se ha generado la matriz de la fórmula polinómica.
+                <p>No se ha generado la matriz de la fórmula polinómica.</p>
+                    <i class="icon-warning-sign icon-2x pull-left"></i>
+                <p>Si la obra se halla <strong>registrada</strong>, Por favor vuelva a generar la matriz de la FP para visualizar el cronograma
                 </p>
             </div>
         </g:else>

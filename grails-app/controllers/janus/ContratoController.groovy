@@ -234,7 +234,7 @@ class ContratoController extends janus.seguridad.Shield {
             errores += "<li>Debe cargar un documento a la biblioteca con nombre 'Justificativo de cantidad de obra'</li>"
         }
 
-        if (errores == "") {
+        if (errores == "") { //registra el contrato
             contrato.estado = "R"
             if (contrato.save(flush: true)) {
                 render "ok"
@@ -261,24 +261,17 @@ class ContratoController extends janus.seguridad.Shield {
 
     def registroContrato() {
         def contrato
-        def planilla
-        def obra = Obra.get(params.obra)
+        def planilla  // si hay planillas de inhabilita el desregistrar
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
-
             planilla = Planilla.findAllByContrato(contrato)
-
-//            println(planilla)
-
-
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
+
             [campos: campos, contrato: contrato, planilla: planilla]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             [campos: campos]
         }
-
-
     }
 
     def saveCambiosPolinomica() {

@@ -317,7 +317,7 @@ class ObraController extends janus.seguridad.Shield {
 
         obraService.registrarObra(obra)
         obra.estado = "R"
-        obra.desgloseTransporte = null  //obliga a genrar matriz con valores históricos almacenado spor grst_obra
+        obra.desgloseTransporte = null  //obliga a genrar matriz con valores históricos almacenados por grst_obra
         if (obra.save(flush: true)) {
             render "ok"
             return
