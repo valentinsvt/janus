@@ -3,7 +3,7 @@ package janus.seguridad
 class ShieldController {
     def loginService
     def ataques = {
-        def msn="Mensaje de acceso no permitido aqui"
+        def msn="Acceso no autorizado"
         render(view:"advertencia",model:[msn:msn])
     }
 

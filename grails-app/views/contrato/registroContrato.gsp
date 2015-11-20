@@ -361,27 +361,6 @@
 
                 </div>
 
-                %{--<div class="span12" style="margin-top: 10px">--}%
-
-                %{--<div class="span2 formato">Administrador</div>--}%
-
-                %{--<div class="span3">--}%
-                %{--<g:select name="administrador.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{--}%
-                %{--it.apellido + ' ' + it.nombre--}%
-                %{--}}"--}%
-                %{--value="${contrato?.administradorId}" class="required" noSelection="['': 'Seleccione...']"/>--}%
-                %{--</div>--}%
-
-                %{--<div class="span2 formato">Delegado del Prefecto</div>--}%
-
-                %{--<div class="span3">--}%
-                %{--<g:select name="delegadoPrefecto.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{--}%
-                %{--it.apellido + ' ' + it.nombre--}%
-                %{--}}"--}%
-                %{--value="${contrato?.delegadoPrefectoId}" class="required" noSelection="['': 'Seleccione...']"/>--}%
-                %{--</div>--}%
-
-                %{--</div>--}%
                 <div class="span12" style="margin-top: 10px">
 
                     <div class="span2 formato">Dirección Administradora</div>
@@ -391,20 +370,15 @@
                                   value="${contrato?.depAdministradorId}" class="required"/>
                     </div>
 
+                    <div class="span2 formato">Indirectos</div>
+
+                    <div class="span3">
+                        <g:textField name="indirectos" class="anticipo activo"
+                                     value="${g.formatNumber(number: contrato?.indirectos, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"
+                                     style="width: 30px; text-align: right"/> %
+                    </div>
+
                 </div>
-
-
-                %{--<div class="span12" style="margin-top: 10px">--}%
-
-                %{--<div class="span2 formato">Financiamiento</div>--}%
-
-                %{--<div class="span3"><g:textField name="financiamiento" class="financiamiento activo" value="${contrato?.financiamiento}"/></div>--}%
-
-                %{--<div class="span2 formato">Financiado Por</div>--}%
-
-                %{--<div class="span3"><g:textField name="financiadoPor" class="financiadoPor activo"/></div>--}%
-
-                %{--</div>--}%
 
             </fieldset>
 
@@ -693,6 +667,21 @@
                         updateAnticipo();
 
                     });
+
+
+            $("#indirectos").keydown(function (ev) {
+
+                return validarNum(ev);
+
+            }).keyup(function () {
+
+                var enteros = $(this).val();
+
+                if (parseFloat(enteros) > 100) {
+                    $(this).val(100)
+                }
+            });
+
 
             $("#anticipo").keydown(function (ev) {
 

@@ -43,7 +43,7 @@
 
         <div class="span12 btn-group" data-toggle="buttons-radio">
             <a href="#" id="1" class="btn btn-info toggle active" data-reporte="materiales">
-                <i class="icon-folder-close-alt"></i>
+                <i class="icon-folder-open-alt"></i>
                 Materiales <!--grpo--><!--sbgr -> Grupo--><!--dprt -> Subgrupo--><!--item-->
             </a>
             <a href="#" id="2" class="btn btn-info toggle" data-reporte="mano_obra">
@@ -54,8 +54,12 @@
                 <i class="icon-truck"></i>
                 Equipos
             </a>
+            <a href="#" id="4" class="btn btn-info toggle">
+                <i class="icon-print"></i>
+                Excel
+            </a>
 
-            <form class="form-search" style="width: 740px; margin-left: 380px; margin-top: -22px; ">
+            <form class="form-search" style="width: 740px; margin-left: 430px; margin-top: -27px; ">
                 <div class="input-append">
                     <input type="text" class="input-medium search-query" id="search"/>
                     <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
