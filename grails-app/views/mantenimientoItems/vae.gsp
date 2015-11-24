@@ -44,7 +44,7 @@
 
 
 
-        <div class="span12 btn-group" data-toggle="buttons-radio">
+        <div class="span12 btn-group" data-toggle="buttons-radio" style="margin-left:0px; height: 35px; width: 360px">
             <a href="#" id="1" class="btn btn-info toggle active" data-reporte="materiales">
                 <i class="icon-folder-open-alt"></i>
                 Materiales <!--grpo--><!--sbgr -> Grupo--><!--dprt -> Subgrupo--><!--item-->
@@ -57,27 +57,25 @@
                 <i class="icon-truck"></i>
                 Equipos
             </a>
-            <a href="#" id="ev" class="btn btn-info btnExcelVae">
-                <i class="icon-print"></i>
-                Excel
-            </a>
-
-            <form class="form-search" style="width: 740px; margin-left: 430px; margin-top: -27px; ">
+        </div>
+            <form class="form-search" style="width: 740px; float: left; display: inline">
                 <div class="input-append">
                     <input type="text" class="input-medium search-query" id="search"/>
                     <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
                 </div>
                 <span id="cantRes"></span>
-                <input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
+                <input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');" style="margin-left: 10px;">
 
-                <span style="font-size: 12px; margin-left: 20px; ">Fecha por Defecto:</span>
+                <span style="font-size: 12px; margin-left: 10px; ">Fecha por Defecto:</span>
                 <span style="width: 120px; margin: 5px;">
                     <elm:datepicker name="fecha" id="fcDefecto" class="datepicker required" style="width: 90px"
-
-                                    maxDate="'+1y'" value="${new Date()}"/>
+                        maxDate="'+1y'" value="${new Date()}"/>
                 </span>
+                <a href="#" id="ev" class="btn btn-info btnExcelVae" >
+                    <i class="icon-print"></i>
+                    VAE
+                </a>
             </form>
-        </div>
 
 
         <div id="loading" style="text-align:center;">
@@ -87,7 +85,7 @@
         </div>
 
 
-        <div id="treeArea" class="hide" style="float: left;margin-top: 15px;">
+        <div id="treeArea" class="hide" style="float: left;">
 
             <div id="tree" class="ui-corner-all"></div>
 
@@ -614,7 +612,7 @@
                         }).bind("search.jstree",function (e, data) {
                             var cant = data.rslt.nodes.length;
                             var search = data.rslt.str;
-                            $("#cantRes").html("<b>" + cant + "</b> resultado" + (cant == 1 ? "" : "s"));
+                            $("#cantRes").html("<b>" + cant + "</b> res.");
                             if (cant > 0) {
                                 var container = $('#tree'), scrollTo = $('.jstree-search').first();
                                 container.animate({
