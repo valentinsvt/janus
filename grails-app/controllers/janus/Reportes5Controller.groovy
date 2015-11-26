@@ -1169,13 +1169,27 @@ class Reportes5Controller {
                 number = new Number(7, fila, val.pcun); sheet.addCell(number);
                 number = new Number(8, fila, val.totl); sheet.addCell(number);
                 number = new Number(9, fila, val.relativo); sheet.addCell(number);
-                number = new Number(10, fila, val.vae_rbro); sheet.addCell(number);
-                number = new Number(11, fila, val.vae_totl); sheet.addCell(number);
+                if(val.vae_rbro != null){
+                    number = new Number(10, fila, val.vae_rbro); sheet.addCell(number);
+                }else{
+                    number = new Number(10, fila, 0); sheet.addCell(number);
+                }
+                if(val.vae_totl != null){
+                    number = new Number(11, fila, val.vae_totl); sheet.addCell(number);
+                }else{
+                    number = new Number(11, fila, 0); sheet.addCell(number);
+                }
+
 
                 fila++
                 filaSub++
                 totales = val.totl
-                vaeTotal = val.vae_totl
+                if(val.vae_totl != null){
+                    vaeTotal = val.vae_totl
+                }else{
+                    vaeTotal = 0
+                }
+
                 totalPresupuesto = (total1 += totales);
                 totalVae = (vaeTotal1 += vaeTotal)
                 ultimaFila = fila

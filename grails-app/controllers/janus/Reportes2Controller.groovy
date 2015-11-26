@@ -774,32 +774,6 @@ class Reportes2Controller {
                 break;
         }
 
-
-//          rubros.each { rubro ->
-//                def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," + params.lista3 + "," + params.lista4 + "," + params.lista5 + "," + params.lista6 + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
-//                preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
-//                def res = preciosService.nv_rubros(parametros)
-//
-////            println("res" + res)
-////            println("rubro " + rubro)
-//
-//                nombresTodos += rubro.nombre
-//                def temp = [:]
-//                def total = 0
-//                res.each { r ->
-//                    total += r["parcial"] + r["parcial_t"]
-//                }
-//                total = total * (1 + indi / 100)
-//                temp.put("codigo", rubro.codigo)
-//                temp.put("nombre", rubro.nombre)
-//                temp.put("unidad", rubro.unidad.codigo)
-//                temp.put("total", total)
-//                datos.add(temp)
-////            println "res "+res
-////            println("datos " + datos)
-//            }
-
-
         def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," + params.lista3 + "," + params.lista4 + "," + params.lista5 + "," + params.lista6 + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
 //        preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
         def res = preciosService.nv_rubros(parametros)
@@ -807,8 +781,6 @@ class Reportes2Controller {
         res.each { t->
             nombresTodos += t.rbronmbr
         }
-
-//        println("res  " + res)
 
         nombresTodos.each {
             def text = (it ?: '')
@@ -821,6 +793,120 @@ class Reportes2Controller {
 //        println("nombres " +corregidos)
 
         [datos: datos, fecha: fecha, indi: indi, params: params, nombres: corregidos, lista1: params.lista1, lista2: params.lista2, lista3: params.lista3, lista4: params.lista4, lista5: params.lista5,lista6: params.lista6, res: res]
+    }
+
+    def consolidadoExcel () {
+
+        def parts = params.id.split("_")
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," + params.lista3 + "," + params.lista4 + "," + params.lista5 + "," + params.lista6 + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
+        def res = preciosService.nv_rubros(parametros)
+
+
+        def indi = params.indi
+
+        try {
+            indi = indi.toDouble()
+        } catch (e) {
+            println "error parse " + e
+            indi = 21.5
+        }
+
+        //excel
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('Consolidado', 0)
+
+        WritableFont times16font = new WritableFont(WritableFont.ARIAL, 11, WritableFont.BOLD, false);
+        WritableFont times16 = new WritableFont(WritableFont.ARIAL, 11, WritableFont.NO_BOLD, false);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        WritableCellFormat times16No = new WritableCellFormat(times16);
+        sheet.setColumnView(0, 30)
+        sheet.setColumnView(1, 70)
+        sheet.setColumnView(2, 15)
+        sheet.setColumnView(3, 20)
+        sheet.setColumnView(4, 20)
+        sheet.setColumnView(5, 20)
+
+        def label
+        def number
+        def fila = 18;
+        def ultimaFila
+
+
+        label = new jxl.write.Label(1, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 3, "GESTIÓN DE PRESUPUESTOS", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 4, "ANÁLISIS DE PRECIOS UNITARIOS", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(0, 6, "Fecha Act. P.U.: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 6, fecha.format("dd-MM-yyyy"), times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 6, "% costos indirectos: ", times16format); sheet.addCell(label);
+        number = new jxl.write.Number(3, 6, indi.toDouble().round(2) ?: 0); sheet.addCell(number);
+        label = new jxl.write.Label(1, 7, "LISTAS DE PRECIOS Y DISTANCIAS", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(0, 8, "Mano de Obra y Equipos: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 8,  Lugar.get(params.lista6).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 9, "Cantón: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 9,  Lugar.get(params.lista1).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 9, "Distancia: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 9,  params.dsp0, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 10, "Especial: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 10, Lugar.get(params.lista2).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 10, "Distancia: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 10, params.dsp1, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 11, "Mejoramiento: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 11, Lugar.get(params.lista4).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 11, "Distancia: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 11, params.dsv0, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 12, "Petreos Hormigones: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 12,  Lugar.get(params.lista3).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 12, "Distancia: ",times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 12,  params.dsv1, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 13, "Carpeta Asfáltica: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 13,  Lugar.get(params.lista5).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 13, "Distancia: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 13,  params.dsv2, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 14, "Chofer: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 14,  Item.get(params.chof).nombre + " (\$ " + params.prch.toDouble().round(2) + ")", times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 14, "Volquete: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 14,  Item.get(params.volq).nombre + " (\$ " + params.prvl.toDouble().round(2) + ")", times16No); sheet.addCell(label);
+
+        label = new jxl.write.Label(0, 17, "CODIGO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 17, "NOMBRE", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 17, "UNIDAD", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 17, "PRECIO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(4, 17, "ESPECIFICACIONES", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(5, 17, "PLANO DE DETALLE", times16format); sheet.addCell(label);
+
+        res.each{ k->
+
+            label = new jxl.write.Label(0, fila, k?.rbrocdgo); sheet.addCell(label);
+            label = new jxl.write.Label(1, fila, k?.rbronmbr); sheet.addCell(label);
+            label = new jxl.write.Label(2, fila, k?.unddcdgo); sheet.addCell(label);
+            number = new jxl.write.Number(3, fila, k?.rbropcun ?: 0); sheet.addCell(number);
+            label = new jxl.write.Label(4, fila, k?.rbroespc); sheet.addCell(label);
+            label = new jxl.write.Label(5, fila, k?.rbrofoto); sheet.addCell(label);
+
+            fila++
+
+            ultimaFila = fila
+
+        }
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "consolidadoExcel.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
     }
 
 

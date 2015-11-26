@@ -5,7 +5,7 @@
   Time: 12:09 PM
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.Lugar" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>
@@ -147,28 +147,28 @@
         <div class="label">Fecha Act. P.U: </div> <div class="dato large">${fecha.format("dd-MM-yyyy")}</div>
         <div class="label">% costos indirectos: </div> <div class="dato small">${indi}</div>
         <div class="dato" style="width: 100%;font-weight: bold;border-bottom: black solid 1px;margin-bottom: 5px;border-top: 1px solid black">Listas de precios y distancias</div>
-        <div class="label">Mano de obra y Equipos: </div> <div class="dato large">${lista6}</div>
+        <div class="label">Mano de obra y Equipos: </div> <div class="dato large">${Lugar.get(lista6).descripcion}</div>
         <div class="label"></div> <div class="dato small"></div>
-        <div class="label">Canton: </div> <div class="dato large ">${lista1}</div>
+        <div class="label">Canton: </div> <div class="dato large ">${Lugar.get(lista1).descripcion}</div>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsp0}</div>
-        <div class="label">Especial: </div> <div class="dato large">${lista2}</div>
+        <div class="label">Especial: </div> <div class="dato large">${Lugar.get(lista2).descripcion}</div>
         <div class="label half">Distancia: </div> <div class="dato small ">${params.dsp1}</div>
         <g:if test="${lista4}">
-            <div class="label">Mejoramiento: </div> <div class="dato large">${lista4}</div>
+            <div class="label">Mejoramiento: </div> <div class="dato large">${Lugar.get(lista4).descripcion}</div>
         </g:if>
         <g:else>
             <div class="label">Mejoramiento: </div> <div class="dato large">No seleccionó Mejoramiento</div>
         </g:else>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsv0}</div>
         <g:if test="${lista3}">
-            <div class="label">Petreos Hormigones:</div> <div class="dato large">${lista3}</div>
+            <div class="label">Petreos Hormigones:</div> <div class="dato large">${janus.Lugar.get(lista3).descripcion}</div>
         </g:if>
         <g:else>
             <div class="label">Petreos Hormigones:</div> <div class="dato large">No seleccionó Petreos Hormigones</div>
         </g:else>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsv1}</div>
         <g:if test="${lista5}">
-            <div class="label">Carpeta Asfáltica: </div> <div class="dato large">${lista5}</div>
+            <div class="label">Carpeta Asfáltica: </div> <div class="dato large">${Lugar.get(lista5).descripcion}</div>
         </g:if>
         <g:else>
             <div class="label">Carpeta Asfáltica: </div> <div class="dato large">No seleccionó carpeta asfáltica</div>

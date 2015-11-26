@@ -481,6 +481,7 @@
         <g:hiddenField name="nodeId" val=""/>
         <g:hiddenField name="nodeGrupo" val=""/>
         <a href= "#" data-dismiss="modal" class="btn btn-primary" id="imp_consolidado" data-transporte="true"><i class="icon-print"></i> Consolidado</a>
+        <a href= "#" data-dismiss="modal" class="btn btn-primary" id="imp_consolidado_excel" data-transporte="true"><i class="icon-table"></i> Consolidado Excel</a>
         <a href="#" data-dismiss="modal" class="btn" id="btnCancel">Cancelar</a>
     </div>
 </div>
@@ -1289,6 +1290,36 @@
                     "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
             var url = "${g.createLink(controller: 'reportes2',action: 'imprimirRubrosConsolidado2')}?" + datos;
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=rubros_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
+            $("#modal-transporte2").modal("hide");
+            return false;
+        });
+
+
+        $("#imp_consolidado_excel").click(function () {
+            var dsp0 = $("#dist_p1").val();
+            var dsp1 = $("#dist_p2").val();
+            var dsv0 = $("#dist_v1").val();
+            var dsv1 = $("#dist_v2").val();
+            var dsv2 = $("#dist_v3").val();
+            var lista1 = $("#lista_1").val();
+            var lista2 = $("#lista_2").val();
+            var lista3 = $("#lista_3").val();
+            var lista4 = $("#lista_4").val();
+            var lista5 = $("#lista_5").val();
+            var lista6 = $("#ciudad").val();
+            var volqueta = $("#costo_volqueta").val();
+            var chofer = $("#costo_chofer").val();
+            var trans = $(this).data("transporte");
+            var nodeId = $("#nodeId").val();
+            var principal = true;
+
+            var datos = "dsp0=" + dsp0 + "&dsp1=" + dsp1 + "&dsv0=" + dsv0 + "&dsv1=" + dsv1 + "&dsv2=" + dsv2 +
+                    "&prvl=" + volqueta + "&prch=" + chofer + "&fecha=" + $("#fecha_precios").val() + "&id=" + nodeId +
+                    "&lugar=" + $("#ciudad").val() + "&lista1=" + lista1 + "&lista2=" + lista2 + "&lista3=" + lista3 +
+                    "&lista4=" + lista4 + "&lista5=" + lista5 + "&lista6=" + lista6 + "&principal=" + principal
+                    + "&chof=" + $("#cmb_chof").val() +
+                    "&volq=" + $("#cmb_vol").val() + "&indi=" + $("#costo_indi").val() + "&trans=" + trans;
+           location.href = "${g.createLink(controller: 'reportes2',action: 'consolidadoExcel')}?" + datos;
             $("#modal-transporte2").modal("hide");
             return false;
         });

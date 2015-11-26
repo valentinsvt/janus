@@ -322,14 +322,30 @@
                                 <g:formatNumber number="${val.vae_totl}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                             </td>
                             <g:set var="total" value="${total.toDouble() + val.totl}"/>
-                            <g:set var="totalVae" value="${totalVae.toDouble() + val.vae_totl}"/>
+
+                            <g:if test="${val.vae_totl != null}">
+                                <g:set var="totalVae" value="${totalVae.toDouble() + val.vae_totl}"/>
+                            </g:if>
+                            <g:else>
+                                <g:set var="totalVae" value="${totalVae.toDouble() + 0}"/>
+                            </g:else>
+
 
 
                             <g:hiddenField name="totales" value="${totales = val.totl}"/>
                             <g:hiddenField name="totalPrueba" value="${totalPrueba = total2+=totales}"/>
                             <g:hiddenField name="totalPresupuesto" value="${totalPresupuesto = total1 += totales}"/>
 
+
+                        <g:if test="${val.vae_totl != null}">
                             <g:hiddenField name="totalesVae" value="${totalesVae = val.vae_totl}"/>
+                        </g:if>
+                        <g:else>
+                            <g:hiddenField name="totalesVae" value="${totalesVae = 0}"/>
+                        </g:else>
+
+
+
                             <g:hiddenField name="finalVae" value="${finalVae = subTotalVae += totalesVae}"/>
                             
                             <g:hiddenField name="totalesRelativo" value="${totalesRelativo = val.relativo}"/>
@@ -484,7 +500,7 @@
 </div>
 
 <script type="text/javascript">
-    console.log(${valores.rbrocdgo});
+    %{--console.log(${valores.rbrocdgo});--}%
     //        cadena = 'pedro@hotmail.com';
     //        cadena = cadena.split('@');
     //        document.write(cadena[0]+'<br/>@'+cadena[1]);

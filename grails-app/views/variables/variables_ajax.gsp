@@ -10,10 +10,7 @@
 }
 
 .ui-front {
-
-
     z-index: 1060 !important;
-
 }
 
 .margen {
@@ -21,13 +18,6 @@
     width       : 500px;
 }
 
-    /*.sum1 {*/
-    /*background : #adff2f !important;*/
-    /*}*/
-
-    /*.sum2 {*/
-    /*border : solid 2px green !important;*/
-    /*}*/
 </style>
 
 <g:form controller="variables" action="saveVar_ajax" name="frmSave-var">
@@ -58,11 +48,7 @@
                 </div>
 
                 <div class="span2">
-                    %{--<div class="input-append">--}%
                     <g:textField class="inputVar num" style="width: 80px" disabled="" name="costo_volqueta" value=""/>
-
-                    %{--<span class="add-on">$</span>--}%
-                    %{--</div>--}%
                 </div>
 
                 <div class="span1">
@@ -86,10 +72,7 @@
                 </div>
 
                 <div class="span2">
-                    %{--<div class="input-append">--}%
                     <g:textField class="inputVar num" name="costo_chofer" disabled="" style="width: 80px"/>
-                    %{--<span class="add-on">$</span>--}%
-                    %{--</div>--}%
                 </div>
 
                 <div class="span1">
@@ -110,7 +93,6 @@
 
 
             <div class="row-fluid">
-
                 <div class="span3">
                     Capital de Cantón
                 </div>
@@ -120,7 +102,6 @@
                                  value="${g.formatNumber(number: obra?.distanciaPeso, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
                                  title="Distancia de la Obra a la capital del Cantón"/>
                 </div>
-
 
                 <div class="span5">
                     Pétreos para Hormigones
@@ -141,12 +122,9 @@
                 </div>
 
                 <div class="span2">
-                    %{--<div class="input-append">--}%
                     <g:textField type="text" name="distanciaPesoEspecial" class="inputVar num"
                                  value="${g.formatNumber(number: obra?.distanciaPesoEspecial, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
                                  title="Distancia de la Obra a la fábrica o proveedor especial"/>
-                    %{--<span class="add-on">km</span>--}%
-                    %{--</div>--}%
                 </div>
 
                 <div class="span5">
@@ -154,34 +132,24 @@
                 </div>
 
                 <div class="span1">
-                    %{--<div class="input-append">--}%
                     <g:textField type="text" name="distanciaVolumenMejoramiento" class="inputVar num"
                                  value="${g.formatNumber(number: obra?.distanciaVolumenMejoramiento, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
                                  title="Distancia de la Obra a la mina"/>
-                    %{--<span class="add-on">km</span>--}%
-                    %{--</div>--}%
                 </div>
-
             </div>
 
             <div class="row-fluid">
 
                 <div class="span3"></div>
-
                 <div class="span2"></div>
-
-
                 <div class="span5">
                     Pétreos para Carpeta Asfáltica
                 </div>
 
                 <div class="span1">
-                    %{--<div class="input-append">--}%
                     <g:textField type="text" name="distanciaVolumenCarpetaAsfaltica" class="inputVar num"
                                  value="${g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
                                  title="Distancia de la Obra a la mina"/>
-                    %{--<span class="add-on">km</span>--}%
-                    %{--</div>--}%
                 </div>
 
             </div>
@@ -339,13 +307,13 @@
 
         <div id="tab-indirecto" class="tab">
             %{--<div class="row-fluid">--}%
-                %{--<div class="span10">--}%
-                    %{--Control y Administración (Fiscalización) - no se usa en obras nuevas--}%
-                %{--</div>--}%
+            %{--<div class="span10">--}%
+            %{--Control y Administración (Fiscalización) - no se usa en obras nuevas--}%
+            %{--</div>--}%
 
-                %{--<div class="span2">--}%
-                    %{--<g:textField type="text" name="contrato" class="inputVar num" value="${g.formatNumber(number: obra?.contrato, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
-                %{--</div>--}%
+            %{--<div class="span2">--}%
+            %{--<g:textField type="text" name="contrato" class="inputVar num" value="${g.formatNumber(number: obra?.contrato, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
+            %{--</div>--}%
             %{--</div>--}%
 
             <div class="row-fluid" style="margin-top: 20px;">
@@ -580,19 +548,19 @@
                     <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}" readonly="true" style="width: 30px; margin-left: 5px"/>
                 </div>
             </div>
-        <div class="row-fluid">
-            <div class="span9">
-                Distancia de desalojo de materiales
-            </div>
+            <div class="row-fluid" style="margin-top: 20px">
+                <div class="span9">
+                    Distancia de desalojo de materiales
+                </div>
 
-            <div class="span2">
-                <g:textField class="inputVar num3" name="distanciaDesalojo" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaDesalojo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-            </div>
+                <div class="span2">
+                    <g:textField class="inputVar num3" name="distanciaDesalojo" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaDesalojo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
 
-            <div class="span1">
-                <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}" readonly="true" style="width: 30px; margin-left: 5px"/>
+                <div class="span1">
+                    <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}" readonly="true" style="width: 30px; margin-left: 5px"/>
+                </div>
             </div>
-        </div>
 
         </div>
 
@@ -618,10 +586,10 @@
          39         -> flecha der
          */
         return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
-                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
-                ev.keyCode == 190 || ev.keyCode == 110 ||
-                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
-                ev.keyCode == 37 || ev.keyCode == 39);
+        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+        ev.keyCode == 190 || ev.keyCode == 110 ||
+        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+        ev.keyCode == 37 || ev.keyCode == 39);
     }
 
     $(".sum1, .sum2, .num").keydown(function (ev) {
@@ -739,14 +707,14 @@
             suma($(".sum1"), $("#indiceGastosGenerales"));
             suma($(".sum2"), $("#totales"));
         }).blur(function () {
-                    suma($(".sum1"), $("#indiceGastosGenerales"));
-                    suma($(".sum2"), $("#totales"));
-                });
+            suma($(".sum1"), $("#indiceGastosGenerales"));
+            suma($(".sum2"), $("#totales"));
+        });
         $(".sum2").keyup(function (ev) {
             suma($(".sum2"), $("#totales"));
         }).blur(function () {
-                    suma($(".sum2"), $("#totales"));
-                });
+            suma($(".sum2"), $("#totales"));
+        });
         $(".sum1").blur();
         $(".sum2").blur();
         $("#tabs").tabs({
@@ -791,8 +759,8 @@
         var smDesglose = 0.0
         //console.log("sumadesglose")
         smDesglose = parseFloat($("#desgloseEquipo").val()) + parseFloat($("#desgloseRepuestos").val()) +
-                     parseFloat($("#desgloseCombustible").val()) + parseFloat($("#desgloseMecanico").val()) +
-                     parseFloat($("#desgloseSaldo").val())
+        parseFloat($("#desgloseCombustible").val()) + parseFloat($("#desgloseMecanico").val()) +
+        parseFloat($("#desgloseSaldo").val())
         $("#totalDesglose").val(number_format(smDesglose, 2, ".", ""));
     }
 
