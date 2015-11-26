@@ -20,10 +20,11 @@
     <body>
         <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
         <g:set var="plazoOk" value="${detalle.findAll { it.dias > 0 }.size() > 0}"/>
-        <g:set var="matrizOk" value="${obra.desgloseTransporte != null}"/>
+        %{--<g:set var="matrizOk" value="${obra.desgloseTransporte != null}"/>--}%
+        <g:set var="matrizOk" value="${tieneMatriz}"/>
         <g:set var="sum" value="${0}"/>
 
-        mmmmmm${meses} plazo: ${plazoOk} matriz:${matrizOk}
+        %{--mmmmmm${meses} plazo: ${plazoOk} matriz:${matrizOk}--}%
         <div class="tituloTree">
             CRONOGRAMA DE LA OBRA: ${obra.nombre?.toUpperCase()} (${meses} mes${meses == 1 ? "" : "es"})
         </div>

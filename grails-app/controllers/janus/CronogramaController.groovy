@@ -11,6 +11,7 @@ class CronogramaController extends janus.seguridad.Shield {
 
     def preciosService
     def arreglosService
+    def DbConnectionService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -358,6 +359,7 @@ class CronogramaController extends janus.seguridad.Shield {
 
     def cronogramaObra() {
         println "--- cronograma"
+        def cn = dbConnectionService.getConnection()
         // debe mostrar los rubros con sus precios unitarios y totales
 //        def inicio = new Date()
         def obra = Obra.get(params.id)
@@ -407,7 +409,15 @@ class CronogramaController extends janus.seguridad.Shield {
 //        println "${TimeCategory.minus(fin, inicio)}"
         println "detalle: $detalle.dias"
 
-        return [detalle: detalle, precios: precios, pcun: pcun, obra: obra, subpres: subpres, subpre: subpre, persona: persona, duenoObra: duenoObra]
+        def tieneMatriz = false
+        cn.eachRow("select count(*) cuenta from mfrb where obra__id = ${obra.id}".toString()) { d ->
+            tieneMatriz = d.cuenta > 0
+        }
+        cn.close()
+
+
+        return [detalle: detalle, precios: precios, pcun: pcun, obra: obra, subpres: subpres, subpre: subpre,
+                persona: persona, duenoObra: duenoObra, tieneMatriz: tieneMatriz]
     }
 
     def cronogramaObra_antesPresupuestos() {

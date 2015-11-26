@@ -1135,7 +1135,8 @@
 
         <div class="modal-body" id="modal_body_formula">
             <div id="msg_formula">
-                <g:if test="${!obra.desgloseTransporte}">
+                %{--<g:if test="${!obra.desgloseTransporte}">--}%
+                <g:if test="${!matrizOk}">
                     <p style="font-size: 14px; text-align: center;">No existe una matriz de la fórmula polinómica</p>
                 </g:if>
                 <g:else>

@@ -60,7 +60,7 @@
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
                 <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
                 <g:if test="${contrato?.estado != 'R'}">
-                    <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-save"></i> Guardar</button>
+                    <button class="btn" id="btn-aceptar"><i class="icon-save"></i> Guardar</button>
                 </g:if>
                 <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
                 <g:if test="${contrato?.id}">
@@ -718,6 +718,7 @@
 
                     });
 
+/*
             $("#codigo").click(function () {
 
                 $("#btn-aceptar").attr("disabled", false)
@@ -753,6 +754,7 @@
                 $("#btn-aceptar").attr("disabled", false)
 
             });
+*/
 
             function enviarObra() {
                 var data = "";
@@ -845,6 +847,7 @@
 
             });
 
+/*
             if (${contrato?.codigo != null}) {
 
                 $(".activo").focus(function () {
@@ -854,6 +857,7 @@
                 })
 
             }
+*/
 
             $("#btn-salir").click(function () {
 

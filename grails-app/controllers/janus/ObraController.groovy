@@ -512,10 +512,7 @@ class ObraController extends janus.seguridad.Shield {
             def volumen = VolumenesObra.findByObra(obra)
             def formula = FormulaPolinomica.findByObra(obra)
 
-            def sqlVer = "SELECT\n" +
-                    "voit__id             id\n" +
-                    "FROM  vlobitem \n" +
-                    "WHERE obra__id= ${params.obra} \n"
+            def sqlVer = "SELECT voit__id id FROM  vlobitem WHERE obra__id= ${params.obra}"
             def verif = cn.rows(sqlVer.toString())
             def verifOK = false
 
@@ -524,7 +521,7 @@ class ObraController extends janus.seguridad.Shield {
                 verifOK = true
             }
 
-            def sqlMatriz = "select count(*) cuantos from mfcl where obra__id=${params.obra}"
+            def sqlMatriz = "select count(*) cuantos from mfcl where obra__id = ${params.obra}"
             def matriz = cn.rows(sqlMatriz.toString())[0].cuantos
             if (matriz > 0) {
                 matrizOk = true
