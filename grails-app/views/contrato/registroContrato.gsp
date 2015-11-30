@@ -24,14 +24,6 @@
             font-weight : bolder;
         }
 
-        .titulo {
-            font-size : 20px;
-        }
-
-        .error {
-            background : #c17474;
-        }
-
         .caps {
             text-transform : uppercase;
         }
@@ -101,11 +93,9 @@
 
             <g:if test="${contrato?.estado == 'R'}">
                 <g:if test="${planilla != []}">
-                    <fieldset class="" style="position: relative; height: 50px; border-bottom: 1px solid black; width: 100%;">
-                        <div class="alert alert-warning" style="margin-top: 10px">
-                            Este contrato ya está registrado
+                        <div id="alertaEstado" title="Obra en ejecución">
+                            <p>Este contrato ya posee planillas y se halla en ejecución</p>
                         </div>
-                    </fieldset>
                 </g:if>
             </g:if>
 
@@ -543,18 +533,13 @@
         <div class="modal grandote hide fade" id="modal-busqueda" style="overflow: hidden">
             <div class="modal-header btn-info">
                 <button type="button" class="close" data-dismiss="modal">x</button>
-
                 <h3 id="modalTitle_busqueda"></h3>
-
             </div>
 
             <div class="modal-body" id="modalBody">
                 <bsc:buscador name="contratos" value="" accion="buscarContrato" controlador="contrato" campos="${campos}" label="Contrato" tipo="lista"/>
-
             </div>
-
             <div class="modal-footer" id="modalFooter_busqueda">
-
             </div>
 
         </div>
@@ -984,6 +969,21 @@
                     }
                 }
 
+            });
+
+            /* muestra la X en el botón de cerrar */
+            $(function() {
+                if(${contrato?.estado == 'R'}) {
+                    $("#alertaEstado").dialog({
+                        modal: true,
+                        open: function() {
+                        $(this).closest(".ui-dialog")
+                                .find(".ui-dialog-titlebar-close")
+                                .removeClass("ui-dialog-titlebar-close")
+                                .html("x");
+                    }
+                    });
+                }
             });
 
 //            $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
