@@ -146,7 +146,8 @@
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaFin}" format="dd-MM-yyyy"/>
                             </td>
-                            <td>${planillaInstance.id} ${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
+                            <td>${planillaInstance?.id} ${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
+                            <td></td>
                             <td class="numero">
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>
@@ -161,7 +162,7 @@
                             %{--</g:if>--}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                    <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                    <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                                         <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                             <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
                                                 <i class="icon-gear"></i>
@@ -171,14 +172,14 @@
                                 </g:if>
 
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato.fiscalizador.id == session.usuario.id}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id: planillaInstance.id, contrato: planillaInstance.contrato.id]"
                                             rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>
                                     </g:link>
                                 </g:if>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O']}">
-                                    <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                    <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                                         <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                             <i class="icon-reorder icon-large"></i>
                                         </g:link>
@@ -226,7 +227,7 @@
                                 </g:elseif>
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
-                                    <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                    <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                                         <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                             <i class="icon-reorder icon-large"></i>
                                         </g:link>
@@ -307,7 +308,7 @@
                                     <g:if test="${lblBtn > 0}">
                                         <g:if test="${lblBtn == 2}">
                                             <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
-                                                <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
+                                                <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                                                     <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                                         Enviar planilla
                                                     </a>
