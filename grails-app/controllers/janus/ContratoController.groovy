@@ -1,6 +1,8 @@
 package janus
 
 import janus.ejecucion.FormulaPolinomicaContractual
+import janus.ejecucion.FormulaPolinomicaReajuste
+import janus.ejecucion.FormulaSubpresupuesto
 import janus.ejecucion.PeriodosInec
 import janus.ejecucion.Planilla
 import janus.ejecucion.TipoFormulaPolinomica
@@ -10,6 +12,7 @@ import janus.pac.CronogramaContrato
 import janus.pac.DocumentoProceso
 import janus.pac.Oferta
 import janus.pac.PeriodoValidez
+import org.hibernate.mapping.Formula
 import org.springframework.dao.DataIntegrityViolationException
 
 class ContratoController extends janus.seguridad.Shield {
@@ -307,16 +310,26 @@ class ContratoController extends janus.seguridad.Shield {
 
     def copiarPolinomica() {
         def contrato = Contrato.get(params.id)
-//        def pac = contrato.oferta.concurso.pac.tipoProcedimiento.fuente
-//
-/*
-        def obraOld = contrato.oferta.concurso.obra
+//        def formulasVarias = FormulaPolinomicaContractual.findAllByContrato(contrato)
+        def formulasVarias = FormulaPolinomicaReajuste.findAllByContrato(contrato)
 
-        def obra = Obra.findByCodigo(obraOld.codigo+"-OF")
-        if(!obra) {
-            obra = obraOld
-        }
-*/
+//        def seleccionadas = []
+//        def po = []
+//        formulasVarias.each {
+//            def cont = it.codigo
+//            if(cont in po){
+//            }else{
+//                po += it.codigo
+//                seleccionadas += it.id
+//            }
+//        }
+//
+//        def map = [:]
+//        seleccionadas.each {
+//            map.put("Formula - "+((FormulaPolinomicaContractual.get(it).codigo)+1),it)
+//        }
+
+
         /** retorna el id  de la obra terminada en OF o la del cuncurso **/
         def obra = contrato.obra
 
@@ -324,6 +337,17 @@ class ContratoController extends janus.seguridad.Shield {
         def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
         def tipo = TipoFormulaPolinomica.get(1)
         def fpB0
+
+
+        //crea registro en formula polinomica reajuste
+
+        def rj = new FormulaPolinomicaReajuste()
+
+        rj.contrato = contrato
+        rj.tipoFormulaPolinomica = tipo
+        rj.descripcion = "Fórmula Polinómica 0"
+
+
         //copia la formula polinomica a la formula polinomica contractual si esta no existe
         if (fr.size() < 5) {
             //esto copia de la obra
@@ -338,6 +362,7 @@ class ContratoController extends janus.seguridad.Shield {
                     frpl.indice = it.indice
                     frpl.tipoFormulaPolinomica = tipo
                     frpl.numero = it.numero
+                    frpl.reajuste = rj
                     if (!frpl.save(flush: true)) {
                         println "error frpl" + frpl.errors
                     }
@@ -385,8 +410,110 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
         def cuadrilla = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, 'c%', [sort: 'numero'])
-        return [ps: ps, cuadrilla: cuadrilla, contrato: contrato]
+        return [ps: ps, cuadrilla: cuadrilla, contrato: contrato, formulas: formulasVarias]
     }
+
+
+    def tablaFormula_ajax () {
+
+//        def muestra = FormulaPolinomicaContractual.get(params.id)
+//        def codigoMuestra = muestra.codigo
+//        def contratoMuestra = muestra.contrato
+
+
+        def fpReajuste = FormulaPolinomicaReajuste.get(params.id)
+
+        def ps = FormulaPolinomicaContractual.withCriteria {
+            eq("contrato", fpReajuste.contrato)
+            eq("reajuste", fpReajuste)
+            ilike("numero", "p%")
+            ne("numero", "P0")
+            order("numero", "asc")
+        }
+
+        def cuadrilla = FormulaPolinomicaContractual.withCriteria {
+            eq("contrato", fpReajuste.contrato)
+            eq("reajuste", fpReajuste)
+            ilike("numero", "c%")
+            ne("numero", "C0")
+            order("numero", "asc")
+        }
+
+//        def cuadrilla = FormulaPolinomicaContractual.findAllByContratoAndCodigoAndNumeroIlike(contratoMuestra, codigoMuestra, 'c%', [sort: 'numero'])
+
+        return [ps: ps, cuadrilla: cuadrilla]
+
+
+    }
+
+    def copiarFormula () {
+
+//        def muestra = FormulaPolinomicaContractual.get(params.id)
+//        def codigoMuestra = muestra.codigo
+//        def contratoMuestra = muestra.contrato
+//
+//        def formulasVarias = FormulaPolinomicaContractual.findAllByContrato(contratoMuestra)
+//
+//        def po = []
+//        formulasVarias.each {
+//            def cont = it.codigo
+//            if(cont in po){
+//            }else{
+//                po += it.codigo
+//            }
+//        }
+
+
+        def fpReajuste = FormulaPolinomicaReajuste.get(params.id)
+
+        def ps = FormulaPolinomicaContractual.withCriteria {
+            eq("contrato", fpReajuste.contrato)
+            eq("reajuste", fpReajuste)
+            order("numero", "asc")
+        }
+
+//        println("ps " + ps)
+//        println("po " + po.max())
+
+        def errorCopiado = 0
+
+
+        def cont = FormulaPolinomicaContractual.findAllByContrato(fpReajuste.contrato).codigo
+
+//        println("codigos " + cont.max())
+
+        def nuevoReajuste = new FormulaPolinomicaReajuste()
+
+        nuevoReajuste.contrato = fpReajuste.contrato
+        nuevoReajuste.tipoFormulaPolinomica = fpReajuste.tipoFormulaPolinomica
+        nuevoReajuste.descripcion = "Formula Polinomica " + (cont.max() + 1)
+        nuevoReajuste.save(flush: true);
+
+        ps.each {
+            def nuevoP = new FormulaPolinomicaContractual()
+            nuevoP.codigo = (cont.max() + 1)
+            nuevoP.contrato = it.contrato
+            nuevoP.indice = it.indice
+            nuevoP.numero = it.numero
+            nuevoP.tipoFormulaPolinomica = it.tipoFormulaPolinomica
+            nuevoP.valor = it.valor
+            nuevoP.version = it.version
+            nuevoP.reajuste = nuevoReajuste
+
+            if(!nuevoP.save(flush: true)){
+                println("error al copiar la formula polinomica")
+                errorCopiado = 1
+            }
+        }
+
+        if(errorCopiado != 0){
+            render "no"
+        }else{
+            render "si"
+        }
+
+    }
+
 
     def polinomicaContrato() {
         def contrato = Contrato.get(params.id)
@@ -987,5 +1114,119 @@ class ContratoController extends janus.seguridad.Shield {
         [planillas: planillas]
 
     }
+
+
+    def asignar () {
+//        println("params " + params)
+
+        def contrato = Contrato.get(params.contrato)
+        def obra = contrato.obra
+//        println("obra " + obra.id)
+
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+        def formulasVarias = FormulaPolinomicaReajuste.findAllByContrato(contrato)
+
+        def formuxSub = FormulaSubpresupuesto.findAllByReajusteInList(formulasVarias);
+
+//        println("ff " + formuxSub)
+//        println("subp " + subPres)
+
+
+         return [contrato: contrato, subpresupuesto: subPres, formulas: formulasVarias, fxs: formuxSub]
+    }
+
+    def saveAsignarFormula () {
+
+        println("params " + params)
+        def arrForm = []
+        def su
+        params.each{
+            if(it.key.toString().startsWith("formu")){
+                arrForm += it.value
+            }
+            if(it.key.toString().startsWith("sub")){
+                su = it.value
+            }
+        }
+
+
+
+        println("arr " + arrForm)
+        println("su " + su)
+
+        def cont
+
+        su.eachWithIndex{g, h->
+
+            def formxSub = new FormulaSubpresupuesto();
+
+            formxSub.subPresupuesto = SubPresupuesto.get(g)
+            formxSub.reajuste = FormulaPolinomicaReajuste.get(arrForm[h])
+
+            if(!formxSub.save(flush: true)){
+                println("Error al asignar las formulas polinomicas")
+                cont = 1
+            }else{
+                cont = 0
+            }
+        }
+
+
+        if(cont == 1){
+            render "no"
+        }else{
+            render "si"
+        }
+
+    }
+
+    def saveAsignarFormula2 () {
+
+        println("params " + params)
+
+
+        def su
+        def fxs
+        def part
+        params.each{
+            if(it.key.toString().startsWith("sub")){
+                su = it.value
+            }
+            if(it.key.toString().startsWith("fxs")){
+                fxs = it.value
+            }
+        }
+
+        part = params.formu.toString().split("_")
+
+        println("f " +part)
+        println("f " +su)
+        println("f " +fxs)
+
+        def cont
+
+        su.eachWithIndex{g, h->
+
+            def formxSub = FormulaSubpresupuesto.get(fxs[h]);
+
+            formxSub.reajuste = FormulaPolinomicaReajuste.get(part[h])
+
+            if(!formxSub.save(flush: true)){
+                println("Error al asignar las formulas polinomicas")
+                cont = 1
+            }else{
+                cont = 0
+            }
+        }
+
+        if(cont == 1){
+            render "no"
+        }else{
+            render "si"
+        }
+
+    }
+
+
 
 } //fin controller

@@ -375,7 +375,10 @@ class Reportes2Controller {
 
 
     def comprobarIlustracion (){
-        def obra = Obra.get(params.id)
+        def obra
+        if(params.id){
+            obra = Obra.get(params.id)
+        }
         def persona = Persona.get(session.usuario.id)
         def rubros = VolumenesObra.findAllByObra(obra).item.unique()
 

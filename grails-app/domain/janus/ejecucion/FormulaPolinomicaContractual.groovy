@@ -12,6 +12,7 @@ class FormulaPolinomicaContractual implements Serializable {
     String numero
     double valor
     int codigo = 0
+    FormulaPolinomicaReajuste reajuste
 //    SubPresupuesto subPresupuesto
 
     static mapping = {
@@ -30,6 +31,7 @@ class FormulaPolinomicaContractual implements Serializable {
             valor column: 'frplvlor'
 //            subPresupuesto column: 'sbpr__id'
             codigo column: 'frplcdgo'
+            reajuste column: 'fprj__id'
         }
     }
 

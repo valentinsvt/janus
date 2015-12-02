@@ -39,93 +39,15 @@
                     Contrato
                 </g:link>
                 <a href="#" class="btn btn-success" id="btnSave"><i class="icon-save"></i> Guardar</a>
+
+                %{--<g:select name="listaFormulas" id="lista" from="${formulas}" optionValue="key" optionKey="value" style="margin-left: 40px; margin-top: 10px; margin-right: 10px"/>--}%
+                <g:select name="listaFormulas" id="lista" from="${formulas}" optionValue="descripcion" optionKey="id" style="margin-left: 40px; margin-top: 10px; margin-right: 10px"/>
+                <a href="#" class="btn btn-info" id="btnCopiar"><i class="icon-save"></i> Copiar fórmula polinómica</a>
             </div>
+
         </div>
 
         <div id="divTabla">
-
-            <div id="tabs" style="width: 700px; height: 700px; text-align: center">
-
-                <ul>
-                    <li><a href="#tab-formulaPolinomica">Fórmula Polinómica</a></li>
-                    <li><a href="#tab-cuadrillaTipo">Cuadrilla Tipo</a></li>
-
-                </ul>
-
-                <div id="tab-formulaPolinomica" class="tab">
-
-                    <div class="formula">
-
-                        <fieldset class="borde">
-                            <legend>Fórmula Polinómica</legend>
-
-                            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPoliContrato">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20px; text-align: center">Coeficiente</th>
-                                        <th style="width: 70px">Nombre del Indice (INEC)</th>
-                                        <th style="width: 40px">Valor</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bodyPoliContrato">
-                                    <g:set var="tot" value="${0}"/>
-                                    <g:each in="${ps}" var="i">
-                                        <tr>
-                                            <td>${i?.numero}</td>
-                                            <td>${i?.indice?.descripcion}</td>
-                                            <td class="editable" data-tipo="p" data-id="${i.id}" id="${i.id}" data-original="${i.valor}" data-valor="${i.valor}" style="text-align: right; width: 40px">
-                                                ${g.formatNumber(number: i?.valor, minFractionDigits: 3, maxFractionDigits: 3)}
-                                            </td>
-                                            <g:set var="tot" value="${tot + i.valor}"/>
-                                        </tr>
-                                    </g:each>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="2">TOTAL</th>
-                                        <th class="total p" style="text-align: right; ">${g.formatNumber(number: tot, maxFractionDigits: 3, minFractionDigits: 3)}</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </fieldset>
-                    </div>
-                </div>
-
-                <div id="tab-cuadrillaTipo" class="tab">
-                    <fieldset class="borde">
-                        <legend>Cuadrilla Tipo</legend>
-
-                        <table class="table table-bordered table-striped table-hover table-condensed" id="tablaCuadrilla">
-                            <thead>
-                                <tr>
-                                    <th style="width: 20px; text-align: center">Coeficiente</th>
-                                    <th style="width: 70px">Nombre del Indice (INEC)</th>
-                                    <th style="width: 40px">Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bodyCuadrilla">
-                                <g:set var="tot" value="${0}"/>
-                                <g:each in="${cuadrilla}" var="i">
-                                    <tr>
-                                        <td>${i?.numero}</td>
-                                        <td>${i?.indice?.descripcion}</td>
-                                        <td class="editable" data-tipo="c" data-id="${i.id}" id="${i.id}" data-original="${i.valor}" data-valor="${i.valor}" style="text-align: right; width: 40px">
-                                            ${g.formatNumber(number: i?.valor, minFractionDigits: 3, maxFractionDigits: 3)}
-                                        </td>
-                                        <g:set var="tot" value="${tot + i.valor}"/>
-                                    </tr>
-                                </g:each>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2">TOTAL</th>
-                                    <th class="total c" style="text-align: right; ">${g.formatNumber(number: tot, maxFractionDigits: 3, minFractionDigits: 3)}</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </fieldset>
-                </div>
-            </div>
         </div>
 
         <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
@@ -200,6 +122,70 @@
                     ui.newPanel.find(".editable").first().addClass("selected");
                 }
             });
+
+            //cargar tabla de fórmulas polinómicas
+
+            function cargarTabla(id) {
+
+//                var interval = loading("detalle")
+
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'contrato',action:'tablaFormula_ajax')}",
+                    data     : {
+                        id: id
+                    },
+                    success  : function (msg) {
+                        $("#divTabla").html(msg);
+                    }
+                });
+            }
+
+            $("#lista").change(function () {
+                var idFormula = $(this).val();
+                cargarTabla(idFormula);
+            });
+
+            cargarTabla( $("#lista").val());
+
+
+            function loading(div) {
+                y = 0;
+                $("#" + div).html("<div class='tituloChevere' id='loading'>Sistema Janus - Cargando, Espere por favor</div>")
+                var interval = setInterval(function () {
+                    if (y == 30) {
+                        $("#detalle").html("<div class='tituloChevere' id='loading'>Cargando, Espere por favor</div>")
+                        y = 0
+                    }
+                    $("#loading").append(".");
+                    y++
+                }, 500);
+                return interval
+            }
+
+
+            $("#btnCopiar").click(function () {
+
+                if (confirm("Está seguro de copiar la fórmula polinómica?")) {
+
+                    $.ajax({
+                        type : "POST",
+                        url : "${g.createLink(controller: 'contrato',action:'copiarFormula')}",
+                        data     : {
+                            id: $("#lista").val()
+                        },
+                        success  : function (msg) {
+                            var alerta;
+                            if(msg == 'si'){
+                                alert("Fórmula polinómica copiada correctamente");
+                                window.location.reload(true)
+                            }else{
+                                alert("Error al copiar la fórmula polinómica")
+                            }
+                        }
+                    });
+                }
+
+            });
+
 
         </script>
 

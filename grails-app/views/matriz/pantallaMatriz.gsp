@@ -115,7 +115,7 @@
     </a>
 </div>
 
-${params}
+%{--${params}--}%
 
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0;width: 100%;max-width: 100%;overflow-x: hidden">
     <div style="width: 1060px;overflow-x: auto;max-width: 1050px;" class="scroll-pane">

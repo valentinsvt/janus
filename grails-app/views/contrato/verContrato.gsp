@@ -42,6 +42,30 @@
 
     <body>
 
+    <g:if test="${flash.message}">
+        <div class="span12" style="margin-bottom: 10px;">
+            <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                ${flash.message}
+            </div>
+        </div>
+    </g:if>
+
+    <div class="span12 hide" style="margin-bottom: 10px;" id="divError">
+        <div class="alert alert-error" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <span id="spanError"></span>
+        </div>
+    </div>
+
+    <div class="span12 hide" style="margin-bottom: 10px;" id="divOk">
+        <div class="alert alert-info" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <span id="spanOk"></span>
+        </div>
+    </div>
+
+
         <div class="row">
             <div class="span12 btn-group" role="navigation" style="margin-left: 0;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
@@ -1070,6 +1094,7 @@
             });
 
             $("#btnRubros").click(function () {
+
                 var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
                 var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
                 $.box({
@@ -1111,9 +1136,47 @@
                                 location.href = urlVaeEx;
                             },
 
-                            "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra" : function () {
-                                var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${contrato?.oferta?.concurso?.obra?.id}&tipo=ie";
-                                location.href = url;
+                            %{--"Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra" : function () {--}%
+                                %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${contrato?.oferta?.concurso?.obra?.id}&tipo=ie";--}%
+                                %{--location.href = url;--}%
+                            %{--},--}%
+
+
+                            "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra": function () {
+                                %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";--}%
+                                %{--location.href = url;--}%
+                                var idObra;
+
+                                %{--if(${contrato}){--}%
+
+                                    idObra = ${contrato?.obra?.id}
+
+                                  $.ajax({
+                                      type: "POST",
+                                      url: "${createLink(controller:'reportes2', action:'comprobarIlustracion')}",
+                                      data: {
+                                          id: idObra,
+                                          tipo: "ie"
+                                      },
+                                      success: function (msg) {
+
+                                          var parts = msg.split('*');
+
+                                          if (parts[0] == 'SI') {
+                                              $("#divError").hide();
+                                              %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";--}%
+                                              var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${contrato?.obra?.id}&tipo=ie";
+                                              location.href = url;
+                                          } else {
+                                              $("#spanError").html("El archivo  '" + parts[1] + "'  no ha sido encontrado");
+                                              $("#divError").show()
+                                          }
+
+                                      }
+                                  });
+//                              }
+
+
                             },
 
                             "Cancelar" : function () {

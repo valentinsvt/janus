@@ -393,7 +393,7 @@
                             <li>
                             %{--<a href="#" id="btnCronograma">--}%
                                 <g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">
-                                    <i class="icon-th"></i>Cronograma contrato
+                                    <i class="icon-th"></i> Cronograma contrato
                                 </g:link>
                             %{--</a>--}%
                             </li>
@@ -419,7 +419,13 @@
 
                             <li>
                                 <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id, show: 1]">
-                                    <i class="icon-book"></i>Biblioteca
+                                    <i class="icon-book"></i> Biblioteca
+                                </g:link>
+                            </li>
+
+                            <li>
+                                <g:link controller="contrato" action="asignar" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id, show: 1]">
+                                    <i class="icon-plus"></i> Asignar F. Polinómica
                                 </g:link>
                             </li>
 
