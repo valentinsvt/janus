@@ -789,13 +789,7 @@
                 return false;
             });
 
-            //            $("#btnAvance").click(function () {
-            ////                $("#modal-fecha").modal("show");
-            //
-            //
-            //
-            //                return false;
-            //            });
+
             $("#btnVerAvance").click(function () {
                 $(this).replaceWith(spinner);
                 location.href = "${createLink(controller: 'reportesPlanillas', action: 'reporteAvance', id:contrato?.id)}?fecha=" +
