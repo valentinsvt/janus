@@ -147,7 +147,7 @@
                                 <g:formatDate date="${planillaInstance.fechaFin}" format="dd-MM-yyyy"/>
                             </td>
                             <td>${planillaInstance?.id} ${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
-                            <td></td>
+                            %{--<td></td>--}%
                             <td class="numero">
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>

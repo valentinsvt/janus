@@ -163,6 +163,29 @@
                         </div>
 
                         <div class="row">
+                            <div class='span2 formato'>
+                                Fórmula Pólinomica
+                            </div>
+
+                            <div class="span4">
+                                <g:if test="${!planillaInstance?.id}">
+                                    <g:select id="formulaPolinomicaReajuste" name="formulaPolinomicaReajuste.id" from="${formulas}" optionKey="id"
+                                              optionValue="descripcion"
+                                              class="many-to-one span3 required"
+                                              value="${planillaInstance?.formulaPolinomicaReajuste?.id}"/>
+                                    <span class="mandatory">*</span>
+
+                                    <p class="help-block ui-helper-hidden"></p>
+                                </g:if>
+                                <g:else>
+                                    ${planillaInstance?.formulaPolinomicaReajuste?.descripcion}
+                                </g:else>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
                             %{--${planillaInstance?.tipoPlanilla?.codigo}--}%
                         <g:if test="${planillaInstance?.id && planillaInstance?.tipoPlanilla?.codigo == "C"}">
                             <div class='span2 formato hide planillaAsociada'>

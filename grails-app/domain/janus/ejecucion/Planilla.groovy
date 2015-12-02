@@ -70,6 +70,8 @@ class Planilla {
 
     String logPagos
 
+    FormulaPolinomicaReajuste formulaPolinomicaReajuste
+
     static auditable = true
     static mapping = {
         table 'plnl'
@@ -141,6 +143,9 @@ class Planilla {
             descripcionMulta column: 'plnldsml'
             multaEspecial column: 'plnlmles'
             logPagos column: 'plnl_log'
+            formulaPolinomicaReajuste column: 'fprj__id'
+
+
 //            imprimeReajueste column: 'plnlimid'
         }
     }

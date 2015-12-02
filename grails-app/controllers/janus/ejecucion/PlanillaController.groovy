@@ -1680,10 +1680,12 @@ class PlanillaController extends janus.seguridad.Shield {
         def tiposPlan = TipoPlanilla.findAllByCodigoInList(["P", "Q", "O"])
         def planillasAvanceAsociada = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, tiposPlan, [sort: 'fechaInicio'])
 
+        def formulasVarias = FormulaPolinomicaReajuste.findAllByContrato(contrato)
+
 
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
-                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini, planillas: planillasAvanceAsociada]
+                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax, suspensiones:suspensiones, ini:ini, planillas: planillasAvanceAsociada, formulas: formulasVarias]
     }
 
    /* def form_old() {
@@ -2094,6 +2096,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
             def contrato = Contrato.get(params.contrato.id)
             planillaInstance.fiscalizador = contrato.fiscalizador
+            planillaInstance.formulaPolinomicaReajuste = FormulaPolinomicaReajuste.get(params."formulaPolinomicaReajuste.id")
         } //es create
 
         if (!planillaInstance.save(flush: true)) {
