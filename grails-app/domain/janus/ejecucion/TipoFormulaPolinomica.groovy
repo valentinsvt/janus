@@ -2,8 +2,9 @@ package janus.ejecucion
 
 class TipoFormulaPolinomica implements Serializable {
 
-     String codigo
-     String descripcion
+    String codigo
+    String descripcion
+
     static auditable = true
     static mapping = {
 

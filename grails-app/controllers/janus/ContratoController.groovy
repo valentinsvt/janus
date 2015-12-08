@@ -12,8 +12,8 @@ import janus.pac.CronogramaContrato
 import janus.pac.DocumentoProceso
 import janus.pac.Oferta
 import janus.pac.PeriodoValidez
-import org.hibernate.mapping.Formula
 import org.springframework.dao.DataIntegrityViolationException
+
 
 class ContratoController extends janus.seguridad.Shield {
 
@@ -309,26 +309,9 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
     def copiarPolinomica() {
+        println " copiarPolinomica: params $params"
         def contrato = Contrato.get(params.id)
-//        def formulasVarias = FormulaPolinomicaContractual.findAllByContrato(contrato)
         def formulasVarias = FormulaPolinomicaReajuste.findAllByContrato(contrato)
-
-//        def seleccionadas = []
-//        def po = []
-//        formulasVarias.each {
-//            def cont = it.codigo
-//            if(cont in po){
-//            }else{
-//                po += it.codigo
-//                seleccionadas += it.id
-//            }
-//        }
-//
-//        def map = [:]
-//        seleccionadas.each {
-//            map.put("Formula - "+((FormulaPolinomicaContractual.get(it).codigo)+1),it)
-//        }
-
 
         /** retorna el id  de la obra terminada en OF o la del cuncurso **/
         def obra = contrato.obra
@@ -338,22 +321,31 @@ class ContratoController extends janus.seguridad.Shield {
         def tipo = TipoFormulaPolinomica.get(1)
         def fpB0
 
-
-        //crea registro en formula polinomica reajuste
-
-        def rj = new FormulaPolinomicaReajuste()
-
-        rj.contrato = contrato
-        rj.tipoFormulaPolinomica = tipo
-        rj.descripcion = "Fórmula Polinómica 0"
-
-
         //copia la formula polinomica a la formula polinomica contractual si esta no existe
         if (fr.size() < 5) {
-            //esto copia de la obra
+            //borra la fórmula en caso de haber menos de 5 coeficientes
             fr.each {
                 it.delete(flush: true)
             }
+
+            def fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
+
+            if(fpReajuste == null){
+                def fprj = new FormulaPolinomicaReajuste(contrato: contrato,
+                        tipoFormulaPolinomica: tipo,
+                        descripcion: "Fórmula polinómica del contrato principal")
+                if(!fprj.save(flush: true)){
+                    println "error al crear la FP del contrato, errores: " + fprj.errors
+                } else {
+                    println "si guarda fprj, $fprj"
+                    fpReajuste =  fprj
+                    FormulaPolinomicaContractual.findAllByContrato(contrato).each { f ->
+                        f.reajuste = fprj
+                        f.save(flush: true)
+                    }
+                }
+            }
+
             fp.each {
                 if (it.valor > 0) {
                     def frpl = new FormulaPolinomicaContractual()
@@ -362,41 +354,12 @@ class ContratoController extends janus.seguridad.Shield {
                     frpl.indice = it.indice
                     frpl.tipoFormulaPolinomica = tipo
                     frpl.numero = it.numero
-                    frpl.reajuste = rj
+                    frpl.reajuste = fpReajuste
                     if (!frpl.save(flush: true)) {
                         println "error frpl" + frpl.errors
                     }
                 }
             }
-/*
-            def fpP0 = new FormulaPolinomicaContractual()
-            fpP0.valor = 0
-            fpP0.contrato = contrato
-            fpP0.indice = null
-            fpP0.tipoFormulaPolinomica = tipo
-            fpP0.numero = "P0"
-            if (!fpP0.save(flush: true)) {
-                println "error fpP0" + fpP0.errors
-            }
-            fpB0 = new FormulaPolinomicaContractual()
-            fpB0.valor = 0
-            fpB0.contrato = contrato
-            fpB0.indice = null
-            fpB0.tipoFormulaPolinomica = tipo
-            fpB0.numero = "B0"
-            if (!fpB0.save(flush: true)) {
-                println "error fpB0" + fpB0.errors
-            }
-            def fpFr = new FormulaPolinomicaContractual()
-            fpFr.valor = 0
-            fpFr.contrato = contrato
-            fpFr.indice = null
-            fpFr.tipoFormulaPolinomica = tipo
-            fpFr.numero = "Fr"
-            if (!fpFr.save(flush: true)) {
-                println "error fpFr" + fpFr.errors
-            }
-*/
         }
 
         //return la tabla para editar
@@ -414,14 +377,70 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
 
+    def fpReajuste_ajax() {
+        def formulaPolinomicaReajusteInstance = new FormulaPolinomicaReajuste()
+
+        render(view: '../formulaPolinomicaReajuste/_form', model: [formulaPolinomicaReajusteInstance: formulaPolinomicaReajusteInstance,
+            cntr: params.cntr])
+    }
+
+    def grabaFprj() {
+        println "grabaFprj params: $params"
+        def fprj = new FormulaPolinomicaReajuste()
+        def fprjDsde = FormulaPolinomicaReajuste.get(params.copiarDe)
+        fprj.properties = params
+        println "nueva: cntr: ${fprj.contrato} tp: ${fprj.tipoFormulaPolinomica.codigo} " +
+                "dscr: ${fprj.descripcion}"
+
+            if(!fprj.save(flush: true)){
+                println "error al crear la FP del contrato, errores: " + fprj.errors
+            } else {
+                println "si guarda fprj, $fprj"
+            }
+
+        def fp = FormulaPolinomicaContractual.findAllByContratoAndReajuste(fprj.contrato, fprjDsde)
+        fp.each {
+            if (it.valor > 0) {
+                def frpl = new FormulaPolinomicaContractual()
+                frpl.valor = it.valor
+                frpl.contrato = fprj.contrato
+                frpl.indice = it.indice
+                frpl.numero = it.numero
+                frpl.reajuste = fprj
+                if (!frpl.save(flush: true)) {
+                    println "error frpl" + frpl.errors
+                }
+            }
+        }
+
+        render ("ok")
+    }
+
     def tablaFormula_ajax () {
 
-//        def muestra = FormulaPolinomicaContractual.get(params.id)
-//        def codigoMuestra = muestra.codigo
-//        def contratoMuestra = muestra.contrato
+        println "tablaFormula_ajax params: $params"
+        def contrato = Contrato.get(params.cntr)
+        def fpReajuste
+        if(params.id) {
+            fpReajuste = FormulaPolinomicaReajuste.get(params.id)
+        } else
+          fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
 
-
-        def fpReajuste = FormulaPolinomicaReajuste.get(params.id)
+        if(fpReajuste == null){
+            def fprj = new FormulaPolinomicaReajuste(contrato: contrato,
+                    tipoFormulaPolinomica: TipoFormulaPolinomica.get(1),
+                    descripcion: "Fórmula polinómica del contrato principal")
+            if(!fprj.save(flush: true)){
+                println "error al crear la FP del contrato, errores: " + fprj.errors
+            } else {
+                println "si guarda fprj, $fprj"
+                fpReajuste =  fprj
+                FormulaPolinomicaContractual.findAllByContrato(contrato).each { fp ->
+                    fp.reajuste = fprj
+                    fp.save(flush: true)
+                }
+            }
+        }
 
         def ps = FormulaPolinomicaContractual.withCriteria {
             eq("contrato", fpReajuste.contrato)

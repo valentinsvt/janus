@@ -64,7 +64,7 @@ class MenuTagLib {
                 strItems += '<a href="#" class="dropdown-toggle" data-toggle="dropdown">' + item.key + '<b class="caret"></b></a>'
                 strItems += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">'
 
-                (item.value.size() / 2).toInteger().times {
+                (item.value.size() / 2).toInteger().times {  /** pares key, value **/
                     strItems += '<li><a href="' + item.value[it * 2 + 1] + '">' + item.value[it * 2] + '</a></li>'
                 }
                 strItems += '</ul>'

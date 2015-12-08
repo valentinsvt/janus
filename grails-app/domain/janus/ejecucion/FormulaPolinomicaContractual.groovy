@@ -11,7 +11,7 @@ class FormulaPolinomicaContractual implements Serializable {
     Indice indice
     String numero
     double valor
-    int codigo = 0
+//    int codigo = 0
     FormulaPolinomicaReajuste reajuste
 //    SubPresupuesto subPresupuesto
 
@@ -30,7 +30,7 @@ class FormulaPolinomicaContractual implements Serializable {
             numero column: 'frplnmro'
             valor column: 'frplvlor'
 //            subPresupuesto column: 'sbpr__id'
-            codigo column: 'frplcdgo'
+//            codigo column: 'frplcdgo'
             reajuste column: 'fprj__id'
         }
     }
@@ -39,7 +39,8 @@ class FormulaPolinomicaContractual implements Serializable {
         numero(blank: true, nullable: true)
         valor(blank: true, nullable: true)
         indice(blank: true, nullable: true)
-        codigo(blank: false, nullable: false)
+        tipoFormulaPolinomica(blank: true, nullable: true)
+//        codigo(blank: false, nullable: false)
     }
 
     String toString(){

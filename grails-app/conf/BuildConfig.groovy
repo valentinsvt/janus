@@ -60,6 +60,7 @@ grails.project.dependency.resolution = {
 //        runtime ":kerberos:1.3"
 //        build ":tomcat:$grailsVersion"
         build ":tomcat:7.0.47"
+        compile ":scaffolding:2.0.0"
     }
 
 }

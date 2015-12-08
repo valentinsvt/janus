@@ -295,13 +295,13 @@
 
                         <div class="row">
                             <div class='span2 formato'>
-                                Fórmula Polinómica
+                                Fórmula Polinómica a utilizar
                             </div>
 
-                            <div class="span4">
+                            <div class="span6">
                                 <g:select id="formulaPolinomicaReajuste" name="formulaPolinomicaReajuste.id" from="${formulas}" optionKey="id"
                                           optionValue="descripcion"
-                                          class="many-to-one span3 required"
+                                          class="many-to-one span5 required"
                                           value="${planillaInstance?.formulaPolinomicaReajuste?.id}"/>
                                 <span class="mandatory">*</span>
 
@@ -315,9 +315,10 @@
                                     Periodo para el reajuste
                                 </div>
 
-                                <div class="span4" style="width: 400px">
+                                <div class="span4">
                                     <g:select name="periodoIndices.id"
                                               from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin', order: 'desc', max: 20])}"
+                                              class="span4"
                                               optionKey="id" style="width: 100%"></g:select>
                                 </div>
                             </div>

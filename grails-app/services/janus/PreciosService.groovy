@@ -552,10 +552,11 @@ class PreciosService {
 
     }
 
-    def verificaIndicesPeriodo(contrato, periodo){
+//    def verificaIndicesPeriodo(contrato, periodo){
+    def verificaIndicesPeriodo(plnl, periodo){
         def cn = dbConnectionService.getConnection()
         if(periodo) {
-            def sql = "select * from verifica_indices("+ contrato.id + ","+ periodo.id +") "
+            def sql = "select * from verifica_indices_v2("+ plnl + ","+ periodo.id +") "
             def result = []
             cn.eachRow(sql.toString()) { r ->
 //            println "res "+r

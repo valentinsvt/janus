@@ -17,6 +17,7 @@ class ReajustePlanilla {
     Date fechaInicio
     Date fechaFin
     double factor
+    FormulaPolinomicaReajuste fpReajuste
 
     static mapping = {
 
@@ -42,6 +43,7 @@ class ReajustePlanilla {
             factor column: 'rjplfctr'
             fechaInicio column: 'rjplfcin'
             fechaFin column: 'rjplfcfn'
+            fpReajuste column: 'fprj__id'
 
         }
 
@@ -62,6 +64,7 @@ class ReajustePlanilla {
         mes(blank:false, nullable: false)
         fechaInicio(blank:true, nullable: true)
         fechaFin(blank:true, nullable: true)
+        fpReajuste(blank:true, nullable: true)
     }
 
 }

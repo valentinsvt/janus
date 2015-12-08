@@ -29,6 +29,7 @@
 
     .formato {
         font-weight : bolder;
+        font-size: large;
     }
 
     </style>
@@ -46,7 +47,7 @@
             Contrato
         </g:link>
         <g:if test="${fxs}">
-            <a href="#" class="btn btn-success" id="btnSaveReajuste"><i class="icon-save"></i> Guardar</a>
+            <a href="#" class="btn btn-success" id="btnGuardar"><i class="icon-save"></i> Guardar</a>
         </g:if>
         <g:else>
             <a href="#" class="btn btn-success" id="btnSave"><i class="icon-save"></i> Guardar</a>
@@ -58,38 +59,41 @@
 
 <div id="divTabla">
 
+    <h3 style="text-align: center">Asignación de las Fórmulas Polinómicas</h3>
+    <div style="min-height: 40px;"> <span>Contrato:</span> <span class="titulo" style="display: inline-block; width: 800px; vertical-align:top;"> ${contrato.objeto}</span></div>
     <div class="span12" style="margin-top: 10px" id="dirSalida">
 
-        <div class="borde_abajo" style="position: relative;float: left;width: 95%;padding-left: 45px">
-            <p class="css-vertical-text">Asignación F. Polinómica</p>
+        <div class="borde_abajo" style="position: relative;float: left;width: 95%;">
+            %{--<p class="css-vertical-text">Asignación F. Polinómica</p>--}%
 
-            <div class="linea" style="height: 98%;"></div>
+            %{--<div class="linea" style="height: 98%;"></div>--}%
 
-            <div style="width: 99.7%;height: 250px;overflow-y: auto;float: right;" id="detalle">
+            %{--<div style="width: 99.7%;height: 250px;overflow-y: auto;float: right;" id="detalle">--}%
 
 
                 <g:set var="contador" value="${subpresupuesto.size()}"/>
                 <g:set var="arr" value="${[]}"/>
-                <g:set var="arr2" value="${[]}"/>
+                %{--<g:set var="arr2" value="${[]}"/>--}%
 
-                <div class="span2 formato" style="width: 500px;"> Subpresupuesto
+                <div class="span7 formato"> Subpresupuestos de la Obra
                 <g:each in="${subpresupuesto}" var="sub" status="i">
-                    <g:textField name="sub_${i}" class="subi" value="${sub?.descripcion}" data-id="${sub.id}" readonly="true" style="width: 500px" title="${sub?.descripcion}" />
+                    <g:textField name="sub_${i}" class="subi span7" value="${sub?.descripcion}" data-id="${sub.id}" readonly="true"
+                                title="${sub?.descripcion}" />
                     <g:set var="arr" value="${arr += sub.id}"/>
                   </g:each>
                 </div>
 
-                <div class="span2 formato" style="width: 230px;"> F. Polinómica
+                <div class="span4 formato"> Fórmula Polinómica a utilizar
                 <g:if test="${fxs}">
                     <g:each in="${fxs}" var="f">
-                        <g:select style="width: 230px;" name="pol_${f}" data-id="${f}" from="${formulas}" optionKey="id"
-                                  optionValue="descripcion" class="sle" value="${f.reajuste.id}" title="Fórmulas Polinómicas"
+                        <g:select name="pol_${f}" data-id="${f}" from="${formulas}" optionKey="id"
+                                  optionValue="descripcion" class="sle span4" value="${f.reajuste.id}" title="Fórmulas Polinómicas"
                                   />
                     </g:each>
                 </g:if>
                 <g:else>
                     <g:each in="${subpresupuesto}" var="pol" status="j">
-                        <g:select style="width: 230px;" name="pol_${j}" data-id="${j}" from="${formulas}" optionKey="id"
+                        <g:select style="width: 340px;" name="pol_${j}" data-id="${j}" from="${formulas}" optionKey="id"
                                   optionValue="descripcion" class="sle" value="" title="Fórmulas Polinómicas"
                                   noSelection="['null': 'Seleccione ...']"/>
 
@@ -97,9 +101,9 @@
                 </g:else>
 
                 </div>
-            </div>
+            %{--</div>--}%
 
-        </div>
+        %{--</div>--}%
     </div>
 
 
@@ -122,7 +126,7 @@
             }
         });
 
-        if(veri != 1){
+        if(veri != 1) {
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(action:'saveAsignarFormula')}",
@@ -140,12 +144,12 @@
                     }
                 }
             });
-        }else{
+        } else {
             confirm("Una o más fórmulas polinómicas no han sido seleccionadas");
         }
     });
 
-    $("#btnSaveReajuste").click(function () {
+    $("#btnGuardar").click(function () {
 
 
         var data = [];
