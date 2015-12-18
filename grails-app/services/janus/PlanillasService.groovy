@@ -1,18 +1,20 @@
 package janus
 
 import janus.ejecucion.PeriodoPlanilla
+import janus.ejecucion.ReajustePlanilla
 import janus.ejecucion.ValorIndice
 import janus.ejecucion.ValorReajuste
 
 class PlanillasService {
+    def dbConnectionService
 
-    def calculaValores(PeriodoPlanilla periodo,cs,ps,pcs,obra,anticipo){
-        println "calculando indices de "+periodo.planilla.id+"  "+periodo.fechaIncio.format("dd-MM-yyyyy")+"  "+periodo.fechaFin.format("dd-MM-yyyyy")
+    def calculaValores(PeriodoPlanilla periodo, cs, ps, pcs, obra, anticipo) {
+        println "calculando indices de " + periodo.planilla.id + "  " + periodo.fechaIncio.format("dd-MM-yyyyy") + "  " + periodo.fechaFin.format("dd-MM-yyyyy")
         def totalB0 = 0
-        periodo.frReajuste=0
-        periodo.b0Reajuste=0
+        periodo.frReajuste = 0
+        periodo.b0Reajuste = 0
         def valorIndice
-        cs.each{c->
+        cs.each { c ->
             valorIndice = ValorIndice.findByPeriodoAndIndice(periodo.periodoReajuste, c.indice)?.valor
             if (!valorIndice) {
 //                println "wtf no valor " + p.periodo + "  " + c.indice
@@ -22,9 +24,9 @@ class PlanillasService {
             def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${periodo.planilla.id} and periodoIndice =${periodo.periodo.id} and formulaPolinomica=${c.id}")
             if (vlrj.size() > 0) {
                 valor = vlrj.pop()
-                valor.periodoReajuste=periodo.periodoReajuste
-                valor.valorReajuste=valorIndice*c.valor
-                totalB0+=(valorIndice*c.valor).toDouble().round(3)
+                valor.periodoReajuste = periodo.periodoReajuste
+                valor.valorReajuste = valorIndice * c.valor
+                totalB0 += (valorIndice * c.valor).toDouble().round(3)
                 valor.save(flush: true)
             } else {
 //                println "error wtf no hay vlrj => from ValorReajuste where obra=${obra.id} and planilla=${p.planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}"
@@ -35,7 +37,7 @@ class PlanillasService {
         periodo.b0Reajuste = totalB0
         periodo.save(flush: true)
         def periodos = PeriodoPlanilla.findAllByPlanilla(anticipo, [sort: "id"])
-        def periodos2 =[]
+        def periodos2 = []
         periodos2.add(periodo)
 
         println("ps " + ps)
@@ -46,10 +48,10 @@ class PlanillasService {
                 if (j == 0) { // es la oferta
                     def valor = 0
                     if (i == 0) { //es mano de obra
-                        if(per.periodoReajuste){
+                        if (per.periodoReajuste) {
                             vlinOferta = per.b0Reajuste
                             valor = per.b0Reajuste
-                        }else{
+                        } else {
                             vlinOferta = per.total
                             valor = per.total
                         }
@@ -61,9 +63,9 @@ class PlanillasService {
                 } else {
                     def vlin, dec = 3
                     if (i == 0) {
-                       // println "es mano de obra "+per.id+"  "+per+"  "+per.b0Reajuste+" "+per.total
+                        // println "es mano de obra "+per.id+"  "+per+"  "+per.b0Reajuste+" "+per.total
                         vlin = (per.periodoReajuste ? per.b0Reajuste : per.total)//
-                      //  println "vlin "+vlin
+                        //  println "vlin "+vlin
                     } else {//
                         if (per.periodoReajuste) {
                             vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoReajuste).valor
@@ -78,9 +80,9 @@ class PlanillasService {
             periodos2.eachWithIndex { per, j ->
                 def vlin
                 if (i == 0) {
-                    if(per.periodoReajuste) {
+                    if (per.periodoReajuste) {
                         vlin = per.b0Reajuste
-                    }else{
+                    } else {
                         vlin = per.total
                     }
                 } else {
@@ -88,7 +90,7 @@ class PlanillasService {
 //                    vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoReajuste).valor
                     vlin = 0
                 }
-                   // println "-->  indice: "+p.indice+" periodo  "+per.periodo.id+" VLIN  "+vlin+"  VLINOFERTA "+vlinOferta+" Valor "+p.valor+"  "
+                // println "-->  indice: "+p.indice+" periodo  "+per.periodo.id+" VLIN  "+vlin+"  VLINOFERTA "+vlinOferta+" Valor "+p.valor+"  "
                 def valor = (vlin / vlinOferta * p.valor).round(3)
 
                 def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${periodo.planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id}")
@@ -117,11 +119,125 @@ class PlanillasService {
             }
         }
 
+        println "total b0 " + totalB0
+        println "total fr " + periodo.frReajuste
+    }
 
+    /* arma la tabla Bo para la planilla reajustada plnl con FP=fprj
+     * 1. carga los índices de la oferta y añade columnas para cada reajuste de la planilla */
+    def armaTablaFr(plnl, fprj, tp) {
+//        println "arma tablaBo --1"
+        def cn = dbConnectionService.getConnection()
+        def tblaBo = []
+        def orden = 1
+        def pcan = 0
+        def titulos = ["OFERTA"]
+        def sql = "select prindscr, cntrpcan from prin, rjpl, cntr, plnl " +
+                "where rjpl.plnl__id = ${plnl} and rjplprdo = 0 and plnl.plnl__id = rjpl.plnl__id and " +
+                "cntr.cntr__id = plnl.cntr__id and prin.prin__id = cntr.prin__id"
+//        println "sql armaIndices****: $sql"
+        cn.eachRow(sql.toString()) {d ->
+            titulos.add(d.prindscr)   //fecha de indices anticipo
+            pcan = d.cntrpcan
+        }
 
-        println "total b0 "+totalB0
-        println "total fr "+periodo.frReajuste
+        sql = "select rjpl__id, prindscr, rjplprdo from rjpl, plnl, prin " +
+                "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
+                "prin.prin__id = rjpl.prin__id order by rjpl.plnlrjst"
+//        println "sql armaTablaBo: $sql"
+        cn.eachRow(sql.toString()) {rj ->
+//            println "arma tablaBo --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
+            if(rj.rjplprdo == 0) {
+                tblaBo = armaIndices(rj.rjpl__id, tp)
+                tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
+                titulos.add("ANTICIPO ${pcan}%")
+                titulos.add(rj.prindscr)
+                orden++
+            }  else {
+                tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
+                titulos.add("AVANCE")
+                titulos.add(rj.prindscr)
+                orden++
+            }
+//            println "tablaBo: $tblaBo"
+//            println "titulos: $titulos"
+        }
+        cn.close()
+//        def cb = cabeceraBo(tblaBo, plnl)
+//        println "cabecera: $titulos"
+        tblaBo.add(titulos)
+        tblaBo  //retorna tabla armada
+    }
 
+    /* arma indices coeficientes y valores de oferta, retorna lista de Bo */
+    def armaIndices(rjpl, tp) {
+        def cn = dbConnectionService.getConnection()
+        def tbla = []
+        def mapa = [:]
+        def sql = "select indcdscr, frplvlor, frplnmro, dtrjinof, dtrjvlof from dtrj, frpl, indc " +
+                "where indc.indc__id = frpl.indc__id and dtrj.frpl__id = frpl.frpl__id and " +
+                "rjpl__id = ${rjpl} and frplnmro ilike '${tp}%' order by frplnmro"
+//        println "sql armaIndices: $sql"
+        cn.eachRow(sql.toString()){d ->
+            mapa = [:]
+            mapa.numero      = d.frplnmro
+            mapa.descripcion = d.indcdscr
+            mapa.coeficiente = d.frplvlor
+            mapa.indice      = d.dtrjinof
+            mapa.valor       = d.dtrjvlof
+            tbla.add(mapa)
+        }
+        cn.close()
+        tbla  //retorna mapa
+    }
+
+    def aumentaColumna(tbla, rjpl, orden, tp) {
+        def cn = dbConnectionService.getConnection()
+        def mapa = [:]
+        def sql = "select frplnmro, dtrjinpr, dtrjvlpr from dtrj, frpl " +
+                "where dtrj.frpl__id = frpl.frpl__id and rjpl__id = ${rjpl} and frplnmro ilike '${tp}%' " +
+                "order by frplnmro"
+//        println "sql armaIndices: $sql"
+        cn.eachRow(sql.toString()){d ->
+            tbla.find {it.numero == d.frplnmro}["indc${orden}"] = d.dtrjinpr
+            tbla.find {it.numero == d.frplnmro}["vlor${orden}"] = d.dtrjvlpr
+        }
+        cn.close()
+        tbla  //retorna mapa
+    }
+
+    /* arma la tabla Po para la planilla reajustada plnl con FP=fprj
+     * Po usa un título estático, y valores de rjpl
+    * */
+    def armaTablaPo(plnl, fprj) {
+//        println "arma tablaPo --1"
+        def cn = dbConnectionService.getConnection()
+        def tblaPo = []
+        def orden = 1
+        def sql = "select tppldscr, rjpl_mes, rjplcrpa, rjplcrac, rjplplpa, rjplplac, rjplvlpo, rjplprdo " +
+                "from rjpl, plnl, tppl, plnl rj " +
+                "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
+                "rj.plnl__id = rjpl.plnlrjst and tppl.tppl__id = rj.tppl__id order by rjpl.rjplprdo"
+        println "sql armaTablaPo: $sql"
+        cn.eachRow(sql.toString()) {rj ->
+            tblaPo.add([tipo: rj.tppldscr, mes: rj.rjpl_mes, crpa: rj.rjplcrpa, crac: rj.rjplcrac, plpa: rj.rjplplpa,
+              plac: rj.rjplplac, po: rj.rjplvlpo])
+        }
+        cn.close()
+        tblaPo  //retorna tabla armada
+    }
+
+    def reajusteAnterior(plnl, fprj) {
+        println "arma reajsute anterior de plnl: $plnl"
+        def cn = dbConnectionService.getConnection()
+        def sql = "select sum(rjplvlor) suma from rjpl where plnl__id = (select plnlrjst from rjpl " +
+                "where plnl__id = ${plnl} and  plnlrjst < plnl__id and rjpl.fprj__id = ${fprj} " +
+                "order by plnlrjst desc limit 1) and rjpl.fprj__id = ${fprj}"
+        println "sql reajusteAnterior: $sql"
+        def valor = cn.rows(sql.toString())[0].suma
+        if(!valor) return 0
+        return valor
+        cn.close()
     }
 
 

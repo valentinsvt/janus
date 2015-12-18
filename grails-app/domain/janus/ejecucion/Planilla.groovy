@@ -201,7 +201,7 @@ class Planilla {
         multaEspecial(blank: true, nullable: true)
         descripcionMulta(blank: true, nullable: true,size: 1..255)
         logPagos(blank: true, nullable: true,size: 1..255)
-//        imprimeReajueste(blank: true, nullable: true)
+        formulaPolinomicaReajuste(blank: true, nullable: true)
     }
 
     String toString() {

@@ -1147,16 +1147,17 @@ class ContratoController extends janus.seguridad.Shield {
 
         def formuxSub = FormulaSubpresupuesto.findAllByReajusteInList(formulasVarias);
 
+        println "formulas $formulasVarias"
+
 //        println("ff " + formuxSub)
 //        println("subp " + subPres)
-
 
          return [contrato: contrato, subpresupuesto: subPres, formulas: formulasVarias, fxs: formuxSub]
     }
 
     def saveAsignarFormula () {
 
-        println("params " + params)
+        println("saveAsignarFormula  " + params)
         def arrForm = []
         def su
         params.each{
@@ -1179,11 +1180,11 @@ class ContratoController extends janus.seguridad.Shield {
 
             def formxSub = new FormulaSubpresupuesto();
 
-            formxSub.subPresupuesto = SubPresupuesto.get(g)
+//            formxSub.subPresupuesto = SubPresupuesto.get(g)
             formxSub.reajuste = FormulaPolinomicaReajuste.get(arrForm[h])
 
             if(!formxSub.save(flush: true)){
-                println("Error al asignar las formulas polinomicas")
+                println "Error al asignar las formulas polinomicas" + formxSub.errors
                 cont = 1
             }else{
                 cont = 0
@@ -1201,26 +1202,25 @@ class ContratoController extends janus.seguridad.Shield {
 
     def saveAsignarFormula2 () {
 
-        println("params " + params)
+        println("saveAsignarFormula2 " + params)
 
-
-        def su
-        def fxs
+        def su = []
+        def fxs = []
         def part
         params.each{
             if(it.key.toString().startsWith("sub")){
-                su = it.value
+                su += it.value
             }
             if(it.key.toString().startsWith("fxs")){
-                fxs = it.value
+                fxs += it.value
             }
         }
 
         part = params.formu.toString().split("_")
 
-        println("f " +part)
-        println("f " +su)
-        println("f " +fxs)
+        println "formula: " +part
+        println "subpr: " +su
+        println "formula x sp: " +fxs
 
         def cont
 
@@ -1229,6 +1229,7 @@ class ContratoController extends janus.seguridad.Shield {
             def formxSub = FormulaSubpresupuesto.get(fxs[h]);
 
             formxSub.reajuste = FormulaPolinomicaReajuste.get(part[h])
+            formxSub.subPresupuesto = SubPresupuesto.get(g)
 
             if(!formxSub.save(flush: true)){
                 println("Error al asignar las formulas polinomicas")

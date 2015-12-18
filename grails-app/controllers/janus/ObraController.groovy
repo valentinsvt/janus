@@ -1496,8 +1496,8 @@ class ObraController extends janus.seguridad.Shield {
 
 //            println "busca direccion de usuario ${session.usuario}"
 
+            def persona = Persona.get(session.usuario.id)
             if(session.usuario.departamento?.codigo != 'UTFPU'){
-                def persona = Persona.get(session.usuario.id)
                 def direccion = Direccion.get(persona.departamento.direccion.id)
                 def departamentos = Departamento.findAllByDireccion(direccion)
                 def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
@@ -1511,7 +1511,11 @@ class ObraController extends janus.seguridad.Shield {
                 obraInstance.inspector = personasRolInsp.first().persona
                 obraInstance.revisor = personasRolRevi.first().persona
                 obraInstance.responsableObra = personasRolElab.first().persona
+            } else {
+                obraInstance.responsableObra = persona   // cambia de dueño al usuario que copia de la UTFPU
             }
+
+
 
             if (!obraInstance.save(flush: true)) {
                 flash.clase = "alert-error"

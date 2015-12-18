@@ -567,8 +567,24 @@ class PreciosService {
         } else {
             return "no hay índices"
         }
+    }
 
 
+    def verificaIndicesPeriodoTodo(cntr, prdo){
+        def cn = dbConnectionService.getConnection()
+        if(prdo) {
+            def sql = "select * from verifica_indices("+ cntr + ","+ prdo +") "
+            def result = []
+            println "verificaIndicesPeriodoTodo, sql: $sql"
+            cn.eachRow(sql.toString()) { r ->
+//            println "res "+r
+                result.add(r.toRowResult())
+            }
+            cn.close()
+            return result
+        } else {
+            return "no hay índices"
+        }
     }
 
 

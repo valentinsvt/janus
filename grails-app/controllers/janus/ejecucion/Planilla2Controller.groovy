@@ -18,6 +18,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
     def diasLaborablesService
     def preciosService
     def planillasService
+    def dbConnectionService
+
     def errores() {
     }
 
@@ -149,7 +151,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
 
     def liquidacion() {
-        session.override = false
+//        session.override = false
 //        println "params " + params
         def planilla = Planilla.get(params.id)
         def override = false
@@ -359,16 +361,17 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
             }
             planillaAnticipo = planillaAnticipo.pop()
-            def fechaOferta = planillaAnticipo.contrato.oferta.fechaEntrega - 30
-            def fechaAnticipo = planillaAnticipo.fechaPresentacion
+//            def fechaOferta = planillaAnticipo.contrato.oferta.fechaEntrega - 30
+//            def fechaAnticipo = planillaAnticipo.fechaPresentacion
+
             def periodosAnticipo = PeriodoPlanilla.findAllByPlanilla(planillaAnticipo, [sort: "id"])
             def planillasAvances = Planilla.withCriteria {
                 eq("contrato", contrato)
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
             }
             def periodosAvances = PeriodoPlanilla.findAllByPlanillaInList(planillasAvances, [sort: "id"])
-            def perOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaOferta, fechaOferta)
-            def perAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaAnticipo, fechaAnticipo)
+//            def perOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaOferta, fechaOferta)
+//            def perAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaAnticipo, fechaAnticipo)
 //        println "planilla "+planilla+"  "+fechaOferta+"  "+fechaAnticipo+" pers "+periodos+"  "+perOferta+"  "+perAnticipo
 
 
@@ -376,6 +379,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaBo += "<thead>"
             tablaBo += "<tr>"
             tablaBo += "<th colspan=\"2\">Cuadrilla Tipo</th>"
+            tablaBo += "<th>*** </th>"
+            tablaBo += "<th class='nb'> ***</th>"
             periodosAnticipo.each {
                 it.planilla.reajusteLiq = 0
                 it.totalLiq = 0
@@ -764,12 +769,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
     def avance() {
         def planilla = Planilla.get(params.id)
-        def override = false
-        if (session.override == "true" || session.override == true) {
-            override = true
-            session.override = false
-        }
-        println "params avance: $params, overrride: $override"
+//        def override = false
+//        if (session.override == "true" || session.override == true) {
+//            override = true
+//            session.override = false
+//        }
 //        def obra = planilla.contrato.oferta.concurso.obra
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
@@ -938,18 +942,18 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def prmlMultaDisposiciones = contrato.multaDisposiciones
         def prmlMultaRetraso = contrato.multaRetraso
 
-        def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
-        if (override && pa.size() > 0) {
-            println "Borrando periodos por alguna razon "
-            pa.each {
-                it.delete(flush: true)
-            }
-            pa = []
-        }
+//        def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
+//        if (override && pa.size() > 0) {
+//            println "Borrando periodos por alguna razon "
+//            pa.each {
+//                it.delete(flush: true)
+//            }
+//            pa = []
+//        }
         def fechaFinPlanilla = planilla.fechaFin
 
 
-        if (pa.size() == 0) {   // crea el periodo de la planilla
+     /*   if (pa.size() == 0) {   // crea el periodo de la planilla
             println "creando periodos de la planilla"
             def inicio = planilla.fechaInicio
 
@@ -1028,13 +1032,13 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
 
 
-        }
+        }*/
 
         def tableWidth = 150 * (periodos.size() + periodos2.size()) + 100
         def smallTableWidth = 400
 
-        println "periodos  " + periodos.periodo
-        println "periodos  2v " + periodos2.periodo
+//        println "periodos  " + periodos.periodo
+//        println "periodos  2v " + periodos2.periodo
         /////////////////*************************b0****************************/////////////////////////
 
 
@@ -1569,28 +1573,25 @@ class Planilla2Controller extends janus.seguridad.Shield {
     }
 
     def anticipo() {
-
+        println "anticipo.."
         def planilla = Planilla.get(params.id)
-        def override = false
-        if (session.override == "true" || session.override == true) {
-            override = true
-            session.override = false
-        }
+//        def override = false
+//        if (session.override == "true" || session.override == true) {
+//            override = true
+//            session.override = false
+//        }
+//        println "over.... ${session.override}, override: $override"
+
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def fechaOferta = planilla.contrato.oferta.fechaEntrega - 30
 
-        if (!planilla) {
-            flash.message = "No se encontró la planilla a generar"
-            redirect(action: "errores")
-            return
-        }
 
         //todo: revisar esto
         fechaOferta = planilla.contrato.periodoInec.fechaInicio
 
         def fechaAnticipo = planilla.fechaPresentacion
-        def periodos = PeriodoPlanilla.findAllByPlanilla(planilla, [sort: "id"])
+//        def periodos = PeriodoPlanilla.findAllByPlanilla(planilla, [sort: "id"])
 
         def perOferta = PeriodosInec.get(contrato.periodoInec.id)
         println "periodo oferta "+perOferta+"  "+contrato.periodoInec
@@ -1647,6 +1648,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 //        println "ps: " + ps
 
 
+/*
         if (override && periodos.size() > 0) {
             println "Borrando periodos por alguna razon "
             periodos.each {
@@ -1654,8 +1656,9 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
             periodos = []
         }
+*/
 
-        def erroresPeriodos = false
+//        def erroresPeriodos = false
 //        println "periodo oferta  1 "+perOferta
 //        println "periodo anticipo  1 "+perAnticipo
         perOferta = verificaIndices(pcs, perOferta, 0)
@@ -1664,29 +1667,31 @@ class Planilla2Controller extends janus.seguridad.Shield {
 //        println "periodo anticipo "+perAnticipo
 
 //        println "verifica oferta "
-        def res = preciosService.verificaIndicesPeriodo(contrato,perOferta)
-        println "res "+res
-//        println "verficia anticipo "
-        def res2 = preciosService.verificaIndicesPeriodo(contrato,perAnticipo)
-//        println "res "+res2
+//        def res = preciosService.verificaIndicesPeriodo(contrato, perOferta)
 
-        if(res.size()+res2.size()>0){
-            res +=res2
-            def mesg ="<p>No se puede generar la planilla</p><br><ul style='margin-left:80px'>"
-            res.each {r->
-                mesg+="<li>No existe valor para: ${r['indcdscr']}, en el periodo: ${r['prindscr']}</li>"
-            }
-            mesg+="</ul><br/><a href='${g.createLink(controller: 'planilla',action: 'list',id:contrato.id)}' class='btn btn-default'>Volver</a>"
-            flash.message = mesg
-            redirect(action: "errores")
-            return
-        }
+//        def res = preciosService.verificaIndicesPeriodo(planilla.id, perOferta)
+//        println "res "+res
+//        def res2 = preciosService.verificaIndicesPeriodoTodo(planilla.contrato.id, perAnticipo.id)
+//        if(res.size()+res2.size()>0){
+//            res +=res2
+//            def mesg ="<p>No se puede generar la planilla</p><br><ul style='margin-left:80px'>"
+//            res.each {r->
+//                mesg+="<li>No existe valor para: ${r['indcdscr']}, en el periodo: ${r['prindscr']}</li>"
+//            }
+//            mesg+="</ul><br/><a href='${g.createLink(controller: 'planilla',action: 'list',id:contrato.id)}' class='btn btn-default'>Volver</a>"
+//            flash.message = mesg
+//            redirect(action: "errores")
+//            return
+//        }
 
 
+/*
         if (!(perOferta && perAnticipo)) {
             erroresPeriodos = false;
         }
+*/
 
+/*
         if (periodos.size() == 0 && perOferta && perAnticipo) {
             println "creando periodos "
 //            pcs.each {c->
@@ -1721,6 +1726,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             redirect(action: "errores")
             return
         }
+*/
 
 
 
@@ -1758,7 +1764,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tams.add(10)
             tamsFr.add(10)
         }
-
+        println "... $periodosNuevos"
         cs.each { c ->
             def key = c.id
             if(!datos[key]) {
@@ -1805,7 +1811,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
 
 
-        def tableWidth = 150 * periodos.size() + 400
+        def tableWidth = 150 * periodosNuevos.size() + 400
 
         def tablaBo = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${tableWidth}px;'>"
         tablaBo += "<thead>"
@@ -2071,6 +2077,279 @@ class Planilla2Controller extends janus.seguridad.Shield {
         [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr]
     }
 
+
+    /** llamar con parametro de fprj.id */
+    def resumen() {
+        println "resumen de planillas.."
+        def planilla = Planilla.get(params.id)
+        def rjpl
+        if(params.fprj) {
+            rjpl = ReajustePlanilla.findAllByPlanillaAndFpReajuste(planilla, FormulaPolinomicaReajuste.get(params.fprj))
+        } else {
+            rjpl = ReajustePlanilla.findAllByPlanilla(planilla).first()
+        }
+
+        //***************************** B0 ****************************
+        def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
+        def titulos = tbBo.pop()
+        println "---- titulos: $titulos"
+
+        def totlFr = []
+
+        def tablaBo = "<table class=\"table table-bordered table-striped table-condensed table-hover\">"
+        tablaBo += "<thead><tr><th colspan=\"2\">Cuadrilla Tipo</th>"
+        def separador = "nb"
+        for(i in 0..titulos.size()-1){
+            separador = separador == "nb" ? "" : "nb"
+            tablaBo += "<th ${(separador == 'nb') ? 'class = \'nb\'' : ''}  > ${titulos[i]}</th>"
+        }
+
+        def coeficientes = 0.0
+        def totalIndiceOferta = 0.0
+        def totalAvance = []
+
+        tablaBo += "</tr>"
+        tablaBo += "</thead>"
+        tablaBo += "<tbody>"
+
+        def planillas = (tbBo[0].size() - 5)/2
+        tbBo.each { d ->
+            tablaBo += "<tr>"
+            tablaBo += "<td class='tal'> ${d.descripcion} (${d.numero})</th>"
+            tablaBo += "<td class='number'> ${numero(d.coeficiente)} </td>"
+            tablaBo += "<td class='number'> ${numero(d.indice)} </td>"
+            tablaBo += "<td class='number'> ${numero(d.valor)} </td>"
+            for(i in 1..planillas){
+                if(!totalAvance[i-1]) totalAvance[i-1] = 0
+                tablaBo += "<td class='number'> ${numero(d["indc$i"])} </td>"
+                tablaBo += "<td class='number'> ${numero(d["vlor$i"])} </td>"
+                totalAvance[i-1] += d["vlor$i"]
+            }
+            totalIndiceOferta += d.valor
+            coeficientes += d.coeficiente
+        }
+
+        tablaBo += "</tbody><tfoot>"
+        tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(coeficientes)}</th>"
+        tablaBo += "<th></th><th class='number'>${numero(totalIndiceOferta)}</th>"
+        for(i in 1..planillas) {
+            tablaBo += "<th></th><th class='number'>${numero(totalAvance[i-1])}</th>"
+        }
+        tablaBo += "</tr></tfoot></table>"
+
+
+        //////////////////////////**********************P0*********************///////////////////////////
+
+//        def tablaP0 = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${tableWidth}px; margin-top:10px;' >"
+        def tablaP0 = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:60%; margin-top:10px;' >"
+        tablaP0 += '<thead>'
+        tablaP0 += '<tr>'
+        tablaP0 += '<th colspan="2" rowspan="2">Mes y año</th>'
+        tablaP0 += '<th colspan="2">Cronograma</th>'
+        tablaP0 += '<th colspan="2">Planillado</th>'
+        tablaP0 += '<th colspan="2" rowspan="2">Valor P<sub>0</sub></th>'
+        tablaP0 += '</tr>'
+        tablaP0 += '<tr>'
+        tablaP0 += '<th>Parcial</th>'
+        tablaP0 += '<th>Acumulado</th>'
+        tablaP0 += '<th>Parcial</th>'
+        tablaP0 += '<th>Acumulado</th>'
+        tablaP0 += '</tr>'
+        tablaP0 += '</thead>'
+        tablaP0 += '<tbody><tr>'
+
+        def tbPo = planillasService.armaTablaPo(rjpl.planilla.id, rjpl.fpReajuste.id)
+        println "tbPo[0]---: ${tbPo[0].size()}, ${tbPo}"
+
+        for(i in 0..tbPo.size()-1 ){
+            if(tbPo[i].tipo.indexOf(' ') > 0) {
+                tablaP0 += "<th>${tbPo[i].tipo.substring(0, tbPo[i].tipo.indexOf(' '))}</th>"
+            } else {
+                tablaP0 += "<th>${tbPo[i].tipo}</th>"
+            }
+            tablaP0 += "<th>${tbPo[i].mes}</th>"
+            tablaP0 += "<td class='number'>${tbPo[i].crpa > 0 ? numero(tbPo[i].crpa, 2) : ''}</td>"
+            tablaP0 += "<td class='number'>${tbPo[i].crac > 0 ? numero(tbPo[i].crac, 2) : ''}</td>"
+            tablaP0 += "<td class='number'>${tbPo[i].plpa > 0 ? numero(tbPo[i].plpa, 2) : ''}</td>"
+            tablaP0 += "<td class='number'>${tbPo[i].plac > 0 ? numero(tbPo[i].plac, 2) : ''}</td>"
+            tablaP0 += "<td class='number'>${numero(tbPo[i].po, 2)}</td></tr>"
+        }
+
+        tablaP0 += '</tbody>'
+        tablaP0 += '<tfoot>'
+        //totales aqui
+        tablaP0 += '</tfoot>'
+        tablaP0 += '</table>'
+
+        //////////////////////////////////////////////*****************FR*********************************/////////////////
+
+        def tbFr = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'p')
+        def titulosFr = tbFr.pop()
+
+        def tr1 = "<tr>"
+        def tr2 = "<tr>"
+        def tr3 = "<tr>"
+        def tablaFr = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='margin-top:10px;'>"
+        tablaFr += '<thead>'
+        tr1 = '<tr>'
+        tr1 += '<th rowspan="2">Componentes</th>'
+
+        def tdRowSpan = "<th colspan='${titulosFr.size()/2}'>Periodo de variación y aplicación de fórmula polinómica</th>"
+        println "$titulosFr, size:${titulosFr.size()} 0... ${titulosFr.size()/2 - 1}"
+
+        for(i in 0..(titulosFr.size()/2 - 1)){
+            if(i == 0){
+                tr1 += "<th>${titulosFr[i]}</th>"
+                tr2 += "<th>${titulosFr[2*i+1]}</th>"
+            } else {
+                tr1 += tdRowSpan
+                tdRowSpan = ""
+                tr2 += "<th>${titulosFr[2*i]}<br>${titulos[2*i+1]}</th>"
+            }
+        }
+
+        tr1 += "</tr>"
+        tr2 += "</tr>"
+
+        tablaFr += tr1 + tr2
+        tablaFr += "</thead>"
+        tablaFr += "<tbody>"
+
+        def total = []
+        planillas = (tbFr[0].size() - 5)/2
+        tbFr.each { d ->
+            tablaFr += "<tr>"
+            tablaFr += "<td class='tal'> ${d.descripcion} (${d.numero})</th>"
+            tablaFr += "<td class='number'><div>${numero(d.coeficiente, 3)}</div><div class='bold'>${numero(d.indice)}</div></td>"
+            for(i in 1..planillas){
+                if(!total[i-1]) total[i-1] = 0.0
+                tablaFr += "<td class='number'><div>${numero(d["indc$i"])}</div><div class='bold'>${numero(d["indc$i"]/d.indice*d.coeficiente)} </td>"
+                total[i-1] += d["indc$i"]/d.indice*d.coeficiente
+            }
+        }
+
+        for(i in 0..planillas-1){
+            totlFr.add([total: total[i], po: tbPo[i].po])
+        }
+
+        println "valores totales: $totlFr, planillas: $planillas"
+
+        tablaFr += "</tbody>"
+
+        tr1 = "<tr>"
+        tr2 = "<tr>"
+        tr3 = "<tr>"
+        def tr4 = "<tr>"
+        def tr5 = "<tr>"
+
+        tr1 += "<th rowspan='4'>1.000</th>"
+        tr1 += "<th>F<sub>r</sub></th>"
+        tr2 += "<th>F<sub>r</sub> -1</th>"
+        tr3 += "<th>P<sub>0</sub></th>"
+        tr4 += "<th>P<sub>r</sub> -Po</th>"
+
+        def reajusteTotal = 0
+
+        def fr1 = 0.0
+        def fr = 0.0
+        for (i in 0..planillas-1){
+            fr1 = (totlFr[i].total - 1).toDouble().round(3)
+            fr = totlFr[i].total.toDouble().round(3)
+            tr1 += "<th class='number'>${numero(fr,3)}</th>"
+            tr2 += "<th class='number'>${numero(fr1,3)}</th>"
+            tr3 += "<th class='number'>${numero(totlFr[i].po, 2)}</th>"
+            reajusteTotal += (totlFr[i].po * fr1).round(2)
+            tr4 += "<th class='number'>${numero((totlFr[i].po * fr1).round(2), 2)}</th>"
+        }
+
+        def anterior = planillasService.reajusteAnterior(rjpl.planilla.id, rjpl.fpReajuste.id)
+        tr5 += "<th colspan='${planillas + 1}'>REAJUSTE TOTAL</th><th class='number'>" + numero(reajusteTotal, 2) + "</th></tr>"
+        if(planillas > 1){ // hay anticipo y otras planillas
+            tr5 += "<tr><th colspan='${planillas + 1}'>REAJUSTE ANTERIOR</th><th class='number'>" +
+                    numero(anterior, 2) + "</th>"
+            tr5 += "<tr><th colspan='${planillas + 1}'>REAJUSTE A PLANILLAR</th><th class='number'>" +
+                    numero((reajusteTotal - anterior), 2) + "</th>"
+        }
+
+        tablaFr += "<tfoot>"
+        tablaFr += tr1 + tr2 + tr3 + tr4 + tr5
+        tablaFr += "</tfoot></table>"
+
+        /* ------------------------- multas ----------------------------------*/
+        def multaPlanilla = MultasPlanilla.findAllByPlanilla(planilla)
+        def pMl
+        def tablaMlFs
+        def tablaMl
+        println "multas ..... $multaPlanilla"
+
+        if(multaPlanilla.size() > 0){
+            multaPlanilla.each { mt ->
+                if(mt.tipoMulta.id == 1){
+                    pMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:50%; margin-top:10px;'>"
+                    pMl += "<tr>"
+                    pMl += '<th class="tal">Fecha presentación planilla</th><td>' + planilla?.fechaPresentacion?.format("dd-MM-yyyy") + ' </td>'
+                    pMl += "</tr>"
+                    pMl += "<tr>"
+                    pMl += '<th class="tal">Periodo planilla</th><td>' + planilla?.fechaInicio?.format("dd-MM-yyyy") + " a " + planilla?.fechaFin?.format("dd-MM-yyyy") + ' </td>'
+                    pMl += "</tr>"
+                    pMl += "<tr>"
+                    pMl += '<th class="tal">Fecha máximo presentación</th> <td>' + mt.fechaMaxima.format("dd-MM-yyyy") + ' </td>'
+                    pMl += "</tr>"
+                    pMl += "<tr>"
+                    pMl += '<th class="tal">Días de retraso</th> <td>' + numero(mt.dias, 0) + "</td>"
+                    pMl += "</tr>"
+                    pMl += "<tr>"
+                    pMl += '<th class="tal">Multa</th> <td>' + mt.descripcion + "</td>"
+                    pMl += "</tr>"
+                    pMl += "<tr>"
+                    pMl += '<th class="tal">Valor de la multa</th> <td>$'  + numero(mt.monto, 2) + "</td>"
+                    pMl += "</tr>"
+                    pMl += '</table>'
+                }
+
+                if(mt.tipoMulta.id == 2){
+
+                    tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:50%; margin-top:10px;'>"
+                    tablaMl += "<tr>"
+                    tablaMl += '<th class="tal">Mes y Año</th><td>' + mt.periodo + ' </td>'
+                    tablaMl += "</tr>"
+                    tablaMl += "<tr>"
+                    tablaMl += '<th class="tal">Cronograma</th><td>' + numero(mt.valorCronograma,2) + ' </td>'
+                    tablaMl += "</tr>"
+                    tablaMl += "<tr>"
+                    tablaMl += '<th class="tal">Planillado</th> <td>' + numero(mt.planilla.valor,2) + ' </td>'
+                    tablaMl += "</tr>"
+                    tablaMl += "<tr>"
+                    tablaMl += '<th class="tal">Multa</th> <td>' + mt.descripcion + "</td>"
+                    tablaMl += "</tr>"
+                    tablaMl += "<tr>"
+                    tablaMl += '<th class="tal">Valor</th> <td>$'  + numero(mt.monto, 2) + "</td>"
+                    tablaMl += "</tr>"
+                    tablaMl += '</table>'
+                }
+
+                if(mt.tipoMulta.id == 3){
+
+                    tablaMlFs = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:50%; margin-top:10px;'>"
+                    tablaMlFs += "<tr>"
+                    tablaMlFs += '<th class="tal">Días</th> <td>' + numero(mt.dias, 0) + "</td>"
+                    tablaMlFs += "</tr>"
+                    tablaMlFs += "<tr>"
+                    tablaMlFs += '<th class="tal">Multa</th> <td>' + mt.descripcion + "</td>"
+                    tablaMlFs += "</tr>"
+                    tablaMlFs += "<tr>"
+                    tablaMlFs += '<th class="tal">Valor de la multa</th> <td>$' + '$' + numero(mt.monto, 2) + "</td>"
+                    tablaMlFs += "</tr>"
+                    tablaMlFs += '</table>'
+                }
+            }
+
+        }
+
+        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, pMl: pMl, tablaMl: tablaMl, tablaMlFs: tablaMlFs ]
+    }
+
+
     def verificaIndices(pcs, per, i) {
         if (!flash.message) {
             flash.message = ""
@@ -2187,4 +2466,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
     private String numero(num) {
         return numero(num, 3)
     }
+
+
 }

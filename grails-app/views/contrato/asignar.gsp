@@ -155,7 +155,8 @@
         var data = [];
         $(".sle").each(function () {
             var $input = $(this);
-            data += ( $input.val() + "_");
+//            data += ( $input.val() + "_");
+            data += $input.val();
         });
 
         $.ajax({

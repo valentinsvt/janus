@@ -48,10 +48,12 @@
 
     <g:set var="periodosOk" value="${[]}"/>
     <g:if test="${planillaAnticipo}">
-        <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaAnticipo)}"/>
+        %{--<g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaAnticipo)}"/>--}%
+        <g:set var="periodosOk" value="${janus.ejecucion.Planilla.findAllByTipoPlanilla(TipoPlanilla.findByCodigo('A'))}"/>
     </g:if>
 
-    <g:if test="${tipos.find { it.codigo == 'A' } || periodosOk.size() > 1}">
+    %{--periodosOk: ${periodosOk.size()} ${tipos}--}%
+    <g:if test="${tipos.find { it.codigo == 'A' } || periodosOk.size() > 0}">
         <div class="btn-toolbar" style="margin-bottom: 20px;">
             <div class="btn-group">
                 <g:link action="list" id="${contrato.id}" class="btn">
@@ -60,7 +62,7 @@
                 </g:link>
 
                 %{--<g:if test="${(!anticipoPagado && !liquidado) || (planillaInstance?.id && planillaInstance.fechaMemoSalidaPlanilla == null)}">--}%
-                <g:if test="${(anticipoPagado && !liquidado) || (planillaInstance?.id && planillaInstance.fechaMemoSalidaPlanilla == null) || (tipos.find{it.codigo = 'A'} && planillaInstance?.fechaMemoSalidaPlanilla == null)}">
+                <g:if test="${(anticipoPagado && !liquidado) || (planillaInstance?.id && planillaInstance.fechaMemoSalidaPlanilla == null) || (tipos.find{it.codigo == 'A'} && planillaInstance?.fechaMemoSalidaPlanilla == null)}">
                     <a href="#" id="btnSave" class="btn btn-success">
                         <i class="icon-save"></i>
                         Guardar
@@ -81,40 +83,12 @@
         </g:if>
 
         %{--<g:if test="${!anticipoPagado || planillaInstance?.id}">--}%
-        <g:if test="${anticipoPagado || planillaInstance?.id ||(tipos.find{it.codigo = 'A'} && planillaInstance?.fechaMemoSalidaPlanilla == null)}">
+        <g:if test="${anticipoPagado || planillaInstance?.id ||(tipos.find{it.codigo == 'A'} && planillaInstance?.fechaMemoSalidaPlanilla == null)}">
             <g:if test="${!liquidado}">
                 <g:form name="frmSave-Planilla" action="save">
                     <fieldset>
                         <g:hiddenField name="id" value="${planillaInstance?.id}"/>
                         <g:hiddenField id="contrato" name="contrato.id" value="${planillaInstance?.contrato?.id}"/>
-                        %{--<g:hiddenField name="numero" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>--}%
-
-%{--
-                        <div class="alert alert-info">
-                            <g:if test="${tipos.find { it.codigo == 'A' }}">
-                                <p>
-                                    La planilla de tipo "${tipos.find {
-                                        it.codigo == 'A'
-                                    }.nombre}" se utiliza para registrar el reajuste al momento del inicio de la obra
-                                </p>
-                            </g:if>
-
-                            <g:if test="${tipos.find { it.codigo == 'L' }}">
-                                <p>
-                                    La planilla de tipo "${tipos.find {
-                                        it.codigo == 'L'
-                                    }.nombre}" se utiliza para registrar el reajuste definitivo de la obra
-                                </p>
-                            </g:if>
-                            <g:if test="${tipos.find { it.codigo == 'C' }}">
-                                <p>
-                                    Las planillas de tipo "${tipos.find {
-                                        it.codigo == 'C'
-                                    }.nombre}" se utilizan para registrar costos por rubros no contractuales y deben asociarse a otra de contractuales
-                                </p>
-                            </g:if>
-                        </div>
---}%
 
                         <div class="row">
                             <div class='span2 formato'>
@@ -145,6 +119,7 @@
                                     <p class="help-block ui-helper-hidden"></p>
                                 </g:if>
                             </div>
+                            %{--.....${planillaInstance?.id} ${tipos}--}%
                             <g:if test="${!planillaInstance?.id && !(tipos.find { it.codigo == 'A' })}">
 
                                 <div class="span2 formato periodo hide">
@@ -293,23 +268,8 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class='span2 formato'>
-                                Fórmula Polinómica a utilizar
-                            </div>
 
-                            <div class="span6">
-                                <g:select id="formulaPolinomicaReajuste" name="formulaPolinomicaReajuste.id" from="${formulas}" optionKey="id"
-                                          optionValue="descripcion"
-                                          class="many-to-one span5 required"
-                                          value="${planillaInstance?.formulaPolinomicaReajuste?.id}"/>
-                                <span class="mandatory">*</span>
-
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <g:if test="${!esAnticipo}">
+                        %{--<g:if test="${!esAnticipo}">--}%
                             <div class="row">
                                 <div class="span2 formato">
                                     Periodo para el reajuste
@@ -318,13 +278,14 @@
                                 <div class="span4">
                                     <g:select name="periodoIndices.id"
                                               from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin', order: 'desc', max: 20])}"
-                                              class="span4"
-                                              optionKey="id" style="width: 100%"></g:select>
+                                              class="span4" optionKey="id" style="width: 100%" value="${planillaInstance.periodoIndices?.id}"></g:select>
                                 </div>
                             </div>
-                        </g:if>
-                        <g:else>
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
                         %{--<g:if test="${planillaInstance.tipoPlanilla?.codigo=='A'}">--}%
+
+%{--
                             <div class="row">
                                 <div class="span2 formato">
                                     Periodo para el reajuste
@@ -337,9 +298,30 @@
                                               value="${planillaInstance?.periodoIndices?.id}"></g:select>
                                 </div>
                             </div>
+--}%
+
                         %{--</g:if>--}%
-                        </g:else>
-                        <g:if test="${!esAnticipo}">
+                        %{--</g:else>--}%
+
+                        <g:if test="${!(esAnticipo || planillaInstance?.tipoPlanilla?.codigo == 'A')}">
+
+                            <div class="row">
+                                <div class='span2 formato'>
+                                    Fórmula Polinómica a utilizar
+                                </div>
+
+                                <div class="span6">
+                                    <g:select id="formulaPolinomicaReajuste" name="formulaPolinomicaReajuste.id" from="${formulas}" optionKey="id"
+                                              optionValue="descripcion"
+                                              class="many-to-one span5 required"
+                                              value="${planillaInstance?.formulaPolinomicaReajuste?.id}"/>
+                                    <span class="mandatory">*</span>
+
+                                    <p class="help-block ui-helper-hidden"></p>
+                                </div>
+                            </div>
+
+
                             <div class="row hide" style="margin-bottom: 10px;" id="divMultaDisp">
                                 <div class='span2 formato'>
                                     Multa por no acatar las disposiciones del fiscalizador

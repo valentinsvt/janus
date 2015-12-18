@@ -56,13 +56,6 @@
 
         <div class="row">
             <div class="span12" role="navigation">
-            %{--
-                            <g:if test="${ultimaAvance &&
-                                    ultimaAvance.fechaFin &&
-                                    prej[0] &&
-                                    prej[0]?.fechaFin &&
-                                    ultimaAvance?.fechaFin >= prej[0]?.fechaFin}">
-            --}%
                 <g:if test="${liquidacion}">
                     <div class="btn-group">
                         <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
@@ -134,9 +127,6 @@
                                 </g:if>
 
                             </td>
-                            %{--<td>--}%
-                            %{--${planillaInstance.estadoPlanilla?.nombre}--}%
-                            %{--</td>--}%
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
                             </td>
@@ -152,14 +142,6 @@
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>
                             <td>
-                            %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">--}%
-                            %{--<i class="icon-zoom-in icon-large"></i>--}%
-                            %{--</a>--}%
-                            %{--<g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo != 'A'}">--}%
-                            %{--<g:link action="" href="#" class="btn btn-small" rel="tooltip" id="${planillaInstance.id}" title="Editar">--}%
-                            %{--<i class="icon-pencil icon-large"></i>--}%
-                            %{--</g:link>--}%
-                            %{--</g:if>--}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
@@ -170,7 +152,6 @@
                                         </g:if>
                                     </g:if>
                                 </g:if>
-
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id: planillaInstance.id, contrato: planillaInstance.contrato.id]"
@@ -188,35 +169,16 @@
                                                 <i class="icon-gear"></i>
                                             </div>
                                         </g:if>
-                                    %{--
-                                                                        <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
-                                                                        <div data-id="${planillaInstance.id}" rel="tooltip" title="ProcesarQ" class="btn btn-small btnProcesaQ">
-                                                                             <i class="icon-gear"></i>
-                                                                        </div>
-                                                                        </g:if>
-                                    --}%
                                     </g:if>
                                 </g:if>
 
-                            %{--
-                                                            <g:link controller="planilla" action="procesar" id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small">
-                                                                <i class="icon-gear"></i>
-                                                            </g:link>
-                            --}%
-                            %{--
-                                                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
-                                                                <i class="icon-gear"></i>
-                                                            </div>
-                            --}%
-
-
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                    <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
+                                    <g:link controller="planilla2" action="resumen" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:if>
                                 <g:elseif test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']}">
-                                    <g:link controller="planilla2" action="avance" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
+                                    <g:link controller="planilla2" action="resumen" id="${planillaInstance.id}" fprj="${planillaInstance.formulaPolinomicaReajuste}" rel="tooltip" title="Resumen" class="btn btn-small">
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:elseif>
@@ -239,14 +201,7 @@
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
-                            %{--
-                                                            <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
-                                                                <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
-                                                                        class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                                                    <i class="icon-print"></i>
-                                                                </g:link>
-                                                            </g:if>
-                            --}%
+
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
                                     <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
@@ -257,35 +212,8 @@
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
-%{--
-                                <g:link controller="reajustePlanilla" action="index" id="${planillaInstance.id}" class="btn btn-small" rel="tooltip" title="Reajustar índices">
-                                    <i class="icon-trello"></i>
-                                </g:link>
---}%
-                            %{--<g:if test="${!planillaInstance.fechaOrdenPago}">--}%
-                            %{--<g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">--}%
-                            %{--<i class="icon-money icon-large"></i>--}%
-                            %{--</g:link>--}%
-                            %{--</g:if>--}%
-                            %{--<g:else>--}%
-                            %{--<g:if test="${!planillaInstance.fechaPago}">--}%
-                            %{--<g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Pagar" id="${planillaInstance.id}">--}%
-                            %{--<i class="icon-money icon-large"></i>--}%
-                            %{--</g:link>--}%
-                            %{--</g:if>--}%
-                            %{--<g:else>--}%
-                            %{--<g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Ver pago" id="${planillaInstance.id}">--}%
-                            %{--<i class="icon-money icon-large"></i>--}%
-                            %{--</g:link>--}%
-                            %{--</g:else>--}%
-                            %{--</g:else>--}%
-                            %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
-                            %{--<i class="icon-pencil icon-large"></i>--}%
-                            %{--</a>--}%
-                            %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
-                            %{--<i class="icon-trash icon-large"></i>--}%
-                            %{--</a>--}%
                             </td>
+
                             <td style="text-align: center;">
                                 <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C' || planillaInstance.tipoPlanilla.codigo == 'L'}">
                                     <g:set var="lblBtn" value="${-1}"/>
@@ -314,14 +242,6 @@
                                                     </a>
                                                 </g:if>
                                             </g:if>
-                                        %{--<a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
-                                        %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
-                                        %{--Enviar reajuste--}%
-                                        %{--</g:if>--}%
-                                        %{--<g:else>--}%
-                                        %{--Enviar planilla--}%
-                                        %{--</g:else>--}%
-                                        %{--</a>--}%
                                         </g:if>
                                         <g:if test="${lblBtn == 3 || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                             Pedir pago
@@ -355,9 +275,6 @@
                                     </g:if>
                                 </g:if>
                                 <g:else>
-                                %{--<div class="badge badge-important">--}%
-                                %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
-                                %{--</div>--}%
                                 </g:else>
                             </td>
                         </tr>
@@ -384,23 +301,6 @@
         </div>
 
 
-        %{--<div id="imprimirDialog">--}%
-
-        %{--<fieldset>--}%
-        %{--<div class="span4" style="margin-top: 10px">--}%
-
-        %{--Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>--}%
-
-        %{--</div>--}%
-
-        %{--<div class="span4" style="margin-top: 10px">--}%
-        %{--Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>--}%
-
-        %{--</div>--}%
-
-        %{--</fieldset>--}%
-        %{--</div>--}%
-
         <div id="errorImpresion">
             <fieldset>
                 <div class="spa3" style="margin-top: 30px; margin-left: 10px">
@@ -410,7 +310,6 @@
                 </div>
             </fieldset>
         </div>
-
 
 
         <script type="text/javascript">
@@ -434,17 +333,11 @@
                 });
 
                 $(".btnPedidoPagoAnticipo").click(function () {
-                    %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
-                    %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
-                    %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
-                    %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
                     location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPagoAnticipo')}/" + $(this).data("id");
                     return false;
                 });
 
                 $(".btnPedidoPago").click(function () {
-                    %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
-                    %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
                     location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPago')}/" + $(this).data("id");
                     return false;
                 });
@@ -468,20 +361,6 @@
                                 return false;
                             });
                             $("#modalTitle").html($btn.text());
-//                            switch (tipo) {
-//                                case "2":
-//                                    $("#modalTitle").html("Enviar reajuste");
-//                                    break;
-//                                case "3":
-//                                    $("#modalTitle").html("Pedir pago");
-//                                    break;
-//                                case "4":
-//                                    $("#modalTitle").html("Informar pago");
-//                                    break;
-//                                case "5":
-//                                    $("#modalTitle").html("Iniciar obra");
-//                                    break;
-//                            }
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
 
@@ -639,44 +518,7 @@
 
                 });
 
-                %{--$("#imprimirDialog").dialog({--}%
-
-                %{--autoOpen  : false,--}%
-                %{--resizable : false,--}%
-                %{--modal     : true,--}%
-                %{--draggable : false,--}%
-                %{--width     : 420,--}%
-                %{--height    : 280,--}%
-                %{--position  : 'center',--}%
-                %{--title     : 'Datos del documento a ser impreso',--}%
-                %{--buttons   : {--}%
-                %{--"Aceptar"  : function () {--}%
-
-                %{--if ($("#oficio").val()) {--}%
-
-                %{--location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()--}%
-
-                %{--$("#imprimirDialog").dialog("close")--}%
-
-                %{--} else {--}%
-
-                %{--$("#errorImpresion").dialog("open")--}%
-
-                %{--}--}%
-
-                %{--},--}%
-                %{--"Cancelar" : function () {--}%
-
-                %{--$("#imprimirDialog").dialog("close")--}%
-
-                %{--}--}%
-
-                %{--}--}%
-
-                %{--})--}%
-
                 $("#errorImpresion").dialog({
-
                     autoOpen  : false,
                     resizable : false,
                     modal     : true,
@@ -687,14 +529,10 @@
                     title     : 'Error',
                     buttons   : {
                         "Aceptar" : function () {
-
                             $("#errorImpresion").dialog("close")
-
                         }
                     }
-
                 });
-
             });
 
         </script>
