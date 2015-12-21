@@ -22,6 +22,7 @@ class Shield {
             session.finalize()
             return false
         } else {
+
 //                return true
 
 
@@ -41,7 +42,6 @@ class Shield {
         if (session.valida) {
             try {
                 if (request.method == "POST") {
-//                println "es post no audit"
                     return true
                 }
 //            println "is allowed Accion: ${actionName.toLowerCase()} ---  Controlador: ${controllerName.toLowerCase()} --- Permisos de ese controlador: "+session.permisos[controllerName.toLowerCase()]

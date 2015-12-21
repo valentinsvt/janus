@@ -2080,7 +2080,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
     /** llamar con parametro de fprj.id */
     def resumen() {
-        println "resumen de planillas.."
+        println "resumen de planillas.. params: $params"
         def planilla = Planilla.get(params.id)
         def rjpl
         if(params.fprj) {
@@ -2089,7 +2089,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
             rjpl = ReajustePlanilla.findAllByPlanilla(planilla).first()
         }
 
-        //***************************** B0 ****************************
+        //***************************** B0 **************************** //anticipo
+
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
         def titulos = tbBo.pop()
         println "---- titulos: $titulos"

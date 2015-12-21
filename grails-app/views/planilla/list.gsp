@@ -123,13 +123,13 @@
                     </g:link>
                 </g:if>
                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                    <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip"
+                    <g:link controller="planilla2" action="resumen" id="${planillaInstance.id}" rel="tooltip"
                             title="Resumen" class="btn btn-small">
                         <i class="icon-table icon-large"></i>
                     </g:link>
                 </g:if>
                 <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
-                    <g:link controller="planilla2" action="avance" id="${planillaInstance.id}" rel="tooltip"
+                    <g:link controller="planilla2" action="resumen" id="${planillaInstance.id}" fprj="${planillaInstance.formulaPolinomicaReajuste}" rel="tooltip"
                             title="Resumen" class="btn btn-small">
                         <i class="icon-table icon-large"></i>
                     </g:link>

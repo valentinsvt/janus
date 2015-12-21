@@ -126,7 +126,7 @@ class PlanillasService {
     /* arma la tabla Bo para la planilla reajustada plnl con FP=fprj
      * 1. carga los índices de la oferta y añade columnas para cada reajuste de la planilla */
     def armaTablaFr(plnl, fprj, tp) {
-//        println "arma tablaBo --1"
+        println "arma tablaFr --1"
         def cn = dbConnectionService.getConnection()
         def tblaBo = []
         def orden = 1
@@ -135,7 +135,7 @@ class PlanillasService {
         def sql = "select prindscr, cntrpcan from prin, rjpl, cntr, plnl " +
                 "where rjpl.plnl__id = ${plnl} and rjplprdo = 0 and plnl.plnl__id = rjpl.plnl__id and " +
                 "cntr.cntr__id = plnl.cntr__id and prin.prin__id = cntr.prin__id"
-//        println "sql armaIndices****: $sql"
+        println "sql armaIndices****: $sql"
         cn.eachRow(sql.toString()) {d ->
             titulos.add(d.prindscr)   //fecha de indices anticipo
             pcan = d.cntrpcan
@@ -144,9 +144,9 @@ class PlanillasService {
         sql = "select rjpl__id, prindscr, rjplprdo from rjpl, plnl, prin " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
                 "prin.prin__id = rjpl.prin__id order by rjpl.plnlrjst"
-//        println "sql armaTablaBo: $sql"
+        println "sql armaTablaBo: $sql"
         cn.eachRow(sql.toString()) {rj ->
-//            println "arma tablaBo --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
+            println "arma tablaBo --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
             if(rj.rjplprdo == 0) {
                 tblaBo = armaIndices(rj.rjpl__id, tp)
                 tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
@@ -159,8 +159,8 @@ class PlanillasService {
                 titulos.add(rj.prindscr)
                 orden++
             }
-//            println "tablaBo: $tblaBo"
-//            println "titulos: $titulos"
+            println "tablaBo: $tblaBo"
+            println "titulos: $titulos"
         }
         cn.close()
 //        def cb = cabeceraBo(tblaBo, plnl)
