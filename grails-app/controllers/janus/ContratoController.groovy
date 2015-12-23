@@ -1218,9 +1218,9 @@ class ContratoController extends janus.seguridad.Shield {
     // copia true: copia FP de la obra, false, ya existe FP contractual
     def copiaFpDesdeObra(cntr, copia) {
         def fpReajuste = FormulaPolinomicaReajuste.findByContrato(cntr)
+        def tipo = TipoFormulaPolinomica.get(1)
 
         if(fpReajuste == null){
-            def tipo = TipoFormulaPolinomica.get(1)
             def fprj = new FormulaPolinomicaReajuste(contrato: cntr,
                     tipoFormulaPolinomica: tipo,
                     descripcion: "Fórmula polinómica del contrato principal")
@@ -1238,7 +1238,7 @@ class ContratoController extends janus.seguridad.Shield {
                 if (it.valor > 0) {
                     def frpl = new FormulaPolinomicaContractual()
                     frpl.valor = it.valor
-                    frpl.contrato = contrato
+                    frpl.contrato = cntr
                     frpl.indice = it.indice
                     frpl.tipoFormulaPolinomica = tipo
                     frpl.numero = it.numero

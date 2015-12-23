@@ -4098,7 +4098,6 @@ class PlanillaController extends janus.seguridad.Shield {
         def contrato = Contrato.get(params.contrato)
 
         def obra = contrato.obra
-        /* SI la obra **_OF existe, se deben tomar los valores de VLOB de **_OF */
 
         def detalle = [:]
         def fpsp = FormulaSubpresupuesto.findAllByReajuste(planilla.formulaPolinomicaReajuste)
@@ -4106,12 +4105,10 @@ class PlanillaController extends janus.seguridad.Shield {
         fpsp.each {
             sbpr.add(it.subPresupuesto)
         }
+        println "subpresupuestos de la obra con esta FP: $sbpr"
         detalle = VolumenesObra.findAllByObraAndSubPresupuestoInList(obra, sbpr, [sort: "orden"])
 
         def precios = [:]
-//        def indirecto = obra.totales / 100
-
-//        preciosService.ac_rbroObra(obra.id)
 
         detalle.each {
 //            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
@@ -4163,7 +4160,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println codigoPerfil
 //        println editable
 
-        return [planilla           : planilla, detalle: detalle, precios: precios, obra: obra,
+        return [planilla: planilla, detalle: detalle, precios: precios, obra: obra,
                 planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
 
