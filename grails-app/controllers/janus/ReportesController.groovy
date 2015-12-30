@@ -2154,8 +2154,7 @@ class ReportesController {
 
 
     def reporteDocumentosObra() {
-
-//        println("*****--->" + params)
+        println "*****--->reporteDocumentosObra: $params"
 
         def cd
         def auxiliar = janus.Auxiliar.get(1);
@@ -2439,12 +2438,15 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph((obra?.inspector?.titulo ?: '')+ ' ' + obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
 
+        println "coordenadas: ${obra?.coordenadas}"
         PdfPTable tablaCoordenadas = new PdfPTable(3);
         tablaCoordenadas.setWidthPercentage(100);
         tablaCoordenadas.setWidths(arregloEnteros([17, 3, 72]))
-        addCellTabla(tablaCoordenadas, new Paragraph("Coordenadas", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaCoordenadas, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaCoordenadas, new Paragraph(obra?.coordenadas, times8normal), prmsHeaderHoja)
+        if(obra?.coordenadas != "S 0 0 W 0 0") {
+            addCellTabla(tablaCoordenadas, new Paragraph("Coordenadas", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCoordenadas, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCoordenadas, new Paragraph(obra?.coordenadas, times8normal), prmsHeaderHoja)
+        }
 
         PdfPTable tablaReferencia = new PdfPTable(3);
         tablaReferencia.setWidthPercentage(100);
@@ -5342,8 +5344,13 @@ class ReportesController {
         addCellTabla(tablaHeader, new Paragraph("Parroquia : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.parroquia?.nombre, times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaHeader, new Paragraph("Coordenadas : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph(obra?.coordenadas, times10normal), prmsHeaderHoja)
+        if(obra?.coordenadas != "S 0 0 W 0 0") {
+            addCellTabla(tablaHeader, new Paragraph("Coordenadas : ", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaHeader, new Paragraph(obra?.coordenadas, times10normal), prmsHeaderHoja)
+        } else {
+            addCellTabla(tablaHeader, new Paragraph("", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaHeader, new Paragraph("", times10normal), prmsHeaderHoja)
+        }
         addCellTabla(tablaHeader, new Paragraph("Fecha: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(printFecha(obra?.fechaOficioSalida).toUpperCase(), times10normal), prmsHeaderHoja)
 

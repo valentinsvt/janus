@@ -6,6 +6,7 @@ import janus.ejecucion.ValorIndice
 import janus.ejecucion.ValorReajuste
 
 class PlanillasService {
+    def preciosService
     def dbConnectionService
 
     def calculaValores(PeriodoPlanilla periodo, cs, ps, pcs, obra, anticipo) {
@@ -124,50 +125,80 @@ class PlanillasService {
     }
 
     /* arma la tabla Bo para la planilla reajustada plnl con FP=fprj
-     * 1. carga los índices de la oferta y añade columnas para cada reajuste de la planilla */
+     * 1. carga los índices de la oferta y añade columnas para cada reajuste de la planilla
+     * tp: 'c' para cuadrilla tipo y 'p' para FP */
     def armaTablaFr(plnl, fprj, tp) {
-        println "arma tablaFr --1"
+        println "arma tablaFr plnl: $plnl, fprj: $fprj, tp: $tp"
         def cn = dbConnectionService.getConnection()
         def tblaBo = []
+        def sql = ""
         def orden = 1
-        def pcan = 0
-        def titulos = ["OFERTA"]
-        def sql = "select prindscr, cntrpcan from prin, rjpl, cntr, plnl " +
-                "where rjpl.plnl__id = ${plnl} and rjplprdo = 0 and plnl.plnl__id = rjpl.plnl__id and " +
-                "cntr.cntr__id = plnl.cntr__id and prin.prin__id = cntr.prin__id"
-        println "sql armaIndices****: $sql"
-        cn.eachRow(sql.toString()) {d ->
-            titulos.add(d.prindscr)   //fecha de indices anticipo
-            pcan = d.cntrpcan
-        }
+        /* Oferta y fecha de oferta */
+        def titulos = tituloSuperior(plnl, fprj)
 
         sql = "select rjpl__id, prindscr, rjplprdo from rjpl, plnl, prin " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
-                "prin.prin__id = rjpl.prin__id order by rjpl.plnlrjst"
-        println "sql armaTablaBo: $sql"
+                "prin.prin__id = rjpl.prin__id order by rjpl.rjplprdo"
+//        println "sql armaTablaFr: $sql"
         cn.eachRow(sql.toString()) {rj ->
-            println "arma tablaBo --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
+//            println "arma tablaFr --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
             if(rj.rjplprdo == 0) {
                 tblaBo = armaIndices(rj.rjpl__id, tp)
                 tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
-                titulos.add("ANTICIPO ${pcan}%")
-                titulos.add(rj.prindscr)
                 orden++
             }  else {
                 tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
-                titulos.add("AVANCE")
-                titulos.add(rj.prindscr)
                 orden++
             }
-            println "tablaBo: $tblaBo"
-            println "titulos: $titulos"
+//            println "tablaBo: $tblaBo"
+//            println "titulos: $titulos"
         }
         cn.close()
 //        def cb = cabeceraBo(tblaBo, plnl)
-//        println "cabecera: $titulos"
-        tblaBo.add(titulos)
+        tblaBo.add(titulos[0])
+        tblaBo.add(titulos[1])
         tblaBo  //retorna tabla armada
     }
+
+    /* Oferta y fecha de oferta, tipo planilla y fecha de presentación */
+    def tituloSuperior(plnl, fprj){
+        def cn = dbConnectionService.getConnection()
+        def titlSuperior = ["OFERTA"]
+        def titlIndices = ["", ""]
+        def pcan
+        def sql = "select inof.prindscr prin__of, inpl.prindscr prin__pl, cntrpcan, plnlfcpr from prin inof, prin inpl, rjpl, cntr, plnl " +
+                "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
+                "cntr.cntr__id = plnl.cntr__id and inof.prin__id = cntr.prin__id and inpl.prin__id = rjpl.prin__id limit 1"
+//        println "sql tituloSuperior: $sql"
+        cn.eachRow(sql.toString()) {d ->
+            titlSuperior.add(d.prin__of)
+            pcan = d.cntrpcan
+        }
+
+        sql = "select rjpl__id, prindscr, rjplprdo, rjpl_mes, plnlfcpr, plnlfcpg from rjpl, plnl, prin " +
+                "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnlrjst and " +
+                "prin.prin__id = rjpl.prin__id order by rjpl.rjplprdo"
+//        println "sql titulos y fechas: $sql"
+        cn.eachRow(sql.toString()) {rj ->
+//            println "arma tablaFr --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
+            if(rj.rjplprdo == 0) {
+                titlSuperior.add("ANTICIPO ${pcan}%")
+                titlSuperior.add("${rj.plnlfcpg? preciosService.componeMes(rj.plnlfcpg.format('MMM-yyyy')) : preciosService.componeMes(rj.plnlfcpr.format('MMM-yyyy'))}")
+                titlIndices.add("${rj.plnlfcpg? "Pago: ${rj.plnlfcpg}" : 'Sin Pago'}")
+                titlIndices.add("Indices: ${rj.prindscr}")
+            }  else {
+                titlSuperior.add("AVANCE")
+                titlSuperior.add("${rj.rjpl_mes}")
+                titlIndices.add("${rj.plnlfcpg? "Pago: ${rj.plnlfcpg}" : 'Sin Pago'}")
+                titlIndices.add("Indices: ${rj.prindscr}")
+            }
+        }
+        cn.close()
+//        println "titlSuperior: $titlSuperior"
+//        println "titlIndices:  $titlIndices"
+        [titlSuperior, titlIndices]
+    }
+
 
     /* arma indices coeficientes y valores de oferta, retorna lista de Bo */
     def armaIndices(rjpl, tp) {
@@ -218,7 +249,7 @@ class PlanillasService {
                 "from rjpl, plnl, tppl, plnl rj " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
                 "rj.plnl__id = rjpl.plnlrjst and tppl.tppl__id = rj.tppl__id order by rjpl.rjplprdo"
-        println "sql armaTablaPo: $sql"
+//        println "sql armaTablaPo: $sql"
         cn.eachRow(sql.toString()) {rj ->
             tblaPo.add([tipo: rj.tppldscr, mes: rj.rjpl_mes, crpa: rj.rjplcrpa, crac: rj.rjplcrac, plpa: rj.rjplplpa,
               plac: rj.rjplplac, po: rj.rjplvlpo])
@@ -228,12 +259,12 @@ class PlanillasService {
     }
 
     def reajusteAnterior(plnl, fprj) {
-        println "arma reajsute anterior de plnl: $plnl"
+//        println "arma reajsute anterior de plnl: $plnl"
         def cn = dbConnectionService.getConnection()
         def sql = "select sum(rjplvlor) suma from rjpl where plnl__id = (select plnlrjst from rjpl " +
                 "where plnl__id = ${plnl} and  plnlrjst < plnl__id and rjpl.fprj__id = ${fprj} " +
                 "order by plnlrjst desc limit 1) and rjpl.fprj__id = ${fprj}"
-        println "sql reajusteAnterior: $sql"
+//        println "sql reajusteAnterior: $sql"
         def valor = cn.rows(sql.toString())[0].suma
         if(!valor) return 0
         return valor

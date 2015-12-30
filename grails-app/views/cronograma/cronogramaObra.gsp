@@ -72,10 +72,7 @@
                     %{--<i class="icon-bar-chart"></i>--}%
                     %{--Gráfico de avance físico--}%
                     %{--</a>--}%
-                    <a href="#" id="btnReporte" class="btn">
-                        <i class="icon-print"></i>
-                        Imprimir
-                    </a>
+                    <a href="#" id="btnReporte" class="btn"><i class="icon-print"></i>Imprimir</a>
                 </div>
             </g:if>
         </div>

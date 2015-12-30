@@ -67,4 +67,8 @@ class ReajustePlanilla {
         fpReajuste(blank:true, nullable: true)
     }
 
+    String toString() {
+        this.fpReajuste.descripcion
+    }
+
 }

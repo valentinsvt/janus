@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 12/6/12
-  Time: 3:11 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -15,8 +7,6 @@
 
     <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
 
-
-
     <style type="text/css">
 
     .texto {
@@ -25,22 +15,15 @@
     }
 
     .aparecer {
-
         display : none;
-
     }
 
     .error {
-
         color       : #ff072f;
         margin-left : 140px;
-
     }
 
-
-
     </style>
-
 
     <title>Formato de Impresión</title>
 </head>
@@ -72,15 +55,12 @@
 <div style='page-break-after: auto'></div>
 
 <div id="tabs" style="width: 800px; height: 1060px">
-
     <ul>
-
         <li><a href="#tab-presupuesto">Presupuesto</a></li>
         <li><a href="#tab-memorando">Memorando</a></li>
         <li><a href="#tab-polinomica">F. Polinómica</a></li>
         <li><a href="#tab-memorandoPresu">Adm. Directa/Cogestión</a></li>
         <li><a href="#tab-textosFijos">Textos Fijos</a></li>
-
     </ul>
 
     <div id="tab-presupuesto" class="tab">
@@ -2034,21 +2014,18 @@
     $("#btnImprimir").click(function () {
         if (!$(this).hasClass("disabled")) {
             reajusteMemo = $("#reajusteMemo").val()
-
             //////console.log("Memo:" + reajusteMemo)
 
             var active = $("#tabs").tabs("option", "active");
+            console.log("activo:" + active)
             if (active == 0) {
 
                 var idCoordinador = $("#coordinador").val()
-
                 var idFirmaCoor
 
                 if (idCoordinador != null) {
-
                     idFirmaCoor = $("#coordinador").val()
                 } else {
-
                     idFirmaCoor = ''
                 }
 
@@ -2060,15 +2037,12 @@
                         $("#firmasFijasPresu").children("tr").each(function (i) {
                             if ($(this).data("id")) {
                                 if (firmasFijas != '') {
-
                                     firmasFijas += ','
                                 } else {
                                     firmasFijas += '-1,'
                                 }
                                 firmasFijas += $(this).data("id")
-
                             }
-
                         });
 //           //console.log("1:" + firmasFijas)
 
@@ -2080,11 +2054,8 @@
                     forzarValue = 2;
                 }
                 if (1 != 1) {
-
                     $("#tipoReporteDialog").dialog("open");
-
                 } else {
-
                     proyeccion = $("#proyeccionReajuste").is(':checked');
                     reajusteIva = $("#reajusteIva").is(':checked');
                     reajusteMeses = $("#mesesReajuste").val();
@@ -2093,13 +2064,11 @@
 
                     if ($(".uno").is(':checked')) {
                         tipoReporte = 1
-
                     } else {
                         tipoReporte = 2
                     }
 
                     $.ajax({
-
                         type    : "POST",
                         url     : "${createLink(controller: 'nota', action: 'saveNota')}",
                         data    : {
@@ -2217,14 +2186,11 @@
                 firmasFijasFormu = [];
 
                 var idCoordinador = $("#coordinador").val()
-
                 var idFirmaCoor
 
                 if (idCoordinador != null) {
-
                     idFirmaCoor = $("#coordinador").val()
                 } else {
-
                     idFirmaCoor = ''
                 }
 

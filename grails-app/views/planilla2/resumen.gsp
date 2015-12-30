@@ -1,16 +1,18 @@
 <%@ page import="janus.Grupo" %>
 <!doctype html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="main">
     <title>
         Cálculo de B0 y P0
     </title>
+%{--
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
     <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
+--}%
 
     <style type="text/css">
     th {
@@ -62,25 +64,8 @@
     </div>
 </g:if>
 
-%{--<g:if test="${alertas != ''}">--}%
-%{--<div class="alert alert-warning alert-block">--}%
-%{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
-
-%{--<h3>Se han generado alertas al generar la planilla</h3>--}%
-%{--${alertas}--}%
-%{--</div>--}%
-%{--</g:if>--}%
-%{--<g:if test="${errores != ''}">--}%
-%{--<div class="alert alert-error alert-block">--}%
-%{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
-
-%{--<h3>Han ocurrido errores graves al generar la planilla</h3>--}%
-%{--${errores}--}%
-%{--</div>--}%
-%{--</g:if>--}%
-
 <div class="row" style="margin-bottom: 10px;">
-    <div class="span12 btn-group" role="navigation">
+    <div class="span5 btn-group" role="navigation">
         <g:link controller="contrato" action="verContrato" params="[contrato: planilla.contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
             <i class="icon-double-angle-left"></i>
             Contrato
@@ -89,20 +74,26 @@
             <i class="icon-angle-left"></i>
             Planillas
         </g:link>
-    %{--<a href="#" class="btn btn-ajax btn-new" id="btnImprimir" title="Imprimir">--}%
-    %{--<i class="icon-print"></i>--}%
-    %{--Imprimir--}%
-    %{--</a>--}%
-        %{--<g:link controller="reportesPlanillas2" action="reportePlanilla" id="${planilla.id}" class="btn  btn-ajax" rel="tooltip" title="Imprimir">--}%
+
         <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planilla.id}" class="btn  btn-ajax" rel="tooltip" title="Imprimir">
             <i class="icon-print"></i> Imprimir
         </g:link>
-    %{--<a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">--}%
-    %{--<i class="icon-table"></i>--}%
-    %{--Excel--}%
-    %{--</a>--}%
+
+
     </div>
+    <g:set var="anticipoVarios" value="${(janus.ejecucion.ReajustePlanilla.findAllByPlanilla(planilla).size() > 1) && (planilla.tipoPlanilla.codigo == 'A')}"/>
+    <g:if test="${anticipoVarios}">
+        Reajuste con la fórmula:
+        <g:select name="reajuste" from="${janus.ejecucion.ReajustePlanilla.findAllByPlanilla(planilla)}" optionKey="id"
+                  id="reajustePl" class="span4" title="Rejustes adicionales" value="${params.rjpl}"/>
+        <button id="verReajuste" style="height: 30px; margin-top: -10px;">Ver Reajuste</button>
+    </g:if>
 </div>
+
+<g:if test="${anticipoVarios}">
+    <h5 style="width: 100%; text-align: center; font-family: 'Bookman', 'Georgia', 'Times New Roman', 'serif'">
+        Planilla del Anticipo reajustada con la Fórmula Polinómica: "${formula}"</h5>
+</g:if>
 
 <elm:headerPlanilla planilla="${planilla}"/>
 
@@ -205,6 +196,12 @@
     })
     $("#btnImprimir").click(function () {
         $("#dlg_reporte").dialog("open")
+    });
+
+    $("#verReajuste").click(function(){
+        var rj = $("#reajustePl").val();
+        var url = "${createLink(action:'resumen')}?id=${planilla.id}&rjpl=" + rj;
+        location.href = url;
     });
 </script>
 

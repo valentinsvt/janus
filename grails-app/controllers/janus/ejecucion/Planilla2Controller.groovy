@@ -2083,31 +2083,45 @@ class Planilla2Controller extends janus.seguridad.Shield {
         println "resumen de planillas.. params: $params"
         def planilla = Planilla.get(params.id)
         def rjpl
+        def formula
         if(params.fprj) {
             rjpl = ReajustePlanilla.findAllByPlanillaAndFpReajuste(planilla, FormulaPolinomicaReajuste.get(params.fprj))
+        } else if(params.rjpl) {
+            rjpl = ReajustePlanilla.get(params.rjpl)
+            formula = rjpl.fpReajuste.descripcion
         } else {
             rjpl = ReajustePlanilla.findAllByPlanilla(planilla).first()
+//            println "pone valor en params.rjpl a: ${rjpl.id}"
+            params.rjpl = rjpl.id
+            formula = rjpl.fpReajuste.descripcion
         }
+
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla, [sort: "periodo", order: "asc"])
 
         //***************************** B0 **************************** //anticipo
 
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
+        def titlIndices = tbBo.pop()
         def titulos = tbBo.pop()
-        println "---- titulos: $titulos"
-
-        def totlFr = []
+        println "resumen titulos: $titulos"
 
         def tablaBo = "<table class=\"table table-bordered table-striped table-condensed table-hover\">"
-        tablaBo += "<thead><tr><th colspan=\"2\">Cuadrilla Tipo</th>"
+        def tr1 = "<thead><tr><th colspan='2'>Cuadrilla Tipo</th>"
+        def tr2 = "<tr><th colspan='2'></th>"
         def separador = "nb"
         for(i in 0..titulos.size()-1){
             separador = separador == "nb" ? "" : "nb"
-            tablaBo += "<th ${(separador == 'nb') ? 'class = \'nb\'' : ''}  > ${titulos[i]}</th>"
+            tr1 += "<th ${(separador == 'nb') ? 'class = \'nb\'' : ''}  > ${titulos[i]}</th>"
+            tr2 += "<th ${(separador == 'nb') ? 'class = \'nb\'' : ''}  > ${titlIndices[i]}</th>"
         }
 
         def coeficientes = 0.0
         def totalIndiceOferta = 0.0
         def totalAvance = []
+
+
+        tablaBo += tr1 + "</tr>" + tr2
+
 
         tablaBo += "</tr>"
         tablaBo += "</thead>"
@@ -2160,7 +2174,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         tablaP0 += '<tbody><tr>'
 
         def tbPo = planillasService.armaTablaPo(rjpl.planilla.id, rjpl.fpReajuste.id)
-        println "tbPo[0]---: ${tbPo[0].size()}, ${tbPo}"
+//        println "tbPo[0]---: ${tbPo[0].size()}, ${tbPo}"
 
         for(i in 0..tbPo.size()-1 ){
             if(tbPo[i].tipo.indexOf(' ') > 0) {
@@ -2185,32 +2199,38 @@ class Planilla2Controller extends janus.seguridad.Shield {
         //////////////////////////////////////////////*****************FR*********************************/////////////////
 
         def tbFr = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'p')
-        def titulosFr = tbFr.pop()
+        tbFr.pop()  // elimina los titulos de indices
+        tbFr.pop()  // elimina los titulos
 
-        def tr1 = "<tr>"
-        def tr2 = "<tr>"
         def tr3 = "<tr>"
         def tablaFr = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='margin-top:10px;'>"
         tablaFr += '<thead>'
         tr1 = '<tr>'
-        tr1 += '<th rowspan="2">Componentes</th>'
+        tr2 = '<tr><th></th>'
+        tr1 += '<th>Fórmula Polinómica - Componentes</th>'
 
-        def tdRowSpan = "<th colspan='${titulosFr.size()/2}'>Periodo de variación y aplicación de fórmula polinómica</th>"
-        println "$titulosFr, size:${titulosFr.size()} 0... ${titulosFr.size()/2 - 1}"
+//        def tdRowSpan = "<th colspan='${titulos.size()/2}'>Periodo de variación y aplicación de fórmula polinómica</th>"
+//        println "$titulosFr, size:${titulosFr.size()} 0... ${titulosFr.size()/2 - 1}"
+/*
+        for(i in 0..titulos.size()-1){
+            separador = separador == "nb" ? "" : "nb"
+            tr1 += "<th ${(separador == 'nb') ? 'class = \'nb\'' : ''}  > ${titulos[i]}</th>"
+            tr2 += "<th ${(separador == 'nb') ? 'class = \'nb\'' : ''}  > ${titlIndices[i]}</th>"
+        }
+*/
 
-        for(i in 0..(titulosFr.size()/2 - 1)){
-            if(i == 0){
-                tr1 += "<th>${titulosFr[i]}</th>"
-                tr2 += "<th>${titulosFr[2*i+1]}</th>"
-            } else {
-                tr1 += tdRowSpan
-                tdRowSpan = ""
-                tr2 += "<th>${titulosFr[2*i]}<br>${titulos[2*i+1]}</th>"
-            }
+
+        for(i in (0..(titulos.size() - 1)).step(2)){
+            separador = separador == "nb" ? "" : "nb"
+            tr1 += "<th>${titulos[i]},   ${titulos[i+1]}</th>"
+            tr2 += "<th>${titlIndices[i]} &nbsp;&nbsp; ${titlIndices[i+1]}</th>"
         }
 
         tr1 += "</tr>"
         tr2 += "</tr>"
+
+        println "... tr1: $tr1"
+        println "... tr2: $tr2"
 
         tablaFr += tr1 + tr2
         tablaFr += "</thead>"
@@ -2229,11 +2249,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
         }
 
-        for(i in 0..planillas-1){
-            totlFr.add([total: total[i], po: tbPo[i].po])
-        }
-
-        println "valores totales: $totlFr, planillas: $planillas"
 
         tablaFr += "</tbody>"
 
@@ -2251,16 +2266,12 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         def reajusteTotal = 0
 
-        def fr1 = 0.0
-        def fr = 0.0
         for (i in 0..planillas-1){
-            fr1 = (totlFr[i].total - 1).toDouble().round(3)
-            fr = totlFr[i].total.toDouble().round(3)
-            tr1 += "<th class='number'>${numero(fr,3)}</th>"
-            tr2 += "<th class='number'>${numero(fr1,3)}</th>"
-            tr3 += "<th class='number'>${numero(totlFr[i].po, 2)}</th>"
-            reajusteTotal += (totlFr[i].po * fr1).round(2)
-            tr4 += "<th class='number'>${numero((totlFr[i].po * fr1).round(2), 2)}</th>"
+            tr1 += "<th class='number'>${numero(reajustesPlanilla[i].factor)}</th>"
+            tr2 += "<th class='number'>${numero(reajustesPlanilla[i].factor - 1)}</th>"
+            tr3 += "<th class='number'>${numero(reajustesPlanilla[i].valorPo, 2)}</th>"
+            reajusteTotal += reajustesPlanilla[i].valorReajustado
+            tr4 += "<th class='number'>${numero(reajustesPlanilla[i].valorReajustado, 2)}</th>"
         }
 
         def anterior = planillasService.reajusteAnterior(rjpl.planilla.id, rjpl.fpReajuste.id)
@@ -2281,7 +2292,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def pMl
         def tablaMlFs
         def tablaMl
-        println "multas ..... $multaPlanilla"
+//        println "multas ..... $multaPlanilla"
 
         if(multaPlanilla.size() > 0){
             multaPlanilla.each { mt ->
@@ -2347,7 +2358,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         }
 
-        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, pMl: pMl, tablaMl: tablaMl, tablaMlFs: tablaMlFs ]
+        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, pMl: pMl, tablaMl: tablaMl,
+         tablaMlFs: tablaMlFs, formula: formula, params: params]
     }
 
 

@@ -346,8 +346,7 @@ class ContratoController extends janus.seguridad.Shield {
             }
 
             fp.each {
-                if (it.valor > 0) {
-                    def frpl = new FormulaPolinomicaContractual()
+                if (it.valor > 0) ()def frpl = new FormulaPolinomicaContractual()
                     frpl.valor = it.valor
                     frpl.contrato = contrato
                     frpl.indice = it.indice
