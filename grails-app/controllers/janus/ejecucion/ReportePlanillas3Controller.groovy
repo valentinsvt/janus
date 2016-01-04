@@ -7,9 +7,12 @@ import com.lowagie.text.Image
 import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.PdfContentByte
+import com.lowagie.text.pdf.PdfImportedPage
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
+import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.PdfWriter
+import com.lowagie.text.Rectangle
 import janus.Obra
 import janus.Parametros
 import janus.VolumenesObra
@@ -960,7 +963,7 @@ class ReportePlanillas3Controller {
         def valoresAnteriores = []
         def totalAnteriores = 0
 
-//        println("ultimo " + ultimoReajuste)
+        println("ultimo " + ultimoReajuste)
 
         if(reajustesPlanilla.size() > 1){
             reajustesPlanilla.each { pl ->
@@ -1732,6 +1735,12 @@ class ReportePlanillas3Controller {
         def planilla = Planilla.get(params.id)
         def rjpl = ReajustePlanilla.findAllByPlanilla(planilla)
         def reajustes = []
+        def pl = new ByteArrayOutputStream()
+        byte[] b
+        def pdfs = []  /** pdfs a armar en el nuevo documento **/
+        def contador = 0
+        def name = "reajustes_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+
         rjpl.each {rj ->
             reajustes.add([planilla: rj.planilla, reajuste: rj.fpReajuste])
         }
@@ -1741,19 +1750,42 @@ class ReportePlanillas3Controller {
 
         /* todo: hacer que se imprima el reporteTablas tantas veces como fprj hayan
         * crear nuevas FP en el contrato 24, igual que en la BD janus_prdc para probar */
-        def r1 = new ByteArrayOutputStream()
-        def r2 = new ByteArrayOutputStream()
+
+        println "reajustes: ${reajustes}"
         reajustes.each {
-            println "reporte 1"
-            r1 = reporteTablas(it.planilla, it.reajuste, 1)   //
-            sleep(1000)
-            println "reporte 2"
-            r2 = reporteTablas(it.planilla, it.reajuste, 2)   //
+            pl = reporteTablas(it.planilla, it.reajuste)
+            pdfs.add(pl.toByteArray())
+            contador++
         }
-        /*  todo: armar de los 2 pdf uno solo pdf */
-        byte[] b = r2.toByteArray();
+
+        if(contador > 1) {
+            def baos = new ByteArrayOutputStream()
+            Document document
+            document = new Document(PageSize.A4);
+
+            def pdfw = PdfWriter.getInstance(document, baos);
+            document.open();
+            PdfContentByte cb = pdfw.getDirectContent();
+
+            pdfs.each {f ->
+                PdfReader reader = new PdfReader(f);
+                for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+                    //nueva página
+                    document.newPage();
+                    //importa la página "i" de la fuente "reader"
+                    PdfImportedPage page = pdfw.getImportedPage(reader, i);
+                    //añade página
+                    cb.addTemplate(page, 0, 0);
+                }
+            }
+            document.close();
+            b = baos.toByteArray();
+        } else {
+            b = pl.toByteArray();
+        }
+
         response.setContentType("application/pdf")
-        response.setHeader("Content-disposition", "attachment; filename=xx")
+        response.setHeader("Content-disposition", "attachment; filename=${name}")
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
@@ -1761,15 +1793,17 @@ class ReportePlanillas3Controller {
     /**
      * Imprime B0, P0 y Fr de la planilla
      **/
-    def reporteTablas(planilla, fpReajuste, nn) {
-        println "reporteTablas de la planilla ${planilla.id} y fpReajuste: ${fpReajuste.id}"
+    def reporteTablas(planilla, fpReajuste) {
+//        println "reporteTablas de la planilla ${planilla.id} y fpReajuste: ${fpReajuste.id}"
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
-        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla, [sort: "periodo", order: "asc"])
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndFpReajuste(planilla, fpReajuste, [sort: "periodo", order: "asc"])
+        def rjpl = reajustesPlanilla.first()
+        println "reajustesPlanilla: $reajustesPlanilla, Po: ${reajustesPlanilla.valorPo}"
 
         /* crea el PDF */
         def baos = new ByteArrayOutputStream()
-        def name = "planilla_${nn}" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        def name = "planilla_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
         Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
@@ -1866,15 +1900,6 @@ class ReportePlanillas3Controller {
 
         /* ********************************************* Tabla B0 *****************************************************/
 
-        def rjpl
-        if(params.fprj) {
-            rjpl = ReajustePlanilla.findAllByPlanillaAndFpReajuste(planilla, FormulaPolinomicaReajuste.get(params.fprj))
-        } else if(params.rjpl) {
-            rjpl = ReajustePlanilla.get(params.rjpl)
-        } else {
-            rjpl = ReajustePlanilla.findAllByPlanilla(planilla).first()
-            params.rjpl = rjpl.id
-        }
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
         def titlIndices = tbBo.pop()
         def titulos = tbBo.pop()
@@ -1984,6 +2009,7 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaP0, new Paragraph("Valor P0", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, rowspan: 2])
 
         def tbPo = planillasService.armaTablaPo(rjpl.planilla.id, rjpl.fpReajuste.id)
+//        def tbPo = planillasService.armaTablaPo(reajustesPlanilla.planilla.id, reajustesPlanilla.fpReajuste.id)
         def totCrono = 0
         def totPlan = 0
         def totlPo = 0

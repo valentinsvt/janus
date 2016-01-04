@@ -2096,7 +2096,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             formula = rjpl.fpReajuste.descripcion
         }
 
-        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla, [sort: "periodo", order: "asc"])
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndFpReajuste(planilla, rjpl.fpReajuste, [sort: "periodo", order: "asc"])
 
         //***************************** B0 **************************** //anticipo
 

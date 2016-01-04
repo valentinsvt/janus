@@ -196,9 +196,10 @@
 %{--
                         <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
                                 class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="ImprimirNuevo">
-                            <i class="icon-new"></i>
+                            <i class="icon-star-empty"></i>
                         </g:link>
 --}%
+
                     </g:if>
                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
                         <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}"
