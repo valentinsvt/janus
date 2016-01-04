@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 7/24/13
-  Time: 1:09 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -251,7 +243,7 @@
 
             function updateVal(tipo) {
 //                var indi = parseInt($("#thIndirectos").data("indi")) / 100;
-                var indi = ${contrato?.indirectos?:21/100}
+                var indi = ${contrato?.indirectos?:21}/100
                 var valorNoIva = parseFloat($.trim($("#txtValor").val()));
 
                 var valorIva = valorNoIva + (valorNoIva * iva);
