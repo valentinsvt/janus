@@ -398,7 +398,7 @@ class ReportesPlanillasController {
         PdfPTable tablaTotal = new PdfPTable(3);
         tablaTotal.setWidthPercentage(100);
         tablaTotal.setWidths(arregloEnteros([64, 9, 27]))
-        tablaTotal.setSpacingAfter(10f)
+        tablaTotal.setSpacingAfter(1f)
 
         addCellTabla(tablaTotal, new Paragraph("TOTAL OBRAS ADICIONALES", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaTotal, new Paragraph(numero(prctAdicional, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -406,6 +406,21 @@ class ReportesPlanillasController {
 
         document.add(tablaTotal)
         /* ************************************************************** FIN DIFERENCIA ****************************************************************************************************/
+
+
+        /*--------- firmas -------*/
+        def tablaFirmas = new PdfPTable(1);
+        tablaFirmas.setWidthPercentage(30);
+        def fiscalizador = contrato.fiscalizador
+        def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
+
+        addCellTabla(tablaFirmas, new Paragraph("", fontTd), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaFirmas, new Paragraph(strFiscalizador, fontThHeader), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        println "document.properties: ${document.properties}"
+
+        document.add(tablaFirmas)
+        /*---- fin de firmas -----*/
 
         document.close();
         pdfw.close()
