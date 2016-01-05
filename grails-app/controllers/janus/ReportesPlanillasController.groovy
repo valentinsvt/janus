@@ -334,7 +334,8 @@ class ReportesPlanillasController {
         document.add(tablaDetalles);
         /* ************************************************************** FIN DETALLES ****************************************************************************************************/
         /* ************************************************************** DIFERENCIA ****************************************************************************************************/
-        def totalMenosMas = Math.abs(totalMenos) - totalMas
+//        println "totalMas $totalMas, totalMenos $totalMenos"
+        def totalMenosMas = totalMas - Math.abs(totalMenos)
         def totalEjecContrat = totalEjecutado - contrato.monto
 
         def num = (totalMenosMas / contrato.monto) * 100
