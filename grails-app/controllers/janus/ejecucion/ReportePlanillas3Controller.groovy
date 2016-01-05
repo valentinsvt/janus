@@ -1347,7 +1347,8 @@ class ReportePlanillas3Controller {
                         multasAct += it.monto
                     }
 
-//                    println("multas actuales" + multasAct)
+                    multasAct += planilla.multaEspecial?:0
+//                    println "multas actuales $multasAct especiales: ${planilla.multaEspecial}"
 
                     def listaPlanillasAnt
 

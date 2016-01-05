@@ -559,7 +559,7 @@ class PreciosService {
             def sql = "select * from verifica_indices_v2("+ plnl + ","+ periodo.id +") "
             def result = []
             cn.eachRow(sql.toString()) { r ->
-//            println "res "+r
+//            println ">>>res "+r
                 result.add(r.toRowResult())
             }
             cn.close()
@@ -575,7 +575,7 @@ class PreciosService {
         if(prdo) {
             def sql = "select * from verifica_indices("+ cntr + ","+ prdo +") "
             def result = []
-            println "verificaIndicesPeriodoTodo, sql: $sql"
+//            println "verificaIndicesPeriodoTodo, sql: $sql"
             cn.eachRow(sql.toString()) { r ->
 //            println "res "+r
                 result.add(r.toRowResult())
@@ -678,6 +678,7 @@ class PreciosService {
     }
 
     def primerDiaDelMes(fecha) {
+        println "primer dia del mes para: $fecha"
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fecha);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
