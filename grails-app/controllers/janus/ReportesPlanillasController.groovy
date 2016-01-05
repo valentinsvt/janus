@@ -417,7 +417,7 @@ class ReportesPlanillasController {
         addCellTabla(tablaFirmas, new Paragraph("", fontTd), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaFirmas, new Paragraph(strFiscalizador, fontThHeader), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
-        println "document.properties: ${document.properties}"
+//        println "document.properties: ${document.properties}"
 
         document.add(tablaFirmas)
         /*---- fin de firmas -----*/
