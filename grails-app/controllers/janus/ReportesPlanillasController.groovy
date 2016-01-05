@@ -386,7 +386,7 @@ class ReportesPlanillasController {
         /* ************************************************************** TOTAL ****************************************************************************************************/
 
         def totalAdicional = totalCosto + totalMenosMas
-        def prctAdicional = (totalAdicional / contrato.monto) / 100
+        def prctAdicional = (totalAdicional / contrato.monto) * 100
 
         PdfPTable tablaTots = new PdfPTable(3);
         tablaTots.setWidthPercentage(100);
