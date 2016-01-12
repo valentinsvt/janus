@@ -195,10 +195,12 @@
 
                         %{--pruebas para planillas con varias FP--}%
 
+%{--
                         <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
                                 class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="ImprimirNuevo">
                             <i class="icon-star-empty"></i>
                         </g:link>
+--}%
 
 
                     </g:if>
@@ -279,7 +281,7 @@
                                 <g:set var="lblBtn" value="${3}"/>
                                 <g:if test="${garantia != 0}">
 
-                                    <g:if test="${contrato.administrador.id == session.usuario.id}">
+                                    <g:if test="${(contrato.administrador.id == session.usuario.id) && (janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0)}">
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}"
                                            data-tipo="${lblBtn}">
                                             Pedir pago

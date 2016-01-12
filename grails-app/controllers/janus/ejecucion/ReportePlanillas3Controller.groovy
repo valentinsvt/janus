@@ -1752,9 +1752,17 @@ class ReportePlanillas3Controller {
         /* todo: hacer que se imprima el reporteTablas tantas veces como fprj hayan
         * crear nuevas FP en el contrato 24, igual que en la BD janus_prdc para probar */
 
+
+        //** genera B0, P0 y Fr de la planilla **
         println "reajustes: ${reajustes}"
         reajustes.each {
             pl = reporteTablas(it.planilla, it.reajuste)
+            pdfs.add(pl.toByteArray())
+            contador++
+        }
+        if(planilla.tipoPlanilla.codigo == 'A') {
+            println "invoca a resumen... planilla"
+            pl = resumenAnticipo(planilla)
             pdfs.add(pl.toByteArray())
             contador++
         }
@@ -1784,6 +1792,8 @@ class ReportePlanillas3Controller {
         } else {
             b = pl.toByteArray();
         }
+
+
 
         response.setContentType("application/pdf")
         response.setHeader("Content-disposition", "attachment; filename=${name}")
@@ -2202,6 +2212,143 @@ class ReportePlanillas3Controller {
                     fechaConFormato(plnl.contrato.fechaPedidoRecepcionFiscalizador, "dd-MMM-yyyy") + " (liquidación)"
         }
         periodoPlanilla
+    }
+
+    def resumenAnticipo(planilla) {
+
+//        println "reporteTablas de la planilla ${planilla.id}"
+        def obra = planilla.contrato.obra
+        def contrato = planilla.contrato
+
+        /* crea el PDF */
+        def baos = new ByteArrayOutputStream()
+
+        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Document document
+        document = new Document();
+        document.setMargins(50,30,30,28)  // 28 equivale a 1 cm: izq, derecha, arriba y abajo
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.resetHeader()
+        document.resetFooter()
+
+        document.open();
+        document.addTitle("Planillas de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, planillas");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
+        Image logo = Image.getInstance(logoPath);
+        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
+
+
+        def bordeThRecuadro = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def bordeThRecuadroDer= [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def bordeTdSinBorde = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def bordeTdRecuadro = [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def bordeTdRecuadroDer = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        /* ***************************************************** Header planilla **********************************************************/
+        def headerPlanilla = { params ->
+            if (!params.espacio) {
+                params.espacio = 1
+            }
+
+            Font fontThUsar = new Font(Font.TIMES_ROMAN, params.size, Font.BOLD);
+            Font fontTdUsar = new Font(Font.TIMES_ROMAN, params.size, Font.NORMAL);
+
+            Paragraph preface = new Paragraph();
+            addEmptyLine(preface, 1);
+            preface.setAlignment(Element.ALIGN_CENTER);
+            preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+            preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, fontTituloGad));
+            addEmptyLine(preface, params.espacio);
+            Paragraph preface2 = new Paragraph();
+            preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+            addEmptyLine(preface2, 1);
+            document.add(logo)
+            document.add(preface);
+            document.add(preface2);
+
+            PdfPTable tablaHeaderPlanilla = new PdfPTable(5);
+            tablaHeaderPlanilla.setWidthPercentage(100);
+            tablaHeaderPlanilla.setWidths(arregloEnteros([12, 24, 10, 12, 24]))
+            tablaHeaderPlanilla.setWidthPercentage(100);
+
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Obra", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.nombre, fontTdUsar), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Lugar", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph((obra.lugar?.descripcion ?: ""), fontTdUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Planilla", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.numero, fontTdUsar), bordeTdSinBorde)
+
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Ubicación", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre, fontTdUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Monto contrato", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Contratista", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Período", fontThUsar), bordeTdSinBorde)
+
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(ponePeriodoPlanilla(planilla), fontTdUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Plazo", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.plazo, 0) + " días", fontTdUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph("Valor obra", fontThUsar), bordeTdSinBorde)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+
+            document.add(tablaHeaderPlanilla);
+        }
+
+        headerPlanilla([size: 10])
+        //-- fin header --/
+
+        Paragraph titulo = new Paragraph();
+        addEmptyLine(titulo, 1);
+        titulo.setAlignment(Element.ALIGN_CENTER);
+        titulo.add(new Paragraph("Resumen del Reajuste del Anticipo", fontTitle));
+        addEmptyLine(titulo, 1);
+        document.add(titulo);
+
+        PdfPTable tbAntc = new PdfPTable(3);
+        tbAntc.setWidths(arregloEnteros([30, 10, 10]))
+        tbAntc.setWidthPercentage(90);
+        tbAntc.setSpacingAfter(5f);
+
+        addCellTabla(tbAntc, new Paragraph("Fórmula polinómica", fontTh), bordeThRecuadro)
+        addCellTabla(tbAntc, new Paragraph("Po", fontTh), bordeThRecuadro)
+        addCellTabla(tbAntc, new Paragraph("Reajuste", fontTh), bordeThRecuadro)
+
+        def tbAn = planillasService.armaResumenAntc(planilla.id)
+        def total = 0
+
+        tbAn.each {
+            addCellTabla(tbAntc, new Paragraph(it.fp, fontTd), bordeTdRecuadro)
+            addCellTabla(tbAntc, new Paragraph(numero(it.po, 2), fontTd), bordeTdRecuadroDer)
+            addCellTabla(tbAntc, new Paragraph(numero(it.vlor,2), fontTd), bordeTdRecuadroDer)
+            total += it.vlor
+        }
+
+        addCellTabla(tbAntc, new Paragraph("Total reajuste", fontTh), bordeThRecuadro + [colspan: 2])
+        addCellTabla(tbAntc, new Paragraph(numero(total, 2), fontTh), bordeThRecuadroDer)
+
+        document.add(tbAntc)
+
+        document.close();
+        pdfw.close()
+        return baos
     }
 
 

@@ -678,7 +678,7 @@ class PreciosService {
     }
 
     def primerDiaDelMes(fecha) {
-        println "primer dia del mes para: $fecha"
+//        println "primer dia del mes para: $fecha"
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fecha);
         calendar.set(Calendar.DAY_OF_MONTH, 1);

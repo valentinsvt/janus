@@ -271,5 +271,21 @@ class PlanillasService {
         cn.close()
     }
 
+    /* arma la tabla de resumen al anticipo: fprj, Po y reajuste
+     * */
+    def armaResumenAntc(plnl) {
+        println "arma tabla resumen anticipo para plnl: $plnl"
+        def cn = dbConnectionService.getConnection()
+        def tblaRs = []
+        def sql = "select frpldscr, rjplvlpo, rjplvlor from rjpl, fprj " +
+                "where rjpl.plnl__id = ${plnl} and rjplprdo = 0 and fprj.fprj__id = rjpl.fprj__id order by rjpl.fprj__id"
+//        println "sql armaTablaRseumen: $sql"
+        cn.eachRow(sql.toString()) {d ->
+            tblaRs.add([fp: d.frpldscr, po: d.rjplvlpo, vlor: d.rjplvlor])
+        }
+        cn.close()
+        tblaRs  //retorna tabla armada
+    }
+
 
 }

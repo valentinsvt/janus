@@ -408,7 +408,7 @@ class VolumenObraController extends janus.seguridad.Shield {
         funcionJs += '$("#item_id").val($(this).attr("regId"));$("#item_codigo").val($(this).attr("prop_codigo"));$("#item_nombre").val($(this).attr("prop_nombre"))'
         funcionJs += '}'
         def numRegistros = 20
-        def extras = " and tipoItem = 2"
+        def extras = " and tipoItem = 2 and codigo not like 'H%'"  // no lista los que inician con H
         if (!params.reporte) {
             def lista = buscadorService.buscar(Item, "Item", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()

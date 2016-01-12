@@ -4528,23 +4528,23 @@ class PlanillaController extends janus.seguridad.Shield {
      * están disponibles los ínidices se retorna null **/
     def indicesDisponiblesAnticipo(plnl, fcha, tp) {
         //* todo: verficar que todos los ínidices de todas las FPRJ del contrato
-//        println "indicesDisponibles para fecha: ${fcha}, con tp: $tp"
+        println "indicesDisponiblesAnticipo para fecha: ${fcha}, con tp: $tp"
         def existe = false
         def prin
         prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fcha, fcha)
         if (!tp){   /** se refiere al primer pago **/
-//            println "periodo de indices para fcha: ${prin}"
+            println "periodo de indices para fcha: ${prin}"
             if(prin){
                 existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
             }
             if(existe) {
-//                println "si existe el prin: ${plnl.periodoIndices}"
+                println "si existe el prin: ${plnl.periodoIndices}"
                 return prin
             } else {
                 def max = 10
                 def fecha = fcha
                 while(!existe){
-//                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
+                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
                     fecha = preciosService.primerDiaDelMes(fecha) - 15
                     prin = PeriodosInec.findByFechaInicioLessThanAndFechaFinGreaterThan(fecha, fecha)
                     existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
@@ -4893,7 +4893,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
     }
 
-    /** hala el valor del índice en PRIN de la oferta**/
+    /** halla el valor del índice en PRIN de la oferta**/
     def valorIndice(indc, prin) {
 //        println "valor Indice de: $indc, periodo: $prin"
         ValorIndice.findByIndiceAndPeriodo(indc, prin).valor
@@ -5075,7 +5075,7 @@ class PlanillaController extends janus.seguridad.Shield {
             prmt.planilla = plnl
             prmt.planillaReajustada = plnl
             fcha = plnl.periodoIndices? plnl.periodoIndices.fechaInicio : plnl.fechaIngreso
-            println "es anticipo -- fcha"
+            println "es anticipo -- $fcha"
             def prin = indicesDisponiblesAnticipo(plnl, fcha, null)
             /** para cada FPRJ crea un registro en RJPL **/
             println "+++ existe indices para prdo: $prin"
@@ -5519,10 +5519,12 @@ class PlanillaController extends janus.seguridad.Shield {
             }
 
             def valor = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
+            def reajustado = valor[0] > 0 ? valor[0] : 0
+            println "reajustado .. $reajustado"
 
             def pl = Planilla.get(plnl.id)
 //            println "actual: ${valor[0]}, anterior:$valorAnt, diferencia: ${valor[0] - valorAnt}"
-            pl.reajuste = valor[0] - valorAnt
+            pl.reajuste = reajustado - valorAnt
             pl.save(flush: true)
         }
     }
