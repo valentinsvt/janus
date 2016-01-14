@@ -172,7 +172,7 @@
                 Responsable: <br>
                 <g:if test="${modifica}">
                     <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id?:session.usuario.id}" id="responsable"
-                              optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;"></g:select>
+                              optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;" disabled="true"></g:select>
                 </g:if>
                 <g:else>
                     ${rubro?.responsable}
