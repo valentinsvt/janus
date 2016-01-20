@@ -166,7 +166,7 @@
 
     $("#existentes").change(function () {
         var idFormula = $(this).val();
-        console.log(idFormula)
+//        console.log(idFormula)
         cargarTabla(idFormula);
     });
 
@@ -236,7 +236,7 @@
 
     function envia() {
         var valid = true;
-        console.log('entra a envia')
+//        console.log('entra a envia')
 //        allFields.removeClass( "ui-state-error" );
         dlgo.dialog("close");
         dlgo.find("form").submit();
