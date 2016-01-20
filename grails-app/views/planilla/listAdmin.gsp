@@ -195,12 +195,10 @@
 
                         %{--pruebas para planillas con varias FP--}%
 
-%{--
                         <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
                                 class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="ImprimirNuevo">
                             <i class="icon-star-empty"></i>
                         </g:link>
---}%
 
 
                     </g:if>
