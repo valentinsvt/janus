@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 11/27/12
-  Time: 11:54 AM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page import="janus.FormulaPolinomica; janus.pac.Concurso; janus.Departamento" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>

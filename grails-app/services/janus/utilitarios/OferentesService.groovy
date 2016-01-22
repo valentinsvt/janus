@@ -344,7 +344,8 @@ class OferentesService {
 
 
     def exportDominio(dominio, campoReferencia, objeto) {
-        def mapa = GrailsDomainBinder.getMapping(dominio)
+//        println "exportDominio: dominio: $dominio, campoReferencia: $campoReferencia, objeto: $objeto"
+        def mapa = new GrailsDomainBinder().getMapping(dominio)
         def tabla = mapa.table.name
         def validacion = "select * from ${tabla} where ${campoReferencia}=${objeto.id}"
         return exportDominio(dominio, campoReferencia, objeto, false, false, false, false, validacion)
@@ -370,7 +371,7 @@ class OferentesService {
         def campos = "("
         def valores = "("
         def dc = grailsApplication.getDomainClass(dominio.toString().split(" ")[1])
-        def mapa = GrailsDomainBinder.getMapping(dominio)
+        def mapa = new GrailsDomainBinder().getMapping(dominio)
         def tabla = mapa.table.name
         def validacion = sqlValidacion
         mapa.columns.eachWithIndex { c, i ->
@@ -443,12 +444,12 @@ class OferentesService {
 
 
     def exportDominioSinReferencia(dominio, objeto, oferente, campoOferente,sqlValidacion){
-        println "dom sin ref "+dominio+"  obt "+objeto
+//        println "dom sin ref "+dominio+"  obt "+objeto
         def sql = "insert into % & values # "
         def campos = "("
         def valores = "("
         def dc = grailsApplication.getDomainClass(dominio.toString().split(" ")[1])
-        def mapa = GrailsDomainBinder.getMapping(dominio)
+        def mapa = new GrailsDomainBinder().getMapping(dominio)
         def tabla = mapa.table.name
         def validacion = sqlValidacion
         mapa.columns.eachWithIndex { c, i ->
