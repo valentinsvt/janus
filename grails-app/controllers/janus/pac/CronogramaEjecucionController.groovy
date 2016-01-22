@@ -786,7 +786,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
 */
 
-            def porPla = (totalPlanilla * 100) / totDol
+//            def porPla = (totalPlanilla * 100) / totDol
+            def porPla = totDol == 0 ? 0 : (totalPlanilla * 100) / totDol
             def canPla = (totCan * (porPla / 100))
 
             filaDolPla += numero(totalPlanilla, 2, "hide")

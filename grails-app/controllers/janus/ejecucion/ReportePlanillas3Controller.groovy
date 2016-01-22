@@ -1920,7 +1920,7 @@ class ReportePlanillas3Controller {
         Paragraph tituloB0 = new Paragraph();
         addEmptyLine(tituloB0, 1);
         tituloB0.setAlignment(Element.ALIGN_CENTER);
-        tituloB0.add(new Paragraph("Cálculo de B0", fontTitle));
+        tituloB0.add(new Paragraph("Cálculo de B0: ${rjpl.fpReajuste.descripcion}", fontTitle));
         addEmptyLine(tituloB0, 1);
         document.add(tituloB0);
 
@@ -1996,7 +1996,7 @@ class ReportePlanillas3Controller {
         Paragraph tituloP0 = new Paragraph();
         addEmptyLine(tituloP0, 1);
         tituloP0.setAlignment(Element.ALIGN_CENTER);
-        tituloP0.add(new Paragraph("Cálculo de P0", fontTitle));
+        tituloP0.add(new Paragraph("Cálculo de P0 ${rjpl.fpReajuste.descripcion}", fontTitle));
         addEmptyLine(tituloP0, 1);
         document.add(tituloP0);
 
@@ -2062,7 +2062,7 @@ class ReportePlanillas3Controller {
         Paragraph tituloFr = new Paragraph();
         addEmptyLine(tituloFr, 1);
         tituloFr.setAlignment(Element.ALIGN_CENTER);
-        tituloFr.add(new Paragraph("Cálculo de Fr y Pr", fontTitle));
+        tituloFr.add(new Paragraph("Cálculo de Fr y Pr ${rjpl.fpReajuste.descripcion}", fontTitle));
         addEmptyLine(tituloFr, 1);
         document.add(tituloFr);
 
