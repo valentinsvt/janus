@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 8/2/13
-  Time: 12:40 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="janus.actas.Acta" %>
 <html>
@@ -218,7 +210,7 @@
             </g:if>
 
             <div class="tituloChevere">
-                Datos Generales
+                Datos Generales: ${actaInstance?.tipo == 'D' ? 'Acta de Recepción Definitiva' : 'Acta de Recepción Provisional'}
             </div>
 
             <g:set var="garantias" value="${janus.pac.Garantia.findAllByContrato(actaInstance.contrato)}"/>
