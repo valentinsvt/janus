@@ -4706,8 +4706,7 @@ class ReportesController {
 
         def firmaNueva
 
-        if(params.firmaNueva){
-
+        if(!(params.firmaNueva == 'undefined')){
             firmaNueva = PersonaRol.get(params.firmaNueva)
         }else {
             firmaNueva = null
