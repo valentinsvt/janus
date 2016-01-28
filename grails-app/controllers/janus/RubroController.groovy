@@ -846,11 +846,19 @@ class RubroController extends janus.seguridad.Shield {
 //        println "verifica rubro "+params
         def rubro = Item.get(params.id)
         def volumenes = VolumenesObra.findAllByItem(rubro);
-        //println "vol " +volumenes
-        if(volumenes.size()>0)
-            render "1"
-        else
+        def obras = volumenes.obra.nombre.unique()
+        def respuesta = "<ul>"
+//        println "vol... obras:  ${obras}"
+        if(volumenes.size()>0) {
+            obras.each {
+                respuesta += "<li>$it </li>"
+            }
+            respuesta += "</ul>"
+//            println ">>>> 1_${respuesta}"
+            render "1_${respuesta}"
+        } else {
             render "0"
+        }
     }
 
     def copiaRubro(){

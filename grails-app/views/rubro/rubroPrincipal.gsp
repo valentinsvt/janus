@@ -2052,14 +2052,16 @@
                 data     : "id=${rubro?.id}",
                 success  : function (msg) {
                     $("#dlgLoad").dialog("close")
-                    if(msg=="1"){
+                    var resp = msg.split('_')
+                    if(resp[0] == "1"){
                        var d =   $.box({
                             imageClass : "box_info",
-                            text       : "Este rubro ya forma parte de una obra. Desea crear una nueva versión de este rubro, y hacer una versión historia?",
+                            text       : "Este rubro ya forma parte de la(s) obra(s):" + resp[1] + "Desea crear una nueva versión de este rubro, y hacer una versión historia?",
                             title      : "Alerta",
                             iconClose  : false,
                             dialog     : {
                                 resizable : false,
+                                width: '500px',
                                 draggable : false,
                                 buttons   : {
                                     "Cancelar":function(){

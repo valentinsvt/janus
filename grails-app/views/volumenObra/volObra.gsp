@@ -148,7 +148,8 @@
 
                     <div class="span4" style="margin-left: 15px;">
                         <b>Rubro</b>
-                        <input type="text" style="width: 420px;font-size: 10px" id="item_nombre" disabled="true">
+                        %{--<input type="text" style="width: 420px;font-size: 10px" id="item_nombre" disabled="true">--}%
+                        <input type="text" style="width: 420px;font-size: 10px" id="item_nombre" readonly="true">
 
                     </div>
 
@@ -245,6 +246,8 @@
 
 
         <script type="text/javascript">
+
+            var aviso = false;  //aviso de TR...
 
             function loading(div) {
                 y = 0;
@@ -363,6 +366,7 @@
                         });
                     }
                 });
+
                 $("#item_codigo").keydown(function (ev) {
 
                     if (ev.keyCode * 1 != 9 && (ev.keyCode * 1 < 37 || ev.keyCode * 1 > 40)) {
@@ -373,10 +377,7 @@
                     } else {
 //                ////console.log("no reset")
                     }
-
                 });
-
-                %{--var idObra = ${obra}--}%
 
                 $("#btnCrearSP").click(function () {
                     var $btnOrig = $(this).clone(true);
@@ -666,6 +667,31 @@
 
                 $(document).ready(function () {
                     $("#grupos").trigger("change");
+                });
+
+                function alerta(titl, mnsj)
+                {
+                    $("<div></div>").html(mnsj).dialog({
+                        title: titl,
+                        resizable: false,
+                        modal: true,
+                        buttons: {
+                            "Aceptar": function()
+                            {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                }
+
+                $("#item_cantidad").focus(function () {
+                    console.log("focccc")
+                    if (($("#item_nombre").val()) && ($("#item_codigo").val().substr(0, 2) == 'TR') && !aviso) {
+                        console.log("ssssssssss i ")
+                        aviso = true;
+                        alerta("Rubro para transporte", "Debe registrar la distancia de desalojo en Variables de " +
+                           "la obra, en la sección Transporte Especial");
+                    }
                 });
 
             });
