@@ -70,6 +70,10 @@ class Planilla {
 
     String logPagos
 
+    String noPago
+    Double noPagoValor = 0
+
+
     FormulaPolinomicaReajuste formulaPolinomicaReajuste
 
     static auditable = true
@@ -145,6 +149,8 @@ class Planilla {
             logPagos column: 'plnl_log'
             formulaPolinomicaReajuste column: 'fprj__id'
 
+            noPago column: 'plnlnopg'
+            noPagoValor column: 'plnlnpvl'
 
 //            imprimeReajueste column: 'plnlimid'
         }

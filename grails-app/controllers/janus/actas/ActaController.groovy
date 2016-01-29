@@ -102,6 +102,7 @@ class ActaController extends janus.seguridad.Shield {
         }
 
         def tipo = params.tipo.toUpperCase()
+//        println "----tipo: ${params.tipo}"
 
         if (tipo != 'D' && tipo != 'P') {
             flash.message = "No se reconoció el tipo de acta " + tipo
@@ -111,6 +112,7 @@ class ActaController extends janus.seguridad.Shield {
 
 //        def tipos = new Acta().constraints.tipo.inList
         def tipos = [params.tipo]
+//        println "----tipo: ${params.tipo}, ---- tipos: $tipos"
 
 
         def actaProv = null
@@ -423,7 +425,7 @@ class ActaController extends janus.seguridad.Shield {
                     def actas = Acta.findAllByContratoAndTipo(contrato, tipo)
                     println "**3" + actas
                     if (actas.size() == 0) {
-
+                        println "no hay el acta .... ${params.id}"
                         def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
                         def hoy = new Date()
                         actaInstance.contrato = contrato
@@ -448,7 +450,9 @@ class ActaController extends janus.seguridad.Shield {
                         actaInstance = actas.find { it.tipo == 'P' }
                         sec = actaInstance.secciones
                     }
+
                     sec.each { s ->
+                        println "procesa seccion: ${s.id}"
                         def objSec = [:]
                         objSec.id = s.id
                         objSec.numero = s.numero
@@ -479,6 +483,7 @@ class ActaController extends janus.seguridad.Shield {
 //            println actaProv.registrada
 //            println actaProv.fechaRegistro
 //            println "#################################"
+
             if (tipo == 'D') {
                 if (actaProv.registrada != 1 || !actaProv.fechaRegistro) {
                     flash.message = "No ha registrado el acta provisional, no puede generar el acta definitiva."
@@ -499,6 +504,7 @@ class ActaController extends janus.seguridad.Shield {
 //                    return
 //                }
             }
+//            println "reurn: actaInstance: $actaInstance, editable: $editable, tipos: $tipos, actaProv: $actaProv, contrato: $cntr"
             return [actaInstance: actaInstance, secciones: jsonSecciones, editable: editable, tipos: tipos, actaProv: actaProv, contrato: cntr]
         } else {
             flash.message = "No puede crear un acta sin contrato"
@@ -597,7 +603,7 @@ class ActaController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Acta " + actaInstance.id
         }
-        redirect(action: 'form', id: actaInstance.id)
+        redirect(action: 'form', id: actaInstance.id, params: params)
     } //save
 
     def show_ajax() {

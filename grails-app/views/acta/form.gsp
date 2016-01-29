@@ -921,6 +921,7 @@
                     });
 
                     $("#txtDescripcion").val(CKEDITOR.instances.descripcion.getData());
+                    var data = $("#frmSave-Acta").serialize();
                     $("#frmSave-Acta").submit();
                     numerosSecciones();
 //                    var data = $("#frmSave-Acta").serialize();

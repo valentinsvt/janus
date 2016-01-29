@@ -150,6 +150,7 @@
                                 <span class="mandatory">*</span>
                             </div>
                         </g:if>
+%{--
                         <g:else>
                             <div class='span2 hide formato planillaAsociada'>
                                 Planilla Asociada
@@ -161,6 +162,7 @@
                                 <p class="help-block ui-helper-hidden"></p>
                             </div>
                         </g:else>
+--}%
                         </div>
 
                         <div class="row">
@@ -303,7 +305,7 @@
                         %{--</g:if>--}%
                         %{--</g:else>--}%
 
-                        <g:if test="${!(esAnticipo || planillaInstance?.tipoPlanilla?.codigo == 'A')}">
+                        <g:if test="${!(esAnticipo || planillaInstance?.tipoPlanilla?.codigo == 'A')}">   %{-- no es anticipo--}%
 
                             <div class="row">
                                 <div class='span2 formato'>
@@ -410,6 +412,26 @@
                             </div>
 
                         </div>
+
+                            <div class="row" style="margin-bottom: 10px;" id="divNoPago">
+                                <div class='span2 formato'>
+                                    Nota de descuento
+                                </div>
+
+                                <div class="span6">
+                                    <g:textArea maxlength="255" name="noPago" class="span6"
+                                           value="${planillaInstance?.noPago}"/>
+                                </div>
+
+                                <div class='span1 formato'>
+                                    Valor
+                                </div>
+
+                                <div class="span3">
+                                    <input type="text" name="noPagoValor" value="${planillaInstance?.noPagoValor}">
+                                </div>
+                            </div>
+
 
                     </fieldset>
                 </g:form>

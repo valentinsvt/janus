@@ -235,8 +235,6 @@ class ReportePlanillas3Controller {
 
         def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla, [sort: "periodo", order: "asc"])
 
-
-
         def conDetalles = true
         if (params.detalle) {
             conDetalles = Boolean.parseBoolean(params.detalle)
@@ -259,31 +257,6 @@ class ReportePlanillas3Controller {
             }
             order("id", "asc")
         }
-
-/*
-        def periodoPlanilla
-        if(!planilla.periodoAnticipo) {
-            periodoPlanilla = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
-//            planilla.periodoAnticipo=periodoPlanilla
-//            planilla.save()
-        }else
-            periodoPlanilla=planilla.periodoAnticipo
-        if (planilla.tipoPlanilla.codigo == "A") {
-//            println "aaaa"
-            periodoPlanilla = PeriodosInec.list([sort: "fechaFin",order: "desc","limit":3]).first()
-//            str += 'Anticipo (' + periodoInec?.descripcion + ")"
-            periodoPlanilla = 'Anticipo (' + periodoPlanilla.descripcion + ")"
-//            println "bbbbb"
-        } else if (planilla.tipoPlanilla.codigo == "L") {
-            periodoPlanilla = "Liquidación del reajuste (${fechaConFormato(planilla.fechaPresentacion, 'dd-MMM-yyyy')})"
-        } else if (planilla.tipoPlanilla.codigo in ["P", "D"]){
-                periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy")
-        } else if (planilla.tipoPlanilla.codigo == "Q"){
-            periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' +
-                    fechaConFormato(planilla.contrato.fechaPedidoRecepcionFiscalizador, "dd-MMM-yyyy") + " (liquidación)"
-        }
-*/
-
 
         def baos = new ByteArrayOutputStream()
         def name = "planilla_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -1515,10 +1488,16 @@ class ReportePlanillas3Controller {
                     addCellTabla(tablaDetalles, new Paragraph(numero(multasAct, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(multasAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
+                    // valor que no se paga por falta de recursos    todo: como se hará luego para pagar lo aqui descontado, como se imprime pedido de pago???
+                    addCellTabla(tablaDetalles, new Paragraph(planilla.noPago, fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(planilla.noPagoValor, 2, "hide"), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
 //                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                     addCellTabla(tablaDetalles, new Paragraph("VALOR LIQUIDO A PAGAR", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalPlanillarAnterior, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                    addCellTabla(tablaDetalles, new Paragraph(numero(totalPlanillarActual, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(totalPlanillarActual - planilla.noPagoValor, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(totalPlanillarAcumulado, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
                 }
