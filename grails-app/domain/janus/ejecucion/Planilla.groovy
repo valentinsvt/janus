@@ -208,6 +208,7 @@ class Planilla {
         descripcionMulta(blank: true, nullable: true,size: 1..255)
         logPagos(blank: true, nullable: true,size: 1..255)
         formulaPolinomicaReajuste(blank: true, nullable: true)
+        noPago(blank: true, nullable: true)
     }
 
     String toString() {

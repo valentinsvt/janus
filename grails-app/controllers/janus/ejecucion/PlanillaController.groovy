@@ -115,14 +115,18 @@ class PlanillaController extends janus.seguridad.Shield {
         def rjplAnterior = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnlAnterior])
         def rjpl = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: planilla])
         def reajuste = rjpl[0] - rjplAnterior[0]
-        println "---reajuste de la planillas: $rjplAnterior, actual $rjpl"
+//        println "---reajuste de la planillas: $rjplAnterior, actual $rjpl"
 
         def texto = Pdfs.findAllByPlanilla(planilla)
         def textos = []
 
         def multas = 0
         // TODO: revisar si estos valores afectan al valor a pagar, si si, tomar de MLPL
-        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+//        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+        multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+        multas += planilla.multaEspecial?:0
+
+//        println "multas: ${multas}, espacial: ${planilla.multaEspecial}"
 
         def tabla = "<table border='0'>"
         tabla += "<tr>"
@@ -149,15 +153,23 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "<th class='tl'>SUMA</th>"
         tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas, 2)}</td>"
         tabla += "</tr>"
+
+        if(planilla.noPagoValor > 0) {
+            tabla += "<tr>"
+            tabla += "<th class='tl'>${planilla.noPago}</th>"
+            tabla += "<td class='tr'>${numero(planilla.noPagoValor, 2)}</td>"
+            tabla += "</tr>"
+        }
+
         tabla += "<tr>"
         tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor, 2)}</td>"
         tabla += "</tr>"
         tabla += "</table>"
 
         if (texto.size() == 0) {
 
-            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas
+            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor
             def neg = ""
             if (totalLetras < 0) {
                 totalLetras = totalLetras * -1
@@ -442,9 +454,11 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def multas = 0
         // TODO: actualizar esta línea al igual que en la 122 (configPedidoPago)
-        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+//        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+        multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+        multas += planilla.multaEspecial?:0
 
-        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas
+        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas - planilla.noPagoValor
         def neg = ""
         if (totalLetras < 0) {
             totalLetras = totalLetras * -1
@@ -1972,7 +1986,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def save() {  /* guarda planilla */
-        println "save "+params
+//        println "save "+params
         def cntr = Contrato.get(params.contrato.id)
         def tipo
 
@@ -1987,7 +2001,7 @@ class PlanillaController extends janus.seguridad.Shield {
         if (tipo.codigo in ["C", "O"]) {   // costo+%, adicionales
             params.avanceFisico = Planilla.executeQuery("select max(avanceFisico) from Planilla where contrato = :c", [c: cntr])[0]
         }
-        println "avance físico: ${params.avanceFisico}"
+//        println "avance físico: ${params.avanceFisico}"
         /** liquidación**/
         if (tipo.codigo == 'L') {
             def contrato = Contrato.get(params.contrato.id)
@@ -2020,7 +2034,10 @@ class PlanillaController extends janus.seguridad.Shield {
         if (params.id) {
 //            println("entro")
             params.fechaPresentacion = params.fechaIngreso
-            def planillaPorAsociar = Planilla.get(params.asociada)
+            def planillaPorAsociar
+            if(params.asociada != 'null') {
+                planillaPorAsociar = Planilla.get(params.asociada)
+            }
 
             planillaInstance = Planilla.get(params.id)
             if (!planillaInstance) {
@@ -2030,15 +2047,20 @@ class PlanillaController extends janus.seguridad.Shield {
                 redirect(action: 'form', params: params)
                 return
             }//no existe el objeto
-            println "es update "+params.valor_multa+"  "+params.multaDescripcion
-            println "es update "+params
+//            println "es update "+params.valor_multa+"  "+params.multaDescripcion
+//            println "es update "+params
             planillaInstance.properties = params
             planillaInstance.padreCosto = planillaPorAsociar
             planillaInstance.periodoIndices = PeriodosInec.get(params.periodoIndices.id)
-            if(!params.valor_multa ||  params.valor_multa=="")
-                params.valor_multa =0
-//            planillaInstance.descripcionMulta = params.multaDescripcion
-//            planillaInstance.multaEspecial = params.valor_multa.toDouble()
+            if(!params.valor_multa || (params.valor_multa == "")) params.valor_multa = 0
+
+            if(!params.noPagoValor || (params.noPagoValor == "")) params.noPagoValor = 0
+//            println "nopagoValor: '${params.noPagoValor}'"
+
+            planillaInstance.descripcionMulta = params.multaDescripcion
+            planillaInstance.multaEspecial = params.valor_multa.toDouble()
+            planillaInstance.noPago = params.noPago
+            planillaInstance.noPagoValor = params.noPagoValor.toDouble()
 
 /*
             if(planillaInstance.tipoPlanilla.codigo=="A"){

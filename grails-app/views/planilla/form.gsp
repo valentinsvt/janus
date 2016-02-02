@@ -146,8 +146,9 @@
                                 Planilla Asociada
                             </div>
                             <div class="span10 hide planillaAsociada">
-                                <g:select name="asociada" from="${planillas}" optionKey="id" style="width: 600px" value="${planillaInstance?.padreCosto?.id}"/>
-                                <span class="mandatory">*</span>
+                                <g:select name="asociada" from="${planillas}" optionKey="id" style="width: 600px"
+                                          value="${planillaInstance?.padreCosto?.id}"  noSelection="['null': 'Sin planilla asociada']"/>
+                                %{--<span class="mandatory">*</span>--}%
                             </div>
                         </g:if>
 %{--

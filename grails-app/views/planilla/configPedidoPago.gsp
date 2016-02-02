@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 12/9/13
-  Time: 11:59 AM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -21,6 +13,10 @@
         .tr {
             text-align : right;
             width      : 75px;
+        }
+        .aviso {
+            font-size: larger;
+            font-weight: bold;
         }
         </style>
 
@@ -41,12 +37,7 @@
                     <i class="icon-arrow-left"></i>
                     Planillas
                 </g:link>
-            %{--<g:link action="form" class="btn" params="[contrato: contrato.id]">--}%
-            %{--<i class="icon-file"></i>--}%
-            %{--Nueva planilla--}%
-            %{--</g:link>--}%
             </div>
-
         </div>
 
         <g:if test="${flash.message}">
@@ -65,11 +56,12 @@
                     <i class="icon icon-info-sign icon-5x pull-left"></i>
 
                     <p>
-                        No se ha configurado el pedido de pago de la planilla. A continuación se presenta el texto por defecto. Realice las modifcaciones necesarias y haga cilck en el botón Guardar.
+                        No se ha configurado el pedido de pago de la planilla. A continuación se presenta el texto por
+                        defecto. Realice las modifcaciones necesarias y haga cilck en el botón Guardar.
                     </p>
 
                     <p>
-                        <span style="font-size: larger; font-weight: bold;">Tenga en cuenta que una vez guardado no se podrá modificar.</span>
+                        <span class="aviso">Tenga en cuenta que una vez guardado no se podrá modificar.</span>
                     </p>
                 </div>
 
@@ -79,7 +71,8 @@
                         <p style="margin-bottom: 30px;">
                             <g:each in="${parrafo}" var="elem">
                                 <g:if test="${elem.tipo == 'E'}">
-                                    <g:textArea class="elem" name="edit_${j + 1}_${i}" value="${elem.string}" style="width: ${elem.w}; height: ${elem.h};"/>
+                                    <g:textArea class="elem" name="edit_${j + 1}_${i}" value="${elem.string}"
+                                                style="width: ${elem.w}; height: ${elem.h};"/>
                                     <g:set var="i" value="${i + 1}"/>
                                 </g:if>
                                 <g:else>
@@ -103,10 +96,7 @@
         <g:else>
             <div class="alert alert-info">
                 <i class="icon icon-info-sign icon-3x pull-left"></i>
-
-                <p>
-                    El pedido de pago de la planilla ya se ha configurado por lo que no podrá ser modificado.
-                </p>
+                <p>El pedido de pago de la planilla ya se ha configurado por lo que no podrá ser modificado.</p>
             </div>
 
             <div class="well">

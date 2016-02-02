@@ -17,7 +17,8 @@ import janus.actas.Avance
 import janus.actas.FraseClima;
 import janus.ejecucion.DetallePlanilla;
 import janus.ejecucion.DetallePlanillaCosto;
-import janus.ejecucion.FormulaPolinomicaContractual;
+import janus.ejecucion.FormulaPolinomicaContractual
+import janus.ejecucion.MultasPlanilla;
 import janus.ejecucion.PeriodoPlanilla;
 import janus.ejecucion.PeriodosInec;
 import janus.ejecucion.Planilla;
@@ -2933,14 +2934,21 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.descuentos, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("(-) Multas  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         def multas = 0
-        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+        multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+        multas += planilla.multaEspecial?:0
+//        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
         addCellTabla(tablaValores, new Paragraph("${numero(multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("SUMA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
+        if(planilla.noPagoValor > 0) {
+            addCellTabla(tablaValores, new Paragraph("${planilla.noPago}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaValores, new Paragraph("${numero(planilla.noPagoValor, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+
         addCellTabla(tablaValores, new Paragraph("A FAVOR DEL CONTRATISTA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas - planilla.noPagoValor, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaValores)
         def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas
@@ -2950,7 +2958,7 @@ class ReportesPlanillasController {
             neg = "MENOS "
         }
         def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
-        println "a letras: $totalLetras, resulta: $numerosALetras"
+//        println "a letras: $totalLetras, resulta: $numerosALetras"
 //       def strParrafo3 = "Son ${neg}${numerosALetras}"
 //        Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
         Paragraph parrafo3 = new Paragraph(texto.parrafo3, fontContenido);
