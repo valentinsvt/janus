@@ -63,77 +63,77 @@ class OferentesService {
         }
     }
 
-    def copiaVolumen(janusId,oferentesId){
+    def copiaVolumen(janusId, oferentesId){
 
         def cn  =dbConnectionService.getConnectionOferentes()
         def cnJ=dbConnectionService.getConnection()
-        def error=false
+        def error = ""
         try{
-            def sql = "select * from vlobitem where obra__id=${oferentesId}"
+            def sql = "select * from vlobitem where obra__id = ${oferentesId}"
             def insert ="insert into vlobitem values (&)"
             def campos=""
-            cn.eachRow(sql.toString()){r->
+            cn.eachRow(sql.toString()){r ->
                 def ar = r.toRowResult()
-                ar.eachWithIndex(){c,i->
-                    if(i==0){
-                        campos+="default,"
-                    }else{
-                        if(c.key=="obra__id")
-                            campos+=janusId
-                        else{
-                            if(c.key=="itemcdgo")
-                                campos+="'"+janusId+"'"
+                ar.eachWithIndex(){c, i ->
+                    if(i == 0){
+                        campos += "default,"
+                    } else {
+                        if(c.key == "obra__id")
+                            campos += janusId
+                        else {
+                            if(c.key == "itemcdgo")
+                                campos += "'" + janusId + "'"
                             else
-                                campos+=c.value
+                                campos += c.value
                         }
-                        if(i<ar.size()-1){
-                            campos+=","
+                        if(i < ar.size()-1){
+                            campos += ","
                         }
                     }
 
                 }
                 //println "campos "+insert.replaceAll("&",campos).toString()
-                cnJ.execute(insert.replaceAll("&",campos).toString())
-                campos=""
+                cnJ.execute(insert.replaceAll("&", campos).toString())
+                campos = ""
             }
             println "subs"
             def subs = SubPresupuesto.list()?.id
             sql = "select * from sbpr where sbpr__id not in ("
             subs.eachWithIndex { s, i ->
-                sql+=s
-                if(i<subs.size()-1){
-                    sql+=","
+                sql += s
+                if(i < subs.size()-1){
+                    sql +=","
                 }
             }
-            sql+=")"
+            sql += ")"
             cn.eachRow(sql.toString()){r->
                 cnJ.execute("insert into sbpr values(${r['sbpr__id']},'${r['sbprdscr']}',${r['sbprtipo']},${r['grpo__id']})")
             }
             println "vlob"
-            sql="select vlob.*,item.itemjnid from vlob,item where item.item__id=vlob.item__id and obra__id=${oferentesId}"
+            sql = "select vlob.*, item.itemjnid from vlob, item where item.item__id = vlob.item__id and obra__id = ${oferentesId}"
             insert ="insert into vlob values (&)"
-            cn.eachRow(sql.toString()){r->
+            cn.eachRow(sql.toString()){r ->
                 def ar = r.toRowResult()
                 ar.eachWithIndex(){c,i->
                     if(i==0){
-                        campos+="default,"
+                        campos += "default,"
                     }else{
-                        if(c.key!="itemjnid"){
-                            if(c.key=="obra__id")
-                                campos+=janusId
+                        if(c.key != "itemjnid"){
+                            if(c.key == "obra__id")
+                                campos += janusId
                             else{
-                                if(c.key=="item__id"){
-                                    ar.each{cm->
-                                        if(cm.key=="itemjnid")
-                                            campos+=cm.value
+                                if(c.key == "item__id"){
+                                    ar.each{cm ->
+                                        if(cm.key == "itemjnid")
+                                            campos += cm.value
                                     }
                                 }
                                 else
-                                    campos+=c.value
+                                    campos += c.value
                             }
                         }
-                        if(i<ar.size()-2){
-                            campos+=","
+                        if(i < ar.size()-2){
+                            campos += ","
                         }
                     }
                 }
@@ -180,7 +180,7 @@ class OferentesService {
 
             //obit
             println "obit ---------------------- !!"
-            sql="select  o.*,i.itemjnid from obit o,item i where o.item__id = i.item__id and o.obra__id=${oferentesId}"
+            sql="select  o.*, i.itemjnid from obit o,item i where o.item__id = i.item__id and o.obra__id=${oferentesId}"
             insert ="insert into obit values (&)"
             cn.eachRow(sql.toString()){r->
                 //println "r "+r
@@ -228,9 +228,9 @@ class OferentesService {
             }
 
 
-            cn.execute("update obra set obraetdo='C' where obra__id=${oferentesId}".toString())
+            cn.execute("update obra set obraetdo='C' where obra__id = ${oferentesId}".toString())
         }catch (e){
-            error=true
+            error = e
             println "ERROR "+e
         }
         finally {
@@ -244,9 +244,9 @@ class OferentesService {
     def copiaFormula(janusId,oferentesId){
         def cn  =dbConnectionService.getConnectionOferentes()
         def cnJ=dbConnectionService.getConnection()
-        def error=false
+        def error = ""
         try{
-            def sql = "select * from fpob where obra__id=${oferentesId}"
+            def sql = "select * from fpob where obra__id = ${oferentesId}"
             def insert ="insert into fpob values (&)"
             def campos=""
             cn.eachRow(sql.toString()){r->
@@ -275,7 +275,7 @@ class OferentesService {
             }
 
         }catch (e){
-            error=true
+            error = e
             println "ERROR "+e
         }
         finally {
@@ -288,30 +288,34 @@ class OferentesService {
     def copiaCrono(janusId,oferentesId){
         def cn  =dbConnectionService.getConnectionOferentes()
         def cnJ=dbConnectionService.getConnection()
-        def error=false
+        def error = ""
         def obra=janus.Obra.get(janusId)
-        def vols = VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        def vols = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def sbpr = 0
         try{
-            def sql = "select c.*,i.itemjnid from crno c , vlob v, item i where c.vlob__id=v.vlob__id and v.item__id=i.item__id and v.obra__id=${oferentesId}"
+            def sql = "select c.*, i.itemjnid, v.sbpr__id from crno c , vlob v, item i where c.vlob__id = v.vlob__id and " +
+                    "v.item__id = i.item__id and v.obra__id = ${oferentesId}"
             def insert ="insert into crno values (&)"
             def campos=""
             cn.eachRow(sql.toString()){r->
                 def ar = r.toRowResult()
-                //println "r -> "+r
-                ar.eachWithIndex(){c,i->
+//                println "ra es -> $ar"
+                sbpr = ar.sbpr__id
+                ar.eachWithIndex(){c, i ->
                     if(i==0){
-                        campos+="default,"
-                    }else{
-                        if(c.key!="itemjnid"){
-                            if(c.key=="vlob__id"){
+                        campos += "default,"
+                    } else {
+                        if(!(c.key in ["itemjnid", "sbpr__id"])){
+                            if(c.key == "vlob__id"){
                                 def jnid
                                 ar.each{cm->
-                                    if(cm.key=="itemjnid")
-                                        jnid=cm.value?.toInteger()
+                                    if(cm.key == "itemjnid"){
+                                        jnid = cm.value?.toInteger()
+                                    }
                                 }
-                                //println "jnid --> "+jnid
-                                vols.each {v->
-                                    if(v.item.id.toInteger()==jnid){
+//                                println "jnid --> $jnid y sbpr: $sbpr"
+                                vols.each {v ->
+                                    if((v.item.id.toInteger() == jnid) && (v.subPresupuesto.id == sbpr)){
                                         campos+=v.id
                                     }
                                 }
@@ -319,20 +323,20 @@ class OferentesService {
                             }else{
                                 campos+=c.value
                             }
-                            if(i<ar.size()-2){
+                            if(i<ar.size()-3){
                                 campos+=","
                             }
                         }
                     }
 
                 }
-                //println "campos "+insert.replaceAll("&",campos).toString()
-                cnJ.execute(insert.replaceAll("&",campos).toString())
-                campos=""
+//                println "campos " + insert.replaceAll("&", campos).toString()
+                cnJ.execute(insert.replaceAll("&", campos).toString())
+                campos = ""
             }
 
         }catch (e){
-            error=true
+            error = e
             println "ERROR "+e
         }
         finally {

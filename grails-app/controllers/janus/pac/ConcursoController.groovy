@@ -363,6 +363,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
     def buscarObra() {
+//        println "buscarObra params: $params"
         def extraParr = ""
         def extraCom = ""
         if (params.campos instanceof java.lang.String) {

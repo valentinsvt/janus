@@ -30,17 +30,17 @@ class OferentesController extends janus.seguridad.Shield {
         copia.codigo = obra.codigo+"-OF"
         copia.estado = "R"
         copia.save(flush: true)
-        oferentesService.copiaDatosObra(copia.id,ofId)
+        oferentesService.copiaDatosObra(copia.id, ofId)
         //println "id "+copia.id
 
-        def error = oferentesService.copiaVolumen(copia.id,ofId)
-        println "formula "
-        error= oferentesService.copiaFormula(copia.id,ofId)
+        def error = oferentesService.copiaVolumen(copia.id, ofId)
+        println "formula error: $error"
+        error += oferentesService.copiaFormula(copia.id, ofId)
         println " crono "
-        error= oferentesService.copiaCrono(copia.id,ofId)
+        error += oferentesService.copiaCrono(copia.id, ofId)
 
-        if(error)
-            render "error"
+        if(error != "")
+            render "error#${error}"
         else
             render copia.id
     }

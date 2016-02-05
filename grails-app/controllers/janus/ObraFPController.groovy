@@ -678,7 +678,7 @@ class ObraFPController {
         cn.eachRow(tx_sql.toString()) { row ->
             if (obra.estado == 'N') {
 /*
-                tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios (${row.item__id}, "
+                tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios (${rodes_Materialesw.item__id}, "
                 tx_cr += "${obra.lugarId},'${obra.fechaPreciosRubros}',null, null, null, null) where grpocdgo = 2"
 */
                 //tx_cr = "select itemcdgo, parcial pcun, cmpo from vlob_pcun_v2 (${id}, ${row.item__id}) where grpocdgo = 2"  //v2

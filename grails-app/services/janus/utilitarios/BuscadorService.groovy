@@ -169,7 +169,7 @@ class BuscadorService {
     }
 
     List buscar(dominio, tabla, tipo, params, ignoreCase, extras="") {
-        println "dominio: $dominio params $params \n extras: $extras"
+//        println "BuscadorService.buscar: dominio: $dominio params $params \n extras: $extras"
         def sql = "from " + tabla
         def mapa = toMap(dominio)
         def parametros =[:]

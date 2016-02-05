@@ -141,12 +141,13 @@
                 data     : "obra="+obra+"&oferente="+oferente+"&obraOf="+obraOf,
                 success  : function (msg) {
                     $("#dlgLoad").dialog("close")
-                     if(msg!="error"){
+                    var partes = msg.split('#');
+                     if(partes[0] !="error"){
                                 location.href="${g.createLink(controller: 'obra',action: 'registroObra')}?obra="+msg
                      }else{
                          $.box({
                              imageClass : "box_info",
-                             text       : "Error al copiar la obra",
+                             text       : "Error al copiar la obra: \n" + partes[1],
                              title      : "Alerta",
                              iconClose  : false,
                              dialog     : {
