@@ -38,7 +38,7 @@ class OferentesController extends janus.seguridad.Shield {
         error += oferentesService.copiaFormula(copia.id, ofId)
         println " crono "
         error += oferentesService.copiaCrono(copia.id, ofId)
-
+        println "pasa crono con error: $error"
         if(error != "")
             render "error#${error}"
         else
