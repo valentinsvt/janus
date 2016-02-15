@@ -1689,7 +1689,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println "12: ${tiposPlanilla.codigo}. liquidado: $liquidado, anticipoPagado: $anticipoPagado"
 //        println "es anticipo: $esAnticipo"
         tiposPlanilla = tiposPlanilla.sort{it.nombre}
-        println "final..: ${tiposPlanilla.codigo} contrato: $contrato"
+//        println "final..: ${tiposPlanilla.codigo} contrato: $contrato"
 
         //planilla asociada
         def tiposPlan = TipoPlanilla.findAllByCodigoInList(["P", "Q", "O"])
@@ -2052,22 +2052,13 @@ class PlanillaController extends janus.seguridad.Shield {
             planillaInstance.properties = params
             planillaInstance.padreCosto = planillaPorAsociar
             planillaInstance.periodoIndices = PeriodosInec.get(params.periodoIndices.id)
-            if(!params.valor_multa || (params.valor_multa == "")) params.valor_multa = 0
 
             if(!params.noPagoValor || (params.noPagoValor == "")) params.noPagoValor = 0
 //            println "nopagoValor: '${params.noPagoValor}'"
 
-            planillaInstance.descripcionMulta = params.multaDescripcion
-            planillaInstance.multaEspecial = params.valor_multa.toDouble()
             planillaInstance.noPago = params.noPago
             planillaInstance.noPagoValor = params.noPagoValor.toDouble()
 
-/*
-            if(planillaInstance.tipoPlanilla.codigo=="A"){
-                println "llego al save !!!!!  "+params.periodoPlan
-                planillaInstance.periodoAnticipo = PeriodosInec.get(params.periodoPlan)
-            }
-*/
             if(planillaInstance.tipoPlanilla.codigo == 'O') { //pone fecha del último periodo planillado
                 def pl = Planilla.findByContratoAndTipoPlanilla(cntr, TipoPlanilla.findByCodigo('Q'))
                 def poAnterior = ReajustePlanilla.findAllByPlanilla(pl, [sort: 'periodo']).last()

@@ -74,6 +74,7 @@
                         </a>
                     </g:if>
 
+
                 %{--<a href="#" class="btn btn-info" id="btnFecha">--}%
                 %{--<i class="icon-calendar"></i>--}%
                 %{--Cambiar fecha de fin--}%
@@ -84,6 +85,11 @@
                 %{--</a>--}%
                     </div>
                 </g:if>
+
+                <a href="#" id="btnReporte" class="btn">
+                    <i class="icon-print"></i>
+                    Imprimir
+                </a>
 
             %{--<div class="btn-group">--}%
             %{--<a href="#" class="btn btn-info disabled" id="btnCambio">--}%
@@ -505,6 +511,13 @@
                     });
                     return false;
                 });
+
+                $("#btnReporte").click(function () {
+                    %{--todo: hacer otro reporte para el cronograma de ejecución, puesto que se usa prej en lugar de meses --}%
+                    location.href = "${createLink(controller: 'reportes2', action:'reporteCronogramaEjec', id:contrato.id)}";
+                    return false;
+                });
+
             });
         </script>
     </body>
