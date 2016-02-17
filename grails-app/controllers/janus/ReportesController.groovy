@@ -1516,8 +1516,11 @@ class ReportesController {
                             "                        </tr>\n" +
                             "                    </tbody>\n" +
 
-                            "                </table>\n" +
-                            "                   <b style=\"float:left\">Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales"
+                            "</table>\n"
+            if(rubro?.codigo.split('-')[0] == 'TR') {
+                footer += "<div><strong>Distancia a la escombrera:</strong> D= ${obra?.distanciaDesalojo} km</div>"
+            }
+            footer += "<div><b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales</div>"
 
 //            nota = "                <div class='divRubro' style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left; page-break-after: always\">\n" +
 

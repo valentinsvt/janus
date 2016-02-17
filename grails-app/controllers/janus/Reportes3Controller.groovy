@@ -3160,7 +3160,8 @@ class Reportes3Controller {
                 tablas += "</div>"
 
                 footer =
-                        " <table class=\"table table-bordered table-striped table-condensed table-hover\" style=\"margin-top: 25px;width: 600px;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000;\">\n" +
+//                        " <div style='display:inline-block; float:right'><table class=\"table table-bordered table-striped table-condensed table-hover\" style=\"margin-top: 15px;width: 600px;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000;\">\n" +
+                        " <table style='border-top: 1px solid #000000; border-bottom:1px solid #000000; float:right; margin-top:15px'>\n" +
                                 "                    <tbody>\n" +
                                 "                        <tr>\n" +
                                 "                            <td style=\"width: 240px;\">\n" +
@@ -3220,8 +3221,13 @@ class Reportes3Controller {
                                 "                        </tr>\n" +
                                 "                    </tbody>\n" +
 
-                                "                </table>\n" +
-                                "                   <b style=\"float:left\">Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales"
+                                "</table>\n"
+                if(rubro?.codigo.split('-')[0] == 'TR') {
+                    footer += "<div style='margin-top:40px'><strong>Distancia a la escombrera:</strong> D= ${obra?.distanciaDesalojo} km</div>"
+                    footer += "<div><b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales</div>"
+                } else {
+                    footer += "<div style='margin-top:40px'><b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales</div>"
+                }
 
 
 //                html += "<div class='divRubro'>" + header + tablas + footer + "</div>"

@@ -1,18 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 06/01/15
-  Time: 04:58 PM
---%>
-
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 11/22/12
-  Time: 12:59 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -54,7 +39,7 @@
         font-size     : 11px;
         /*font-weight   : bold;*/
         text-align    : center;
-        margin-bottom : 5px;
+        margin-bottom : 0px;
         width         : 95%;
         /*font-family       : 'Tulpen One', cursive !important;*/
         /*font-family : "Open Sans Condensed" !important;*/
@@ -327,6 +312,12 @@
     </div>
     <table style="margin-top: 130px">
         <tbody>
+        <div>
+            <g:set var="dist" value="${rubro?.codigo?.split("-")}"/>
+            <g:if test="${dist[0] == 'TR'}">
+                <b>Distancia a la escombrera:</b> D= ${obra?.distanciaDesalojo} KM
+            </g:if>
+        </div>
         <div>
             <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.
         </div>
