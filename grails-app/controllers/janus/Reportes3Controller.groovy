@@ -275,10 +275,14 @@ class Reportes3Controller {
         tablaMat2 += "<thead><tr><th colspan='6' class='tituloHeader'>MATERIALES</th></tr><tr><th colspan='6' class='theader'></th></tr><tr><th style='width: 80px;' class='padTopBot'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>CANTIDAD</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr> <tr><th colspan='6' class='theaderup'></th></tr> </thead><tbody>"
 
         res.eachWithIndex { r, i ->
+            def tx = r.itemnmbr
+            tx = tx.replaceAll(/&QUOT/, /&quot/)
+
             if (r["grpocdgo"] == 3) {
                 tablaHer += "<tr>"
                 tablaHer += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                tablaHer += "<td>" + r["itemnmbr"] + "</td>"
+//                tablaHer += "<td>" + r["itemnmbr"] + "</td>"
+                tablaHer += "<td>" + tx + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -290,7 +294,8 @@ class Reportes3Controller {
             if (r["grpocdgo"] == 2) {
                 tablaMano += "<tr>"
                 tablaMano += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                tablaMano += "<td>" + r["itemnmbr"] + "</td>"
+//                tablaMano += "<td>" + r["itemnmbr"] + "</td>"
+                tablaMano += "<td>" + tx + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -304,7 +309,8 @@ class Reportes3Controller {
                 if (params.desglose == '1') {
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td>" + tx + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -316,7 +322,8 @@ class Reportes3Controller {
                 else{
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td>" + tx + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -328,7 +335,8 @@ class Reportes3Controller {
             if (r["grpocdgo"] == 1 && params.desglose == "1") {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+//                tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+                tablaTrans += "<td>" + tx + "</td>"
                 if(r["tplscdgo"].trim() =='P' || r["tplscdgo"].trim() =='P1' ){
                     tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
                 } else{
@@ -458,10 +466,14 @@ class Reportes3Controller {
 //        println "res "+res
 
         vae.eachWithIndex { r, i ->
+            def tx = r.itemnmbr
+            tx = tx.replaceAll(/&QUOT/, /&quot/)
+
             if (r["grpocdgo"] == 3) {
                 tablaHer += "<tr>"
                 tablaHer += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                tablaHer += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                tablaHer += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                tablaHer += "<td style='width: 420px;'>" + tx + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 65px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -480,7 +492,8 @@ class Reportes3Controller {
             if (r["grpocdgo"] == 2) {
                 tablaMano += "<tr>"
                 tablaMano += "<td style='width: 140px;'>" + r["itemcdgo"] + "</td>"
-                tablaMano += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                tablaMano += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                tablaMano += "<td style='width: 420px;'>" + tx + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 65px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -501,7 +514,8 @@ class Reportes3Controller {
                 if (params.desglose == '1') {
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td style='width: 420px;'>" + tx + "</td>"
                     tablaMat += "<td style='width: 50px;'>" + '' +  "</td>"
                     tablaMat += "<td style='width: 65px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -520,7 +534,8 @@ class Reportes3Controller {
                 else{
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td style='width: 420px;'>" + tx + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'></td>"
                     tablaMat += "<td style='width: 65px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -541,7 +556,8 @@ class Reportes3Controller {
 
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 140px;'>" + r["itemcdgo"] + "</td>"
-                tablaTrans += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                tablaTrans += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                tablaTrans += "<td style='width: 420px;'>" + tx + "</td>"
                 if(r["tplscdgo"].trim() =='P' || r["tplscdgo"].trim() =='P1' ){
                     tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
                 } else{
@@ -957,10 +973,14 @@ class Reportes3Controller {
 
         res.each { r ->
 //            println "res "+res
+            def tx = r.itemnmbr
+            tx = tx.replaceAll(/&QUOT/, /&quot/)
+
             if (r["grpocdgo"] == 3) {
                 tablaHer += "<tr>"
                 tablaHer += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                tablaHer += "<td>" + r["itemnmbr"] + "</td>"
+//                tablaHer += "<td>" + r["itemnmbr"] + "</td>"
+                tablaHer += "<td>" + tx + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -972,7 +992,8 @@ class Reportes3Controller {
             if (r["grpocdgo"] == 2) {
                 tablaMano += "<tr>"
                 tablaMano += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                tablaMano += "<td>" + r["itemnmbr"] + "</td>"
+//                tablaMano += "<td>" + r["itemnmbr"] + "</td>"
+                tablaMano += "<td>" + tx + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -988,7 +1009,8 @@ class Reportes3Controller {
                 tablaMat += "<tr>"
                 if (params.trans != 'no') {
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td>" + tx + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1000,7 +1022,8 @@ class Reportes3Controller {
                 if(params.trans == 'no'){
 
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td>" + tx + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1013,7 +1036,8 @@ class Reportes3Controller {
             if (r["grpocdgo"]== 1 && params.trans != 'no') {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-                tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+//                tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+                tablaTrans += "<td>" + tx + "</td>"
                 if(r["tplscdgo"].trim() =='P' || r["tplscdgo"].trim() =='P1' ){
                     tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
                 } else{
@@ -1150,10 +1174,16 @@ class Reportes3Controller {
 
         vae.eachWithIndex { r, i ->
 //            println "res "+res
+            def tx = r.itemnmbr
+            tx = tx.replaceAll(/&QUOT/, /&quot/)
+//            println "..nombre ${r} cambia a $tx"
+//            println "..nombre ${r}"
+
             if (r["grpocdgo"] == 3) {
                 tablaHer += "<tr>"
                 tablaHer += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                tablaHer += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                tablaHer += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                tablaHer += "<td style='width: 420px;'>" + tx + "</td>"
                 tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 65px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaHer += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1173,7 +1203,8 @@ class Reportes3Controller {
             if (r["grpocdgo"] == 2) {
                 tablaMano += "<tr>"
                 tablaMano += "<td style='width: 140px;'>" + r["itemcdgo"] + "</td>"
-                tablaMano += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                tablaMano += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                tablaMano += "<td style='width: 420px;'>" + tx + "</td>"
                 tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 65px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaMano += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1194,7 +1225,9 @@ class Reportes3Controller {
                 tablaMat += "<tr>"
                 if (params.trans != 'no') {
                     tablaMat += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td style='width: 420px;'>" + tx + "</td>"
+
                     tablaMat += "<td style='width: 50px;'>" + '' +  "</td>"
                     tablaMat += "<td style='width: 65px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1214,7 +1247,8 @@ class Reportes3Controller {
                 }
                 if(params.trans == 'no'){
                     tablaMat += "<td style='width: 120px;'>" + r["itemcdgo"] + "</td>"
-                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                    tablaMat += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                    tablaMat += "<td style='width: 420px;'>" + tx + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'></td>"
                     tablaMat += "<td style='width: 65px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 45px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1234,7 +1268,8 @@ class Reportes3Controller {
             if (r["grpocdgo"]== 1 && params.trans != 'no') {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 140px;'>" + r["itemcdgo"] + "</td>"
-                tablaTrans += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+//                tablaTrans += "<td style='width: 420px;'>" + r["itemnmbr"] + "</td>"
+                tablaTrans += "<td style='width: 420px;'>" + tx + "</td>"
                 if(r["tplscdgo"].trim() =='P' || r["tplscdgo"].trim() =='P1' ){
                     tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
                 } else{
@@ -1710,6 +1745,7 @@ class Reportes3Controller {
             text = text.decodeHTML()
             text = text.replaceAll(/</, /&lt;/);
             text = text.replaceAll(/>/, /&gt;/);
+            text = text.replaceAll(/"/, /&quot;/);
             corregidos += text
         }
 

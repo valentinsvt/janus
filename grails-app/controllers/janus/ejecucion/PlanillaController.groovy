@@ -4370,7 +4370,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def saveDetalle() {
-//        println params
+//        println "saveDetalle $params"
         def pln = Planilla.get(params.id)
         def err = 0
 

@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 2/8/13
-  Time: 12:19 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -299,13 +291,7 @@
                             var val = $row.data("val");
                             var id = $row.data("id");
 
-//                            if (vol && cant && val && cant > 0 && val > 0) {
-//                                data += "d=" + vol + "_" + cant + "_" + val;
-//                                if (id != "nuevo") {
-//                                    data += "_" + id;
-//                                }
-//                                data += "&";
-//                            }
+/*
                             if (vol && cant) {
                                 data += "d=" + vol + "_" + cant + "_" + val;
                                 if (id != "nuevo") {
@@ -313,6 +299,17 @@
                                 }
                                 data += "&";
                             }
+*/
+                            console.log('vol:' + vol, 'cant:' + cant)
+
+                            if (vol !== undefined && cant !== undefined) {
+                                data += "d=" + vol + "_" + cant + "_" + val;
+                                if (id != "nuevo") {
+                                    data += "_" + id;
+                                }
+                                data += "&";
+                            }
+
                         });
                         if (data == "") {
                             $("#dlgLoad").dialog("close");
