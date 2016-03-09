@@ -663,6 +663,7 @@
 <script type="text/javascript">
     function agregar(id,tipo){
         var tipoItem=$("#item_id").attr("tipo")
+        console.log("-->" + tipoItem)
         var cant = $("#item_cantidad").val()
         if (cant == "")
             cant = 0
@@ -1787,6 +1788,7 @@
         });
 
         $(".borrarItem").click(function () {
+//            $(".item_row").dblclick()
             var tr = $(this).parent().parent()
             var boton = $(this)
             if (confirm("Esta seguro de eliminar este registro? Esta acción es irreversible")) {
@@ -1795,38 +1797,38 @@
                     data     : "id=${rubro?.id}",
                     success  : function (msg) {
                         $("#dlgLoad").dialog("close")
-                        if(msg=="1"){
+                        var resp = msg.split('_')
+                        if(resp[0] == "1"){
                             var d =   $.box({
                                 imageClass : "box_info",
-                                text       : "Este rubro ya forma parte de una obra.",
+                                text       : "Este rubro ya forma parte de la(s) obra(s):" + resp[1] + "</br> <strong> * Si desea eliminar el item, necesita crear el historico del rubro </strong>",
                                 title      : "Alerta",
                                 iconClose  : false,
                                 dialog     : {
                                     resizable : false,
+                                    width: '500px',
                                     draggable : false,
                                     buttons   : {
                                         "Cancelar":function(){
 
                                         }
                                         %{--"Aceptar" : function () {--}%
-                                            %{--$("#dlgLoad").dialog("open")--}%
+                                            %{--$("#dlgLoad").dialog("open");--}%
                                             %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'copiaRubro')}",--}%
                                                 %{--data     : "id=${rubro?.id}",--}%
                                                 %{--success  : function (msg) {--}%
-                                                    %{--$("#dlgLoad").dialog("close")--}%
+                                                    %{--$("#dlgLoad").dialog("close");--}%
                                                     %{--if(msg=="true"){--}%
                                                         %{--alert("Error al generar historico del rubro, comunique este error al administrador del sistema")--}%
                                                     %{--}else{--}%
-%{--//                                                    console.log("es historico",msg)--}%
-                                                        %{--$("#boxHiddenDlg").dialog("close")--}%
+                                                    %{--console.log("es historico",msg)--}%
+                                                        %{--$("#boxHiddenDlg").dialog("close");--}%
                                                         %{--agregar(msg,"H");--}%
 
                                                     %{--}--}%
-
                                                 %{--}--}%
                                             %{--});--}%
                                         %{--}--}%
-
                                     }
                                 }
                             });
@@ -2056,7 +2058,7 @@
                     if(resp[0] == "1"){
                        var d =   $.box({
                             imageClass : "box_info",
-                            text       : "Este rubro ya forma parte de la(s) obra(s):" + resp[1] + "Desea crear una nueva versión de este rubro, y hacer una versión historia?",
+                            text       : "Este rubro ya forma parte de la(s) obra(s):" + resp[1] + "Desea crear una nueva versión de este rubro, y hacer una versión histórica?",
                             title      : "Alerta",
                             iconClose  : false,
                             dialog     : {
