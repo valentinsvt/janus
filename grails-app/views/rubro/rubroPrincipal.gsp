@@ -2032,6 +2032,24 @@
 
         <g:if test="${rubro}">
         $("#btn_agregarItem").click(function () {
+//            console.log("valor:" + $('#item_desc').val().length);
+            if($('#item_desc').val().length == 0)  {
+                $.box({
+                    imageClass : "box_info",
+                    text       : "No hay item que agregar al APU",
+                    title      : "Alerta",
+                    iconClose  : false,
+                    dialog     : {
+                        resizable : false,
+                        draggable : false,
+                        buttons   : {
+                            "Aceptar" : function () {
+                            }
+                        }
+                    }
+                });
+                return false
+            }
             if ($("#calcular").hasClass("active")) {
                 $.box({
                     imageClass : "box_info",
