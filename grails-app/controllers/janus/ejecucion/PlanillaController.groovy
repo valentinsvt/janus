@@ -4557,7 +4557,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 def max = 10
                 def fecha = fcha
                 while(!existe){
-                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
+//                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
                     fecha = preciosService.primerDiaDelMes(fecha) - 15
                     prin = PeriodosInec.findByFechaInicioLessThanAndFechaFinGreaterThan(fecha, fecha)
                     existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
@@ -4569,7 +4569,28 @@ class PlanillaController extends janus.seguridad.Shield {
             }
 
         } else if(tp == 'R') {
-            return preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0 ? prin : null
+            // si no hay ídices a la fecha de pago se retorma los más recientes
+            if(prin){
+                existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
+            }
+            if(existe) {
+                println "si existe el prin: ${plnl.periodoIndices}"
+                return prin
+            } else {
+                def max = 10
+                def fecha = fcha
+                while(!existe){
+                    println "periodo actual para recalculo de reajuste...: $prin, fcha: ${fcha}, fecha: ${fecha}"
+                    fecha = preciosService.primerDiaDelMes(fecha) - 15
+                    prin = PeriodosInec.findByFechaInicioLessThanAndFechaFinGreaterThan(fecha, fecha)
+                    existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
+                    if(!max--){
+                        return null
+                    }
+                }
+                return prin
+            }
+//            return preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0 ? prin : null
         }
     }
 
