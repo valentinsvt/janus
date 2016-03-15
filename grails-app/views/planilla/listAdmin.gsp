@@ -286,6 +286,9 @@
                                         </a>
                                     </g:if>
                                 </g:if>
+                                <g:else>
+                                    No se ha ingresado la garantía de este contrato, no es posible pedir el pago
+                                </g:else>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
                                     <g:if test="${contrato.administrador.id == session.usuario.id}">
                                         <a href="#" class="btn btn-devolver pg_${lblBtn}"
