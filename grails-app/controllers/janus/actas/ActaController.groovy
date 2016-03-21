@@ -452,7 +452,7 @@ class ActaController extends janus.seguridad.Shield {
                     }
 
                     sec.each { s ->
-                        println "procesa seccion: ${s.id}"
+//                        println "procesa seccion: ${s.id}"
                         def objSec = [:]
                         objSec.id = s.id
                         objSec.numero = s.numero

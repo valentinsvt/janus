@@ -2097,7 +2097,7 @@
                 }
             }
 
-            if (active == 1) {
+            if (active == 1) {   //Memorando
 
                 var idCoordinador = $("#coordinador").val()
 

@@ -87,19 +87,6 @@ class ReportesPlanillasController {
             }
         }
 //        println "espacios: $espacios"
-//        println "---pasa delegado Fis: $delegadoFiscalizacion"
-/*
-        if (direccion.size() == 0) {
-            println "no se encontro direccion de fiscalizacion!!"
-        } else if (direccion.size() > 1) {
-            println "se encontraron ${direccion.size()} direcciones de fiscalizacion!!! " + direccion
-        } else {
-            def dptoDireccion = Departamento.findAllByDireccion(direccion.first())
-            def funcionDirector = Funcion.findByCodigo("D")
-            def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
-            delegadoFiscalizacion = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)?.persona
-        }
-*/
         return [actaInstance: acta, directorDeFiscalizacion: delegadoFiscalizacion, espacios: espacios]
     }
 

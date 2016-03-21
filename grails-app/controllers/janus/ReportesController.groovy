@@ -4731,9 +4731,9 @@ class ReportesController {
 
         def firmaNueva
 
-        if(!(params.firmaNueva == 'undefined')){
+        if (!(params.firmaNueva == 'undefined')) {
             firmaNueva = PersonaRol.get(params.firmaNueva)
-        }else {
+        } else {
             firmaNueva = null
         }
 
@@ -4870,31 +4870,27 @@ class ReportesController {
 
 
 
-        if(obra?.direccionDestino){
+        if (obra?.direccionDestino) {
             addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph("PARA", times10bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph(obra?.direccionDestino?.nombre, times10bold), prmsHeaderHoja)
-        } else if (obra?.departamentoDestino){
+        } else if (obra?.departamentoDestino) {
             addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph("PARA", times10bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph(obra?.departamentoDestino?.descripcion, times10bold), prmsHeaderHoja)
-        }else {
+        } else {
             addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph("PARA", times10bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaDatosMemo, new Paragraph("No se ha seleccionado una dirección de destino, en la pantalla de Registro de Obra", times10bold), prmsHeaderHoja)
         }
 
-
-
 //        addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaDatosMemo, new Paragraph("PARA", times10bold), prmsHeaderHoja)
 //        addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaDatosMemo, new Paragraph(obra?.departamento?.direccion?.nombre + ' - ' + obra?.departamento?.descripcion, times10bold), prmsHeaderHoja)
-
-
 
 
         PdfPTable tablaLinea = new PdfPTable(2);
@@ -5009,7 +5005,7 @@ class ReportesController {
         PdfPTable tablaBaseMemo = new PdfPTable(4);
         tablaMemo.setWidthPercentage(100);
         tablaBaseMemo.setWidthPercentage(100);
-        tablaBaseMemo.setWidths(arregloEnteros([12,70, 20, 25]))
+        tablaBaseMemo.setWidths(arregloEnteros([12, 70, 20, 25]))
         tablaBaseMemo.setSpacingBefore(20)
 
 
@@ -5041,7 +5037,7 @@ class ReportesController {
             if (params.proyeccionMemo == 'true' && cantidadMesesMemo >= '1' && params.reajusteIvaMemo == 'false') {
 
                 def anio = new Date().getYear()
-                inflacion = ValoresAnuales.findByAnio((anio+1900)).inflacion
+                inflacion = ValoresAnuales.findByAnio((anio + 1900)).inflacion
                 mesesMemo = params.reajusteMesesMemo
                 proyeccionTotalMemo = (totalBase.toDouble() * ((inflacion / 1200) * mesesMemo.toInteger()))
                 valorTotal = totalBase.toDouble() + proyeccionTotalMemo;
@@ -5060,7 +5056,7 @@ class ReportesController {
             if (params.proyeccionMemo == 'true' && cantidadMesesMemo >= '1' && params.reajusteIvaMemo == 'true') {
 
                 def anio = new Date().getYear()
-                inflacion = ValoresAnuales.findByAnio((anio+1900)).inflacion
+                inflacion = ValoresAnuales.findByAnio((anio + 1900)).inflacion
                 mesesMemo = params.reajusteMesesMemo
                 proyeccionTotalMemo = (totalBase.toDouble() * ((inflacion / 1200) * mesesMemo.toInteger()))
                 ivaTotal = ((totalBase.toDouble() + proyeccionTotalMemo) * paux?.iva) / 100;
@@ -5133,33 +5129,33 @@ class ReportesController {
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         //nuevas
-        def personaRol=null
-        if(params.firmaCoordinador != ''){
+        def personaRol = null
+        if (params.firmaCoordinador != '') {
             personaRol = PersonaRol.get(params.firmaCoordinador)
             firmaCoordinador = personaRol?.persona
-            if(firmaNueva) {
+            if (firmaNueva) {
                 firmaCoordinador = firmaNueva.persona
             }
 
             addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 //            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        }else{
+        } else {
             addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 //            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
         def rolPrint = "COORDINADOR"
-        println "firma nueva "+firmaNueva
-        if(firmaNueva) {
+        println "firma nueva " + firmaNueva
+        if (firmaNueva) {
             firmaCoordinador = firmaNueva.persona
             def rol = PersonaRol.findAllByPersona(firmaNueva.persona)
             rol.each {
-                if(it.funcion.codigo == "D"){
-                    if(firmaNueva.persona.sexo == "M"){
-                        rolPrint="DIRECTOR"
-                    }else{
-                        rolPrint="DIRECTORA"
+                if (it.funcion.codigo == "D") {
+                    if (firmaNueva.persona.sexo == "M") {
+                        rolPrint = "DIRECTOR"
+                    } else {
+                        rolPrint = "DIRECTORA"
                     }
                 }
             }
@@ -5177,6 +5173,22 @@ class ReportesController {
 //        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         document.add(tablaFirmas);
+
+        /** todo: poner responsable y revisado por **/
+/*
+        if (tipo == '1') {
+            PdfPTable tablaPie = new PdfPTable(2);
+            tablaPie.setWidthPercentage(100);
+            tablaPie.setWidths(arregloEnteros([3, 60]))
+
+            addCellTabla(tablaPie, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaPie, new Paragraph("Elaborado por:" + obra?.responsableObra?.sigla, times8normal), prmsHeaderHoja)
+            addCellTabla(tablaPie, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaPie, new Paragraph("Revisado  por: ???", times8normal), prmsHeaderHoja)
+
+            document.add(tablaPie)
+        }
+*/
 
         //old
 //            firmaFijaMemo.each {f->
