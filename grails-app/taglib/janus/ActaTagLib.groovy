@@ -609,7 +609,7 @@ class ActaTagLib {
         rjpl.each { rj ->
             if (rj.planillaReajustada.tipoPlanilla.codigo != "L" && rj.planillaReajustada.tipoPlanilla.codigo != "M" && rj.planillaReajustada.tipoPlanilla.codigo != "C") {
                 tabla += "<tr>"
-                tabla += "<td style='text-align:center;'>${rj.planilla.numero}</td>"
+                tabla += "<td style='text-align:center;'>${rj.planillaReajustada.numero}</td>"
                 tabla += "<td style='text-align:center;'>"
                 if (rj.planillaReajustada.tipoPlanilla.codigo == "A") {
                     tabla += "ANTICIPO"
