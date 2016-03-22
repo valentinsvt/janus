@@ -420,7 +420,7 @@ class ActaTagLib {
 
 //        def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso'])
         def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso']).last()
-        def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl)
+        def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl, [sort: 'periodo'])
 
         def tabla = "<table class='table table-bordered table-condensed'>"
 
@@ -437,16 +437,18 @@ class ActaTagLib {
         def total = 0
         rjpl.each { rj ->
             def periodo
-            if (rj.planilla.tipoPlanilla.codigo == "A") {
+            if (rj.planillaReajustada.tipoPlanilla.codigo == "A") {
                 periodo = "ANTICIPO"
             } else {
-                periodo = "DEL " + fechaConFormato(fecha: rj.planilla.fechaInicio, formato: "dd-MM-yyyy") +
-                        " AL " + fechaConFormato(fecha: rj.planilla.fechaFin, formato: "dd-MM-yyyy")
+//                periodo = "DEL " + fechaConFormato(fecha: rj.planillaReajustada.fechaInicio, formato: "dd-MM-yyyy") +
+//                        " AL " + fechaConFormato(fecha: rj.planillaReajustada.fechaFin, formato: "dd-MM-yyyy")
+                periodo = "DEL " + fechaConFormato(fecha: rj.fechaInicio, formato: "dd-MM-yyyy") +
+                        " AL " + fechaConFormato(fecha: rj.fechaFin, formato: "dd-MM-yyyy")
             }
             total += rj.valorReajustado
             tabla += "<tr>"
-            tabla += "<td>${fechaConFormato(fecha: rj.planilla.fechaIngreso)}</td>"
-            tabla += "<td>${rj.planilla.numero}</td>"
+            tabla += "<td>${fechaConFormato(fecha: rj.planillaReajustada.fechaIngreso)}</td>"
+            tabla += "<td>${rj.planillaReajustada.numero}</td>"
             tabla += "<td>${periodo}</td>"
             tabla += "<td class='tar'>${numero(numero: rj.valorReajustado)}</td>"
             tabla += "</tr>"
@@ -576,12 +578,12 @@ class ActaTagLib {
         return tabla
     }
 
-    def rpr(Acta acta) {    // resumen de pago de reajustes
+    def rpr(Acta acta) {    // resumen de pago de reajustes  8.1
 
         def contrato = acta.contrato
 //        def planillas = Planilla.findAllByContrato(contrato, [sort: "numero"])
         def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso']).last()
-        def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl)
+        def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl, [sort: 'periodo'])
 
 
 //        println "---------------------------------------------------------------"
@@ -605,14 +607,15 @@ class ActaTagLib {
         def totalProvisional = 0, totalDefinitivo = 0, totalDiferencia = 0
         def liquidacion = (Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('L')).size() > 0)
         rjpl.each { rj ->
-            if (rj.planilla.tipoPlanilla.codigo != "L" && rj.planilla.tipoPlanilla.codigo != "M" && rj.planilla.tipoPlanilla.codigo != "C") {
+            if (rj.planillaReajustada.tipoPlanilla.codigo != "L" && rj.planillaReajustada.tipoPlanilla.codigo != "M" && rj.planillaReajustada.tipoPlanilla.codigo != "C") {
                 tabla += "<tr>"
                 tabla += "<td style='text-align:center;'>${rj.planilla.numero}</td>"
                 tabla += "<td style='text-align:center;'>"
-                if (rj.planilla.tipoPlanilla.codigo == "A") {
+                if (rj.planillaReajustada.tipoPlanilla.codigo == "A") {
                     tabla += "ANTICIPO"
                 } else {
-                    tabla += "DEL ${rj.planilla.fechaInicio?.format('yyyy-MM-dd')} AL ${rj.planilla.fechaFin?.format('yyyy-MM-dd')}"
+//                    tabla += "DEL ${rj.planillaReajustada.fechaInicio?.format('yyyy-MM-dd')} AL ${rj.planillaReajustada.fechaFin?.format('yyyy-MM-dd')}"
+                    tabla += "DEL ${rj.fechaInicio?.format('yyyy-MM-dd')} AL ${rj.fechaFin?.format('yyyy-MM-dd')}"
                 }
                 tabla += "</td>"
                 def diferencia = 0
@@ -631,7 +634,7 @@ class ActaTagLib {
 
 
                 totalProvisional += rj.valorReajustado
-                totalDefinitivo += rj.planilla.reajusteLiq
+                totalDefinitivo += rj.planillaReajustada.reajusteLiq
                 totalDiferencia += diferencia
 
                 tabla += "</tr>"

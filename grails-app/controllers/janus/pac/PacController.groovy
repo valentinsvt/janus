@@ -370,14 +370,17 @@ class PacController extends janus.seguridad.Shield {
     }
 
     def buscaPrsp() {
-
+        println "buscaPrsp $params"
         def listaTitulos = ["Código", "Descripción", "Fuente", "programa", "Subprograma", "Proyecto"]
         def listaCampos = ["numero", "descripcion", "fuente", "programa", "subPrograma", "proyecto"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaPrsp", controller: "asignacion")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-ccp").modal("hide");'
-        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion")+" Fuente: "+$(this).attr("prop_fuente")+" - Programa: "+$(this).attr("prop_programa")+" - Subprograma: "+$(this).attr("prop_subPrograma")+" - Proyecto: "+$(this).attr("prop_proyecto"));cargarTecho();'
+        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));' +
+                '$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion")+" Fuente: "+$(this).attr("prop_fuente")+" - Programa:' +
+                ' "+$(this).attr("prop_programa")+" - Subprograma: "+$(this).attr("prop_subPrograma")+" - Proyecto: "+$(this).attr("prop_proyecto"));' +
+                'cargarTecho();'
         funcionJs += '}'
         def numRegistros = 20
         def extras = ""
@@ -421,8 +424,9 @@ class PacController extends janus.seguridad.Shield {
         println "uso de asignación: $pacs.costo"
         def usado = 0
         pacs.each {
-            println "procesa: ${it.id}, ${it.costo} con ${params.pac_id}"
-            if(it.id != params.pac_id.toInteger()) {
+//            println "procesa $it"
+//            println "procesa: ${it.id}, ${it.costo} con ${params?.pac_id}"
+            if(it.id != (params?.pac_id? params?.pac_id?.toInteger() : 0)) {
                 usado += it.costo * it.cantidad
             }
         }
