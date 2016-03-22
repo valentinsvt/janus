@@ -5146,9 +5146,10 @@ class ReportesController {
 //            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
         def rolPrint = "COORDINADOR"
-        println "firma nueva " + firmaNueva
+//        println "firma nueva " + firmaNueva
+        def personaNueva
         if (firmaNueva) {
-            firmaCoordinador = firmaNueva.persona
+            personaNueva = firmaNueva.persona
             def rol = PersonaRol.findAllByPersona(firmaNueva.persona)
             rol.each {
                 if (it.funcion.codigo == "D") {
@@ -5160,11 +5161,12 @@ class ReportesController {
                 }
             }
         }
+//        println "coordinador: ${firmaCoordinador.nombre}, personanueva: ${personaNueva.nombre}"
         addCellTabla(tablaFirmas, new Paragraph(rolPrint, times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
-        addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(personaNueva?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaFirmas, new Paragraph('', times8bold), prmsHeaderHoja)
 
@@ -5175,20 +5177,20 @@ class ReportesController {
         document.add(tablaFirmas);
 
         /** todo: poner responsable y revisado por **/
-/*
         if (tipo == '1') {
             PdfPTable tablaPie = new PdfPTable(2);
             tablaPie.setWidthPercentage(100);
             tablaPie.setWidths(arregloEnteros([3, 60]))
 
             addCellTabla(tablaPie, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaPie, new Paragraph("Elaborado por:" + obra?.responsableObra?.sigla, times8normal), prmsHeaderHoja)
+            addCellTabla(tablaPie, new Paragraph("Elaborado por: " + obra?.responsableObra?.titulo?.toUpperCase() + " " +
+                    obra?.responsableObra?.nombre?.toUpperCase() + obra?.responsableObra?.apellido?.toUpperCase(), times8normal), prmsHeaderHoja)
             addCellTabla(tablaPie, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaPie, new Paragraph("Revisado  por: ???", times8normal), prmsHeaderHoja)
-
+            addCellTabla(tablaPie, new Paragraph("Revisado por: " + firmaCoordinador?.titulo?.toUpperCase() + " " +
+                    firmaCoordinador?.nombre?.toUpperCase() + " " + firmaCoordinador?.apellido?.toUpperCase() , times8normal), prmsHeaderHoja)
+//            println "Revisado por: " + firmaCoordinador?.nombre + firmaCoordinador?.apellido
             document.add(tablaPie)
         }
-*/
 
         //old
 //            firmaFijaMemo.each {f->
