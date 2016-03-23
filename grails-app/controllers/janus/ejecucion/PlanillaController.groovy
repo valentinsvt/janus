@@ -894,7 +894,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
-//        println "pago_ajax: PARAMS: " + params
+        println "pago_ajax: PARAMS: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -930,7 +930,14 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println planilla.fechaMemoPagoPlanilla
 
         def dptoFiscalizacion = Departamento.findAllByCodigo("FISC")
-        def dptoDirFinanciera = Departamento.findAllByCodigo("FINA")
+//        def dptoDirFinanciera = Departamento.findAllByCodigo("FINA")
+        def dptoDirFinanciera
+        if(params.tipo == '4') {
+            dptoDirFinanciera = Departamento.findAllByCodigo("FINA")
+        } else {
+            dptoDirFinanciera = Departamento.findAllByCodigo("AP")
+        }
+        println "dpto: ${dptoDirFinanciera[0]}, size: ${dptoDirFinanciera.size()}"
 
         if (dptoFiscalizacion.size() == 1) {
             dptoFiscalizacion = dptoFiscalizacion[0]
@@ -943,11 +950,12 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         if (dptoDirFinanciera.size() == 1) {
             dptoDirFinanciera = dptoDirFinanciera[0]
+            println "ok: ${dptoDirFinanciera} ----1"
         } else if (dptoDirFinanciera.size() == 0) {
             render "No se encontró el departamento de Dirección Financiera con código FINA. Por favor asegúrese de que exista para continuar con el trámite."
             return
         } else {
-            render "Se encontraron ${dptoDirFinanciera.size()} departamentos de Dirección Financiera con código FINA. Por favor asegúrese de que exista para sólo uno continuar con el trámite."
+            render "Se encontraron ${dptoDirFinanciera.size()} departamentos de Dirección Financiera con código AP. Por favor asegúrese de que exista para sólo uno continuar con el trámite."
             return
         }
 

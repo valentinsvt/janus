@@ -74,7 +74,9 @@
                 <g:set var="prej" value="${janus.pac.PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])}"/>
                 <tbody class="paginate">
                     <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
-                        <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}"/>
+                        %{--<g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}"/>--}%
+                        <g:set var="periodosOk" value="1"/>
+                        %{--${periodosOk}:::::${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}--}%
                         <tr style="font-size: 10px">
                             <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
                             <td>
@@ -154,7 +156,7 @@
                                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && !planillaInstance.contrato.obra.fechaInicio}">
                                         <g:set var="lblBtn" value="${-7}"/>
                                     </g:if>
-
+                                    %{--lbl:${lblBtn}--}%
                                     <g:if test="${lblBtn > 0}">
                                         <g:if test="${lblBtn == 2}">
                                             <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
@@ -199,13 +201,13 @@
                                             <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="4">
                                                 Corregir pago
                                             </a>
+                                            <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                         </g:if>
                                         <g:else>
                                             <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="4">
                                                 Informar pago
                                             </a>
                                         </g:else>
-                                        <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                     </g:elseif>
 
                                 </g:if>
