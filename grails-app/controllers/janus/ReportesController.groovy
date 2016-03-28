@@ -35,6 +35,7 @@ class ReportesController {
     def preciosService
     def dbConnectionService
     def diasLaborablesService
+    def obraService
 
     def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 
@@ -5176,8 +5177,10 @@ class ReportesController {
 
         document.add(tablaFirmas);
 
-        /** todo: poner responsable y revisado por **/
-        if (tipo == '1') {
+        /** todo: poner responsable y revisado por ... usar obrasService.esDuenoObra**/
+        if(obraService.esDuenoObra(obra, session.usuario.id) && (tipo == '1') && (session.usuario.departamento.codigo == 'UTFPU')){
+            def funcionCoord = Funcion.findByCodigo('O')
+            def coordinador = PersonaRol.findByFuncionAndPersonaInList(funcionCoord, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))?.persona
             PdfPTable tablaPie = new PdfPTable(2);
             tablaPie.setWidthPercentage(100);
             tablaPie.setWidths(arregloEnteros([3, 60]))
@@ -5186,8 +5189,8 @@ class ReportesController {
             addCellTabla(tablaPie, new Paragraph("Elaborado por: " + obra?.responsableObra?.titulo?.toUpperCase() + " " +
                     obra?.responsableObra?.nombre?.toUpperCase() + obra?.responsableObra?.apellido?.toUpperCase(), times8normal), prmsHeaderHoja)
             addCellTabla(tablaPie, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaPie, new Paragraph("Revisado por: " + firmaCoordinador?.titulo?.toUpperCase() + " " +
-                    firmaCoordinador?.nombre?.toUpperCase() + " " + firmaCoordinador?.apellido?.toUpperCase() , times8normal), prmsHeaderHoja)
+            addCellTabla(tablaPie, new Paragraph("Revisado por: " + coordinador?.titulo?.toUpperCase() + " " +
+                    coordinador?.nombre?.toUpperCase() + " " + coordinador?.apellido?.toUpperCase() , times8normal), prmsHeaderHoja)
 //            println "Revisado por: " + firmaCoordinador?.nombre + firmaCoordinador?.apellido
             document.add(tablaPie)
         }
