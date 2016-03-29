@@ -737,7 +737,7 @@ class Reportes2Controller {
 
 
     def imprimirRubrosConsolidado2() {
-//        println "consolidado 2: "+params
+//        println "consolidado 2: $params"
         def rubros = []
 
         def parts = params.id.split("_")
@@ -777,7 +777,10 @@ class Reportes2Controller {
                 break;
         }
 
-        def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," + params.lista3 + "," + params.lista4 + "," + params.lista5 + "," + params.lista6 + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
+        def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," +
+                params.lista3 + "," + params.lista4 + "," + params.lista5 + "," + params.lista6 + "," + params.dsp0 + "," +
+                params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq +
+                "," + params.indi
 //        preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
         def res = preciosService.nv_rubros(parametros)
 

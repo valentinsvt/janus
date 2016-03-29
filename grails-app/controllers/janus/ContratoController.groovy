@@ -229,6 +229,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         def planoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("plano") }
         def justificativoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("justificativo") }
+        println "documentos: ${documentosContrato} planos: ${planoContrato}, justificativo: ${justificativoContrato}"
 
         if (planoContrato.size() == 0) {
             errores += "<li>Debe cargar un documento a la biblioteca con nombre 'Plano'</li>"

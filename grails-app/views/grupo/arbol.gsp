@@ -100,7 +100,8 @@
             </div>
 
             <div class="span3">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" id="ciudad" style="width: 170px"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id"
+                    optionValue="descripcion" id="ciudad" style="width: 170px"/>
             </div>
 
             <div class="span1">
@@ -292,7 +293,7 @@
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modal_trans_title2">
-            Variables de transporte
+            Variables de transporte para el Grupo
         </h3>
     </div>
 
@@ -304,7 +305,8 @@
             </div>
 
             <div class="span3">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" id="ciudad" style="width: 170px"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id"
+                          optionValue="descripcion" id="ciudad" style="width: 170px"/>
             </div>
 
             <div class="span1">
@@ -312,7 +314,8 @@
             </div>
 
             <div class="span2">
-                <elm:datepicker name="item.fecha" class="" style="width: 90px;" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
+                <elm:datepicker name="item.fecha" class="" style="width: 90px;" id="fecha_precios2" value="${new java.util.Date()}"
+                                format="dd-MM-yyyy"/>
             </div>
 
             <div class="span2" style="width: 120px;">
@@ -320,7 +323,7 @@
             </div>
 
             <div class="span1">
-                <input type="text" style="width: 30px;" id="costo_indi" value="21">
+                <input type="text" style="width: 30px;" id="costo_indi2" value="21">
             </div>
         </div>
         <hr style="margin: 5px 0 10px 0;"/>
@@ -331,7 +334,7 @@
             </div>
 
             <div class="span3" style="margin-left: 10px;">
-                <g:select style="width: 165px;" name="volquetes" from="${volquetes2}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1': 'Seleccione']}" value="${aux.volquete.id}"/>
+                <g:select style="width: 165px;" name="volquetes" from="${volquetes2}" optionKey="id" optionValue="nombre" id="cmb_vol2" noSelection="${['-1': 'Seleccione']}" value="${aux.volquete.id}"/>
             </div>
 
             <div class="span1" style="width: 35px; margin-left: 5px;">
@@ -339,7 +342,7 @@
             </div>
 
             <div class="span1" style="margin-left: 5px; width: 90px;">
-                <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_volqueta">
+                <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_volqueta2">
             </div>
 
             <div class="span1" style="margin-left: 5px;">
@@ -347,7 +350,7 @@
             </div>
 
             <div class="span3" style="margin-left: 5px;">
-                <g:select style="width: 165px;" name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" noSelection="${['-1': 'Seleccione']}" value="${aux.chofer.id}"/>
+                <g:select style="width: 165px;" name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof2" noSelection="${['-1': 'Seleccione']}" value="${aux.chofer.id}"/>
             </div>
 
             <div class="span1" style="width: 35px;margin-left: 5px;">
@@ -355,7 +358,7 @@
             </div>
 
             <div class="span1" style="margin-left: 5px; width: 90px;">
-                <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_chofer">
+                <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_chofer2">
             </div>
         </div>
 
@@ -377,7 +380,7 @@
             </div>
 
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_p1" value="10.00">
+                <input type="text" style="width: 50px;" id="dist_p1g" value="10.00">
             </div>
 
             <div class="span4">
@@ -385,7 +388,7 @@
             </div>
 
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_v1" value="20.00">
+                <input type="text" style="width: 50px;" id="dist_v1g" value="20.00">
             </div>
 
         </div>
@@ -396,7 +399,7 @@
             </div>
 
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_p2" value="10.00">
+                <input type="text" style="width: 50px;" id="dist_p2g" value="10.00">
             </div>
 
             <div class="span4">
@@ -404,7 +407,7 @@
             </div>
 
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_v2" value="20.00">
+                <input type="text" style="width: 50px;" id="dist_v2g" value="20.00">
             </div>
         </div>
 
@@ -418,7 +421,7 @@
             </div>
 
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_v3" value="20.00">
+                <input type="text" style="width: 50px;" id="dist_v3g" value="20.00">
             </div>
         </div>
 
@@ -434,7 +437,7 @@
             </div>
 
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_1"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_1g"/>
             </div>
 
             <div class="span3">
@@ -442,7 +445,7 @@
             </div>
 
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_3"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_3g"/>
             </div>
         </div>
 
@@ -452,7 +455,7 @@
             </div>
 
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_2"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_2g"/>
             </div>
 
             <div class="span3">
@@ -460,7 +463,7 @@
             </div>
 
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_4"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_4g"/>
             </div>
         </div>
 
@@ -472,7 +475,7 @@
             </div>
 
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_5"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_5g"/>
             </div>
         </div>
     </div>
@@ -480,7 +483,7 @@
     <div class="modal-footer" id="modal_trans_footer2">
         <g:hiddenField name="nodeId" val=""/>
         <g:hiddenField name="nodeGrupo" val=""/>
-        <a href= "#" data-dismiss="modal" class="btn btn-primary" id="imp_consolidado" data-transporte="true"><i class="icon-print"></i> Consolidado</a>
+        <a href= "#" data-dismiss="modal" class="btn btn-primary" id="imp_consolidado" data-transporte="true"><i class="icon-print"></i>Consolidado</a>
         <a href= "#" data-dismiss="modal" class="btn btn-primary" id="imp_consolidado_excel" data-transporte="true"><i class="icon-table"></i> Consolidado Excel</a>
         <a href="#" data-dismiss="modal" class="btn" id="btnCancel">Cancelar</a>
     </div>
@@ -526,9 +529,10 @@
         });
     }
 
-    function getPrecios($cmb, $txt) {
+    function getPrecios($cmb, $txt, $fcha) {
         if ($cmb.val() != "-1") {
-            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids=" + $cmb.val();
+//            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids=" + $cmb.val();
+            var datos = "fecha=" + $fcha.val() + "&ciudad=" + $("#ciudad").val() + "&ids=" + $cmb.val();
             $.ajax({
                 type    : "POST",
                 url     : "${g.createLink(controller: 'rubro',action:'getPreciosTransporte')}",
@@ -628,6 +632,7 @@
             icon             : params.icon,
             action           : function (obj) {
                 $("#modal-transporte2").modal("show");
+                $("#fecha_precios2").change();
             }
         };
         return obj;
@@ -884,7 +889,7 @@
                 });
                 menuItems.print = imprimirConsolidado({
                     id        : nodeStrId,
-                    label     : "Imprimir",
+                    label     : "Imprimir rubros del grupo",
                     sepBefore : true,
                     sepAfter  : false,
                     icon      : icons.print
@@ -963,7 +968,7 @@
                 });
                 menuItems.print = imprimir({
                     id        : nodeStrId,
-                    label     : "Imprimir",
+                    label     : "Imprimir rubros subgrupo",
                     sepBefore : true,
                     sepAfter  : false,
                     icon      : icons.print
@@ -1023,7 +1028,7 @@
                 });
                 menuItems.print = imprimir({
                     id        : nodeStrId,
-                    label     : "Imprimir",
+                    label     : "Imprimir capítulo",
                     sepBefore : true,
                     sepAfter  : false,
                     icon      : icons.print
@@ -1032,7 +1037,7 @@
             case "rubro":
                 menuItems.print = imprimir({
                     id        : nodeStrId,
-                    label     : "Imprimir",
+                    label     : "Imprimir rubro",
                     sepBefore : true,
                     sepAfter  : false,
                     icon      : icons.print
@@ -1178,15 +1183,27 @@
             $("#cmb_vol").change()
             $("#cmb_chof").change()
         })
+        $("#fecha_precios2").change(function(){
+            $("#cmb_vol2").change()
+            $("#cmb_chof2").change()
+        })
 
         $("#cmb_vol").change(function () {
-            getPrecios($("#cmb_vol"), $("#costo_volqueta"));
+            getPrecios($("#cmb_vol"), $("#costo_volqueta"), $("#fecha_precios"));
         });
+        $("#cmb_vol2").change(function () {
+            getPrecios($("#cmb_vol2"), $("#costo_volqueta2"), $("#fecha_precios2"));
+        });
+
         $("#cmb_chof").change(function () {
-            getPrecios($("#cmb_chof"), $("#costo_chofer"));
+            getPrecios($("#cmb_chof"), $("#costo_chofer"), $("#fecha_precios"));
         });
-        getPrecios($("#cmb_chof"), $("#costo_chofer"));
-        getPrecios($("#cmb_vol"), $("#costo_volqueta"));
+        $("#cmb_chof2").change(function () {
+            getPrecios($("#cmb_chof2"), $("#costo_chofer2"), $("#fecha_precios2"));
+        });
+
+        getPrecios($("#cmb_chof"), $("#costo_chofer"), $("#fecha_precios"));
+        getPrecios($("#cmb_vol"), $("#costo_volqueta"), $("#fecha_precios"));
 
         $("#btnSearch").click(function () {
             doSearch();
@@ -1265,25 +1282,26 @@
 
 
         $("#imp_consolidado").click(function () {
-            var dsp0 = $("#dist_p1").val();
-            var dsp1 = $("#dist_p2").val();
-            var dsv0 = $("#dist_v1").val();
-            var dsv1 = $("#dist_v2").val();
-            var dsv2 = $("#dist_v3").val();
-            var lista1 = $("#lista_1").val();
-            var lista2 = $("#lista_2").val();
-            var lista3 = $("#lista_3").val();
-            var lista4 = $("#lista_4").val();
-            var lista5 = $("#lista_5").val();
+//            alert("consolidado...")
+            var dsp0 = $("#dist_p1g").val();
+            var dsp1 = $("#dist_p2g").val();
+            var dsv0 = $("#dist_v1g").val();
+            var dsv1 = $("#dist_v2g").val();
+            var dsv2 = $("#dist_v3g").val();
+            var lista1 = $("#lista_1g").val();
+            var lista2 = $("#lista_2g").val();
+            var lista3 = $("#lista_3g").val();
+            var lista4 = $("#lista_4g").val();
+            var lista5 = $("#lista_5g").val();
             var lista6 = $("#ciudad").val();
-            var volqueta = $("#costo_volqueta").val();
-            var chofer = $("#costo_chofer").val();
+            var volqueta = $("#costo_volqueta2").val();
+            var chofer = $("#costo_chofer2").val();
             var trans = $(this).data("transporte");
             var nodeId = $("#nodeId").val();
             var principal = true;
 
             var datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 +
-                    "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=" + nodeId +
+                    "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios2").val() + "Wid=" + nodeId +
                     "Wlugar=" + $("#ciudad").val() + "Wlista1=" + lista1 + "Wlista2=" + lista2 + "Wlista3=" + lista3 +
                     "Wlista4=" + lista4 + "Wlista5=" + lista5 + "Wlista6=" + lista6 + "Wprincipal=" + principal
                     + "Wchof=" + $("#cmb_chof").val() +
