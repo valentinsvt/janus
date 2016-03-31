@@ -3744,6 +3744,14 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
             }
 
+            if(obra?.distanciaDesalojo != 0){
+                addCellTabla(tablaDatos, new Paragraph("Distancia al botadero (escombrera)", times8bold), prmsHeaderHoja + [colspan: 3] )
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaDesalojo, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            }
+
+
             txtDatos1.setAlignment(Element.ALIGN_CENTER);
             txtDatos1.add(new Paragraph("COSTO INDIRECTO TOTAL : ${obra?.totales} %", times8bold));
             txtDatos1.add(new Paragraph(" ", times8bold));
