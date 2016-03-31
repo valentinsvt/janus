@@ -4,12 +4,12 @@
             <meta name="layout" content="main">
             <script src="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/js', file: 'jquery.dataTables.min.js')}"></script>
             <link href="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/css', file: 'jquery.dataTables.css')}" rel="stylesheet">
-        <title>Verificación de Precios de la obra</title>
+        <title>Verificación de Materiales con precios cero</title>
     </head>
 
     <body>
         <div class="hoja">
-            <div class="tituloGrande" style="width: 100%">Verificación de precios en obra: ${obra?.descripcion}</div>
+            <div class="tituloGrande" style="width: 100%">Precios Cero en obra: ${obra?.descripcion}</div>
 
             <g:if test="${flash.message}">
                 <div class="span12">
@@ -35,21 +35,16 @@
                             <th>Item</th>
                             <th>U</th>
                             <th>P. Unitario</th>
-                            <th>Fecha</th>
-
                         </tr>
                     </thead>
                     <tbody>
                         <g:each in="${res}" var="r">
-                            <g:if test="${r?.fecha != null}">
                             <tr>
                                 <td>${r?.codigo}</td>
                                 <td>${r?.item}</td>
                                 <td style="text-align: center">${r?.unidad}</td>
                                 <td style="text-align: right"><g:formatNumber number="${r?.punitario}" minFractionDigits="5" maxFractionDigits="5" format="##,##0" locale="ec"/></td>
-                                <td style="text-align: center"><g:formatDate date="${r?.fecha}" format="dd-MM-yyyy"/></td>
                             </tr>
-                            </g:if>
                         </g:each>
                     </tbody>
                 </table>

@@ -230,6 +230,10 @@
 
     </g:else>
 
+    <g:if test="${obra?.estado != 'R'}">
+        <button class="btn" id="revisarPrecios"><i class="icon-check"></i> Precios 0</button>
+    </g:if>
+
 </div>
 
 <g:form class="registroObra" name="frm-registroObra" action="save">
@@ -935,7 +939,6 @@
             No se puede generar la Verificación de Precios, porque la obra no cuenta con la Matriz!
         </div>
     </fieldset>
-
 </div>
 
 
@@ -1944,19 +1947,7 @@
         });
 
         $("#btnDocumentos").click(function () {
-
-            %{--if (${obra?.estado == 'R'}) {--}%
-
-            %{--$("#dlgLoad").dialog("open");--}%
-
             location.href = "${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}"
-//
-//            }
-//            else {
-//                $("#documentosDialog").dialog("open")
-//
-//            }
-
         });
 
         $("#btnMapa").click(function () {
@@ -1966,7 +1957,6 @@
         });
 
         $("#btnVeri").click(function () {
-            %{--var verificar = ${verifOK}--}%
             if (${verifOK == true}) {
                 location.href = "${g.createLink(controller: 'verificacionPrecios', action: 'verificacion', id: obra?.id)}"
             }
@@ -2731,7 +2721,6 @@
         });
 
         $("#dlgVerificacion").dialog({
-
             autoOpen: false,
             resizable: false,
             modal: true,
@@ -2744,11 +2733,17 @@
                 "Aceptar": function () {
 
                     $("#dlgVerificacion").dialog("close");
-
                 }
             }
+        });
 
-
+        $("#revisarPrecios").click(function () {
+            if (${verifOK == true}) {
+                location.href = "${g.createLink(controller: 'verificacionPrecios', action: 'preciosCero', id: obra?.id)}"
+            }
+            else {
+                $("#dlgVerificacion").dialog("open");
+            }
         });
 
         function busqueda() {
@@ -2783,7 +2778,6 @@
     });
 
     $("#errorDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2795,19 +2789,11 @@
         title: 'Error',
         buttons: {
             "Aceptar": function () {
-
                 $("#errorDialog").dialog("close");
-
             }
         }
 
     });
-
-
-
-
-
-
 
 </script>
 
