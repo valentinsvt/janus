@@ -305,7 +305,7 @@
                             <g:if test="${lblBtn == 5}">
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}"
-                                       data-tipo="${lblBtn}">
+                                       data-tipo="${lblBtn}" data-tppl="${planillaInstance.tipoPlanilla.id}" >
                                         Iniciar Obra
                                     </a>
                                 </g:if>
@@ -443,7 +443,8 @@
                 url: "${createLink(action:'pago_ajax')}",
                 data: {
                     id: $btn.data("id"),
-                    tipo: tipo
+                    tipo: tipo,
+                    tppl: $btn.data("tppl")
                 },
                 success: function (msg) {
                     var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');

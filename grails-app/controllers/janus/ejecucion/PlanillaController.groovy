@@ -894,7 +894,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
-        println "pago_ajax: PARAMS: " + params
+//        println "pago_ajax: PARAMS: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -932,7 +932,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def dptoFiscalizacion = Departamento.findAllByCodigo("FISC")
 //        def dptoDirFinanciera = Departamento.findAllByCodigo("FINA")
         def dptoDirFinanciera
-        if(params.tipo == '4') {
+        if(params.tipo in ['4', '5']) {
             dptoDirFinanciera = Departamento.findAllByCodigo("FINA")
         } else {
             dptoDirFinanciera = Departamento.findAllByCodigo("AP")
