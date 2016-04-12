@@ -68,7 +68,7 @@ class ObraService {
             if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(usro).departamento?.direccion?.id) {
                 dueno = true
             } else {
-                dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+                dueno = personasUtfpu.contains(responsableRol) && (Persona.get(usro).departamento?.codigo == 'UTFPU')
             }
         }
         dueno
