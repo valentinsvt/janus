@@ -54,7 +54,6 @@
                     </a>
 
                     <div class="btn-group" style="margin-top: 20px;">
-                        %{--<input type="submit" value="Guardar" class="btn btn-primary">--}%
                         <g:if test="${filePath}">
                             <g:link action="downloadFile" id="${rubro.id}" params="[tipo: tipo]" class="btn btn-info">
                                 <i class="icon-download-alt"></i> Descargar

@@ -716,6 +716,22 @@ class RubroController extends janus.seguridad.Shield {
         def rubro = Item.get(params.id)
         def tipo = params.tipo
 
+
+        def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
+
+        println("rubro " + rubro)
+        println("ares " + ares?.id)
+
+
+        def ret
+
+        if(ares){
+            ret = ares?.item
+        }else{
+            ret = rubro
+        }
+
+
         def filePath
         def titulo
         switch (tipo) {
@@ -725,7 +741,7 @@ class RubroController extends janus.seguridad.Shield {
                 break;
             case "dt":
                 titulo = "Especificaciones"
-                filePath = rubro.especificaciones
+                filePath = ares?.ruta
                 break;
         }
 
@@ -735,7 +751,7 @@ class RubroController extends janus.seguridad.Shield {
             ext = filePath.split("\\.")
             ext = ext[ext.size() - 1]
         }
-        return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
+        return [rubro: ret, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
     }
 
     def downloadFile() {
@@ -782,6 +798,15 @@ class RubroController extends janus.seguridad.Shield {
         def path = servletContext.getRealPath("/") + "rubros/"   //web-app/rubros
         new File(path).mkdirs()
         def rubro = Item.get(params.rubro)
+        def ares
+        if(ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)){
+            ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
+        }else{
+            ares = new ArchivoEspecificacion()
+            ares.item = rubro
+            ares.codigo = rubro.codigoEspecificacion
+        }
+
         def f = request.getFile('file')  //archivo = name del input type file
         if (f && !f.empty) {
             def fileName = f.getOriginalFilename() //nombre original del archivo
@@ -803,7 +828,7 @@ class RubroController extends janus.seguridad.Shield {
                 def file = new File(pathFile)
                 f.transferTo(file)
 
-                def old = tipo == "il" ? rubro.foto : rubro.especificaciones
+                def old = tipo == "il" ? rubro.foto : ares?.ruta
                 if (old && old.trim() != "") {
                     def oldPath = servletContext.getRealPath("/") + "rubros/" + old
                     def oldFile = new File(oldPath)
@@ -817,21 +842,24 @@ class RubroController extends janus.seguridad.Shield {
                         rubro.foto = /*g.resource(dir: "rubros") + "/" + */ fileName
                         break;
                     case "dt":
-                        rubro.especificaciones = /*g.resource(dir: "rubros") + "/" + */ fileName
+//                        rubro.especificaciones = /*g.resource(dir: "rubros") + "/" + */ fileName
+                        ares?.ruta = /*g.resource(dir: "rubros") + "/" + */ fileName
                         break;
                 }
 
-
-                if(rubro.save(flush: true)){
-                    if(rubro.codigoEspecificacion!="" && rubro.codigoEspecificacion){
-//                        println "buscnado codigos "+rubro.codigoEspecificacion
-                        def rubros = Item.findAllByCodigoNotEqualAndCodigoEspecificacion(rubro.codigo,rubro.codigoEspecificacion)
-                        rubros.each {
-//                            println "actualizando "+it
-                            it.especificaciones=rubro.especificaciones
-                            it.save(flush: true)
-                        }
-                    }
+//
+//                if(rubro.save(flush: true)){
+//                    if(rubro.codigoEspecificacion!="" && rubro.codigoEspecificacion){
+//                        def rubros = Item.findAllByCodigoNotEqualAndCodigoEspecificacion(rubro.codigo,rubro.codigoEspecificacion)
+//                        rubros.each {
+//                            it.especificaciones=rubro.especificaciones
+//                            it.save(flush: true)
+//                        }
+//                    }
+//                }
+                if(ares.save(flush: true)){
+                    rubro.especificaciones = ares?.ruta
+                    rubro.save(flush: true)
                 }
             } else {
                 flash.clase = "alert-error"
