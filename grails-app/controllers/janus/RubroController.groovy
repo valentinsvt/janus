@@ -1,5 +1,7 @@
 package janus
 
+import janus.apus.ArchivoEspecificacion
+
 //import org.apache.tools.ant.types.resources.comparators.Date
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -707,6 +709,10 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def showFoto() {
+
+//        def ares = ArchivoEspecificacion.get(2)
+//        println "...> $ares"
+
         def rubro = Item.get(params.id)
         def tipo = params.tipo
 
