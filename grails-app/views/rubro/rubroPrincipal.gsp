@@ -70,12 +70,13 @@
     </g:if>
 
     <g:if test="${rubro}">
-        <a href="#" id="detalle" class="btn btn-ajax btn-new">
-            <i class="icon-list"></i>
-            Especificaciones
-        </a>
-
-    </g:if>
+        <g:if test="${rubro?.codigoEspecificacion}">
+            <a href="#" id="detalle" class="btn btn-ajax btn-new">
+                <i class="icon-list"></i>
+                Especificaciones
+            </a>
+        </g:if>
+   </g:if>
     <g:if test="${rubro}">
         <a href="#" id="foto" class="btn btn-ajax btn-new">
             <i class="icon-picture"></i>

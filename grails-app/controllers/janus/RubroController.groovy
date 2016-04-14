@@ -720,7 +720,7 @@ class RubroController extends janus.seguridad.Shield {
         def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
 
         println("rubro " + rubro)
-        println("ares " + ares?.id)
+        println("ares111 " + ares?.id)
 
 
         def ret
@@ -798,14 +798,16 @@ class RubroController extends janus.seguridad.Shield {
         def path = servletContext.getRealPath("/") + "rubros/"   //web-app/rubros
         new File(path).mkdirs()
         def rubro = Item.get(params.rubro)
-        def ares
+        def archivEsp
         if(ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)){
-            ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
+            archivEsp = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
         }else{
-            ares = new ArchivoEspecificacion()
-            ares.item = rubro
-            ares.codigo = rubro.codigoEspecificacion
+//            println("entro")
+            archivEsp = new ArchivoEspecificacion()
+            archivEsp.item = rubro
+            archivEsp.codigo = rubro.codigoEspecificacion
         }
+
 
         def f = request.getFile('file')  //archivo = name del input type file
         if (f && !f.empty) {
@@ -828,7 +830,7 @@ class RubroController extends janus.seguridad.Shield {
                 def file = new File(pathFile)
                 f.transferTo(file)
 
-                def old = tipo == "il" ? rubro.foto : ares?.ruta
+                def old = tipo == "il" ? rubro.foto : archivEsp?.ruta
                 if (old && old.trim() != "") {
                     def oldPath = servletContext.getRealPath("/") + "rubros/" + old
                     def oldFile = new File(oldPath)
@@ -843,7 +845,7 @@ class RubroController extends janus.seguridad.Shield {
                         break;
                     case "dt":
 //                        rubro.especificaciones = /*g.resource(dir: "rubros") + "/" + */ fileName
-                        ares?.ruta = /*g.resource(dir: "rubros") + "/" + */ fileName
+                        archivEsp?.ruta = /*g.resource(dir: "rubros") + "/" + */ fileName
                         break;
                 }
 
@@ -857,8 +859,11 @@ class RubroController extends janus.seguridad.Shield {
 //                        }
 //                    }
 //                }
-                if(ares.save(flush: true)){
-                    rubro.especificaciones = ares?.ruta
+
+
+
+                if(archivEsp.save(flush: true)){
+                    rubro.especificaciones = archivEsp?.ruta
                     rubro.save(flush: true)
                 }
             } else {
