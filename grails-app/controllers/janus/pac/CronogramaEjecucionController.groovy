@@ -1057,7 +1057,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def errores = false
 
         if (((fcfm - fcfn + 1) >= dias && (fcfm != fcfn))) {
-            ultimoPeriodo.fechaFin = fcfn + dias - 1
+            ultimoPeriodo.fechaFin = fcfn + dias
             if (!ultimoPeriodo.save(flush: true)) {
                 errores = true
                 println "ERROR!!!!: " + ultimoPeriodo.errors
@@ -1103,11 +1103,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 }
 
             } else {
-                fcfn = fcin + dias - 1
-                dias -= (fcfn - fcin + 1)
+                fcfn = fcin + dias
+                dias -= (fcfn - fcin)
                 /** alarga el periodo inicial **/
                 def periodo = new PeriodoEjecucion([
                         obra       : obra,
+
+
                         numero     : prdo++,
                         tipo       : "A",
                         fechaInicio: fcin,

@@ -894,7 +894,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
-//        println "pago_ajax: PARAMS: " + params
+        println "pago_ajax: params: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -910,11 +910,13 @@ class PlanillaController extends janus.seguridad.Shield {
         def fiscContrato = contrato.fiscalizador
 //        fiscContrato = null
         if (!adminContrato) {
-            render "No se encontró el administrador del contrato. Por favor asegúrese de que existe un administrador activo para continuar con el trámite."
+            render "No se encontró el administrador del contrato. Por favor asegúrese de que existe un administrador " +
+                    "activo para continuar con el trámite."
             return
         }
         if (!fiscContrato && tipo == "2") {
-            render "No se encontró el fiscalizador del contrato. Por favor asegúrese de que existe un fiscalizador activo para continuar con el trámite."
+            render "No se encontró el fiscalizador del contrato. Por favor asegúrese de que existe un fiscalizador " +
+                    "activo para continuar con el trámite."
             return
         }
         def obraDpto = adminContrato.departamento
@@ -937,25 +939,29 @@ class PlanillaController extends janus.seguridad.Shield {
         } else {
             dptoDirFinanciera = Departamento.findAllByCodigo("AP")
         }
-        println "dpto: ${dptoDirFinanciera[0]}, size: ${dptoDirFinanciera.size()}"
+        println "params.tipo: ${params.tipo}, dpto: ${dptoDirFinanciera[0]}, size: ${dptoDirFinanciera.size()}"
 
         if (dptoFiscalizacion.size() == 1) {
             dptoFiscalizacion = dptoFiscalizacion[0]
         } else if (dptoFiscalizacion.size() == 0) {
-            render "No se encontró el departamento de Fiscalización con código FISC. Por favor asegúrese de que exista para continuar con el trámite."
+            render "No se encontró el departamento de Fiscalización con código FISC. Por favor asegúrese de que exista " +
+                    "para continuar con el trámite."
             return
         } else {
-            render "Se encontraron ${dptoFiscalizacion.size()} departamentos de Fiscalización con código FISC. Por favor asegúrese de que exista para sólo uno continuar con el trámite."
+            render "Se encontraron ${dptoFiscalizacion.size()} departamentos de Fiscalización con código FISC. Por " +
+                    "favor asegúrese de que exista para sólo uno continuar con el trámite."
             return
         }
         if (dptoDirFinanciera.size() == 1) {
             dptoDirFinanciera = dptoDirFinanciera[0]
             println "ok: ${dptoDirFinanciera} ----1"
         } else if (dptoDirFinanciera.size() == 0) {
-            render "No se encontró el departamento de Dirección Financiera con código FINA. Por favor asegúrese de que exista para continuar con el trámite."
+            render "No se encontró el departamento de Dirección Financiera con código FINA. Por favor asegúrese de " +
+                    "que exista para continuar con el trámite."
             return
         } else {
-            render "Se encontraron ${dptoDirFinanciera.size()} departamentos de Dirección Financiera con código AP. Por favor asegúrese de que exista para sólo uno continuar con el trámite."
+            render "Se encontraron ${dptoDirFinanciera.size()} departamentos de Dirección Financiera con código AP. " +
+                    "Por favor asegúrese de que exista para sólo uno continuar con el trámite."
             return
         }
 
@@ -1022,13 +1028,13 @@ class PlanillaController extends janus.seguridad.Shield {
                     eq("departamento", obraDpto)
                 }
                 if (!dDe) {
-                    render "No se encontró el departamento que envía el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
-                            " que envía a ${dptoFiscalizacion}"
+                    render "No se encontró el departamento que envía el trámite. Por favor asegúrese de que el tipo de trámite " +
+                            tipoTramite.descripcion + " tenga como departamento" + " que envía a ${dptoFiscalizacion}"
                     return
                 }
                 if (!dPara) {
-                    render "No se encontró el departamento que recibe el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
-                            " que recibe a ${obraDpto}"
+                    render "No se encontró el departamento que recibe el trámite. Por favor asegúrese de que el tipo de trámite " +
+                            tipoTramite.descripcion + " tenga como departamento" + " que recibe a ${obraDpto}"
                     return
                 }
                 break;
@@ -5436,7 +5442,13 @@ class PlanillaController extends janus.seguridad.Shield {
         def totPoAc = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
                 "planillaReajustada = :p and periodo < :pr ", [p: plnl, pr: prdo])[0]?:0
 
+//        println ".....1"
+        def totPlnl = ReajustePlanilla.executeQuery("select acumuladoPlanillas from ReajustePlanilla where planilla = :p and " +
+                "planillaReajustada = :p", [p: plnl])[0]?:0
+//        println ".....2 $totPlnl"
+
         def resto  = Math.round((plnl.contrato.anticipo - totPo - totPoAc)*100)/100
+//        def resto  = Math.round((plnl.contrato.anticipo - totPo)*100)/100
         if (resto < 0) resto = 0  // ya nop se aplica deducción de anticipo
 //        println "------------resto: $resto"
 
@@ -5445,7 +5457,7 @@ class PlanillaController extends janus.seguridad.Shield {
         if(estePo > resto) {
             valorPo = vlor - resto
         } else if((plnl.tipoPlanilla.codigo == 'Q') && plFinal) {
-            valorPo = resto
+            valorPo = totPlnl - cntr.anticipo - totPo
         } else {
             valorPo = estePo
         }
