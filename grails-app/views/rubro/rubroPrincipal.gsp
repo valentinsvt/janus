@@ -1950,13 +1950,55 @@
             }
         });
 
+
+        %{--function revisarCodigo (espec) {--}%
+            %{--$.ajax({--}%
+                %{--type: 'POST',--}%
+                %{--url: "${createLink(controller: 'rubro', action: 'revisarCodigo_ajax')}",--}%
+                %{--data:{--}%
+                    %{--id: '${rubro?.id}',--}%
+                    %{--codigo: espec--}%
+                %{--},--}%
+                %{--success: function (msg){--}%
+                    %{--console.log(msg)--}%
+                    %{--if(msg == 'ok'){--}%
+                        %{--$.box({--}%
+                            %{--imageClass : "box_info",--}%
+                            %{--text       : "Código de especificación duplicado!",--}%
+                            %{--title      : "Alerta",--}%
+                            %{--iconClose  : false,--}%
+                            %{--dialog     : {--}%
+                                %{--resizable : false,--}%
+                                %{--draggable : false,--}%
+                                %{--buttons   : {--}%
+                                    %{--"Aceptar" : function () {--}%
+                                    %{--}--}%
+                                %{--}--}%
+                            %{--}--}%
+                        %{--});--}%
+                    %{--}else{--}%
+                        %{--console.log("Sin error")--}%
+                    %{--}--}%
+                %{--}--}%
+            %{--})--}%
+
+        %{--}--}%
+
+
+
         $("#guardar").click(function () {
+
 
             var cod = $("#input_codigo").val()
             var desc = $("#input_descripcion").val()
             var subGr = $("#selSubgrupo").val()
             var msg = ""
-            var resp = $("#responsable").val()
+            var resp = $("#responsable").val();
+            var espec = $("#input_codigo_es").val();
+
+//            revisarCodigo(espec);
+
+
 //            console.log(desc,desc.trim(),desc.trim().length,resp)
             if (cod.trim().length > 30 || cod.trim().length < 1) {
                 msg = "<br>Error: La propiedad código debe tener entre 1 y 30 caracteres."
@@ -2033,6 +2075,11 @@
         });
 
         <g:if test="${rubro}">
+
+
+
+
+
         $("#btn_agregarItem").click(function () {
 //            console.log("valor:" + $('#item_desc').val().length);
             if($('#item_desc').val().length == 0)  {

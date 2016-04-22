@@ -1274,7 +1274,6 @@
 
 
         $("#imp_consolidado").click(function () {
-//            alert("consolidado...")
             var dsp0 = $("#dist_p1g").val();
             var dsp1 = $("#dist_p2g").val();
             var dsv0 = $("#dist_v1g").val();
@@ -1306,22 +1305,43 @@
 
 
         $("#imp_consolidado_excel").click(function () {
-            var dsp0 = $("#dist_p1").val();
-            var dsp1 = $("#dist_p2").val();
-            var dsv0 = $("#dist_v1").val();
-            var dsv1 = $("#dist_v2").val();
-            var dsv2 = $("#dist_v3").val();
-            var lista1 = $("#lista_1").val();
-            var lista2 = $("#lista_2").val();
-            var lista3 = $("#lista_3").val();
-            var lista4 = $("#lista_4").val();
-            var lista5 = $("#lista_5").val();
+
+//            var dsp0 = $("#dist_p1").val();
+//            var dsp1 = $("#dist_p2").val();
+//            var dsv0 = $("#dist_v1").val();
+//            var dsv1 = $("#dist_v2").val();
+//            var dsv2 = $("#dist_v3").val();
+//            var lista1 = $("#lista_1").val();
+//            var lista2 = $("#lista_2").val();
+//            var lista3 = $("#lista_3").val();
+//            var lista4 = $("#lista_4").val();
+//            var lista5 = $("#lista_5").val();
+//            var lista6 = $("#ciudad").val();
+//            var volqueta = $("#costo_volqueta").val();
+//            var chofer = $("#costo_chofer").val();
+//            var trans = $(this).data("transporte");
+//            var nodeId = $("#nodeId").val();
+//            var principal = true;
+
+
+            var dsp0 = $("#dist_p1g").val();
+            var dsp1 = $("#dist_p2g").val();
+            var dsv0 = $("#dist_v1g").val();
+            var dsv1 = $("#dist_v2g").val();
+            var dsv2 = $("#dist_v3g").val();
+            var lista1 = $("#lista_1g").val();
+            var lista2 = $("#lista_2g").val();
+            var lista3 = $("#lista_3g").val();
+            var lista4 = $("#lista_4g").val();
+            var lista5 = $("#lista_5g").val();
             var lista6 = $("#ciudad").val();
-            var volqueta = $("#costo_volqueta").val();
-            var chofer = $("#costo_chofer").val();
+            var volqueta = $("#costo_volqueta2").val();
+            var chofer = $("#costo_chofer2").val();
             var trans = $(this).data("transporte");
             var nodeId = $("#nodeId").val();
             var principal = true;
+
+
 
             var datos = "dsp0=" + dsp0 + "&dsp1=" + dsp1 + "&dsv0=" + dsv0 + "&dsv1=" + dsv1 + "&dsv2=" + dsv2 +
                     "&prvl=" + volqueta + "&prch=" + chofer + "&fecha=" + $("#fecha_precios").val() + "&id=" + nodeId +
