@@ -1344,7 +1344,7 @@
 
 
             var datos = "dsp0=" + dsp0 + "&dsp1=" + dsp1 + "&dsv0=" + dsv0 + "&dsv1=" + dsv1 + "&dsv2=" + dsv2 +
-                    "&prvl=" + volqueta + "&prch=" + chofer + "&fecha=" + $("#fecha_precios").val() + "&id=" + nodeId +
+                    "&prvl=" + volqueta + "&prch=" + chofer + "&fecha=" + $("#fecha_precios2").val() + "&id=" + nodeId +
                     "&lugar=" + $("#ciudad").val() + "&lista1=" + lista1 + "&lista2=" + lista2 + "&lista3=" + lista3 +
                     "&lista4=" + lista4 + "&lista5=" + lista5 + "&lista6=" + lista6 + "&principal=" + principal
                     + "&chof=" + $("#cmb_chof").val() +
