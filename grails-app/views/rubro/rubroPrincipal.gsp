@@ -221,19 +221,16 @@
         </div>
 
         <g:if test="${rubro && modifica}">
-            <div class="span2">
+            <div class="span2" style="margin-left: -10px">
                 <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
                     Copiar composición
                 </a>
             </div>
         </g:if>
-    %{--
-            <div class="span3">
-                % costos indirectos
-                <input type="text" style="width: 30px;" id="costo_indi" value="21">
-            </div>
-    --}%
-
+        <div class="span1" style="margin-left: -10px">
+            <a class="btn btn-small btn-info infoItem" href="#" rel="tooltip" title="Información" iden="${}">
+                <i class="icon-exclamation"></i> Info</a>
+        </div>
     </div>
 
     <div class="row-fluid" style="margin-bottom: 5px">
@@ -269,6 +266,7 @@
                 <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Agregar" id="btn_agregarItem">
                     <i class="icon-plus"></i>
                 </a>
+
             </div>
         </g:if>
 
@@ -316,7 +314,7 @@
                         <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
                     </td>
                     <td class="col_total" style="display: none;text-align: right"></td>
-                    <td style="width: 40px;text-align: center" class="col_delete">
+                    <td style="width: 50px;text-align: center" class="col_delete">
                         <g:if test="${modifica}">
                             <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
                                 <i class="icon-trash"></i></a>
@@ -363,7 +361,7 @@
                         <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
                     </td>
                     <td class="col_total" style="display: none;text-align: right"></td>
-                    <td style="width: 40px;text-align: center" class="col_delete">
+                    <td style="width: 50px;text-align: center" class="col_delete">
                         <g:if test="${modifica}">
                             <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
                                 <i class="icon-trash"></i></a>
@@ -407,7 +405,7 @@
                     <td class="col_precioUnit" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
 
                     <td class="col_total" style="display: none;text-align: right"></td>
-                    <td style="width: 40px;text-align: center" class="col_delete">
+                    <td style="width: 50px;text-align: center" class="col_delete">
                         <g:if test="${modifica}">
                             <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
                                 <i class="icon-trash"></i></a>
@@ -1672,14 +1670,7 @@
                                         var celdaTotal = padre.find(".col_total")
                                         var celdaCant = padre.find(".cant")
                                         var celdaHora = padre.find(".col_hora")
-//                                    ////console.log(celdaHora)
-//                                    ////console.log(,,"rend "+celdaRend.html(),"total "+ celdaTotal.html(),"multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
-//                                    ////console.log("----")
-//                                    ////console.log("celda "+parseFloat(celda.html()))
-//                                    ////console.log("cant sin mun "+celdaCant.html() )
-//                                    ////console.log("cant "+parseFloat(celdaCant.html()) )
-//                                    ////console.log(" multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
-                                        var rend = 1
+                                        var rend = 1;
                                         if (celdaHora.hasClass("col_hora")) {
                                             celdaHora.html(number_format(parseFloat(celda.html()) * parseFloat(celdaCant.html()), 5, ".", ""))
                                         }
@@ -1729,25 +1720,6 @@
                                         "Cancelar":function(){
 
                                         }
-                                        %{--"Aceptar" : function () {--}%
-                                        %{--$("#dlgLoad").dialog("open")--}%
-                                        %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'copiaRubro')}",--}%
-                                        %{--data     : "id=${rubro?.id}",--}%
-                                        %{--success  : function (msg) {--}%
-                                        %{--$("#dlgLoad").dialog("close")--}%
-                                        %{--if(msg=="true"){--}%
-                                        %{--alert("Error al generar historico del rubro, comunique este error al administrador del sistema")--}%
-                                        %{--}else{--}%
-                                        %{--//                                                    console.log("es historico",msg)--}%
-                                        %{--$("#boxHiddenDlg").dialog("close")--}%
-                                        %{--agregar(msg,"H");--}%
-
-                                        %{--}--}%
-
-                                        %{--}--}%
-                                        %{--});--}%
-                                        %{--}--}%
-
                                     }
                                 }
                             });
@@ -1867,6 +1839,60 @@
             }
 
         });
+
+
+        $(".infoItem").click(function () {
+
+            var tr = $(this).parent().parent()
+            var boton = $(this)
+
+                $("#dlgLoad").dialog("open")
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'verificaRubro')}",
+                    data     : "id=${rubro?.id}",
+                    success  : function (msg) {
+                        $("#dlgLoad").dialog("close")
+                        var resp = msg.split('_')
+                        if(resp[0] == "1"){
+                            var d =   $.box({
+                                imageClass : "box_info",
+                                text       : "Este rubro forma parte de la(s) obra(s):" + resp[1],
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    width: '500px',
+                                    draggable : false,
+                                    buttons   : {
+                                        "Cancelar":function(){
+
+                                        }
+                                     }
+                                }
+                            });
+                        }else{
+                            var d =   $.box({
+                                imageClass : "box_info",
+                                text       : "Este rubro no forma parte de ninguna obra",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    width: '500px',
+                                    draggable : false,
+                                    buttons   : {
+                                        "Cancelar":function(){
+
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+        });
+
+
+
 
         $("#cdgo_buscar").dblclick(function () {
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
