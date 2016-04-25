@@ -226,11 +226,12 @@
                     Copiar composición
                 </a>
             </div>
+            <div class="span1" style="margin-left: -10px">
+                <a class="btn btn-small btn-info infoItem" href="#" rel="tooltip" title="Información" iden="${}">
+                    <i class="icon-exclamation"></i> Info</a>
+            </div>
         </g:if>
-        <div class="span1" style="margin-left: -10px">
-            <a class="btn btn-small btn-info infoItem" href="#" rel="tooltip" title="Información" iden="${}">
-                <i class="icon-exclamation"></i> Info</a>
-        </div>
+
     </div>
 
     <div class="row-fluid" style="margin-bottom: 5px">
