@@ -227,7 +227,7 @@
                 </a>
             </div>
             <div class="span1" style="margin-left: -10px">
-                <a class="btn btn-small btn-info infoItem" href="#" rel="tooltip" title="Información" iden="${}">
+                <a class="btn btn-small btn-info infoItem" href="#" rel="tooltip" title="Información">
                     <i class="icon-exclamation"></i> Info</a>
             </div>
         </g:if>
