@@ -436,12 +436,17 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaHeaderPlanilla, new Paragraph(" ", fontTdUsar), prmsTdNoBorder)
             }
 */
+            def valorObra = ReajustePlanilla.executeQuery("select max(acumuladoPlanillas) from ReajustePlanilla " +
+                    "where planilla = :p", [p: planilla])[0]?:0
+
+
             addCellTabla(tablaHeaderPlanilla, new Paragraph(ponePeriodoPlanilla(planilla), fontTdUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph("Plazo", fontThUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.plazo, 0) + " días", fontTdUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), prmsTdNoBorder)
             addCellTabla(tablaHeaderPlanilla, new Paragraph("Valor obra", fontThUsar), prmsTdNoBorder)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), prmsTdNoBorder)
+//            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), prmsTdNoBorder)
+            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(valorObra, 2), fontTdUsar), prmsTdNoBorder)
 
             document.add(tablaHeaderPlanilla);
         }
