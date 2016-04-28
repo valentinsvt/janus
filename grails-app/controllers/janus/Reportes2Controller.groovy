@@ -803,6 +803,7 @@ class Reportes2Controller {
 
     def consolidadoExcel () {
 
+//        println "consolidado excel ... $params"
         def parts = params.id.split("_")
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def parametros = "" + parts[1]+ ",'" + fecha.format("yyyy-MM-dd") + "'," + params.lista1 + "," + params.lista2 + "," +
@@ -870,14 +871,14 @@ class Reportes2Controller {
         label = new jxl.write.Label(1, 10, Lugar.get(params.lista2).descripcion, times16No); sheet.addCell(label);
         label = new jxl.write.Label(2, 10, "Distancia: ", times16format); sheet.addCell(label);
         label = new jxl.write.Label(3, 10, params.dsp1, times16No); sheet.addCell(label);
-        label = new jxl.write.Label(0, 11, "Mejoramiento: ", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 11, Lugar.get(params.lista4).descripcion, times16No); sheet.addCell(label);
-        label = new jxl.write.Label(2, 11, "Distancia: ", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(3, 11, params.dsv0, times16No); sheet.addCell(label);
-        label = new jxl.write.Label(0, 12, "Petreos Hormigones: ", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 12,  Lugar.get(params.lista3).descripcion, times16No); sheet.addCell(label);
-        label = new jxl.write.Label(2, 12, "Distancia: ",times16format); sheet.addCell(label);
-        label = new jxl.write.Label(3, 12,  params.dsv1, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 11, "Petreos Hormigones: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 11,  Lugar.get(params.lista3).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 11, "Distancia: ",times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 11,  params.dsv0, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(0, 12, "Mejoramiento: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 12, Lugar.get(params.lista4).descripcion, times16No); sheet.addCell(label);
+        label = new jxl.write.Label(2, 12, "Distancia: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 12, params.dsv1, times16No); sheet.addCell(label);
         label = new jxl.write.Label(0, 13, "Carpeta Asfáltica: ", times16format); sheet.addCell(label);
         label = new jxl.write.Label(1, 13,  Lugar.get(params.lista5).descripcion, times16No); sheet.addCell(label);
         label = new jxl.write.Label(2, 13, "Distancia: ", times16format); sheet.addCell(label);

@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gato
-  Date: 19/11/15
-  Time: 12:09 PM
---%>
-
 <%@ page import="janus.Lugar" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -153,20 +146,23 @@
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsp0}</div>
         <div class="label">Especial: </div> <div class="dato large">${Lugar.get(lista2).descripcion}</div>
         <div class="label half">Distancia: </div> <div class="dato small ">${params.dsp1}</div>
-        <g:if test="${lista4}">
-            <div class="label">Mejoramiento: </div> <div class="dato large">${Lugar.get(lista4).descripcion}</div>
-        </g:if>
-        <g:else>
-            <div class="label">Mejoramiento: </div> <div class="dato large">No seleccionó Mejoramiento</div>
-        </g:else>
-        <div class="label half">Distancia: </div> <div class="dato small">${params.dsv0}</div>
+
         <g:if test="${lista3}">
             <div class="label">Petreos Hormigones:</div> <div class="dato large">${janus.Lugar.get(lista3).descripcion}</div>
         </g:if>
         <g:else>
             <div class="label">Petreos Hormigones:</div> <div class="dato large">No seleccionó Petreos Hormigones</div>
         </g:else>
+        <div class="label half">Distancia: </div> <div class="dato small">${params.dsv0}</div>
+
+        <g:if test="${lista4}">
+            <div class="label">Mejoramiento: </div> <div class="dato large">${Lugar.get(lista4).descripcion}</div>
+        </g:if>
+        <g:else>
+            <div class="label">Mejoramiento: </div> <div class="dato large">No seleccionó Mejoramiento</div>
+        </g:else>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsv1}</div>
+
         <g:if test="${lista5}">
             <div class="label">Carpeta Asfáltica: </div> <div class="dato large">${Lugar.get(lista5).descripcion}</div>
         </g:if>
