@@ -717,19 +717,19 @@ class RubroController extends janus.seguridad.Shield {
         def tipo = params.tipo
 
 
-        //def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
+        def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
 
-        //println("rubro " + rubro)
-        //println("ares111 " + ares?.id)
+        println("rubro " + rubro)
+        println("ares111 " + ares?.id)
 
 
-        //def ret
+        def ret
 
-        //if(ares){
-        //    ret = ares?.item
-        //}else{
-        //    ret = rubro
-        //}
+        if(ares){
+            ret = ares?.item
+        }else{
+            ret = rubro
+        }
 
 
         def filePath
@@ -741,7 +741,7 @@ class RubroController extends janus.seguridad.Shield {
                 break;
             case "dt":
                 titulo = "Especificaciones"
-              //  filePath = ares?.ruta
+                filePath = ares?.ruta
                 filePath = rubro.especificaciones
                 break;
         }
@@ -752,8 +752,8 @@ class RubroController extends janus.seguridad.Shield {
             ext = filePath.split("\\.")
             ext = ext[ext.size() - 1]
         }
-        //  return [rubro: ret, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
-        return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
+        return [rubro: ret, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
+        //return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
     }
 
     def downloadFile() {
