@@ -1011,6 +1011,13 @@ class ContratoController extends janus.seguridad.Shield {
             params.fechaSubscripcion = new Date().parse("dd-MM-yyyy", params.fechaSubscripcion)
         }
 
+
+        if(params.conReajuste){
+            println("entro")
+            params.conReajuste = 1
+        }
+
+
         def indice = PeriodosInec.get(params."periodoValidez.id")
 
         if (params.id) {

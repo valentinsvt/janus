@@ -280,6 +280,7 @@
                                      value="${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> x 1000
                     </div>
 
+
                     <div class="span2 formato">Multa por no presentación de planilla</div>
 
                     <div class="span3">
@@ -359,11 +360,19 @@
 
                     <div class="span2 formato">Indirectos</div>
 
-                    <div class="span3">
+                    <div class="span1">
                         <g:textField name="indirectos" class="anticipo activo"
                                      value="${g.formatNumber(number: contrato?.indirectos, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"
                                      style="width: 30px; text-align: right"/> %
                     </div>
+
+
+                    <div class="span1 formato">Incluye reajuste</div>
+
+                    <div class="span1">
+                        <g:checkBox name="conReajuste" checked="${contrato?.conReajuste == 1 ? 'true' : 'false'}"/>
+                    </div>
+
 
                 </div>
 
