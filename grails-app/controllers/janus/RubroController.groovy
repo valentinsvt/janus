@@ -719,15 +719,15 @@ class RubroController extends janus.seguridad.Shield {
 
         def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
 
-        println("rubro " + rubro)
-        println("ares111 " + ares?.id)
+//        println("rubro " + rubro)
+//        println("ares111 " + ares?.id)
 
 
         def ret
 
         if(ares){
             ret = ares?.item
-        }else{
+        } else {
             ret = rubro
         }
 
@@ -742,7 +742,7 @@ class RubroController extends janus.seguridad.Shield {
             case "dt":
                 titulo = "Especificaciones"
                 filePath = ares?.ruta
-                filePath = rubro.especificaciones
+//                filePath = rubro.especificaciones
                 break;
         }
 
@@ -752,8 +752,8 @@ class RubroController extends janus.seguridad.Shield {
             ext = filePath.split("\\.")
             ext = ext[ext.size() - 1]
         }
-        return [rubro: ret, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
-        //return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
+//        return [rubro: ret, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
+        return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath, ares: ares.id]
     }
 
     def downloadFile() {
@@ -770,6 +770,32 @@ class RubroController extends janus.seguridad.Shield {
                 filePath = rubro.especificaciones
                 break;
         }
+
+        def ext = filePath.split("\\.")
+        ext = ext[ext.size() - 1]
+        def folder = "rubros"
+        def path = servletContext.getRealPath("/") + folder + File.separatorChar + filePath
+        println "path "+path
+        def file = new File(path)
+        if(file.exists()){
+            def b = file.getBytes()
+            response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
+            response.setHeader("Content-disposition", "attachment; filename=" + filePath)
+            response.setContentLength(b.length)
+            response.getOutputStream().write(b)
+        }else{
+            flash.message="El archivo seleccionado no se encuentra en el servidor."
+            redirect(action: "showFoto",params: [id:rubro.id,tipo: "dt"])
+        }
+
+    }
+
+
+    def downloadFileAres() {
+        def ares = ArchivoEspecificacion.get(params.id)
+
+        def tipo = params.tipo
+        def filePath = ares.ruta
 
         def ext = filePath.split("\\.")
         ext = ext[ext.size() - 1]

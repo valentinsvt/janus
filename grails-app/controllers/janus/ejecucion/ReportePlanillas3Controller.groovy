@@ -1036,7 +1036,7 @@ class ReportePlanillas3Controller {
                     addCellTabla(tablaPml, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaPml, new Paragraph(numero(mt.dias,0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaPml, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                    addCellTabla(tablaPml, new Paragraph(numero(mt.descripcion, 2) + " x 1000 de \$" + numero((planilla.valor > 0 ? planilla.valor : totalCronoPlanilla), 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph(numero(mt.descripcion, 2) + " x 1000 de \$" + numero((planilla.valor > 0 ? planilla.valor : mt.valorCronograma), 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaPml, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaPml, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 

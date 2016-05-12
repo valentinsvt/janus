@@ -55,9 +55,16 @@
 
                     <div class="btn-group" style="margin-top: 20px;">
                         <g:if test="${filePath}">
-                            <g:link action="downloadFile" id="${rubro.id}" params="[tipo: tipo]" class="btn btn-info">
-                                <i class="icon-download-alt"></i> Descargar
-                            </g:link>
+                            <g:if test="${tipo == 'il'}">
+                                <g:link action="downloadFile" id="${rubro.id}" params="[tipo: tipo]" class="btn btn-info">
+                                    <i class="icon-download-alt"></i> Descargar
+                                </g:link>
+                            </g:if>
+                            <g:if test="${tipo == 'dt'}">
+                                <g:link action="downloadFileAres" id="${ares}" params="[tipo: tipo]" class="btn btn-info">
+                                    <i class="icon-download-alt"></i> Descargar
+                                </g:link>
+                            </g:if>
                         </g:if>
                     </div>
                 </div>
