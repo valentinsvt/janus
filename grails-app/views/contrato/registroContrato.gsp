@@ -366,11 +366,12 @@
                                      style="width: 30px; text-align: right"/> %
                     </div>
 
+                    <div class="span 3" style="border-color: #888; border-style: solid; border-width: thin">
+                        <div class="span2 formato">La multa por retraso de obra incluye el valor del reajuste</div>
 
-                    <div class="span1 formato">Incluye reajuste</div>
-
-                    <div class="span1">
-                        <g:checkBox name="conReajuste" checked="${contrato?.conReajuste == 1 ? 'true' : 'false'}"/>
+                        <div class="span1">
+                            <g:checkBox name="conReajuste" checked="${contrato?.conReajuste == 1 ? 'true' : ''}"/>
+                        </div>
                     </div>
 
 

@@ -5037,16 +5037,28 @@ class PlanillaController extends janus.seguridad.Shield {
         insertaMulta(prmt)
 
         /** multa por retraso de obra: fechaFinObra - FechaCronograma * valor de multa **/
-        if(plnl.tipoPlanilla == 'Q'){
-            dias = (plnl.contrato.obra.fechaInicio + plnl.contrato.plazo - plnl.fechaFin)
-            multaPlanilla = Math.round(dias * (plnl.contrato.multaRetraso / 1000)*100)/100
-            prmt = [:]
-            prmt.planilla = plnl
-            prmt.tipoMulta = TipoMulta.get(3) /** 3 multa por por no aactar disposiciones del fiscalizador **/
-            prmt.descripcion = "${plnl.contrato.multaRetraso} x 1000 de ${formatoNum.format(plnl.contrato.monto.toDouble())} por día"
-            prmt.dias = plnl.diasMultaDisposiciones
-            prmt.monto = multaPlanilla
-            insertaMulta(prmt)
+        if(plnl.tipoPlanilla.codigo == 'Q'){
+            def valor = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
+            def reajustado = valor[0] > 0 ? valor[0] : 0
+            def total = plnl.contrato.monto.toDouble() + reajustado
+            def tpml = TipoMulta.get(4)  /** 4 retraso de obra **/
+            dias = (plnl.fechaFin - plnl.contrato.obra.fechaInicio)
+//            println "dias: $dias, plazo: ${plnl.contrato.plazo}, fin: ${plnl.fechaFin} - inicio: ${plnl.contrato.obra.fechaInicio}"
+            dias -= plnl.contrato.plazo
+            if(dias > 0) {
+                multaPlanilla = Math.round(dias * (plnl.contrato.multaRetraso * total / 1000)*100)/100
+                prmt = [:]
+                prmt.planilla = plnl
+                prmt.tipoMulta = tpml
+                prmt.descripcion = "${plnl.contrato.multaRetraso} x 1000 de ${formatoNum.format(total)} por día"
+                prmt.dias = dias
+                prmt.monto = multaPlanilla
+                insertaMulta(prmt)
+            } else {
+                MultasPlanilla.findAllByPlanillaAndTipoMulta(plnl, tpml).each {
+                    it.delete()
+                }
+            }
         }
     }
 
@@ -5555,7 +5567,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            def anteriores = ReajustePlanilla.findAllByPlanilla(plnl, [sort: 'periodo'])
             def anteriores = ReajustePlanilla.findAllByPlanillaAndPlanillaReajustadaNotEqual(plnl, plnl, [sort: 'periodo'])
             def anterior
-            println "antrerioesr: antes .. ${anteriores.size()}, planilla: ${anteriores}"
+//            println "anteriores: antes .. ${anteriores.size()}, planilla: ${anteriores}"
 
 /*
             if(anteriores.size() > 1) {
@@ -5574,7 +5586,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
             def valor = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
             def reajustado = valor[0] > 0 ? valor[0] : 0
-            println "reajustado .. $reajustado"
+//            println "reajustado .. $reajustado"
 
             def pl = Planilla.get(plnl.id)
 //            println "actual: ${valor[0]}, anterior:$valorAnt, diferencia: ${valor[0] - valorAnt}"
