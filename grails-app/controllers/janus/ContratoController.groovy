@@ -1012,9 +1012,12 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
 
-        if(params.conReajuste){
-            println("entro")
+        println("params con " + params.conReajuste)
+
+        if(params.conReajuste == 'on'){
             params.conReajuste = 1
+        }else{
+            params.conReajuste = 0
         }
 
 
