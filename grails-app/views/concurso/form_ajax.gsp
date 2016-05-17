@@ -310,7 +310,7 @@
                                         <g:textField name="codigo" class="" value="${concursoInstance?.codigo}"/>
                                         --}%
                                         %{--<span class="uneditable-input">${concursoInstance?.codigo}</span>--}%
-                                        <g:textField name="codigo" value="${concursoInstance?.codigo}" maxlength="20" class="allCaps"/>
+                                        <g:textField name="codigo" value="${concursoInstance?.codigo}" maxlength="20" class="allCaps required"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
