@@ -753,7 +753,7 @@ class RubroController extends janus.seguridad.Shield {
             ext = ext[ext.size() - 1]
         }
 //        return [rubro: ret, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
-        return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath, ares: ares.id]
+        return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath, ares: ares?.id]
     }
 
     def downloadFile() {
