@@ -21,7 +21,8 @@ import janus.ejecucion.FormulaPolinomicaContractual
 import janus.ejecucion.MultasPlanilla;
 import janus.ejecucion.PeriodoPlanilla;
 import janus.ejecucion.PeriodosInec;
-import janus.ejecucion.Planilla;
+import janus.ejecucion.Planilla
+import janus.ejecucion.ReajustePlanilla;
 import janus.ejecucion.TipoPlanilla;
 import janus.ejecucion.ValorIndice;
 import janus.ejecucion.ValorReajuste;
@@ -2989,7 +2990,7 @@ class ReportesPlanillasController {
 
     def memoPedidoPagoAnticipo() {
         def planilla = Planilla.get(params.id)
-        println("planilla " + params.id)
+        println("memoPedidoPagoAnticipo - planilla " + params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
 //        def tramite = Tramite.findByPlanilla(planilla)
@@ -3184,6 +3185,8 @@ class ReportesPlanillasController {
         tablaValores.setSpacingBefore(5f)
         tablaValores.setSpacingAfter(5f)
 
+        def reajuste = ReajustePlanilla.findByPlanilla(planilla).valorReajustado
+
         if (planilla.tipoPlanilla.codigo == 'A') {
             addCellTabla(tablaValores, new Paragraph("${numero(contrato?.porcentajeAnticipo, 0)}% de anticipo", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         } else {
@@ -3192,13 +3195,13 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero(planilla.reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("SUMA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("A FAVOR DEL CONTRATISTA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + reajuste, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaValores)
 

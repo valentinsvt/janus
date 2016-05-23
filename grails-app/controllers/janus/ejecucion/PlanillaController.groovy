@@ -387,15 +387,17 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def savePedidoPagoAnticipo() {
-//        println "save textos "+params
+        println "savePedidoPagoAnticipo textos "+params
         def planilla = Planilla.get(params.id)
         def contrato = planilla.contrato
         def obra = contrato.obra
         def texto = new Pdfs()
         texto.planilla = planilla
         texto.fecha = new Date()
+        def reajuste = ReajustePlanilla.findByPlanilla(planilla).valorReajustado
 
-        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+//        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + reajuste)
 //        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(numero(planilla.valor + planilla.reajuste, 2).replaceAll(',','').toDouble())
 
         def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
