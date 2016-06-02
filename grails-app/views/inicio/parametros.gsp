@@ -78,6 +78,13 @@
                     <g:link controller="diaLaborable" action="calendario">Días laborables</g:link> permite definir los días laborables
                     en un calendario anual.
                 </div><br>
+                <div class="item" texto="iva">
+                    %{--<g:link controller="obra" action="cambiarIva" id="ivaPar" >IVA </g:link> permite cambiar el valor del IVA--}%
+                    <a href="#" class="" id="btnCambiarIva" title="Cambiar Iva"
+                       style="margin-top: -10px;"> IVA - permite cambiar el valor del IVA
+
+                    </a>
+                </div><br>
             </div>
 
             <div id="obra" class="ui-widget-content" style="height: 560px">
@@ -298,6 +305,11 @@
     contratación y ejecución de obras.</p>
 </div>
 
+<div id="iva" style="display:none">
+    <h3>IVA</h3><br>
+    <p>Permite cambiar el valor del IVA </p>
+</div>
+
 %{--
 <div id="tpin" style="display:none">
     <h3>Tipo de Indice</h3><br>
@@ -456,7 +468,86 @@
 %{--</div>--}%
 
 
+
+
+
+
+
+<div class="modal hide fade mediumModal" id="modal-TipoObra" style=";overflow: hidden;">
+<div class="modal-header btn-primary">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+
+    <h3 id="modalTitle_tipo">
+    </h3>
+</div>
+
+<div class="modal-body" id="modalBody_tipo">
+
+</div>
+
+<div class="modal-footer" id="modalFooter_tipo">
+</div>
+</div>
+
+
+
+
 <script type="text/javascript">
+
+
+    //IVA
+
+    $("#btnCambiarIva").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "${createLink(controller: "obra", action:'formIva_ajax')}",
+            data: {
+
+            },
+            success: function (msg) {
+                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                btnSave.click(function () {
+                    $(this).replaceWith(spinner);
+                    $.ajax({
+                        type: "POST",
+                        url: "${createLink(controller: 'obra', action:'guardarIva_ajax')}",
+                        data: $("#frmIva").serialize(),
+                        success: function (msg) {
+//                            if (msg.lastIndexOf("No", 0) == 0) {
+//                                alert(msg)
+//                            } else {
+//                                $("#claseObra").replaceWith(msg);
+//                                alert('Clase de obra creada!')
+//                            }
+                            if(msg == 'ok'){
+                                alert('Iva cambiado correctamente!');
+                                $("#modal-TipoObra").modal("hide");
+                            }else{
+                                alert("Error al cambiar el Iva")
+
+                            }
+                            $("#modal-TipoObra").modal("hide");
+                        }
+                    });
+                    return false;
+
+                });
+
+                $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
+                $("#modalTitle_tipo").html("Cambiar IVA");
+                $("#modalBody_tipo").html(msg);
+                $("#modalFooter_tipo").html("").append(btnOk).append(btnSave);
+                $("#modal-TipoObra").modal("show");
+            }
+        });
+        return false;
+
+    });
+
+
+
     $(document).ready(function () {
         $('.item').hover(function () {
             //$('.item').click(function(){

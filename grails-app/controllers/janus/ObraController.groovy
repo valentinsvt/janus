@@ -1588,4 +1588,26 @@ class ObraController extends janus.seguridad.Shield {
         }
     } //delete
 
+
+    def formIva_ajax () {
+
+    }
+
+
+    def guardarIva_ajax () {
+
+        def paux = Parametros.first()
+        def nuevoIva = params.iva_name
+
+        paux.iva = nuevoIva.toInteger()
+
+        try{
+            paux.save(flush: true)
+            render "ok"
+        }catch (e){
+            render "no"
+        }
+    }
+
+
 } //fin controller
