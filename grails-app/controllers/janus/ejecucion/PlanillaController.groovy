@@ -454,13 +454,22 @@ class PlanillaController extends janus.seguridad.Shield {
         texto.planilla = planilla
         texto.fecha = new Date()
 
+        def cn = dbConnectionService.getConnection()
+        def sql= "select sum(rjplvlor) suma from rjpl where plnl__id = (select max(plnlrjst) from rjpl " +
+                "where plnl__id = ${planilla.id} and plnlrjst < plnl__id)"
+        println "--sql: $sql"
+        def reajusteAnterior = cn.rows(sql.toString())[0].suma
+        def reajuste = ReajustePlanilla.findAllByPlanilla(planilla).sum{ it.valorReajustado} - reajusteAnterior
+
+
         def multas = 0
         // TODO: actualizar esta línea al igual que en la 122 (configPedidoPago)
 //        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
         multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
         multas += planilla.multaEspecial?:0
 
-        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas - planilla.noPagoValor
+//        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas - planilla.noPagoValor
+        def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor
         def neg = ""
         if (totalLetras < 0) {
             totalLetras = totalLetras * -1
