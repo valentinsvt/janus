@@ -2925,7 +2925,7 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("(+) Reajuste  ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("Total planilla + reajuste ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero((planilla.reajuste + planilla.valor), 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero((reajuste + planilla.valor), 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("(-) Anticipo  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.descuentos, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("(-) Multas  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
