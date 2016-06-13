@@ -520,7 +520,7 @@
 
             function addRow(data, position) {
 //                ////console.log("add row");
-                var $tr = $("<tr></tr>").data(data).attr("id", data.id).addClass(data.estadoTxt).addClass(data.estadoCdgo);
+                var $tr = $("<tr></tr>").data(data).attr("id", data.id).addClass(data.estadoTxt).addClass(data.estadoCdgo).attr('etdo',data.estadoTxt);
                 //Tipo  #   aseguradora     docu        estado      emision     vencimiento     monto
                 var $tipo = $("<td class='tipoGarantiaTxt'></td>").text(data.tipoGarantiaTxt);
                 var $num = $("<td class='codigo'></td>").text(data.codigo);
@@ -609,7 +609,9 @@
                         var continua = true;
                         if (btn == "btnAdd") {
                             $body.children("tr").each(function () {
-                                if ($(this).data("tipoGarantia").toString() == data.tipoGarantia.toString()) {
+//                                console.log('..etdo......', $(this).attr("etdo").toString())
+                                if ($(this).data("tipoGarantia").toString() == data.tipoGarantia.toString() &&
+                                        $(this).attr("etdo").toString() == "Vigente" ) {
                                     continua = false;
                                 }
                             });
