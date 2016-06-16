@@ -1961,8 +1961,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             redirect(action: "errores", params: [contrato: params.id])
             return
         }
-        println "Index contrato: $contrato"
-        println "Index obra: $obra"
+        println "Id contrato: $contrato"
+        println "Id obra: $obra"
 
         /** copia el cronograma del contrato (crng) a la tabla cronograma de ejecucion (crej)
          *  --Se debe crear primero los prej y luego insertar cada rubro desde cronogramaContrato
@@ -1994,7 +1994,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             for (pr in (1..periodos[0])) {
                 def dias = (pr - 1) * 30 //+ (crono.periodo - 1)
                 def prdo = 0
-                println "crear periodo... pr: $pr, dias: $dias, plazo: ${contrato.plazo}"
+//                println "crear periodo... pr: $pr, dias: $dias, plazo: ${contrato.plazo} fcha: ${fcha}"
 
                 if ((dias + 30) > contrato.plazo) {
                     prdo = contrato.plazo - dias
@@ -2005,6 +2005,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 fcin = fcha ? fcha + 1 : obra.fechaInicio
                 fcfn = fcin + (prdo - 1).toInteger()      // 30 - 1 para contar el dia inicial
                 fcfm = preciosService.ultimoDiaDelMes(fcin)
+//                println "--------- fcfm: ${fcfm} fcfn: ${fcfn}"
                 if (fcfm < fcfn) {   /** sobrepasa el mes --> 2 periodos **/
                     prej = PeriodoEjecucion.findByContratoAndFechaInicioAndFechaFin(contrato, fcin, fcfm)
                     if (!prej) {
@@ -2019,6 +2020,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             flash.message = "No se pudo crear prej"
                             println "Error al crear prej*******: " + prej.errors
                         } else {
+//                            println "se ha creado el prej: ${pr} para ${fcin} a ${fcfn}"
                             flash.message = "Prej actualizado exitosamente"
                         }
                     }
@@ -2038,6 +2040,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             flash.message = "No se pudo crear prej"
                             println "Error al crear prej*******: " + prej.errors
                         } else {
+//                            println "se ha creado el prej: ${pr} para ${fcin} a ${fcfn}"
                             flash.message = "Prej actualizado exitosamente"
                         }
                     }
@@ -2055,9 +2058,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             flash.message = "No se pudo crear prej"
                             println "Error al crear prej*******: " + prej.errors
                         } else {
+//                            println "se ha creado el prej: ${pr} para ${fcin} a ${fcfn}"
                             flash.message = "Prej actualizado exitosamente"
                         }
                     }
+                    fcha = fcfn
                 }
             }
         }
@@ -2066,7 +2071,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def cronogramas = CronogramaEjecucion.countByVolumenObraInList(detalle)
 
         if (cronogramas == 0) {
-//            println "no hay datos de cronograma ... inicia cargado"
+            println "no hay datos de cronograma ... inicia cargado"
             detalle.each { vol ->
                 def cronoCntr = CronogramaContrato.findAllByVolumenObra(vol, [sort: 'periodo'])
                 cronoCntr.each { crono ->
