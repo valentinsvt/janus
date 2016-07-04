@@ -89,7 +89,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
      */
 
     def suspensionNueva() {
-        println "suspensiones, params: $params"
+        println "suspensionNueva, params: $params"
         def cntr = Contrato.get(params.cntr)
         def obra = cntr.obra
         def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
@@ -2286,6 +2286,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def fcha = iniPrej
 
         def i = 0
+        println "periodos: $periodos, fcha: $fcha, fechaFinal: $fechaFinal"
         while (fcha < fechaFinal) {
             def pr = periodos[i]
             def pe = new PeriodoEjecucion()
@@ -2299,13 +2300,12 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 println "Error al crear prej de suspension: " + pe.errors
             }
 
-//            println "procesa peridodo: $pr.id, cambiar = $cambiar, desde ${pr.fechaInicio.format('dd-MMM-yyyy')} a " +
-//                    "${pr.fechaFin.format('dd-MMM-yyyy')}"
+            println "procesa peridodo: $pr.id, cambiar = $cambiar, desde ${pr.fechaInicio.format('dd-MMM-yyyy')} a " +
+                    "${pr.fechaFin.format('dd-MMM-yyyy')}"
             if (!cambiar) {
                 if (pr.fechaFin > suspension.fechaInicio) {
                     def prej = PeriodoEjecucion.get(pe.id)
                     prej.fechaFin = suspension.fechaInicio - 1
-//                    println "cambia fecha de fin a: ${pr.fechaFin.format('dd-MMM-yyyy')}"
                     if (!prej.save(flush: true)) {
                         println "Error al crear prej de suspension: " + prej.errors
                     }
@@ -2327,10 +2327,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 // cambiar periodos
                 def prej = PeriodoEjecucion.get(pe.id)
                 prej.fechaInicio = fcha
+                println "fechaFinal: $fechaFinal,  ultimo día del mes: ${preciosService.ultimoDiaDelMes(fcha)}"
                 if (fechaFinal > preciosService.ultimoDiaDelMes(fcha)) {
+                    println "hace 1...."
                     prej.fechaFin = preciosService.ultimoDiaDelMes(fcha)
                     fcha = prej.fechaFin + 1
                 } else {
+                    println "hace 2...."
                     prej.fechaFin = fechaFinal
                     fcha = fechaFinal
                 }
@@ -2338,11 +2341,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     println "Error al crear prej de suspension: " + prej.errors
                 }
             }
-            i++
+            if(!cambiar) i++
         }
 
         /** ingresar en crej los valores en base a crej_t y periodo por periodo prej **/
-
 
         def nuevoPrej = PeriodoEjecucion.findAllByContratoAndTipoNotEqual(cntr, 'S', [sort: 'fechaInicio'])
         def periodoTmpProcesado = 0
