@@ -864,7 +864,7 @@ class ReportePlanillas3Controller {
 //                cells[3][i] = new Paragraph(numero(t,2), fontTd)
                 cells[3][i] = new Paragraph(numero(reajustesPlanilla[0].valorReajustado,2), fontTd)
                 reajusteTotal += t
-            }else{
+            } else {
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
                 cells[1][i] = new Paragraph(numero(fr1), fontTd)
