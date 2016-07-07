@@ -629,9 +629,14 @@ class ObraFPController {
 //        println "rubros: $tx_sql \n con sbpr: $sbpr"
         def contador = 1
         cn.eachRow(tx_sql.toString()) { row ->
-            def nmbr = row.itemnmbr.replaceAll(/'/,"\'\'")        //maneja nombres con comillas simples
-            def tx = "${id},'${row.itemcdgo}', '${nmbr.size() > 60 ? nmbr[0..59] : nmbr}'," +
-                    "'${row.unddcdgo}', ${row.vlobcntd}, ${contador}, ${sbpr}"
+//            def nmbr = row.itemnmbr.replaceAll(/'/,"\'\'")        //maneja nombres con comillas simples
+            def nmbr = row.itemnmbr
+            nmbr = nmbr.size() > 60 ? nmbr[0..58] : nmbr  //puede haber una "'" como final y debe reemplazarse por "''"
+//            println "nmbr antes: $nmbr"
+            nmbr = nmbr.replaceAll(/'/,"\'\'")
+//            println "nmbr despues: $nmbr, ${nmbr.size()}"
+
+            def tx = "${id},'${row.itemcdgo}', '${nmbr}'," + "'${row.unddcdgo}', ${row.vlobcntd}, ${contador}, ${sbpr}"
 //            println "..........." + tx
 /*
             insertaRubro("obra__id, codigo, rubro, unidad, cantidad, orden",
