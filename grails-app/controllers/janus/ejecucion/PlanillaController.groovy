@@ -5271,10 +5271,11 @@ class PlanillaController extends janus.seguridad.Shield {
             def diasEsteMes = 0
             def esteMes = 0.0
             def restoMes = 0.0
+            def planilladoEsteMes = 0.0
             def diasPlanillados = preciosService.diasPlanillados(plnl.id)
             println "dias planillados: $diasPlanillados"
             def fchaFinPlanillado = plnl.fechaInicio
-            prdo = 0
+//            prdo = 0
 
             while(fchaFinPlanillado < plnl.fechaFin){
                 prdo++
@@ -5289,6 +5290,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     println "dias este mes: ${fchaFinPlanillado.format('yyyy-MMM-dd')}  dias: ${diasEsteMes}"
                     esteMes = Math.round(plnl.valor * diasEsteMes / diasPlanillados * 100) / 100
                     plAcumulado += esteMes
+                    planilladoEsteMes += esteMes
 
                     println "fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado"
 
@@ -5310,8 +5312,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
                 } else {  // se crea el último periodo en rjpl
                     diasEsteMes = preciosService.diasEsteMes(plnl.contrato.id, fchaFinPlanillado.format('yyyy-MM-dd'), plnl.fechaFin.format('yyyy-MM-dd'))
-                    esteMes = plnl.valor - plAcumulado
-                    plAcumulado = plnl.valor
+                    esteMes = plnl.valor - planilladoEsteMes
+//                    plAcumulado += plnl.valor
+                    plAcumulado += esteMes
 
                     if(plnl.tipoPlanilla.codigo == 'Q'){
                         pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndTipo(plnl.contrato, plnl.fechaInicio, 'P')
@@ -5327,7 +5330,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         }
                         total += ms.parcialCronograma
                     }
-
+                    println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado"
                     registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, plnl.fechaFin, parcial, total)
 
                     fchaFinPlanillado = plnl.fechaFin

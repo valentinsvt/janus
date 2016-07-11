@@ -83,9 +83,11 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(formula)
         def total = children.sum { it.valor }
         def cn = dbConnectionService.getConnection()
-        def indices = cn.rows("select indc__id id, indcdscr descripcion from indc where indc__id in " +
+        def sql = "select indc__id id, indcdscr descripcion from indc where indc__id in " +
                 "(select indc__id from vlin where vlinvalr > 0 and prin__id = " +
-                "(select prin__id from prin order by prinfcin desc limit 1)) order by tpin__id desc, indcdscr")
+                "(select prin__id from prin order by prinfcin desc limit 1)) order by tpin__id desc, indcdscr"
+        println "editarGrupo... indicaes: $sql"
+        def indices = cn.rows(sql.toString())
         cn.close()
         return [formula: formula, total: total, indices: indices]
     }
