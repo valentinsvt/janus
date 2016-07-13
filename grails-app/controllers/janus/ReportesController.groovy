@@ -7730,7 +7730,7 @@ class ReportesController {
 
     def reportedocumentosObraMemoAdmi() {
 
-//        println("params: " + params)
+//        println "reportedocumentosObraMemoAdmi params: $params"
 
         def auxiliar = Auxiliar.get(1)
         def obra = Obra.get(params.id)

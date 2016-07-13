@@ -1025,7 +1025,7 @@ class ReportePlanillas3Controller {
                     document.add(tituloMultaNoPres);
 
                     PdfPTable tablaPml = new PdfPTable(2);
-                    tablaPml.setWidthPercentage(50);
+                    tablaPml.setWidthPercentage(60);
 
                     tablaPml.setHorizontalAlignment(Element.ALIGN_LEFT)
 
@@ -1045,7 +1045,7 @@ class ReportePlanillas3Controller {
                     document.add(tablaPml);
                 }
 
-                if(mt.tipoMulta.id == 2){
+                if(mt.tipoMulta.id == 2){   // incumplimiento del cronograma
 
                     Paragraph tituloMultaNoPres = new Paragraph();
                     tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
@@ -1054,7 +1054,7 @@ class ReportePlanillas3Controller {
                     document.add(tituloMultaNoPres);
 
                     PdfPTable tablaMultaDisp = new PdfPTable(2);
-                    tablaMultaDisp.setWidthPercentage(50);
+                    tablaMultaDisp.setWidthPercentage(60);
                     tablaMultaDisp.setSpacingAfter(10f);
 
                     tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
@@ -1081,7 +1081,7 @@ class ReportePlanillas3Controller {
                     document.add(tituloMultaNoPres);
 
                     PdfPTable tablaMultaDisp = new PdfPTable(2);
-                    tablaMultaDisp.setWidthPercentage(50);
+                    tablaMultaDisp.setWidthPercentage(60);
                     tablaMultaDisp.setSpacingAfter(10f);
 
                     tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
@@ -1103,7 +1103,7 @@ class ReportePlanillas3Controller {
             document.add(tituloMultaUsu);
 
             PdfPTable tablaMultaUsu = new PdfPTable(2);
-            tablaMultaUsu.setWidthPercentage(50);
+            tablaMultaUsu.setWidthPercentage(60);
             tablaMultaUsu.setSpacingAfter(10f);
 
             tablaMultaUsu.setHorizontalAlignment(Element.ALIGN_LEFT)
@@ -1111,7 +1111,11 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaMultaUsu, new Paragraph("Concepto", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaUsu, new Paragraph(planilla.descripcionMulta, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaUsu, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaMultaUsu, new Paragraph('$'+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            if(planilla.multaEspecial){
+                addCellTabla(tablaMultaUsu, new Paragraph('$'+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            } else {
+                addCellTabla(tablaMultaUsu, new Paragraph(''+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            }
 
             document.add(tablaMultaUsu);
 
