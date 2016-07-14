@@ -5098,9 +5098,13 @@ class PlanillaController extends janus.seguridad.Shield {
             def reajustado = valor[0] > 0 ? valor[0] : 0
             def total = plnl.contrato.monto.toDouble() + reajustado
             def tpml = TipoMulta.get(4)  /** 4 retraso de obra **/
-            dias = (plnl.fechaFin - plnl.contrato.obra.fechaInicio)
-//            println "dias: $dias, plazo: ${plnl.contrato.plazo}, fin: ${plnl.fechaFin} - inicio: ${plnl.contrato.obra.fechaInicio}"
+
+            def cn = dbConnectionService.getConnection()
+            def sql= "select cast(to_char(sum(prejfcfn - prejfcin), 'dd') as integer) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo = 'P'"
+            dias  = (int) cn.rows(sql.toString())[0].dias
+
             dias -= plnl.contrato.plazo
+
             if(dias > 0) {
                 multaPlanilla = Math.round(dias * (plnl.contrato.multaRetraso * total / 1000)*100)/100
                 prmt = [:]
