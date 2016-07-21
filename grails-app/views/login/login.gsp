@@ -20,53 +20,6 @@
             margin : 0.25in;
         }
 
-        .item {
-            width       : 260px;
-            height      : 220px;
-            float       : left;
-            margin      : 4px;
-            font-family : 'open sans condensed';
-            border      : none;
-
-        }
-
-        .imagen {
-            width      : 167px;
-            height     : 100px;
-            margin     : auto;
-            margin-top : 10px;
-        }
-
-        .texto {
-            width       : 90%;
-            height      : 50px;
-            padding-top : 0px;
-            /*border: solid 1px black;*/
-            margin      : auto;
-            margin      : 8px;
-            /*font-family: fantasy; */
-            font-size   : 16px;
-
-            /*
-                    font-weight: bolder;
-            */
-            font-style  : oblique;
-            /*text-align: justify;*/
-        }
-
-        .fuera {
-            margin-left      : 15px;
-            margin-top       : 10px;
-            /*background-color: #317fbf; */
-            background-color : rgba(200, 200, 200, 0.9);
-            border           : none;
-
-        }
-
-        .desactivado {
-            color : #bbc;
-        }
-
         .titl {
             font-family: 'open sans condensed';
             font-weight: bold;
@@ -74,6 +27,28 @@
             color:#0088CC;
             margin-top: 20px;
         }
+        .centrado {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .logo {
+            height: 595px;
+            background: #d7d7d7;
+            padding: 10px;
+            width: 910px;
+            margin: auto;
+            margin-top: 5px
+        }
+        .login2 {
+            border: 5px solid #2080B0;
+            background:#C7C7C5; /*#a7a7a5*/
+            color: #939Aa2;
+            width: 300px;
+            position: relative;
+            padding-left: 60px;
+            margin: 0px
+        }
+
 
         </style>
     </head>
@@ -91,12 +66,10 @@
             <span id="spanError"></span>
         </div>
 
-        <div style="text-align: center; margin-top: 40px;"><h1 class="titl" style="font-size: 32px;">SEP - GADPP</h1>
-            <h1 class="titl" style="font-size: 24px;">SEGUIMIENTO Y EJECUCIÓN DE PROYECTOS DE OBRAS Y CONSULTORÍAS<br>
-                GOBIERNO AUTÓNOMO DESCENTRALIZADO PROVINCIA DE PICHINCHA</h1>
-            %{--<h1 class="titl" style="font-size: 24px; color: #06a">Registro de Ofertas en Línea</h1></div>--}%
+        <div class="centrado"><h1 class="titl" style="font-size: 32px;">${empr.empresa}</h1>
+            <h1 class="titl" style="font-size: 24px;">${empr.nombre}</h1>
 
-        <div class="dialog ui-corner-all" style="height: 595px;background: #d7d7d7;;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
+        <div class="dialog ui-corner-all logo">
             <div style="text-align: center; margin-top: 50px; color: #810;">
                 <img src="${resource(dir: 'images', file: 'logo_gpp3.png')}"/>
             </div>
@@ -108,7 +81,8 @@
                 </a>
             </div>
 
-            <div style="text-align: center ; color:#004060; margin-top:90px; ">Desarrollado por: TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
+            <div style="text-align: center ; color:#004060; margin-top:90px; ">
+                Desarrollado por: TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
 
         </div>
     </div>
@@ -116,7 +90,7 @@
         <div class="modal login hide fade " id="modal-ingreso" style=";overflow: hidden;">
             <div class="modal-body" id="modalBody" style="padding: 0px">
 
-                <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #2080B0;background:#C7C7C5 /*#a7a7a5*/;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
+                <g:form class="well form-horizontal span login2" action="validar" name="frmLogin">
                     <p class="css-vertical-text" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px; color: #334">Sistema SEP - GADPP</p>
 
                     <div class="linea" style="height: 95%;left: 45px; border-left-color: #334"></div>

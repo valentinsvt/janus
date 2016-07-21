@@ -21,11 +21,13 @@ class InicioController extends janus.seguridad.Shield {
             prms << d.accnnmbr
         }
         cn.close()
+        def empr = Parametros.get(1)
+
         //println "formula "
         //oferentesService.copiaFormula(1457,1485)
        // println " crono "
         //oferentesService.copiaCrono(1457,1485)
-        return [prms: prms]
+        return [prms: prms, empr: empr]
     }
 
 

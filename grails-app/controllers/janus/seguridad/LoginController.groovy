@@ -52,7 +52,8 @@ class LoginController {
     }
 
     def login() {
-
+        def empr = Parametros.get(1)
+        [empr: empr]
     }
 
     def validar() {
@@ -89,8 +90,9 @@ class LoginController {
     def perfiles() {
         def usuarioLog = session.usuario
         def perfilesUsr = Sesn.findAllByUsuario(usuarioLog, [sort: 'perfil'])
+        def empr = Parametros.get(1)
 
-        return [perfilesUsr: perfilesUsr]
+        return [perfilesUsr: perfilesUsr, empr: empr]
     }
 
 

@@ -35,9 +35,8 @@
     <body style="background-color: #d7d7d7">
     <div class="dialog ui-corner-all" style="height: 595px;background: #d9d9d9;;padding: 10px;width: 910px; margin: auto;">
         %{--<g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #2080B0; background:#c7c7c5;color: #939Aa2; width: 300px; margin-left: 240px; margin-top: 180px; position: relative; padding-left: 100px">--}%
-        <div style="text-align: center;"><h1 class="titl" style="font-size: 32px;">SEP - GADPP</h1>
-        <h1 class="titl" style="font-size: 24px;">SEGUIMIENTO Y EJECUCIÓN DE PROYECTOS DE OBRAS Y CONSULTORÍAS<br>
-            GOBIERNO AUTÓNOMO DESCENTRALIZADO PROVINCIA DE PICHINCHA</h1>
+        <div style="text-align: center;"><h1 class="titl" style="font-size: 32px;">${empr.empresa}</h1>
+        <h1 class="titl" style="font-size: 24px;">${empr.nombre}</h1>
     </div>
 
         <g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #2080B0; background:#c7c7c5;color: #939Aa2; width: 300px; margin-left: 240px; margin-top: 80px; position: relative; padding-left: 100px">

@@ -2,9 +2,9 @@ package janus
 
 class Parametros implements Serializable {
     //int indicador
-    //String password
-    //String direccionObrasCiviles
-    //String direccionVialidadConcesiones
+    String codigo
+    String nombre
+    String empresa
     String factorReduccion
     String factorVelocidad
     String capacidadVolquete
@@ -41,9 +41,9 @@ class Parametros implements Serializable {
         version false
         columns {
             id column: 'paux__id'
-            //indicador column: 'pauxindi'
-            //password column: 'pauxpass'
-            //direccionObrasCiviles column: 'prsn_dic'
+            codigo column: 'pauxcdgo'
+            nombre column: 'pauxnmbr'
+            empresa column: 'pauxempr'
             //direccionVialidadConcesiones column: 'prsndvyc'
             factorReduccion column: 'trnpftrd'
             factorVelocidad column: 'trnpvlcd'
@@ -74,10 +74,9 @@ class Parametros implements Serializable {
         }
     }
     static constraints = {
-        //indicador(blank: true, nullable: true, attributes: [title: 'indicador'])
-        //password(size: 1..8, blank: true, nullable: true, attributes: [title: 'password'])
-        //direccionObrasCiviles(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionObrasCiviles'])
-        //direccionVialidadConcesiones(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionVialidadConcesiones'])
+        codigo(size: 4..4, blank: true, nullable: true, attributes: [title: 'código'])
+        nombre(size: 4..255, blank: true, nullable: true, attributes: [title: 'nombre'])
+        empresa(size: 4..127, blank: true, nullable: true, attributes: [title: 'empresa'])
         factorReduccion(size: 1..6, blank: true, nullable: true, attributes: [title: 'factorReduccion'])
         factorVelocidad(size: 1..6, blank: true, nullable: true, attributes: [title: 'factorVelocidad'])
         capacidadVolquete(size: 1..6, blank: true, nullable: true, attributes: [title: 'capacidadVolquete'])

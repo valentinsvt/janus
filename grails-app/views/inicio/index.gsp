@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>Sistema SEP - GADPP</title>
+    <title>${empr.empresa}</title>
     <meta name="layout" content="main"/>
     <style type="text/css">
     @page {
@@ -68,9 +68,7 @@
 
 <body>
 <div class="dialog">
-    <div style="text-align: center;"><h1 class="titl"
-                                         style="font-size: 26px;">SEGUIMIENTO Y EJECUCIÓN DE PROYECTOS DE OBRAS Y CONSULTORÍAS<br>
-        GOBIERNO AUTÓNOMO DESCENTRALIZADO PROVINCIA DE PICHINCHA</h1></div>
+    <div style="text-align: center;"><h1 class="titl" style="font-size: 26px;">${empr.nombre}</h1></div>
 
     <div class="body ui-corner-all" style="width: 850px;position: relative;margin: auto;margin-top: 0px;height: 510px;
     background: #2080b0;">
