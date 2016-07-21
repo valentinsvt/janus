@@ -71,7 +71,7 @@
 
         <div class="dialog ui-corner-all logo">
             <div style="text-align: center; margin-top: 50px; color: #810;">
-                <img src="${resource(dir: 'images', file: 'logo_gpp3.png')}"/>
+                <img src="${resource(dir: 'images', file: 'logotipo.png')}"/>
             </div>
 
             <div style="width: 100%;height: 30px;float: left;margin-top: 30px;text-align: center">
