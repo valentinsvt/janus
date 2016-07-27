@@ -5301,6 +5301,7 @@ class PlanillaController extends janus.seguridad.Shield {
                             insertaRjpl(prmt)
                             prdo = po.periodo
                             plAcumulado = po.acumuladoPlanillas
+                            total = po.acumuladoCronograma
                         }
                     }
                 }
@@ -5328,7 +5329,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
             while(fchaFinPlanillado < plnl.fechaFin){
                 prdo++
-                total = 0
+//                total = 0
                 println "fchaFinPlanillado: ${fchaFinPlanillado.format('yyyy-MMM-dd')} periodo: $prdo"
 
                 fcfm = preciosService.ultimoDiaDelMes(fchaFinPlanillado)
