@@ -2,25 +2,27 @@
 
 <div style="height: 35px; width: 100%;">
     <div class="btn-group pull-left">
-        <a href="#" class="btn btn-ajax" id="btnNew">
-            <i class="icon-money"></i>
-            Nuevo Precio
-        </a>
-        %{--<a href="#" class="btn" id="btnCopy">--}%
-        %{--<i class="icon-copy"></i>--}%
-        %{--Copiar Precios--}%
-        %{--</a>--}%
-        <a href="#" class="btn btn-success btn-ajax" id="btnSave">
-            <i class="icon-save"></i>
-            Guardar
-        </a>
-        <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
-        %{--<g:if test="${!precioRef}">--}%
-            <a href="#" class="btn btn-ajax" id="btnCalc${item.departamento.subgrupo.grupoId}">
+        <g:if test="${session.perfil.codigo == 'CSTO'}">
+            <a href="#" class="btn btn-ajax" id="btnNew">
                 <i class="icon-money"></i>
-                Calcular precio
+                Nuevo Precio
             </a>
-        %{--</g:if>--}%
+            %{--<a href="#" class="btn" id="btnCopy">--}%
+            %{--<i class="icon-copy"></i>--}%
+            %{--Copiar Precios--}%
+            %{--</a>--}%
+            <a href="#" class="btn btn-success btn-ajax" id="btnSave">
+                <i class="icon-save"></i>
+                Guardar
+            </a>
+            <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
+            %{--<g:if test="${!precioRef}">--}%
+                <a href="#" class="btn btn-ajax" id="btnCalc${item.departamento.subgrupo.grupoId}">
+                    <i class="icon-money"></i>
+                    Calcular precio
+                </a>
+            %{--</g:if>--}%
+            </g:if>
         </g:if>
     </div>
 
@@ -66,22 +68,33 @@
                     <td>
                         <g:formatDate date="${precio.fecha}" format="dd-MM-yyyy"/>
                     </td>
-                    <td class="precio textRight ${precio.registrado != 'R' ? 'editable' : ''}" data-original="${precio.precioUnitario}" data-valor="${precio.precioUnitario}" id="${precio.id}">
-                        <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5" format="##,#####0" locale='ec'/>
-                    </td>
-                    <td class="delete">
-                    %{--<g:if test="${precio.fechaIngreso == new java.util.Date().clearTime()}">--}%
-                        <g:if test="${precio.registrado != 'R'}">
-                            <a href="#" class="btn btn-danger btn-small btnDelete" rel="tooltip" title="Eliminar" id="${precio.id}">
-                                <i class="icon-trash icon-large"></i>
-                            </a>
-                        </g:if>
-                        <g:else>
-                            <a href="#" class="btn btn-danger btn-small btnDeleteReg" rel="tooltip" title="Eliminar" id="${precio.id}">
-                                <i class="icon-trash icon-large"></i>
-                            </a>
-                        </g:else>
-                    </td>
+
+                    <g:if test="${session.perfil.codigo == 'CSTO'}">
+                        <td class="precio textRight ${precio.registrado != 'R' ? 'editable' : ''}" data-original="${precio.precioUnitario}" data-valor="${precio.precioUnitario}" id="${precio.id}">
+                            <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5" format="##,#####0" locale='ec'/>
+                        </td>
+                        <td class="delete">
+                        %{--<g:if test="${precio.fechaIngreso == new java.util.Date().clearTime()}">--}%
+                            <g:if test="${precio.registrado != 'R'}">
+                                <a href="#" class="btn btn-danger btn-small btnDelete" rel="tooltip" title="Eliminar" id="${precio.id}">
+                                    <i class="icon-trash icon-large"></i>
+                                </a>
+                            </g:if>
+                            <g:else>
+                                <a href="#" class="btn btn-danger btn-small btnDeleteReg" rel="tooltip" title="Eliminar" id="${precio.id}">
+                                    <i class="icon-trash icon-large"></i>
+                                </a>
+                            </g:else>
+                        </td>
+                    </g:if>
+                    <g:else>
+                        <td class="precio textRight" data-original="${precio.precioUnitario}" data-valor="${precio.precioUnitario}" id="${precio.id}">
+                            <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5" format="##,#####0" locale='ec'/>
+                        </td>
+                        <td class="delete">
+
+                        </td>
+                    </g:else>
                 </tr>
             </g:each>
         </tbody>

@@ -705,7 +705,6 @@ class MantenimientoItemsController extends Shield {
     }
 
     def precios() {
-        //lugar
         //rubro precio
     }
 
@@ -1359,7 +1358,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def showLg_ajax() {
-//        params.tipo = "C"
+        println "showLg_ajax... params: $params"
 //        params.operador = "<"
         if (params.fecha == "all") {
             params.todasLasFechas = "true"
