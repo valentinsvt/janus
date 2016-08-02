@@ -4,6 +4,7 @@ import com.lowagie.text.*
 
 //import com.lowagie.text.Font
 import com.lowagie.text.pdf.*
+import janus.apus.ArchivoEspecificacion
 import janus.ejecucion.*
 import janus.pac.CronogramaContrato
 import janus.pac.CronogramaEjecucion
@@ -245,16 +246,21 @@ class Reportes2Controller {
 
                 pathIlustracion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.foto
 
-                if (extIlustracion.toLowerCase() == "pdf") {
+                if (extIlustracion.toLowerCase() in ["pdf"]) {
                     readerIlustracion = new PdfReader(new FileInputStream(pathIlustracion));
                     pagesIlustracion = readerIlustracion.getNumberOfPages()
                 }
             }
-            if (rubro.especificaciones && tipo.contains("e")) {
-                extEspecificacion = rubro.especificaciones.split("\\.")
+
+            def ares = ArchivoEspecificacion.findByItem(rubro)
+//            if (rubro.especificaciones && tipo.contains("e")) {
+            if (ares && tipo.contains("e")) {
+//                extEspecificacion = rubro.especificaciones.split("\\.")
+                extEspecificacion = ares.ruta.split("\\.")
                 extEspecificacion = extEspecificacion[extEspecificacion.size() - 1]
 
-                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.especificaciones
+//                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.especificaciones
+                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + ares?.ruta
 
                 if (extEspecificacion.toLowerCase() == "pdf") {
                     readerEspecificacion = new PdfReader(new FileInputStream(pathEspecificacion));
@@ -375,6 +381,7 @@ class Reportes2Controller {
 
 
     def comprobarIlustracion (){
+//        println ".... comprobarIlustracion, params: $params"
         def obra
         if(params.id){
             obra = Obra.get(params.id)
@@ -385,6 +392,8 @@ class Reportes2Controller {
         def baos = new ByteArrayOutputStream()
         def arrIl = []
         def arrIe = []
+        def mensaje = ""
+        def error = false
 
 
         def pagAct = 1
@@ -392,54 +401,71 @@ class Reportes2Controller {
         def tipo = params.tipo //i: ilustraciones, e: especificaciones, ie: ambas
 
         rubros.each { rubro ->
-
+            mensaje = rubro.codigo
             def extIlustracion = "", extEspecificacion = "", pagesEspecificacion = 0, pagesIlustracion = 0, pathEspecificacion, pathIlustracion
             PdfReader readerEspecificacion
             PdfReader readerIlustracion
 
             if (rubro.foto && tipo.contains("i")) {
+                mensaje += rubro?.foto
                 extIlustracion = rubro.foto.split("\\.")
                 extIlustracion = extIlustracion[extIlustracion.size() - 1]
 
                 pathIlustracion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.foto
 
-                arrIl += (rubro?.foto+"*")
+                arrIl += (rubro?.foto + "*")
 
                 def il
 
-                if (extIlustracion.toLowerCase() == "pdf") {
+//                if (extIlustracion.toLowerCase() in ["pdf", "png", "jpg"]) {
+                if (extIlustracion.toLowerCase() in ["pdf"]) {  //solo pdf se tiene que cargar separadamente los png y jpg se insertan sin problema
                     try{
                         il = new FileInputStream(pathIlustracion)
-
-                        render "SI"
+                        render "SI*"
+                        mensaje += "..ok"
                     }
                   catch(e){
-                      render "NO_"+arrIl[0]
+                      arrIl += (rubro?.foto+"*")
+                      mensaje += " **** no existe"
+                      error = true
+                      render "NO*" + arrIl[0]
                   }
                 }
             }
-            if (rubro.especificaciones && tipo.contains("e")) {
-                extEspecificacion = rubro.especificaciones.split("\\.")
+//            if (rubro.especificaciones && tipo.contains("e")) {
+            def ares = ArchivoEspecificacion.findByItem(rubro)
+//            println "rubro: ${rubro.codigo}, ruta: ${ares?.ruta}"
+            if (ares && tipo.contains("e")) {
+                mensaje += " ruta: ${ares?.ruta}"
+//                extEspecificacion = rubro.especificaciones.split("\\.")
+                extEspecificacion = ares.ruta.split("\\.")
                 extEspecificacion = extEspecificacion[extEspecificacion.size() - 1]
 
-                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.especificaciones
+//                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.especificaciones
+                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + ares?.ruta
 
-                arrIe += (rubro?.especificaciones+"*")
+                arrIe += ( ares?.ruta + "*")
 
                 def fi
-                if (extEspecificacion.toLowerCase() == "pdf") {
+                if (extEspecificacion.toLowerCase() in ["pdf"]) {
                     try {
                         fi = new FileInputStream(pathEspecificacion)
-
-                        render "SI"
+                        render "SI*"
+                        mensaje += "..ok"
                     }
                      catch (e){
-
-                         render "NO*"+arrIe[0]
+                         arrIe += (ares?.ruta + "*")
+                         mensaje += "********* No existe"
+                         error = true
+                         render "NO*" + arrIe[0]
                      }
                 }
             }
+//            println mensaje
+            if(!error) render "SI*"
         }
+//        println "existió error: $error"
+
     }
 
     def reporteRubroIlustracion_bck() {

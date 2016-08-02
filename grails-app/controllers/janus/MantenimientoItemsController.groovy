@@ -1358,7 +1358,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def showLg_ajax() {
-        println "showLg_ajax... params: $params"
+//        println "showLg_ajax... params: $params"
 //        params.operador = "<"
         if (params.fecha == "all") {
             params.todasLasFechas = "true"
