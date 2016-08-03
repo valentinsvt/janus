@@ -80,6 +80,28 @@ class LoginController {
             session.usuarioKerberos=user.login
             session.valida = Parametros.get(1).valida
             redirect(action: "perfiles")
+
+            // registra sesion activa ------------------------------
+            //                println  "sesion ingreso: $session.id  desde ip: ${request.getRemoteAddr()}"  //activo
+            def activo = new SesionActiva()
+            activo.idSesion = session.id
+            activo.fechaInicio = new Date()
+            activo.activo = 'S'
+            activo.dirIP = request.getRemoteAddr()
+            activo.login = user.login
+            activo.save()
+            // pone X en las no .... cerradas del mismo login e ip
+            def abiertas = SesionActiva.findAllByLoginAndDirIPAndFechaFinIsNullAndIdSesionNotEqual(session.usuario.login,
+                    request.getRemoteAddr(), session.id)
+            if (abiertas.size() > 0) {
+                abiertas.each { sa ->
+                    sa.fechaFin = new Date()
+                    sa.activo = 'X'
+                    sa.save()
+                }
+            }
+            // ------------------fin de sesion activa --------------
+
             return
         }
        }
@@ -135,6 +157,15 @@ class LoginController {
 
 
     def logout() {
+
+        // registra fin de sesion activa --------------
+        def activo = SesionActiva.findByIdSesion(session.id)
+        if (activo) {
+            activo.fechaFin = new Date()
+            activo.activo = 'N'
+            activo.save()
+        }
+        // -------------- fin -------------------------
 
         session.usuario = null
         session.usuarioKerberos=null
