@@ -163,7 +163,7 @@ class LoginController {
         if (activo) {
             activo.fechaFin = new Date()
             activo.activo = 'N'
-            activo.save()
+            activo.save(flush: true)
         }
         // -------------- fin -------------------------
 
