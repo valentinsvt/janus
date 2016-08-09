@@ -1259,7 +1259,7 @@ class Reportes2Controller {
 //        params.lugar = "4"
 //        params.grupo = "1"
 //
-//        println "params" + params
+//        println "reportePrecios params" + params
 
         def grupo = Grupo.get(params.grupo.toLong())
 
@@ -1315,6 +1315,9 @@ class Reportes2Controller {
                 text = text.replaceAll(/</, /&lt;/);
                 text = text.replaceAll(/>/, /&gt;/);
                 text = text.replaceAll(/"/, /&quot;/);
+                text = text.replaceAll(/'/, /&apos;/);
+                text = text.replaceAll(/&/, /&amp;/);
+
                 corregidos += text
             }
 

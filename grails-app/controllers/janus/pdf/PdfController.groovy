@@ -12,7 +12,7 @@ class PdfController {
             byte[] b
             def baseUri = request.scheme + "://" + request.serverName + ":" + request.serverPort
 
-            params.url=params.url.replaceAll("W","&")
+            params.url = params.url.replaceAll("W","&")
             if(params.pdfController){
                 def content = g.include(controller:params.pdfController, action:params.pdfAction, id:params.pdfId)
                 b = pdfService.buildPdfFromString(content.readAsString(), baseUri)
