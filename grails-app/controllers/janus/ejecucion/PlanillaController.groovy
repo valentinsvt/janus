@@ -4566,7 +4566,7 @@ class PlanillaController extends janus.seguridad.Shield {
      * están disponibles los ínidices se retorna null **/
     def indicesDisponiblesAnticipo(plnl, fcha, tp) {
         //* todo: verficar que todos los ínidices de todas las FPRJ del contrato
-        println "indicesDisponiblesAnticipo para fecha: ${fcha}, con tp: $tp"
+//        println "indicesDisponiblesAnticipo para fecha: ${fcha}, con tp: $tp"
         def existe = false
         def prin
         prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fcha, fcha)
@@ -4576,7 +4576,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
             }
             if(existe) {
-                println "si existe el prin: ${plnl.periodoIndices}"
+//                println "si existe el prin: ${plnl.periodoIndices}"
                 return prin
             } else {
                 def max = 10
@@ -4599,7 +4599,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
             }
             if(existe) {
-                println "si existe el prin: ${plnl.periodoIndices}"
+//                println "si existe el prin: ${plnl.periodoIndices}"
                 return prin
             } else {
                 def max = 10
@@ -4625,7 +4625,7 @@ class PlanillaController extends janus.seguridad.Shield {
      * si tp = 'R' se trata de reajuste a la fecha de pago o presentación, si no
      * están disponibles los ínidices se retorna null **/
     def indicesDisponibles(plnl, fcha, tp) {
-        println "indicesDisponibles para plnl: ${plnl.id} fecha: ${fcha}, con tp: $tp"
+//        println "indicesDisponibles para plnl: ${plnl.id} fecha: ${fcha}, con tp: $tp"
         def existe = false
         def prin
         prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fcha, fcha)
@@ -4636,13 +4636,13 @@ class PlanillaController extends janus.seguridad.Shield {
                 existe = preciosService.verificaIndicesPeriodo(plnl.id, prin).size() == 0
             }
             if(existe) {
-                println "si existe el prin: ${plnl.periodoIndices}"
+//                println "si existe el prin: ${plnl.periodoIndices}"
                 return prin
             } else {
                 def max = 10
                 def fecha = fcha
                 while(!existe){
-                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
+//                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
                     fecha = preciosService.primerDiaDelMes(fecha) - 15
                     prin = PeriodosInec.findByFechaInicioLessThanAndFechaFinGreaterThan(fecha, fecha)
 //                    existe = preciosService.verificaIndicesPeriodo(plnl.contrato, prin).size() == 0
@@ -4664,7 +4664,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def insertaRjpl(prmt) {
         def rjpl = new ReajustePlanilla()
-        println "inserta reajuste planilla : ${prmt}"
+//        println "inserta reajuste planilla : ${prmt}"
         def rjpl_an = ReajustePlanilla.findByPlanillaAndPlanillaReajustadaAndPeriodoAndFpReajuste(prmt.planilla,
                 prmt.planillaReajustada, prmt.periodo, prmt.fpReajuste)
         if (rjpl_an) {
@@ -5005,7 +5005,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         /** manejar datos de:  * tipo de multa, * dias de retraso, * multa descripción y * valor de la multa */
         def rjpl = ReajustePlanilla.findAllByPlanillaAndPlanillaReajustada(plnl, plnl, [sort: 'periodo'])
-        println "rjpl --- multas: ${rjpl.size()}"
+//        println "rjpl --- multas: ${rjpl.size()}"
 
         def baseMulta = 0
         def formatoNum = new DecimalFormat("#,###.##")
@@ -5171,7 +5171,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def procesaReajusteLq(id) {
-        println "inicia procesaReajuste...."
+//        println "inicia procesaReajuste...."
         def prmt = [:]
         def plnl = Planilla.get(id)
         def cntr = plnl.contrato
@@ -5182,7 +5182,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def plParaPo = 0.0
         def plAcumulado = 0.0
         def parcial = 0.0
-        def total = 0.0
+        def totalCr = 0.0
         def aDescontar = 0.0
         def ttDescontar = 0.0
         def hayAnteriores = false
@@ -5195,12 +5195,12 @@ class PlanillaController extends janus.seguridad.Shield {
             prmt.planilla = plnl
             prmt.planillaReajustada = plnl
             fcha = plnl.periodoIndices? plnl.periodoIndices.fechaInicio : plnl.fechaIngreso
-            println "es anticipo -- $fcha"
+//            println "es anticipo -- $fcha"
             def prin = indicesDisponiblesAnticipo(plnl, fcha, null)
             /** para cada FPRJ crea un registro en RJPL **/
-            println "+++ existe indices para prdo: $prin"
+//            println "+++ existe indices para prdo: $prin"
             FormulaPolinomicaReajuste.findAllByContrato(plnl.contrato).each {
-                println "++++indice disponible: $prin, fprj: ${it.id}"
+//                println "++++indice disponible: $prin, fprj: ${it.id}"
                 prmt.periodoInec = prin
                 prmt.parcialCronograma = 0
                 prmt.acumuladoCronograma = 0
@@ -5243,7 +5243,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         prmt.fpReajuste = it
 //                        println "  inserta ... rjpl: ${it.id}, prmt: $prmt"
                         insertaRjpl(prmt)
-                        println "inserta ok..."
+//                        println "inserta ok..."
                     }
 
                 } else if((p.tipoPlanilla.toString() == 'P') && (p == pl.last())) {  // reajusta sólo planillas de avance
@@ -5269,10 +5269,10 @@ class PlanillaController extends janus.seguridad.Shield {
                             prmt.acumuladoCronograma = po.acumuladoCronograma
 
                             // si acPlanillas > acCronograma => Po queda igual, sino, Po = parcialCr*% si alcanza
-                            println "++++++++acCr: $po.acumuladoCronograma, acPl: $po.acumuladoPlanillas, valor: ${plnl.valor}, dsct: $dsct"
+//                            println "++++++++acCr: $po.acumuladoCronograma, acPl: $po.acumuladoPlanillas, valor: ${plnl.valor}, dsct: $dsct"
                             if(po.acumuladoCronograma > po.acumuladoPlanillas) {
                                 if((po.acumuladoCronograma - po.acumuladoPlanillas)*dsct <= (plnl.valor - plParaPo)) {
-                                    println "pone el nuevo Po a: ${Math.round(po.parcialCronograma * dsct * 100)/100}"
+//                                    println "pone el nuevo Po a: ${Math.round(po.parcialCronograma * dsct * 100)/100}"
                                     prmt.valorPo = Math.round(po.parcialCronograma * dsct * 100)/100
                                     plParaPo += prmt.valorPo - po.valorPo
                                 } else {
@@ -5301,7 +5301,7 @@ class PlanillaController extends janus.seguridad.Shield {
                             insertaRjpl(prmt)
                             prdo = po.periodo
                             plAcumulado = po.acumuladoPlanillas
-                            total = po.acumuladoCronograma
+                            totalCr = po.acumuladoCronograma
                         }
                     }
                 }
@@ -5323,32 +5323,34 @@ class PlanillaController extends janus.seguridad.Shield {
             def restoMes = 0.0
             def planilladoEsteMes = 0.0
             def diasPlanillados = preciosService.diasPlanillados(plnl.id)
-            println "dias planillados: $diasPlanillados"
+//            println "dias planillados: $diasPlanillados"
             def fchaFinPlanillado = plnl.fechaInicio
 //            prdo = 0
 
+//            println "antes del while total: $totalCr"
+            def total = 0.0
             while(fchaFinPlanillado < plnl.fechaFin){
                 prdo++
-//                total = 0
-                println "fchaFinPlanillado: ${fchaFinPlanillado.format('yyyy-MMM-dd')} periodo: $prdo"
+//                println "fchaFinPlanillado: ${fchaFinPlanillado.format('yyyy-MMM-dd')} periodo: $prdo"
 
                 fcfm = preciosService.ultimoDiaDelMes(fchaFinPlanillado)
 
                 if(plnl.fechaFin > fcfm)   /*** la planilla sobrepasa el mes: tiene dos o mas Po  **/
                 {
                     diasEsteMes = preciosService.diasEsteMes(plnl.contrato.id, fchaFinPlanillado.format('yyyy-MM-dd'), fcfm.format('yyyy-MM-dd'))
-                    println "dias este mes: ${fchaFinPlanillado.format('yyyy-MMM-dd')}  dias: ${diasEsteMes}"
+//                    println "dias este mes: ${fchaFinPlanillado.format('yyyy-MMM-dd')}  dias: ${diasEsteMes}"
                     esteMes = Math.round(plnl.valor * diasEsteMes / diasPlanillados * 100) / 100
                     plAcumulado += esteMes
                     planilladoEsteMes += esteMes
 
-                    println "fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado"
+//                    println "fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado"
 
 
                     pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipo(plnl.contrato,
                        plnl.fechaInicio, fcfm, 'P')
 
                     parcial = 0.0
+                    total = totalCr
                     pems.each {ms ->
                         if(ms.fechaFin >= fchaFinPlanillado){
                             parcial += ms.parcialCronograma
@@ -5356,6 +5358,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         total += ms.parcialCronograma
                     }
 
+//                    println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
 
                     registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, fcfm, parcial, total)
                     fchaFinPlanillado =  preciosService.sumaUnDia(fcfm)
@@ -5374,13 +5377,15 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
 
                     parcial = 0.0
+                    total = totalCr
                     pems.each {ms ->
+//                        println "ms.parcialCronograma ${ms.parcialCronograma}"
                         if(ms.fechaFin >= fchaFinPlanillado){
                             parcial += ms.parcialCronograma
                         }
                         total += ms.parcialCronograma
                     }
-                    println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado"
+//                    println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
                     registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, plnl.fechaFin, parcial, total)
 
                     fchaFinPlanillado = plnl.fechaFin

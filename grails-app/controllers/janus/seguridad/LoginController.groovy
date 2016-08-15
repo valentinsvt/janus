@@ -57,7 +57,7 @@ class LoginController {
     }
 
     def validar() {
-        println "validar: $params"
+//        println "validar: $params"
         def user = Persona.withCriteria {
             eq("login", params.login)
             eq("password", params.pass.encodeAsMD5())
