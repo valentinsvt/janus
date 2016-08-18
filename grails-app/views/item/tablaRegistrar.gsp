@@ -24,7 +24,8 @@
                         <th>Precio</th>
                         <th class="precioAL hidden">Precio Anterior</th>
                         <th>Fecha</th>
-                        <th>Registrar</th>
+                        <th>Registrar
+                            <a href="#" class="btn " title="Todos" id="seleccionar"><i class="icon-check"></i>Todos</a>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,7 +56,7 @@
                                     <i class="icon-ok"></i>
                                 </g:if>
                                 <g:else>
-                                    <input type="checkbox"/>
+                                    <input type="checkbox" class="chequear"/>
                                 </g:else>
                             </td>
                         </tr>
@@ -210,7 +211,9 @@
                     $("#dlgLoad").dialog("close");
                 });
 
-
+                $("#seleccionar").click(function(){
+                    $(".chequear")[0].checked ? $(".chequear").prop("checked", false) : $(".chequear").prop("checked", true);
+                });
 
 
             </script>

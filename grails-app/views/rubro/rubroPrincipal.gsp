@@ -95,7 +95,7 @@
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: -10px">
 
 <div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;">
-    <g:form class="frmRubro" action="save" style="height: 100px;">
+    <g:form name="frmRubro" action="save" style="height: 100px;">
         <input type="hidden" id="rubro__id" name="rubro.id" value="${rubro?.id}">
 
         <p class="css-vertical-text">Rubro</p>
@@ -172,8 +172,10 @@
             <div class="span4" style="color: #01a; width: 300px; margin-left: 10px" >
                 Responsable: <br>
                 <g:if test="${modifica}">
-                    <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id?:session.usuario.id}" id="responsable"
-                              optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;" disabled="true"></g:select>
+                    %{--<g:select name="rubro.responsable.id" id="selResponsable" from="${resps}" value="${rubro?.responsable?.id?:session.usuario.id}"--}%
+                              %{--optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;" readonly="true"></g:select>--}%
+                    <input type="hidden" name="rubro.responsable" class="span72" value="${rubro?.responsable?.id?:session.usuario.id}" id="selResponsable">
+                    <input type="text" name="persona" class="span72" value="${rubro?.responsable?:session.usuario}" id="Responsable" readonly>
                 </g:if>
                 <g:else>
                     ${rubro?.responsable}
@@ -2020,13 +2022,13 @@
             var desc = $("#input_descripcion").val()
             var subGr = $("#selSubgrupo").val()
             var msg = ""
-            var resp = $("#responsable").val();
+            var resp = $("#selResponsable").val();
             var espec = $("#input_codigo_es").val();
 
 //            revisarCodigo(espec);
 
 
-//            console.log(desc,desc.trim(),desc.trim().length,resp)
+            console.log('reponsable:',resp)
             if (cod.trim().length > 30 || cod.trim().length < 1) {
                 msg = "<br>Error: La propiedad código debe tener entre 1 y 30 caracteres."
             }
@@ -2092,7 +2094,7 @@
 
                     } else {
 //                        console.log("sub")
-                        $(".frmRubro").submit()
+                        $("#frmRubro").submit()
                     }
 
                 }

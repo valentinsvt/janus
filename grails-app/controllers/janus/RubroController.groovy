@@ -63,6 +63,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def rubroPrincipal() {
+//        println "rubroPrincipal params: $params"
         def rubro
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
         def grupos = []
@@ -101,10 +102,16 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.idRubro)
             def items = Rubro.findAllByRubro(rubro)
             items.sort { it.item.codigo }
-            println "items: $items"
-            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
+            resps = rubro.responsable
+//            println "responsable: $resps, ${resps?.id} rubro: ${rubro.id} ${rubro.codigo} ${rubro.responsable}"
+            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes,
+             aux: aux, volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
         } else {
-            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
+
+//            println "Nuevo .... responsable: ${resps?.id} ${resps}"
+
+            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux,
+             volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
         }
     }
 

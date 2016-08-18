@@ -104,27 +104,35 @@ class PreciosService {
     }
 
 
+    /**
+     * Obtiene los registros de rbpc más antiguos que no estén registrados
+     **/
     def getPrecioRubroItemEstadoNoFecha(lugar, items, registrado) {
         def cn = dbConnectionService.getConnection()
         def itemsId = items
         def res = []
 
-        def sql = "SELECT "
-        sql += "r1.item__id,"
-        sql += "i.itemcdgo,"
-        sql += "(SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) "
-        sql += "FROM rbpc r1,item i "
-        sql += "WHERE "
-        sql += "r1.item__id in (${itemsId}) "
-        sql += "and r1.lgar__id=${lugar.id} "
-        sql += "and i.item__id=r1.item__id "
-        sql += " " + registrado + " "
-        sql += "group by 1,2 order by 2"
-        sql += ""
+        def sqltx = "select min(rbpcfcha) fecha from rbpc where item__id in (${itemsId}) and lgar__id = ${lugar.id} and rbpcrgst != 'R'"
+//        println "getPrecioRubroItemEstadoNoFecha -- sql: $sqltx"
+        def fecha = cn.rows(sqltx.toString())[0].fecha  // fecha más anterior de items sin registro
+//        println "getPrecioRubroItemEstadoNoFecha $fecha"
 
-//        println "()" + sql
-        cn.eachRow(sql.toString()) { row ->
-            res.add(row[2])
+//        def sql = "SELECT r1.item__id, i.itemcdgo, "
+//        sql += "(SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = min(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) "
+//        sql += "FROM rbpc r1, item i "
+//        sql += "WHERE r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and i.item__id=r1.item__id ${registrado} "
+//        sql += "group by 1,2 order by 2"
+
+        if(fecha) {
+            def sql = "SELECT r1.item__id, i.itemcdgo, rbpc__id FROM rbpc r1, item i "
+            sql += "WHERE r1.item__id in (${itemsId}) and r1.lgar__id = ${lugar.id} and i.item__id = r1.item__id ${registrado} and " +
+                    "rbpcfcha = '${fecha}'"
+            sql += "order by 2"
+
+
+            cn.eachRow(sql.toString()) { row ->
+                res.add(row[2])
+            }
         }
         cn.close()
         return res

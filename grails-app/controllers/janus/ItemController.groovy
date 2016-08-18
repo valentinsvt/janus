@@ -53,7 +53,7 @@ class ItemController extends janus.seguridad.Shield {
         if (params.tipo != "-1") {
             sql += ", dprt, sbgr, grpo"
         }
-        sql += " where rbpc.item__id=item.item__id and lgar__id=${lugar.id} "
+        sql += " where rbpc.item__id=item.item__id and lgar__id = ${lugar.id} "
         if (params.tipo != "-1") {
             sql += "and item.dprt__id = dprt.dprt__id "
             sql += "and dprt.sbgr__id = sbgr.sbgr__id "
