@@ -230,6 +230,12 @@
 //        ////console.log("return "+band)
         return band
     }
+
+
+
+    var ban = 0
+
+
     function copiaTabla() {
         var tabla = $('<table class="table table-bordered  table-condensed " id="tablaHeaders" style="width:140px;max-width: 140px;float: left">')
         var ht = $("#ht").innerHeight()
@@ -261,10 +267,34 @@
         $(".col_0").remove()
         $(".col_1").remove()
 
+
+            $(".item_row").bind("click", function () {
+                if(ban == 0){
+                    if ($(this).hasClass("activo")) {
+
+                        $("." + $(this).attr("fila")).addClass($(".activo").attr("color")).removeClass("activo")
+                    } else {
+                        $(this).addClass("activo")
+                        $("." + $(this).attr("fila")).addClass("activo")
+                        $("." + $(this).attr("fila")).removeClass("gris")
+                        $("." + $(this).attr("fila")).removeClass("blanco")
+                    }
+                }else{
+
+                }
+
+
+            });
+
+
+
+
     }
+
+
     function appendTabla() {
         var tabla = $("#body_headers")
-
+        ban = 1
         $("#tableBody_hid").find(".item_row").each(function () {
             var col0 = $(this).find(".col_0")
             var col1 = $(this).find(".col_1")
@@ -296,6 +326,7 @@
                 $("." + $(this).attr("fila")).removeClass("gris")
                 $("." + $(this).attr("fila")).removeClass("blanco")
             }
+
         });
 
     }
@@ -312,17 +343,18 @@
 //            inicio++
 //
 //        }, 4000);
-        $(".item_row").click(function () {
-            if ($(this).hasClass("activo")) {
-                $("." + $(this).attr("fila")).addClass($(".activo").attr("color")).removeClass("activo")
-            } else {
-                $(this).addClass("activo")
-                $("." + $(this).attr("fila")).addClass("activo")
-                $("." + $(this).attr("fila")).removeClass("gris")
-                $("." + $(this).attr("fila")).removeClass("blanco")
-            }
-
-        });
+//        $(".item_row").click(function () {
+//            console.log("activo 1")
+//            if ($(this).hasClass("activo")) {
+//                $("." + $(this).attr("fila")).addClass($(".activo").attr("color")).removeClass("activo")
+//            } else {
+//                $(this).addClass("activo")
+//                $("." + $(this).attr("fila")).addClass("activo")
+//                $("." + $(this).attr("fila")).removeClass("gris")
+//                $("." + $(this).attr("fila")).removeClass("blanco")
+//            }
+//
+//        });
         var ctrl = 0
         $("body").keydown(function (ev) {
 //            ////console.log(ev.keyCode)
