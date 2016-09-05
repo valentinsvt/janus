@@ -1160,7 +1160,7 @@ class ReportesController {
 
 //        //NUEVO
 //
-//        println "----->>>>" + params
+//        println "imprimirRubros ----->>>>" + params
 //        def rubro = Item.get(params.id)
         def obra = Obra.get(params.obra)
 
@@ -1168,35 +1168,31 @@ class ReportesController {
         def fecha2
 
         if (obra?.fechaPreciosRubros) {
-
-//            fecha1 = new Date().parse("dd-MM-yyyy", params.fecha)
             fecha1 = obra?.fechaPreciosRubros
         } else {
 
         }
 
         if (obra?.fechaOficioSalida) {
-
-//            fecha2 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
             fecha2 = obra?.fechaOficioSalida
-
         } else {
         }
 
         def rubros = []
-
-//        def parts = params.id.split("_")
-
-
         def lugar = obra?.lugar
         def indi = obra?.totales
-//        def listas = params.listas
 
         try {
             indi = indi.toDouble()
         } catch (e) {
             println "error parse " + e
             indi = 21.5
+        }
+
+        if(obra.estado != 'R') {
+            println "antes de imprimir rubros.. actualiza desalojo y herramienta menor"
+            preciosService.ac_transporteDesalojo(obra.id)
+            preciosService.ac_rbroObra(obra.id)
         }
 
         def html = ""

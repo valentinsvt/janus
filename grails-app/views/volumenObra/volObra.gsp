@@ -687,7 +687,7 @@
                 $("#item_cantidad").focus(function () {
                     console.log("focccc")
                     if (($("#item_nombre").val()) && ($("#item_codigo").val().substr(0, 2) == 'TR') && !aviso) {
-                        console.log("ssssssssss i ")
+//                        console.log("ssssssssss i ")
                         aviso = true;
                         alerta("Rubro para transporte", "Debe registrar la distancia de desalojo en Variables de " +
                            "la obra, en la sección Transporte Especial");
