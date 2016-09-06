@@ -3237,7 +3237,7 @@ class ReportesPlanillasController {
 
         /* *********************************** FIRMA **********************************/
 
-        def strParrafoFirma = "\n\n\n______________________________________\n${nombrePersona(prsn[0].persona)}\nAdministrador - Delegado"
+        def strParrafoFirma = "\n\n\n______________________________________\n${nombrePersona(prsn[0].persona)}\nAdministrador del Contrato - Delegado"
         Paragraph parrafoFirma = new Paragraph(strParrafoFirma, fontFirma);
         parrafoFirma.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafoFirma, 1);
@@ -3507,7 +3507,7 @@ class ReportesPlanillasController {
 //            println firma
 //            println "***************************************"
             addCellTabla(tablaFirmas, new Paragraph(firma, times12bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("Administrador - Delegado", times12bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Administrador del Contrato - Delegado", times12bold), prmsHeaderHoja)
             document.add(tablaFirmas);
 
 //        def footer = new PdfPTable(1);

@@ -269,8 +269,9 @@
                 }
                 $("#spanCoef").text($.trim($row.attr("numero")) + ": " + $.trim($row.attr("nombre"))).parent().data("nombreOk", nombreOk);
             }
+
             function updateTotal(val) {
-                $("#spanSuma").text("(" + number_format(val, 3, ".", ",") + ")").data("total", val);
+                $("#spanSuma").text("(" + number_format(val, 6, ".", ",") + ")").data("total", val);
             }
 
             function treeSelection($item) {

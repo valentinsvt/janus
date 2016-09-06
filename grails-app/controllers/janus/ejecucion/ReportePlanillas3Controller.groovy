@@ -304,7 +304,7 @@ class ReportePlanillas3Controller {
             def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
 //            def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
             def strSubdirector = "Ing. Miguel Velasteguí" + "\nSubdirector"
-            def strAdmin = nombrePersona(administrador) + "\nAdministrador - Delegado"
+            def strAdmin = nombrePersona(administrador) + "\nAdministrador del Contrato - Delegado"
             def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
             def strFechaAprobacion = "\nFecha de aprobación"
 
@@ -346,7 +346,7 @@ class ReportePlanillas3Controller {
                 if (params.orientacion == "horizontal") {
                     tablaFirmas.setWidths(arregloEnteros([30,5, 30,5, 30]))
                 } else if (params.orientacion == "vertical") {
-                    tablaFirmas.setWidths(arregloEnteros([25, 5,30,5, 25]))
+                    tablaFirmas.setWidths(arregloEnteros([25, 5,35,5, 25]))
                 }
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
