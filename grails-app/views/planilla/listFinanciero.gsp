@@ -153,7 +153,7 @@
                                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && planillaInstance.contrato.obra.fechaInicio}">
                                         <g:set var="lblBtn" value="${-6}"/>
                                     </g:if>
-                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && !planillaInstance.contrato.obra.fechaInicio}">
+                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && !planillaInstance.contrato.obra.fechaInicio && planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                         <g:set var="lblBtn" value="${-7}"/>
                                     </g:if>
                                     %{--lbl:${lblBtn}--}%
