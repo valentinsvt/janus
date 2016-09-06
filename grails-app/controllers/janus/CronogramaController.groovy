@@ -407,7 +407,7 @@ class CronogramaController extends janus.seguridad.Shield {
 //        def fin = new Date()
 //        println "cronogramaObra: precios $precios"
 //        println "${TimeCategory.minus(fin, inicio)}"
-        println "detalle: $detalle.dias"
+//        println "detalle: $detalle.dias"
 
         def tieneMatriz = false
         cn.eachRow("select count(*) cuenta from mfrb where obra__id = ${obra.id}".toString()) { d ->
