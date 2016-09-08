@@ -1481,12 +1481,14 @@ class Reportes2Controller {
                 label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
                 label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
                 label = new jxl.write.Label(2, fila, it?.unidad ? it?.unidad.toString() : ""); sheet.addCell(label);
-                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(3) ?: 0); sheet.addCell(number);
+//                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(3) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble() ?: 0); sheet.addCell(number);
                 number = new jxl.write.Number(4, fila,0); sheet.addCell(number);
                 number = new jxl.write.Number(5, fila, it?.punitario.toDouble().round(6) ?: 0); sheet.addCell(number);
 //                number = new jxl.write.Number(6, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
                 number = new jxl.write.Number(6, fila, it?.transporte.toDouble() ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(7, fila, it?.costo.toDouble().round(6) ?: 0); sheet.addCell(number);
+//                number = new jxl.write.Number(7, fila, it?.costo.toDouble().round(6) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(7, fila, it?.costo.toDouble() ?: 0); sheet.addCell(number);
                 label = new jxl.write.Label(8, fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
 
                 fila++
@@ -1672,12 +1674,15 @@ class Reportes2Controller {
                 label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
                 label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
                 label = new jxl.write.Label(2, fila, it?.unidad ? it?.unidad.toString() : ""); sheet.addCell(label);
-                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(2) ?: 0); sheet.addCell(number);
+//                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble() ?: 0); sheet.addCell(number);
 //                number = new jxl.write.Number(4, fila,0); sheet.addCell(number);
-                number = new jxl.write.Number(4, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(5, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(6, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(7, fila, it?.total.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(4, fila, it?.punitario.toDouble().round(6) ?: 0); sheet.addCell(number);
+//                number = new jxl.write.Number(5, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(5, fila, it?.transporte.toDouble() ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(6, fila, it?.costo.toDouble() ?: 0); sheet.addCell(number);
+//                number = new jxl.write.Number(7, fila, it?.total.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(7, fila, it?.total.toDouble() ?: 0); sheet.addCell(number);
                 label = new jxl.write.Label(8,fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
                 label = new jxl.write.Label(9, fila, it?.subpresupuesto ? it?.subpresupuesto.toString() : "");
                 sheet.addCell(label);
