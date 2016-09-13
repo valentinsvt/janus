@@ -74,7 +74,8 @@ class MigracionService {
     List cargarTablas(cn) {
         def arreglo = []
         def i = 0
-        def sql = "select table_name as Tabla from information_schema.tables where table_type like '%TABLE%' and table_schema='public' order by table_name";
+        def sql = "select table_name as Tabla from information_schema.tables " +
+                "where table_type like '%TABLE%' and table_schema='public' order by table_name";
         cn.eachRow(sql) { d ->
             arreglo[i] = d.Tabla.toString()
             i++
@@ -83,7 +84,9 @@ class MigracionService {
     }
 
     def getSecuencia(cn, tabla) {
-        def sql = "select column_name as Columna, udt_name as Tipo,character_maximum_length as Tam, column_default as sec from information_schema.columns where table_name = '${tabla}' and column_default is not null order by ordinal_position limit 1;"
+        def sql = "select column_name as Columna, udt_name as Tipo,character_maximum_length as Tam, column_default as sec " +
+                "from information_schema.columns " +
+                "where table_name = '${tabla}' and column_default is not null order by ordinal_position limit 1;"
         def sec = []
         cn.eachRow(sql.toString()) { r ->
             sec.add(r["sec"])

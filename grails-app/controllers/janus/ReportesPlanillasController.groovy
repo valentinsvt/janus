@@ -514,7 +514,11 @@ class ReportesPlanillasController {
             } else {
                 def num = (i + 1).toString().padLeft(2, "0")
                 def val = band == 0 ? avanceContrato["frase" + num] : ""
-                html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, "maxLength":511, style: "width: 1000px; height:100px;")
+                if(i == 5) {  //la frase 6: F.- Actividades más importantes del periodo va hasta 1023 c
+                    html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, "maxLength":1023, style: "width: 1000px; height:100px;")
+                } else {
+                    html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, "maxLength":511, style: "width: 1000px; height:100px;")
+                }
             }
         }
         html += "<div style='margin-bottom:10px; margin-top:5px;'>" +
