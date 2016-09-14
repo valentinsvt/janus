@@ -824,7 +824,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def uploadFile() {
-//        println "upload "+params
+        println "upload "+params
 
         def acceptedExt = ["jpg", "png", "gif", "jpeg", "pdf"]
 
@@ -834,9 +834,9 @@ class RubroController extends janus.seguridad.Shield {
         new File(path).mkdirs()
         def rubro = Item.get(params.rubro)
         def archivEsp
-        if(ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)){
+        if(ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)) {
             archivEsp = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
-        }else{
+        } else {
 //            println("entro")
             archivEsp = new ArchivoEspecificacion()
             archivEsp.item = rubro
@@ -863,6 +863,8 @@ class RubroController extends janus.seguridad.Shield {
                 fileName = fileName + "." + ext
                 def pathFile = path + fileName
                 def file = new File(pathFile)
+                println "subiendo archivo: $fileName"
+
                 f.transferTo(file)
 
                 def old = tipo == "il" ? rubro.foto : archivEsp?.ruta
@@ -877,6 +879,7 @@ class RubroController extends janus.seguridad.Shield {
                 switch (tipo) {
                     case "il":
                         rubro.foto = /*g.resource(dir: "rubros") + "/" + */ fileName
+                        rubro.save(flush: true)
                         break;
                     case "dt":
 //                        rubro.especificaciones = /*g.resource(dir: "rubros") + "/" + */ fileName
@@ -909,10 +912,9 @@ class RubroController extends janus.seguridad.Shield {
             flash.clase = "alert-error"
             flash.message = "Error: Seleccione un archivo JPG, JPEG, GIF, PNG ó PDF"
         }
+
         redirect(action: "showFoto", id: rubro.id, params: [tipo: tipo])
         return
-
-
     }
 
 
