@@ -717,19 +717,13 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def showFoto() {
-
         // para habilitar el ares, quitar los comentarios sangrados y cambiar el return //
 
         def rubro = Item.get(params.id)
         def tipo = params.tipo
-
-
         def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
-
 //        println("rubro " + rubro)
 //        println("ares111 " + ares?.id)
-
-
         def ret
 
         if(ares){
@@ -737,7 +731,6 @@ class RubroController extends janus.seguridad.Shield {
         } else {
             ret = rubro
         }
-
 
         def filePath
         def titulo
@@ -759,7 +752,6 @@ class RubroController extends janus.seguridad.Shield {
             ext = filePath.split("\\.")
             ext = ext[ext.size() - 1]
         }
-//        return [rubro: ret, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
         return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath, ares: ares?.id]
     }
 
@@ -799,6 +791,7 @@ class RubroController extends janus.seguridad.Shield {
 
 
     def downloadFileAres() {
+//        println "downloadFileAres: $params"
         def ares = ArchivoEspecificacion.get(params.id)
 
         def tipo = params.tipo
@@ -808,7 +801,7 @@ class RubroController extends janus.seguridad.Shield {
         ext = ext[ext.size() - 1]
         def folder = "rubros"
         def path = servletContext.getRealPath("/") + folder + File.separatorChar + filePath
-        println "path "+path
+//        println "path "+path
         def file = new File(path)
         if(file.exists()){
             def b = file.getBytes()
@@ -818,7 +811,7 @@ class RubroController extends janus.seguridad.Shield {
             response.getOutputStream().write(b)
         }else{
             flash.message="El archivo seleccionado no se encuentra en el servidor."
-            redirect(action: "showFoto",params: [id:rubro.id,tipo: "dt"])
+            redirect(action: "showFoto",params: [id: params.rubro, tipo: "dt"])
         }
 
     }

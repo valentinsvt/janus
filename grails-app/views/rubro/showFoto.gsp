@@ -61,7 +61,7 @@
                                 </g:link>
                             </g:if>
                             <g:if test="${tipo == 'dt'}">
-                                <g:link action="downloadFileAres" id="${ares}" params="[tipo: tipo]" class="btn btn-info">
+                                <g:link action="downloadFileAres" id="${ares}" params="[tipo: tipo, rubro: rubro.id]" class="btn btn-info">
                                     <i class="icon-download-alt"></i> Descargar
                                 </g:link>
                             </g:if>
