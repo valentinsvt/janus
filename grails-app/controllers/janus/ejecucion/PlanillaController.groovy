@@ -5360,7 +5360,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //                    println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
 
-                    registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, fcfm, parcial, total)
+                    registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, fcfm, parcial, total, false)
                     fchaFinPlanillado =  preciosService.sumaUnDia(fcfm)
 
                 } else {  // se crea el último periodo en rjpl
@@ -5385,8 +5385,9 @@ class PlanillaController extends janus.seguridad.Shield {
                         }
                         total += ms.parcialCronograma
                     }
-//                    println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
-                    registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, plnl.fechaFin, parcial, total)
+                    println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
+
+                    registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, plnl.fechaFin, parcial, total, true)
 
                     fchaFinPlanillado = plnl.fechaFin
                 }
@@ -5888,7 +5889,7 @@ class PlanillaController extends janus.seguridad.Shield {
      * @param esteMes --> columna rjplvlpo
      * @return
      */
-    def registraRjpl(prdo, esteMes, plAcumulado, contrato, planilla, fcin, fcfn, crpa, crac ) {
+    def registraRjpl(prdo, esteMes, plAcumulado, contrato, planilla, fcin, fcfn, crpa, crac, planillaFinal) {
 
 /*
         def pems = PeriodoEjecucion.findAllByContratoAndFechaFinLessThanEquals(contrato, fcfn, [sort: 'fechaInicio'])
@@ -5922,7 +5923,7 @@ class PlanillaController extends janus.seguridad.Shield {
         prmt.fechaFin = fcfn
         prmt.fpReajuste = planilla.formulaPolinomicaReajuste
 
-        def dsct1 = calculaPo(planilla.id, esteMes, false, prmt.periodo)
+        def dsct1 = calculaPo(planilla.id, esteMes, planillaFinal, prmt.periodo)
 //                println "+++2: ${calculaPo(plnl.id, 0, false, prmt.periodo)}, anterior: $dsct1"
         prmt.valorPo = dsct1
 //                println "inserta segunda parte: $prmt"
