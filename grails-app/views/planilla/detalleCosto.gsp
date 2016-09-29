@@ -560,7 +560,7 @@
                         var max = parseFloat($tdTotal.data("max"));
                         var tot = parseFloat($tdTotal.data("val"));
                         var val = parseFloat(data.total) + parseFloat(tot);
-
+                        console.log('max:', max);
                         if (val <= max) {
                             if (noDuplicados(data)) {
                                 $.ajax({

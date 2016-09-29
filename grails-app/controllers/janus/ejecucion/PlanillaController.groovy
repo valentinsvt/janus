@@ -4208,7 +4208,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def totalMonto = detalles.size() > 0 ? detalles.sum { it.monto} : 0
         def totalIndi = detalles.size() > 0 ? detalles.sum { it.montoIndirectos } : 0
         def total = totalMonto + totalIndi
-        println("total monto " + total)
+//        println "total monto " + total
         planilla.valor = total
         if (!planilla.save(flush: true)) {
             println "error al actualizar el valor de la planilla " + planilla.errors
@@ -4218,7 +4218,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def addDetalleCosto() {
-        println("params dettale costo" + params)
+//        println "params detalle costo" + params
         def detalle = new DetallePlanillaCosto()
         if (params.id) {
             detalle = DetallePlanillaCosto.get(params.id)
@@ -4280,6 +4280,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         def anteriores = Planilla.withCriteria {
+            eq("contrato", contrato)
             eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
             ne("id", planilla.id)
         }
@@ -4296,6 +4297,8 @@ class PlanillaController extends janus.seguridad.Shield {
 //        return [planilla: planilla, obra: obra, contrato: contrato,
 //                editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
 //        return [planilla: planilla, obra: obra, contrato: contrato, indirectos: indirectos,
+
+//        println "max: $max, totalAnterior: $totalAnterior, anteriores: ${anteriores.valor} "
         return [planilla: planilla, obra: obra, contrato: contrato,
                 editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), max: max]
     }
