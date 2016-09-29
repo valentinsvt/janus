@@ -32,6 +32,11 @@
         .borderTop {
             border-top : #5E8E9B double 3px !important;
         }
+
+        input[type=text]:focus {
+            color: #000f24 !important;
+            background-color: #faff96 !important;
+        }
         </style>
 
     </head>
