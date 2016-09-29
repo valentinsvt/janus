@@ -5388,7 +5388,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         }
                         total += ms.parcialCronograma
                     }
-                    println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
+//                    println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
 
                     registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, plnl.fechaFin, parcial, total, true)
 
@@ -5636,7 +5636,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 "planillaReajustada = :p and periodo < :pr ", [p: plnl, pr: prdo])[0]?:0
 
 //        println ".....1"
-        def totPlnl = ReajustePlanilla.executeQuery("select acumuladoPlanillas from ReajustePlanilla where planilla = :p and " +
+        def totPlnl = ReajustePlanilla.executeQuery("select max(acumuladoPlanillas) from ReajustePlanilla where planilla = :p and " +
                 "planillaReajustada = :p", [p: plnl])[0]?:0
 //        println ".....2 $totPlnl"
 
@@ -5645,12 +5645,13 @@ class PlanillaController extends janus.seguridad.Shield {
         if (resto < 0) resto = 0  // ya nop se aplica deducción de anticipo
 //        println "------------resto: $resto"
 
-//        println "totalPo anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
+//        println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
 
         if(estePo > resto) {
             valorPo = vlor - resto
         } else if((plnl.tipoPlanilla.codigo == 'Q') && plFinal) {
-            valorPo = totPlnl - cntr.anticipo - totPo
+            valorPo = totPlnl - cntr.anticipo - totPo - totPoAc
+//            valorPo = vlor - cntr.anticipo - totPo + totPoAc
         } else {
             valorPo = estePo
         }
