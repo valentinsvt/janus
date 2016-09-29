@@ -791,7 +791,7 @@ class ReportesPlanillasController {
 
 
         addCellTabla(tablaDetalle, new Paragraph("FECHA VENCIMIENTO", fontTh), [pl: 20, border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDetalle, new Paragraph(fechaConFormato(prej.first().fechaInicio + contrato?.plazo?.toInteger(), formatoFechasTabla), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 3])
+        addCellTabla(tablaDetalle, new Paragraph(fechaConFormato(prej.first().fechaInicio + contrato?.plazo?.toInteger() -1, formatoFechasTabla), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 3])
 
         def totalDias = 0
 
