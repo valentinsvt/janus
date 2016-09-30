@@ -397,7 +397,7 @@
                 <div id="firmas">
                     <div class="firma">
                         <g:if test="${actaInstance.contrato.administrador}">
-                            ${actaInstance.contrato.administrador.titulo.toUpperCase() ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}
+                            ${actaInstance.contrato.administrador.titulo?.toUpperCase() ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}
                         %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
                         </g:if>
                         <br/>
@@ -408,7 +408,7 @@
                         <g:if test="${directorDeFiscalizacion}">
                         %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
                         %{--${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido}--}%
-                            ${directorDeFiscalizacion.titulo.toUpperCase() ?: ""} ${directorDeFiscalizacion.nombre} ${directorDeFiscalizacion.apellido}
+                            ${directorDeFiscalizacion.titulo?.toUpperCase() ?: ""} ${directorDeFiscalizacion.nombre} ${directorDeFiscalizacion.apellido}
                         </g:if>
                         <br/>
                         DELEGADO DIRECCIÓN DE FISCALIZACIÓN
@@ -416,7 +416,7 @@
 
                     <div class="firma">
                         <g:if test="${actaInstance.contrato.oferta.proveedor}">
-                           ${actaInstance.contrato.oferta.proveedor.titulo.toUpperCase() ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
+                           ${actaInstance.contrato.oferta.proveedor.titulo?.toUpperCase() ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
                         </g:if>
                         <br/>
                         CONTRATISTA

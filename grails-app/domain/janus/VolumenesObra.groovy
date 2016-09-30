@@ -15,7 +15,8 @@ class VolumenesObra implements Serializable {
     static auditable = [ignore: ["orden"]]
     static mapping = {
         table 'vlob'
-        cache usage: 'read-write', include: 'non-lazy'
+//        cache usage: 'read-write', include: 'non-lazy'
+        cache false
         id column: 'vlob__id'
         id generator: 'identity'
         version false
