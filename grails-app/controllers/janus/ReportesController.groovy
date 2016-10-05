@@ -48,6 +48,7 @@ class ReportesController {
     }
 
     def garantiasContrato() {
+//        println "reporte garantiasContrato $params"
         def contrato = Contrato.get(params.id)
         def garantias = Garantia.findAllByContrato(contrato)
         return [contrato: contrato, garantias: garantias]
@@ -2191,6 +2192,7 @@ class ReportesController {
             firmaFija = []
         }
         cuenta = firma.size() + firmaFija.size() + 1
+
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]

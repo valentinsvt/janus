@@ -94,6 +94,13 @@ class DocumentosObraController {
         def totalPresupuesto=0;
         def totalPresupuestoBien=0;
 
+        if(obra.estado != 'R') {
+            println "antes de imprimir rubros.. actualiza desalojo y herramienta menor"
+            preciosService.ac_transporteDesalojo(obra.id)
+            preciosService.ac_rbroObra(obra.id)
+        }
+
+
         def valores = preciosService.rbro_pcun_v2(obra.id)
 
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
@@ -182,7 +189,7 @@ class DocumentosObraController {
 //        println "lista de personas" + firmantes
 
 //        personasUtfpuDire.add(personasUtfpuCoor)
-        personasUtfpuDire+=personasUtfpuCoor
+        personasUtfpuDire += personasUtfpuCoor
 //        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionDire, Persona.findAllByDepartamentoInList(Direccion.findByDepartamento(Departamento.findByCodigo('UTFPU'))))
 
 //        def directorUtfpu = PersonaRol.findByFuncionAndPersonaInList(funcionDirector,Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))

@@ -13,6 +13,7 @@ class ElementosTagLib {
     static namespace = "elm"
 
     Closure numero = { attrs ->
+//        println "numero: $attrs"
         if (attrs.debug == "true" || attrs.debug == true) {
             println "AQUI: " + attrs
         }
@@ -70,6 +71,7 @@ class ElementosTagLib {
         }
         out << g.formatNumber(attrs)
     }
+
     Closure headerPlanillaAdm = { attrs ->
         def str = ""
         PlanillaAdmin planilla = attrs.planilla
