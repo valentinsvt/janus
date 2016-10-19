@@ -247,6 +247,7 @@
                         <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
                             <g:set var="lblBtn" value="${2}"/>
                             <g:if test="${planillaInstance.fechaMemoSalidaPlanilla}">
+                            %{--<g:if test="${planillaInstance.fechaMemoSalidaPlanilla || (planillaInstance.fechaMemoSalidaPlanilla && planillaInstance.tipoPlanilla.codigo == 'C')}">--}%
                                 <g:set var="lblBtn" value="${3}"/>
                                 <g:if test="${planillaInstance.fechaMemoPedidoPagoPlanilla}">
                                     <g:set var="lblBtn" value="${4}"/>
@@ -274,12 +275,13 @@
                             </g:if>
 
                         %{--${contrato.administrador.id} session: ${session.usuario.id}  garantía: ${garantia}--}%
+                        ${lblBtn} ${garantia}
 
                             <g:if test="${(lblBtn == 3) || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                 <g:set var="lblBtn" value="${3}"/>
                                 <g:if test="${garantia != 0}">
 
-                                    <g:if test="${(contrato.administrador.id == session.usuario.id) && (janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0)}">
+                                    <g:if test="${(contrato.administrador.id == session.usuario.id) && ((janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0) || (planillaInstance.tipoPlanilla.codigo == 'C'))}">
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}"
                                            data-tipo="${lblBtn}">
                                             Pedir pago

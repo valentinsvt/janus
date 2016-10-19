@@ -8634,8 +8634,10 @@ class ReportesController {
 
         Paragraph pie = new Paragraph();
         pie.setAlignment(Element.ALIGN_LEFT);
-        pie.add(new Paragraph("Nota: Para Administración Directa, a los costos de los materiales se incrementa el porcentaje de Timbres Provinciales y el de gastos financieros", times8normal ))
-        pie.add(new Paragraph("PLAZO: " + obra?.plazoEjecucionMeses + "mes(es) " + obra?.plazoEjecucionDias + " días calendario", times8normal ))
+        pie.add(new Chunk("Nota", times10bold))
+        pie.add(new Paragraph(": Para Administración Directa, a los costos de los materiales se incrementa el porcentaje de Timbres Provinciales y el de gastos financieros", times8normal ))
+        pie.add(new Chunk("PLAZO", times10bold))
+        pie.add(new Paragraph(": " + obra?.plazoEjecucionMeses + " mes(es) " + obra?.plazoEjecucionDias + " días calendario", times8normal ))
         if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
             addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Cogestión:", times10bold), prmsHeaderHoja)
         } else if(obra.tipo == 'D' & session.perfil.codigo == 'ADDI') {
@@ -8645,10 +8647,19 @@ class ReportesController {
             pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por cogestión el valor que se requerirá consiste en el costo de los materiales \$ " + g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
                     + " puesto que la mano de obra y los costos están considerados dentro de los gastos corrientes de la Institución.", times8normal));
         } else {
-            pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por administración directa el valor que se requerirá consiste en el costo de los materiales \$ " + g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+            pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por administración directa el valor que se " +
+                    "requerirá consiste en el costo de los materiales \$ " +
+                    g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
                     + " puesto que la mano de obra y los costos están considerados dentro de los gastos corrientes de la Institución.", times8normal));
         }
 
+        pie.add(new Paragraph("", times8normal));
+        pie.add(new Paragraph("La institución realiza un estudio de mercado independiente de cualquier proceso de compra de materiales " +
+                "o contratación de obra específico, para lo cual cada cuatro meses la UTFPU, realiza la actualización de los precios de los " +
+                "materiales de construcción, con la colaboración de varias empresas fabricantes, distribuidores y ferreterías que " +
+                "proporcionan un listado de venta al público de sus diferentes productos.", times8normal));
+
+        pie.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(pie, 1);
 
         PdfPTable tablaAdjunto = new PdfPTable(2);
