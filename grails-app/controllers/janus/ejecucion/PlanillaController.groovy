@@ -5076,7 +5076,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 if(plnl.fechaFin > fcfm)   /*** la planilla sobrepasa el mes: tiene dos o mas Po  **/
                 {
                     diasEsteMes = preciosService.diasEsteMes(plnl.contrato.id, fchaFinPlanillado.format('yyyy-MM-dd'), fcfm.format('yyyy-MM-dd'))
-//                    println "dias este mes: ${fchaFinPlanillado.format('yyyy-MMM-dd')}  dias: ${diasEsteMes}"
+                    println "dias este mes: ${fchaFinPlanillado.format('yyyy-MMM-dd')}  dias: ${diasEsteMes}"
                     esteMes = Math.round(plnl.valor * diasEsteMes / diasPlanillados * 100) / 100
                     plAcumulado += esteMes
                     planilladoEsteMes += esteMes
@@ -5535,6 +5535,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def texto = ""
         def ultimo = ""
         def inicio
+        def inicioPr
         def planillasAnt = Planilla.findAllByContratoAndTipoPlanillaNotEqual(cntr, antc, [sort: 'fechaPresentacion'])
         if (planillasAnt) {
             inicio = planillasAnt.pop().fechaFin + 1
@@ -5544,22 +5545,22 @@ class PlanillaController extends janus.seguridad.Shield {
             periodosEjec.each { pe ->
                 ultimo = texto
 
-//                println "xxprocesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')} " +
-//                        "fin de obra: $finalObra"
+                println "xxprocesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')} " +
+                        "fin de obra: $finalObra"
 
                 fcim = preciosService.primerDiaDelMes(pe.fechaInicio)
                 fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
                 diasMes = fcfm -fcim + 1
 
-//                println "xxel mes de ${pe.fechaInicio} tiene $diasMes dias"
+                println "xxel mes de ${pe.fechaInicio} tiene $diasMes dias, fechaFin: ${pe.fechaFin}"
 
                 if(!lleno) {  // ya se completó los días del mes en curso
                     if (pe.fechaFin == fcfm) {
                         if (inicio) { // viene de un periodo anterior
-//                            println "xxsi hay inicio, dias: $dias"
+                            println "xxsi hay inicio, dias: $dias"
                             texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                         } else {
-//                            println "xxno hay inicio, dias: $dias"
+                            println "xxno hay inicio, dias: $dias"
                             texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                             inicio = pe.fechaInicio
                         }
@@ -5579,18 +5580,27 @@ class PlanillaController extends janus.seguridad.Shield {
                             lleno = true
                             //no deben procesarse mas periodos
                         }
-
                     } else { // pe.fechaFin no es fin de mes
+                        println "opcional: $opcional, último: $ultimo, inicio: $inicioPr"
                         if(opcional){
                             texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                         } else {
                             texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
-                            inicio = pe.fechaInicio
+                            if(!inicioPr) {
+                               inicio = pe.fechaInicio
+                               inicioPr = inicio.format("dd-MM-yyyy")
+                            }
                         }
+//                        periodos.put(texto, texto.replaceAll('_', ' a '))
                         // si es el último periodo también es opcional
                         if (pe.fechaFin == finalObra) {
                             if (ultimo) {
-                                def desde = periodos[ultimo].split(' a ')[0]
+                                def desde = ""
+                                if(periodos){
+                                    desde = periodos[ultimo].split(' a ')[0]
+                                } else {
+                                    desde = inicioPr
+                                }
                                 texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
                                 periodos.put(texto, texto.replaceAll('_', ' a '))
                             } else if(periodos){

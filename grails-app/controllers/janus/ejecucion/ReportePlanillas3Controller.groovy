@@ -404,7 +404,7 @@ class ReportePlanillas3Controller {
             addEmptyLine(preface, params.espacio);
             Paragraph preface2 = new Paragraph();
             preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-            addEmptyLine(preface2, 1);
+//            addEmptyLine(preface2, 1);
             document.add(logo)
             document.add(preface);
             document.add(preface2);
@@ -461,7 +461,7 @@ class ReportePlanillas3Controller {
         /* ***************************************************** Tabla B0 *****************************************************************/
 
         Paragraph tituloB0 = new Paragraph();
-        addEmptyLine(tituloB0, 1);
+//        addEmptyLine(tituloB0, 1);
         tituloB0.setAlignment(Element.ALIGN_CENTER);
         tituloB0.add(new Paragraph("Cálculo de B0", fontTitle));
         addEmptyLine(tituloB0, 1);
