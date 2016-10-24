@@ -1147,7 +1147,7 @@ class ReportesController {
             def nombre = rubro.nombre.decodeHTML()
             nombre = nombre.replaceAll(/</, /&lt;/)
             nombre = nombre.replaceAll(/>/, /&gt;/)
-/            def header, tablas, footer, nota, salto
+            def header, tablas, footer, nota, salto
             def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
 
             header =
