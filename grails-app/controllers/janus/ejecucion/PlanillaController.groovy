@@ -1652,18 +1652,12 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println "9: " + tiposPlanilla.codigo
         }
 
-/*
-        if (!costo) {
-            tiposPlanilla.remove(TipoPlanilla.findByCodigo("C"))
-        }
-*/
-
-        if (!params.id) {
+        def periodos = []
+        if(!params.id){
             planillaInstance.numero = cPlanillas + 1
+            periodos = ponePeriodos(tiposPlanilla, contrato, anticipo, periodosEjec, finalObra)
+            println "retorna periodos: $periodos"
         }
-
-        def periodos = ponePeriodos(tiposPlanilla, contrato, anticipo, periodosEjec, finalObra)
-        println "retorna periodos: $periodos"
 
         def now = new Date()
         def maxDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},"
@@ -5536,7 +5530,9 @@ class PlanillaController extends janus.seguridad.Shield {
         def ultimo = ""
         def inicio
         def inicioPr
-        def planillasAnt = Planilla.findAllByContratoAndTipoPlanillaNotEqual(cntr, antc, [sort: 'fechaPresentacion'])
+        def avance = TipoPlanilla.findAllByCodigoInList(['P', 'Q'])
+        println "planillas de avance: $avance"
+        def planillasAnt = Planilla.findAllByContratoAndTipoPlanillaInList(cntr, avance, [sort: 'fechaPresentacion'])
         if (planillasAnt) {
             inicio = planillasAnt.pop().fechaFin + 1
         }
@@ -5546,7 +5542,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 ultimo = texto
 
                 println "xxprocesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')} " +
-                        "fin de obra: $finalObra"
+                        "fin de obra: $finalObra, inicio: $inicio"
 
                 fcim = preciosService.primerDiaDelMes(pe.fechaInicio)
                 fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
@@ -5581,7 +5577,7 @@ class PlanillaController extends janus.seguridad.Shield {
                             //no deben procesarse mas periodos
                         }
                     } else { // pe.fechaFin no es fin de mes
-                        println "opcional: $opcional, último: $ultimo, inicio: $inicioPr"
+                        println "opcional: $opcional, último: $ultimo, inicioPr: $inicioPr, inicio: $inicio"
                         if(opcional){
                             texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                         } else {
