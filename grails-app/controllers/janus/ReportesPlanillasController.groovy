@@ -464,9 +464,9 @@ class ReportesPlanillasController {
                 "A.- Resultados de los ensayos de materiales",
                 "B.- Análisis de la cantidad y calidad de ls equipos y maquinaria en obra",
                 "C.- Cuadro de las condiciones climáticas del sitio de la obra",
-                "D.- Detalle de la correspondencia intercambiada con el contratista",
+                "D.- Detalle de la correspondencia intercambiada con el contratista (16 líneas)",
                 "E.- Análisis del personal técnico del contratista",
-                "F.- Actividades más importantes del periodo",
+                "F.- Actividades más importantes del periodo (16 líneas)",
                 "G.- Seguridad industrial y personal",
                 "H.- Cumplimiento de especificaciones técnicas",
                 "I.- Decisiones importantes",
@@ -514,7 +514,7 @@ class ReportesPlanillasController {
             } else {
                 def num = (i + 1).toString().padLeft(2, "0")
                 def val = band == 0 ? avanceContrato["frase" + num] : ""
-                if(i == 5) {  //la frase 6: F.- Actividades más importantes del periodo va hasta 1023 c
+                if(i in [3,5]) {  //la frase 6: F.- Actividades más importantes del periodo va hasta 1023 c
                     html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, "maxLength":1023, style: "width: 1000px; height:100px;")
                 } else {
                     html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, "maxLength":511, style: "width: 1000px; height:100px;")
