@@ -108,7 +108,7 @@
                     <div class="span6" style="margin-top: -10px">
 
                         <div id="div_sel">
-                            <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion"
+                            <g:select name="piePaginaSel" from="${janus.Nota.findAllByTipoIsNull()}" value="${nota?.id}" optionValue="descripcion"
                                       optionKey="id" style="width: 300px;" noSelection="['-1': 'Seleccione una nota...']"/>
                         </div>
 

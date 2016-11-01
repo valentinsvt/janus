@@ -330,6 +330,17 @@
                     <div class="span2">${contrato?.periodoInec?.descripcion}</div>
                 </div>
 
+                <g:if test="${contrato?.adicionales}">
+                    <div class="span12" style="margin-top: 10px">
+                        <div class="span3 formato">Memo de autorización de Obras Adicionales</div>
+
+                        <div class="span3">
+                            ${contrato?.adicionales}
+                        </div>
+                    </div>
+                </g:if>
+
+
             </fieldset>
             <fieldset class="" style="position: relative; padding: 10px;border-bottom: 1px solid black; margin-top: -10px">
 
@@ -510,6 +521,14 @@
                                 %{--<g:if test="${esDirector == 'N'}">--}%
                                     <a href="#" id="btnIndi">
                                         <i class="icon-file"></i> % de Indirectos
+                                    </a>
+                                </g:if>
+                            </li>
+                            <li>
+                                <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
+                                %{--<g:if test="${esDirector == 'N'}">--}%
+                                    <a href="#" id="btnAdicionales">
+                                        <i class="icon-file"></i> Autización C + %
                                     </a>
                                 </g:if>
                             </li>
@@ -796,6 +815,32 @@
                     },
                     success : function (msg) {
                         var $btnOk = $('<a href="#" class="btn">Actualizar Valorobras</a>');
+                        var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                        $btnOk.click(function () {
+                            $(this).replaceWith(spinner);
+                            $("#frmaIndi").submit();
+                            location.reload(true);
+                        });
+                        $("#modal_tittle_var").text("Costos Indirectos");
+                        $("#modal_body_var").html(msg);
+                        $("#fiscalizador").data("contrato", "${contrato?.id}");
+                        $("#modal_footer_var").html($btnCerrar).append($btnOk);
+//                        $("#modal_footer_var").html($btnOk);
+                        $("#modal-var").modal("show");
+                    }
+                });
+                return false;
+            });
+
+            $("#btnAdicionales").click(function () {
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(controller: 'fiscalizadorContrato', action: 'adicionales')}",
+                    data    : {
+                        contrato : "${contrato?.id}"
+                    },
+                    success : function (msg) {
+                        var $btnOk = $('<a href="#" class="btn">Aceptar</a>');
                         var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
                         $btnOk.click(function () {
                             $(this).replaceWith(spinner);

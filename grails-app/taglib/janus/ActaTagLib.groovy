@@ -326,7 +326,7 @@ class ActaTagLib {
         tabla += "<td class='tar'>${numero(numero: prct)}</td>"
         tabla += "<td class='tar'>${numero(numero: costo)}</td>"
         tabla += "<td class='tar'>${numero(numero: prctCosto)}</td>"
-        tabla += "<td class='tar'></td>"
+        tabla += "<td class='tar'>${contrato.adicionales}</td>"
         tabla += "<td class='tar'></td>"
         tabla += "<td class='tar'></td>"
         tabla += "<td class='tar'>${numero(numero: prctTotal)}</td>"
