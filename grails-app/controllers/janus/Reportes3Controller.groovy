@@ -7,7 +7,9 @@ import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
-import com.lowagie.text.Font;
+import com.lowagie.text.Font
+import janus.pac.EstadoGarantia
+import janus.pac.Garantia;
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.*
@@ -2694,7 +2696,6 @@ class Reportes3Controller {
 
     def reporteGarantias () {
 
-
         def garantias =  janus.pac.Garantia.list();
 
 //        println("-->>" + garantias)
@@ -2811,6 +2812,384 @@ class Reportes3Controller {
         response.getOutputStream().write(b)
     }
 
+
+
+    def reporteGarantiasVenceran () {
+
+//        println("-->>" + params)
+
+        def fechaHasta = new Date().parse("dd-MM-yyyy",params.hasta)
+        def fechaDesde = new Date().parse("dd-MM-yyyy",params.desde)
+        def estado = EstadoGarantia.get(1)
+
+        def garantias =  Garantia.withCriteria {
+            eq("estado", estado)
+            gt("fechaInicio", fechaDesde)
+            lt("fechaFinalizacion", fechaHasta)
+        }
+
+        def auxiliar = Auxiliar.get(1)
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead4 = [border: Color.WHITE,
+                             align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellHead5 = [border: Color.WHITE,
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2,
+                    prmsCellRight: prmsCellRight, prmsCellHead2: prmsCellHead2, prmsCellLeft2: prmsCellLeft2]
+
+        def baos = new ByteArrayOutputStream()
+        def name = "garantias_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Garantias " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph headers = new Paragraph();
+
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", times18bold))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("REPORTE DE GARANTÍAS QUE VENCERÁN", times14bold ))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("QUITO, " + printFecha(new Date()), times12bold));
+        headers.add(new Paragraph(" ", times10bold));
+
+        PdfPTable tablaGarantia = new PdfPTable(10);
+        tablaGarantia.setWidthPercentage(100);
+        tablaGarantia.setWidths(arregloEnteros([10,15,10,8,5,14,6,10,10,10]))
+
+        addCellTabla(tablaGarantia, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Contratista", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Tipo de Garantía", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("N° Garantía", times8bold), prmsCellHead2)
+//        addCellTabla(tablaGarantia, new Paragraph("Rnov", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Original", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Aseguradora", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Documento", times8bold), prmsCellHead2)
+//        addCellTabla(tablaGarantia, new Paragraph("Estado", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Monto", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Emisión", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Vencimiento", times8bold), prmsCellHead2)
+//        addCellTabla(tablaGarantia, new Paragraph("Cancelación", times8bold), prmsCellHead2)
+
+        garantias.each {
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoGarantia?.descripcion, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.codigo, times8normal), prmsCellHead4)
+//            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.numeroRenovaciones, format: "###,###", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.padre?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.aseguradora?.nombre, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoDocumentoGarantia?.descripcion, times8normal), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(it?.estado?.descripcion, times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8normal), prmsCellHead5)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaInicio.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaFinalizacion.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(it?.cancelada?.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+        }
+
+        document.add(headers)
+        document.add(tablaGarantia)
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+    }
+
+    def reporteGarantiasDevueltas () {
+        //        println("-->>" + params)
+
+//        def fechaHasta = new Date().parse("dd-MM-yyyy",params.hasta)
+//        def fechaDesde = new Date().parse("dd-MM-yyyy",params.desde)
+        def estado = EstadoGarantia.get(3)
+
+        def garantias =  Garantia.withCriteria {
+            eq("estado", estado)
+        }
+
+        def auxiliar = Auxiliar.get(1)
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead4 = [border: Color.WHITE,
+                             align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellHead5 = [border: Color.WHITE,
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2,
+                    prmsCellRight: prmsCellRight, prmsCellHead2: prmsCellHead2, prmsCellLeft2: prmsCellLeft2]
+
+        def baos = new ByteArrayOutputStream()
+        def name = "garantias_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Garantias " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph headers = new Paragraph();
+
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", times18bold))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("REPORTE DE GARANTÍAS DEVUELTAS", times14bold ))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("QUITO, " + printFecha(new Date()), times12bold));
+        headers.add(new Paragraph(" ", times10bold));
+
+        PdfPTable tablaGarantia = new PdfPTable(10);
+        tablaGarantia.setWidthPercentage(100);
+        tablaGarantia.setWidths(arregloEnteros([10,15,10,9,10,8,7,10,10,40]))
+
+        addCellTabla(tablaGarantia, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Contratista", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Tipo de Garantía", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("N° Garantía", times8bold), prmsCellHead2)
+//        addCellTabla(tablaGarantia, new Paragraph("Rnov", times8bold), prmsCellHead2)
+//        addCellTabla(tablaGarantia, new Paragraph("Original", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Aseguradora", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Documento", times8bold), prmsCellHead2)
+//        addCellTabla(tablaGarantia, new Paragraph("Estado", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Monto", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Emisión", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Vencimiento", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Observaciones", times8bold), prmsCellHead2)
+
+        garantias.each {
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoGarantia?.descripcion, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.codigo, times8normal), prmsCellHead4)
+//            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.numeroRenovaciones, format: "###,###", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8normal), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(it?.padre?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.aseguradora?.nombre, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoDocumentoGarantia?.descripcion, times8normal), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(it?.estado?.descripcion, times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8normal), prmsCellHead5)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaInicio.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaFinalizacion.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.observaciones, times8normal), prmsCellHead4)
+        }
+
+        document.add(headers)
+        document.add(tablaGarantia)
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+    }
+
+
+    def reporteGarantiasVencidas () {
+        //        println("-->>" + params)
+
+//        def fechaHasta = new Date().parse("dd-MM-yyyy",params.hasta)
+//        def fechaDesde = new Date().parse("dd-MM-yyyy",params.desde)
+        def estadoRev = EstadoGarantia.get(3)
+        def estadoDev = EstadoGarantia.get(6)
+        def hoy = new Date()
+        def garantias =  Garantia.withCriteria {
+            ne("estado", estadoRev)
+            ne("estado", estadoDev)
+            lt("fechaFinalizacion", hoy)
+
+        }
+
+        def auxiliar = Auxiliar.get(1)
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead4 = [border: Color.WHITE,
+                             align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellHead5 = [border: Color.WHITE,
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2,
+                    prmsCellRight: prmsCellRight, prmsCellHead2: prmsCellHead2, prmsCellLeft2: prmsCellLeft2]
+
+        def baos = new ByteArrayOutputStream()
+        def name = "garantias_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Garantias " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph headers = new Paragraph();
+
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", times18bold))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("REPORTE DE GARANTÍAS VENCIDAS", times14bold ))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("QUITO, " + printFecha(new Date()), times12bold));
+        headers.add(new Paragraph(" ", times10bold));
+
+        PdfPTable tablaGarantia = new PdfPTable(12);
+        tablaGarantia.setWidthPercentage(100);
+        tablaGarantia.setWidths(arregloEnteros([10,15,10,10,5,10,10,10,10,10,10,10]))
+
+        addCellTabla(tablaGarantia, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Contratista", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Tipo de Garantía", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("N° Garantía", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Rnov", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Original", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Aseguradora", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Documento", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Estado", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Monto", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Emisión", times8bold), prmsCellHead2)
+        addCellTabla(tablaGarantia, new Paragraph("Vencimiento", times8bold), prmsCellHead2)
+//        addCellTabla(tablaGarantia, new Paragraph("Cancelación", times8bold), prmsCellHead2)
+
+        garantias.each {
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoGarantia?.descripcion, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.numeroRenovaciones, format: "###,###", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.padre?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.aseguradora?.nombre, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoDocumentoGarantia?.descripcion, times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.estado?.descripcion, times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8normal), prmsCellHead5)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaInicio.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaFinalizacion.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(it?.cancelada?.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+        }
+
+        document.add(headers)
+        document.add(tablaGarantia)
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+    }
 
     def reporteRubrosVaeReg () {
 

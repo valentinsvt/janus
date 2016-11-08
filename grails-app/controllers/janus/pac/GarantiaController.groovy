@@ -291,4 +291,11 @@ class GarantiaController extends janus.seguridad.Shield {
             redirect(action: "list")
         }
     } //delete
+
+
+    def fechas_ajax () {
+
+    }
+
+
 } //fin controller
