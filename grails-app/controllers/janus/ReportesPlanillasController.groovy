@@ -595,6 +595,7 @@ class ReportesPlanillasController {
 
     def reporteAvance() {
 //        println "reporteAvance $params"
+        def cn = dbConnectionService.getConnection()
         def plnl = Planilla.get(params.plnl)
 
         if (!params.id) {
@@ -668,8 +669,13 @@ class ReportesPlanillasController {
         def inversionProgramada = crej.sum { it.precio } ?: 0
         def inversionReal = planillasAvance.sum { it.valor } ?: 0
         def costoPorcentaje = planillasCosto.sum { it.valor } ?: 0
-        def multas = planillasAvance.sum { it.multaRetraso + it.multaPlanilla } ?: 0
 
+
+//        def multas = planillasAvance.sum { it.multaRetraso + it.multaPlanilla } ?: 0
+        def tx = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl " +
+                "where cntr__id = ${plnl.contrato.id} and tppl__id in (3,9,4) and plnlfcfn <= '${plnl.fechaFin}')"
+        def multas = cn.rows(tx.toString())[0].suma
+//        println "sum: $tx"
         def baos = new ByteArrayOutputStream()
         def name = "avance_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
