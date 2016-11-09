@@ -14,6 +14,13 @@
         <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.ui.position.js')}" type="text/javascript"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.js')}" type="text/javascript"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.css')}" rel="stylesheet" type="text/css"/>
+
+        <style type="text/css">
+        .boton {
+            padding: 2px 6px;
+            margin-top: -10px
+        }
+        </style>
     </head>
 
     <body>
@@ -103,39 +110,42 @@
                         <span id="sp">
                             %{--<g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
 
-                            <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="font-size: 10px" id="subPres"/></span>
+                            <span id="div_cmb_sub">
+                            <g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion"
+                                      id="subPres"/>
+                            </span>
 
                             %{--todo descomentar esto--}%
                             %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
 
                         </span>
 
-                    %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
-                    <g:if test="${duenoObra == 1}">
-                        <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
+                    <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    %{--<g:if test="${duenoObra == 1}">--}%
+                        <a href="#" class="btn boton" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-plus"></i>
                         </a>
-                        <a href="#" class="btn" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">
+                        <a href="#" class="btn boton" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-minus"></i>
                         </a>
-                        <a href="#" class="btn" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">
+                        <a href="#" class="btn boton" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-edit"></i>
                         </a>
 
                     </g:if>
-                        <g:else>
-                        <g:if test="${persona?.departamento?.id == obra?.departamento?.id}">
-                            <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
-                                <i class="icon-plus"></i>
-                            </a>
-                            <a href="#" class="btn" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">
-                                <i class="icon-minus"></i>
-                            </a>
-                            <a href="#" class="btn" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">
-                                <i class="icon-edit"></i>
-                            </a>
-                        </g:if>
-                        </g:else>
+                        %{--<g:else>--}%
+                        %{--<g:if test="${persona?.departamento?.id == obra?.departamento?.id}">--}%
+                            %{--<a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">--}%
+                                %{--<i class="icon-plus"></i>--}%
+                            %{--</a>--}%
+                            %{--<a href="#" class="btn" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">--}%
+                                %{--<i class="icon-minus"></i>--}%
+                            %{--</a>--}%
+                            %{--<a href="#" class="btn" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">--}%
+                                %{--<i class="icon-edit"></i>--}%
+                            %{--</a>--}%
+                        %{--</g:if>--}%
+                        %{--</g:else>--}%
 
                     </div>
 
