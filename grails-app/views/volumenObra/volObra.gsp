@@ -95,9 +95,9 @@
                 %{--<div class="linea" style="height: 98%;"></div>--}%
 
                 <div class="row-fluid" style="margin-left: 0px">
-                    <div class="span3" style="width: 170px; ">
+                    <div class="span3" style="width: 135px; ">
                         <b>Tipo de Obra:</b><g:select name="grupos" id="grupos" from="${grupoFiltrado}" optionKey="id" optionValue="descripcion"
-                                                      style="margin-left: 0px; width: 160px " value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"/>
+                                                style="margin-left: 0px; width: 130px; font-size: 11px" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"/>
 
                     %{--<b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"--}%
                     %{--style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>--}%
@@ -150,7 +150,7 @@
                     </div>
 
                     %{--<div class="span7" style="height: 38px"></div> --}%
-                    <div class="span1" style="margin-left: -17px; width: 100px;">
+                    <div class="span1" style="margin-left: 0px; width: 100px;">
                         <b>Código</b>
                         <input type="text" style="width: 100px;;font-size: 10px" id="item_codigo" class="allCaps">
                         <input type="hidden" style="width: 60px" id="item_id">
