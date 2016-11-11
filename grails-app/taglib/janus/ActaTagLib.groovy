@@ -31,7 +31,9 @@ class ActaTagLib {
                 "&Ntilde;": "Ñ",
                 "&deg;"   : "°",
                 "&nbsp;"  : " ",
-                "&acute;" : ""
+                "&acute;" : "",
+                "&uuml;" : "ü",
+                "&Uuml;" : "ü"
 //                ">" : "&gt;",   -- no usar en texto html
 //                "<" : "&lt;",
         ]

@@ -87,7 +87,8 @@ class ReportesPlanillasController {
                espacios += "<br/>"
             }
         }
-//        println "espacios: $espacios"
+
+///        println "espacios: $espacios"
         return [actaInstance: acta, directorDeFiscalizacion: delegadoFiscalizacion, espacios: espacios]
     }
 
