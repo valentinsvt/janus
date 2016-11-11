@@ -33,7 +33,7 @@ class ActaTagLib {
                 "&nbsp;"  : " ",
                 "&acute;" : "",
                 "&uuml;" : "ü",
-                "&Uuml;" : "ü"
+                "&Uuml;" : "Ü"
 //                ">" : "&gt;",   -- no usar en texto html
 //                "<" : "&lt;",
         ]
