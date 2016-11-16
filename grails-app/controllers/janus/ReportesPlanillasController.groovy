@@ -635,7 +635,8 @@ class ReportesPlanillasController {
         def planillasCosto = Planilla.withCriteria {
             eq("contrato", contrato)
             eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
-            le("fechaFin", plnl.fechaFin)
+//            le("fechaFin", plnl.fechaFin)
+            eq("padreCosto", plnl)
         }
 
         def planillaAnticipo = Planilla.withCriteria {
