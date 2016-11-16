@@ -190,8 +190,14 @@ class VolumenObraController extends janus.seguridad.Shield {
             }
         }
 
-//        volumen.cantidad = itemVolumen.cantidad.toDouble()
+
+        if(params.canti){
         volumen.cantidad = params.canti.toDouble()
+        }else{
+        volumen.cantidad = itemVolumen.cantidad.toDouble()
+        }
+
+
         volumen.orden = (volu.orden.size().toInteger()) + 1
         volumen.subPresupuesto = SubPresupuesto.get(params.subDest)
         volumen.obra = obra
