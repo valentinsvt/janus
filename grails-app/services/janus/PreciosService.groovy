@@ -735,7 +735,7 @@ class PreciosService {
         def cn = dbConnectionService.getConnection()
         def sql = "select sum(cast(to_char(prejfcfn, 'J') as integer) - cast(to_char(prejfcin, 'J') as integer)) + count(*) dias " +
                 "from prej where cntr__id = ${cntr} and prejfcin >= '${fcin}' and prejfcfn <= '${fcfn}' and prejtipo = 'P'"
-        println "sql: $sql"
+//        println "sql: $sql"
         def dias = cn.rows(sql.toString())[0].dias
         return dias?:0
 //        cn.close()

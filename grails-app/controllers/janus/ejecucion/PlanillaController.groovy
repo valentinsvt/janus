@@ -4837,7 +4837,7 @@ class PlanillaController extends janus.seguridad.Shield {
             dias  = (int) cn.rows(sql.toString())[0].dias
             sql = "select sum(mdcedias) dias from mdce where cntr__id = ${plnl.contrato.id} and mdcetipo = 'A'"
             def ampliacion = (int) cn.rows(sql.toString())[0].dias?:0
-            println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
+//            println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
 
             dias -= plnl.contrato.plazo + ampliacion
 
@@ -5074,7 +5074,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 if(plnl.fechaFin > fcfm)   /*** la planilla sobrepasa el mes: tiene dos o mas Po  **/
                 {
                     diasEsteMes = preciosService.diasEsteMes(plnl.contrato.id, fchaFinPlanillado.format('yyyy-MM-dd'), fcfm.format('yyyy-MM-dd'))
-                    println "dias este mes: ${fchaFinPlanillado.format('yyyy-MMM-dd')}  dias: ${diasEsteMes}"
+//                    println "dias este mes: ${fchaFinPlanillado.format('yyyy-MMM-dd')}  dias: ${diasEsteMes}"
                     esteMes = Math.round(plnl.valor * diasEsteMes / diasPlanillados * 100) / 100
                     plAcumulado += esteMes
                     planilladoEsteMes += esteMes
@@ -5380,7 +5380,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //        println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
 
-        if(estePo > resto) {
+        if((estePo > resto) && (plnl.tipoPlanilla.codigo != 'Q')) {
             valorPo = vlor - resto
         } else if((plnl.tipoPlanilla.codigo == 'Q') && plFinal) {
             valorPo = totPlnl - cntr.anticipo - totPo - totPoAc
@@ -5626,7 +5626,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def sql= "select sum(vlobsbtt) suma from fpsp, vlob where vlob.sbpr__id = fpsp.sbpr__id and " +
                 "fprj__id = ${fprj} and obra__id = ${cntr.obraContratada.id}"
-        println "--sql: $sql"
+//        println "--sql: $sql"
         def valor = cn.rows(sql.toString())[0].suma * plnl/cntr.monto
         println "valor: $valor"
         return valor

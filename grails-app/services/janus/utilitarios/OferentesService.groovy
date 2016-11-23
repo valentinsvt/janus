@@ -25,6 +25,7 @@ class OferentesService {
         }else{
             sql = sql.replaceAll("&"," ")
         }
+        println "oferentes: $sql"
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
         }
