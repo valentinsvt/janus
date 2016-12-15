@@ -416,7 +416,7 @@
 
                     <div class="firma">
                         <g:if test="${actaInstance.contrato.oferta.proveedor}">
-                            <g:if test="${actaInstance.contrato.oferta.proveedor.tipo == 'E'}">
+                            <g:if test="${actaInstance.contrato.oferta.proveedor.tipo != 'N'}">
                                 ${actaInstance.contrato.oferta.proveedor.nombre}
                             </g:if>
                             <g:else>
