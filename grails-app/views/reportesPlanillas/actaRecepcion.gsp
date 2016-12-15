@@ -416,7 +416,12 @@
 
                     <div class="firma">
                         <g:if test="${actaInstance.contrato.oferta.proveedor}">
-                           ${actaInstance.contrato.oferta.proveedor.titulo?.toUpperCase() ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
+                            <g:if test="${actaInstance.contrato.oferta.proveedor.tipo == 'E'}">
+                                ${actaInstance.contrato.oferta.proveedor.nombre}
+                            </g:if>
+                            <g:else>
+                                ${actaInstance.contrato.oferta.proveedor.titulo?.toUpperCase() ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
+                            </g:else>
                         </g:if>
                         <br/>
                         CONTRATISTA
