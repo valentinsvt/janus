@@ -14,6 +14,7 @@ class ActaTagLib {
     static namespace = "acta"
 
     def preciosService
+    def dbConnectionService
 
     Closure clean = { attrs ->
         def replace = [
@@ -195,6 +196,7 @@ class ActaTagLib {
 
     def dtp(Acta acta) {  // detalle de planillas  numeral 4.2
         def contrato = acta.contrato
+        def cn = dbConnectionService.getConnection()
 
 /*
         def planillas = Planilla.withCriteria {
@@ -246,6 +248,7 @@ class ActaTagLib {
             anticipo = planilla.descuentos
 //            multas = planilla.multaPlanilla + planilla.multaRetraso
             multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+            multas += cn.rows("select coalesce(plnlmles,0) suma from plnl where plnl__id = ${planilla.id}")[0].suma
 //            println "&&&multas: $multas"
             totalValor += valor
             totalAnticipo += anticipo
