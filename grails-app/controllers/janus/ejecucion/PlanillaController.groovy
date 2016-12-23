@@ -4707,7 +4707,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def prmt = [:]
 
         /*** No presentación de planilla */
-        def res = diasLaborablesService.diasLaborablesDesde(fechaFinPer, diasMax)
+        def fcfm = preciosService.ultimoDiaDelMes(plnl.fechaFin)
+        def res = diasLaborablesService.diasLaborablesDesde(fcfm, diasMax)
 //        println " multas: $res"
         /* si hay error, res[0] = false */
         if (!res[0]) {
@@ -4745,7 +4746,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def rj_cr = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
         def acCronograma = rj_cr[0] > 0 ? rj_cr[0] : 0
 
-        /********* retraso en presentación *************/
+        /********* retraso en presentación cronograma *************/
         baseMulta = plnl.valor > 0 ? plnl.valor : rjpl.last().parcialCronograma
         multaPlanilla = Math.round((plnl.contrato.multaPlanilla / 1000) * (baseMulta)*retraso*100)/100
         prmt = [:]
