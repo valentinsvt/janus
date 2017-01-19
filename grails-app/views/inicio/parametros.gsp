@@ -127,6 +127,10 @@
                     <g:link controller="inicio" action="variables">Valores de costos indirectos y transporte</g:link> valores por defecto que se usan en las obras.
                 </div><br>
 
+                <div class="item" texto="anio">
+                    <g:link controller="anio" action="list">Ingreso de Años</g:link> para el registro de periodos de los índices.
+                </div><br>
+
                 <div class="item" texto="anua">
                     <g:link controller="valoresAnuales" action="list">Valores Anuales</g:link>
                 </div><br>
@@ -361,6 +365,10 @@
 <div id="var" style="display:none">
     <h3>Variables</h3><br>
     <p>Valores de parámetros de transporte y costos indirectos que se usan por defecto en las obras.</p>
+</div>
+<div id="anio" style="display:none">
+    <h3>Ingreso de Años</h3><br>
+    <p>Registro de los años para el control y manejo de los índices año por año.</p>
 </div>
 <div id="anua" style="display:none">
     <h3>Variables Anuales</h3><br>
