@@ -109,6 +109,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         def contrato = planilla.contrato
         def obra = contrato.obra
+        def costo = Planilla.findByPadreCosto(planilla)?.valor?:0
 
         def plnlAnterior = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(planilla.contrato,
                 TipoPlanilla.findAllByCodigoInList(['A', 'P']), planilla.fechaPresentacion, [sort: 'fechaPresentacion']).last()
@@ -161,15 +162,22 @@ class PlanillaController extends janus.seguridad.Shield {
             tabla += "</tr>"
         }
 
+        if(costo) {
+            tabla += "<tr>"
+            tabla += "<th class='tl'>Costo + Porcentaje</th>"
+            tabla += "<td class='tr'>${numero(costo, 2)}</td>"
+            tabla += "</tr>"
+        }
+
         tabla += "<tr>"
         tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
-        tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor, 2)}</td>"
+        tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo, 2)}</td>"
         tabla += "</tr>"
         tabla += "</table>"
 
         if (texto.size() == 0) {
 
-            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor
+            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo
             def neg = ""
             if (totalLetras < 0) {
                 totalLetras = totalLetras * -1
@@ -451,6 +459,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def contrato = planilla.contrato
         def obra = contrato.obra
         def texto = new Pdfs()
+        def costo = Planilla.findByPadreCosto(planilla)?.valor?:0
         texto.planilla = planilla
         texto.fecha = new Date()
 
@@ -469,7 +478,7 @@ class PlanillaController extends janus.seguridad.Shield {
         multas += planilla.multaEspecial?:0
 
 //        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas - planilla.noPagoValor
-        def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor
+        def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo
         def neg = ""
         if (totalLetras < 0) {
             totalLetras = totalLetras * -1

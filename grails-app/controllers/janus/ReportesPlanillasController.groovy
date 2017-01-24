@@ -2736,6 +2736,7 @@ class ReportesPlanillasController {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
+        def costo = Planilla.findByPadreCosto(planilla)?.valor?:0
 
         def ok = true
         def str = ""
@@ -2946,8 +2947,8 @@ class ReportesPlanillasController {
         def multas = 0
         multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
         multas += planilla.multaEspecial?:0
-//        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
         addCellTabla(tablaValores, new Paragraph("${numero(multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
 
         addCellTabla(tablaValores, new Paragraph("SUMA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + reajuste - planilla.descuentos - multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
@@ -2957,11 +2958,16 @@ class ReportesPlanillasController {
             addCellTabla(tablaValores, new Paragraph("${numero(planilla.noPagoValor, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         }
 
+        if(costo){  // existe planilla de costo + porcentaje
+            addCellTabla(tablaValores, new Paragraph("(+) Costo + Porcentaje ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaValores, new Paragraph("${numero(costo, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+
         addCellTabla(tablaValores, new Paragraph("A FAVOR DEL CONTRATISTA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaValores)
-        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas
+        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas + costo
         def neg = ""
         if (totalLetras < 0) {
             totalLetras = totalLetras * -1
