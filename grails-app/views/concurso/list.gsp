@@ -41,7 +41,8 @@
             <div class="span3" id="busca">
             </div>
         </div>
-        <span style="color: navy;">Haga clic con el botón derecho del ratón sobre el concurso para acceder al menú de acciones</span>
+        <span style="color: navy;">Haga clic con el botón derecho del ratón sobre el concurso para acceder al menú de acciones.</span>
+        <span style="color: navy;">Recuerde que el formato del código del proceso es: MCO-<strong>número</strong>-GADPP-17</span>
 
         <g:form action="delete" name="frmDelete-Concurso">
             <g:hiddenField name="id"/>
@@ -54,7 +55,7 @@
                     <tr>
                         <th>Obra</th>
                         <th>Pac</th>
-                        <g:sortableColumn property="codigo" title="Codigo"/>
+                        <g:sortableColumn property="codigo" title="Código"/>
                         <g:sortableColumn property="objeto" title="Objeto"/>
                         <g:sortableColumn property="costoBases" title="Costo Bases"/>
                         <th>Documentos</th>

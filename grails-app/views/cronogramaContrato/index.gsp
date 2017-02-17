@@ -106,9 +106,6 @@
                             <th class="subtotal">
                                 C.Total
                             </th>
-                            %{--<th class="dias">--}%
-                            %{--Días--}%
-                            %{--</th>--}%
                             <th class="tiny">
                                 T.
                             </th>
@@ -148,8 +145,11 @@
                                 <td class="num cantidad" data-valor="${vol.cantidad}">
                                     <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                 </td>
+                                %{--<td class="num precioU" data-valor="${precios[vol.id.toString()]}">--}%
+                                    %{--<g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                                %{--</td>--}%
                                 <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
-                                    <g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    <g:formatNumber number="${precios[vol.id.toString()]/vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                 </td>
                                 %{--<g:set var="parcial" value="${precios[vol.id.toString()] * vol.cantidad}"/>--}%
                                 <g:set var="parcial" value="${precios[vol.id.toString()]}"/>

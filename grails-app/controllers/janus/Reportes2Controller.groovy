@@ -1279,6 +1279,7 @@ class Reportes2Controller {
                     eq("grupo", grupo)
                 }
             }
+            eq("estado", "A")
         }
         lista.id.each {
             if (items != "") {

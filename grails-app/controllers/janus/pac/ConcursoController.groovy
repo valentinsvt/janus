@@ -20,14 +20,20 @@ class ConcursoController extends janus.seguridad.Shield {
 //        def conc = Concurso.count()
         def sec = 1
         def lst = Concurso.list([sort: "id", order: "desc"])
-//        println lst
+        println lst
         if (lst.size() > 1) {
             def last = lst[1].codigo?.split("-")
             println "... last: $last"
             if (last?.size() > 2) {
 //                def cod = last[2].toInteger()
-                def cod = last[1].toInteger()
-                sec = cod + 1
+                def cod = 0
+                try {
+                    cod = last[1].toInteger()
+                    sec = cod + 1
+                } catch (e) {
+                    println "error $e"
+                }
+
 //                println cod
 //                println sec
             }
