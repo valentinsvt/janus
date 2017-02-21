@@ -446,6 +446,7 @@ class ReportesPlanillasController {
 
     def tablaAvance() {
 //        println "tablaAvance...: $params"
+        def cn = dbConnectionService.getConnection()
         def contrato = Contrato.get(params.id)
         def plnl = Planilla.get(params.plnl)
         def avanceContrato = Avance.findAllByContratoAndPlanilla(contrato, plnl)
@@ -481,6 +482,8 @@ class ReportesPlanillasController {
                 "<a href='#' class='btn btn-success btnSave'><i class='icon icon-save'></i>Guardar</a> </span>" +
                 "<a href='#' class='btn btn-primary btnPrint'><i class='icon icon-print'></i>Imprimir</a></legend>"
 //        if (band == 1) {
+        def suspension = cn.rows("select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'".toString())[0]
+//        println "suspensión: $suspension, ${suspension.prejfcin.class}"
         def dateFormat = new SimpleDateFormat("EEEE dd-MM-yyyy", new Locale("es"))
         titulos.eachWithIndex { t, i ->
             html += "<h5>${t}</h5>"
@@ -498,17 +501,22 @@ class ReportesPlanillasController {
                 def dia = plnl.fechaInicio
                 def fin = plnl.fechaFin
                 while (dia <= fin) {
-                    def valM = "", valT = ""
-                    if (frases.size() > 0) {
-                        def fr = frases.find { it.fecha == dia }
-                        valM = fr ? fr.manana : ""
-                        valT = fr ? fr.tarde : ""
+                    /** eliminar suspensiones **/
+                    if(dia >= suspension.prejfcin && dia <= suspension.prejfcfn) {
+//                        println "dia: $dia es suspensión"
+                    } else {
+                        def valM = "", valT = ""
+                        if (frases.size() > 0) {
+                            def fr = frases.find { it.fecha == dia }
+                            valM = fr ? fr.manana : ""
+                            valT = fr ? fr.tarde : ""
+                        }
+                        html += "<tr>"
+                        html += "<td>${dateFormat.format(dia).capitalize()}</td>"
+                        html += "<td>${g.select(name: 'clima_m_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+                        html += "<td>${g.select(name: 'clima_t_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+                        html += "</tr>"
                     }
-                    html += "<tr>"
-                    html += "<td>${dateFormat.format(dia).capitalize()}</td>"
-                    html += "<td>${g.select(name: 'clima_m_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
-                    html += "<td>${g.select(name: 'clima_t_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
-                    html += "</tr>"
                     dia++
                 }
                 html += "</table>"
@@ -930,7 +938,7 @@ class ReportesPlanillasController {
 //                    def fin = periodo[0].fechaFin
                     def dia = plnl.fechaInicio
                     def fin = plnl.fechaFin
-
+                    def suspension = cn.rows("select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'".toString())[0]
                     def tablaClima = new PdfPTable(3);
                     tablaClima.setWidths(arregloEnteros([40, 30, 30]))
                     tablaClima.setWidthPercentage(50);
@@ -941,15 +949,19 @@ class ReportesPlanillasController {
                     addCellTabla(tablaClima, new Paragraph('Tarde', fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
                     while (dia <= fin) {
-                        def valM = "", valT = ""
-                        if (frases.size() > 0) {
-                            def fr = frases.find { it.fecha == dia }
-                            valM = fr ? fr.manana : ""
-                            valT = fr ? fr.tarde : ""
+                        if(dia >= suspension.prejfcin && dia <= suspension.prejfcfn) {
+//                            println "dia: $dia es suspensión"
+                        } else {
+                            def valM = "", valT = ""
+                            if (frases.size() > 0) {
+                                def fr = frases.find { it.fecha == dia }
+                                valM = fr ? fr.manana : ""
+                                valT = fr ? fr.tarde : ""
+                            }
+                            addCellTabla(tablaClima, new Paragraph(dateFormat.format(dia).capitalize(), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                            addCellTabla(tablaClima, new Paragraph(valM, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                            addCellTabla(tablaClima, new Paragraph(valT, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                         }
-                        addCellTabla(tablaClima, new Paragraph(dateFormat.format(dia).capitalize(), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                        addCellTabla(tablaClima, new Paragraph(valM, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                        addCellTabla(tablaClima, new Paragraph(valT, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                         dia++
                     }
                     document.add(tablaClima)
