@@ -996,7 +996,7 @@ class ContratoController extends janus.seguridad.Shield {
     def save() {
         def contratoInstance
 
-        println "-->> save" + params
+//        println "-->> save" + params
 
         if (params.codigo) {
             params.codigo = params.codigo.toString().toUpperCase()
@@ -1052,13 +1052,11 @@ class ContratoController extends janus.seguridad.Shield {
 
             contratoInstance = new Contrato(params)
             contratoInstance.periodoInec = indice
-
         } //es create
-        if (!contratoInstance.save(flush: true)) {
 
+        if (!contratoInstance.save(flush: true)) {
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Contrato " + (contratoInstance.id ? contratoInstance.id : "") + "</h4>"
-
             str += "<ul>"
             contratoInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
@@ -1068,7 +1066,6 @@ class ContratoController extends janus.seguridad.Shield {
                 str += "<li>" + msg + "</li>"
             }
             str += "</ul>"
-
             flash.message = str
             redirect(action: 'registroContrato')
             return
@@ -1076,7 +1073,6 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-//            flash.message = "Se ha actualizado correctamente Contrato " + contratoInstance.id
             flash.message = "Se ha actualizado correctamente Contrato " + contratoInstance.codigo
         } else {
             flash.clase = "alert-success"
