@@ -105,13 +105,18 @@
 
                     %{--<g:if test="${contrato?.codigo != null}">--}%
 
-                    <div class="span2 formato">Contrato N°</div>
+                    <div class="span1 formato">Contrato N°</div>
 
-                    <div class="span3"><g:textField name="codigo" maxlength="20" class="codigo required caps" value="${contrato?.codigo}"/></div>
+                    <div class="span3"><g:textField name="codigo" maxlength="20" class="codigo required caps"
+                                                    value="${contrato?.codigo}" style="font-weight: bold"/></div>
 
                     <div class="span2 formato">Memo de Distribución</div>
 
                     <div class="span3"><g:textField name="memo" class="memo caps allCaps" value="${contrato?.memo}" maxlength="20"/></div>
+
+                    <div class="span2 text-info" style="font-weight: bolder">
+                        Contrato ${contrato?.estado == 'R'? 'Registrado' : 'No Registrado'}
+                    </div>
 
                 </div> <!--DSAFSD-->
             </fieldset>
@@ -133,7 +138,9 @@
                         <div class="span4"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
 
                         <div class="span1 formato">Nombre</div>
-                        <div class="span3"><g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}" style="width: 500px" disabled="true"/></div>
+                        <div class="span3">
+                            <g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}"
+                                         style="width: 500px" disabled="true"/></div>
 
                     </div>
 
@@ -249,13 +256,26 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Tipo de contrato</div>
+                    <div class="span2 formato text-info">Tipo de contrato</div>
 
-                    <div class="span4" style="margin-left:-20px"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContratoId}" optionKey="id" optionValue="descripcion"/></div>
+                    <div class="span3" style="margin-left:-20px">
+                        <g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" id="tpcr"
+                              class="tipoContrato activo text-info" value="${contrato?.tipoContratoId}"
+                              optionKey="id" optionValue="descripcion" style="font-weight: bolder"/></div>
 
-                    <div class="span2 formato" style="margin-left:-20px">Fecha de Suscripción</div>
+                    <div id="CntrPrincipal" hidden>
+                    <div class="span2 formato text-info" style="margin-left:-20px; width: 140px;">Contrato Principal</div>
 
-                    <div class="span3"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
+                    <div class="span2" style="margin-left:-20px">
+                        <g:select from="${janus.Contrato.list([sort: 'fechaSubscripcion'])}" name="padre.id"
+                                  class="activo text-info" noSelection="['-1': '-- Seleccione']"
+                                  value="${contrato?.padre?.id}" optionKey="id" optionValue="codigo"
+                                  style="width: 140px" />
+                    </div>
+                    </div>
+                    <div class="span2 formato">Fecha de Suscripción</div>
+
+                    <div class="span2"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
                 </div>
 
@@ -630,51 +650,32 @@
             });
 
             $("#plazo").keydown(function (ev) {
-
                 return validarInt(ev);
-
             }).keyup(function () {
-
                         var enteros = $(this).val();
-
-                    });
+            });
 
             $("#monto").keydown(function (ev) {
-
                 return validarNum(ev);
-
             }).keyup(function () {
-
                         var enteros = $(this).val();
-
-                    });
+            });
 
             $("#porcentajeAnticipo").keydown(function (ev) {
-
                 return validarNum(ev);
-
             }).keyup(function () {
-
                         var enteros = $(this).val();
-
                         if (parseFloat(enteros) > 100) {
-
                             $(this).val(100)
-
                         }
                         updateAnticipo();
-
-                    });
+            });
 
 
             $("#indirectos").keydown(function (ev) {
-
                 return validarNum(ev);
-
             }).keyup(function () {
-
                 var enteros = $(this).val();
-
                 if (parseFloat(enteros) > 100) {
                     $(this).val(100)
                 }
@@ -682,80 +683,59 @@
 
 
             $("#anticipo").keydown(function (ev) {
-
                 return validarNum(ev);
-
             }).keyup(function () {
-
                         var enteros = $(this).val();
                         updateAnticipo();
 //                        var porcentaje = $("#porcentajeAnticipo").val();
-//
 //                        var monto = $("#monto").val();
-//
 //                        var anticipoValor = (porcentaje * (monto)) / 100;
-//
 //                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ""));
-
                     }).click(function () {
                         updateAnticipo();
 //                        var porcentaje = $("#porcentajeAnticipo").val();
-//
 //                        var monto = $("#monto").val();
-//
 //                        var anticipoValor = (porcentaje * (monto)) / 100;
-//
 //                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
-
                     });
 
             $("#financiamiento").keydown(function (ev) {
-
                 return validarNum(ev);
-
             }).keyup(function () {
-
-                        var enteros = $(this).val();
-
-                    });
+                var enteros = $(this).val();
+            });
 
 /*
             $("#codigo").click(function () {
-
                 $("#btn-aceptar").attr("disabled", false)
-
             });
 
             $("#memo").click(function () {
-
                 $("#btn-aceptar").attr("disabled", false)
-
             })
 
             $("#objeto").click(function () {
-
                 $("#btn-aceptar").attr("disabled", false)
-
             });
 
-            $("#tipoContrato").change(function () {
-
-                $("#btn-aceptar").attr("disabled", false)
-
-            });
 
             $("#monto").click(function () {
-
                 $("#btn-aceptar").attr("disabled", false)
-
             });
 
             $("#financiamiento").click(function () {
-
                 $("#btn-aceptar").attr("disabled", false)
-
             });
 */
+
+            $("#tpcr").change(function () {
+//                console.log("--->", $("#tpcr").val());
+                if($("#tpcr").val() == "3") {
+                    $("#CntrPrincipal").show();
+                } else {
+                    $("#CntrPrincipal").hide();
+                }
+            });
 
             function enviarObra() {
                 var data = "";
@@ -778,7 +758,6 @@
                         $(".contenidoBuscador").html(msg).show("slide");
                     }
                 });
-
             }
 
             function cargarCombo() {
@@ -790,9 +769,7 @@
                             $("#div_ofertas").html(msg)
                         }
                     });
-
                 }
-
             }
 
             function cargarCanton() {
@@ -804,7 +781,6 @@
                             $("#canton").val(msg)
                         }
                     });
-
                 }
             }
 
@@ -820,10 +796,7 @@
             });
 
             $("#btn-lista").click(function () {
-
                 $("#btn-cancelar").attr("disabled", true);
-//        $("#btn-aceptar").attr("disabled", true);
-
                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
                 $("#modalTitle_busqueda").html("Lista de Contratos");
                 $("#modalFooter_busqueda").html("").append(btnOk);
@@ -831,16 +804,13 @@
                 $("#buscarDialog").bind("click", enviar)
                 $("#contenidoBuscador").html("")
                 $("#modal-busqueda").modal("show");
-
             });
 
             $("#btn-nuevo").click(function () {
-
                 location.href = "${createLink(action: 'registroContrato')}"
             });
 
             $("#obraCodigo").focus(function () {
-
                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
                 $("#modalTitle_busquedaOferta").html("Lista de Obras");
                 $("#modalFooter_busquedaOferta").html("").append(btnOk);
@@ -848,33 +818,17 @@
 
             });
 
-/*
-            if (${contrato?.codigo != null}) {
-
-                $(".activo").focus(function () {
-
-                    $("#btn-aceptar").attr("disabled", false)
-
-                })
-
-            }
-*/
 
             $("#btn-salir").click(function () {
-
                 location.href = "${g.createLink(action: 'index', controller: "inicio")}";
-
             });
 
             $("#btn-aceptar").click(function () {
-
                 if($(".indiceOferta").val()){
                     $("#frm-registroContrato").submit();
                 }else{
                     alert("No ha seleccionado un indice!")
                 }
-
-
             });
 
             $("#btn-registrar").click(function () {
@@ -910,8 +864,6 @@
                         }
                     }
                 });
-//
-
             });
 
             $("#btn-desregistrar").click(function () {
@@ -930,27 +882,17 @@
             });
 
             $("#btn-cancelar").click(function () {
-
                 if (${contrato?.id == null}) {
-
                     location.href = "${g.createLink(action: 'registroContrato')}";
-
                 } else {
-
                     location.href = "${g.createLink(action: 'registroContrato')}" + "?contrato=" + "${contrato?.id}";
-
                 }
-
             })
 
             $("#btn-borrar").click(function () {
-
                 if (${contrato?.codigo != null}) {
-
                     $("#borrarContrato").dialog("open")
-
                 }
-
             });
 
             $("#borrarContrato").dialog({
@@ -976,15 +918,11 @@
                                 location.href = "${g.createLink(action: 'registroContrato')}";
                             }
                         });
-//
-
-//
                     },
                     "Cancelar" : function () {
                         $("#borrarContrato").dialog("close");
                     }
                 }
-
             });
 
             /* muestra la X en el botón de cerrar */
@@ -1000,6 +938,7 @@
                     }
                     });
                 }
+                $("#tpcr").change();
             });
 
 //            $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));

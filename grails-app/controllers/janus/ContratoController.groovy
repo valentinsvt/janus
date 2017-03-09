@@ -996,30 +996,30 @@ class ContratoController extends janus.seguridad.Shield {
     def save() {
         def contratoInstance
 
-//        println("-->> save" + params)
+        println "-->> save" + params
 
         if (params.codigo) {
             params.codigo = params.codigo.toString().toUpperCase()
+        }
+
+        if (params.tipoContrato.id == "1") {  //contrato Principal
+            params.padre.id = "-1"
         }
 
         if (params.memo) {
             params.memo = params.memo.toString().toUpperCase()
         }
 
-
         if (params.fechaSubscripcion) {
             params.fechaSubscripcion = new Date().parse("dd-MM-yyyy", params.fechaSubscripcion)
         }
 
-
-        println("params con " + params.conReajuste)
-
+//        println("params con " + params.conReajuste)
         if(params.conReajuste == 'on'){
             params.conReajuste = 1
         }else{
             params.conReajuste = 0
         }
-
 
         def indice = PeriodosInec.get(params."periodoValidez.id")
 
@@ -1033,6 +1033,10 @@ class ContratoController extends janus.seguridad.Shield {
                 return
             }//no existe el objeto
             contratoInstance.properties = params
+//            println "contrato padre: ${params.padre.id} ${params.padre.id.class}"
+            if(params.padre.id == "-1") {
+                contratoInstance.padre = null
+            }
             contratoInstance.periodoInec = indice
         }//es edit
         else {
@@ -1043,13 +1047,8 @@ class ContratoController extends janus.seguridad.Shield {
                     flash.message = "No se puede grabar el Contrato, elija una oferta válida "
                     redirect(action: 'registroContrato')
                     return
-
-
                 }
-
-
             }
-
 
             contratoInstance = new Contrato(params)
             contratoInstance.periodoInec = indice
