@@ -1620,14 +1620,16 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-//        println "pasa filtros...: " + tiposPlanilla.codigo
+//        println "pasa filtros...: ${tiposPlanilla.codigo}, .. planillasAvance: ${planillasAvance.size()}"
+//        println "contrato: $contrato"
 
         def periodosEjec
         if(planillasAvance.size() == 0) {
             periodosEjec = PeriodoEjecucion.findAllByContratoAndTipo(contrato, 'P', [sort: "fechaFin"])
         } else {
             def hasta = planillasAvance[-1].fechaFin
-            periodosEjec = PeriodoEjecucion.findAllByContratoAndTipoAndFechaInicioGreaterThan(contrato, 'P', hasta, [sort: "fechaFin"])
+//            println "fecha hasta: $hasta"
+            periodosEjec = PeriodoEjecucion.findAllByContratoAndTipoInListAndFechaInicioGreaterThan(contrato, ['P', 'A'], hasta, [sort: "fechaFin"])
         }
         def finalObra = null
 //        println "periodosEjec: ${periodosEjec.size()}"
@@ -5555,23 +5557,26 @@ class PlanillaController extends janus.seguridad.Shield {
         def inicioPr
         def avance = TipoPlanilla.findAllByCodigoInList(['P', 'Q'])
         println "planillas de avance: $avance"
+        println "periodosEjec: $periodosEjec"
         def planillasAnt = Planilla.findAllByContratoAndTipoPlanillaInList(cntr, avance, [sort: 'fechaPresentacion'])
         if (planillasAnt) {
             inicio = planillasAnt.pop().fechaFin + 1
         }
         // hay periodos para tipos de planilla: P, Q, D
+//        println ".....tipos: ${tipos.codigo}"
         if (tipos.codigo.contains("P") || tipos.codigo.contains("Q") || tipos.codigo.contains("D")) {
+            println "inicia .. 1"
             periodosEjec.each { pe ->
                 ultimo = texto
 
-                println "xxprocesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')} " +
-                        "fin de obra: $finalObra, inicio: $inicio"
+//                println "xxprocesa ... periodo: ${pe.fechaInicio.format('dd-MM-yyyy') + '_' + pe.fechaFin.format('dd-MM-yyyy')} " +
+//                        "fin de obra: $finalObra, inicio: $inicio"
 
                 fcim = preciosService.primerDiaDelMes(pe.fechaInicio)
                 fcfm = preciosService.ultimoDiaDelMes(pe.fechaInicio)
                 diasMes = fcfm -fcim + 1
 
-                println "xxel mes de ${pe.fechaInicio} tiene $diasMes dias, fechaFin: ${pe.fechaFin}"
+//                println "xxel mes de ${pe.fechaInicio} tiene $diasMes dias, fechaFin: ${pe.fechaFin}"
 
                 if(!lleno) {  // ya se completó los días del mes en curso
                     if (pe.fechaFin == fcfm) {
