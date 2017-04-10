@@ -567,7 +567,7 @@ class ObraController extends janus.seguridad.Shield {
 
             duenoObra = esDuenoObra(obra) ? 1 : 0
 
-//            println "dueÑo: " + duenoObra
+            println "dueÑo: " + duenoObra
 
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen,
              matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra,

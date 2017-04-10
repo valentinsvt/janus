@@ -868,7 +868,7 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
     def buscarObra() {
-        println "buscar obra "+params
+//        println "buscar obra "+params
         def extras = " "
         def parr = { p ->
             return p.parroquia?.nombre
@@ -900,7 +900,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (!params.reporte) {
             def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
-            println("listaf " + lista)
+//            println("listaf " + lista)
             /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
             for (int i = lista.size() - 1; i > -1; i--) {

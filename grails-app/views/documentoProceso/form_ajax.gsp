@@ -43,7 +43,8 @@
             </div>
 
             <div class="controls">
-                <g:textArea name="nombre" cols="40" rows="5" maxlength="255" class="" value="${documentoProcesoInstance?.nombre}"/>
+                <g:textArea name="nombre" cols="40" rows="2" maxlength="255" class="" value="${documentoProcesoInstance?.nombre}"
+                            style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -56,7 +57,8 @@
             </div>
 
             <div class="controls">
-                <g:textArea name="resumen" cols="40" rows="5" maxlength="1024" class="" value="${documentoProcesoInstance?.resumen}"/>
+                <g:textArea name="resumen" cols="40" rows="2" maxlength="1024" class="" value="${documentoProcesoInstance?.resumen}"
+                            style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -69,7 +71,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class="" value="${documentoProcesoInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="63" class="" value="${documentoProcesoInstance?.descripcion}"
+                             style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -82,7 +85,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="palabrasClave" maxlength="63" class="" value="${documentoProcesoInstance?.palabrasClave}"/>
+                <g:textField name="palabrasClave" maxlength="63" class="" value="${documentoProcesoInstance?.palabrasClave}"
+                             style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

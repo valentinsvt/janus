@@ -222,6 +222,7 @@ class BuscadorService {
         lista = dominio.findAll((sql+orderby).toString(), [max: 200])
         lista.add(lista.size())
 //        println "dominio. $dominio sql $sql  orderby: $orderby  lista: $lista, size: ${lista.size()}, tipo: $tipo"
+//        println "dominio. $dominio sql $sql  tipo: $tipo parametros: $parametros"
         if (lista.size() < 1 && tipo != "excluyente") {
             res = filtro("or", parametros, common, mapa, ignoreCase)
             println "retorna de filtro: $res"
