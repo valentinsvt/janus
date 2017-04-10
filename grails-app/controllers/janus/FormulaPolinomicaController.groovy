@@ -254,7 +254,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 //            println "SQL items: " + sql
             def rows = cn.rows(sql.toString())
 //            println "rows: $rows"
-            [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total]
+            [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total, subpre: sbpr.id]
         }
     }
 
@@ -502,6 +502,45 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     def creaIndice() {
         println "crear indice"
         redirect(controller: "Indice", action: "form_adicional")
+    }
+
+    def tablaItems () {
+
+        println("params " + params)
+
+        def cn = dbConnectionService.getConnection()
+
+        def sql = ""
+        if (params.tipo == 'p') {
+            println("entro")
+            sql = "SELECT item.item__id iid, itemcdgo codigo, item.itemnmbr item, grpo__id grupo, valor aporte, 0 precio " +
+                    "from item, dprt, sbgr, mfcl, mfvl " +
+                    "where mfcl.obra__id = ${params.id} and mfcl.sbpr__id = ${params.subpr} and " +
+                    "mfcl.clmndscr = item.item__id || '_T' and " +
+                    "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and " +
+                    "grpo__id <> 2 and " +
+                    "mfvl.obra__id = mfcl.obra__id and mfvl.sbpr__id = mfcl.sbpr__id and " +
+                    "mfvl.clmncdgo = mfcl.clmncdgo and " +
+                    "mfvl.codigo = 'sS3' and item.item__id not in (select item__id from itfp, fpob " +
+                    "where itfp.fpob__id = fpob.fpob__id and obra__id = ${params.id} and sbpr__id = ${params.subpr}) " +
+                    "order by valor desc"
+        } else {
+            sql = "SELECT item.item__id iid, itemcdgo codigo, item.itemnmbr item, grpo__id grupo, valor aporte, 0 precio " +
+                    "from item, dprt, sbgr, mfcl, mfvl " +
+                    "where mfcl.obra__id = ${params.id} and mfcl.sbpr__id = ${params.subpr} and " +
+                    "mfcl.clmndscr = item.item__id || '_T' and " +
+                    "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and " +
+                    "grpo__id = 2 and " +
+                    "mfvl.obra__id = mfcl.obra__id and mfvl.sbpr__id = mfcl.sbpr__id and " +
+                    "mfvl.clmncdgo = mfcl.clmncdgo and " +
+                    "mfvl.codigo = 'sS5' and item.item__id not in (select item__id from itfp, fpob " +
+                    "where itfp.fpob__id = fpob.fpob__id and obra__id = ${params.id} and sbpr__id = ${params.subpr}) " +
+                    "order by valor desc"
+        }
+//            println "SQL items: " + sql
+        def rows = cn.rows(sql.toString())
+
+        return [rows: rows, tipo: params.tipo]
     }
 
 } //fin controller

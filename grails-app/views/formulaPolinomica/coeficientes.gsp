@@ -186,38 +186,53 @@
                         </div>
                     </div>
 
-                    <div class="contenedorTabla">
-                        <table class="table table-condensed table-bordered table-striped table-hover" id="tblDisponibles">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Descripción</th>
-                                    ${tipo == 'c' ? '<th>Precio unitario</th>' : ''}
-                                    <th>Aporte</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <g:each in="${rows}" var="r">
-                                    <tr data-item="${r.iid}" data-codigo="${r.codigo}" data-nombre="${r.item}" data-valor="${r.aporte ?: 0}" data-precio="${r.precio ?: 0}" data-grupo="${r.grupo}">
-                                        <td>
-                                            ${r.codigo}
-                                        </td>
-                                        <td>
-                                            ${r.item}
-                                        </td>
-                                        <g:if test="${tipo == 'c'}">
-                                            <td class="numero">
-                                                <g:formatNumber number="${r.precio ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>
-                                            </td>
-                                        </g:if>
-                                        <td class="numero">
-                                            <g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>
-                                        </td>
-                                    </tr>
-                                </g:each>
-                            </tbody>
-                        </table>
+                    <div class="span-12">
+                        <g:textField name="nombre_codigo" id="buscaCodigo" placeholder="Código Item"/>
+                        <g:textField name="nombre_desc" id="buscaDescrip" placeholder="Descripción"/>
+                        <div class="btn-group">
+                        <a href="#" id="btnBuscarItem" class="btn btn-success" title="Buscar Item">
+                            <i class="icon-search"></i> Buscar
+                        </a>
+                        </div>
+
                     </div>
+
+                    <div class="span-12" id="tablaBusquedaItems">
+
+                    </div>
+
+                    %{--<div class="contenedorTabla">--}%
+                        %{--<table class="table table-condensed table-bordered table-striped table-hover" id="tblDisponibles">--}%
+                            %{--<thead>--}%
+                                %{--<tr>--}%
+                                    %{--<th>Item</th>--}%
+                                    %{--<th>Descripción</th>--}%
+                                    %{--${tipo == 'c' ? '<th>Precio unitario</th>' : ''}--}%
+                                    %{--<th>Aporte</th>--}%
+                                %{--</tr>--}%
+                            %{--</thead>--}%
+                            %{--<tbody>--}%
+                                %{--<g:each in="${rows}" var="r">--}%
+                                    %{--<tr data-item="${r.iid}" data-codigo="${r.codigo}" data-nombre="${r.item}" data-valor="${r.aporte ?: 0}" data-precio="${r.precio ?: 0}" data-grupo="${r.grupo}">--}%
+                                        %{--<td>--}%
+                                            %{--${r.codigo}--}%
+                                        %{--</td>--}%
+                                        %{--<td>--}%
+                                            %{--${r.item}--}%
+                                        %{--</td>--}%
+                                        %{--<g:if test="${tipo == 'c'}">--}%
+                                            %{--<td class="numero">--}%
+                                                %{--<g:formatNumber number="${r.precio ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>--}%
+                                            %{--</td>--}%
+                                        %{--</g:if>--}%
+                                        %{--<td class="numero">--}%
+                                            %{--<g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>--}%
+                                        %{--</td>--}%
+                                    %{--</tr>--}%
+                                %{--</g:each>--}%
+                            %{--</tbody>--}%
+                        %{--</table>--}%
+                    %{--</div>--}%
                 </div>
             </div>
         </div>
@@ -250,6 +265,32 @@
     </div>
 
         <script type="text/javascript">
+
+            $("#btnBuscarItem").click(function () {
+                var codigo = $("#buscaCodigo").val();
+                var descripcion = $("#buscaDescrip").val()
+                cargarTablaItems(${obra?.id}, '${tipo}', ${subpre}, codigo, descripcion)
+            });
+
+            cargarTablaItems(${obra?.id}, '${tipo}', ${subpre});
+
+            function cargarTablaItems (obra, tipo, sub, cod, desc) {
+                $.ajax({
+                   type: 'POST',
+                    url: '${createLink(controller: 'formulaPolinomica', action: 'tablaItems')}',
+                    data:{
+                        id: obra,
+                        tipo: tipo,
+                        subpr: sub,
+                        codigo: cod,
+                        descripcion: desc
+                    },
+                    success: function (msg) {
+                        $("#tablaBusquedaItems").html(msg)
+                    }
+                });
+            }
+
 
             var $tree = $("#tree");
             var $tabla = $("#tblDisponibles");
