@@ -872,8 +872,7 @@
                                 $btn.show();
                                 spinner.remove();
                             } else {
-                                $.ajax({
-                                    async   : false,
+                                $.ajax({                                    async   : false,
                                     type    : "POST",
                                     url     : "${createLink(action:'addItemFormula')}",
                                     data    : dataAdd,

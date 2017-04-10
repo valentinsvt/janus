@@ -20,6 +20,11 @@
             padding: 2px 6px;
             margin-top: -10px
         }
+/*
+        .textoRojo {
+            color: #800000; !important;
+        }    
+*/
         </style>
     </head>
 
@@ -167,7 +172,7 @@
                         <b>Descripción:</b>
                         <input type="text" style="width: 680px" id="item_descripcion" value="">
                     </div>
-                    <div class="span2" style="margin-left: 20px; width: 180px;">
+                    <div class="span2" style="margin-left: 20px; width: 180px;" id="lbl_cntd">
                         <b>Cantidad:</b>
                         <input type="text" style="width: 90px;text-align: right" id="item_cantidad" value="">
                     </div>
@@ -615,6 +620,14 @@
                     if (cantidad * 1 < 0.00001 || orden * 1 < 1) {
                         msn = "La cantidad  y el orden deben ser números positivos mayores a 0"
                     }
+/*
+                    if (Math.abs(cantidad) * 1 < 0.00001) {
+                        msn = "La cantidad debe ser diferente de cero"
+                    }
+                    if (orden * 1 < 1) {
+                        msn = "El orden del rubro debe ser mayor a 0"
+                    }
+*/
                     if (rubro * 1 < 1)
                         msn = "seleccione un rubro"
 
@@ -695,14 +708,40 @@
                 }
 
                 $("#item_cantidad").focus(function () {
-                    console.log("focccc")
                     if (($("#item_nombre").val()) && ($("#item_codigo").val().substr(0, 2) == 'TR') && !aviso) {
-//                        console.log("ssssssssss i ")
                         aviso = true;
                         alerta("Rubro para transporte", "Debe registrar la distancia de desalojo en Variables de " +
                            "la obra, en la sección Transporte Especial");
                     }
                 });
+
+/*
+                $("#item_cantidad").change(function () {
+                    var cantidad = $("#item_cantidad").val()
+                    if (cantidad * 1 < -0.0001) {
+                        console.log('menor')
+                        $("#lbl_cntd").addClass("textoRojo")
+                        $.box({
+                            imageClass : "box_info",
+                            text       : "Cantidades de obra negativos se usa sólo para presupuestos de <b>Contratos Complementarios</b> " +
+                             "si no es el caso, por favor ingrese cantidades de obra mayores que cero",
+                            title      : "Alerta",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable : false,
+                                draggable : false,
+                                buttons   : {
+                                    "Aceptar" : function () {
+                                    }
+                                },
+                                width     : 500
+                            }
+                        });
+                    } else {
+                        $("#lbl_cntd").removeClass("textoRojo")
+                    }
+                });
+*/
 
             });
         </script>

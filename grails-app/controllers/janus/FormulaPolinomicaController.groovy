@@ -509,10 +509,18 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         println("params " + params)
 
         def cn = dbConnectionService.getConnection()
-
         def sql = ""
+        def sql_cdgo = ""
+        def sql_dscr = ""
+        if(params.codigo) {
+            sql_cdgo = " and itemcdgo ilike '%${params.codigo}%' "
+        }
+        if(params.descripcion) {
+            sql_dscr = " and itemnmbr ilike '%${params.descripcion}%' "
+        }
         if (params.tipo == 'p') {
             println("entro")
+/*
             sql = "SELECT item.item__id iid, itemcdgo codigo, item.itemnmbr item, grpo__id grupo, valor aporte, 0 precio " +
                     "from item, dprt, sbgr, mfcl, mfvl " +
                     "where mfcl.obra__id = ${params.id} and mfcl.sbpr__id = ${params.subpr} and " +
@@ -523,6 +531,19 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     "mfvl.clmncdgo = mfcl.clmncdgo and " +
                     "mfvl.codigo = 'sS3' and item.item__id not in (select item__id from itfp, fpob " +
                     "where itfp.fpob__id = fpob.fpob__id and obra__id = ${params.id} and sbpr__id = ${params.subpr}) " +
+                    "order by valor desc"
+*/
+            sql = "SELECT item.item__id iid, itemcdgo codigo, item.itemnmbr item, grpo__id grupo, valor aporte, 0 precio " +
+                    "from item, dprt, sbgr, mfcl, mfvl " +
+                    "where mfcl.obra__id = ${params.id} and mfcl.sbpr__id = ${params.subpr} and " +
+                    "mfcl.clmndscr = item.item__id || '_T' and " +
+                    "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and " +
+                    "grpo__id <> 2 and " +
+                    "mfvl.obra__id = mfcl.obra__id and mfvl.sbpr__id = mfcl.sbpr__id and " +
+                    "mfvl.clmncdgo = mfcl.clmncdgo and " +
+                    "mfvl.codigo = 'sS3' and item.item__id not in (select item__id from itfp, fpob " +
+                    "where itfp.fpob__id = fpob.fpob__id and obra__id = ${params.id} and sbpr__id = ${params.subpr}) " +
+                    sql_cdgo + sql_dscr +
                     "order by valor desc"
         } else {
             sql = "SELECT item.item__id iid, itemcdgo codigo, item.itemnmbr item, grpo__id grupo, valor aporte, 0 precio " +
@@ -535,6 +556,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     "mfvl.clmncdgo = mfcl.clmncdgo and " +
                     "mfvl.codigo = 'sS5' and item.item__id not in (select item__id from itfp, fpob " +
                     "where itfp.fpob__id = fpob.fpob__id and obra__id = ${params.id} and sbpr__id = ${params.subpr}) " +
+                    sql_cdgo + sql_dscr +
                     "order by valor desc"
         }
 //            println "SQL items: " + sql

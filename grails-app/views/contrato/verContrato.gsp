@@ -258,9 +258,14 @@
 
             <fieldset class="" style="position: relative;  border-bottom: 1px solid black;padding: 10px;">
                 <div class="span12" style="margin-top: 10px">
-                    <div class="span1 formato">Tipo</div>
-
-                    <div class="span4">${contrato?.tipoContrato?.descripcion}</div>
+                    <g:if test="${contrato?.tipoContrato?.codigo?.trim() == 'C'}">
+                        <div class="span1 formato text-info">Tipo</div>
+                        <div class="span4 text-info"><strong>${contrato?.tipoContrato?.descripcion}</strong></div>
+                    </g:if>
+                    <g:else>
+                        <div class="span1 formato">Tipo</div>
+                        <div class="span4">${contrato?.tipoContrato?.descripcion}</div>
+                    </g:else>
 
                     <div class="span2 formato">Fecha de Suscripción</div>
                     <div class="span2">${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}</div>
@@ -269,9 +274,14 @@
                 </div>
 
                 <div class="span12" style="margin-top: 5px">
-                    <div class="span2 formato" style="margin-left:0px;">Objeto del Contrato</div>
-
-                    <div class="span10" style="margin-left: -40px">${contrato?.objeto}</div>
+                    <g:if test="${contrato?.tipoContrato?.codigo?.trim() == 'C'}">
+                        <div class="span2 formato text-info" style="margin-left:0px;">Objeto del Contrato</div>
+                        <div class="span10 text-info" style="margin-left: -40px">${contrato?.objeto}</div>
+                    </g:if>
+                    <g:else>
+                        <div class="span2 formato" style="margin-left:0px;">Objeto del Contrato</div>
+                        <div class="span10" style="margin-left: -40px">${contrato?.objeto}</div>
+                    </g:else>
                 </div>
             </fieldset>
 
