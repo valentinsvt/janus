@@ -507,6 +507,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     def tablaItems () {
 
         println("params " + params)
+        def obra = Obra.get(params.id)
 
         def cn = dbConnectionService.getConnection()
         def sql = ""
@@ -519,7 +520,6 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             sql_dscr = " and itemnmbr ilike '%${params.descripcion}%' "
         }
         if (params.tipo == 'p') {
-            println("entro")
 /*
             sql = "SELECT item.item__id iid, itemcdgo codigo, item.itemnmbr item, grpo__id grupo, valor aporte, 0 precio " +
                     "from item, dprt, sbgr, mfcl, mfvl " +
@@ -562,7 +562,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 //            println "SQL items: " + sql
         def rows = cn.rows(sql.toString())
 
-        return [rows: rows, tipo: params.tipo]
+        return [rows: rows, tipo: params.tipo, obra: obra]
     }
 
 } //fin controller
