@@ -186,6 +186,7 @@
                         </div>
                     </div>
 
+%{--
                     <div class="span-12">
                         <g:textField name="nombre_codigo" id="buscaCodigo" placeholder="Código Item"/>
                         <g:textField name="nombre_desc" id="buscaDescrip" placeholder="Descripción"/>
@@ -196,6 +197,7 @@
                         </div>
 
                     </div>
+--}%
 
                     <div class="span-12" id="tablaBusquedaItems">
 

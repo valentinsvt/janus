@@ -177,7 +177,9 @@ class Reportes2Controller {
     def reporteRubroIlustracion() {
         def obra = Obra.get(params.id)
         def persona = Persona.get(session.usuario.id)
-        def rubros = VolumenesObra.findAllByObra(obra).item.unique()
+        def rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()
+
+//        println "rubros: ${rubros.codigo}"
 
         def baos = new ByteArrayOutputStream()
         def name = "rubros_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -252,7 +254,8 @@ class Reportes2Controller {
                 }
             }
 
-            def ares = ArchivoEspecificacion.findByItem(rubro)
+//            def ares = ArchivoEspecificacion.findByItem(rubro)
+            def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
 //            if (rubro.especificaciones && tipo.contains("e")) {
             if (ares && tipo.contains("e")) {
 //                extEspecificacion = rubro.especificaciones.split("\\.")
