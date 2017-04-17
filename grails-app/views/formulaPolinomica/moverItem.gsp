@@ -14,7 +14,7 @@
     <div class="row">
         <div class="span">
             Mover Item al coeficiente:
-            <g:select name="indice" from="${cof}" class="span4"/>
+            <g:select name="indice" from="${cof?.numero}" class="span4"/>
         </div>
     </div>
 

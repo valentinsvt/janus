@@ -29,8 +29,14 @@
             </div>
 
             <div class="controls">
-                <input type="file" id="archivo" name="archivo" class="required"/>
-
+                <g:if test="${documentoProcesoInstance?.path}">
+                    <span>
+                        ${documentoProcesoInstance?.path ? documentoProcesoInstance?.path : 'No se encuentra cargado ningún archivo!' }
+                    </span>
+                </g:if>
+                <g:else>
+                    <input type="file" id="archivo" name="archivo" class="${documentoProcesoInstance?.path ? '' : 'required'}"/>
+                </g:else>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

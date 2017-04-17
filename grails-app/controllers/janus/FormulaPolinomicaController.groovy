@@ -573,10 +573,17 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def moverItem () {
-        println("params mover " + params)
+//        println("params mover " + params)
         def obra = Obra.get(params.obra)
-        def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
-        return [cof: params.coe]
+//        def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
+
+        def fp = FormulaPolinomica.withCriteria {
+            eq("obra", obra)
+            like("numero", "p%")
+            order 'numero', 'asc'
+        }
+
+        return [cof: fp]
     }
 
 } //fin controller

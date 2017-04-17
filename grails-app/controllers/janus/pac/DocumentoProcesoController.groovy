@@ -276,60 +276,69 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
         new File(path).mkdirs()
 
         def f = request.getFile('archivo')  //archivo = name del input type file
-//        println("---> " + f?.getOriginalFilename())
-        if (f && !f.empty && f.getOriginalFilename() != '') {
-            def fileName = f.getOriginalFilename() //nombre original del archivo
 
-            def accepted = ["jpg", 'png', "pdf"]
+        if(!f && documentoProcesoInstance?.path){
+
+        }else{
+
+            //        println("---> " + f?.getOriginalFilename())
+            if (f && !f.empty && f.getOriginalFilename() != '') {
+                def fileName = f.getOriginalFilename() //nombre original del archivo
+
+                def accepted = ["jpg", 'png', "pdf"]
 
 //            def tipo = f.
 
-            def ext = ''
+                def ext = ''
 
-            def parts = fileName.split("\\.")
-            fileName = ""
-            parts.eachWithIndex { obj, i ->
-                if (i < parts.size() - 1) {
-                    fileName += obj
-                } else {
-                    ext = obj
+                def parts = fileName.split("\\.")
+                fileName = ""
+                parts.eachWithIndex { obj, i ->
+                    if (i < parts.size() - 1) {
+                        fileName += obj
+                    } else {
+                        ext = obj
+                    }
                 }
-            }
 
-            if (!accepted.contains(ext)) {
-                flash.message = "El archivo tiene que ser de tipo jpg, png o pdf"
+                if (!accepted.contains(ext)) {
+                    flash.message = "El archivo tiene que ser de tipo jpg, png o pdf"
+                    flash.clase = "alert-error"
+                    redirect(action: 'list', id: params.concurso.id)
+                    return
+                }
+
+                fileName = fileName.tr(/áéíóúñÑÜüÁÉÍÓÚàèìòùÀÈÌÒÙÇç .!¡¿?&#°"'/, "aeiounNUuAEIOUaeiouAEIOUCc_")
+                def archivo = fileName
+                fileName = fileName + "." + ext
+
+                def i = 0
+                def pathFile = path + File.separatorChar + fileName
+                def src = new File(pathFile)
+
+                while (src.exists()) { // verifica si existe un archivo con el mismo nombre
+                    fileName = archivo + "_" + i + "." + ext
+                    pathFile = path + File.separatorChar + fileName
+                    src = new File(pathFile)
+                    i++
+                }
+
+                f.transferTo(new File(pathFile)) // guarda el archivo subido al nuevo path
+                documentoProcesoInstance.path = fileName
+            }else{
                 flash.clase = "alert-error"
-                redirect(action: 'list', id: params.concurso.id)
+                flash.message = "Error al guardar el documento. No se ha cargado ningún archivo!"
+                if (params.contrato) {
+                    redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato, show: params.show])
+                } else {
+                    redirect(action: 'list', id: params.concurso.id)
+                }
                 return
             }
-
-            fileName = fileName.tr(/áéíóúñÑÜüÁÉÍÓÚàèìòùÀÈÌÒÙÇç .!¡¿?&#°"'/, "aeiounNUuAEIOUaeiouAEIOUCc_")
-            def archivo = fileName
-            fileName = fileName + "." + ext
-
-            def i = 0
-            def pathFile = path + File.separatorChar + fileName
-            def src = new File(pathFile)
-
-            while (src.exists()) { // verifica si existe un archivo con el mismo nombre
-                fileName = archivo + "_" + i + "." + ext
-                pathFile = path + File.separatorChar + fileName
-                src = new File(pathFile)
-                i++
-            }
-
-            f.transferTo(new File(pathFile)) // guarda el archivo subido al nuevo path
-            documentoProcesoInstance.path = fileName
-        }else{
-            flash.clase = "alert-error"
-            flash.message = "Error al guardar el documento. No se ha cargado ningún archivo!"
-            if (params.contrato) {
-                redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato, show: params.show])
-            } else {
-                redirect(action: 'list', id: params.concurso.id)
-            }
-            return
         }
+
+
+
         /***************** file upload ************************************************/
 
         if (!documentoProcesoInstance.save(flush: true)) {
