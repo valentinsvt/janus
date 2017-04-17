@@ -1476,6 +1476,9 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.codigo = nuevoCodigo
             obraInstance.estado = 'N'
             obraInstance.departamento = session.usuario.departamento
+            obraInstance.memoSif = null
+            obraInstance.fechaInicio = null
+            obraInstance.fechaFin = null
 
 //            println "busca direccion de usuario ${session.usuario}"
 

@@ -247,6 +247,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+//        println("params " + params)
         def documentoProcesoInstance
         if (params.id) {
             documentoProcesoInstance = DocumentoProceso.get(params.id)
@@ -275,7 +276,8 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
         new File(path).mkdirs()
 
         def f = request.getFile('archivo')  //archivo = name del input type file
-        if (f && !f.empty) {
+//        println("---> " + f?.getOriginalFilename())
+        if (f && !f.empty && f.getOriginalFilename() != '') {
             def fileName = f.getOriginalFilename() //nombre original del archivo
 
             def accepted = ["jpg", 'png', "pdf"]
@@ -318,6 +320,15 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
 
             f.transferTo(new File(pathFile)) // guarda el archivo subido al nuevo path
             documentoProcesoInstance.path = fileName
+        }else{
+            flash.clase = "alert-error"
+            flash.message = "Error al guardar el documento. No se ha cargado ningún archivo!"
+            if (params.contrato) {
+                redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato, show: params.show])
+            } else {
+                redirect(action: 'list', id: params.concurso.id)
+            }
+            return
         }
         /***************** file upload ************************************************/
 

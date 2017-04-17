@@ -155,10 +155,14 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             def fp = FormulaPolinomica.findAllByObraAndSubPresupuesto(obra, sbpr, [sort: "numero"])
 //            println "fp: " + fp
             def total = 0
+            def cof = []
 
             fp.each { f ->
                 if (f.numero =~ params.tipo) {
+//                    println("numero " + f.numero)
+                    cof += f
                     def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
+//                    println("---------------------- " + children)
                     def mapFormula = [
                             data: f.numero,
                             attr: [
@@ -254,7 +258,10 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 //            println "SQL items: " + sql
             def rows = cn.rows(sql.toString())
 //            println "rows: $rows"
-            [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total, subpre: sbpr.id]
+
+//            println("cof " + cof?.numero)
+
+            [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total, subpre: sbpr.id, cof: cof?.numero]
         }
     }
 
@@ -563,6 +570,13 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         def rows = cn.rows(sql.toString())
 
         return [rows: rows, tipo: params.tipo, obra: obra]
+    }
+
+    def moverItem () {
+        println("params mover " + params)
+        def obra = Obra.get(params.obra)
+        def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
+        return [cof: params.coe]
     }
 
 } //fin controller

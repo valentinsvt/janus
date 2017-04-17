@@ -16,7 +16,7 @@
 
             <div class="controls">
                 <g:select id="etapa" name="etapa.id" from="${janus.pac.Etapa.list()}" optionKey="id" class="many-to-one " value="${documentoProcesoInstance?.etapa?.id}"
-                          noSelection="['null': '']" optionValue="descripcion"/>
+                          optionValue="descripcion"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="controls">
-                <input type="file" id="archivo" name="archivo"/>
+                <input type="file" id="archivo" name="archivo" class="required"/>
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="controls">
-                <g:textArea name="nombre" cols="40" rows="2" maxlength="255" class="" value="${documentoProcesoInstance?.nombre}"
+                <g:textArea name="nombre" cols="40" rows="2" maxlength="255" class="required" value="${documentoProcesoInstance?.nombre}"
                             style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -66,12 +66,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class="" value="${documentoProcesoInstance?.descripcion}"
+                <g:textField name="descripcion" maxlength="63" class="required" value="${documentoProcesoInstance?.descripcion}"
                              style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
