@@ -536,7 +536,8 @@
                         $.box({
                             imageClass : "box_info",
                             title      : "Alerta",
-                            text       : "No puede ingresar otro rubro pues el valor de las planillas de Costo + porcentaje superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})",
+                            text       : "No puede ingresar otro rubro pues el valor de las planillas de Costo + porcentaje " +
+                               "superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})",
                             iconClose  : false,
                             dialog     : {
                                 resizable : false,

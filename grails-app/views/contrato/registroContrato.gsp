@@ -99,9 +99,9 @@
                 </g:if>
             </g:if>
 
-            <fieldset class="" style="position: relative; padding: 10px;border-bottom: 1px solid black;">
+            <fieldset class="" style="position: relative; margin-top: 10px;border-bottom: 1px solid black;">
 
-                <div class="span12" style="margin-top: 10px; margin-bottom: 5px;">
+                <div class="span12" style="margin-top: 0px; margin-bottom: 0px;">
 
                     %{--<g:if test="${contrato?.codigo != null}">--}%
 
@@ -252,7 +252,7 @@
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 150px; border-bottom: 1px solid black;padding: 10px;">
+            <fieldset class="" style="position: relative; height: 120px; border-bottom: 1px solid black;">
 
                 <div class="span12" style="margin-top: 10px">
 
@@ -277,13 +277,20 @@
 
                     <div class="span2"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
+                    <g:if test="${complementario}">
+                        <div class="text-info">
+                            <strong>Tiene el contrato complementario: ${complementario?.codigo}</strong>
+                        </div>
+                    </g:if>
+
                 </div>
 
                 <div class="span12" style="margin-top: 5px">
 
                     <div class="span2 formato">Objeto del Contrato</div>
 
-                    <div class="span9" style="margin-left: -20px"><g:textArea name="objeto" class="activo" rows="5" cols="5" style="height: 79px; width: 900px; resize: none" value="${contrato?.objeto}"/></div>
+                    <div class="span9" style="margin-left: -20px"><g:textArea name="objeto" class="activo"
+                         style="height: 55px; width: 960px; resize: none; margin-top: -6px" value="${contrato?.objeto}"/></div>
 
                 </div>
 
@@ -402,7 +409,7 @@
         </g:form>
 
         <g:if test="${contrato}">
-            <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;">
+            <div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">
 
                 <div class="navbar-inner">
                     <div class="botones">

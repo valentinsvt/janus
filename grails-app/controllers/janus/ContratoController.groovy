@@ -64,9 +64,13 @@ class ContratoController extends janus.seguridad.Shield {
 
     def verContrato() {
         def contrato
+        def complementario
+
 //        println "params de verContrato: $params"
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
+            complementario = Contrato.findByPadre(contrato)
+            println "***complementario: $complementario"
 //            println "ANT " + contrato
 
             if(contrato){
@@ -102,16 +106,16 @@ class ContratoController extends janus.seguridad.Shield {
 
                 def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
 
-                [campos: campos, contrato: contrato, esDirector: esDirector, esDirFis: esDirFis]
+                [campos: campos, contrato: contrato, esDirector: esDirector, esDirFis: esDirFis, complementario: complementario]
             }else{
                 def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
-                [campos: campos]
+                [campos: campos, complementario: complementario]
             }
 
 
         } else {
             def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
-            [campos: campos]
+            [campos: campos, complementario: complementario]
         }
     }
 
@@ -266,15 +270,17 @@ class ContratoController extends janus.seguridad.Shield {
     def registroContrato() {
         def contrato
         def planilla  // si hay planillas de inhabilita el desregistrar
+        def complementario
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
             planilla = Planilla.findAllByContrato(contrato)
+            complementario = Contrato.findByPadre(contrato)
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
 
-            [campos: campos, contrato: contrato, planilla: planilla]
+            [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-            [campos: campos]
+            [campos: campos, complementario: complementario]
         }
     }
 

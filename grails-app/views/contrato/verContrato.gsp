@@ -260,12 +260,22 @@
                 <div class="span12" style="margin-top: 10px">
                     <g:if test="${contrato?.tipoContrato?.codigo?.trim() == 'C'}">
                         <div class="span1 formato text-info">Tipo</div>
-                        <div class="span4 text-info"><strong>${contrato?.tipoContrato?.descripcion}</strong></div>
+                        <div class="span4 text-info">${contrato?.tipoContrato?.descripcion}</div>
                     </g:if>
                     <g:else>
                         <div class="span1 formato">Tipo</div>
-                        <div class="span4">${contrato?.tipoContrato?.descripcion}</div>
+                        <g:if test="${complementario}">
+                            <div class="span2">${contrato?.tipoContrato?.descripcion}</div>
+                        </g:if>
+                        <g:else>
+                            <div class="span4">${contrato?.tipoContrato?.descripcion}</div>
+                        </g:else>
                     </g:else>
+                    <g:if test="${complementario}">
+                        <div class="text-info span3" style="margin-left: -40px">
+                            <strong>Complementario: ${complementario?.codigo}</strong>
+                        </div>
+                    </g:if>
 
                     <div class="span2 formato">Fecha de Suscripción</div>
                     <div class="span2">${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}</div>
