@@ -144,9 +144,15 @@
             Cuadrilla Tipo
         </g:link>
     </div>
-    <a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"
-       style="margin-top: -10px;" id="btnBorrar">
-        <i class="icon-trash"></i>
+
+
+
+
+    %{--<a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"--}%
+    <a href="#" class="btn " title="Reiniciar la Fórmula Polinómica"
+       %{--style="margin-top: -10px;" id="btnBorrar">--}%
+       style="margin-top: -10px;" id="btnReiniciarFP">
+        <i class="icon-refresh"></i>
         Reiniciar la Fórmula Polinomica
     </a>
     <g:link controller="reportes5" action="imprimirCoeficientes" id="${obra?.id}" class="btn btnImprimir" title="Imprimir la Fórmula Polinómica" style="margin-top: -10px;">
@@ -157,8 +163,10 @@
         Crear Índices
     </a>
 
-    <a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"
-       style="margin-top: -10px;" id="btnEliminar">
+    %{--<a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"--}%
+    <a href="#" class="btn " title="Borrar la Fórmula Polinómica"
+       %{--style="margin-top: -10px;" id="btnEliminar">--}%
+       style="margin-top: -10px;" id="btnEliminarFP">
         <i class="icon-trash"></i>
         Eliminar Fórmula
     </a>
@@ -183,7 +191,7 @@
 
         <div id="formulaRight" class="right ui-corner-right">
             <div id="rightContents" class="hide">
-                <div id="divError" class="alert alert-error hide"></div>
+                %{--<div id="divError" class="alert alert-error hide"></div>--}%
 
                 <div class="btn-toolbar" style="margin-left: 10px; margin-bottom:0;">
                     <div class="btn-group">
@@ -294,6 +302,22 @@
         <a href="#" class="btn btn-danger" id="btnMoverCancelar">Cancelar</a>
         <a href="#" class="btn btn-success" id="btnMoverAceptar">Aceptar</a>
     </div>
+</div>
+
+<div id="reiniciarDialog">
+    <fieldset>
+        <div class="span3">
+            Esta seguro que desea reiniciar la fórmula polinómica?
+        </div>
+    </fieldset>
+</div>
+
+<div id="borrarDialog">
+    <fieldset>
+        <div class="span3">
+            Esta seguro que desea borrar la fórmula polinómica?
+        </div>
+    </fieldset>
 </div>
 
 <script type="text/javascript">
@@ -840,20 +864,80 @@
             return false;
         });
 
-        $("#btnBorrar").click(function () {
-            $(this).replaceWith(spinner);
-            $.ajax({
-                async   : false,
-                type    : "POST",
-                url     : "${createLink(action:'borrarFP')}",
-                data    : {
-                    obra : ${obra.id}
-                },
-                success : function (msg) {
+        $("#btnReiniciarFP").click(function () {
+            $("#reiniciarDialog").dialog("open");
+        });
+
+        $("#reiniciarDialog").dialog({
+
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 370,
+            height: 150,
+            position: 'center',
+            title: 'Reiniciar Fórmula Polinómica',
+            buttons: {
+                "Aceptar": function () {
+
+                    $(this).replaceWith(spinner);
                     $.ajax({
                         async   : false,
                         type    : "POST",
-                        url     : "${createLink(action:'insertarVolumenesItem')}",
+                        url     : "${createLink(action:'borrarFP')}",
+                        data    : {
+                            obra : ${obra.id}
+                        },
+                        success : function (msg) {
+                            $.ajax({
+                                async   : false,
+                                type    : "POST",
+                                url     : "${createLink(action:'insertarVolumenesItem')}",
+                                data    : {
+                                    obra : ${obra.id},
+                                    sbpr: ${subpre}
+                                },
+                                success : function (msg1) {
+                                    location.reload(true);
+                                }
+                            });
+                        }
+                    });
+                    return false;
+
+                },
+                "Cancelar": function () {
+
+                    $("#reiniciarDialog").dialog("close")
+
+                }
+
+            }
+
+        });
+
+        $("#btnEliminarFP").click(function () {
+            $("#borrarDialog").dialog("open");
+        });
+
+        $("#borrarDialog").dialog({
+
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 370,
+            height: 150,
+            position: 'center',
+            title: 'Borrar Fórmula Polinómica',
+            buttons: {
+                "Aceptar": function () {
+                    $(this).replaceWith(spinner);
+                    $.ajax({
+                        async   : false,
+                        type    : "POST",
+                        url     : "${createLink(action:'borrarFP')}",
                         data    : {
                             obra : ${obra.id}
                         },
@@ -861,25 +945,12 @@
                             location.reload(true);
                         }
                     });
-                }
-            });
-            return false;
-        });
-
-        $("#btnEliminar").click(function () {
-            $(this).replaceWith(spinner);
-            $.ajax({
-                async   : false,
-                type    : "POST",
-                url     : "${createLink(action:'borrarFP')}",
-                data    : {
-                    obra : ${obra.id}
+                    return false;
                 },
-                success : function (msg) {
-                    location.reload(true);
+                "Cancelar": function () {
+                    $("#borrarDialog").dialog("close")
                 }
-            });
-            return false;
+            }
         });
 
         $("#btnAgregarItems").click(function () {
@@ -1027,7 +1098,7 @@
             },
 
             types : {
-                valid_children : [ "fp", "it", "mover"],
+                valid_children : [ "fp", "it"],
                 types          : {
                     fp : {
                         icon           : {
@@ -1038,12 +1109,6 @@
                     it : {
                         icon           : {
                             image : icons.it
-                        },
-                        valid_children : [""]
-                    },
-                    mover : {
-                        icon           : {
-                            image : icons.mover
                         },
                         valid_children : [""]
                     }

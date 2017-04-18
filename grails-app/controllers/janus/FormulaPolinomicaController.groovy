@@ -105,7 +105,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
     def coeficientes() {
 
-//        println "coef " + params
+        println "coef " + params
 
         if (!params.tipo) {
             params.tipo = 'p'
@@ -272,46 +272,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def cn2 = dbConnectionService.getConnection()
         def updates = dbConnectionService.getConnection()
-        // itemcmpo ya no se usa
-        //--------------------------------
-/*
-        def sql = "SELECT v.voit__id, v.obra__id, v.item__id, v.voitpcun, v.voitcntd, v.voitcoef, " +
-                "v.voitordn, v.voittrnp, v.voitrndm, i.itemnmbr, i.dprt__id, d.sbgr__id, " +
-                "s.grpo__id, o.clmndscr, o.clmncdgo " +
-                "from vlobitem v, dprt d, sbgr s, item i, mfcl o " +
-                "where v.item__id = i.item__id and i.dprt__id = d.dprt__id and " +
-                "d.sbgr__id = s.sbgr__id and o.clmndscr = i.itemcmpo || '_T' and " +
-                "v.obra__id = ${params.obra} and o.obra__id=${params.obra} " +
-                "order by s.grpo__id"
-        println "**insertarVolumenesItem sql: " + sql
-        def sbpr = params.sbpr
-        cn.eachRow(sql.toString()) { r ->
-            println "**r-> " + r
-            def codigo = ""
-            if (r['grpo__id'] == 1 || r['grpo__id'] == 3)
-                codigo = "sS3"
-            else
-                codigo = "sS5"
-            def select = "select valor from mfvl where clmncdgo=${r['clmncdgo']} and codigo='${codigo}' and " +
-                    "obra__id =${params.obra} and sbpr__id = ${sbpr}"
-            println "**cn2: " + select
-            def valor = 0.000000
-            cn2.eachRow(select.toString()) { r2 ->
-                println "r2 "+r2
-                valor = r2['valor']
-                if (!valor)
-                    valor = 0
-                def sqlUpdate = "update vlobitem set voitcoef= ${valor} where voit__id = ${r['voit__id']}"
-                println "**actualiza vlobitem con: " + sqlUpdate
-                updates.execute(sqlUpdate.toString())
-            }
-        }
-*/
-        //------------------------------
 
         def fp = FormulaPolinomica.findAllByObraAndSubPresupuesto(obra, sbpr)
         if (fp.size() == 0) {
-//            def indice21 = Indice.findByCodigo("Cem")
             def indice21 = Indice.findByCodigo("Cem-Po")
             def indiSldo = Indice.findByCodigo("SLDO")
             def indiMano = Indice.findByCodigo("MO")
