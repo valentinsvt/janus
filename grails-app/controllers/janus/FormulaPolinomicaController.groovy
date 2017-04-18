@@ -105,7 +105,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
     def coeficientes() {
 
-        println "coef " + params
+//        println "coef " + params
 
         if (!params.tipo) {
             params.tipo = 'p'
@@ -573,17 +573,37 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def moverItem () {
-//        println("params mover " + params)
+        println("params moverUI " + params)
         def obra = Obra.get(params.obra)
-//        def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
-
+        def itemFormula = ItemsFormulaPolinomica.get(params.id)
         def fp = FormulaPolinomica.withCriteria {
             eq("obra", obra)
             like("numero", "p%")
+            ne("numero",itemFormula.formulaPolinomica.numero)
+            isNotNull("indice")
             order 'numero', 'asc'
         }
+        println("fp " + fp)
 
-        return [cof: fp]
+        return [cof: fp, nodo: params.id]
+    }
+
+    def moverSave () {
+        println("params mover " + params)
+        def obra = Obra.get(params.obra)
+        def fp = FormulaPolinomica.findByObraAndNumero(obra, params.coef)
+        def itemFormula = ItemsFormulaPolinomica.get(params.nodo)
+
+        itemFormula.formulaPolinomica = fp
+
+        if(!itemFormula.save(flush: true)){
+            render "NO"
+        }else{
+            render "OK"
+        }
+
+        println("fp " + fp)
+
     }
 
 } //fin controller

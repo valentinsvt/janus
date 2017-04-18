@@ -108,6 +108,20 @@
     </div>
 </g:if>
 
+<div class="span12 hide" style="margin-bottom: 10px;" id="divError">
+    <div class="alert alert-error" role="status">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <span id="spanError"></span>
+    </div>
+</div>
+
+<div class="span12 hide" style="margin-bottom: 10px;" id="divOk">
+    <div class="alert alert-info" role="status">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <span id="spanOk"></span>
+    </div>
+</div>
+
 <div class="tituloTree">
     Coeficientes de la fórmula polinómica de la obra: ${obra.descripcion + " (" + obra.codigo + ")"}
 </div>
@@ -274,17 +288,13 @@
         <h3 id="modalTitleMover">Mover Item</h3>
     </div>
 
-    <div class="modal-body" id="modalBodyMover">
-        %{--<strong class="span2">Mover Item al coeficiente:</strong>  <g:select name="nameMover" id="selectMover" from="${cof?.numero}" sel="${cof?.numero}"/>--}%
-    </div>
+    <div class="modal-body" id="modalBodyMover"> </div>
 
     <div class="modal-footer" id="modalFooterMover">
         <a href="#" class="btn btn-danger" id="btnMoverCancelar">Cancelar</a>
         <a href="#" class="btn btn-success" id="btnMoverAceptar">Aceptar</a>
     </div>
 </div>
-
-
 
 <script type="text/javascript">
 
@@ -319,7 +329,7 @@
 
     var icons = {
         edit   : "${resource(dir: 'images/tree', file: 'edit.png')}",
-        mover : "${resource(dir: 'images/tree', file: 'group_pr.png')}",
+        mover : "${resource(dir: 'images/tree', file: 'lugar_all.png')}",
         delete : "${resource(dir: 'images/tree', file: 'delete.gif')}",
 
 
@@ -655,13 +665,11 @@
                     %{--separator_after  : false,--}%
                     %{--icon             : icons.mover,--}%
                     %{--action           : function (obj) {--}%
-
                         %{--$.ajax({--}%
                             %{--type    : "POST",--}%
                             %{--url     : "${createLink(action: 'moverItem')}",--}%
                             %{--data    : {--}%
                                 %{--id : nodeId,--}%
-                                %{--coe: '${cof}',--}%
                                 %{--obra: ${obra?.id}--}%
                             %{--},--}%
                             %{--success : function (msg) {--}%
@@ -680,15 +688,33 @@
 
 
     $("#btnMoverAceptar").click(function () {
-        var seleccionado = $("#selectMover").attr('sel');
+//        var $seleccionado = $(".idCoefi option:selected").text();
+        var $seleccionado = $(".idCoefi option:selected").val();
+        var nd = $(".idNodo").val()
         $.ajax({
             type    : "POST",
-            url     : "${createLink(controller: 'formulaPolinomica', action: 'moverItem')}",
+            url     : "${createLink(controller: 'formulaPolinomica', action: 'moverSave')}",
             data    : {
-                id : nodeId
+                coef : $seleccionado,
+                obra : '${obra?.id}',
+                nodo : nd
             },
             success : function (msg) {
-             $("#modalMover").modal("hide");
+                if(msg == 'OK'){
+                    $("#modalMover").modal("hide");
+                    $("#divError").hide();
+                    $("#spanOk").html("Item reasignado correctamente");
+                    $("#divOk").show();
+                    setTimeout(function() {
+                        location.reload(true);
+                    }, 1000);
+
+                }else{
+                    $("#modalMover").modal("hide");
+                    $("#spanError").html("Error al reasignar el item!");
+                    $("#divError").show()
+                }
+
             }
         });
     });
@@ -722,9 +748,6 @@
         $("#btnRegresar").click(function () {
             var url = $(this).attr("href");
             var total = parseFloat($("#spanTotal").data("valor"));
-
-//                    console.log(total, Math.abs(total - 1), Math.abs(total - 1) > 0.0001);
-
             var liCont = 0;
             var liEq = 0;
             $("#tree").find("li[rel=fp]").each(function () {
@@ -827,7 +850,6 @@
                     obra : ${obra.id}
                 },
                 success : function (msg) {
-//                            ////console.log(msg);
                     $.ajax({
                         async   : false,
                         type    : "POST",
@@ -836,7 +858,6 @@
                             obra : ${obra.id}
                         },
                         success : function (msg) {
-//                                    ////console.log(msg);
                             location.reload(true);
                         }
                     });
@@ -855,13 +876,11 @@
                     obra : ${obra.id}
                 },
                 success : function (msg) {
-//                            ////console.log(msg);
                     location.reload(true);
                 }
             });
             return false;
         });
-
 
         $("#btnAgregarItems").click(function () {
             var $btn = $(this);
@@ -895,7 +914,6 @@
                         }
                     });
 
-                    //                        console.log(dataAdd, msg);
                     if (msg != "") {
                         $("#divError").html("<ul>" + msg + "</ul>").show("pulsate", 2000, function () {
                             setTimeout(function () {
@@ -927,8 +945,6 @@
                                             insertados[p[0]] = p[1];
                                         }
                                     }
-
-                                    //                                    ////console.log("insertados", insertados);
                                     for (i = 0; i < rows2add.length; i++) {
                                         var it = rows2add[i];
                                         var add = it.add;
@@ -936,8 +952,6 @@
 
                                         add.attr.id = "it_" + insertados[add.attr.item];
                                         totalInit += parseFloat(add.attr.valor);
-                                        //                                        ////console.log(add.attr.item, add);
-
                                         $tree.jstree("create_node", $target, "first", add);
                                         if (!$target.hasClass("jstree-open")) {
                                             $('#tree').jstree("open_node", $target);
@@ -976,7 +990,6 @@
                     });
                 }
             }
-
             return false;
         });
 
@@ -1014,7 +1027,7 @@
             },
 
             types : {
-                valid_children : [ "fp", "it"],
+                valid_children : [ "fp", "it", "mover"],
                 types          : {
                     fp : {
                         icon           : {
@@ -1025,6 +1038,12 @@
                     it : {
                         icon           : {
                             image : icons.it
+                        },
+                        valid_children : [""]
+                    },
+                    mover : {
+                        icon           : {
+                            image : icons.mover
                         },
                         valid_children : [""]
                     }

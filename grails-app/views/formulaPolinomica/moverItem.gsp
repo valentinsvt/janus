@@ -1,3 +1,4 @@
+<%@ page import="janus.ItemsFormulaPolinomica" %>
 <%--
   Created by IntelliJ IDEA.
   User: gato
@@ -5,25 +6,12 @@
   Time: 13:53
 --%>
 <div>
-    %{--<div class="row">--}%
-        %{--<div class="span">--}%
-            %{--Cambiar <strong>${formula.indice.descripcion}</strong>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+    <g:hiddenField name="nameNodo" class="idNodo" value="${nodo}"/>
 
     <div class="row">
         <div class="span">
             Mover Item al coeficiente:
-            <g:select name="indice" from="${cof?.numero}" class="span4"/>
+            <g:select name="nombreCof" from="${cof?.numero}" class="span4 idCoefi" cf="${cof?.id}"/>
         </div>
     </div>
-
-    %{--<div class="row">--}%
-        %{--<div class="span">--}%
-            %{--Modificar valor &nbsp;&nbsp;&nbsp;--}%
-            %{--<input type="number" step="0.001" pattern="#.###"/>--}%
-            %{--<g:field type="number" name="valor" step="0.001" pattern="#.###" value="${formula.valor}" class="input-mini"/>--}%
-            %{--(suma <g:formatNumber number="${total}" format="##,##0.#####" locale="ec"/>)--}%
-        %{--</div>--}%
-    %{--</div>--}%
 </div>
