@@ -536,23 +536,24 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def moverItem () {
-        println("params moverUI " + params)
+//        println("params moverUI " + params)
         def obra = Obra.get(params.obra)
         def itemFormula = ItemsFormulaPolinomica.get(params.id)
         def fp = FormulaPolinomica.withCriteria {
             eq("obra", obra)
             like("numero", "p%")
             ne("numero",itemFormula.formulaPolinomica.numero)
+            ne("numero", "p01")
             isNotNull("indice")
             order 'numero', 'asc'
         }
-        println("fp " + fp)
+//        println("fp " + fp)
 
         return [cof: fp, nodo: params.id]
     }
 
     def moverSave () {
-        println("params mover " + params)
+//        println("params mover " + params)
         def obra = Obra.get(params.obra)
         def fp = FormulaPolinomica.findByObraAndNumero(obra, params.coef)
         def itemFormula = ItemsFormulaPolinomica.get(params.nodo)
@@ -565,7 +566,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             render "OK"
         }
 
-        println("fp " + fp)
+//        println("fp " + fp)
 
     }
 
