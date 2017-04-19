@@ -49,11 +49,11 @@
             %{--<i class="icon-table"></i>--}%
            VAE Excel
         </a>
-        %{--<g:if test="${obra?.estado != 'R' && duenoObra == 1}">--}%
+        <g:if test="${obra?.estado != 'R' && duenoObra == 1}">
             <a href="#" class="btn btn-danger" title="Eliminar subpresupuesto" id="borrarSubpre">
                 <i class="icon-trash"></i>
             </a>
-        %{--</g:if>--}%
+        </g:if>
     </div>
 </div>
 <table class="table table-bordered table-striped table-condensed table-hover">
