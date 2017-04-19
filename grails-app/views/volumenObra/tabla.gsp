@@ -9,8 +9,8 @@
     <div class="span-6" style="margin-bottom: 5px">
         <b>Subpresupuesto:</b>
         <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion"
-                  style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"
-                  noSelection="['-1': 'TODOS']"/>
+                  style="width: 260px;font-size: 10px" id="subPres_desc" value="${subPre}"
+                  noSelection="['-1': 'TODOS']" class="selector"/>
 
         %{--todo descomentar esto--}%
         %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>--}%
@@ -49,6 +49,11 @@
             %{--<i class="icon-table"></i>--}%
            VAE Excel
         </a>
+        %{--<g:if test="${obra?.estado != 'R' && duenoObra == 1}">--}%
+            <a href="#" class="btn btn-danger" title="Eliminar subpresupuesto" id="borrarSubpre">
+                <i class="icon-trash"></i>
+            </a>
+        %{--</g:if>--}%
     </div>
 </div>
 <table class="table table-bordered table-striped table-condensed table-hover">
@@ -128,8 +133,16 @@
     </fieldset>
 </div>
 
+<div id="borrarSubpreDialog">
+    <fieldset>
+        <div class="span3">
+            Esta seguro que desea borrar este subpresupuesto con todos sus rubros?
+        </div>
+    </fieldset>
+</div>
 
 <script type="text/javascript">
+
 
     $.contextMenu({
         selector: '.item_row',
@@ -450,5 +463,71 @@
            }
         }
     });
+
+    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
+    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
+
+    $("#borrarSubpreDialog").dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        width: 320,
+        height: 180,
+        position: 'center',
+        title: 'Borrar Subpresupuesto',
+        buttons: {
+            "Aceptar": function () {
+//                $("#spinner").show();
+                $(this).replaceWith(spinner)
+                var seleccionado = $(".selector option:selected").val();
+                $.ajax({
+                    type: "POST",
+                     url: "${g.createLink(controller: 'volumenObra',action:'eliminarSubpre')}",
+                    data: {
+                         sub: seleccionado,
+                        obra: '${obra?.id}'
+                    },
+                    success: function (msg) {
+                         var parts = msg.split("_");
+                         if(parts[0] == 'OK'){
+                             $("#spinner").hide();
+                             $("#borrarSubpreDialog").dialog("close");
+                             $("#divError").hide();
+                             $("#spanOk").html(parts[1]);
+                             $("#divOk").show();
+
+                             setTimeout(function() {
+                                 location.reload(true);
+                             }, 1000);
+                         }else{
+                             $("#spinner").hide();
+                             $("#borrarSubpreDialog").dialog("close");
+                             $("#spanError").html(parts[1]);
+                             $("#divError").show()
+
+                         }
+                    }
+                });
+
+            },
+            "Cancelar" : function () {
+                $("#borrarSubpreDialog").dialog("close");
+            }
+        }
+    });
+
+
+    $("#borrarSubpre").click(function () {
+        var todos = $(".selector option:selected").val();
+        if(todos == -1){
+            alert("Seleccione un subpresupuesto!")
+        }else{
+//            console.log("--> " + todos);
+            $("#borrarSubpreDialog").dialog("open");
+        }
+
+    });
+
 
 </script>

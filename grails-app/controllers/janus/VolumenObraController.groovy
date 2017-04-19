@@ -428,4 +428,40 @@ class VolumenObraController extends janus.seguridad.Shield {
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Item", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Rubros", anchos: anchos, extras: extras, landscape: true])
         }
     }
+
+    def eliminarSubpre () {
+        println("params eliminar sub " + params)
+        def subpresupuesto = SubPresupuesto.get(params.sub)
+        def obra = Obra.get(params.obra)
+        def volumenes = VolumenesObra.findAllBySubPresupuestoAndObra(subpresupuesto, obra)
+//        println("vols " + volumenes)
+        def cronogramas = Cronograma.findAllByVolumenObraInList(volumenes)
+        def errores = 0
+
+        if(cronogramas){
+//            println("Existe vlob en crono")
+            render "NO_No se puede borrar el subpresupuesto, uno o mas rubros ya se encuentran en el cronograma!"
+        }else{
+            volumenes.each {v->
+//                v.delete(flush: true)
+                if(!v.delete(flush:true)){
+                    errores += v.errors.getErrorCount()
+                }
+            }
+            println("errores " + errores)
+            if(errores == 0){
+//                if(!subpresupuesto.delete(flush:true)){
+//                render "NO_Error al borrar el subpresupuesto"
+//                }else{
+                 render "OK_Subpresupuesto borrado correctamente"
+//                }
+            }else{
+                render "NO_Error al borrar el subpresupuesto"
+            }
+        }
+
+
+//        println("cronos " + cronogramas)
+
+    }
 }

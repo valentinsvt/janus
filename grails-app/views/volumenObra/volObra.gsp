@@ -38,6 +38,20 @@
             </g:if>
         </div>
 
+    <div class="span12 hide" style="margin-bottom: 10px;" id="divError">
+        <div class="alert alert-error" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <span id="spanError"></span>
+        </div>
+    </div>
+
+    <div class="span12 hide" style="margin-bottom: 10px;" id="divOk">
+        <div class="alert alert-success" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <span id="spanOk"></span>
+        </div>
+    </div>
+
         %{--<div class="tituloTree">--}%
         <div style=" font-size: 14px;  color: #0088CC;">
             Volúmenes de la obra: ${obra.descripcion + " (" + obra.codigo + ")"}
