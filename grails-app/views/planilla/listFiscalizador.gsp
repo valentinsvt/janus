@@ -153,17 +153,20 @@
                                     </g:if>
                                 </g:if>
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C', 'L'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id: planillaInstance.id, contrato: planillaInstance.contrato.id]"
                                             rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>
                                     </g:link>
                                 </g:if>
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O']}">
-                                    <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'L']}">
+                                    <g:if test="${(contrato?.fiscalizador?.id == session.usuario.id)}">
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo != 'L'}">
                                         <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                             <i class="icon-reorder icon-large"></i>
                                         </g:link>
+                                        </g:if>
+                                        %{--<g:if test="${!planillaInstance.fechaMemoSalidaPlanilla || planillaInstance.tipoPlanilla.codigo == 'L'}">--}%
                                         <g:if test="${!planillaInstance.fechaMemoSalidaPlanilla}">
                                             <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
                                                 <i class="icon-gear"></i>
@@ -182,11 +185,13 @@
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:elseif>
+%{--
                                 <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
                                     <g:link controller="planilla2" action="liquidacion" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:elseif>
+--}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
                                     <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
@@ -207,11 +212,14 @@
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
+%{--
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                    <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                    <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planillaInstance.id}"
+                                            class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
+--}%
                             </td>
 
                             <td style="text-align: center;">
@@ -472,7 +480,7 @@
 
                 $(".btnProcesaQ").click(function () {
                     var id = $(this).data("id");
-//                    console.log("id:" + id)
+                    console.log("id:" + id)
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'procesarLq')}",

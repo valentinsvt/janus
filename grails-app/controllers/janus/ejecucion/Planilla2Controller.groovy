@@ -151,17 +151,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
 
     def liquidacion() {
-//        session.override = false
-//        println "params " + params
         def planilla = Planilla.get(params.id)
         def override = false
-//        println planilla
-//        println planilla.contrato
-//        println planilla.contrato.oferta
-//        println planilla.contrato.oferta.concurso
-//        println planilla.contrato.oferta.concurso.obra
-        def obra = planilla.contrato.oferta.concurso.obra
+        def obra = planilla.contrato.obra
         def contrato = planilla.contrato
+
         def planillasAnterioresTot = Planilla.withCriteria {
             eq("contrato", contrato)
             and {
@@ -175,16 +169,20 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 }
             }
         }
+
         def planillasAnteriores = Planilla.withCriteria {
             eq("contrato", contrato)
             or {
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
+                eq("tipoPlanilla", TipoPlanilla.findByCodigo("Q"))
             }
             order("id", "asc")
         }
-        def planillaAnterior = planillasAnteriores[planillasAnteriores.size() - 1]
-//        println "planilla 2 " + planillaAnterior
+
+//        def planillaAnterior = planillasAnteriores[planillasAnteriores.size() - 1]
+        def planillaAnterior = planillasAnteriores[-1]
+
         def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
         def finalObraCrono = periodosEjec.pop().fechaFin
         def tarde = false
@@ -195,6 +193,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             eq("liquidacion", 1)
             eq("codigo", obra.codigo + "LQ")
         }
+/*
         if (obraLiquidacion.size() == 0) {
             println "error 1"
             flash.message = "No se encontró la obra de liquidación"
@@ -205,22 +204,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
             flash.message = "Se encontró más de una obra de liquidación"
             redirect(action: "errores")
             return
-        } else if (obraLiquidacion.size() == 1) {
-            obraLiquidacion = obraLiquidacion[0]
-//            def pcs = FormulaPolinomicaContractual.withCriteria {
-//                and {
-//                    eq("contrato", contrato)
-//                    or {
-//                        ilike("numero", "c%")
-//                        and {
-//                            ne("numero", "P0")
-//                            ne("numero", "p01")
-//                            ilike("numero", "p%")
-//                        }
-//                    }
-//                    order("numero", "asc")
-//                }
-//            }
+        } else
+*/
+//        if (obraLiquidacion.size() == 1) {
+        if (obra) {
+            obraLiquidacion = obra
             def pcs = FormulaPolinomica.withCriteria {
                 and {
                     eq("obra", obraLiquidacion)
@@ -236,25 +224,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 }
             }
 
-//            def cs = FormulaPolinomica.findAllByObraAndNumeroIlike(obraLiquidacion, "C%", [sort: "numero"])
             def cs = FormulaPolinomica.withCriteria {
                 eq("obra", obraLiquidacion)
                 ilike("numero", "C%")
-//                gt("valor", 0)
                 order("numero")
             }
-//            def cs = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "C%", [sort: "numero"])
-//        def ps=  FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato,"P%",[sort:"numero"])
-//            def ps = FormulaPolinomicaContractual.withCriteria {
-//                and {
-//                    eq("contrato", contrato)
-//                    and {
-//                        ne("numero", "P0")
-//                        ilike("numero", "p%")
-//                    }
-//                    order("numero", "asc")
-//                }
-//            }
             def ps = FormulaPolinomica.withCriteria {
                 and {
                     eq("obra", obraLiquidacion)
@@ -269,17 +243,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
             def cMayor0 = cs.findAll { it.valor > 0 }
             def pMayor0 = ps.findAll { it.valor > 0 }
 
-//            println "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-//            println cs
-//            println cMayor0
-//            println cMayor0.size()
-//            println ps
-//            println pMayor0
-//            println pMayor0.size()
-//            println "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-
             if (cMayor0.size() == 0 || pMayor0.size() == 1) {
-                println "NO hay la fp de liq"
+                println "No hay la FP de liquidación"
                 println obraLiquidacion.id
                 def url = g.createLink(controller: "formulaPolinomica", action: "coeficientes", id: obraLiquidacion.id)
                 def link = "<a href='${url}' class='btn btn-danger'>Fórmula polinómica de liquidación</a>"
@@ -305,36 +270,23 @@ class Planilla2Controller extends janus.seguridad.Shield {
             def errorNull = ""
             flash.message = ""
             planillasAnteriores.each { pl ->
-//                println pl
                 def pers = PeriodoPlanilla.findAllByPlanilla(pl)
                 pers.each { p ->
-//                    println "\t" + p
                     def periodo
                     if (tarde) {
-//                        println "\t\t1: " + p.fechaIncio + "    " + p.fechaFin
                         periodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(p.fechaIncio, p.fechaFin)
-//                        println "Periodo q incluye " + p.fechaIncio.format("dd-MM-yyyy") + " y " + p.fechaFin.format("dd-MM-yyyy") + ": " + periodo
                     } else {
-//                        println "\t\t2: " + pl.fechaPago
                         periodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPago, pl.fechaPago)
-//                        println "Periodo q incluye " + pl.fechaPago.format("dd-MM-yyyy") + " y " + pl.fechaPago.format("dd-MM-yyyy") + ": " + periodo
                     }
-//                    println "\t\t" + periodo
                     p.periodoLiquidacion = periodo
                     p.save(flush: true)
                     existe = verificaIndices(pcs, periodo, 0)
-//                    println "\t\t" + existe
                     if (!periodo || !existe) {
                         errorNull = true
                     }
                     if (periodo != existe) {
                         error = true
-//                        if (!error.contains(periodo.toString())) {
-//                            error += "<li>No se encontraron todos los valores de índice para el periodo " + periodo.toString() + "</li>"
-////                            flash.message += "<li>No se encontraron todos los valores de índice para el periodo " + periodo.toString() + "</li>"
-//                        }
                     }
-//                    println "\t\t\t" + error
                 }
             }
 
@@ -351,7 +303,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 redirect(action: "errores")
                 return
             }
-//            println "AQUI"
 
             def tableWidth = 150 * periodos.size() + 400
             ///////////////////////////////////////////////////**********planillas*****************////////////////////////////////////////////////////////////
@@ -361,8 +312,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
             }
             planillaAnticipo = planillaAnticipo.pop()
-//            def fechaOferta = planillaAnticipo.contrato.oferta.fechaEntrega - 30
-//            def fechaAnticipo = planillaAnticipo.fechaPresentacion
 
             def periodosAnticipo = PeriodoPlanilla.findAllByPlanilla(planillaAnticipo, [sort: "id"])
             def planillasAvances = Planilla.withCriteria {
@@ -370,10 +319,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
             }
             def periodosAvances = PeriodoPlanilla.findAllByPlanillaInList(planillasAvances, [sort: "id"])
-//            def perOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaOferta, fechaOferta)
-//            def perAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaAnticipo, fechaAnticipo)
-//        println "planilla "+planilla+"  "+fechaOferta+"  "+fechaAnticipo+" pers "+periodos+"  "+perOferta+"  "+perAnticipo
-
 
             def tablaBo = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:&&px;'>"
             tablaBo += "<thead>"
@@ -403,9 +348,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
             cs.each { c ->
                 if (c.valor > 0) {
-//                println "\t\t" + c
-//                println c.class
-//                println "\n"
                     tablaBo += "<tr>"
                     tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
                     tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
@@ -533,22 +475,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         totPlan += p.parcialPlanilla
                         tablaP0 += "<td class='number'>${numero(act2, 2)}</td>"
                         tablaP0 += "<td class='number'>${numero(p.p0, 2)}</td>"
-//                    def retraso=0, multa=0
-//                    if (p.parcialCronograma > p.parcialPlanilla) {
-//                        def totalContrato = contrato.monto
-//                        def prmlMulta = contrato.multaPlanilla
-//                        def valorDia = p.parcialCronograma / p.dias
-//                        retraso = ((p.parcialCronograma - p.parcialPlanilla) / valorDia).round(2)
-//                        multa = ((totalContrato) * (prmlMulta / 1000) * retraso).round(2)
-//                    }
-////                    totalMultaRetraso+=multa
-//                    bodyMultaRetraso += "<tr>"
-//                    bodyMultaRetraso += "<th class='tal'>${fechaConFormato(p.fechaIncio,'MMM-yy')}</th>"
-//                    bodyMultaRetraso += "<td class='number'>${p.parcialCronograma}</td>"
-//                    bodyMultaRetraso += "<td class='number'>${p.parcialPlanilla}</td>"
-//                    bodyMultaRetraso += "<td class='number'>${retraso}</td>"
-//                    bodyMultaRetraso += "<td class='number'>${multa}</td>"
-//                    bodyMultaRetraso += "</tr>"
                     }
                 }
             }
@@ -615,11 +541,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                             tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(per.totalLiq, 3)}</div></td>"
                             valor = per.totalLiq
                         } else {
-//                            println "*****************************************************"
-//                            println p.indice
-//                            println per.periodoLiquidacion
-//                            println ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion)
-//                            println "*****************************************************"
                             vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion).valor
                             tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(vlinOferta, 2)}</div></td>"
                             valor = vlinOferta
@@ -650,7 +571,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                             vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion).valor
                             dec = 2
                         }
-//                    println "error "+p.indice+" "+p.indice.id+"  "+per.periodo.id+"   "+vlin+"  "+vlinOferta+"  "+p.valor+"  "+"  "+per.periodo.id
                         def valor = (vlin / vlinOferta * p.valor).round(3)
 
                         def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomicaLiq=${p.id} and planillaLiq=${per.planilla.id}")
@@ -677,8 +597,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     }
 
                 }
-
-
                 tablaFr += "</tr>"
             }
 
@@ -693,7 +611,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     p.reajusteLiq += planillasAnteriores[i - 1].reajusteLiq
                     p.save(flush: true)
                 }
-
             }
 
             tr1 = "<tr>"
@@ -748,12 +665,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
             if (!planilla.save(flush: true)) {
                 println "error planilla reajuste " + planilla.id
             }
-
-//        tr5+="<th colspan='2'>REAJUSTE TOTAL</th><th class='number'>"+reajusteTotal+"</th>"
-//
-//        tablaFr+="<tfoot>"
-//        tablaFr+=tr1+tr2+tr3+tr4+tr5
-//        tablaFr+="</tfoot></table>"
 
             //////////////////////////////////////////fin anticipo//////////////////////////////////////////////////////////////////////////////////////////////////
 

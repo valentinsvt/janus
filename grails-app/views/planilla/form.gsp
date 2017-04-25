@@ -441,6 +441,7 @@
                 <div class="alert alert-warning">
                     <h4>Alerta</h4>
 
+                    anticipoPagado: ${anticipoPagado} id:${planillaInstance?.id} tipos:${tipos.find{it.codigo == 'A'}} fc:${planillaInstance?.fechaMemoSalidaPlanilla}
                     <p style="margin-top: 10px;">
                         <i class="icon-warning-sign icon-2x pull-left"></i>
                         Ya se ha efectuado la planilla de liquidación del reajuste, no puede crear nuevas planillas.

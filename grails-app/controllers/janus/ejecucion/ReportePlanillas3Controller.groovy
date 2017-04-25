@@ -235,7 +235,8 @@ class ReportePlanillas3Controller {
 
         def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla, [sort: "periodo", order: "asc"])
 
-        def conDetalles = true
+//        def conDetalles = true
+        def conDetalles = planilla.tipoPlanilla.codigo != 'L'
         if (params.detalle) {
             conDetalles = Boolean.parseBoolean(params.detalle)
         }
@@ -970,6 +971,10 @@ class ReportePlanillas3Controller {
 
 //        println("anteriores " + valoresAnteriores)
 //        println("total " + totalAnteriores)
+
+        if(planilla.tipoPlanilla.codigo == 'L') {
+            totalAnteriores = planillasService.reajusteAnteriorLq(planilla.id)
+        }
 
         totalProcesadoD2 = promedioActualD2 - totalAnteriores
 
