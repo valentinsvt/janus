@@ -622,27 +622,20 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 
-        def si = 0
+        def garantia
 
-        def garantias = Garantia.findAllByContrato(contrato);
+        def garantias = Garantia.findAllByContrato(contrato, [sort: 'fechaFinalizacion']);
 
         if(contrato.contratista.tipo != 'E') {
-            garantias.each {
-                if(it.fechaFinalizacion >= new Date()){
-                    si += 1
-                }
-            }
+            garantia = garantias? garantias.last().fechaFinalizacion : null
         } else {
-            si = 1
+            garantia = new Date()
         }
-//
-//        println("garantias" + garantias)
-        println("si tiene garantías" + si)
-//        println fp
 
         def firma = Persona.findAllByCargoIlike("Direct%");
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
-        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma, garantia: si]
+        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList,
+                firma: firma, garantia: garantia]
     }
 
 

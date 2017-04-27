@@ -275,11 +275,12 @@
                             </g:if>
 
                         %{--${contrato.administrador.id} session: ${session.usuario.id}  garantía: ${garantia}--}%
-                        ${lblBtn} ${garantia}
+                            
+                        %{--${lblBtn} ${garantia}--}%
 
                             <g:if test="${(lblBtn == 3) || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                 <g:set var="lblBtn" value="${3}"/>
-                                <g:if test="${garantia != 0}">
+                                <g:if test="${garantia >= planillaInstance.fechaFin}">
 
                                     <g:if test="${(contrato.administrador.id == session.usuario.id) && ((janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0) || (planillaInstance.tipoPlanilla.codigo == 'C'))}">
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}"
