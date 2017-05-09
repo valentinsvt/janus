@@ -611,6 +611,7 @@ class ActaTagLib {
         tabla += "<tbody>"
         def totalProvisional = 0, totalDefinitivo = 0, totalDiferencia = 0
         def liquidacion = (Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('L')).size() > 0)
+        def diferencia = 0
         rjpl.each { rj ->
             if (rj.planillaReajustada.tipoPlanilla.codigo != "L" && rj.planillaReajustada.tipoPlanilla.codigo != "M" && rj.planillaReajustada.tipoPlanilla.codigo != "C") {
                 tabla += "<tr>"
@@ -623,8 +624,9 @@ class ActaTagLib {
                     tabla += "DEL ${rj.fechaInicio?.format('yyyy-MM-dd')} AL ${rj.fechaFin?.format('yyyy-MM-dd')}"
                 }
                 tabla += "</td>"
-                def diferencia = 0
-                /** todo: hacaer liquidación del reajuste **/
+
+                /** TODO: hacer liquidación del reajuste   --- 9-may-2017 */
+/*
                 if(liquidacion) {
                     diferencia = planilla.reajusteLiq - planilla.reajuste
                     tabla += "<td style='text-align:center;'>${numero(numero: planilla.reajuste)}</td>"
@@ -636,6 +638,7 @@ class ActaTagLib {
                     tabla += "<td style='text-align:center;'></td>"
                     tabla += "<td style='text-align:center;'></td>"
                 }
+*/
 
 
                 totalProvisional += rj.valorReajustado
@@ -643,6 +646,12 @@ class ActaTagLib {
                 totalDiferencia += diferencia
 
                 tabla += "</tr>"
+            } else if(rj.planillaReajustada.tipoPlanilla == 'L'){
+
+                diferencia = rj.valorReajustado
+                tabla += "<td style='text-align:center;'>${numero(numero: rj.valorReajustado)}</td>"
+                tabla += "<td style='text-align:center;'></td>"
+                tabla += "<td style='text-align:center;'></td>"
             }
         }
         tabla += "</tbody>"
