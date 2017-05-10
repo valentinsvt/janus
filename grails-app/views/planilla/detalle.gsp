@@ -395,7 +395,10 @@
                         numero($(this), parseFloat($(this).val()));
 
                         var v100 = $(".totalAcu").data("max");
-                        var v125 = parseFloat($(".totalAcu").data("max")) * 1.25;
+//                        var v125 = parseFloat($(".totalAcu").data("max")) * 1.25;
+                        var v125 = parseFloat($(".totalAcu").data("max")) * parseFloat(${adicionales});
+                        var adicionales = Math.round(v125 * 100)/100 + " con el " +
+                            parseInt((parseFloat(${adicionales}) - 1) *100) + "% de incremento";
 
                         var total = 0, totalAcu = 0;
                         //esta parte calcula los totales
@@ -409,6 +412,7 @@
                             }
                         });
 
+//                        console.log('totalAcu', totalAcu, 'v100', v100, 'v125', v125)
                         if (totalAcu > v100 && totalAcu <= v125) {
                             $.box({
                                 imageClass : "box_info",
@@ -429,7 +433,7 @@
                             $("#btnSave").addClass("disabled");
                             $.box({
                                 imageClass : "box_info",
-                                text       : "El monto total supera el 125% del monto del contrato.",
+                                text       : "El monto " + Math.round(totalAcu)*100/100 + " supera el máximo de " + adicionales,
                                 title      : "Alerta",
                                 iconClose  : false,
                                 dialog     : {

@@ -3872,10 +3872,17 @@ class PlanillaController extends janus.seguridad.Shield {
     def detalle() {
         def planilla = Planilla.get(params.id)
         def contrato = Contrato.get(params.contrato)
-
         def obra = contrato.obra
-
         def detalle = [:]
+        def obrasAdicionales = 1.25
+
+        /**
+         *   máximo valor a considerar de obras adicionales desde el 20-mar-2017 --> 5%
+         */
+        if(contrato.fechaFirma > Date.parse('dd-MM-yyy', '20-03-2017')) {
+            obrasAdicionales = 1.05
+        }
+
         def fpsp = FormulaSubpresupuesto.findAllByReajuste(planilla.formulaPolinomicaReajuste)
         def sbpr = []
         fpsp.each {
@@ -3936,7 +3943,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println codigoPerfil
 //        println editable
 
-        return [planilla: planilla, detalle: detalle, precios: precios, obra: obra,
+        return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, adicionales: obrasAdicionales,
                 planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
 
@@ -4026,7 +4033,16 @@ class PlanillaController extends janus.seguridad.Shield {
         def totalAnterior = anteriores.size() > 0 ? anteriores.sum { it.valor } : 0
 
 //        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 21
-        def max = contrato.monto * 0.1  /* máximo valor a consderar de las planillas costo + porcentae Nuevo (2017) 2% */
+        def max = contrato.monto * 0.1
+
+        /**
+         *   máximo valor a considerar de las planillas costo + porcentaje desde el 20-mar-2017 --> 2%
+         */
+//        if(new Date() > Date.parse('dd-MM-yyy', '20-03-2017')) {
+        if(contrato.fechaFirma > Date.parse('dd-MM-yyy', '20-03-2017')) {
+            max = contrato.monto * 0.02
+        }
+
         max -= totalAnterior
 
         def json = new JsonBuilder(dets)

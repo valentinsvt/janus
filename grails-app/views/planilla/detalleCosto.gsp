@@ -162,6 +162,7 @@
         <script type="text/javascript">
 
             var iva = ${iva}/100;
+            var anterior = 0;
 
             function initRows() {
                 var rows = ${detalles};
@@ -363,6 +364,7 @@
                 $("#tdTotal").text(number_format(data.total, 2, ".", ","));
                 $("#btnAdd").hide();
                 $("#btnSave").show();
+                anterior = data.total
             }
 
             function updateRow(data) {
@@ -514,8 +516,11 @@
                     var data = $tr.data();
                     var $tdTotal = $("#tdTotalFinal");
                     var max = parseFloat($tdTotal.data("max"));
-                    var tot = parseFloat($tdTotal.data("val"));
-                    var val = parseFloat(data.total) + parseFloat(tot);
+                    var tot = parseFloat($tdTotal.data("valor"));
+                    var val = parseFloat(data.total) + parseFloat(tot) - parseFloat(anterior);
+
+//                    console.log('max', max, 'tot', tot, 'val', val, 'total:', $tdTotal.val(), 'anterior: ', anterior);
+//                    if (val <= max) {
                     if (val <= max) {
                         $.ajax({
                             type    : "POST",
