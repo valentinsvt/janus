@@ -378,11 +378,11 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Dirección Administradora</div>
+                    <div class="span1 formato">Dirección Administradora</div>
 
-                    <div class="span3">
-                        <g:select name="depAdministrador.id" from="${janus.Departamento.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"
-                                  value="${contrato?.depAdministradorId}" class="required"/>
+                    <div class="span4">
+                        <g:select name="depAdministrador.id" from="${janus.Departamento.list([sort: 'descripcion'])}" optionKey="id"
+                                  optionValue="descripcion"  value="${contrato?.depAdministradorId}" class="required span4"/>
                     </div>
 
                     <div class="span2 formato">Indirectos</div>

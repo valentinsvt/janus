@@ -502,7 +502,7 @@ class ReportesPlanillasController {
                 def fin = plnl.fechaFin
                 while (dia <= fin) {
                     /** eliminar suspensiones **/
-                    if(dia >= suspension.prejfcin && dia <= suspension.prejfcfn) {
+                    if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
 //                        println "dia: $dia es suspensión"
                     } else {
                         def valM = "", valT = ""
