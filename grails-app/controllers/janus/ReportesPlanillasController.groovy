@@ -949,7 +949,7 @@ class ReportesPlanillasController {
                     addCellTabla(tablaClima, new Paragraph('Tarde', fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
                     while (dia <= fin) {
-                        if(dia >= suspension.prejfcin && dia <= suspension.prejfcfn) {
+                        if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
 //                            println "dia: $dia es suspensión"
                         } else {
                             def valM = "", valT = ""
