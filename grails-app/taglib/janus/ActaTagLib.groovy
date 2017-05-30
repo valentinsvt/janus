@@ -626,7 +626,6 @@ class ActaTagLib {
                 tabla += "</td>"
 
                 /** TODO: hacer liquidación del reajuste   --- 9-may-2017 */
-/*
                 if(liquidacion) {
                     diferencia = planilla.reajusteLiq - planilla.reajuste
                     tabla += "<td style='text-align:center;'>${numero(numero: planilla.reajuste)}</td>"
@@ -638,7 +637,6 @@ class ActaTagLib {
                     tabla += "<td style='text-align:center;'></td>"
                     tabla += "<td style='text-align:center;'></td>"
                 }
-*/
 
 
                 totalProvisional += rj.valorReajustado
