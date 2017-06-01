@@ -3879,7 +3879,8 @@ class PlanillaController extends janus.seguridad.Shield {
         /**
          *   máximo valor a considerar de obras adicionales desde el 20-mar-2017 --> 5%
          */
-        if(contrato.fechaFirma > Date.parse('dd-MM-yyy', '20-03-2017')) {
+//        println "nuevo contrato... ${contrato.fechaSubscripcion}"
+        if(contrato.fechaSubscripcion > Date.parse('dd-MM-yyy', '20-03-2017')) {
             obrasAdicionales = 1.05
         }
 
@@ -3943,6 +3944,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println codigoPerfil
 //        println editable
 
+        println "adicionales: $obrasAdicionales"
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, adicionales: obrasAdicionales,
                 planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
@@ -4039,7 +4041,7 @@ class PlanillaController extends janus.seguridad.Shield {
          *   máximo valor a considerar de las planillas costo + porcentaje desde el 20-mar-2017 --> 2%
          */
 //        if(new Date() > Date.parse('dd-MM-yyy', '20-03-2017')) {
-        if(contrato.fechaFirma > Date.parse('dd-MM-yyy', '20-03-2017')) {
+        if(contrato.fechaSubscripcion > Date.parse('dd-MM-yyy', '20-03-2017')) {
             max = contrato.monto * 0.02
         }
 
