@@ -99,16 +99,14 @@
                 </g:if>
             </g:if>
 
-            <fieldset class="" style="position: relative; margin-top: 10px;border-bottom: 1px solid black;">
+            <fieldset class="grupo" style="position: relative; margin-top: 10px;border-bottom: 1px solid black;">
 
-                <div class="span12" style="margin-top: 0px; margin-bottom: 0px;">
-
-                    %{--<g:if test="${contrato?.codigo != null}">--}%
-
-                    <div class="span1 formato">Contrato N°</div>
-
-                    <div class="span3"><g:textField name="codigo" maxlength="20" class="codigo required caps"
-                                                    value="${contrato?.codigo}" style="font-weight: bold"/></div>
+                    <div class="grupo span4" style="display: inline;">
+                    <label class="span1 formato" style="width: 90px;">Contrato N°</label>
+                        <div class="span2"><g:textField name="codigo" maxlength="20" class="codigo required caps"
+                                    value="${contrato?.codigo}" style="font-weight: bold; width: 140px"/></div>
+                        <p class="help-block ui-helper-hidden"></p>
+                    </div>
 
                     <div class="span2 formato">Memo de Distribución</div>
 
@@ -118,7 +116,6 @@
                         Contrato ${contrato?.estado == 'R'? 'Registrado' : 'No Registrado'}
                     </div>
 
-                </div> <!--DSAFSD-->
             </fieldset>
 
 
@@ -612,7 +609,38 @@
 //                $("#monto").val(number_format(monto, 2, ".", ","));
             }
 
-            $("#frm-registroContrato").validate();
+
+            $("#frm-registroContrato").validate({
+                errorClass     : "help-block",
+                errorPlacement : function (error, element) {
+                    if (element.parent().hasClass("input-group")) {
+                        error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                    element.parents(".grupo").addClass('has-error');
+                },
+                success        : function (label) {
+                    label.parents(".grupo").removeClass('has-error');
+                },
+                rules  : {
+                    codigo : {
+                        remote : {
+                            url  : "${createLink(action:'validaCdgo')}",
+                            type : "post",
+                            data : {
+                                id  : "${contrato?.id}",
+                                antes: "${contrato?.codigo}"
+                            }
+                        }
+                    }
+                },
+                messages       : {
+                    codigo : {
+                        remote : "El código ya existe"
+                    }
+                }
+            });
 
             function validarNum(ev) {
                 /*
@@ -633,6 +661,7 @@
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
+
             function validarInt(ev) {
                 /*
                  48-57      -> numeros
@@ -651,6 +680,7 @@
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
+
 
             $(".number").keydown(function (ev) {
                 return validarInt(ev);

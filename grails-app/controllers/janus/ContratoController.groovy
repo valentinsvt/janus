@@ -44,7 +44,7 @@ class ContratoController extends janus.seguridad.Shield {
         contrato.obra.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
 
         def liquidacion = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('Q'))
-        if(liquidacion){
+        if (liquidacion) {
             liquidacion?.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
             liquidacion.save(flush: true)
         }
@@ -73,7 +73,7 @@ class ContratoController extends janus.seguridad.Shield {
             println "***complementario: $complementario"
 //            println "ANT " + contrato
 
-            if(contrato){
+            if (contrato) {
                 if (!contrato?.anticipo) {
 //                println "...no tiene anticipo....."
                     if (contrato.monto && contrato.porcentajeAnticipo) {
@@ -92,13 +92,13 @@ class ContratoController extends janus.seguridad.Shield {
 //            println ".........." + obra
                 /** direccion administradora del contrato **/
                 def dptoDireccion = Departamento.findAllByDireccion(contrato.depAdministrador.direccion)
-            println "departamentos... a listar:" + dptoDireccion
+                println "departamentos... a listar:" + dptoDireccion
                 def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion)
                 def directores = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalDireccion).persona.id
 //            println "directores:" + directores + "  usurio: $session.usuario id:" + session.usuario.id
                 def esDirector = directores.contains(session.usuario.id) ? "S" : "N"
 
-            println "esDirector: $esDirector directores: $directores"
+                println "esDirector: $esDirector directores: $directores"
 
 
                 def personalFis = Persona.findAllByDepartamento(Departamento.findByCodigo('FISC'))
@@ -108,7 +108,7 @@ class ContratoController extends janus.seguridad.Shield {
                 def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
 
                 [campos: campos, contrato: contrato, esDirector: esDirector, esDirFis: esDirFis, complementario: complementario]
-            }else{
+            } else {
                 def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
                 [campos: campos, complementario: complementario]
             }
@@ -131,7 +131,7 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
     def saveDelegado() {
-        println "AQUI: "+params
+        println "AQUI: " + params
         def contrato = Contrato.get(params.id)
         def delegado = Persona.get(params.pref)
 
@@ -403,7 +403,7 @@ class ContratoController extends janus.seguridad.Shield {
         def formulaPolinomicaReajusteInstance = new FormulaPolinomicaReajuste()
 
         render(view: '../formulaPolinomicaReajuste/_form', model: [formulaPolinomicaReajusteInstance: formulaPolinomicaReajusteInstance,
-            cntr: params.cntr])
+                                                                   cntr                             : params.cntr])
     }
 
     def grabaFprj() {
@@ -414,11 +414,11 @@ class ContratoController extends janus.seguridad.Shield {
         println "nueva: cntr: ${fprj.contrato} tp: ${fprj.tipoFormulaPolinomica.codigo} " +
                 "dscr: ${fprj.descripcion}"
 
-            if(!fprj.save(flush: true)){
-                println "error al crear la FP del contrato, errores: " + fprj.errors
-            } else {
-                println "+++si guarda fprj, $fprj"
-            }
+        if (!fprj.save(flush: true)) {
+            println "error al crear la FP del contrato, errores: " + fprj.errors
+        } else {
+            println "+++si guarda fprj, $fprj"
+        }
 
         def fp = FormulaPolinomicaContractual.findAllByContratoAndReajuste(fprj.contrato, fprjDsde)
         fp.each {
@@ -435,19 +435,19 @@ class ContratoController extends janus.seguridad.Shield {
             }
         }
 
-        render ("ok")
+        render("ok")
     }
 
-    def tablaFormula_ajax () {
+    def tablaFormula_ajax() {
 //        println "tablaFormula_ajax params: $params"
         def contrato = Contrato.get(params.cntr)
         def fpReajuste
-        if(params.id) {
+        if (params.id) {
             fpReajuste = FormulaPolinomicaReajuste.get(params.id)
         } else
-          fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
+            fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
 
-        if(fpReajuste == null){
+        if (fpReajuste == null) {
             copiaFpDesdeObra(contrato, false)
             fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
         }
@@ -471,7 +471,7 @@ class ContratoController extends janus.seguridad.Shield {
         return [ps: ps, cuadrilla: cuadrilla]
     }
 
-    def copiarFormula () {
+    def copiarFormula() {
 
 //        def muestra = FormulaPolinomicaContractual.get(params.id)
 //        def codigoMuestra = muestra.codigo
@@ -525,15 +525,15 @@ class ContratoController extends janus.seguridad.Shield {
             nuevoP.version = it.version
             nuevoP.reajuste = nuevoReajuste
 
-            if(!nuevoP.save(flush: true)){
+            if (!nuevoP.save(flush: true)) {
                 println("error al copiar la formula polinomica")
                 errorCopiado = 1
             }
         }
 
-        if(errorCopiado != 0){
+        if (errorCopiado != 0) {
             render "no"
-        }else{
+        } else {
             render "si"
         }
 
@@ -1023,9 +1023,9 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
 //        println("params con " + params.conReajuste)
-        if(params.conReajuste == 'on'){
+        if (params.conReajuste == 'on') {
             params.conReajuste = 1
-        }else{
+        } else {
             params.conReajuste = 0
         }
 
@@ -1042,7 +1042,7 @@ class ContratoController extends janus.seguridad.Shield {
             }//no existe el objeto
             contratoInstance.properties = params
 //            println "contrato padre: ${params.padre.id} ${params.padre.id.class}"
-            if(params.padre.id == "-1") {
+            if (params.padre.id == "-1") {
                 contratoInstance.padre = null
             }
             contratoInstance.periodoInec = indice
@@ -1146,7 +1146,7 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
 
-    def asignar () {
+    def asignar() {
 //        println("asignar params " + params)
         def contrato = Contrato.get(params.contrato)
         def subPres = VolumenesObra.findAllByObra(contrato.obra).subPresupuesto.unique()
@@ -1155,16 +1155,16 @@ class ContratoController extends janus.seguridad.Shield {
 
 //        println "formulas: $formulas"
 
-         return [contrato: contrato, subpresupuesto: subPres, formulas: formulas, fpsp: fpsp]
+        return [contrato: contrato, subpresupuesto: subPres, formulas: formulas, fpsp: fpsp]
     }
 
-    def saveAsignarFormula () {
+    def saveAsignarFormula() {
 //        println("saveAsignarFormula  " + params)
         def cont = 0
 
         params.each { k, v ->  // 'k' es el valor de sbpr y 'v' el id de fprj
             def partes = k.split("_")
-            if(partes.size() == 2) {
+            if (partes.size() == 2) {
 //                println "subpresupuesto: ${partes[1].toLong()} con valor de fprj.id = $v"
                 def fpsp = FormulaSubpresupuesto.get(partes[1].toLong())
                 fpsp.reajuste = FormulaPolinomicaReajuste.get(v)
@@ -1174,55 +1174,55 @@ class ContratoController extends janus.seguridad.Shield {
                 }
             }
         }
-        if(cont > 0){
+        if (cont > 0) {
             render "no"
-        }else{
+        } else {
             render "si"
         }
     }
 
-    def saveAsignarFormula2 () {
+    def saveAsignarFormula2() {
 
         println("saveAsignarFormula2 " + params)
 
         def su = []
         def fxs = []
         def part
-        params.each{
-            if(it.key.toString().startsWith("sub")){
+        params.each {
+            if (it.key.toString().startsWith("sub")) {
                 su += it.value
             }
-            if(it.key.toString().startsWith("fxs")){
+            if (it.key.toString().startsWith("fxs")) {
                 fxs += it.value
             }
         }
 
         part = params.formu.toString().split("_")
 
-        println "formula: " +part
-        println "subpr: " +su
-        println "formula x sp: " +fxs
+        println "formula: " + part
+        println "subpr: " + su
+        println "formula x sp: " + fxs
 
         def cont
 
-        su.eachWithIndex{g, h->
+        su.eachWithIndex { g, h ->
 
             def formxSub = FormulaSubpresupuesto.get(fxs[h]);
 
             formxSub.reajuste = FormulaPolinomicaReajuste.get(part[h])
             formxSub.subPresupuesto = SubPresupuesto.get(g)
 
-            if(!formxSub.save(flush: true)){
+            if (!formxSub.save(flush: true)) {
                 println("Error al asignar las formulas polinomicas")
                 cont = 1
-            }else{
+            } else {
                 cont = 0
             }
         }
 
-        if(cont == 1){
+        if (cont == 1) {
             render "no"
-        }else{
+        } else {
             render "si"
         }
 
@@ -1233,7 +1233,7 @@ class ContratoController extends janus.seguridad.Shield {
         def fpReajuste = FormulaPolinomicaReajuste.findByContrato(cntr)
         def tipo = TipoFormulaPolinomica.get(1)
 
-        if(fpReajuste == null){
+        if (fpReajuste == null) {
             def fprj = new FormulaPolinomicaReajuste(contrato: cntr,
                     tipoFormulaPolinomica: tipo,
                     descripcion: "Fórmula polinómica del contrato principal")
@@ -1245,7 +1245,7 @@ class ContratoController extends janus.seguridad.Shield {
             }
         }
 
-        if(copia){
+        if (copia) {
             def fp = FormulaPolinomica.findAllByObra(cntr.obra)
             fp.each {
                 if (it.valor > 0) {
@@ -1283,6 +1283,17 @@ class ContratoController extends janus.seguridad.Shield {
 
     }
 
+    def validaCdgo() {
+        println "validaCdgo: $params"
+        def cntr = Contrato.findByCodigo(params.codigo)
+        if (cntr) {
+            println "retorna false: ya existe"
+            render false
+        } else {
+            println "retorna true: ok"
+            render true
+        }
+    }
 
 
 } //fin controller
