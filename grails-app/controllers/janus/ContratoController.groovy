@@ -1284,13 +1284,17 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
     def validaCdgo() {
-        println "validaCdgo: $params"
-        def cntr = Contrato.findByCodigo(params.codigo)
+        def codigo = params.codigo.toUpperCase()
+        def cntr = Contrato.findByCodigo(codigo)
+//        println "validaCdgo: $params"
         if (cntr) {
-            println "retorna false: ya existe"
+//            println "retorna false: ya existe"
+            if(params.id && params.codigo == params.antes) {
+                render true
+            }
             render false
         } else {
-            println "retorna true: ok"
+//            println "retorna true: ok"
             render true
         }
     }
