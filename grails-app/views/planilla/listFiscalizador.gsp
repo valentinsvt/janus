@@ -39,7 +39,7 @@
                         <i class="icon-arrow-left"></i>
                         Contrato
                     </g:link>
-                    <g:if test="${anticipo > 0}">
+                    <g:if test="${anticipo >= 0}">
                         <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                             <g:link action="form" class="btn" params="[contrato: contrato?.id]">
                                 <i class="icon-file"></i>
@@ -143,6 +143,20 @@
                             </td>
                             <td>
 
+                                <g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                    <g:link action="form" class="btn btn-small" rel="tooltip" title="Editar"
+                                            params="[contrato: contrato.id]" id="${planillaInstance.id}">
+                                        <i class="icon-pencil icon-large"></i>
+                                    </g:link>
+                                    <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
+                                        <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                            <i class="icon-gear"></i>
+                                        </div>
+                                    </g:if>
+                                </g:if>
+
+
+%{--
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                     <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                                         <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
@@ -152,6 +166,7 @@
                                         </g:if>
                                     </g:if>
                                 </g:if>
+--}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C', 'L'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id: planillaInstance.id, contrato: planillaInstance.contrato.id]"
@@ -243,17 +258,20 @@
 
                                     <g:if test="${lblBtn > 0}">
                                         <g:if test="${lblBtn == 2}">
-                                            <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
+                                            %{--<g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">--}%
                                                 <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                                                     <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                                         Enviar planilla
                                                     </a>
                                                 </g:if>
-                                            </g:if>
+                                            %{--</g:if>--}%
                                         </g:if>
-                                        <g:if test="${lblBtn == 3 || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
+
+                                        %{--<g:if test="${lblBtn == 3 || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">--}%
+                                        <g:if test="${lblBtn == 3}">
                                             Pedir pago
                                         </g:if>
+
                                         <g:if test="${lblBtn == 4}">
                                             Informar pago
                                         </g:if>
@@ -467,7 +485,7 @@
 //                    console.log("id:" + id)
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(action:'procesar')}",
+                        url     : "${createLink(action:'procesarLq')}",
                         data    : {
                             id : id
                         },

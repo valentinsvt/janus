@@ -3076,7 +3076,7 @@ class ReportesPlanillasController {
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
 
-        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+//        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla.reajuste)
 
         def baos = new ByteArrayOutputStream()
         def name = "memo_pedido_pago_anticipo_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -3238,7 +3238,7 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("${numero(reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("SUMA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + reajuste, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("A FAVOR DEL CONTRATISTA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + reajuste, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
