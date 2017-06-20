@@ -27,6 +27,9 @@
         .caps {
             text-transform : uppercase;
         }
+        .help-block {
+            color: #f00;
+        }
         </style>
 
 
