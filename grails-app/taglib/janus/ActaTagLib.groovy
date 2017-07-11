@@ -610,7 +610,10 @@ class ActaTagLib {
 
         tabla += "<tbody>"
         def totalProvisional = 0, totalDefinitivo = 0, totalDiferencia = 0
-        def liquidacion = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('L')).last()
+        def liquidacion = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('L'))
+        if(liquidacion) {
+            liquidacion = liquidacion.last()
+        }
         def diferencia = 0
         def rj_lq = 0
         def sql = "select rjplvlor from rjpl where plnl__id = ${liquidacion.id} and plnlrjst = "
