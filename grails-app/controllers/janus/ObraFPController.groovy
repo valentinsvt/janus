@@ -1224,7 +1224,7 @@ class ObraFPController {
                         "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
                 //println "tarifaHoraria:" + tx_cr
             } else {
-                tx_cr = "select itempcun pcun from obit where item__id = ${item__id}"
+                tx_cr = "select itempcun pcun from obit where item__id = ${item__id} and obra__id = ${id}"
             }
 
             //println "...... segunda: " + tx_cr

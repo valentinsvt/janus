@@ -13,9 +13,14 @@ class ExportController extends janus.seguridad.Shield {
         def obra = janus.Obra.get(params.obra)
 
         def oferente = Persona.get(params.oferente)
+        def cn = dbConnectionService.getConnectionOferentes()
+        /** todo: hacer que si ya existe en oferentes no se inserte lapersona. **/
+//        def of_oferente = cn.rows("select count(*) cnta from prsn where ")
+//        if()
+
         def r = oferentesService.exportDominio(janus.Persona, "prsnjnid", oferente)
 
-        //println ">>>>" + r
+        println ">>>>" + r
         if (r !=-1) {
             def oferenteId = r
             def res = oferentesService.exportDominio(janus.Obra, "obrajnid", obra, params.oferente, "ofrt__id", r, "ofrt__id", "select * from obra where obrajnid=${obra.id} and ofrt__id=${r}")
