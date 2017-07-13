@@ -270,19 +270,21 @@ class ContratoController extends janus.seguridad.Shield {
 
 
     def registroContrato() {
+        println "registroContrato: $params"
         def contrato
         def planilla  // si hay planillas de inhabilita el desregistrar
         def complementario
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
             planilla = Planilla.findAllByContrato(contrato)
-            complementario = Contrato.findByPadre(contrato)
+//            complementario = Contrato.findByPadre(contrato)
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
 
             [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-            [campos: campos, complementario: complementario]
+            [campos: campos]
+//            [campos: campos, complementario: complementario]
         }
     }
 
@@ -1002,9 +1004,10 @@ class ContratoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+//        println "-->> save: >>>>>>${params.id}<<<<<"
         def contratoInstance
 
-//        println "-->> save" + params
+        if(params."padre.id" == -1) params."padre.id" = null
 
         if (params.codigo) {
             params.codigo = params.codigo.toString().toUpperCase()
@@ -1041,7 +1044,7 @@ class ContratoController extends janus.seguridad.Shield {
                 return
             }//no existe el objeto
             contratoInstance.properties = params
-//            println "contrato padre: ${params.padre.id} ${params.padre.id.class}"
+            println "actualizado: ${contratoInstance.objeto} ${params.objeto}"
             if (params.padre.id == "-1") {
                 contratoInstance.padre = null
             }
@@ -1062,7 +1065,13 @@ class ContratoController extends janus.seguridad.Shield {
             contratoInstance.periodoInec = indice
         } //es create
 
-        if (!contratoInstance.save(flush: true)) {
+//        contratoInstance.depAdministrador = Departamento.get(params."depAdministrador.id")
+
+        println "graba contrato... ${contratoInstance.id}"
+        try {
+            contratoInstance.save(flush: true)
+        } catch (e) {
+            println "errrr: $e"
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Contrato " + (contratoInstance.id ? contratoInstance.id : "") + "</h4>"
             str += "<ul>"
@@ -1078,6 +1087,26 @@ class ContratoController extends janus.seguridad.Shield {
             redirect(action: 'registroContrato')
             return
         }
+/*
+        if (!contratoInstance.save(flush: true)) {
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Contrato " + (contratoInstance.id ? contratoInstance.id : "") + "</h4>"
+            str += "<ul>"
+            contratoInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex { arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+            flash.message = str
+            redirect(action: 'registroContrato')
+            return
+        }  else {
+            println "errores: ${contratoInstance.errors}"
+        }
+*/
 
         if (params.id) {
             flash.clase = "alert-success"
@@ -1286,13 +1315,15 @@ class ContratoController extends janus.seguridad.Shield {
     def validaCdgo() {
         def codigo = params.codigo.toUpperCase()
         def cntr = Contrato.findByCodigo(codigo)
-//        println "validaCdgo: $params"
+        println "validaCdgo: $params"
         if (cntr) {
 //            println "retorna false: ya existe"
             if(params.id && params.codigo == params.antes) {
                 render true
+                return
             }
             render false
+            return
         } else {
 //            println "retorna true: ok"
             render true

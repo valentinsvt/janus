@@ -224,7 +224,8 @@
                                 </g:if>
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
-                                    <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                    <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}"
+                                            class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
@@ -290,12 +291,14 @@
                                     </g:elseif>
 
                                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
-                                        <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                        <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago"
+                                           data-id="${planillaInstance.id}">
                                             <i class="icon-print"></i>
                                         </a>
                                     </g:if>
                                     <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['P', 'Q']) && Math.abs(lblBtn) > 3}">
-                                        <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                        <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago"
+                                           data-id="${planillaInstance.id}">
                                             <i class="icon-print"></i>
                                         </a>
 
@@ -365,7 +368,7 @@
                 });
 
                 $(".btnPedidoPago").click(function () {
-                    location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPago')}/" + $(this).data("id");
+                    location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'memoPedidoPago')}/" + $(this).data("id");
                     return false;
                 });
 

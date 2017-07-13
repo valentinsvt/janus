@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <g:form class="registroContrato" name="frm-registroContrato" action="save">
+        <g:form class="registroContrato" name="frmRegistroContrato" action="save">
 
             <g:hiddenField name="id" value="${contrato?.id}"/>
 
@@ -277,11 +277,13 @@
 
                     <div class="span2"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
+%{--
                     <g:if test="${complementario}">
                         <div class="text-info">
                             <strong>Tiene el contrato complementario: ${complementario?.codigo}</strong>
                         </div>
                     </g:if>
+--}%
 
                 </div>
 
@@ -302,17 +304,24 @@
 
                     <div class="span2 formato">Multa por retraso de obra</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         <g:textField name="multaRetraso" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> x 1000
+                                     value="${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
                     </div>
-
+                    <div class="span1" style="margin-left: -100px">
+                        x 1000
+                    </div>
+                    <div class="span1">
+                    </div>
 
                     <div class="span2 formato">Multa por no presentación de planilla</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         <g:textField name="multaPlanilla" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> x 1000
+                                     value="${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
+                    </div>
+                    <div class="span1" style="margin-left: -100px">
+                        x 1000
                     </div>
 
                 </div>
@@ -321,16 +330,24 @@
 
                     <div class="span2 formato">Multa por incumplimiento del cronograma</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         <g:textField name="multaIncumplimiento" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaIncumplimiento, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> x 1000
+                                     value="${g.formatNumber(number: contrato?.multaIncumplimiento, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
+                    </div>
+                    <div class="span1" style="margin-left: -100px">
+                        x 1000
+                    </div>
+                    <div class="span1">
                     </div>
 
                     <div class="span2 formato">Multa por no acatar disposiciones del fiscalizador</div>
 
-                    <div class="span3">
+                    <div class="span2">
                         <g:textField name="multaDisposiciones" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaDisposiciones, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> x 1000
+                                     value="${g.formatNumber(number: contrato?.multaDisposiciones, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
+                    </div>
+                    <div class="span1" style="margin-left: -100px">
+                        x 1000
                     </div>
 
                 </div>
@@ -344,8 +361,12 @@
 
                     <div class="span2 formato">Plazo</div>
 
-                    <div class="span3"><g:textField name="plazo" class="plazo activo" style="width: 50px" maxlength="4"
-                                                    value="${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"/> Días</div>
+                    <div class="span2"><g:textField name="plazo" class="plazo activo" style="width: 50px" maxlength="4"
+                                                    value="${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"/>
+                    </div>
+                    <div class="span1" style="margin-left: -100px">
+                        Días
+                    </div>
 
                 </div>
 
@@ -365,14 +386,16 @@
                     </div>
 
 
-                <g:if test="${contrato?.codigo != null}">
+                %{--<g:if test="${contrato?.codigo != null}">--}%
                     <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
-                    <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list([sort: 'fechaFin'])}" class="indiceOferta activo" value="${contrato?.periodoInec?.id}" optionValue="descripcion" optionKey="id"/></div>
-                   </g:if>
-                    <g:else>
-                        <div class="span6" id="filaIndice">
-                        </div>
-                    </g:else>
+                    <div class="span3"><g:select name="periodoInec.id" from="${janus.pac.PeriodoValidez.list([sort: 'fechaFin'])}"
+                                                 class="indiceOferta activo" value="${contrato?.periodoInec?.id}"
+                                                 optionValue="descripcion" optionKey="id"/></div>
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<div class="span6" id="filaIndice">--}%
+                    %{--</div>--}%
+                %{--</g:else>--}%
 
                 </div>
 
@@ -605,17 +628,21 @@
         <script type="text/javascript">
 
             function updateAnticipo() {
-                var porcentaje = $("#porcentajeAnticipo").val();
-                var monto = $("#monto").val().replace(",", "");
-                var anticipoValor = (porcentaje * (monto)) / 100;
+                %{--console.log("reg:", "${contrato?.estado}", "${contrato?.estado != 'R'}")--}%
+                if("${contrato?.estado}" != 'R') {
+                    var porcentaje = $("#porcentajeAnticipo").val();
+                    var monto = $("#monto").val().replace(/,/g, "");
+                    var anticipoValor = Math.round(parseFloat(porcentaje) * parseFloat(monto)) / 100;
+                    $("#anticipo").val(anticipoValor);
+                }
 //                $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
 //                $("#monto").val(number_format(monto, 2, ".", ","));
             }
 
 
-            $("#frm-registroContrato").validate({
-                errorClass     : "help-block",
-                errorPlacement : function (error, element) {
+            $("#frmRegistroContrato").validate({
+                errorClass: "help-block",
+                errorPlacement: function (error, element) {
                     if (element.parent().hasClass("input-group")) {
                         error.insertAfter(element.parent());
                     } else {
@@ -623,7 +650,7 @@
                     }
                     element.parents(".grupo").addClass('has-error');
                 },
-                success        : function (label) {
+                success: function (label) {
                     label.parents(".grupo").removeClass('has-error');
                 },
                 rules  : {
@@ -722,22 +749,22 @@
             });
 
 
-            $("#anticipo").keydown(function (ev) {
-                return validarNum(ev);
-            }).keyup(function () {
-                        var enteros = $(this).val();
-                        updateAnticipo();
+//            $("#anticipo").keydown(function (ev) {
+//                return validarNum(ev);
+//            }).keyup(function () {
+//                        var enteros = $(this).val();
+//                        updateAnticipo();
 //                        var porcentaje = $("#porcentajeAnticipo").val();
 //                        var monto = $("#monto").val();
 //                        var anticipoValor = (porcentaje * (monto)) / 100;
 //                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ""));
-                    }).click(function () {
-                        updateAnticipo();
+//                    }).click(function () {
+//                        updateAnticipo();
 //                        var porcentaje = $("#porcentajeAnticipo").val();
 //                        var monto = $("#monto").val();
 //                        var anticipoValor = (porcentaje * (monto)) / 100;
 //                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
-                    });
+//                    });
 
             $("#financiamiento").keydown(function (ev) {
                 return validarNum(ev);
@@ -790,7 +817,7 @@
                     data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" + $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
                 }
                 data += "&ordenado=" + $("#campoOrdn :selected").val() + "&orden=" + $("#orden :selected").val();
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'contrato',action:'buscarObra')}",
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'contrato', action:'buscarObra')}",
                     data     : data,
                     success  : function (msg) {
                         $("#spinner").hide();
@@ -864,8 +891,11 @@
             });
 
             $("#btn-aceptar").click(function () {
+//                console.log("guardar", $(".indiceOferta").val())
                 if($(".indiceOferta").val()){
-                    $("#frm-registroContrato").submit();
+//                    console.log("hace submit")
+                    $("#frmRegistroContrato").submit();
+//                    console.log("DESPUÉS DE submit")
                 }else{
                     alert("No ha seleccionado un indice!")
                 }
