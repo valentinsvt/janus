@@ -62,6 +62,11 @@
                     <i class="icon-copy"></i>
                     Copiar documentos de la obra
                 </a>
+
+                <a href="#" class="btn btn-ajax btn-info" id="docRespaldo">
+                    <i class="icon-file"></i>
+                    Respaldo para Obras Adicionales
+                </a>
             </div>
 
             <div class="span3" id="busca">
@@ -165,6 +170,35 @@
                             concurso : ${concurso.id},
                             contrato : "${contrato?.id}",
                             show     : "${params.show}"
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                            $("#modalTitle").html("Crear Documento");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-DocumentoProceso").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn new
+
+                $("#docRespaldo").click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'form_ajax')}",
+                        data    : {
+                            concurso : ${concurso.id},
+                            contrato : "${contrato?.id}",
+                            show     : "${params.show}",
+                            docuResp : 'S'
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');

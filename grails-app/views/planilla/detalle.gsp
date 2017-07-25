@@ -397,8 +397,16 @@
                         var v100 = $(".totalAcu").data("max");
 //                        var v125 = parseFloat($(".totalAcu").data("max")) * 1.25;
                         var v125 = parseFloat($(".totalAcu").data("max")) * parseFloat(${adicionales});
+                        if(v125 == 0) v125 = v100;
                         var adicionales = Math.round(v125 * 100)/100 + " con el " +
                             parseInt((parseFloat(${adicionales}) - 1) *100) + "% de incremento";
+                        var respaldo = ""
+                        if(parseFloat(${adicionales}) == 0) {
+                            respaldo = "No se ha subido documento de respaldo de obras adicionales"
+                            adicionales = Math.round(v100 * 100)/100  + ", no hay documento de respaldo de obras adicionales";
+                        } else {
+                            respaldo = "El total planillado supera el 100% del monto del contrato"
+                        }
 
                         var total = 0, totalAcu = 0;
                         //esta parte calcula los totales
@@ -416,7 +424,8 @@
                         if (totalAcu > v100 && totalAcu <= v125) {
                             $.box({
                                 imageClass : "box_info",
-                                text       : "El monto total supera el 100% del monto del contrato. Se requiere autorización de aumento de cantidad de obra.",
+//                                text       : "El total planillado supera el 100% del monto del contrato. Se requiere autorización de aumento de cantidad de obra.",
+                                text       : respaldo,
                                 title      : "Alerta",
                                 iconClose  : false,
                                 dialog     : {

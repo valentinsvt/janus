@@ -15,7 +15,8 @@
             </div>
 
             <div class="controls">
-                <g:select id="etapa" name="etapa.id" from="${janus.pac.Etapa.list()}" optionKey="id" class="many-to-one " value="${documentoProcesoInstance?.etapa?.id}"
+                <g:select id="etapa" name="etapa.id" from="${janus.pac.Etapa.list()}" optionKey="id" class="many-to-one "
+                          value="${documentoProcesoInstance?.etapa?.id?:4}"
                           optionValue="descripcion"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -49,7 +50,8 @@
             </div>
 
             <div class="controls">
-                <g:textArea name="nombre" cols="40" rows="2" maxlength="255" class="required" value="${documentoProcesoInstance?.nombre}"
+                <g:textArea name="nombre" cols="40" rows="2" maxlength="255" class="required"
+                            value="${documentoProcesoInstance?.nombre}"
                             style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -77,7 +79,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class="required" value="${documentoProcesoInstance?.descripcion}"
+                <g:textField name="descripcion" maxlength="63" class="required"
+                             value="${documentoProcesoInstance?.descripcion?:respaldo}"
                              style="width:280px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

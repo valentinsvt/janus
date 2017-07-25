@@ -5,6 +5,7 @@ import janus.*
 import janus.actas.Acta
 import janus.pac.CronogramaContrato
 import janus.pac.CronogramaEjecucion
+import janus.pac.DocumentoProceso
 import janus.pac.Garantia
 import janus.pac.PeriodoEjecucion
 
@@ -3875,7 +3876,9 @@ class PlanillaController extends janus.seguridad.Shield {
         def obra = contrato.obra
         def detalle = [:]
         def obrasAdicionales = 1.25
+        def respaldo = DocumentoProceso.findByDescripcionIlike('%respaldo%')
 
+        println "repaldo: $respaldo"
         /**
          *   máximo valor a considerar de obras adicionales desde el 20-mar-2017 --> 5%
          */
@@ -3895,12 +3898,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def precios = [:]
 
         detalle.each {
-//            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
             def res
             res = preciosService.precioVlob(obra.id, it.item.id)
-
-//            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
-//            println "resultado: " + res
             precios.put(it.id.toString(), res["precio"][0])
         }
 
@@ -3916,33 +3915,10 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-//        println planillasAnteriores
-
         def editable = planilla.fechaMemoSalidaPlanilla == null && contrato.fiscalizador.id == session.usuario.id
-//        editable = PeriodoPlanilla.findAllByPlanilla(planilla).size() == 0
-//        println "editable: " + editable
 
-
-//        def codigoPerfil = session.perfil.codigo
-//        println codigoPerfil
-        /*TODO: descomentar esto para que bloquee segun el perfil */
-//        switch (codigoPerfil) {
-//            case "FINA":
-//            case "ADCT":
-//                editable = false
-//                break;
-//            case "FISC":
-////                editable = editable
-//                break;
-//            default:
-//                editable = false
-//        }
-        /* DESCOMENTAR HASTA AQUI */
-//        editable = true
-
-//        println planilla.fechaMemoSalidaPlanilla
-//        println codigoPerfil
-//        println editable
+        if(!respaldo) obrasAdicionales = 0
+//        obrasAdicionales = 0
 
         println "adicionales: $obrasAdicionales"
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, adicionales: obrasAdicionales,
@@ -3996,19 +3972,10 @@ class PlanillaController extends janus.seguridad.Shield {
         def editable = planilla.fechaMemoSalidaPlanilla == null
         def iva = Parametros.get(1).iva
         def dets = []
+        def respaldo = DocumentoProceso.findByDescripcionIlike('%respaldo%')
 
         def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla , [sort: "id", order: 'desc'])
-        /*"planilla.id"   :${planilla.id},
-            factura         : factura,
-            rubro           : rubro,
-            "unidad.id"     : unidadId,
-            unidadText      : unidadText,
-            monto           : valor,
-            montoIva        : valorIva,
-            montoIndirectos : valorIndi,
-            indirectos      : $("#thIndirectos").data("indi"),
-            total           : total
-            */
+
         detalles.each { dp ->
             dets.add([
                     id             : dp.id,
@@ -4045,16 +4012,16 @@ class PlanillaController extends janus.seguridad.Shield {
             max = contrato.monto * 0.02
         }
 
+        if(!respaldo) max = 0
+
         max -= totalAnterior
 
         def json = new JsonBuilder(dets)
 //        println json.toPrettyString()
-
-//        return [planilla: planilla, obra: obra, contrato: contrato,
-//                editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
-//        return [planilla: planilla, obra: obra, contrato: contrato, indirectos: indirectos,
-
 //        println "max: $max, totalAnterior: $totalAnterior, anteriores: ${anteriores.valor} "
+
+
+
         return [planilla: planilla, obra: obra, contrato: contrato,
                 editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), max: max]
     }

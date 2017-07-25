@@ -176,7 +176,8 @@ class PrflController extends janus.seguridad.Shield  {
         prflInstance.properties = params
         prflInstance.save()
         //prflInstance = kerberosoldService.save(params, Prfl, session.perfil, session.usuario)
-        if (prflInstance.properties.errors.getErrorCount() > 0) {
+//        if (prflInstance.properties.errors.getErrorCount() > 0) {
+        if (prflInstance.errors) {
 //          println "---- save ${prflInstance}"
           render("El perfil no ha podido actualizar")
         } else {

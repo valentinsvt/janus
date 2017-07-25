@@ -45,6 +45,11 @@
                                 <i class="icon-file"></i>
                                 Nueva planilla
                             </g:link>
+                            <g:link controller="documentoProceso" action="list" params="[id: contrato?.oferta?.concurso?.id, contrato: contrato?.id]"
+                                    class="btn btn-info" title="Cargar Docuemnto de repaldo para Obras adicionales">
+                                <i class="icon-file"></i>
+                                Documento de respaldo para Obras Adicionales
+                            </g:link>
                         </g:if>
                     </g:if>
 
@@ -563,6 +568,7 @@
                         }
                     }
                 });
+
             });
 
         </script>

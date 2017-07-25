@@ -518,6 +518,17 @@
                     var max = parseFloat($tdTotal.data("max"));
                     var tot = parseFloat($tdTotal.data("valor"));
                     var val = parseFloat(data.total) + parseFloat(tot) - parseFloat(anterior);
+                    var respaldo
+
+                    console.log('max: ', max)
+                    if(max < 0.1) {
+                        respaldo = "No se ha subido documento de respaldo de obras adicionales"
+                    } else {
+                        respaldo = "El valor de las planillas de Costo + porcentaje " +
+                        "superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})"
+                    }
+
+
 
 //                    console.log('max', max, 'tot', tot, 'val', val, 'total:', $tdTotal.val(), 'anterior: ', anterior);
 //                    if (val <= max) {
@@ -541,8 +552,7 @@
                         $.box({
                             imageClass : "box_info",
                             title      : "Alerta",
-                            text       : "No puede ingresar otro rubro pues el valor de las planillas de Costo + porcentaje " +
-                               "superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})",
+                            text       : respaldo,
                             iconClose  : false,
                             dialog     : {
                                 resizable : false,
@@ -566,7 +576,15 @@
                         var max = parseFloat($tdTotal.data("max"));
                         var tot = parseFloat($tdTotal.data("val"));
                         var val = parseFloat(data.total) + parseFloat(tot);
-                        console.log('max:', max);
+                        var respaldo = ""
+//                        console.log('max Agregar:', max);
+                        if(max < 0.001) {
+                            respaldo = "No se ha subido documento de respaldo de obras adicionales"
+                        } else {
+                            respaldo = "El valor de las planillas de Costo + porcentaje " +
+                                    "superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})"
+                        }
+
                         if (val <= max) {
                             if (noDuplicados(data)) {
                                 $.ajax({
@@ -608,7 +626,8 @@
                             $.box({
                                 imageClass : "box_info",
                                 title      : "Alerta",
-                                text       : "No puede ingresar otro rubro pues el valor de las planillas de Costo + porcentaje superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})",
+                                %{--text       : "No puede ingresar otro rubro pues el valor de las planillas de Costo + porcentaje superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})",--}%
+                                text       : respaldo,
                                 iconClose  : false,
                                 dialog     : {
                                     resizable : false,
