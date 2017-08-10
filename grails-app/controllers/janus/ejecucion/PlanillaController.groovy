@@ -4242,10 +4242,10 @@ class PlanillaController extends janus.seguridad.Shield {
             }
 
             if(plnl.tipoPlanilla.toString() == 'Q') {  //se aplica el total del desceunto al anticipo
-               if (!Acta.findByContrato(plnl.contrato)) {
-                    flash.message = "No se ingresado el acta de entrega recepción de esta obra, por lo que no procede " +
-                            "la lanilla de liquidación del reajuuste"
+                if (!plnl.contrato.fechaPedidoRecepcionContratista || !plnl.contrato.fechaPedidoRecepcionFiscalizador) {
+                    flash.message = "Por favor ingrese las fechas de pedido de recepción para procesar la planilla de liquidación"
                     flash.clase = "alert-error"
+//                    redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: plnl.contrato.id)
                     render "fechas"
                     return
                 }
@@ -4257,11 +4257,10 @@ class PlanillaController extends janus.seguridad.Shield {
             }
 
             if(plnl.tipoPlanilla.toString() == 'L') {  //se aplica el total del desceunto al anticipo
-                if (!plnl.contrato.fechaPedidoRecepcionContratista || !plnl.contrato.fechaPedidoRecepcionFiscalizador) {
-                    flash.message = "Por favor ingrese las fechas de pedido de recepción para procesar la planilla de liquidación"
+                if (!Acta.findByContrato(plnl.contrato)) {
+                    flash.message = "No se ingresado el acta de entrega recepción de esta obra, por lo que no procede " +
+                            "la lanilla de liquidación del reajuuste"
                     flash.clase = "alert-error"
-//                    redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: plnl.contrato.id)
-                    render "fechas"
                     return
                 }
             }
