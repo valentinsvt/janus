@@ -243,8 +243,11 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             } //no existe el objeto
         } //es edit
         documentoProcesoInstance.concurso = concurso
+        def dscr = ""
+        if(params.docuResp == 'R') dscr = 'Respaldo para obras adicionales'
+        if(params.docuResp == 'C') dscr = 'Respaldo para Costo mas prcentaje'
         return [documentoProcesoInstance: documentoProcesoInstance, concurso: concurso, contrato: contrato, show: show,
-        respaldo: params.docuResp == 'S'? 'Respaldo para obras adicionales': '']
+        respaldo: dscr]
     } //form_ajax
 
     def save() {

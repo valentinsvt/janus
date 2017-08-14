@@ -3876,7 +3876,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def obra = contrato.obra
         def detalle = [:]
         def obrasAdicionales = 1.25
-        def respaldo = DocumentoProceso.findByDescripcionIlike('%respaldo%')
+        def respaldo = DocumentoProceso.findByDescripcionIlike('%respaldo%adicio%')
 
         println "repaldo: $respaldo"
         /**
@@ -3972,7 +3972,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def editable = planilla.fechaMemoSalidaPlanilla == null
         def iva = Parametros.get(1).iva
         def dets = []
-        def respaldo = DocumentoProceso.findByDescripcionIlike('%respaldo%')
+        def respaldo = DocumentoProceso.findByDescripcionIlike('%respaldo%costo%')
 
         def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla , [sort: "id", order: 'desc'])
 
