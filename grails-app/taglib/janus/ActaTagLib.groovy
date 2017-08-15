@@ -8,6 +8,7 @@ import janus.ejecucion.PeriodoPlanilla
 import janus.ejecucion.Planilla
 import janus.ejecucion.ReajustePlanilla
 import janus.ejecucion.TipoPlanilla
+import janus.pac.DocumentoProceso
 
 class ActaTagLib {
 
@@ -324,6 +325,7 @@ class ActaTagLib {
         def prctCosto = (costo / contrato.monto) * 100
 
         def prctTotal = ((valor + costo) / contrato.monto) * 100
+        def respaldo = DocumentoProceso.findByConcursoAndDescripcionIlike(contrato.oferta.concurso, '%respaldo%adicio%')
 
         tabla += "<tbody>"
         tabla += "<tr>"
@@ -331,7 +333,7 @@ class ActaTagLib {
         tabla += "<td class='tar'>${numero(numero: prct)}</td>"
         tabla += "<td class='tar'>${numero(numero: costo)}</td>"
         tabla += "<td class='tar'>${numero(numero: prctCosto)}</td>"
-        tabla += "<td class='tar'>${contrato.adicionales}</td>"
+        tabla += "<td class='tar'>${respaldo.nombre}</td>"
         tabla += "<td class='tar'></td>"
         tabla += "<td class='tar'></td>"
         tabla += "<td class='tar'>${numero(numero: prctTotal)}</td>"
