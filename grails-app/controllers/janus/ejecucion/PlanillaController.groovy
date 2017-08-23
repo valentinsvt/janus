@@ -5417,16 +5417,16 @@ class PlanillaController extends janus.seguridad.Shield {
         def inicio
         def inicioPr
         def avance = TipoPlanilla.findAllByCodigoInList(['P', 'Q'])
-        println "planillas de avance: $avance"
-        println "periodosEjec: $periodosEjec"
+//        println "planillas de avance: $avance"
+//        println "periodosEjec: $periodosEjec"
         def planillasAnt = Planilla.findAllByContratoAndTipoPlanillaInList(cntr, avance, [sort: 'fechaPresentacion'])
         if (planillasAnt) {
             inicio = planillasAnt.pop().fechaFin + 1
         }
         // hay periodos para tipos de planilla: P, Q, D
-//        println ".....tipos: ${tipos.codigo}"
+//        println "ponePeriodos finalObra: $finalObra, tipos: ${tipos.codigo}"
         if (tipos.codigo.contains("P") || tipos.codigo.contains("Q") || tipos.codigo.contains("D")) {
-            println "inicia .. 1"
+//            println "inicia .. 1"
             periodosEjec.each { pe ->
                 ultimo = texto
 
@@ -5445,7 +5445,7 @@ class PlanillaController extends janus.seguridad.Shield {
                             println "xxsi hay inicio, dias: $dias"
                             texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                         } else {
-                            println "xxno hay inicio, dias: $dias"
+//                            println "xxno hay inicio, dias: $dias"
                             texto = pe.fechaInicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                             inicio = pe.fechaInicio
                         }
@@ -5466,7 +5466,7 @@ class PlanillaController extends janus.seguridad.Shield {
                             //no deben procesarse mas periodos
                         }
                     } else { // pe.fechaFin no es fin de mes
-                        println "opcional: $opcional, último: $ultimo, inicioPr: $inicioPr, inicio: $inicio"
+//                        println "opcional: $opcional, último: $ultimo, inicioPr: $inicioPr, inicio: $inicio"
                         if(opcional){
                             texto = inicio.format("dd-MM-yyyy") + "_" + pe.fechaFin.format("dd-MM-yyyy")
                         } else {
@@ -5476,15 +5476,18 @@ class PlanillaController extends janus.seguridad.Shield {
                                inicioPr = inicio.format("dd-MM-yyyy")
                             }
                         }
+
 //                        periodos.put(texto, texto.replaceAll('_', ' a '))
+
+//                        println "periodos. $periodos, pe.fechaFin: ${pe.fechaFin}, final: ${finalObra} inicio: $inicio"
                         // si es el último periodo también es opcional
                         if (pe.fechaFin == finalObra) {
                             if (ultimo) {
                                 def desde = ""
-                                if(periodos){
+                                if(periodos[ultimo]){    /*** trata el ultimo trama de la obra ****/
                                     desde = periodos[ultimo].split(' a ')[0]
                                 } else {
-                                    desde = inicioPr
+                                    desde = inicioPr?: inicio.format("dd-MM-yyyy")
                                 }
                                 texto = desde + "_" + pe.fechaFin.format("dd-MM-yyyy")
                                 periodos.put(texto, texto.replaceAll('_', ' a '))

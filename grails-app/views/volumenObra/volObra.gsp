@@ -300,7 +300,7 @@
                 } else {
                     datos = "obra=${obra.id}&ord=" + 1
                 }
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra', action:'tabla')}",
                     data     : datos,
                     success  : function (msg) {
                         clearInterval(interval)
