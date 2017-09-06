@@ -429,15 +429,20 @@ class OferentesService {
         if (count == 0) {
             def res
             try {
-              println "insert ! "+sql
+              println "insert ! " + sql
                 res = cn.executeInsert(sql.toString())
-                println "res "+res
-                res=res[0][0]
+                println "res " + res
+                res = res[0][0]
 //                println "res "+res
             } catch (e) {
                 println "ERROR: " + e
                 res = -1
             }
+
+            if(tabla == 'item') {
+                cn.execute("update item set cpac__id = 0 where cpac__id is null")
+            }
+
             cn.close()
             return res
         } else {
