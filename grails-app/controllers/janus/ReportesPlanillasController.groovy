@@ -680,11 +680,16 @@ class ReportesPlanillasController {
 
         def inversionProgramada = crej.sum { it.precio } ?: 0
         def inversionReal = planillasAvance.sum { it.valor } ?: 0
-        def costoPorcentaje = planillasCosto.sum { it.valor } ?: 0
+
+
+        def tx = "select sum(plnlmnto) suma from plnl where cntr__id = ${plnl.contrato.id} and tppl__id = 5 and " +
+                "plnlfcfn <= '${plnl.fechaFin}'"
+
+        def costoPorcentaje = cn.rows(tx.toString())[0]?.suma ?: 0
 
 
 //        def multas = planillasAvance.sum { it.multaRetraso + it.multaPlanilla } ?: 0
-        def tx = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl " +
+        tx = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl " +
                 "where cntr__id = ${plnl.contrato.id} and tppl__id in (3,9,4) and plnlfcfn <= '${plnl.fechaFin}')"
 
         def multas = cn.rows(tx.toString())[0].suma + plnl.multaEspecial?:0
