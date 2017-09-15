@@ -1374,7 +1374,12 @@ class ObraController extends janus.seguridad.Shield {
                 obraInstance.indiceUtilidad = par.indiceUtilidad
                 obraInstance.indiceCostosIndirectosTimbresProvinciales = par.indiceCostosIndirectosTimbresProvinciales
 
-                obraInstance.lugar = Lugar.findByDescripcion('QUITO')
+                /** variables por defecto para las nuevas obras **/
+                obraInstance.lugar = Lugar.findAll('from Lugar  where tipoLista=1')[0]
+                obraInstance.listaVolumen0 = Lugar.findAll('from Lugar  where tipoLista=3')[0]
+                obraInstance.distanciaPeso = 10
+                obraInstance.distanciaVolumen = 30
+
 
                 obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
                         obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
