@@ -1344,11 +1344,6 @@ class ObraController extends janus.seguridad.Shield {
 
         }//es edit
         else {
-
-//            println("params " + params)
-
-
-
             if(!Obra.findByCodigo(params.codigo)){
 
                 obraInstance = new Obra(params)
@@ -1379,6 +1374,7 @@ class ObraController extends janus.seguridad.Shield {
                 obraInstance.indiceUtilidad = par.indiceUtilidad
                 obraInstance.indiceCostosIndirectosTimbresProvinciales = par.indiceCostosIndirectosTimbresProvinciales
 
+                obraInstance.lugar = Lugar.findByDescripcion('QUITO')
 
                 obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
                         obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
