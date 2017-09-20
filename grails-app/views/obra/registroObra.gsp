@@ -1239,7 +1239,7 @@
     }
 
     $("#porcentajeAnticipo").keydown(function (ev) {
-
+        console.log("entro down")
         return validarNum(ev);
 
     }).keyup(function () {

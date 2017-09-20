@@ -12,6 +12,7 @@ import janus.pac.CronogramaContrato
 import janus.pac.DocumentoProceso
 import janus.pac.Oferta
 import janus.pac.PeriodoValidez
+import janus.pac.TipoContrato
 import org.springframework.dao.DataIntegrityViolationException
 
 
@@ -1004,7 +1005,7 @@ class ContratoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-//        println "-->> save: >>>>>>${params.id}<<<<<"
+//        println "-->> save: >>>>>>${params}<<<<<"
         def contratoInstance
 
         if(params."padre.id" == -1) params."padre.id" = null
@@ -1026,29 +1027,28 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
 //        println("params con " + params.conReajuste)
-        if (params.conReajuste == 'on') {
-            params.conReajuste = 1
-        } else {
-            params.conReajuste = 0
-        }
 
-        def indice = PeriodosInec.get(params."periodoValidez.id")
+
+//        def indice = PeriodosInec.get(params."periodoValidez.id")
+        def indice = PeriodosInec.get(params."periodoInec.id")
+        def oferta = Oferta.get(params."oferta.id")
+        def tipoContrato = TipoContrato.get(params."tipoContrato.id")
 
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
 
-            if (!contratoInstance) {
-                flash.clase = "alert-error"
-                flash.message = "No se encontró Contrato con id " + params.id
-                redirect(action: 'registroContrato')
-                return
-            }//no existe el objeto
+//            if (!contratoInstance) {
+//                flash.clase = "alert-error"
+//                flash.message = "No se encontró Contrato con id " + params.id
+//                redirect(action: 'registroContrato')
+//                return
+//            }//no existe el objeto
             contratoInstance.properties = params
-            println "actualizado: ${contratoInstance.objeto} ${params.objeto}"
-            if (params.padre.id == "-1") {
-                contratoInstance.padre = null
-            }
-            contratoInstance.periodoInec = indice
+//            println "actualizado: ${contratoInstance.objeto} ${params.objeto}"
+//            if (params.padre.id == "-1") {
+//                contratoInstance.padre = null
+//            }
+//            contratoInstance.periodoInec = indice
         }//es edit
         else {
 
@@ -1061,19 +1061,30 @@ class ContratoController extends janus.seguridad.Shield {
                 }
             }
 
-            contratoInstance = new Contrato(params)
-            contratoInstance.periodoInec = indice
+            contratoInstance = new Contrato()
+            contratoInstance.properties = params
+
+
         } //es create
 
-//        contratoInstance.depAdministrador = Departamento.get(params."depAdministrador.id")
 
-        println "graba contrato... ${contratoInstance.id}"
+        if (params."padre.id" == "-1") {
+            contratoInstance.padre = null
+        }
+
+        contratoInstance.periodoInec = indice
+        contratoInstance.oferta = oferta
+        contratoInstance.tipoContrato = tipoContrato
+        contratoInstance.depAdministrador = Departamento.get(params."depAdministrador.id")
+
+//        println "graba contrato... ${contratoInstance.depAdministrador}"
+
         try {
             contratoInstance.save(flush: true)
         } catch (e) {
-            println "errrr: $e"
+//            println "errrr: $e "
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar Contrato " + (contratoInstance.id ? contratoInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar Contrato </h4>"
             str += "<ul>"
             contratoInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage

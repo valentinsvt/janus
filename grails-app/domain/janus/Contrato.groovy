@@ -162,13 +162,13 @@ class Contrato implements Serializable {
         indirectos(blank: true, nullable: true)
         obraContratada(blank: true, nullable: true)
         contratista(blank: true, nullable: true)
-        adicionales(size: 1..20, blank: true, nullable: true)
+        adicionales(maxSize: 20, blank: true, nullable: true)
 
     }
 
     def getObra() {
         if(this.obraContratada == null){
-            def tmp_obra = Obra.findByCodigo(this.oferta?.concurso?.obra.codigo+"-OF")
+            def tmp_obra = Obra.findByCodigo(this.oferta?.concurso?.obra?.codigo+"-OF")
             if(!tmp_obra) {
                 if(this.obraContratada == null) this.obraContratada = this.oferta?.concurso?.obra
             } else {
@@ -176,7 +176,7 @@ class Contrato implements Serializable {
             }
         }
         if(this.contratista == null){
-            this.contratista = this.oferta.proveedor
+            this.contratista = this.oferta?.proveedor
         }
         return this.obraContratada
     }

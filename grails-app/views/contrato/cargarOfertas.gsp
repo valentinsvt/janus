@@ -42,6 +42,9 @@
 //            $("#plazo").val(number_format(p, 0,"."));
             $("#plazo").val(p);
 //            $("#ofertaId").val($(this).val());
+
+            updateAnticipo();
+
         }
         else {
             $("#contratista").val("");
