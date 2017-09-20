@@ -693,7 +693,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def cantModificable = []
 
-        println "cantModificable0: " + cantModificable
+//        println "cantModificable0: " + cantModificable
 
         def filaDol = "", filaPor = "", filaCan = ""
         def totDol = 0, totPor = 0, totCan = 0
@@ -709,7 +709,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     can  : 0,
                     crono: null
             ]
-            println "cantModificable1: " + cantModificable
+//            println "cantModificable1: " + cantModificable
             if (cronosPer.size() == 1) {
                 cronosPer = cronosPer[0]
 //                    println cronosPer.id
@@ -729,14 +729,14 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         can  : cronosPer.cantidad,
                         crono: cronosPer.id
                 ]
-                println "cantModificable2: " + cantModificable
+//                println "cantModificable2: " + cantModificable
 //                totalesDol[i] += cronosPer.precio
             }
             filaDol += "</td>"
             filaPor += "</td>"
             filaCan += "</td>"
         }
-        println "cantModificable3: " + cantModificable
+//        println "cantModificable3: " + cantModificable
 //        println cantModificable
 
         def filaDolPla = "", filaPorPla = "", filaCanPla = ""
@@ -767,7 +767,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             def totalPlanilla = 0
             def modificable = true
 //            println cantModificable[i]
-            println "cantModificable4[${i}]: " + cantModificable[i]
+//            println "cantModificable4[${i}]: " + cantModificable[i]
 
 /*
             planillasPeriodo.each { pla ->
@@ -798,7 +798,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             totPorPla += porPla
             totCanPla += canPla
 
-            println "\t\ttotalPlanilla=" + totalPlanilla + "   porPla=" + porPla + "   canPla=" + canPla
+//            println "\t\ttotalPlanilla=" + totalPlanilla + "   porPla=" + porPla + "   canPla=" + canPla
 
             if (modificable) {
                 def dol = cantModificable[i].dol - totalPlanilla
@@ -808,14 +808,14 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def maxPor = numero(por.toDouble().round(2))
                 def maxCan = numero(can.toDouble().round(2))
 
-                println "cantModificable6[${i}]: " + cantModificable[i]
+//                println "cantModificable6[${i}]: " + cantModificable[i]
 
                 maxDolAcu += dol.toDouble()
                 maxPrctAcu += por.toDouble()
                 maxCanAcu += can.toDouble()
 
-                println "\tdol=" + dol + "  por=" + por + "  can=" + can + "  maxDol=" + maxDol + "   maxPor=" + maxPor + "   maxCan=" + maxCan +
-                        "   maxDolAcu=" + maxDolAcu + "  maxPrctAcu=" + maxPrctAcu + "  maxCanAcu=" + maxCanAcu
+//                println "\tdol=" + dol + "  por=" + por + "  can=" + can + "  maxDol=" + maxDol + "   maxPor=" + maxPor + "   maxCan=" + maxCan +
+//                        "   maxDolAcu=" + maxDolAcu + "  maxPrctAcu=" + maxPrctAcu + "  maxCanAcu=" + maxCanAcu
 
 
                 filaDolMod += "<input type='text' class='input-mini tiny dol p${i}' value='" + "0.00" +/* maxDol +*/
@@ -999,7 +999,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def ok = "OK"
 
         modificaciones.each { periodo, mod ->
-            println ".. " + periodo + "\t" + mod
+//            println ".. " + periodo + "\t" + mod
             def fis = mod.fis
             def prc = mod.prct
             def dol = mod.dol
@@ -1241,10 +1241,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         println params
         def vol = VolumenesObra.get(params.vol)
         def crejs = CronogramaEjecucion.findAllByVolumenObra(vol)
-        println crejs
+        println ".....modificarVolumen" + crejs
     }
 
     def tabla() {
+        def inicio = new Date()
         def obra = Obra.get(params.id)
         def html = ""
 
@@ -1254,25 +1255,26 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
         def cronos = []
 
-        preciosService.ac_rbroObra(obra.id)
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
+        def res = preciosService.rbro_pcun_v2(obra.id)
+
         detalle.each { vol ->
-            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
-//            precios.put(vol.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
-//            println indirecto
-//            println res
-            def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
+//            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
+//            def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
             cronos.add([
                     codigo  : vol.item.codigo,
                     nombre  : vol.item.nombre,
                     unidad  : vol.item.unidad.codigo,
                     cantidad: vol.cantidad,
-                    precioU : precio,
-                    parcial : precio * vol.cantidad,
+                    precioU : res.find { it.vlob__id == vol.id}.pcun,
+                    parcial : res.find { it.vlob__id == vol.id}.totl,
                     volumen : vol
             ])
         }//detalles.each
+
+        def fin = new Date()
+        println "cronogramaObraEjec: detalles --> ${TimeCategory.minus(fin, inicio)}"
 
         def row2 = ""
 
@@ -1327,6 +1329,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += "</thead>"
 
         html += "<tbody>"
+
+        fin = new Date()
+        println "cronogramaObraEjec: inicia tabla --> ${TimeCategory.minus(fin, inicio)}"
+
+
         cronos.each { crono ->
             html += "<tr class='click item_row ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}' data-vol='" + crono.volumen.id + "'>"
 
@@ -1343,12 +1350,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
 
             html += "<td class='num cantidad'>"
-//            html += formatNumber(number: crono.cantidad, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             html += numero(crono.cantidad)
             html += "</td>"
 
             html += "<td class='num precioU'>"
-//            html += formatNumber(number: crono.precioU, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             html += numero(crono.precioU)
             html += "</td>"
 
@@ -1361,12 +1366,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 filaCan += "<td class='fis num ${periodo.tipo}'>"
                 if (cronoPer.size() == 1) {
                     cronoPer = cronoPer[0]
-//                    println cronoPer.id
-//                    filaDol += g.formatNumber(number: cronoPer.precio, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
                     filaDol += numero(cronoPer.precio)
-//                    filaPor += g.formatNumber(number: cronoPer.porcentaje, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
                     filaPor += numero(cronoPer.porcentaje)
-//                    filaCan += g.formatNumber(number: cronoPer.cantidad, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
                     filaCan += numero(cronoPer.cantidad)
                     totDol += cronoPer.precio
                     totPor += cronoPer.porcentaje
@@ -1379,15 +1380,14 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
 
             html += "<td class='num subtotal'>"
-//            html += formatNumber(number: crono.parcial, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
-            crono.parcial = crono.parcial.round(2)
+//            crono.parcial = crono.parcial.round(2)
+            crono.parcial = crono.parcial.toDouble().round(2)
             html += numero(crono.parcial.round(2))
             totalCosto += crono.parcial
             html += "</td>"
             html += '<td>$</td>'
             html += filaDol
             html += "<td class='num dol total totalRubro'>"
-//            html += formatNumber(number: totDol, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             html += numero(totDol)
             html += "</td>"
             html += "</tr>"
@@ -1397,7 +1397,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += '<td>%</td>'
             html += filaPor
             html += "<td class='num prct total totalRubro'>"
-//            html += formatNumber(number: totPor, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             html += numero(totPor)
             html += "</td>"
             html += "</tr>"
@@ -1407,7 +1406,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += '<td>F</td>'
             html += filaCan
             html += "<td class='num fis total totalRubro'>"
-//            html += formatNumber(number: totCan, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             html += numero(totCan)
             html += "</td>"
             html += "</tr>"
@@ -1419,11 +1417,15 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += "<td></td>"
         html += "<td colspan='4'>TOTAL PARCIAL</td>"
         html += "<td class='num'>"
-//        html += formatNumber(number: totalCosto, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
         totalCosto = totalCosto.toDouble().round(2)
         html += numero(totalCosto)
         html += "</td>"
         html += "<td>T</td>"
+
+        fin = new Date()
+        println "cronogramaObraEjec: totales --> ${TimeCategory.minus(fin, inicio)}"
+
+
         def filaDolAcum = "", filaPor = "", filaPorAcum = "", sumaDol = 0, sumaPor = 0
         totalesDol.each {
             it = it.toDouble().round(2)
@@ -1431,22 +1433,18 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             sumaDol += it
             sumaPor += por
             html += "<td class='num'>"
-//            html += formatNumber(number: it, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             html += numero(it)
             html += "</td>"
 
             filaDolAcum += "<td class='num'>"
-//            filaDolAcum += formatNumber(number: sumaDol, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             filaDolAcum += numero(sumaDol)
             filaDolAcum += "</td>"
 
             filaPor += "<td class='num'>"
-//            filaPor += formatNumber(number: por, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             filaPor += numero(por)
             filaPor += "</td>"
 
             filaPorAcum += "<td class='num'>"
-//            filaPorAcum += formatNumber(number: sumaPor, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             filaPorAcum += numero(sumaPor)
             filaPorAcum += "</td>"
         }
@@ -1486,6 +1484,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         html += "</table>"
 
+/*
+        fin = new Date()
+        println "cronogramaObraEjec: fin"
+        println "${TimeCategory.minus(fin, inicio)}"
+*/
+
+//        println "retorna.... ${html.size()} bytes"
         return [detalle: detalle, precios: precios, obra: obra, tabla: html]
     }
 

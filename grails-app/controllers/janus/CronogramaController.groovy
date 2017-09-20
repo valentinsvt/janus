@@ -358,16 +358,15 @@ class CronogramaController extends janus.seguridad.Shield {
     }
 
     def cronogramaObra() {
-        println "--- cronograma"
+//        println "--- cronograma"
         def cn = dbConnectionService.getConnection()
         // debe mostrar los rubros con sus precios unitarios y totales
 //        def inicio = new Date()
         def obra = Obra.get(params.id)
         def subpres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
         def persona = Persona.get(session.usuario.id)
-        def duenoObra = 0
 
-        duenoObra = esDuenoObra(obra) ? 1 : 0
+        def duenoObra = esDuenoObra(obra) ? 1 : 0
 
         def subpre = params.subpre
         if (!subpre) {
@@ -391,15 +390,12 @@ class CronogramaController extends janus.seguridad.Shield {
 
         def precios = [:]
         def pcun = [:]
-//        def indirecto = obra.totales / 100
 
-        preciosService.ac_rbroObra(obra.id)
+        if(obra.estado == 'N') {
+            preciosService.ac_rbroObra(obra.id)
+        }
 
-        //TODO: mostrar precio unitario, armar respuesta como pcun_totl desde preciosService.rbro_pcun_v2_item
         detalle.each { dt ->
-//            it.refresh()
-//            def res = preciosService.rbro_pcun_v2_item(obra.id, it.subPresupuesto.id, it.item.id)
-//            precios.put(it.id.toString(), res)
             precios.put(dt.id.toString(), preciosVlob.find { it.vlob__id == dt.id}.totl)
             pcun.put(dt.id.toString(), preciosVlob.find { it.vlob__id == dt.id}.pcun)
         }
@@ -414,7 +410,6 @@ class CronogramaController extends janus.seguridad.Shield {
             tieneMatriz = d.cuenta > 0
         }
         cn.close()
-
 
         return [detalle: detalle, precios: precios, pcun: pcun, obra: obra, subpres: subpres, subpre: subpre,
                 persona: persona, duenoObra: duenoObra, tieneMatriz: tieneMatriz]
