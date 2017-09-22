@@ -145,32 +145,28 @@
         </g:link>
     </div>
 
-
-
-
-    %{--<a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"--}%
-    <a href="#" class="btn " title="Reiniciar la Fórmula Polinómica"
-       %{--style="margin-top: -10px;" id="btnBorrar">--}%
-       style="margin-top: -10px;" id="btnReiniciarFP">
-        <i class="icon-refresh"></i>
-        Reiniciar la Fórmula Polinomica
-    </a>
+    <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1)}">
+        <a href="#" class="btn " title="Reiniciar la Fórmula Polinómica"
+           style="margin-top: -10px;" id="btnReiniciarFP">
+            <i class="icon-refresh"></i>
+            Reiniciar la Fórmula Polinomica
+        </a>
+    </g:if>
     <g:link controller="reportes5" action="imprimirCoeficientes" id="${obra?.id}" class="btn btnImprimir" title="Imprimir la Fórmula Polinómica" style="margin-top: -10px;">
         <i class="icon-print"></i>
         Imprimir coeficientes
     </g:link>
-    <a href="#" id="creaIndice" class="btn" title="Crear Índices" style="margin-top: -10px;">
-        Crear Índices
-    </a>
 
-    %{--<a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"--}%
-    <a href="#" class="btn " title="Borrar la Fórmula Polinómica"
-       %{--style="margin-top: -10px;" id="btnEliminar">--}%
-       style="margin-top: -10px;" id="btnEliminarFP">
-        <i class="icon-trash"></i>
-        Eliminar Fórmula
-    </a>
-
+    <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1)}">
+        <a href="#" id="creaIndice" class="btn" title="Crear Índices" style="margin-top: -10px;">
+            Crear Índices
+        </a>
+        <a href="#" class="btn " title="Borrar la Fórmula Polinómica"
+           style="margin-top: -10px;" id="btnEliminarFP">
+            <i class="icon-trash"></i>
+            Eliminar Fórmula
+        </a>
+    </g:if>
 </div>
 
 <div class="row">
@@ -207,56 +203,9 @@
                     </div>
                 </div>
             </div>
-
-            %{--
-                                <div class="span-12">
-                                    <g:textField name="nombre_codigo" id="buscaCodigo" placeholder="Código Item"/>
-                                    <g:textField name="nombre_desc" id="buscaDescrip" placeholder="Descripción"/>
-                                    <div class="btn-group">
-                                    <a href="#" id="btnBuscarItem" class="btn btn-success" title="Buscar Item">
-                                        <i class="icon-search"></i> Buscar
-                                    </a>
-                                    </div>
-
-                                </div>
-            --}%
-
             <div class="span-12" id="tablaBusquedaItems">
 
             </div>
-
-            %{--<div class="contenedorTabla">--}%
-            %{--<table class="table table-condensed table-bordered table-striped table-hover" id="tblDisponibles">--}%
-            %{--<thead>--}%
-            %{--<tr>--}%
-            %{--<th>Item</th>--}%
-            %{--<th>Descripción</th>--}%
-            %{--${tipo == 'c' ? '<th>Precio unitario</th>' : ''}--}%
-            %{--<th>Aporte</th>--}%
-            %{--</tr>--}%
-            %{--</thead>--}%
-            %{--<tbody>--}%
-            %{--<g:each in="${rows}" var="r">--}%
-            %{--<tr data-item="${r.iid}" data-codigo="${r.codigo}" data-nombre="${r.item}" data-valor="${r.aporte ?: 0}" data-precio="${r.precio ?: 0}" data-grupo="${r.grupo}">--}%
-            %{--<td>--}%
-            %{--${r.codigo}--}%
-            %{--</td>--}%
-            %{--<td>--}%
-            %{--${r.item}--}%
-            %{--</td>--}%
-            %{--<g:if test="${tipo == 'c'}">--}%
-            %{--<td class="numero">--}%
-            %{--<g:formatNumber number="${r.precio ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>--}%
-            %{--</td>--}%
-            %{--</g:if>--}%
-            %{--<td class="numero">--}%
-            %{--<g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>--}%
-            %{--</td>--}%
-            %{--</tr>--}%
-            %{--</g:each>--}%
-            %{--</tbody>--}%
-            %{--</table>--}%
-            %{--</div>--}%
         </div>
     </div>
 </div>
@@ -443,28 +392,20 @@
 
     function createContextmenu(node) {
         var parent = node.parent().parent();
-
         var nodeStrId = node.attr("id");
         var nodeText = $.trim(node.attr("nombre"));
-
         var parentStrId = parent.attr("id");
         var parentText = $.trim(parent.attr("nombre"));
-
         var nodeTipo = node.attr("rel");
-
         var parentTipo = parent.attr("rel");
-
         var parts = nodeStrId.split("_");
         var nodeId = parts[1];
 
         parts = parentStrId.split("_");
         var parentId = parts[1];
-
         var nodeHasChildren = node.hasClass("hasChildren");
         var cantChildren = node.children("ul").children().size();
-
         var menuItems = {}, lbl = "", item = "";
-
         var num = $.trim(node.attr("numero"));
         var hijos = node.children("ul").length;
 
@@ -496,7 +437,6 @@
                     if (cantNombre == 0) {
                         if (valor != "") {
                             btnSave.replaceWith(spinner);
-//                                ////console.log("SI!!");
                             $.ajax({
                                 type    : "POST",
                                 url     : "${createLink(action: 'guardarGrupo')}",
@@ -507,7 +447,6 @@
                                 },
                                 success : function (msg) {
                                     if (msg == "OK") {
-//                                            valor = number_format(valor,)
                                         node.attr("nombre", indiceNombre).trigger("change_node.jstree");
                                         node.attr("valor", valor).trigger("change_node.jstree");
                                         $("#modal-formula").modal("hide");
@@ -516,7 +455,6 @@
                                 }
                             });
                         } else {
-//                                ////console.log("NO");
                         }
                     } else {
                         $("#modal-formula").modal("hide");
@@ -572,11 +510,8 @@
                 var nodeDes = node.attr("nombre");
                 var nodeValor = node.attr("valor");
                 var nodeItem = node.attr("item");
-
                 var nodePrecio = node.attr("precio");
                 var nodeGrupo = node.attr("grupo");
-
-            %{--console.log("nodo:" + node.attr("grupo"), "data:" + "${params.tipo}");--}%
 
                 /*** Selecciona el nodo y su padre ***/
                 var $seleccionados = $("a.selected, div.selected, a.editable, div.editable");
@@ -679,40 +614,13 @@
 
                     }
                 };
-
-
-
-
-                %{--menuItems.mover = {--}%
-                    %{--label            : "Mover",--}%
-                    %{--separator_before : false,--}%
-                    %{--separator_after  : false,--}%
-                    %{--icon             : icons.mover,--}%
-                    %{--action           : function (obj) {--}%
-                        %{--$.ajax({--}%
-                            %{--type    : "POST",--}%
-                            %{--url     : "${createLink(action: 'moverItem')}",--}%
-                            %{--data    : {--}%
-                                %{--id : nodeId,--}%
-                                %{--obra: ${obra?.id}--}%
-                            %{--},--}%
-                            %{--success : function (msg) {--}%
-                                %{--$("#modalBodyMover").html(msg);--}%
-                                %{--$("#modalMover").modal('show');--}%
-                            %{--}--}%
-                        %{--});--}%
-
-                    %{--}--}%
-                %{--};--}%
                 break;
         }
-
         return menuItems;
     }
 
 
     $("#btnMoverAceptar").click(function () {
-//        var $seleccionado = $(".idCoefi option:selected").text();
         var $seleccionado = $(".idCoefi option:selected").val();
         var nd = $(".idNodo").val()
         $.ajax({
@@ -744,7 +652,7 @@
     });
 
     $("#btnMoverCancelar").click(function () {
-                $("#modalMover").modal("hide");
+        $("#modalMover").modal("hide");
     });
 
 

@@ -105,7 +105,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
     def coeficientes() {
 
-        println "coef " + params
+//        println "coef " + params
 
         if (!params.tipo) {
             params.tipo = 'p'
@@ -118,7 +118,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         }
 
         def cn = dbConnectionService.getConnection()
-
+        def persona = Persona.get(session.usuario.id)
         def sqlMatriz = "select count(*) cuantos from mfcl where obra__id=${params.id}"
         def matriz = cn.rows(sqlMatriz.toString())[0].cuantos
         if (matriz == 0) {
@@ -255,14 +255,17 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                         "where itfp.fpob__id = fpob.fpob__id and obra__id = ${params.id} and sbpr__id = ${sbpr.id}) " +
                         "order by valor desc"
             }
-//            println "SQL items: " + sql
+
             def rows = cn.rows(sql.toString())
-//            println "rows: $rows"
 
-//            println("cof " + cof?.numero)
+            def duenoObra = esDuenoObra(obra) ? 1 : 0
 
-            [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total, subpre: sbpr.id, cof: cof?.numero]
+            [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total, subpre: sbpr.id, cof: cof?.numero, duenoObra: duenoObra, persona: persona]
         }
+    }
+
+    def esDuenoObra(obra) {
+        return obraService.esDuenoObra(obra, session.usuario.id)
     }
 
     def insertarVolumenesItem() {

@@ -14,11 +14,9 @@
 
         <script type="text/javascript"
                 src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBpasnhIQUsHfgCvC3qeJpEgcB9_ppWQI0&sensor=true"></script>
-
         <style>
 
         #mapaPichincha img {
-
             max-width : none;;
         }
 
@@ -30,7 +28,6 @@
             display : none;
         }
         </style>
-
 
         <title>Localización de la Obra</title>
     </head>
@@ -66,11 +63,7 @@
 
         <div class="noprint">
 
-            %{--<div id="imprime" style="float: left; margin: 20px; height: 80px;">Coordenadas:</div>--}%
-
-
             <div style="margin-top: 40px; width: 900px;">
-                %{--<div class="span3" style="margin-left: -30px; margin-right: 30px;">--}%
                 <div style="margin: 0 0 0 20px;">
                     <span class="control-label label label-inverse">
                         Coordenadas Originales de la Obra:
@@ -85,11 +78,6 @@
                     </span>
                     <span style="margin-left: 34px; color: #008" id="divCoords">${obra.coordenadas}</span>
                 </div>
-
-                %{--<div class="span2" style="float: left; width: 200px">Latitud: <g:textField name="latitud" class="latitud number" id="latitud" style="width: 100px"/></div>--}%
-
-                %{--<div class="span2" style="float: left; width: 200px">Longitud: <g:textField name="longitud" class="longitud number" id="longitud" style="width: 100px"/></div>--}%
-
             </div>
         </div>
 
@@ -118,100 +106,17 @@
                 </span>
                 ${obra.comunidad?.nombre}
             </div>
-
         </div>
-    </div>
-        %{--$("#imprime").append("<p>Cantón: " + "${obra.comunidad.parroquia.canton.nombre}" + "</p>")--}%
-        %{--$("#imprime").append("<p>Parroquia: " + "${obra.comunidad.parroquia.nombre}" + "</p>")--}%
-        %{--
-        <div id="coordenadas" class="noprint" style="margin-top: 20px">
-
-            <div class="coordenadasOriginales span12">
-
-                --}%
-        %{--<span>Coordenadas Originales de la Obra:</span>--}%%{--
-
-                --}%
-        %{--<input class="span2" id="lato">--}%%{--
-
-                --}%
-        %{--<input class="span2" id="longo">--}%%{--
-
-
-
-                --}%
-        %{--<div class="span3" style="margin-left: -30px; margin-right: 30px; font-weight: bold">Coordenadas Originales de la Obra:</div>--}%%{--
-
-
-                <div class="span3" style="margin-left: -30px; margin-right: 30px;">
-                    <span id="coordOrig" class="control-label label label-inverse">
-                        Coordenadas Originales de la Obra:
-                    </span>
-                </div>
-
-                --}%
-        %{--<div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" id="lato" style="width: 100px" maxlength="5"/></div>--}%%{--
-
-
-                <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" style="width: 100px" id="lato"
-                                                                                    value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" disabled="true"/></div>
-
-
-
-                --}%
-        %{--<div class="span3">Longitud: <g:textField name="longo" class="longo number" id="longo" style="width: 120px" maxlength="5"/></div>--}%%{--
-
-
-
-                <div class="span3">Longitud: <g:textField name="longo" class="longo number" style="width: 100px" id="longo"
-                                                          value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" disabled="true"/></div>
-
-
-
-
-
-            </div>
-            <g:form class="registroObra" name="frm-latitudLongitud" action="save">
-
-            <g:hiddenField name="id" value="${obra?.id}"/>
-            <div class="coordenadas span12">
-                --}%
-        %{--<div class="span3" style="margin-left: -30px; margin-right: 30px; font-weight: bold">Coordenadas Nuevas de la Obra:</div>--}%%{--
-
-
-                <div class="span3" style="margin-left: -30px; margin-right: 30px;">
-                    <span id="coordNuevas" class="control-label label label-inverse">
-                        Coordenadas Nuevas de la Obra:
-                    </span>
-                </div>
-
-
-                <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="latitud" class="latitud number" id="latitud" style="width: 100px"/></div>
-                <div class="span3">Longitud: <g:textField name="longitud" class="longitud number" id="longitud" style="width: 100px"/></div>
-
-            </div>
-            </g:form>
-
-        </div>
-        --}%
 
 
         <div class="btn-group" style="margin-top: 10px; margin-left: 300px">
-
             <button class="btn noprint" id="btnVolver"><i class="icon-arrow-left"></i> Regresar</button>
             <g:if test="${obra?.liquidacion == 0}">
             <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
                 <button class="btn noprint" id="btnGuardar"><i class="icon-check"></i> Guardar</button>
             </g:if>
             </g:if>
-        %{--<form>--}%
-        %{--<input type="button" value="Print this page" onClick="window.print()">--}%
-        %{--</form>--}%
-        %{--<button class="btn noprint" id="btnImprimir" onClick="window.print()"><i class="icon-print"></i> Imprimir</button>--}%
             <button class="btn noprint" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-
-            %{--<img src="images/print.png" class="print" alt="print" title="print" onclick="window.open('print.html')" />--}%
-
         </div>
 
 
@@ -511,18 +416,6 @@
                 window.print()
             });
 
-            //            function preparar() {
-            //                console.log("antes de imprimir")
-            %{--$("#imprime").append("<p>Latitud: " + $("#lato").val() + "</p>")--}%
-            %{--$("#imprime").append("<p>Longitud: " + $("#longo").val() + "</p>")--}%
-            %{--$("#imprime").append("<p>Cantón: " + "${obra.comunidad.parroquia.canton.nombre}" + "</p>")--}%
-            %{--$("#imprime").append("<p>Parroquia: " + "${obra.comunidad.parroquia.nombre}" + "</p>")--}%
-            //            }
-
-            //            function despues() {
-            //                console.log("despues de imprimir")
-            //                $("#imprime").html("")
-            //            }
 
         </script>
 

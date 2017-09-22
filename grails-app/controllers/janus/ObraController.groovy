@@ -447,15 +447,9 @@ class ObraController extends janus.seguridad.Shield {
         def claseObra
         def duenoObra = 0
         def funcionElab = Funcion.findByCodigo('E')
-
-//        println("--->" + Departamento.findByCodigo('UTFPU'))
-
         def personasUtfpu1 = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
-
         def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personasUtfpu1)
-
         def responsableObra
-
 
         def fechaPrecio = new Date()
         cn.eachRow("select max(rbpcfcha) fcha from rbpc, item where rbpc.item__id = item.item__id and " +
@@ -534,37 +528,6 @@ class ObraController extends janus.seguridad.Shield {
 
             }
             cn.close()
-//  println matriz + "matriz ok: " + matrizOk
-
-//            responsableObra = obra?.responsableObra?.id
-//
-//            println("ññññ" + responsableObra)
-//            personasUtfpu.each{
-//                println("res" + it.id)
-//                if(it.id == responsableObra){
-//                    duenoObra += 1
-//                }
-//            }
-
-//            responsableObra = obra?.responsableObra
-
-//            def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
-//            if(responsableRol){
-//                personasUtfpu.each{
-//                    if(it.id == responsableRol.id ){
-//                        duenoObra = 1
-//                    } else {
-//
-//                    }
-//                }
-//            } else {
-//
-//            }
-//            println  "responsable" + responsableRol +  " dueño " + duenoObra
-//            if (session.usuario.id == responsableObra.id) duenoObra++
-//            duenoObra = duenoObra > 0? 1: 0
-//            println  "responsable" + responsableRol +  " dueño " + duenoObra + "sesion: " + session.usuario.id
-//            println "funcion: " + esDuenoObra(obra)
 
             duenoObra = esDuenoObra(obra) ? 1 : 0
 
@@ -575,28 +538,6 @@ class ObraController extends janus.seguridad.Shield {
              claseObra: claseObra, grupoDir: grupo, dire  : direccion, depar: departamentos, concurso: concurso,
              personasUtfpu: personasUtfpu, duenoObra: duenoObra, sbprMF:sbprMF]
         } else {
-            /* ********* genera el numero de memo de formula polinoica ********************************* */
-//            def dpto = persona.departamento
-//            println "........." + dpto.documento
-//            def numActual = dpto.documento
-//            def num = numActual?:0 + 1
-//            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
-//                num = 1
-//            }
-//            def numero = "FP-" + num
-//            if (dpto.codigo) {
-//                numero += "-" + dpto.codigo
-//            }
-//            numero += "-" + (new Date().format("yy"))
-            /* ********* fin genera el numero de memo de formula polinoica ***************************** */
-
-//            responsableObra = obra?.responsableObra?.id
-//
-//            personasUtfpu.each{
-//                if(it.id == responsableObra ){
-//                    duenoObra = 1
-//                }
-//            }
 
             duenoObra = 0
 

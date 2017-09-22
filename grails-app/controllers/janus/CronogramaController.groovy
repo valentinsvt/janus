@@ -370,7 +370,7 @@ class CronogramaController extends janus.seguridad.Shield {
 
         def subpre = params.subpre
         if (!subpre) {
-            subpre = subpres[0].id
+            subpre = subpres[0]?.id
         }
 
         def detalle

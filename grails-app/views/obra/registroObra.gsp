@@ -35,10 +35,6 @@
         background: #c17474;
     }
 
-    .mover {
-
-    }
-
     .editable {
         border-bottom: 1px dashed;
     }
@@ -137,13 +133,7 @@
                 </button>
             </g:if>
         </g:if>
-    %{--
-          <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
-              <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
-              </button>
-          </g:if>
-    --}%
-        <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
+         <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
             <g:if test="${!obra?.fechaInicio}">
                 <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
                 </button>
@@ -193,9 +183,9 @@
             </g:if>
 
             <g:if test="${obra?.id != null}">
-                %{--<g:if test="${duenoObra == 1 || obra?.id == null}">--}%
-                    <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
-                %{--</g:if>--}%
+            %{--<g:if test="${duenoObra == 1 || obra?.id == null}">--}%
+                <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+            %{--</g:if>--}%
             </g:if>
 
             <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
@@ -246,9 +236,6 @@
             <div class="linea" style="height: 85%;"></div>
 
         </div>
-
-    %{--${obra?.tipo}--}%
-    %{--${session.perfil.codigo}--}%
         <g:if test="${obra?.tipo == 'D'}">
             <g:if test="${session.perfil.codigo == 'ADDI'}">
                 <div class="span 12"
@@ -264,7 +251,6 @@
                          style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA / COGESTIÓN</div>
                 </g:else>
             </g:else>
-        %{--<g:if test="${session.perfil.codigo == 'ADDI'}">--}%
         </g:if>
 
         <div class="span12" style="margin-top: 0px">
@@ -700,29 +686,6 @@
                 </a>
                 <g:set var="coordsParts" value="${coords.split(' ')}"/>
             </div>
-            %{--<g:if test="${obra?.id != null}">--}%
-
-            %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
-
-            %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number: obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Latitud de la Obra"/></div>--}%
-
-            %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
-
-            %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number: obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Longitud de la Obra"/></div>--}%
-
-            %{--</g:if>--}%
-            %{--<g:else>--}%
-
-            %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
-
-            %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}" style="width: 100px" maxlength="11" title="Latitud de la Obra"/></div>--}%
-
-            %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
-
-            %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11" title="Longitud de la Obra"/></div>--}%
-
-            %{--</g:else>--}%
-
         </div>
 
     </fieldset>
@@ -730,20 +693,10 @@
     <fieldset class="borde" style="position: relative;float: left">
 
         <div class="span12" style="margin-top: 10px">
-
             <p class="css-vertical-text">Salida</p>
-
             <div class="linea" style="height: 85%;"></div>
-
         </div>
 
-
-        %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
-        %{--<div class="span12" style="margin-top: 10px" id="dirSalida">--}%
-
-        %{--</div>--}%
-        %{--</g:if>--}%
-        %{--<g:else>--}%
         <div class="span12" style="margin-top: 10px" id="dirSalida">
             <div class="span2 formato" style="width: 230px;">Destino: Dirección
             <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id"
@@ -771,14 +724,10 @@
             <g:if test="${obra?.id && obra?.tipo != 'D'}">
                 <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
                 <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
-                %{--<div style="font-weight: normal;">${obra?.formulaPolinomica}</div>--}%
                     <g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"
                                  title="Fórmula Polinómica" style="width: 120px;" value="${obra?.formulaPolinomica}"/>
                 </g:if>
                 <g:else>
-                %{--<a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">--}%
-                %{--Generar--}%
-                %{--</a>--}%
                     <g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"
                                  title="Fórmula Polinómica" style="width: 120px;"/>
                 </g:else>
@@ -790,15 +739,7 @@
                             value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
             </div>
         </div>
-        %{--</g:else>--}%
-
         <div class="span12" style="margin-top: 10px">
-
-            %{--<div class="span1 formato">DESTINO</div>--}%
-
-            %{--<div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>--}%
-            %{--<div class="span3"><g:select name="departamento.id" class="departamento" value="${obra?.departamento?.id}" from="${janus.Departamento?.list()}"--}%
-            %{--optionKey="id" optionValue="descripcion" style="width: 350px"/></div>--}%
 
         </div>
 
@@ -810,13 +751,9 @@
 
     <fieldset class="borde">
         <div class="span7">
-
             <div class="span2">Buscar Por</div>
-
             <div class="span2">Criterio</div>
-
             <div class="span1">Ordenar</div>
-
         </div>
 
         <div>
@@ -839,11 +776,8 @@
     </fieldset>
 
     <fieldset class="borde">
-
         <div id="divTabla" style="height: 460px; overflow-y:auto; overflow-x: auto;">
-
         </div>
-
     </fieldset>
 
 </div>
@@ -869,7 +803,6 @@
     <fieldset>
         <div class="span3">
             Primero debe registrar la obra para poder imprimir los documentos.
-
         </div>
     </fieldset>
 
@@ -925,7 +858,6 @@
                           optionKey="id" optionValue="${{
                     it.nombre + ' ' + it.apellido
                 }}"/>
-                %{--<g:select name="oferenteCopia" from="${janus.Persona.list()}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>--}%
             </div>
         </div>
     </fieldset>
@@ -940,10 +872,6 @@
     </fieldset>
 </div>
 
-
-
-
-
 <g:if test="${obra?.id}">
     <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px;float: left" align="center">
 
@@ -957,18 +885,11 @@
                     </a></li>
                     <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
                     <li>
-                        %{--
-                                                <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btnFormula" params="[obra: obra?.id]" title="Coeficientes">
-                                                    Fórmula Pol.
-                                                </g:link>
-                        --}%
                         <a href="#" id="btnFormula"><i class="icon-money"></i>Fórmula Pol.</a>
 
                     </li>
-                    %{--<li><a href="#">FP Liquidación</a></li>--}%
                     <li><a href="#" id="btnRubros"><i class="icon-money"></i>Rubros</a></li>
                     <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
-                    %{--<li><a href="${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>--}%
                     <li><a href="${g.createLink(controller: 'cronograma', action: 'cronogramaObra', id: obra?.id)}"><i
                             class="icon-calendar"></i>Cronograma
                     </a></li>
@@ -1086,18 +1007,15 @@
                     </g:if>
                 </g:else>
 
-            %{--${sbprMF}--}%
                 <span style="margin-left: 100px;">Generada para:</span>
                 <g:select name="matriz_gen" from="${sbprMF}" optionKey="key" optionValue="value"
                           style="margin-right: 20px; width: 400px"></g:select>
 
-                %{--<g:each var="sb" in="${sbprMF}" status="i">--}%
-                %{--${sb.key} ${sb.value}<br/>--}%
-                %{--</g:each>--}%
-
                 <p style="margin-top: 20px">Desea volver a generar la matriz? o generar otra matriz</p>
                 <a href="#" class="btn btn-info" id="no">No -> Ver la Matriz existente</a>
-                <a href="#" class="btn btn-danger" id="si">Si -> Generar Matriz</a>
+                <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1)}">
+                    <a href="#" class="btn btn-danger" id="si">Si -> Generar Matriz</a>
+                </g:if>
                 <a href="#" class="btn btn-info" id="cancela" style="margin-left: 200px;">Cancelar</a>
 
             </div>
@@ -1108,8 +1026,6 @@
                           optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
             <p>Generar con desglose de Transporte <input type="checkbox" id="si_trans" style="margin-top: -3px"
                                                          checked="true">
-
-                %{--"FP.... ${FormulaPolinomica.countByObra(janus.Obra.get(obra?.id))}"--}%
                 <g:if test="${FormulaPolinomica.countByObra(janus.Obra.get(obra?.id)) > 0}">
                     <p>Borrar la Fórmula Polinómica<input type="checkbox" id="borra_fp" style="margin-top: -3px" checked="true">
                 </g:if>
@@ -1130,37 +1046,27 @@
 
         <div class="modal-body" id="modal_body_formula">
             <div id="msg_formula">
-                %{--<g:if test="${!obra.desgloseTransporte}">--}%
                 <g:if test="${!matrizOk}">
                     <p style="font-size: 14px; text-align: center;">No existe una matriz de la fórmula polinómica</p>
                 </g:if>
                 <g:else>
-                %{--${sbprMF}--}%
                     <span style="margin-left: 100px;">Subpresupuesto:</span>
-                    <g:select name="matriz_genFP" from="${sbprMF}" optionKey="key" optionValue="value"
-                              style="margin-right: 20px; width: 400px"></g:select>
-
+                    <g:select name="matriz_genFP" from="${sbprMF}" optionKey="key" optionValue="value" style="margin-right: 20px; width: 400px"/>
                     <a href="#" class="btn btn-info" id="irFP">Ir a la Fórmula Polinómica</a>
                     <a href="#" class="btn btn-info" id="cancelaFP" style="margin-left: 360px;">Cancelar</a>
                 </g:else>
-
             </div>
-
         </div>
-
     </div>
-
 </g:if>
 
 <div id="admDirecta">
-
     <br>
     <b>Observaciones:</b><br><br>
     <textarea style="width: 90%;height: 80px;resize: none" id="descAdm" maxlength="250"></textarea>
     <br> <br>
     <b>Fecha de inicio:</b> <br><br>
     <elm:datepicker id="fechaInicio"></elm:datepicker>
-
 </div>
 
 <div id="errorDialog">
@@ -1241,17 +1147,11 @@
     $("#porcentajeAnticipo").keydown(function (ev) {
         console.log("entro down")
         return validarNum(ev);
-
     }).keyup(function () {
-
         var enteros = $(this).val();
-
         if (parseFloat(enteros) > 100) {
-
             $(this).val(100)
-
         }
-
     });
 
     $("#longitudVia").bind({
@@ -1315,13 +1215,9 @@
     });
 
     $("#plazo").keydown(function (ev) {
-
         return validarNum(ev);
-
     }).keyup(function () {
-
         var enteros = $(this).val();
-
     });
 
     $("#latitud").bind({
@@ -1349,9 +1245,7 @@
                     $(this).val(val);
                 }
             }
-
         }
-
     });
 
     $("#longitud").bind({
@@ -1384,32 +1278,10 @@
 
     });
 
-    %{--function loadPersonas2() {--}%
-
-    %{--var idObra = ${obra?.id}--}%
-    %{--$.ajax({--}%
-    %{--type    : "POST",--}%
-    %{--url     : "${g.createLink(action:'getPersonas')}",--}%
-    %{--data    : {id : ${persona?.departamento?.id},--}%
-    %{--obra      : idObra--}%
-
-    %{--},--}%
-    %{--success : function (msg) {--}%
-
-    %{--$("#filaPersonas").html(msg);--}%
-    %{--}--}%
-    %{--});--}%
-    %{--}--}%
-
-
     function loadPersonas() {
-
-        %{--var idP = ${(obra)?obra.departamento?.direccion?.id:persona?.departamento?.direccion?.id }--}%
 
         var idP
         var idDep1
-
-
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
         <g:if test="${obra}">
         <g:if test="${duenoObra == 1}">
@@ -1430,56 +1302,51 @@
         <g:if test="${obra}">
 //               idP = $("#departamentoDire").val();
         idP = ${persona?.departamento?.direccion?.id}
-                idDep1 = ${persona?.departamento?.id}
-                        </g:if>
-                        <g:else>
-                        idP = ${persona?.departamento?.direccion?.id}
-                                idDep1 =
+            idDep1 = ${persona?.departamento?.id}
+                </g:if>
+                <g:else>
+                idP = ${persona?.departamento?.direccion?.id}
+                    idDep1 =
         ${persona?.departamento?.id}
         </g:else>
-
         </g:else>
 
-
         var idObra = ${obra?.id}
-                $.ajax({
-                    type: "POST",
-                    url: "${g.createLink(action:'getPersonas2')}",
-                    data: {
-                        id: idP,
-                        %{--idDep : ${persona?.departamento?.id},--}%
-                        idDep: idDep1,
-                        obra: idObra
+            $.ajax({
+                type: "POST",
+                url: "${g.createLink(action:'getPersonas2')}",
+                data: {
+                    id: idP,
+                    %{--idDep : ${persona?.departamento?.id},--}%
+                    idDep: idDep1,
+                    obra: idObra
 
-                    },
-                    success: function (msg) {
+                },
+                success: function (msg) {
 
-                        $("#filaPersonas").html(msg);
-                    }
-                });
+                    $("#filaPersonas").html(msg);
+                }
+            });
     }
 
 
     $("#departamentoObra").change(function () {
 
         var idDep = $("#departamentoObra").val()
-
-//               console.log("->" + idDep)
-
         var idObra = ${obra?.id}
-                $.ajax({
-                    type: "POST",
-                    url: "${g.createLink(action:'getPersonas2')}",
-                    data: {
-                        id: idDep,
-                        obra: idObra
+            $.ajax({
+                type: "POST",
+                url: "${g.createLink(action:'getPersonas2')}",
+                data: {
+                    id: idDep,
+                    obra: idObra
 
-                    },
-                    success: function (msg) {
+                },
+                success: function (msg) {
 
-                        $("#filaPersonas").html(msg);
-                    }
-                });
+                    $("#filaPersonas").html(msg);
+                }
+            });
     });
 
 
@@ -1872,15 +1739,6 @@
                     });
                 }
             });
-            %{--$.ajax({--}%
-            %{--type    : "POST",--}%
-            %{--url     : "${createLink(action: 'matrizFP',controller: 'obraFP')}",--}%
-            %{--data    : "obra=${obra.id}&sub=" + sp + "&trans=" + tr,--}%
-            %{--success : function (msg) {--}%
-            %{--$("#dlgLoad").dialog("close");--}%
-            %{--location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',params:[id:obra.id,inicio:0,limit:40])}"--}%
-            %{--}--}%
-            %{--});--}%
         });
         </g:if>
         $("#lista").click(function () {
@@ -1910,39 +1768,25 @@
                 $('#criterio').focus()
             }, 500);
         });
+
         $("#nuevo").click(function () {
-//            $("input[type=text]").val("");
-//            $("textarea").val("");
-//            $("select").val("-1");
-
             location.href = "${g.createLink(action: 'registroObra')}";
-
         });
 
         $("#cancelarObra").click(function () {
-
             location.href = "${g.createLink(action: 'registroObra')}" + "?obra=" + "${obra?.id}";
-
         });
 
         $("#eliminarObra").click(function () {
-
             if (${obra?.id != null}) {
-
                 $("#eliminarObraDialog").dialog("open");
-
             }
-
         });
 
         $("#cambiarEstado").click(function () {
-
             if (${obra?.id != null}) {
-
                 $("#estadoDialog").dialog("open")
-
             }
-
         });
 
         $("#btnDocumentos").click(function () {
@@ -1950,9 +1794,7 @@
         });
 
         $("#btnMapa").click(function () {
-
             location.href = "${g.createLink(action: 'mapaObra', id: obra?.id)}"
-
         });
 
         $("#btnVeri").click(function () {
@@ -1965,11 +1807,6 @@
         });
 
         $("#btn-aceptar").click(function () {
-//                    $(this).replaceWith(spinner);
-            %{--<g:if test="${!obra}">--}%
-            %{--$("#departamento").val($("#departamentoObra").val())--}%
-            %{--</g:if>--}%
-
             $("#frm-registroObra").submit();
         });
 
@@ -1984,7 +1821,6 @@
             loadSalida();
             loadPersonas();
         });
-
 
         function loadSalida() {
 
@@ -2011,28 +1847,22 @@
             direccionEl =
             ${persona?.departamento?.direccion?.id}
             </g:else>
-
             </g:else>
-
 
             var idObra = ${obra?.id}
 
-//                    console.log("DP:" + direccionEl)
-//                    console.log("ID:" + idObra)
+                $.ajax({
+                    type: "POST",
+                    url: "${g.createLink(action:'getSalida')}",
+                    data: {
+                        direccion: direccionEl,
+                        obra: idObra
+                    },
+                    success: function (msg) {
 
-                    $.ajax({
-                        type: "POST",
-                        url: "${g.createLink(action:'getSalida')}",
-                        data: {
-                            direccion: direccionEl,
-                            obra: idObra
-                        },
-                        success: function (msg) {
-
-                            $("#dirSalida").html(msg);
-                        }
-                    });
-
+                        $("#dirSalida").html(msg);
+                    }
+                });
         }
 
         $("#copiarObra").click(function () {
@@ -2045,83 +1875,81 @@
         $("#btnRubros").click(function () {
             var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
             var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${obra?.id}Wdesglose=";
-
-
             var idObra = ${obra?.id}
 
-            $.box({
-                imageClass: "box_info",
-                text: "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br><span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
-                title: "Imprimir Rubros de la Obra",
-                iconClose: true,
-                dialog: {
-                    resizable: false,
-                    draggable: false,
-                    width: 600,
-                    height: 280,
-                    buttons: {
+                $.box({
+                    imageClass: "box_info",
+                    text: "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br><span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
+                    title: "Imprimir Rubros de la Obra",
+                    iconClose: true,
+                    dialog: {
+                        resizable: false,
+                        draggable: false,
+                        width: 600,
+                        height: 280,
+                        buttons: {
 
-                        "Con desglose de Trans.": function () {
-                            url += "1";
-                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-                        },
-                        "Sin desglose de Trans.": function () {
-                            url += "0";
-                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-                        },
-                        "Exportar Rubros a Excel": function () {
-                            var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
-                            url += "1";
-                            location.href = url;
-                        },
-                        "VAE con desglose de Trans.": function () {
-                            urlVae += "1";
-                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
-                        },
-                        "VAE sin desglose de Trans.": function () {
-                            urlVae += "0";
-                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
-                        },
-                        "Exportar VAE a Excel": function () {
-                            var urlVaeEx = "${createLink(controller:'reportes3', action:'imprimirRubrosVaeExcel')}?obra=${obra?.id}&transporte=";
-                            urlVaeEx += "1";
-                            location.href = urlVaeEx;
-                        },
-                        "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra": function () {
-                            %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";--}%
-                            %{--location.href = url;--}%
+                            "Con desglose de Trans.": function () {
+                                url += "1";
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                            },
+                            "Sin desglose de Trans.": function () {
+                                url += "0";
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                            },
+                            "Exportar Rubros a Excel": function () {
+                                var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
+                                url += "1";
+                                location.href = url;
+                            },
+                            "VAE con desglose de Trans.": function () {
+                                urlVae += "1";
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
+                            },
+                            "VAE sin desglose de Trans.": function () {
+                                urlVae += "0";
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
+                            },
+                            "Exportar VAE a Excel": function () {
+                                var urlVaeEx = "${createLink(controller:'reportes3', action:'imprimirRubrosVaeExcel')}?obra=${obra?.id}&transporte=";
+                                urlVaeEx += "1";
+                                location.href = urlVaeEx;
+                            },
+                            "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra": function () {
+                                %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";--}%
+                                %{--location.href = url;--}%
 
-                            $.ajax({
-                                type: "POST",
-                                url: "${createLink(controller:'reportes2', action:'comprobarIlustracion')}",
-                                data: {
-                                    id: idObra,
-                                    tipo: "ie"
-                                },
-                                success: function (msg) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${createLink(controller:'reportes2', action:'comprobarIlustracion')}",
+                                    data: {
+                                        id: idObra,
+                                        tipo: "ie"
+                                    },
+                                    success: function (msg) {
 
-                                    var parts = msg.split('*');
+                                        var parts = msg.split('*');
 
-                                    if (parts[0] == 'SI') {
-                                        $("#divError").hide();
-                                        var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
-                                        location.href = url;
-                                    } else {
-                                        $("#spanError").html("El archivo  '" + parts[1] + "'  no ha sido encontrado");
-                                        $("#divError").show()
+                                        if (parts[0] == 'SI') {
+                                            $("#divError").hide();
+                                            var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
+                                            location.href = url;
+                                        } else {
+                                            $("#spanError").html("El archivo  '" + parts[1] + "'  no ha sido encontrado");
+                                            $("#divError").show()
+                                        }
+
                                     }
+                                });
 
-                                }
-                            });
+                            },
 
-                        },
+                            "Cancelar": function () {
 
-                        "Cancelar": function () {
-
+                            }
                         }
                     }
-                }
-            });
+                });
             return false;
         });
 
@@ -2131,15 +1959,12 @@
         });
 
         $("#btnImprimir").click(function () {
-
             $("#dlgLoad").dialog("open");
             location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistro', id: obra?.id)}"
             $("#dlgLoad").dialog("close")
-
         });
 
         $("#modal-var").draggable({
-//            handle: ".modal-header"
         });
 
         $("#btnVar").click(function () {
@@ -2153,50 +1978,35 @@
                 success: function (msg) {
 
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
-
                     var btnCancel = $('<a href="#" data-dismiss="modal" class="btn" >Cancelar</a>');
 
                     btnSave.click(function () {
-
-//                                var active = $("#tabs").tabs("option", "active");
                         if ($("#frmSave-var").valid()) {
                             btnSave.replaceWith(spinner);
                         }
-                        var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();//+"&lang=en_US";
+                        var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();
                         var url = $("#frmSave-var").attr("action");
-
-//                                ////console.log(url);
-//                                ////console.log(data);
 
                         $.ajax({
                             type: "POST",
                             url: url,
                             data: data,
                             success: function (msg) {
-//                                ////console.log("Data Saved: " + msg);
                                 $("#modal-var").modal("hide");
                             }
                         });
-
                         return false;
-
                     });
 
                     $("#modal_title_var").html("Variables");
                     $("#modal_body_var").html(msg);
                     $("#modal_footer_var").html("").append(btnCancel);
-                    %{--<g:if test="${obra?.estado!='R'}">--}%
-                    %{--$("#modal_footer_var").html("").append(btnSave);--}%
-                    %{--</g:if>--}%
-                    %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id && obra?.estado != 'R'}">--}%
                     <g:if test="${duenoObra == 1 && obra?.estado != 'R'}">
                     $("#modal_footer_var").html("").append(btnSave);
-
                     </g:if>
                     <g:else>
                     $("#modal_footer_var").html("").append(btnCancel);
                     </g:else>
-
                     $("#modal-var").modal("show");
                 }
             });
@@ -2214,14 +2024,6 @@
             title: 'Copiar la obra',
             buttons: {
                 "Aceptar": function () {
-                    %{--var data = $("#frm-registroObra").serialize();--}%
-                    %{--data+="&nuevoCodigo="+ $.trim($("#nuevoCodigo").val());--}%
-
-                    %{--var url = "${createLink(action: 'saveCopia')}?"+data;--}%
-
-                    %{--////console.log(url);--}%
-
-                    //location.href = url;
 
                     var originalId = "${obra?.id}";
                     var nuevoCodigo = $.trim($("#nuevoCodigo").val());
@@ -2232,32 +2034,23 @@
                         data: {
                             id: originalId,
                             nuevoCodigo: nuevoCodigo
-
                         },
                         success: function (msg) {
-
-                            $("#copiarDialog").dialog("close")
-                            var parts = msg.split('_')
+                            $("#copiarDialog").dialog("close");
+                            var parts = msg.split('_');
                             if (parts[0] == 'NO') {
-
                                 $("#spanError").html(parts[1]);
                                 $("#divError").show()
                             } else {
-
-                                $("#divError").hide()
+                                $("#divError").hide();
                                 $("#spanOk").html(parts[1]);
                                 $("#divOk").show()
-
                             }
-
                         }
                     });
-
                 },
                 "Cancelar": function () {
-
                     $("#copiarDialog").dialog("close");
-
                 }
             }
         });
@@ -2268,7 +2061,6 @@
             modal: true,
             draggable: false,
             width: 380,
-//                    height    : 250,
             position: 'center',
             title: 'Copiar la obra al sistema de oferentes',
             buttons: {
@@ -2286,7 +2078,6 @@
                             oferente: oferente
                         },
                         success: function (msg) {
-//                                    console.log(msg)
                             $("#dlgLoad").dialog("close");
                             $("#copiarDialogOfe").dialog("close");
                             var parts = msg.split('_');
@@ -2308,7 +2099,6 @@
         });
 
         $("#busqueda").dialog({
-
             autoOpen: false,
             resizable: false,
             modal: true,
@@ -2317,7 +2107,6 @@
             height: 600,
             position: 'center',
             title: 'Datos de Situación Geográfica'
-
         });
 
         $("#estadoDialog").dialog({
@@ -2332,10 +2121,8 @@
             title: 'Cambiar estado de la Obra',
             buttons: {
                 "Aceptar": function () {
-
                     $("#dlgLoad").dialog("open");
-//
-                    var estadoCambiado = $("#estado").val();
+                   var estadoCambiado = $("#estado").val();
 
                     if (estadoCambiado == 'N') {
                         estadoCambiado = 'R';
@@ -2344,7 +2131,6 @@
                             url: "${g.createLink(action: 'regitrarObra')}",
                             data: "id=${obra?.id}",
                             success: function (msg) {
-//                                ////console.log(msg)
                                 if (msg != "ok") {
                                     $.box({
                                         imageClass: "box_info",
@@ -2368,9 +2154,7 @@
                                 }
                             }
                         });
-//
                     } else {
-
                         $.ajax({
                             type: "POST",
                             url: "${g.createLink(action: 'desregitrarObra')}",
@@ -2400,11 +2184,8 @@
                                 }
                             }
                         });
-//
                     }
-//                            $(".estado").val(estadoCambiado);
                     $("#estadoDialog").dialog("close");
-//
                 },
                 "Cancelar": function () {
                     $("#estadoDialog").dialog("close");
@@ -2524,7 +2305,6 @@
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                     btnSave.click(function () {
-//                            submitForm(btnSave);
                         $(this).replaceWith(spinner);
                         $.ajax({
                             type: "POST",
@@ -2532,7 +2312,6 @@
                             data: $("#frmSave-TipoObra").serialize(),
                             success: function (msg) {
                                 if (msg != 'error') {
-//                                            $("#divTipoObra").html(msg);
                                     $("#tipoObra").replaceWith(msg);
                                     alert('Tipo de obra creada!')
                                 } else {
@@ -2543,7 +2322,6 @@
 
                             }
                         });
-
                         return false;
                     });
 
@@ -2555,11 +2333,9 @@
                 }
             });
             return false;
-
         });
 
         $("#btnCrearClase").click(function () {
-
             $.ajax({
                 type: "POST",
                 url: "${createLink(controller: "claseObra", action:'form_ext_ajax')}",
@@ -2586,10 +2362,6 @@
                             }
                         });
                         return false;
-//                        }else{
-//                            alert('No ingreso ningun código!')
-//                        }
-
                     });
 
                     $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
@@ -2600,11 +2372,9 @@
                 }
             });
             return false;
-
         });
 
         $("#btnCrearPrograma").click(function () {
-
             $.ajax({
                 type: "POST",
                 url: "${createLink(controller:'programacion', action:'form_ext_ajax')}",
@@ -2629,10 +2399,8 @@
                                 $("#modal-TipoObra").modal("hide");
                             }
                         });
-
                         return false;
                     });
-
                     $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
                     $("#modalTitle_tipo").html("Crear Programa");
                     $("#modalBody_tipo").html(msg);
@@ -2641,11 +2409,9 @@
                 }
             });
             return false;
-
         });
 
         $("#eliminarObraDialog").dialog({
-
             autoOpen: false,
             resizable: false,
             modal: true,
@@ -2656,49 +2422,30 @@
             title: 'Eliminar Obra',
             buttons: {
                 "Aceptar": function () {
-
                     if (${volumen?.id != null || formula?.id != null}) {
-
                         $("#noEliminarDialog").dialog("open")
-
                     }
-
                     else {
-
                         $.ajax({
                             type: "POST",
                             url: "${createLink(action: 'delete')}",
                             data: "id=${obra?.id}",
                             success: function (msg) {
-
                                 if (msg == 'ok') {
-
                                     location.href = "${createLink(action: 'registroObra')}"
-
-                                } else {
-
                                 }
-
                             }
                         });
-
                     }
-
                     $("#eliminarObraDialog").dialog("close")
-
                 },
                 "Cancelar": function () {
-
                     $("#eliminarObraDialog").dialog("close")
-
                 }
-
             }
-
         });
 
         $("#noEliminarDialog").dialog({
-
             autoOpen: false,
             resizable: false,
             modal: true,
@@ -2709,14 +2456,10 @@
             title: 'No se puede Eliminar la Obra!',
             buttons: {
                 "Aceptar": function () {
-
                     $("#eliminarObraDialog").dialog("close");
                     $("#noEliminarDialog").dialog("close");
-
                 }
             }
-
-
         });
 
         $("#dlgVerificacion").dialog({
@@ -2730,7 +2473,6 @@
             title: 'No se ha generado la Matriz!',
             buttons: {
                 "Aceptar": function () {
-
                     $("#dlgVerificacion").dialog("close");
                 }
             }
@@ -2746,16 +2488,9 @@
         });
 
         function busqueda() {
-
             var buscarPor = $("#buscarPor").val();
             var criterio = $(".criterio").val();
-
             var ordenar = $("#ordenar").val();
-
-//                   ////console.log("buscar" + buscarPor)
-//                    ////console.log("criterio" + criterio)
-//                    ////console.log("ordenar" + ordenar)
-
             $.ajax({
                 type: "POST",
                 url: "${createLink(action:'situacionGeografica')}",
@@ -2766,14 +2501,11 @@
 
                 },
                 success: function (msg) {
-
                     $("#divTabla").html(msg);
                     $("#dlgLoad").dialog("close");
                 }
             });
-
         }
-
     });
 
     $("#errorDialog").dialog({
