@@ -16,7 +16,7 @@
     <body>
         <div class="btn-toolbar">
             <div class="btn-group">
-                <g:link action="index" id="${contrato.id}" params="[subpre: params.subpre]" class="btn">
+                <g:link action="${!nuevo ? 'index' : 'nuevoCronograma'}" id="${contrato.id}" params="[subpre: params.subpre]" class="btn">
                     <i class="icon-caret-left"></i>
                     Cronograma
                 </g:link>

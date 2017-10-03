@@ -278,7 +278,7 @@ class ContratoController extends janus.seguridad.Shield {
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
             planilla = Planilla.findAllByContrato(contrato)
-//            complementario = Contrato.findByPadre(contrato)
+            complementario = Contrato.findByPadre(contrato)
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
 
             [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario]

@@ -8,9 +8,12 @@ import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
 import com.lowagie.text.Phrase
 import com.lowagie.text.Rectangle
+import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
+import janus.pac.CronogramaContratado
+import janus.pac.CronogramaContrato
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.Label
@@ -1225,5 +1228,333 @@ class Reportes5Controller {
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
     }
+
+
+
+    def reporteCronogramaNuevoPdf() {
+//        println "reporteCronogramaPdf params: $params"
+        def tipo = params.tipo
+        def obra = null, contrato = null, lbl = ""
+        switch (tipo) {
+            case "obra":
+                obra = Obra.get(params.id.toLong())
+                lbl = " la obra"
+                break;
+            case "contrato":
+                contrato = Contrato.get(params.id)
+                obra = contrato.obra
+                lbl = "l contrato de la obra"
+                break;
+        }
+
+        def meses = obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)
+//        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def detalle = VolumenContrato.findAllByObra(obra, [sort: "volumenOrden"])
+
+        def precios = [:]
+        def indirecto = obra.totales / 100
+
+        preciosService.ac_rbroObra(obra.id)
+
+        detalle.each {
+            it.refresh()
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+
+            if(res["precio"][0] != null){
+                precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+            }else{
+                precios.put(it.id.toString(), (0 * indirecto).toDouble().round(2))
+            }
+        }
+
+        def baos = new ByteArrayOutputStream()
+
+        def name = "cronograma${tipo.capitalize()}_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+
+        Font catFont2 = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font catFont3 = new Font(Font.TIMES_ROMAN, 16, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        def prmsHeaderHoja = [border: Color.WHITE]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        PdfContentByte cb = pdfw.getDirectContent();
+        document.addTitle("Cronograma de${lbl} " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, planillas");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        /* ***************************************************** Titulo del reporte *******************************************************/
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", catFont3));
+        preface.add(new Paragraph("CRONOGRAMA", catFont2));
+        preface.add(new Paragraph("DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", catFont2));
+        addEmptyLine(preface, 1);
+        Paragraph preface2 = new Paragraph();
+        document.add(preface);
+        document.add(preface2);
+        Paragraph pMeses = new Paragraph();
+        pMeses.add(new Paragraph("Obra: ${obra.descripcion} (${meses} mes${meses == 1 ? '' : 'es'})", info))
+        addEmptyLine(pMeses, 1);
+        document.add(pMeses);
+
+        Paragraph pRequirente = new Paragraph();
+        pRequirente.add(new Paragraph("Requirente: ${obra?.departamento?.direccion?.nombre + ' - ' + obra.departamento?.descripcion}", info))
+        document.add(pRequirente);
+
+        Paragraph codigoObra = new Paragraph();
+        codigoObra.add(new Paragraph("Código de la Obra: ${obra?.codigo}", info))
+        document.add(codigoObra);
+
+        Paragraph docReferencia = new Paragraph();
+        docReferencia.add(new Paragraph("Doc. Referencia: ${obra?.oficioIngreso}", info))
+        document.add(docReferencia);
+
+        Paragraph fecha = new Paragraph();
+        fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
+        document.add(fecha);
+
+        Paragraph plazo = new Paragraph();
+        plazo.add(new Paragraph("Plazo: ${obra?.plazoEjecucionMeses} Meses" + " ${obra?.plazoEjecucionDias} Días", info))
+        document.add(plazo);
+
+        Paragraph rutaCritica = new Paragraph();
+        rutaCritica.add(new Paragraph("Los rubros pertenecientes a la ruta crítica están marcados con un * antes de su código.", info))
+        addEmptyLine(rutaCritica, 1);
+        document.add(rutaCritica);
+
+        /* ***************************************************** Fin Titulo del reporte ***************************************************/
+        /* ***************************************************** Tabla cronograma *********************************************************/
+        def tams = [10, 40, 5, 6, 6, 6, 2]
+        meses.times {
+            tams.add(7)
+        }
+        tams.add(10)
+
+        PdfPTable tabla = new PdfPTable(8 + meses);
+        tabla.setWidthPercentage(100);
+        tabla.setWidths(arregloEnteros(tams))
+        tabla.setWidthPercentage(100);
+
+        addCellTabla(tabla, new Paragraph("Código", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("Rubro", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("Unidad", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("Cantidad", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("P. Unitario", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("C. Total", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("T.", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        meses.times { i ->
+            addCellTabla(tabla, new Paragraph("Mes " + (i + 1), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        }
+        addCellTabla(tabla, new Paragraph("Total Rubro", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        tabla.setHeaderRows(1)
+
+        def totalMes = []
+        def sum = 0
+        def borderWidth = 2
+
+        detalle.eachWithIndex { vol, s ->
+            def cronos
+            switch (tipo) {
+                case "obra":
+//                    cronos = Cronograma.findAllByVolumenObra(vol)
+                    cronos = Cronograma.findAllByVolumenObra(VolumenesObra.findByItemAndOrdenAndObra(vol.item, vol.volumenOrden, vol.obra))
+                    break;
+                case "contrato":
+//                    cronos = CronogramaContrato.findAllByVolumenObra(vol)
+                    cronos = CronogramaContratado.findAllByVolumenContrato(vol)
+                    break;
+            }
+
+            def totalDolRow = 0, totalPrcRow = 0, totalCanRow = 0
+            def parcial = Math.round(precios[vol.id.toString()] * vol.volumenCantidad*100)/100
+            sum += parcial
+
+            addCellTabla(tabla, new Paragraph((vol.rutaCritica == 'S' ? "* " : "") + vol.item.codigo, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tabla, new Paragraph(vol.item.nombre, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tabla, new Paragraph(vol.item.unidad.codigo, fontTd), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tabla, new Paragraph(numero(vol.volumenCantidad, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tabla, new Paragraph(numero(precios[vol.id.toString()], 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tabla, new Paragraph(numero(parcial, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tabla, new Paragraph('$', fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            meses.times { i ->
+                def prec = cronos.find { it.periodo == i + 1 }
+                totalDolRow += (prec ? prec.precio : 0)
+                if (!totalMes[i]) {
+                    totalMes[i] = 0
+                }
+                totalMes[i] += (prec ? prec.precio : 0)
+                addCellTabla(tabla, new Paragraph(numero(prec?.precio, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            }
+            addCellTabla(tabla, new Paragraph(numero(totalDolRow, 2) + ' $', fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tabla, new Paragraph(' ', fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 6])
+            addCellTabla(tabla, new Paragraph('%', fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            meses.times { i ->
+                def porc = cronos.find { it.periodo == i + 1 }
+                totalPrcRow += (porc ? porc.porcentaje : 0)
+                addCellTabla(tabla, new Paragraph(numero(porc?.porcentaje, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            }
+            addCellTabla(tabla, new Paragraph(numero(totalPrcRow, 2) + ' %', fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tabla, new Paragraph(' ', fontTd), [border: Color.BLACK, bwb: borderWidth, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 6])
+            addCellTabla(tabla, new Paragraph('F', fontTd), [border: Color.BLACK, bwb: borderWidth, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            meses.times { i ->
+                def cant = cronos.find { it.periodo == i + 1 }
+                totalCanRow += (cant ? cant.cantidad : 0)
+                addCellTabla(tabla, new Paragraph(numero(cant?.cantidad, 2), fontTd), [border: Color.BLACK, bwb: borderWidth, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            }
+            addCellTabla(tabla, new Paragraph(numero(totalCanRow, 2) + ' F', fontTh), [border: Color.BLACK, bwb: borderWidth, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("TOTAL PARCIAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+        addCellTabla(tabla, new Paragraph(numero(sum, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("T", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        meses.times { i ->
+            addCellTabla(tabla, new Paragraph(numero(totalMes[i], 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("TOTAL ACUMULADO", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("T", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        def acu = 0
+        meses.times { i ->
+            acu += totalMes[i]
+            addCellTabla(tabla, new Paragraph(numero(acu, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("% PARCIAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("T", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        meses.times { i ->
+            def prc = 100 * totalMes[i] / sum
+            addCellTabla(tabla, new Paragraph(numero(prc, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("% ACUMULADO", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tabla, new Paragraph("T", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        acu = 0
+        meses.times { i ->
+            def prc = 100 * totalMes[i] / sum
+            acu += prc
+            addCellTabla(tabla, new Paragraph(numero(acu, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+        addCellTabla(tabla, new Paragraph(" ", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tabla)
+        /* ***************************************************** Fin Tabla cronograma *****************************************************/
+
+        def personaElaboro
+        def firmaCoordinador
+        def ban = 0
+
+        def deptoUsu = Persona.get(session.usuario.id).departamento
+
+        def funcionCoor = Funcion.findByCodigo('O')
+        def funcionElab = Funcion.findByCodigo('E')
+
+        def personasDep = Persona.findAllByDepartamento(deptoUsu)
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+        def coordinador = PersonaRol.findByPersonaInListAndFuncion(personasDep,funcionCoor)
+        def coordinadorUtfpu = PersonaRol.findByPersonaInListAndFuncion(personasUtfpu,funcionCoor)
+
+        def elabUtfpu = PersonaRol.findAllByPersonaInListAndFuncion(personasUtfpu,funcionElab)
+
+        def responsableRol = PersonaRol.findByPersona(Persona.get(obra?.responsableObra?.id))
+
+        elabUtfpu.each {
+            if(it?.id == responsableRol?.id){
+                ban = 1
+            }
+        }
+
+
+        PdfPTable tablaFirmas = new PdfPTable(3);
+        tablaFirmas.setWidthPercentage(100);
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+
+        if(obra?.responsableObra){
+            personaElaboro = Persona.get(obra?.responsableObra?.id)
+            addCellTabla(tablaFirmas, new Paragraph((personaElaboro?.titulo?.toUpperCase() ?: '') + " " + (personaElaboro?.nombre.toUpperCase() ?: '' ) + " " + (personaElaboro?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        }
+
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
+        if(coordinador){
+            if(ban == 1){
+                firmaCoordinador = coordinadorUtfpu.persona
+                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            }else{
+                firmaCoordinador = coordinador.persona
+                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            }
+
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+        }
+        //cargos
+
+        addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        document.add(tablaFirmas);
+
+        document.close();
+
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+    }
+
+
 
 }

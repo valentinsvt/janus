@@ -69,13 +69,13 @@
         </div>
 
         <div style="margin-bottom: 5px;">
-            Subpresupuesto: <g:select name="subpresupuesto" from="${subpres}" optionKey="id" optionValue="descripcion"
+            <strong>Subpresupuesto:</strong> <g:select name="subpresupuesto" from="${subpres}" optionKey="id" optionValue="descripcion"
                                       style="width: 300px;font-size: 10px" id="subpres" value="${subpre}"
                                       noSelection="['-1': 'TODOS']"/>
-            <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
+            <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre"><i class="fa icon-double-angle-down"></i> Cambiar</a>
 
             <g:if test="${contrato.estado != 'R'}">
-                <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>
+                <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar"><i class="fa icon-eraser"></i> Desmarcar todo</a>
             </g:if>
         </div>
 
@@ -402,7 +402,7 @@
                 <div class="well">
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="span5">
-                            Periodos   <input id="periodosDesde" class="spinner"/> al <input id="periodosHasta" class="spinner" value="${meses}"/>
+                            Períodos   <input id="periodosDesde" class="spinner"/> al <input id="periodosHasta" class="spinner" value="${meses}"/>
                         </div>
                     </div>
 
