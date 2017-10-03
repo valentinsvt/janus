@@ -135,7 +135,8 @@
             <div class="span12">
 
                 <div class="span1 formato">Obra</div>
-                <div class="span4"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
+                <div class="span4"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off"
+                                                value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
 
                 <div class="span1 formato">Nombre</div>
                 <div class="span3">
@@ -775,7 +776,8 @@
             data += "&criterios=" + $(this).attr("criterio");
         });
         if (data.length < 2) {
-            data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" + $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
+            data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" +
+                    $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
         }
         data += "&ordenado=" + $("#campoOrdn :selected").val() + "&orden=" + $("#orden :selected").val();
         $.ajax({type : "POST", url : "${g.createLink(controller: 'contrato', action:'buscarObra')}",
@@ -815,7 +817,7 @@
     $("#obraCodigo").dblclick(function () {
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
         $("#modalTitle_busqueda").html("Lista de obras");
-        $("#modalFooter_busqueda").html("").append(btnOk);
+        $("#modalFooter_busqueda").html("<span class=\"text-info\">Use un criterio de búsqueda para localizar obras</span>").append(btnOk);
         $("#modal-busqueda").modal("show");
         $("#contenidoBuscador").html("")
         $("#buscarDialog").unbind("click")

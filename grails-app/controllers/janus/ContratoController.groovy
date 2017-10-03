@@ -911,7 +911,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (!params.reporte) {
             def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
-//            println("listaf " + lista)
+            println("listaf " + lista)
             /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
             for (int i = lista.size() - 1; i > -1; i--) {
@@ -925,8 +925,10 @@ class ContratoController extends janus.seguridad.Shield {
                     lista.remove(i);
                 }*/
             }
-//            println "lista2 "+lista
-            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: nuevaLista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+            println "lista2 "+lista
+            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: nuevaLista,
+                   funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs,
+                                                     width: 1800, paginas: 12])
         } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
