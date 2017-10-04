@@ -128,7 +128,7 @@
                         <i class="icon-table icon-large"></i>
                     </g:link>
                 </g:if>
-                <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
+                <g:elseif test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']}">
                     <g:link controller="planilla2" action="resumen" id="${planillaInstance.id}" fprj="${planillaInstance.formulaPolinomicaReajuste}" rel="tooltip"
                             title="Resumen" class="btn btn-small">
                         <i class="icon-table icon-large"></i>
