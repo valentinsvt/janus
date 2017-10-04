@@ -8,6 +8,7 @@ import janus.ejecucion.Planilla
 import janus.ejecucion.TipoFormulaPolinomica
 import janus.ejecucion.TipoPlanilla
 import janus.pac.Concurso
+import janus.pac.CronogramaContratado
 import janus.pac.CronogramaContrato
 import janus.pac.DocumentoProceso
 import janus.pac.Oferta
@@ -275,13 +276,14 @@ class ContratoController extends janus.seguridad.Shield {
         def contrato
         def planilla  // si hay planillas de inhabilita el desregistrar
         def complementario
+        def complementarios
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
             planilla = Planilla.findAllByContrato(contrato)
             complementario = Contrato.findByPadre(contrato)
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-
-            [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario]
+            complementarios = Contrato.findAllByPadre(contrato)
+            [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario, complementarios: complementarios]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             [campos: campos]
@@ -1341,6 +1343,64 @@ class ContratoController extends janus.seguridad.Shield {
 //            println "retorna true: ok"
             render true
         }
+    }
+
+    def integrarCrono () {
+//        println("params " + params)
+        def contrato = Contrato.get(params.id)
+        def complementario = Contrato.get(params.comp)
+        def cronogramaComp = CronogramaContratado.findByContrato(complementario)
+        def cronograma = CronogramaContratado.findByContrato(contrato)
+        def errores = ''
+
+
+        if(!cronogramaComp){
+            render "no_El contrato complementario seleccionado no tiene cronograma!"
+        }else{
+
+        def volumenesContrato = VolumenContrato.findAllByContrato(complementario)
+
+            volumenesContrato.each{ v->
+
+                def nuevoVocr = new VolumenContrato(v.properties)
+                nuevoVocr.contrato = contrato
+                nuevoVocr.contratoComplementario = complementario
+                nuevoVocr.obra = contrato.obra
+
+                try{
+                    nuevoVocr.save(flush: true)
+                }catch (e){
+                    println("error al guardar el vocr complementario " + e)
+                    errores += e
+                }
+
+            }
+
+        def cronogramasComp = CronogramaContratado.findAllByContrato(complementario)
+
+            cronogramasComp.each{c->
+
+                def nuevoCrono = new CronogramaContratado(c.properties)
+                nuevoCrono.contrato = contrato
+
+                try{
+                    nuevoCrono.save(flush:true)
+                }catch (e){
+                    println("error al guardar la integracion para el cronograma " + e)
+                    errores += e
+                }
+
+            }
+
+
+            if(errores == ''){
+                render "ok_Cronogramas integrados correctamente"
+            }else{
+                render "no_Error al integrar los cronogramas"
+            }
+
+        }
+
     }
 
 

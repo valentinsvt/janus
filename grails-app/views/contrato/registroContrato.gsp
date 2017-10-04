@@ -446,14 +446,14 @@
                         </g:link>
                     </li>
                     %{--<li>--}%
-                        %{--<g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" style="color: #702213;" title="Nuevo Cronograma Contrato">--}%
-                            %{--<i class="icon-th"></i> Cronograma contrato--}%
-                        %{--</g:link>--}%
+                    %{--<g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" style="color: #702213;" title="Nuevo Cronograma Contrato">--}%
+                    %{--<i class="icon-th"></i> Cronograma contrato--}%
+                    %{--</g:link>--}%
                     %{--</li>--}%
                     %{--<li>--}%
-                        %{--<g:link controller="contrato" action="fpComple" id="${contrato?.id}" title="Fórmula Polinómica del Complementario">--}%
-                            %{--<i class="fa icon-th"></i> FP del Complementario--}%
-                        %{--</g:link>--}%
+                    %{--<g:link controller="contrato" action="fpComple" id="${contrato?.id}" title="Fórmula Polinómica del Complementario">--}%
+                    %{--<i class="fa icon-th"></i> FP del Complementario--}%
+                    %{--</g:link>--}%
                     %{--</li>--}%
                     <li>
                         <g:link action="copiarPolinomica" id="${contrato?.id}"><i class="icon-superscript"></i> F. polinómica</g:link>
@@ -475,27 +475,36 @@
         </div>
     </div>
 
-    <g:if test="${complementario}">
-        <div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">
-            <div class="navbar-inner">
-                <div class="botones">
-                    <ul class="nav">
+    <div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">
+        <div class="navbar-inner">
+            <div class="botones">
+                <ul class="nav">
+                    <li>
+                        <g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">
+                            <i class="icon-th"></i> Cronograma contrato
+                        </g:link>
+                    </li>
+                    <li>
+                        <g:link controller="contrato" action="fpComple" id="${contrato?.id}" title="Fórmula Polinómica del contrato complementario">
+                            <i class="fa icon-th"></i> FP del contrato complementario
+                        </g:link>
+                    </li>
+                    <g:if test="${complementario}">
                         <li>
-                            <g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">
-                                <i class="icon-th"></i> Cronograma contrato complementario
-                            </g:link>
+                            %{--<g:link controller="contrato" action="integrarCrono" id="${contrato?.id}" title="Integración del cronograma contrato y del cronograma del contrato complementario">--}%
+                            %{--<i class="fa icon-th"></i> Integrar cronograma complementario--}%
+                            %{--</g:link>--}%
+                            %{----}%
+
+                            <a href="#" name="integrar_name" id="integrarCronograma" data-id="${contrato?.id}" title="Integración del cronograma contrato y del cronograma del contrato complementario">
+                                <i class="fa icon-th"></i> Integrar cronograma complementario
+                            </a>
                         </li>
-                        <li>
-                            <g:link controller="contrato" action="fpComple" id="${contrato?.id}" title="Fórmula Polinómica del Complementario">
-                                <i class="fa icon-th"></i> FP del contrato complementario
-                            </g:link>
-                        </li>
-                    </ul>
-                </div>
+                    </g:if>
+                </ul>
             </div>
         </div>
-    </g:if>
-
+    </div>
 </g:if>
 
 
@@ -540,10 +549,6 @@
 </div>
 
 
-
-%{--</div>--}%
-
-
 <div id="borrarContrato">
 
     <fieldset>
@@ -554,9 +559,114 @@
     </fieldset>
 </div>
 
+
+<div id="integrarCronoDialog">
+    <fieldset>
+        <div class="span4">
+            Seleccione el contrato complementario cuyo cronograma será integrado al cronograma del contrato: <strong>${contrato?.codigo}</strong>
+        </div>
+    </fieldset>
+    <fieldset style="margin-top: 10px">
+        <div class="span4">
+            <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+                      name="complementarios_name" id="contratosComp" class="form-control" style="width: 380px"/>
+        </div>
+    </fieldset>
+</div>
+
+
 <script type="text/javascript">
 
 
+    $("#integrarCronograma").click(function () {
+        $("#integrarCronoDialog").dialog("open")
+    });
+
+    $("#integrarCronoDialog").dialog({
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 450,
+        height    : 220,
+        position  : 'center',
+        title     : 'Integrar cronograma',
+        buttons   : {
+            "Aceptar"  : function () {
+                var complementario = $("#contratosComp").val();
+
+                $.box({
+                    imageClass : "box_info",
+                    title      : "Confirmación",
+                    text       : "Está seguro que desea integrar el cronograma del contrato con el cronograma del contrato complementario?",
+                    iconClose  : false,
+                    dialog     : {
+                        width         : 400,
+                        resizable     : false,
+                        draggable     : false,
+                        closeOnEscape : false,
+                        buttons       : {
+                            "Aceptar" : function () {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(controller: 'contrato', action: 'integrarCrono')}",
+                                    data    :  {
+                                        id: '${contrato?.id}',
+                                        comp: complementario
+                                    },
+                                    success : function (msg) {
+                                        var parts = msg.split("_");
+                                        if(parts[0] == 'no'){
+                                            $.box({
+                                                imageClass : "box_info",
+                                                title      : "Alerta",
+                                                text       : parts[1],
+                                                iconClose  : false,
+                                                dialog     : {
+                                                    width         : 400,
+                                                    resizable     : false,
+                                                    draggable     : false,
+                                                    closeOnEscape : false,
+                                                    buttons       : {
+                                                        "Aceptar" : function () {
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }else{
+                                            $.box({
+                                                imageClass : "box_info",
+                                                title      : "Integrado",
+                                                text       : parts[1],
+                                                iconClose  : false,
+                                                dialog     : {
+                                                    width         : 400,
+                                                    resizable     : false,
+                                                    draggable     : false,
+                                                    closeOnEscape : false,
+                                                    buttons       : {
+                                                        "Aceptar" : function () {
+                                                            $("#integrarCronoDialog").dialog("close");
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            },
+                            "Cancelar" : function () {
+                                $("#integrarCronoDialog").dialog("close");
+                            }
+                        }
+                    }
+                });
+            },
+            "Cancelar" : function () {
+                $("#integrarCronoDialog").dialog("close");
+            }
+        }
+    });
 
     $("#multaRetraso").keydown(function (ev) {
     }).keyup(function () {
@@ -777,7 +887,7 @@
         });
         if (data.length < 2) {
             data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" +
-                    $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
+                $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
         }
         data += "&ordenado=" + $("#campoOrdn :selected").val() + "&orden=" + $("#orden :selected").val();
         $.ajax({type : "POST", url : "${g.createLink(controller: 'contrato', action:'buscarObra')}",
