@@ -894,7 +894,8 @@
                                     data += "Wcol=" + $(this).attr("id");
                                 });
 
-                                var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=Reporte_costos_" + tipo + ".pdf&url=${createLink(controller: 'reportes2', action: 'reportePrecios')}";
+                                var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=Reporte_costos_" +
+                                        tipo + ".pdf&url=${createLink(controller: 'reportes2', action: 'reportePrecios')}";
                                 location.href = actionUrl + "?" + data;
 
                                 var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
@@ -919,17 +920,8 @@
                                 var lugar = $("#lugarRep").val();
                                 var grupo = current;
 
-                                location.href = "${g.createLink(controller: 'reportes2', action: 'reportePreciosExcel')}?fecha=" + fecha + "&lugar=" + lugar + "&grupo=" + grupo;
-
-//                                var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
-//                                wait.prepend(spinnerBg);
-//
-//                                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-//                                $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-//                                $("#modalTitle").html("Procesando");
-//                                $("#modalBody").html(wait);
-//                                $("#modalFooter").html("").append(btnClose);
-
+                                location.href = "${g.createLink(controller: 'reportes2', action: 'reportePreciosExcel')}?fecha=" +
+                                        fecha + "&lugar=" + lugar + "&grupo=" + grupo;
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");

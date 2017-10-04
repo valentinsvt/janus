@@ -1256,14 +1256,7 @@ class Reportes2Controller {
 
 
     def reportePrecios() {
-//        params.orden = "a" //a,n    Alfabetico | Numerico
-//        params.col = ["t", "u", "p", "f"] //t,u,p,f   Transporte | Unidad | Precio | Fecha de Act
-//        params.fecha = "22-11-2012"
-//        params.lugar = "4"
-//        params.grupo = "1"
-//
 //        println "reportePrecios params" + params
-
         def grupo = Grupo.get(params.grupo.toLong())
 
         def orden = "itemnmbr"
@@ -1277,6 +1270,7 @@ class Reportes2Controller {
         def items = ""
         def lista = Item.withCriteria {
             eq("tipoItem", TipoItem.findByCodigo("I"))
+            eq("estado", "A")
             departamento {
                 subgrupo {
                     eq("grupo", grupo)
@@ -1748,9 +1742,7 @@ class Reportes2Controller {
     }
 
     def reportePreciosExcel() {
-
 //        println("params " + params)
-
         def orden = "itemnmbr"
         if (params.orden == "n") {
             orden = "itemcdgo"
@@ -1761,6 +1753,7 @@ class Reportes2Controller {
         def items = ""
         def lista = Item.withCriteria {
             eq("tipoItem", TipoItem.findByCodigo("I"))
+            eq("estado", "A")
             departamento {
                 subgrupo {
                     eq("grupo", grupo)
@@ -1781,7 +1774,6 @@ class Reportes2Controller {
         }
 
 //        println("excel" + res)
-
         //excel
 
         WorkbookSettings workbookSettings = new WorkbookSettings()

@@ -1360,7 +1360,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         def volumenesContrato = VolumenContrato.findAllByContrato(complementario)
 
-            volumenesContrato.each{ v->
+            volumenesContrato.each{ v ->
 
                 def nuevoVocr = new VolumenContrato(v.properties)
                 nuevoVocr.contrato = contrato
@@ -1369,28 +1369,37 @@ class ContratoController extends janus.seguridad.Shield {
 
                 try{
                     nuevoVocr.save(flush: true)
+                    def cronogramasComp = CronogramaContratado.findAllByContratoAndVolumenContrato(complementario, v)
+                    cronogramasComp.each { c ->
+                        def nuevoCrono = new CronogramaContratado(c.properties)
+                        nuevoCrono.contrato = contrato
+                        nuevoCrono.volumenContrato = nuevoVocr
+                        try{
+                            nuevoCrono.save(flush:true)
+                        }catch (e){
+                            println("error al guardar la integracion para el cronograma " + e)
+                            errores += e
+                        }
+                    }
                 }catch (e){
                     println("error al guardar el vocr complementario " + e)
                     errores += e
                 }
-
             }
 
+/*
         def cronogramasComp = CronogramaContratado.findAllByContrato(complementario)
-
-            cronogramasComp.each{c->
-
+            cronogramasComp.each{c ->
                 def nuevoCrono = new CronogramaContratado(c.properties)
                 nuevoCrono.contrato = contrato
-
                 try{
                     nuevoCrono.save(flush:true)
                 }catch (e){
                     println("error al guardar la integracion para el cronograma " + e)
                     errores += e
                 }
-
             }
+*/
 
 
             if(errores == ''){

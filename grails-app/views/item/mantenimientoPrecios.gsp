@@ -112,13 +112,7 @@
                 }
 
                 var todos = 2;
-//        if ($("#todos").attr("checked") == "checked") {
-//            todos = 1
-//        } else {
-//            todos = 2
-//        }
                 var tipo = $("#tipo").val();
-
                 var reg = "";
                 if ($("#reg").hasClass("active")) {
                     reg += "R";
@@ -167,24 +161,17 @@
 //        });
 
                 $(".btn-consultar").click(function () {
-
                     var lgar = $("#listaPrecio").val();
-
                     if (lgar != -1) {
-
                         $("#error").hide();
                         $("#dlgLoad").dialog("open");
                         consultar();
                         $("#divTabla").show();
                     }
                     else {
-
                         $("#divTabla").html("").hide();
-
                         $("#error").show();
-
                     }
-
                 });
 
                 $(".btn-actualizar").click(function () {

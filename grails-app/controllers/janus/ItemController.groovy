@@ -316,8 +316,7 @@ class ItemController extends janus.seguridad.Shield {
     }
 
     def tabla() {
-
-//        println "tabla " + params
+        println "tabla " + params
         if (!params.max || params.max == 0) {
             params.max = 100
         } else {
@@ -339,62 +338,22 @@ class ItemController extends janus.seguridad.Shield {
 
         def tipo;
 
-//        println("tipo" + params.tipo)
-
         if (t == "1") {
-//            println "AQUI " + params
 
-//            lugar = Lugar.get(params.lgar)
-//
-//            def c = PrecioRubrosItems.createCriteria()
-//            rubroPrecio = c.list(max: params.max, offset: params.offset) {
-//                eq("lugar", lugar)
-//                item {
-//                    if (params.tipo != "-1") {
-//                        departamento {
-//                            subgrupo {
-//                                eq("grupo", Grupo.get(params.tipo))
-//                            }
-//                        }
-//                    }
-//                    order("codigo", "asc")
-//                }
-//                order("fecha", "desc")
-//            }
-//
-//            params.totalRows = rubroPrecio.totalCount
-//
-//            params.totalPags = Math.ceil(rubroPrecio.totalCount / params.max).toInteger()
-//
-//            if (params.totalPags <= 10) {
-//                params.first = 1
-//                params.last = params.last = params.totalPags
-//            } else {
-//                params.first = Math.max(1, params.pag.toInteger() - 5)
-//                params.last = Math.min(params.totalPags, params.pag + 5)
-//
-//                def ts = params.last - params.first
-//                if (ts < 9) {
-//                    def r = 10 - ts
-//                    params.last = Math.min(params.totalPags, params.last + r).toInteger()
-//                }
-//            }
         }
 
         if (t == "2") {
             lugar = Lugar.get(params.lgar)
             def sql
             tipo = Grupo.get(params.tipo)
-//           println(tipo);
 
             sql = "select distinct rbpc.item__id, item.itemcdgo "
             sql += "from rbpc, item"
             if (params.tipo != "-1") {
                 sql += ", dprt, sbgr, grpo"
             }
-            sql += " where lgar__id=${lugar.id} "
-//            sql += " where rbpc.item__id=item.item__id and lgar__id=${lugar.id} "
-            sql += "and rbpc.item__id = item.item__id "
+            sql += " where lgar__id = ${lugar.id} "
+            sql += "and rbpc.item__id = item.item__id and itemetdo = 'A' "
             if (params.tipo != "-1") {
                 sql += "and item.dprt__id = dprt.dprt__id "
                 sql += "and dprt.sbgr__id = sbgr.sbgr__id "
@@ -414,7 +373,7 @@ class ItemController extends janus.seguridad.Shield {
             sql += "limit ${params.max} "
             sql += "offset ${params.offset} "
 
-//            println "SQL:" + sql
+            println "SQL:" + sql
 
             def itemsIds = ""
 
@@ -459,7 +418,7 @@ class ItemController extends janus.seguridad.Shield {
 
                     sql3 = "select count(distinct rbpc.item__id) "
                     sql3 += "from rbpc "
-                    sql3 += "where lgar__id=${lugar.id} "
+                    sql3 += "where lgar__id = ${lugar.id} "
                     if (params.reg == "R") {
                         sql3 += " and rbpcrgst = 'R'"
                     } else if (params.reg == "N") {

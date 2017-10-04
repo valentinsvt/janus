@@ -153,7 +153,6 @@ class CronogramaContratoController extends janus.seguridad.Shield {
     def nuevoCronograma () {
         def contrato = Contrato.get(params.id)
         def cn = dbConnectionService.getConnection()
-        def cn2 = dbConnectionService.getConnection()
         if (!contrato) {
             flash.message = "No se encontró el contrato"
             flash.clase = "alert-error"
@@ -275,13 +274,15 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         }
 
         def precios = [:]
-        def indirecto = obra.totales / 100
+//        def indirecto = obra.totales / 100
 
+        println "detalle: $detalle"
         detalle.each {
-            it.refresh()
-            def res = preciosService.rbro_pcun_v2_item(obra.id, it.subPresupuesto.id, it.item.id)
+//            it.refresh()
+//            def res = preciosService.rbro_pcun_v2_item(obra.id, it.subPresupuesto.id, it.item.id)
+            def res = it.volumenPrecio * it.volumenCantidad
+            println "---- res: $res"
             precios.put(it.id.toString(), res)
-
         }
 
         return [detalle: detalle, precios: precios, obra: obra, contrato: contrato, subpres: subpres, subpre: subpre]
