@@ -475,6 +475,8 @@
         </div>
     </div>
 
+    %{--comentar para no incluir complementearios--}%
+%{--
     <div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">
         <div class="navbar-inner">
             <div class="botones">
@@ -491,11 +493,6 @@
                     </li>
                     <g:if test="${complementario}">
                         <li>
-                            %{--<g:link controller="contrato" action="integrarCrono" id="${contrato?.id}" title="Integración del cronograma contrato y del cronograma del contrato complementario">--}%
-                            %{--<i class="fa icon-th"></i> Integrar cronograma complementario--}%
-                            %{--</g:link>--}%
-                            %{----}%
-
                             <a href="#" name="integrar_name" id="integrarCronograma" data-id="${contrato?.id}" title="Integración del cronograma contrato y del cronograma del contrato complementario">
                                 <i class="fa icon-th"></i> Integrar cronograma complementario
                             </a>
@@ -505,6 +502,7 @@
             </div>
         </div>
     </div>
+--}%
 </g:if>
 
 
