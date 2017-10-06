@@ -916,7 +916,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (!params.reporte) {
             def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
-            println("listaf " + lista)
+//            println("listaf " + lista)
             /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
             for (int i = lista.size() - 1; i > -1; i--) {
@@ -930,7 +930,7 @@ class ContratoController extends janus.seguridad.Shield {
                     lista.remove(i);
                 }*/
             }
-            println "lista2 "+lista
+//            println "lista2 "+lista
             render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: nuevaLista,
                    funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs,
                                                      width: 1800, paginas: 12])
@@ -1016,19 +1016,15 @@ class ContratoController extends janus.seguridad.Shield {
         def contratoInstance
 
         if(params."padre.id" == -1) params."padre.id" = null
-
         if (params.codigo) {
             params.codigo = params.codigo.toString().toUpperCase()
         }
-
         if (params.tipoContrato.id == "1") {  //contrato Principal
             params.padre.id = "-1"
         }
-
         if (params.memo) {
             params.memo = params.memo.toString().toUpperCase()
         }
-
         if (params.fechaSubscripcion) {
             params.fechaSubscripcion = new Date().parse("dd-MM-yyyy", params.fechaSubscripcion)
         }
@@ -1038,41 +1034,32 @@ class ContratoController extends janus.seguridad.Shield {
 
 //        def indice = PeriodosInec.get(params."periodoValidez.id")
         def indice = PeriodosInec.get(params."periodoInec.id")
-        def oferta = Oferta.get(params."oferta.id")
         def tipoContrato = TipoContrato.get(params."tipoContrato.id")
+
 
 //        println("oferta " + oferta + " " + params."oferta.id")
 
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
-
-//            if (!contratoInstance) {
-//                flash.clase = "alert-error"
-//                flash.message = "No se encontró Contrato con id " + params.id
-//                redirect(action: 'registroContrato')
-//                return
-//            }//no existe el objeto
             contratoInstance.properties = params
-//            println "actualizado: ${contratoInstance.objeto} ${params.objeto}"
-//            if (params.padre.id == "-1") {
-//                contratoInstance.padre = null
-//            }
-//            contratoInstance.periodoInec = indice
+
+
         }//es edit
         else {
 
-            if (params.oferta) {
-                if (params.oferta.id == '-1') {
-                    flash.clase = "alert-error"
-                    flash.message = "No se puede grabar el Contrato, elija una oferta válida "
-                    redirect(action: 'registroContrato')
-                    return
-                }
-            }
+//            if (params.oferta) {
+//                if (params.oferta.id == '-1') {
+//                    flash.clase = "alert-error"
+//                    flash.message = "No se puede grabar el Contrato, elija una oferta válida "
+//                    redirect(action: 'registroContrato')
+//                    return
+//                }
+//            }
 
             contratoInstance = new Contrato()
             contratoInstance.properties = params
-
+            def oferta = Oferta.get(params."oferta.id")
+            contratoInstance.oferta = oferta
 
         } //es create
 
@@ -1082,7 +1069,7 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
         contratoInstance.periodoInec = indice
-        contratoInstance.oferta = oferta
+//        contratoInstance.oferta = oferta
         contratoInstance.tipoContrato = tipoContrato
         contratoInstance.depAdministrador = Departamento.get(params."depAdministrador.id")
 
@@ -1325,7 +1312,7 @@ class ContratoController extends janus.seguridad.Shield {
         println "fin de actualización de frpl"
         // inserta valores en fpsp: FormulaSubpresupuesto
         def sbpr = VolumenesObra.findAllByObra(cntr.obra, [sort: "orden"]).subPresupuesto.unique()
-        println "inserta fpsp, sbpr: $sbpr"
+//        println "inserta fpsp, sbpr: $sbpr"
         sbpr.each {
             def fpsp = new FormulaSubpresupuesto(reajuste: fpReajuste, subPresupuesto: it)
             fpsp.save(flush: true)
@@ -1336,7 +1323,7 @@ class ContratoController extends janus.seguridad.Shield {
     def validaCdgo() {
         def codigo = params.codigo.toUpperCase()
         def cntr = Contrato.findByCodigo(codigo)
-        println "validaCdgo: $params"
+//        println "validaCdgo: $params"
         if (cntr) {
 //            println "retorna false: ya existe"
             if(params.id && params.codigo == params.antes) {

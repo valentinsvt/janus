@@ -128,7 +128,7 @@
 
         <div class="linea" style="height: 85%;"></div>
 
-        <g:hiddenField name="oferta.id" class="oferta" value="${contrato?.oferta?.id}"/>
+        %{--<g:hiddenField name="ofertaAc" class="oferta" value="${contrato?.oferta?.id}"/>--}%
 
         <g:if test="${contrato?.codigo != null}">
 
