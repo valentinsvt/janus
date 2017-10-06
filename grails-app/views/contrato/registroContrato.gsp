@@ -128,7 +128,7 @@
 
         <div class="linea" style="height: 85%;"></div>
 
-    %{--<g:hiddenField name="oferta" class="oferta" value="${contrato?.oferta?.id}"/>--}%
+        <g:hiddenField name="oferta.id" class="oferta" value="${contrato?.oferta?.id}"/>
 
         <g:if test="${contrato?.codigo != null}">
 
@@ -475,42 +475,36 @@
         </div>
     </div>
 
-    %{--comentar para no incluir complementearios--}%
-%{--
-    <div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">
-        <div class="navbar-inner">
-            <div class="botones">
-                <ul class="nav">
-                    <li>
-                        <g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">
-                            <i class="icon-th"></i> Cronograma contrato
-                        </g:link>
-                    </li>
-                    <li>
-                        <g:link controller="contrato" action="fpComple" id="${contrato?.id}" title="Fórmula Polinómica del contrato complementario">
-                            <i class="fa icon-th"></i> FP del contrato complementario
-                        </g:link>
-                    </li>
-                    <g:if test="${complementario}">
-                        <li>
-                            <a href="#" name="integrar_name" id="integrarCronograma" data-id="${contrato?.id}" title="Integración del cronograma contrato y del cronograma del contrato complementario">
-                                <i class="fa icon-th"></i> Integrar cronograma complementario
-                            </a>
-                        </li>
-                    </g:if>
-                </ul>
-            </div>
-        </div>
-    </div>
---}%
+%{--comentar para no incluir complementearios--}%
+
+    %{--<div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">--}%
+        %{--<div class="navbar-inner">--}%
+            %{--<div class="botones">--}%
+                %{--<ul class="nav">--}%
+                    %{--<li>--}%
+                        %{--<g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">--}%
+                            %{--<i class="icon-th"></i> Cronograma contrato--}%
+                        %{--</g:link>--}%
+                    %{--</li>--}%
+                    %{--<g:if test="${complementario}">--}%
+                        %{--<li>--}%
+                            %{--<a href="#" name="integrarFP_name" id="integrarFP" title="Integración de la FP del contrato y de la FP del contrato complementario">--}%
+                                %{--<i class="fa icon-th"></i> Integrar FP complementario--}%
+                            %{--</a>--}%
+                        %{--</li>--}%
+
+                        %{--<li>--}%
+                            %{--<a href="#" name="integrar_name" id="integrarCronograma" title="Integración del cronograma contrato y del cronograma del contrato complementario">--}%
+                                %{--<i class="fa icon-th"></i> Integrar cronograma complementario--}%
+                            %{--</a>--}%
+                        %{--</li>--}%
+                    %{--</g:if>--}%
+                %{--</ul>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+    %{--</div>--}%
+
 </g:if>
-
-
-
-
-
-
-
 
 <div class="modal hide fade mediumModal" id="modal-var" style="overflow: hidden">
     <div class="modal-header btn-primary">
@@ -559,15 +553,37 @@
 
 
 <div id="integrarCronoDialog">
+        <fieldset>
+            <div class="span4">
+                Seleccione el contrato complementario cuyo cronograma será integrado al cronograma del contrato: <strong>${contrato?.codigo}</strong>
+            </div>
+        </fieldset>
+        <fieldset style="margin-top: 10px">
+            <div class="span4">
+                <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+                          name="complementarios_name" id="contratosComp" class="form-control" style="width: 380px"/>
+            </div>
+        </fieldset>
+</div>
+
+<div id="integrarCronoDialogNo">
+        <fieldset>
+            <div class="span4">
+                No tiene ningún contrato complementario cuyo cronograma pueda ser integrado al cronograma del contrato: <p><strong>${contrato?.codigo}</strong></p>
+            </div>
+        </fieldset>
+</div>
+
+<div id="integrarFPDialog">
     <fieldset>
         <div class="span4">
-            Seleccione el contrato complementario cuyo cronograma será integrado al cronograma del contrato: <strong>${contrato?.codigo}</strong>
+            Seleccione el contrato complementario cuya FP será integrada a la FP del contrato: <strong>${contrato?.codigo}</strong>
         </div>
     </fieldset>
     <fieldset style="margin-top: 10px">
         <div class="span4">
-            <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
-                      name="complementarios_name" id="contratosComp" class="form-control" style="width: 380px"/>
+            <g:select from="${formula}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+                      name="complementariosFP_name" id="contratosFP" class="form-control" style="width: 380px"/>
         </div>
     </fieldset>
 </div>
@@ -576,9 +592,121 @@
 <script type="text/javascript">
 
 
-    $("#integrarCronograma").click(function () {
-        $("#integrarCronoDialog").dialog("open")
+    $("#integrarFP").click(function () {
+        $("#integrarFPDialog").dialog("open")
     });
+
+    $("#integrarFPDialog").dialog({
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 450,
+        height    : 220,
+        position  : 'center',
+        title     : 'Integrar Fórmula Polinómica',
+        buttons   : {
+            "Aceptar"  : function () {
+                var complementario = $("#contratosFP").val();
+
+                $.box({
+                    imageClass : "box_info",
+                    title      : "Confirmación",
+                    text       : "Está seguro que desea integrar la FP del contrato con la FP del contrato complementario?",
+                    iconClose  : false,
+                    dialog     : {
+                        width         : 400,
+                        resizable     : false,
+                        draggable     : false,
+                        closeOnEscape : false,
+                        buttons       : {
+                            "Aceptar" : function () {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(controller: 'contrato', action: 'integrarFP')}",
+                                    data    :  {
+                                        id: '${contrato?.id}',
+                                        comp: complementario
+                                    },
+                                    success : function (msg) {
+                                        var parts = msg.split("_");
+                                        if(parts[0] == 'no'){
+                                            $.box({
+                                                imageClass : "box_info",
+                                                title      : "Alerta",
+                                                text       : parts[1],
+                                                iconClose  : false,
+                                                dialog     : {
+                                                    width         : 400,
+                                                    resizable     : false,
+                                                    draggable     : false,
+                                                    closeOnEscape : false,
+                                                    buttons       : {
+                                                        "Aceptar" : function () {
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }else{
+                                            $.box({
+                                                imageClass : "box_info",
+                                                title      : "Integrado",
+                                                text       : parts[1],
+                                                iconClose  : false,
+                                                dialog     : {
+                                                    width         : 400,
+                                                    resizable     : false,
+                                                    draggable     : false,
+                                                    closeOnEscape : false,
+                                                    buttons       : {
+                                                        "Aceptar" : function () {
+                                                            $("#integrarFPDialog").dialog("close");
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            },
+                            "Cancelar" : function () {
+                                $("#integrarFPDialog").dialog("close");
+                            }
+                        }
+                    }
+                });
+            },
+            "Cancelar" : function () {
+                $("#integrarFPDialog").dialog("close");
+            }
+        }
+    });
+
+    $("#integrarCronograma").click(function () {
+        var complementario = $("#contratosComp").val();
+        if(complementario){
+            $("#integrarCronoDialog").dialog("open")
+        }else{
+            $("#integrarCronoDialogNo").dialog("open")
+        }
+    });
+
+    $("#integrarCronoDialogNo").dialog({
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 450,
+        height    : 180,
+        position  : 'center',
+        title     : 'Integrar cronograma',
+        buttons   : {
+            "Aceptar": function () {
+                $("#integrarCronoDialogNo").dialog("close")
+            }
+        }
+    });
+
 
     $("#integrarCronoDialog").dialog({
         autoOpen  : false,
@@ -592,7 +720,6 @@
         buttons   : {
             "Aceptar"  : function () {
                 var complementario = $("#contratosComp").val();
-
                 $.box({
                     imageClass : "box_info",
                     title      : "Confirmación",

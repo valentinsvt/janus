@@ -283,11 +283,14 @@ class ContratoController extends janus.seguridad.Shield {
             complementario = Contrato.findByPadre(contrato)
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             complementarios = Contrato.findAllByPadre(contrato)
-            [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario, complementarios: complementarios]
+            def volumenesCopiados = VolumenContrato.findAllByContratoAndContratoComplementarioIsNotNull(contrato).contratoComplementario.unique()
+            def filtrados = complementarios - Contrato.findAllByIdInList(volumenesCopiados.id)
+
+
+            [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario, complementarios: filtrados, formula: complementarios]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             [campos: campos]
-//            [campos: campos, complementario: complementario]
         }
     }
 
@@ -342,7 +345,7 @@ class ContratoController extends janus.seguridad.Shield {
                 it.delete(flush: true)
             }
 
-            copiaFpDesdeObra(contrato, true)  //true copia FP desde obra
+            copiaFpDesdeObra(contrato, true, false)  //true copia FP desde obra
 
 /*
             def fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
@@ -453,7 +456,7 @@ class ContratoController extends janus.seguridad.Shield {
             fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
 
         if (fpReajuste == null) {
-            copiaFpDesdeObra(contrato, false)
+            copiaFpDesdeObra(contrato, false, false)
             fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
         }
 
@@ -1038,6 +1041,8 @@ class ContratoController extends janus.seguridad.Shield {
         def oferta = Oferta.get(params."oferta.id")
         def tipoContrato = TipoContrato.get(params."tipoContrato.id")
 
+//        println("oferta " + oferta + " " + params."oferta.id")
+
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
 
@@ -1279,8 +1284,9 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (fpReajuste == null) {
             def fprj = new FormulaPolinomicaReajuste(contrato: cntr,
-                    tipoFormulaPolinomica: tipo,
-                    descripcion: "Fórmula polinómica del contrato principal")
+                        tipoFormulaPolinomica: tipo,
+                        descripcion: "Fórmula polinómica del contrato principal")
+
             if (!fprj.save(flush: true)) {
                 println "error al crear la FP del contrato, errores: " + fprj.errors
             } else {
@@ -1387,25 +1393,61 @@ class ContratoController extends janus.seguridad.Shield {
                 }
             }
 
-/*
-        def cronogramasComp = CronogramaContratado.findAllByContrato(complementario)
-            cronogramasComp.each{c ->
-                def nuevoCrono = new CronogramaContratado(c.properties)
-                nuevoCrono.contrato = contrato
-                try{
-                    nuevoCrono.save(flush:true)
-                }catch (e){
-                    println("error al guardar la integracion para el cronograma " + e)
-                    errores += e
-                }
-            }
-*/
-
-
             if(errores == ''){
                 render "ok_Cronogramas integrados correctamente"
             }else{
                 render "no_Error al integrar los cronogramas"
+            }
+        }
+    }
+
+    def integrarFP () {
+        println("params " + params)
+        def contrato = Contrato.get(params.id)
+        def complementario = Contrato.get(params.comp)
+        def fpComplementaria = FormulaPolinomicaReajuste.findByContrato(complementario)
+        def tipoFormula = TipoFormulaPolinomica.findByCodigo("C")
+        def errores = ''
+        def fprj
+
+        if(!fpComplementaria){
+            render "no_El contrato complementario seleccionado no posee Fórmula Polinómica!"
+        }else{
+
+            def formulas = FormulaPolinomicaContractual.findAllByContrato(complementario)
+            fprj = new FormulaPolinomicaReajuste(contrato: contrato,
+                    tipoFormulaPolinomica: tipoFormula,
+                    descripcion:  "Fórmula polinómica del contrato complementario")
+            try{
+                fprj.save(flush: true)
+            }catch (e){
+                println("error al guardar fprj")
+                errores += e
+            }
+
+//            def reajuste = FormulaPolinomicaReajuste.findByContratoAndDescripcion(contrato, "Fórmula polinómica del contrato complementario")
+            def reajuste = FormulaPolinomicaReajuste.get(fprj.id)
+
+            formulas.each {f->
+
+                def nuevaFormula = new FormulaPolinomicaContractual(f.properties)
+                nuevaFormula.contrato = contrato
+                nuevaFormula.tipoFormulaPolinomica = tipoFormula
+                nuevaFormula.reajuste = reajuste
+
+                try{
+                    nuevaFormula.save(flush: true)
+                }catch (e){
+                    println("error al copiar la fp del complementarios al contrato")
+                    errores += e
+                }
+
+            }
+
+            if(errores == ''){
+                render "ok_Fórmula Polinómica del contrato complementario integrada correctamente!"
+            }else{
+                render "no_Error al integrar la fórmula polinómica del contrato complementario"
             }
 
         }
