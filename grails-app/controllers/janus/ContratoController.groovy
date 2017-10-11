@@ -345,7 +345,7 @@ class ContratoController extends janus.seguridad.Shield {
                 it.delete(flush: true)
             }
 
-            copiaFpDesdeObra(contrato, true, false)  //true copia FP desde obra
+            copiaFpDesdeObra(contrato, true)  //true copia FP desde obra
 
 /*
             def fpReajuste = FormulaPolinomicaReajuste.findByContrato(contrato)
