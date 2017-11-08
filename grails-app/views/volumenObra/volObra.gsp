@@ -54,7 +54,7 @@
 
         %{--<div class="tituloTree">--}%
         <div style=" font-size: 14px;  color: #0088CC;">
-            Volúmenes de la obra: ${obra.descripcion + " (" + obra.codigo + ")"}
+            Volúmenes de la obra: ${obra.nombre + " (" + obra.codigo + ")"}
             <input type="hidden" id="override" value="0">
         </div>
         <div style="height: 25px; margin-bottom:10px; border-bottom: 1px solid rgba(148, 148, 148, 1);">

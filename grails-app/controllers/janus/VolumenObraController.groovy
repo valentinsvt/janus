@@ -41,8 +41,8 @@ class VolumenObraController extends janus.seguridad.Shield {
 
         duenoObra = esDuenoObra(obra)? 1 : 0
 
-        def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
-        def valorLicitacion = TipoProcedimiento.findBySigla("LICO").minimo
+        def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD")?.techo?:  210000
+        def valorLicitacion = TipoProcedimiento.findBySigla("LICO")?.minimo?: 30000000
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 //        println "subs "+subpreFiltrado.descripcion

@@ -39,6 +39,7 @@
                         <i class="icon-arrow-left"></i>
                         Contrato
                     </g:link>
+                    %{--/** todo: validar que se haya iniciado la obra para planillas de avance **/--}%
                     <g:if test="${anticipo >= 0}">
                         <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
                             <g:link action="form" class="btn" params="[contrato: contrato?.id]">
