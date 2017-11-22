@@ -2955,7 +2955,7 @@ class Reportes3Controller {
 //        }
 
 
-        def garantias = Garantia.findAllByContratoInListAndEstado(filtrados, estado)
+        def garantias = Garantia.findAllByContratoInListAndEstado(filtrados, estado, [sort:"contrato.contratista.nombre",order:'desc'],[sort:"fechaInicio",order:'desc'])
 
 
         def auxiliar = Auxiliar.get(1)
@@ -3089,7 +3089,7 @@ class Reportes3Controller {
 //        }
 
 
-        def garantias = Garantia.findAllByContratoInListAndFechaFinalizacionLessThanAndEstadoNotEqualAndEstadoNotEqual(filtrados, hoy, estadoRev, estadoDev)
+        def garantias = Garantia.findAllByContratoInListAndFechaFinalizacionLessThanAndEstadoNotEqualAndEstadoNotEqual(filtrados, hoy, estadoRev, estadoDev, [sort:"contrato.contratista.nombre",order:'desc'],[sort:"fechaInicio",order:'desc'])
 
 //        println("garantias " + garantias)
 
