@@ -102,7 +102,7 @@
         </div>
 
         <div class="span1">
-            <span class="span1 uneditable-input">${contrato?.monto}</span>
+            <span class="span2 uneditable-input">${contrato?.monto}</span>
         </div>
     </div>
 

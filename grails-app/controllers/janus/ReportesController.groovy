@@ -4696,10 +4696,6 @@ class ReportesController {
 
 
         if (tipo == '1') {
-//            addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaMemo, new Paragraph("Base de Contrato N°", times10bold), prmsHeaderHoja)
-//            addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaMemo, new Paragraph(obra?.oficioSalida, times10normal), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
@@ -4948,7 +4944,7 @@ class ReportesController {
 
             addCellTabla(tablaPie, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaPie, new Paragraph("Elaborado por: " + obra?.responsableObra?.titulo?.toUpperCase() + " " +
-                    obra?.responsableObra?.nombre?.toUpperCase() + obra?.responsableObra?.apellido?.toUpperCase(), times8normal), prmsHeaderHoja)
+                    obra?.responsableObra?.nombre?.toUpperCase() + " " + obra?.responsableObra?.apellido?.toUpperCase(), times8normal), prmsHeaderHoja)
             addCellTabla(tablaPie, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaPie, new Paragraph("Revisado por: " + coordinador?.titulo?.toUpperCase() + " " +
                     coordinador?.nombre?.toUpperCase() + " " + coordinador?.apellido?.toUpperCase() , times8normal), prmsHeaderHoja)
