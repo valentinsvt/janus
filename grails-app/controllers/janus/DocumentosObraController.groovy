@@ -55,7 +55,7 @@ class DocumentosObraController {
 //        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra,'c%')
 //        println("cuadrilla:" + cuadrilla)
         def departamento = Departamento.get(obra?.departamento?.id)
-//        println("departamento: " + obra?.departamento?.descripcion)
+        println("departamento: " + obra?.departamento?.descripcion)
 //        def personas = Persona.list()
         def departamentos = Departamento.list()
 
@@ -149,7 +149,7 @@ class DocumentosObraController {
         def firmaDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
         def coordinadores = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoordinador, personalDireccion)
 
-//        println("Director-->" + firmaDirector)
+//        println "coordinadores: ${coordinadores.persona.nombre}"
 
         //calculo de composición
 
@@ -173,8 +173,8 @@ class DocumentosObraController {
         def personasUtfpuCoor = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
 
 //        def personas = Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion))
-        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionDire,Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion)))
-
+        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionDire, Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion)))
+//        println "personasUtfpuDire: ${personasUtfpuDire.persona.nombre}"
 
         def firmantes = []
 //        firmantes.add([persona: personasUtfpuCoor, rol:'COORDINADOR'])
