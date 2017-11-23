@@ -71,7 +71,7 @@ class BuscadorService {
                             }
                         }
                         qrt.add(str)
-                        //println "qrt "+qrt
+//                        println "qrt "+qrt
                         mes=qrt[1]
                         if(qrt[0].size()==4){
                             anio=qrt[0]
@@ -87,9 +87,10 @@ class BuscadorService {
                             println "error del parse!! en la fecha "+fecha
                             fecha=new Date().parse("dd-MM-yyyy","01-01-2012")
                         }
-                        parts[0]+=" "+campo+" "+comparador+" ? "
+//                        parts[0]+=" "+campo+" "+comparador+" ? "
+                        parts[0]+=" "+campo+" "+comparador + "'${fecha.format('yyyy-MM-dd')}'"
                         parts.add(fecha)
-                        //println "pattern "+pattern
+//                        println "---> parts: $parts"
 
                     }else{
                         if(dato =~"janus"){
@@ -183,7 +184,7 @@ class BuscadorService {
             orderby = " ORDER BY ${sort} ${order}"
         }
         if(params.campos instanceof java.lang.String){
-            parametros.put(params.campos,[params.criterios,params.operadores])
+            parametros.put(params.campos,[params.criterios, params.operadores])
         }else{
             params.campos.eachWithIndex{p,i->
                 if(parametros[p])
@@ -193,7 +194,7 @@ class BuscadorService {
             }
         }
 
-        common=parametros.keySet().intersect(mapa.keySet())
+        common = parametros.keySet().intersect(mapa.keySet())
         alterna.each {
 
             def llave = it.key.toString().replaceFirst("&","")
@@ -225,7 +226,7 @@ class BuscadorService {
 //        println "dominio. $dominio sql $sql  tipo: $tipo parametros: $parametros"
         if (lista.size() < 1 && tipo != "excluyente") {
             res = filtro("or", parametros, common, mapa, ignoreCase)
-            println "retorna de filtro: $res"
+//            println "retorna de filtro: $res"
             sql ="from " + tabla+" "+res[0]
             res.remove(0)
             lista = dominio.refresh().findAll(sql+orderby, res,[max: 200])
