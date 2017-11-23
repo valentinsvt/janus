@@ -83,7 +83,7 @@
             <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
         </g:if>
         <g:else>
-            <div class="span1">Responsable Cantidades de Obra</div>
+            <div class="span1">Resp. de las Cantidades</div>
             <g:hiddenField name="inspector.id" id="hiddenInspector" value="${obra?.inspector?.id}"/>
             <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
         </g:else>
