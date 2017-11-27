@@ -359,13 +359,13 @@ class IndiceController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def anio = Anio.findByAnio(new Date().format('yyyy'))
 
-        def tx_sql = "select * from sp_vlin(${janus.pac.Anio.get(params.anio?: anio.id).anio})"
+        def tx_sql = "select * from sp_vlin(${janus.pac.Anio.get(params?.anio ?: anio?.id)?.anio})"
         def datos = cn.rows(tx_sql.toString())
 
         cn.close()
 
         //println "año: $anio.id"
-        [datos: datos, anio: params.anio?: anio.id]
+        [datos: datos, anio: params.anio?: anio?.id]
     }
 
     def editarIndices() {

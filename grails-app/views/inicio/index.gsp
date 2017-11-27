@@ -60,9 +60,26 @@
         font-family: 'open sans condensed';
         font-weight: bold;
         text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);
+    <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        color: #1a7031;
+    </g:if>
+    <g:else>
         color: #0070B0;
+    </g:else>
+
         margin-top: 20px;
     }
+
+    .bordes {
+    <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        background: #1a7031;
+    </g:if>
+    <g:else>
+        background: #2080b0;
+    </g:else>
+
+    }
+
     </style>
 </head>
 
@@ -70,8 +87,7 @@
 <div class="dialog">
     <div style="text-align: center;"><h1 class="titl" style="font-size: 26px;">${empr.nombre}</h1></div>
 
-    <div class="body ui-corner-all" style="width: 850px;position: relative;margin: auto;margin-top: 0px;height: 510px;
-    background: #2080b0;">
+    <div class="body ui-corner-all bordes" style="width: 850px;position: relative;margin: auto;margin-top: 0px;height: 510px;">
 
         <g:if test="${prms.contains('rubroPrincipal')}">
             <a href="${createLink(controller: 'rubro', action: 'rubroPrincipal')}" title="Análisis de Precios Unitarios">
@@ -93,16 +109,16 @@
         <g:if test="${prms.contains('registroObra')}">
             <a href= "${createLink(controller:'obra', action: 'registroObra')}" title="Registro de Obras">
         </g:if>
-            <div class="ui-corner-all item fuera">
-                <div class="ui-corner-all ui-widget-content item">
-                    <div class="imagen">
-                        <img src="${resource(dir: 'images', file: 'obra100.png')}" width="100%" height="100%"/>
-                    </div>
-
-                    <div class="texto"><b>Obras</b>: registro de Obras, georeferenciación, los volúmenes de obra,
-                    variables de transporte y costos indirectos ...</div>
+        <div class="ui-corner-all item fuera">
+            <div class="ui-corner-all ui-widget-content item">
+                <div class="imagen">
+                    <img src="${resource(dir: 'images', file: 'obra100.png')}" width="100%" height="100%"/>
                 </div>
+
+                <div class="texto"><b>Obras</b>: registro de Obras, georeferenciación, los volúmenes de obra,
+                variables de transporte y costos indirectos ...</div>
             </div>
+        </div>
         <g:if test="${prms.contains('registroObra')}">
             </a>
         </g:if>
@@ -110,16 +126,16 @@
         <g:if test="${prms.contains('registrarPac')}">
             <a href= "${createLink(controller:'pac', action: 'registrarPac')}" title="Plan Anual de Compras Públicas">
         </g:if>
-            <div class="ui-corner-all item fuera">
-                <div class="ui-corner-all ui-widget-content item">
-                    <div class="imagen">
-                        <img src="${resource(dir: 'images', file: 'compras.png')}" width="100%" height="100%"/>
-                    </div>
-
-                    <div class="texto"><b>Compras Públicas</b>: plan anual de contrataciones, gestión de pliegos y
-                    control y seguimiento del PAC de obras ...</div>
+        <div class="ui-corner-all item fuera">
+            <div class="ui-corner-all ui-widget-content item">
+                <div class="imagen">
+                    <img src="${resource(dir: 'images', file: 'compras.png')}" width="100%" height="100%"/>
                 </div>
+
+                <div class="texto"><b>Compras Públicas</b>: plan anual de contrataciones, gestión de pliegos y
+                control y seguimiento del PAC de obras ...</div>
             </div>
+        </div>
         <g:if test="${prms.contains('registrarPac')}">
             </a>
         </g:if>
@@ -127,16 +143,16 @@
         <g:if test="${prms.contains('verContrato')}">
             <a href= "${createLink(controller:'contrato', action: 'verContrato')}" title="Contratos y Ejecución de Obras">
         </g:if>
-            <div class="ui-corner-all  item fuera">
-                <div class="ui-corner-all ui-widget-content item">
-                    <div class="imagen">
-                        <img src="${resource(dir: 'images', file: 'fiscalizar.png')}" width="100%" height="100%"/>
-                    </div>
-
-                    <div class="texto"><b>Ejecución</b>: seguimiento a la ejecución de las obras: incio de obra,
-                    planillas, reajuste de precios, cronograma ...</div>
+        <div class="ui-corner-all  item fuera">
+            <div class="ui-corner-all ui-widget-content item">
+                <div class="imagen">
+                    <img src="${resource(dir: 'images', file: 'fiscalizar.png')}" width="100%" height="100%"/>
                 </div>
+
+                <div class="texto"><b>Ejecución</b>: seguimiento a la ejecución de las obras: incio de obra,
+                planillas, reajuste de precios, cronograma ...</div>
             </div>
+        </div>
         <g:if test="${prms.contains('verContrato')}">
             </a>
         </g:if>

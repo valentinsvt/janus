@@ -13,8 +13,14 @@
         <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
+        <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+            <link href="${resource(dir: 'css', file: 'treeV2.css')}" rel="stylesheet"/>
+        </g:if>
+        <g:else>
+            <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
+        </g:else>
 
-        <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
+
 
         %{--<script type="text/javascript" src="${resource(dir: 'js/jquery/css', file: 'jquery.jstree.js')}"></script>--}%
         %{--<link href="${resource(dir: 'js/jquery/css/bw', file: 'jquery-ui-1.10.2.custom.min.css')}" rel="stylesheet"/>--}%

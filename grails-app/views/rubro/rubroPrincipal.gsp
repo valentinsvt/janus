@@ -430,7 +430,7 @@
 </div>
 
 <div class="modal grande hide fade " id="modal-rubro" style=";overflow: hidden;">
-    <div class="modal-header btn-info">
+    <div class="modal-header btn-primary">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modalTitle"></h3>
@@ -450,7 +450,7 @@
 </div>
 
 <div class="modal large hide fade " id="modal-detalle" style=";overflow: hidden;">
-    <div class="modal-header btn-info">
+    <div class="modal-header btn-primary">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modalTitle-detalle">Especificaciones</h3>

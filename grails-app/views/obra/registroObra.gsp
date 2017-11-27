@@ -970,7 +970,7 @@
 
 
 <div class="modal grandote hide fade " id="modal-busqueda" style=";overflow: hidden;">
-    <div class="modal-header btn-info">
+    <div class="modal-header btn-primary">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modalTitle_busqueda"></h3>

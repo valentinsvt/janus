@@ -1,0 +1,465 @@
+/*
+para regresar a la version anterior comentar esto y cambiar en los layouts la carpeta del jquery ui de bw a twitBoot
+*/
+body {
+    background-color : #D7D7D7;
+}
+
+input, select, textarea, .datepicker {
+    background-color : #E7E7E7 !important;
+    border-color     : #404040 !important;
+}
+
+/*
+Hasta aca se comenta para regresar a la version anterior
+*/
+
+.add-on {
+    border : solid 1px #000000 !important;
+}
+
+.btn-group {
+    display        : inline-block;
+    font-size      : 0;
+    position       : relative;
+    vertical-align : middle;
+    white-space    : nowrap;
+}
+
+.input-append .add-on:last-child, .input-append .btn:last-child, .input-append .btn-group:last-child > .dropdown-toggle {
+    border-radius : 0 4px 4px 0;
+}
+
+/*Menu*/
+.navbar .brand {
+    float       : left;
+    display     : block;
+    padding     : 10px 20px 10px;
+    margin-left : -20px;
+    font-size   : 20px;
+    font-weight : 200;
+    /*color       : #777777;*/
+    /*color       : #FFAC37;*/
+    color       : #ffce8f;
+    /*text-shadow : -2px 2px 1px rgba(248, 148, 6, 0.5) !important;*/
+}
+
+.bold {
+    font-weight : bold;
+}
+
+.titulo, .tituloTree {
+    font-size   : 14px !important;
+    /*font-family : 'Tulpen One', cursive;*/
+    font-weight : bold !important;
+    /*text-shadow : -2px 2px 1px rgba(148, 148, 148, 0.5);*/
+}
+
+.tituloTree {
+    /*font-family    : 'Open Sans Condensed', cursive;*/
+    margin-bottom  : 10px;
+    font-size      : 25px;
+    padding-bottom : 8px;;
+    border-bottom  : 1px solid rgba(148, 148, 148, 1);
+    color          : #0088CC;
+}
+
+.highlight {
+    background-color : #FFFF88;
+}
+
+.noMargin {
+    margin : 0 !important;
+}
+
+.noPadding {
+    padding : 0 !important;
+}
+
+/* Custom styling */
+body {
+    font-size : 12px;
+}
+
+.table th {
+    text-align : center;
+}
+
+.navbar {
+    margin-bottom : 10px;
+}
+
+.mandatory {
+    color       : #b62f29;
+    font-weight : bold;
+}
+
+.textRight {
+    text-align : right !important;
+}
+
+/******************inputs ******************************/
+.allCaps {
+    text-transform : uppercase;
+}
+
+/********** para los datepickers ***********/
+.ui-datepicker-calendar {
+    font-size   : 12px;
+    line-height : 12px;
+}
+
+.datepicker {
+    background-image    : url(../images/calendar.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
+}
+
+.datetimepicker {
+    background-image    : url(../images/calendarTime.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
+}
+
+.datepicker.disabled {
+    background-image    : url(../images/calendar_disabled.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
+}
+
+/************ para los autocomplete *************/
+.ui-autocomplete-loading {
+    background-image    : url(../images/spinner.gif) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
+}
+
+.ui-autocomplete-loading-error {
+    background-image    : url(../images/exclamation.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
+}
+
+.ui-autocomplete {
+    max-height : 300px;
+    overflow-y : auto;
+    /* prbtnevent horizontal scrollbar */
+    overflow-x : hidden;
+}
+
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+    height : 100px;
+}
+
+/*************** para los arboles ************/
+a.jstree-search, a.jstree-search.jstree-hovered {
+    background-color : #5bb75b;
+    color            : white !important;
+    text-shadow      : none;
+}
+
+a.jstree-search.jstree-hovered {
+    border           : solid 1px;
+    border-color     : #387038;
+    background-color : #1b8e36;
+}
+
+fieldset.borde {
+    border : 1px solid #999;
+}
+
+fieldset.borde legend {
+    width  : auto;
+    border : none;
+}
+
+.buscador {
+    width : 800px
+}
+
+.css-vertical-text {
+    position          : absolute;
+    left              : 5px;
+    bottom            : 5px;
+    color             : #1a7031;
+    border            : 0px solid red;
+    /*writing-mode      : tb-rl;*/
+    -webkit-transform : rotate(270deg);
+    -moz-transform    : rotate(270deg);
+    -o-transform      : rotate(270deg);
+    white-space       : nowrap;
+    display           : block;
+    width             : 20px;
+    height            : 20px;
+    font-size         : 25px;
+    font-family       : 'Tulpen One', cursive;
+    font-weight       : bold;
+    font-size         : 35px;
+    /*text-shadow       : -2px 2px 1px rgba(0, 0, 0, 0.25);*/
+
+    /*text-shadow: 0px 0px 1px #333;*/
+}
+
+.tituloChevere {
+    color       : #1a7031;
+    border      : 0px solid red;
+    white-space : nowrap;
+    display     : block;
+    width       : 98%;
+    height      : 30px;
+    font-family : 'open sans condensed';
+    font-weight : bold;
+    font-size   : 25px;
+    /*text-shadow : -2px 2px 1px rgba(0, 0, 0, 0.25);*/
+    margin-top  : 10px;
+    line-height : 25px;
+}
+
+.tituloGrande {
+    color       : #1a7031;
+    width       : 98%;
+    height      : 30px;
+    font-family : 'open sans condensed';
+    font-weight : bold;
+    font-size   : 18px;
+    margin-top  : 10px;
+    line-height : 25px;
+}
+
+.label-azul {
+    color       : #1a7031;
+    font-family : 'open sans condensed';
+    font-weight : bold;
+    font-size   : 14px;
+    /*text-shadow : -2px 2px 1px rgba(0, 0, 0, 0.25);*/
+    line-height : 14px;
+
+}
+
+.linea {
+    position    : absolute;
+    left        : 30px;
+    bottom      : 5px;
+    width       : 1px;
+    border-left : 1px solid #1a7031;
+
+}
+
+td.numero {
+    text-align : right !important;
+}
+
+/***************************** TABLAS **********************************/
+th.sortable a {
+    background-position : right;
+    background-repeat   : no-repeat;
+    padding-right       : 1.1em;
+    color               : #ffffff !important;
+}
+
+th.asc a {
+    background-image : url(../images/skin/sorted_asc.gif) !important;
+}
+
+th.desc a {
+    background-image : url(../images/skin/sorted_desc.gif) !important;
+}
+
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+    background-color : #ececec;
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color : rgb(66, 161, 81);
+}
+
+.table th {
+    /*background  : #49AFCD;*/
+    background  : #1b8e36;
+    font-family : "Open Sans Condensed";
+    font-size   : 15px;
+    font-weight : bolder;
+    color       : white;
+    /*text-shadow : -2px 4px 2px rgba(0, 0, 0, 0.8);*/
+}
+
+.borde_abajo {
+    border-bottom : 1px solid black;
+    margin-bottom : 10px;
+}
+
+/************************************** TAMANIO DE LOS MODALES *************************************************************/
+
+/********cambiar el height *********/
+.tallModal .modal-body {
+    max-height : 800px;
+}
+
+/********cambiar el height *********/
+.tallModal2 .modal-body {
+    max-height : 840px;
+}
+
+/********cambiar el width************/
+.longModal {
+    width  : 900px; /* SET THE WIDTH OF THE MODAL */
+    margin : -250px 0 0 -450px; /* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
+}
+
+.mediumModal {
+    width  : 700px; /* SET THE WIDTH OF THE MODAL */
+    margin : -250px 0 0 -350px; /* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
+}
+
+.modal.large {
+    width       : 780px;
+    margin-left : -390px; /* - width/2 */
+}
+
+.modal.long {
+    width       : 1000px;
+    margin-left : -500px; /* - width/2 */
+}
+
+.modal.grande {
+    width       : 1000px;
+    height      : 650px;
+    margin-left : -500px; /* - width/2 */
+}
+
+.grande .modal-body {
+    height     : 610px;
+    max-height : 580px;
+}
+
+.modal.grande2 {
+    width       : 1016px;
+    margin-left : -508px; /* - width/2 */
+}
+
+.grande2 .modal-body {
+    height     : 545px;
+    max-height : 545px;
+}
+
+.modal.grandote {
+    width       : 1200px;
+    margin-left : -600px; /* - width/2 */
+    height      : 600px;
+    margin-top  : -300px;
+}
+
+.topModal {
+
+    margin-top : -430px;
+
+}
+
+.grandote .modal-body {
+    height     : 460px;
+    max-height : 460px;
+}
+
+.modal.grandotote {
+    width       : 1200px;
+    margin-left : -600px; /* - width/2 */
+    height      : 700px;
+    margin-top  : -300px;
+}
+
+.grandotote .modal-body {
+    height     : 560px;
+    max-height : 560px;
+}
+
+.modal.big {
+    width       : 1000px;
+    margin-left : -500px; /* - width/2 */
+    max-height  : 650px;
+    margin-top  : -300px;
+}
+
+.big .modal-body {
+    /*height     : 500px;*/
+    max-height : 510px;
+}
+
+.modal.login {
+    width       : 390px;
+    margin-left : -195px; /* - width/2 */
+    padding     : 0px;
+    background  : none;
+}
+
+/************************************* ALERTAS ********************************************************/
+tr td.alerta {
+    width               : 32px;
+    padding             : 4px;
+    background-position : 4px;
+    background-repeat   : no-repeat;
+}
+
+tr.success td.alerta {
+    /*background-color : darkgreen !important;*/
+    background-image : url(../images/semaforos/verde.png) !important;
+}
+
+.verde {
+    /*background-color : darkgreen !important;*/
+    width            : 30px;
+    height           : 30px;
+    float            : left;
+    margin-left      : 5px;
+    margin-right     : 5px;
+    background-image : url(../images/semaforos/verde.png) !important;
+}
+
+tr.warning td.alerta {
+    /*background-color : darkgoldenrod !important;*/
+    background-image : url(../images/semaforos/amarillo.png) !important;
+}
+
+.amarillo {
+    width            : 30px;
+    height           : 30px;
+    float            : left;
+    margin-left      : 5px;
+    margin-right     : 5px;
+    /*background-color : darkgoldenrod !important;*/
+    background-image : url(../images/semaforos/amarillo.png) !important;
+}
+
+.rojo {
+    margin-left      : 5px;
+    margin-right     : 5px;
+    width            : 30px;
+    height           : 30px;
+    float            : left;
+    /*background-color : darkred !important;*/
+    background-image : url(../images/semaforos/rojo.png) !important;
+}
+
+tr.error td.alerta {
+    /*background-color : darkred !important;*/
+    background-image : url(../images/semaforos/rojo.png) !important;
+}
+
+tr.info td.alerta {
+    /*background-color : darkslategrey !important;*/
+    background-image : url(../images/semaforos/completo.png) !important;
+}
+
+/************************************* FIN ALERTAS ********************************************************/
+
+.ui-button-text-only .ui-button-text {
+    background : #1a7031 !important;
+}
+
+.hasCountdown {
+    font-size : 10px;
+}

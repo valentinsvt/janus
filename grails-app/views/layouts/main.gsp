@@ -30,7 +30,13 @@
         <link href='${resource(dir: "font/tulpen", file: "stylesheet.css")}' rel='stylesheet' type='text/css'>
 
         <!-- Le styles -->
-        <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
+        <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+            <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrapV2.css')}" rel="stylesheet">
+        </g:if>
+        <g:else>
+            <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
+        </g:else>
+        %{--<link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.readable.css')}" rel="stylesheet">--}%
 
         <link href="${resource(dir: 'fontawsome/css', file: 'font-awesome.css')}" rel="stylesheet">
 
@@ -82,7 +88,13 @@
         <script src="${resource(dir: 'js', file: 'functions.js')}"></script>
         <g:layoutHead/>
 
-        <link href="${resource(dir: 'css', file: 'custom.css')}" rel="stylesheet">
+        <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+            <link href="${resource(dir: 'css', file: 'customV2.css')}" rel="stylesheet">
+        </g:if>
+        <g:else>
+            <link href="${resource(dir: 'css', file: 'custom.css')}" rel="stylesheet">
+        </g:else>
+
         <link href="${resource(dir: 'css', file: 'customButtons.css')}" rel="stylesheet">
     </head>
 
