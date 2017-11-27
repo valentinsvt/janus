@@ -115,7 +115,7 @@
         </div>
 
         <div class="modal grande hide fade" id="modal-pac" style="overflow: hidden;">
-            <div class="modal-header btn-info">
+            <div class="modal-header btn-primary">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 
                 <h3 id="modalTitle-obra">Buscar PAC</h3>
