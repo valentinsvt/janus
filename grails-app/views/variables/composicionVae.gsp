@@ -25,7 +25,7 @@
 
 <body>
 <div class="hoja">
-    <div class="tituloChevere">Valores del VAE, para la Obra: ${obra?.descripcion}</div>
+    <div class="span12" style="color: #1a7031; font-size: 18px; margin-bottom: 10px"><strong>Valores del VAE, para la Obra:</strong> ${obra?.descripcion}</div>
 
     <g:if test="${flash.message}">
         <div class="span12">
