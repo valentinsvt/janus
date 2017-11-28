@@ -574,6 +574,14 @@
         </fieldset>
 </div>
 
+<div id="integrarFPDialogNo">
+    <fieldset>
+        <div class="span4">
+            No tiene ninguna FP complementario para ser integrado al contrato: <p><strong>${contrato?.codigo}</strong></p>
+        </div>
+    </fieldset>
+</div>
+
 <div id="integrarFPDialog">
     <fieldset>
         <div class="span4">
@@ -582,7 +590,7 @@
     </fieldset>
     <fieldset style="margin-top: 10px">
         <div class="span4">
-            <g:select from="${formula}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+            <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
                       name="complementariosFP_name" id="contratosFP" class="form-control" style="width: 380px"/>
         </div>
     </fieldset>
@@ -593,7 +601,12 @@
 
 
     $("#integrarFP").click(function () {
-        $("#integrarFPDialog").dialog("open")
+        var complementario = $("#contratosFP").val();
+        if(complementario){
+            $("#integrarFPDialog").dialog("open")
+        }else{
+            $("#integrarFPDialogNo").dialog("open")
+        }
     });
 
     $("#integrarFPDialog").dialog({
@@ -703,6 +716,22 @@
         buttons   : {
             "Aceptar": function () {
                 $("#integrarCronoDialogNo").dialog("close")
+            }
+        }
+    });
+
+    $("#integrarFPDialogNo").dialog({
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 450,
+        height    : 180,
+        position  : 'center',
+        title     : 'Integrar Fórmula Polinómica',
+        buttons   : {
+            "Aceptar": function () {
+                $("#integrarFPDialogNo").dialog("close")
             }
         }
     });
