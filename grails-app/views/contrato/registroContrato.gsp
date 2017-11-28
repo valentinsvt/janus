@@ -477,32 +477,32 @@
 
 %{--comentar para no incluir complementearios--}%
 
-    %{--<div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">--}%
-        %{--<div class="navbar-inner">--}%
-            %{--<div class="botones">--}%
-                %{--<ul class="nav">--}%
-                    %{--<li>--}%
-                        %{--<g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">--}%
-                            %{--<i class="icon-th"></i> Cronograma contrato--}%
-                        %{--</g:link>--}%
-                    %{--</li>--}%
-                    %{--<g:if test="${complementario}">--}%
-                        %{--<li>--}%
-                            %{--<a href="#" name="integrarFP_name" id="integrarFP" title="Integración de la FP del contrato y de la FP del contrato complementario">--}%
-                                %{--<i class="fa icon-th"></i> Integrar FP complementario--}%
-                            %{--</a>--}%
-                        %{--</li>--}%
+    <div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">
+        <div class="navbar-inner">
+            <div class="botones">
+                <ul class="nav">
+                    <li>
+                        <g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">
+                            <i class="icon-th"></i> Cronograma contrato
+                        </g:link>
+                    </li>
+                    <g:if test="${complementario}">
+                        <li>
+                            <a href="#" name="integrarFP_name" id="integrarFP" title="Integración de la FP del contrato y de la FP del contrato complementario">
+                                <i class="fa icon-th"></i> Integrar FP complementario
+                            </a>
+                        </li>
 
-                        %{--<li>--}%
-                            %{--<a href="#" name="integrar_name" id="integrarCronograma" title="Integración del cronograma contrato y del cronograma del contrato complementario">--}%
-                                %{--<i class="fa icon-th"></i> Integrar cronograma complementario--}%
-                            %{--</a>--}%
-                        %{--</li>--}%
-                    %{--</g:if>--}%
-                %{--</ul>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+                        <li>
+                            <a href="#" name="integrar_name" id="integrarCronograma" title="Integración del cronograma contrato y del cronograma del contrato complementario">
+                                <i class="fa icon-th"></i> Integrar cronograma complementario
+                            </a>
+                        </li>
+                    </g:if>
+                </ul>
+            </div>
+        </div>
+    </div>
 
 </g:if>
 
