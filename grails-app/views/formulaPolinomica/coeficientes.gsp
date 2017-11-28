@@ -69,21 +69,45 @@
     }
 
     .selected, .selected td {
+    <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        background : #42a151 !important;
+    </g:if>
+    <g:else>
         background : #A4CCEA !important;
+    </g:else>
+
     }
 
     .hovered {
+
+    <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        background : #42a151;
+    </g:if>
+    <g:else>
         background : #C4E5FF;
+    </g:else>
     }
 
     .table-hover tbody tr:hover td,
     .table-hover tbody tr:hover th {
+    <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        background-color : #c0efc2 !important;
+    </g:if>
+    <g:else>
         background-color : #C4E5FF !important;
+    </g:else>
+
         cursor           : pointer;
     }
 
     table.dataTable tr.odd.selected td.sorting_1, table.dataTable tr.even.selected td.sorting_1 {
+    <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        background : #42a151 !important;
+    </g:if>
+    <g:else>
         background : #88AFCC !important;
+    </g:else>
+
     }
 
     .jstree-apple a {
