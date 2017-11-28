@@ -127,7 +127,8 @@
 
     <body>
         <div class="hoja">
-            <div class="tituloChevere">Composición de la obra: ${obra?.descripcion}</div>
+            %{--<div class="tituloChevere">Composición de la obra: ${obra?.descripcion}</div>--}%
+            <div class="span12" style="color: #1a7031; font-size: 18px; margin-bottom: 10px"><strong>Composición de la obra:</strong> ${obra?.descripcion}</div>
 
             <g:if test="${flash.message}">
                 <div class="span12">
