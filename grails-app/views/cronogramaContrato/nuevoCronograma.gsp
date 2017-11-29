@@ -129,13 +129,17 @@
                     <td style="text-align: center" class="unidad">
                         ${vol.item.unidad.codigo}
                     </td>
-                    <td class="num cantidad" data-valor="${vol.volumenCantidad}">
-                        <g:formatNumber number="${vol.volumenCantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                    <td class="num cantidad" data-valor="${vol.volumenCantidad + vol.cantidadComplementaria}">
+                        %{--<g:formatNumber number="${vol.volumenCantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                        <g:formatNumber number="${vol.volumenCantidad + vol.cantidadComplementaria}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                     </td>
-                    <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
-                        <g:formatNumber number="${precios[vol.id.toString()]/vol.volumenCantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                    %{--<td class="num precioU" data-valor="${precios[vol.id.toString()]}">--}%
+                    <td class="num precioU" data-valor="${vol.volumenPrecio}">
+                        %{--<g:formatNumber number="${precios[vol.id.toString()]/vol.volumenCantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                        <g:formatNumber number="${vol.volumenPrecio}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                     </td>
-                    <g:set var="parcial" value="${precios[vol.id.toString()]}"/>
+                    %{--<g:set var="parcial" value="${precios[vol.id.toString()]}"/>--}%
+                    <g:set var="parcial" value="${(vol.volumenCantidad + vol.cantidadComplementaria)* vol.volumenPrecio}"/>
                     <td class="num subtotal" data-valor="${parcial}">
                         <g:formatNumber number="${parcial}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                         <g:set var="sum" value="${sum + parcial}"/>
@@ -157,7 +161,16 @@
                 </tr>
 
                 <tr class="item_prc ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''}" data-id="${vol.id}">
-                    <td colspan="6">
+                    <td colspan="3">
+                        &nbsp
+                    </td>
+                    <td style="text-align: center">
+                        %{--<a href="#" class="btn btn-success btn-small btnEditar" data-id="${vol?.id}" data-cantidad="${vol?.volumenCantidad}" title="Editar cantidad complementaria">--}%
+                        <a href="#" class="btn btn-success btn-small btnEditar" data-id="${vol?.id}" data-cantidad="${vol.volumenCantidad + vol.cantidadComplementaria}" title="Editar cantidad complementaria">
+                            <i class="fa icon-pencil"></i>
+                        </a>
+                    </td>
+                    <td colspan="2">
                         &nbsp
                     </td>
                     <td>
@@ -391,8 +404,116 @@
 </div>
 
 
+%{--<div id="modificarCantidadDialog">--}%
+    %{--<fieldset>--}%
+        %{--<div class="span4">--}%
+            %{--<strong></strong>--}%
+        %{--</div>--}%
+    %{--</fieldset>--}%
+    %{--<fieldset style="margin-top: 10px">--}%
+        %{--<div class="span4">--}%
+
+        %{--</div>--}%
+    %{--</fieldset>--}%
+%{--</div>--}%
+
+
+<div class="modal hide fade mediumModal" id="modal-TipoObra" style=";overflow: hidden;">
+    <div class="modal-header btn-primary">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modalTitle_tipo">
+        </h3>
+    </div>
+
+    <div class="modal-body" id="modalBody_tipo">
+
+    </div>
+
+    <div class="modal-footer" id="modalFooter_tipo">
+    </div>
+</div>
+
+
 <script type="text/javascript">
 
+        $(".btnEditar").click(function () {
+            var id = $(this).data("id")
+            var cantidad = $(this).data("cantidad")
+//            $("#modificarCantidadDialog").dialog("open")
+
+
+
+            $.ajax({
+                type: 'POST',
+                url:'${createLink(controller: 'cronogramaContrato', action: 'modificarCantidad_ajax')}',
+                data:{
+                    id: id
+                },
+                success: function (msg) {
+                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                    btnSave.click(function () {
+                        $(this).replaceWith(spinner);
+                        $.ajax({
+                            type: "POST",
+                            url: "${createLink(controller: 'cronogramaContrato', action:'guardarCantidad_ajax')}",
+                            data: $("#frmSave-Programacion").serialize(),
+                            success: function (msg) {
+                                if (msg == 'ok') {
+                                    alert("Cantidad modificada!");
+                                    setTimeout(function () {
+                                        location.href = "${g.createLink(controller: 'cronogramaContrato', action: 'nuevoCronograma')}/" + "${contrato?.id}";
+                                    }, 700);
+                                } else {
+                                    alert("Error al modificar la cantidad!")
+                                }
+                                $("#modal-TipoObra").modal("hide");
+                            }
+                        });
+                        return false;
+                    });
+                    $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
+                    $("#modalTitle_tipo").html("Cambiar cantidad complementaria");
+                    $("#modalBody_tipo").html(msg);
+                    $("#modalFooter_tipo").html("").append(btnOk).append(btnSave);
+                    $("#modal-TipoObra").modal("show");
+                }
+            });
+
+
+
+        });
+
+        %{--$("#modificarCantidadDialog").dialog({--}%
+            %{--autoOpen  : false,--}%
+            %{--resizable : false,--}%
+            %{--modal     : true,--}%
+            %{--draggable : false,--}%
+            %{--width     : 450,--}%
+            %{--height    : 180,--}%
+            %{--position  : 'center',--}%
+            %{--title     : 'Editar cantidad complementaria',--}%
+            %{--buttons   : {--}%
+                %{--"Cerrar": function () {--}%
+                    %{--$("#modificarCantidadDialog").dialog("close")--}%
+                %{--},--}%
+                %{--"Guardar": function () {--}%
+                    %{--$.ajax({--}%
+                       %{--type: 'POST',--}%
+                        %{--url:'${createLink(controller: 'cronogramaContrato', action: 'modificarCantidad_ajax')}',--}%
+                        %{--data:{--}%
+                            %{--id: $(".btnEditar").data("id")--}%
+                        %{--},--}%
+                        %{--success: function (msg) {--}%
+                            %{--$("#modificarCantidadDialog").dialog("close")--}%
+                        %{--}--}%
+                    %{--});--}%
+                %{--}--}%
+
+            %{--}--}%
+        %{--});--}%
 
     function updateTotales() {
 

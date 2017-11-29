@@ -12,6 +12,7 @@ class VolumenContrato implements Serializable{
     double volumenPrecio
     double volumenSubtotal
     String rutaCritica
+    double cantidadComplementaria
 
     static auditable = true
     static mapping = {
@@ -32,13 +33,14 @@ class VolumenContrato implements Serializable{
             volumenPrecio column: 'vocrpcun'
             volumenSubtotal column: 'vocrsbtt'
             rutaCritica column: 'vocrrtcr'
+            cantidadComplementaria column: 'vocrcncp'
         }
     }
 
     static constraints = {
         contrato(blank: false, attributes: [title: 'contrato'])
         obra(blank: false, attributes: [title: 'obra'])
-        contratoComplementario(blank: false, attributes: [title: 'complementario'])
+        contratoComplementario(blank: true, nullable: true, attributes: [title: 'complementario'])
         item(blank: false, attributes: [title: 'item'])
         volumenCantidad(blank: false, attributes: [title: 'cantidad'])
         subPresupuesto(blank: false, attributes: [title: 'subPresupuesto'])

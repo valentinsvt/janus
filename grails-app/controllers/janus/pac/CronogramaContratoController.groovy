@@ -580,4 +580,41 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         render "ok:" + ok + "_no:" + no
     }
 
+    def modificarCantidad_ajax (){
+//        println("params " + params)
+        def volumen = VolumenContrato.get(params.id)
+        def cantidadActual = volumen.volumenCantidad
+        def cantidadComp = volumen.cantidadComplementaria
+        def cantidad = cantidadActual.toDouble() + cantidadComp.toDouble()
+        return[volumen: volumen, cantidad: cantidad]
+    }
+
+    def guardarCantidad_ajax () {
+        println("params " + params)
+        def volumen = VolumenContrato.get(params.id)
+        def cantidadComplementaria = params.volumenCantidad.toDouble()
+        def cantidadActual = volumen.volumenCantidad + volumen.cantidadComplementaria
+        def cantidadNueva = cantidadActual + cantidadComplementaria
+        def nuevoTotal = cantidadNueva.toDouble() * volumen.volumenPrecio
+
+        println("cantidad " + cantidadNueva)
+        println("total " + nuevoTotal)
+
+        volumen.cantidadComplementaria = cantidadComplementaria.toDouble()
+        volumen.volumenSubtotal = nuevoTotal.toDouble()
+
+        println("--> " +  volumen.cantidadComplementaria )
+        println("--> " +  volumen.volumenSubtotal )
+
+        try{
+            volumen.save(flush: true)
+            println("- " + volumen.volumenSubtotal)
+            render "ok"
+        }catch (DataIntegrityViolationException e){
+            println("error al modificar la cantidad complementaria " + e)
+            render "no"
+        }
+
+    }
+
 } //fin controller

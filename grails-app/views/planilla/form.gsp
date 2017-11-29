@@ -151,20 +151,37 @@
                                 %{--<span class="mandatory">*</span>--}%
                             </div>
                         </g:if>
-%{--
-                        <g:else>
-                            <div class='span2 hide formato planillaAsociada'>
-                                Planilla Asociada
-                            </div>
-                            <div class="span10 hide planillaAsociada">
-                                <g:select name="asociada" from="${planillas}" optionKey="id" style="width: 600px" />
-                                <span class="mandatory">*</span>
-
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </g:else>
---}%
                         </div>
+
+                        <g:if test="${planillaInstance?.tipoPlanilla?.toString() == 'C'}">
+                            <div class="row">
+                                <div class="span2 formato text-info" >
+                                    Fecha de Inicio
+                                </div>
+                                <div class="span4 text-info">
+                                    <elm:datepicker name="fechaInicio" class=" span3 required"
+                                                    value="${planillaInstance?.fechaInicio}"
+                                                    minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
+                                                    maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                                    <span class="mandatory">*</span>
+
+                                    <p class="help-block ui-helper-hidden"></p>
+                                </div>
+
+                                <div class="span2 formato text-info">
+                                    Fecha de Fin
+                                </div>
+                                <div class="span4 text-info">
+                                    <elm:datepicker name="fechaFin" class=" span3 required"
+                                                    value="${planillaInstance?.fechaFin}"
+                                                    minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
+                                                    maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                                    <span class="mandatory">*</span>
+
+                                    <p class="help-block ui-helper-hidden"></p>
+                                </div>
+                            </div>
+                        </g:if>
 
                         <div class="row">
 

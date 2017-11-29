@@ -1359,6 +1359,7 @@ class ContratoController extends janus.seguridad.Shield {
                 nuevoVocr.contrato = contrato
                 nuevoVocr.contratoComplementario = complementario
                 nuevoVocr.obra = contrato.obra
+                nuevoVocr.cantidadComplementaria = 0
 
                 try{
                     nuevoVocr.save(flush: true)
