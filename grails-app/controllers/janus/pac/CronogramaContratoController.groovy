@@ -172,8 +172,8 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         def ex = cn.rows(sql2.toString())
 
         if(!ex || ex == ''){
-            def sqlCopia = "insert into vocr(sbpr__id, cntr__id, obra__id, item__id, vocrcntd, vocrordn, vocrpcun, vocrsbtt, vocrrtcr)\n" +
-                    "select sbpr__id, ${contrato?.id}, ${contrato?.obra?.id}, item__id, vlobcntd, vlobordn, vlobpcun, vlobsbtt, vlobrtcr\n" +
+            def sqlCopia = "insert into vocr(sbpr__id, cntr__id, obra__id, item__id, vocrcntd, vocrordn, vocrpcun, vocrsbtt, vocrrtcr, vocrcncp)\n" +
+                    "select sbpr__id, ${contrato?.id}, ${contrato?.obra?.id}, item__id, vlobcntd, vlobordn, vlobpcun, vlobsbtt, vlobrtcr, 0 \n" +
                     "from vlob where obra__id = ${contrato?.obra?.id}"
 
             cn.execute(sqlCopia.toString());
