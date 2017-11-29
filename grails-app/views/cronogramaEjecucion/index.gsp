@@ -68,6 +68,15 @@
                 </g:if>
 
             </div>
+
+            <div class="btn" style="height: 30px">
+                De:
+                <g:field type="number" name="desde" step="1" pattern="#" value="${desde}" min="0" max="${hasta+1}" class="input-mini"/>
+                a:
+                <g:field type="number" name="hasta" step="1" pattern="#" value="${hasta}" min="0" max="${maximo}" class="input-mini"/>
+                <a href="#" id="btnRango" class="btn" style="margin-top: -8px;"> <i class="icon-check"></i> Ir</a>
+                <a href="#" id="btnTodos" class="btn" style="margin-top: -8px;"> <i class="icon-all"></i>Todo</a>
+            </div>
         </g:if>
 
         <a href="#" id="btnReporte" class="btn">
@@ -170,7 +179,9 @@
             type: "POST",
             url: "${createLink(action: 'tabla')}",
             data: {
-                id: ${obra.id}
+                id: ${obra.id},
+                desde: $("#desde").val(),
+                hasta: $("#hasta").val()
             },
             success: function (msg) {
                 $("#divTabla").html(msg);
@@ -473,6 +484,18 @@
         $("#btnReporte").click(function () {
             %{--todo: hacer otro reporte para el cronograma de ejecución, puesto que se usa prej en lugar de meses --}%
             location.href = "${createLink(controller: 'reportes2', action:'reporteCronogramaEjec', id:contrato.id)}";
+            return false;
+        });
+
+        $("#btnRango").click(function () {
+            var dsde = $("#desde").val()
+            var hsta = $("#hasta").val()
+            location.href = "${createLink(action:'index', id:contrato.id)}" + "?desde=" + dsde + "&hasta=" + hsta;
+            return false;
+        });
+
+        $("#btnTodos").click(function () {
+            location.href = "${createLink(action:'index', id:contrato.id)}" + "?desde=1&hasta=1000";
             return false;
         });
 

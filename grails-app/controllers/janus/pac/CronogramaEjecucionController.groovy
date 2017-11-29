@@ -615,6 +615,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def contrato = Contrato.get(params.contrato.toLong())
         def obra = contrato.obra
         def vol = VolumenesObra.get(params.vol.toLong())
+        def totlDol = 0, totlCan = 0
+
 
         def html = "", row2 = ""
 
@@ -642,6 +644,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 parcial : precio * vol.cantidad,
                 volumen : vol
         ]
+
+        totlCan = vol.cantidad
+        totlDol = vol.cantidad * precio
+
 
         html += "<table class='table table-condensed'>"
         html += "<tr>"
@@ -819,7 +825,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
 
                 filaDolMod += "<input type='text' class='input-mini tiny dol p${i}' value='" + "0.00" +/* maxDol +*/
-                        "' data-tipo='dol' data-total='${totDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
+                        "' data-tipo='dol' data-total='${totlDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
                         " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
                         " data-val1='${totalPlanilla.toDouble().round(2)}' /> " /*+
                         "(max. ${maxDolAcu.toDouble().round(2)})"*/
@@ -829,7 +835,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         " data-val1='${porPla.toDouble().round(2)}'  /> " /*+
                         "(max. ${maxPrctAcu.toDouble().round(2)})"*/
                 filaCanMod += "<input type='text' class='input-mini tiny fis p${i}' value='" + "0.00" + /*maxCan +*/
-                        "' data-tipo='fis' data-total='${totCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
+                        "' data-tipo='fis' data-total='${totlCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
                         " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
                         " data-val1='${canPla.toDouble().round(2)}' /> " /*+
                         "(max. ${maxCanAcu.toDouble().round(2)})"*/
@@ -848,29 +854,22 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += '<td>$</td>'
         html += filaDol
         html += "<td class='num dol total totalRubro'>"
-//            html += formatNumber(number: totDol, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
         html += numero(totDol)
         html += "</td>"
         html += "</tr>"
 
         html += "<tr class='click item_prc'>"
-//        html += '<td colspan="5"> </td>'
-//        html += '<td>Cronograma</td>'
         html += '<td>%</td>'
         html += filaPor
         html += "<td class='num prct total totalRubro'>"
-//            html += formatNumber(number: totPor, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
         html += numero(totPor)
         html += "</td>"
         html += "</tr>"
 
         html += "<tr class='click item_f '>"
-//        html += '<td colspan="5"> </td>'
-//        html += '<td>Cronograma</td>'
         html += '<td>F</td>'
         html += filaCan
         html += "<td class='num fis total totalRubro'>"
-//            html += formatNumber(number: totCan, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
         html += numero(totCan)
         html += "</td>"
         html += "</tr>"
@@ -1249,13 +1248,22 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def obra = Obra.get(params.id)
         def html = ""
 
+        println "tabla: $params"
+        def desde = params.desde.toInteger()?:1
+        def hasta = params.hasta.toInteger()?:10
+        def offset = desde - 1
+
+
         def precios = [:]
         def indirecto = obra.totales / 100
 
         def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
         def cronos = []
 
-        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+//        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden", max: hasta - desde + 1, offset: offset])
+
+        println "detalle: $detalle"
 
         def res = preciosService.rbro_pcun_v2(obra.id)
 
@@ -1293,14 +1301,16 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += 'Unidad'
         html += '</th>'
         html += '<th rowspan="2" style="width:60px;">'
-        html += 'Cantidad'
+        html += 'Cantidad Unitario Total'
         html += '</th>'
+/*
         html += '<th rowspan="2" style="width:60px;">'
         html += 'Unitario'
         html += '</th>'
         html += '<th rowspan="2" style="width:60px;">'
         html += 'C.Total'
         html += '</th>'
+*/
         html += '<th rowspan="2" style="width:12px;">'
         html += 'T.'
         html += '</th>'
@@ -1353,9 +1363,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += numero(crono.cantidad)
             html += "</td>"
 
+/*
             html += "<td class='num precioU'>"
             html += numero(crono.precioU)
             html += "</td>"
+*/
 
             def filaDol = "", filaPor = "", filaCan = ""
             def totDol = 0, totPor = 0, totCan = 0
@@ -1379,12 +1391,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 filaCan += "</td>"
             }
 
-            html += "<td class='num subtotal'>"
-//            crono.parcial = crono.parcial.round(2)
-            crono.parcial = crono.parcial.toDouble().round(2)
-            html += numero(crono.parcial.round(2))
+//            html += "<td class='num subtotal'>"
+            crono.parcial = Math.round(crono.parcial.toDouble() * 100) / 100
+//            html += numero(crono.parcial) + "#"
             totalCosto += crono.parcial
-            html += "</td>"
+//            html += "</td>"
             html += '<td>$</td>'
             html += filaDol
             html += "<td class='num dol total totalRubro'>"
@@ -1393,16 +1404,32 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</tr>"
 
             html += "<tr class='click item_prc ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}'>"
-            html += '<td colspan="6"> </td>'
+            html += '<td colspan="3"> </td>'
+            html += "<td class='num precioU'>"
+            html += numero(crono.precioU)
+            html += "</td>"
+//            html += '<td colspan="2"> </td>'
+
+
             html += '<td>%</td>'
             html += filaPor
             html += "<td class='num prct total totalRubro'>"
+            if(totPor != 100) {
+                println "****** ${crono}"
+            }
             html += numero(totPor)
             html += "</td>"
             html += "</tr>"
 
             html += "<tr class='click item_f ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}'>"
-            html += '<td colspan="6"> </td>'
+//            html += '<td colspan="6"> </td>'
+            html += '<td colspan="3"> </td>'
+            html += "<td class='num subtotal'>"
+            crono.parcial = Math.round(crono.parcial.toDouble() * 100) / 100
+            html += numero(crono.parcial) + "</td>"
+//            html += '<td colspan="2"> </td>'
+
+
             html += '<td>F</td>'
             html += filaCan
             html += "<td class='num fis total totalRubro'>"
@@ -1415,7 +1442,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += "<tfoot>"
         html += "<tr>"
         html += "<td></td>"
-        html += "<td colspan='4'>TOTAL PARCIAL</td>"
+        html += "<td colspan='2'>TOTAL PARCIAL</td>"
         html += "<td class='num'>"
         totalCosto = totalCosto.toDouble().round(2)
         html += numero(totalCosto)
@@ -1428,6 +1455,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def filaDolAcum = "", filaPor = "", filaPorAcum = "", sumaDol = 0, sumaPor = 0
         totalesDol.each {
+//            println "valor: $it  --> ${it.toDouble().round(2)}"
             it = it.toDouble().round(2)
             def por = ((100 * it) / totalCosto).round(2)
             sumaDol += it
@@ -1453,7 +1481,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         html += "<tr>"
         html += "<td></td>"
-        html += "<td colspan='4'>TOTAL ACUMULADO</td>"
+        html += "<td colspan='2'>TOTAL ACUMULADO</td>"
         html += "<td class='num'>"
         html += "</td>"
         html += "<td>T</td>"
@@ -1463,7 +1491,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         html += "<tr>"
         html += "<td></td>"
-        html += "<td colspan='4'>% PARCIAL</td>"
+        html += "<td colspan='2'>% PARCIAL</td>"
         html += "<td class='num'>"
         html += "</td>"
         html += "<td>T</td>"
@@ -1473,7 +1501,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         html += "<tr>"
         html += "<td></td>"
-        html += "<td colspan='4'>% ACUMULADO</td>"
+        html += "<td colspan='2'>% ACUMULADO</td>"
         html += "<td class='num'>"
         html += "</td>"
         html += "<td>T</td>"
@@ -1770,6 +1798,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def index() {
 
+        println "tabla: $params"
+        def desde = params.desde?:1
+        def hasta = params.hasta?.toInteger()?:10
+//        hasta = Math.min(hasta, 10)
+
         def contrato = Contrato.get(params.id)
         if (!contrato) {
             flash.message = "No se encontró el contrato"
@@ -1811,7 +1844,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 min("fechaInicio")
             }
         }
-        return [obra: obra, contrato: contrato, suspensiones: suspensiones, ini: ini]
+
+
+        return [obra: obra, contrato: contrato, suspensiones: suspensiones, ini: ini, desde: desde.toInteger(),
+                hasta: hasta.toInteger(), maximo: 100]
     }
 
 
