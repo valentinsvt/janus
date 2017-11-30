@@ -153,6 +153,7 @@
                         </g:if>
                         </div>
 
+%{--
                         <g:if test="${planillaInstance?.tipoPlanilla?.toString() == 'C'}">
                             <div class="row">
                                 <div class="span2 formato text-info" >
@@ -182,6 +183,7 @@
                                 </div>
                             </div>
                         </g:if>
+--}%
 
                         <div class="row">
 
