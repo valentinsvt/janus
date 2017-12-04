@@ -1813,7 +1813,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println "es update "+params.valor_multa+"  "+params.multaDescripcion
 //            println "es update "+params
             planillaInstance.properties = params
-            if(planillaPorAsociar){
+            if(planillaInstance.tipoPlanilla.codigo == 'C'){
                 planillaInstance.padreCosto = planillaPorAsociar
                 planillaInstance.fechaInicio = planillaPorAsociar?.fechaInicio
                 planillaInstance.fechaFin = planillaPorAsociar?.fechaFin
