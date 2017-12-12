@@ -206,12 +206,13 @@ class ReportePlanillas3Controller {
     }
 
     def reportePlanilla() {
-        println("reportePlanilla params " + params.id)
+//        println "reportePlanilla params $params"
         def planilla = Planilla.get(params.id)
 
         if (planilla.tipoPlanilla.codigo == 'Q') {
             if (!planilla.contrato.fechaPedidoRecepcionContratista || !planilla.contrato.fechaPedidoRecepcionFiscalizador) {
-                flash.message = "Por favor ingrese las fechas de pedido de recepción para generar la planilla final de avance (liquidación)"
+                flash.message = "Por favor ingrese las fechas de pedido de recepción para generar la planilla " +
+                        "final de avance (liquidación)"
                 flash.clase = "alert-error"
                 redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: planilla.contrato.id)
                 return
@@ -237,12 +238,6 @@ class ReportePlanillas3Controller {
 
 //        def conDetalles = true
         def conDetalles = planilla.tipoPlanilla.codigo != 'L'
-        if (params.detalle) {
-            conDetalles = Boolean.parseBoolean(params.detalle)
-        }
-        if (planilla.tipoPlanilla.codigo == "A") {
-            conDetalles = false
-        }
 
         def planillasAnteriores = Planilla.withCriteria {
             eq("contrato", contrato)
@@ -855,7 +850,7 @@ class ReportePlanillas3Controller {
         ]
 
         def reajusteTotal = 0
-        println "periodos: $periodos"
+//        println "periodos: $periodos"
 
         periodos.eachWithIndex { per3, i ->
             if(per3.key == 0){
@@ -947,7 +942,7 @@ class ReportePlanillas3Controller {
         def valoresAnteriores = []
         def totalAnteriores = 0
 
-        println("ultimo " + ultimoReajuste)
+//        println("ultimo " + ultimoReajuste)
 
         if(reajustesPlanilla.size() > 1){
             reajustesPlanilla.each { pl ->
@@ -959,7 +954,7 @@ class ReportePlanillas3Controller {
             planillasReajuste += -1
         }
 
-        println("planilla reajuste " + planillasReajuste)
+//        println("planilla reajuste " + planillasReajuste)
 
         if(planillasReajuste.last() != -1){
             valoresAnteriores = ReajustePlanilla.findAllByPlanilla(planillasReajuste.last())
@@ -1142,8 +1137,9 @@ class ReportePlanillas3Controller {
         /* ***************************************************** Detalles *****************************************************************/
 
 
-//        println "detalles"
+//        println "detalles --- $conDetalles"
         if (conDetalles) {
+//            println "....1"
             PdfPTable tablaDetalles = null
             def borderWidth = 1
 
@@ -1270,21 +1266,21 @@ class ReportePlanillas3Controller {
                     def cpAnt = 0
                     def cpAct = 0
 
+                    def planillasAnterioresCP = Planilla.withCriteria {
+                        eq("contrato", contrato)
+                        and {
+                            lt("fechaIngreso", planilla.fechaIngreso)
+                            eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
+                        }
+                        order("id", "asc")
+                    }
+
+                    cpAnt = planillasAnterioresCP.sum { it.valor } ?: 0
+
                     def cpPlanilla = Planilla.findAllByPadreCosto(planilla)
                     if (cpPlanilla.size() == 1) {
                         cpPlanilla = cpPlanilla[0]
-                        def planillasAnterioresCP = Planilla.withCriteria {
-                            eq("contrato", contrato)
-                            and {
-                                lt("fechaIngreso", cpPlanilla.fechaIngreso)
-                                eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
-                            }
-                            order("id", "asc")
-                        }
-
                         cpAct = cpPlanilla.valor
-                        cpAnt = planillasAnterioresCP.sum { it.valor } ?: 0
-
                     } else if (cpPlanilla.size() == 0) {
 //                        println "No hay planillas de cp"
                     } else {
@@ -1294,6 +1290,7 @@ class ReportePlanillas3Controller {
                     }
                     def cpAcu = cpAnt + cpAct
 
+//                    println "params.ant ${params.ant}, ${params.ant}, ${params.acu}"
                     def smAnt = params.ant + cpAnt
                     def smAct = params.act + cpAct
                     def smAcu = params.acu + cpAcu

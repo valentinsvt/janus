@@ -287,7 +287,8 @@ class ContratoController extends janus.seguridad.Shield {
             def filtrados = complementarios - Contrato.findAllByIdInList(volumenesCopiados.id)
 
 
-            [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario, complementarios: filtrados, formula: complementarios]
+            [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario,
+             complementarios: filtrados, formula: complementarios]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             [campos: campos]
