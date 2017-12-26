@@ -30,7 +30,7 @@
         <link href='${resource(dir: "font/tulpen", file: "stylesheet.css")}' rel='stylesheet' type='text/css'>
 
         <!-- Le styles -->
-        <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        <g:if test="${janus.Parametros.findByEmpresaLike(message(code: 'ambiente2'))}">
             <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrapV2.css')}" rel="stylesheet">
         </g:if>
         <g:else>
@@ -88,7 +88,7 @@
         <script src="${resource(dir: 'js', file: 'functions.js')}"></script>
         <g:layoutHead/>
 
-        <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        <g:if test="${janus.Parametros.findByEmpresaLike(message(code: 'ambiente2'))}">
             <link href="${resource(dir: 'css', file: 'customV2.css')}" rel="stylesheet">
         </g:if>
         <g:else>

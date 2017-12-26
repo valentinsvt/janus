@@ -3194,6 +3194,9 @@ class PlanillaController extends janus.seguridad.Shield {
                         " and fechaPresentacion < :f", [c: plnl.contrato, p: plnl.id, f: plnl.fechaPresentacion])
                 def dsct = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
                         "planillaReajustada = :p", [p: plnl])
+
+                println "totDsct[0]: ${totDsct[0]}, dsct[0]: ${dsct[0]}"
+
                 if((totDsct[0] + dsct[0]) <= plnl.contrato.anticipo) {
                     plnl.descuentos = dsct[0]
                 } else {

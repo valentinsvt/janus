@@ -18,7 +18,7 @@
     <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
     <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet"/>
 
-    <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+    <g:if test="${janus.Parametros.findByEmpresaLike(message(code: 'ambiente2'))}">
         <link href="${resource(dir: 'css', file: 'treeV2.css')}" rel="stylesheet"/>
     </g:if>
     <g:else>
@@ -37,6 +37,7 @@
         </div>
     </div>
 </g:if>
+
 
 <div id="loading" style="text-align:center;">
     <img src="${resource(dir: 'images', file: 'spinner_24.gif')}" alt="Cargando..."/>

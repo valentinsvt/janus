@@ -14,7 +14,8 @@
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.9.1.js')}"></script>
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.10.2.custom.min.js')}"></script>
 
-        <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        %{--<g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">--}%
+        <g:if test="${janus.Parametros.findByEmpresaLike(message(code: 'ambiente2'))}">
             <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrapV2.css')}" rel="stylesheet">
         </g:if>
         <g:else>

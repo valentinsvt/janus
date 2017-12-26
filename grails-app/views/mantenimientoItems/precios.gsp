@@ -14,7 +14,7 @@
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
-        <g:if test="${janus.Parametros.findByEmpresaLike('CNSL-GADPP')}">
+        <g:if test="${janus.Parametros.findByEmpresaLike(message(code: 'ambiente2'))}">
             <link href="${resource(dir: 'css', file: 'treeV2.css')}" rel="stylesheet"/>
         </g:if>
         <g:else>

@@ -2344,14 +2344,14 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             println "procesa peridodo: $pr.id, cambiar = $cambiar, desde ${pr.fechaInicio.format('dd-MMM-yyyy')} a " +
                     "${pr.fechaFin.format('dd-MMM-yyyy')}"
             if (!cambiar) {
-                if (pr.fechaFin > suspension.fechaInicio) {
+                if (pr.fechaFin >= suspension.fechaInicio) {
                     def prej = PeriodoEjecucion.get(pe.id)
                     prej.fechaFin = suspension.fechaInicio - 1
                     if (!prej.save(flush: true)) {
                         println "Error al crear prej de suspension: " + prej.errors
                     }
                     cambiar = true
-                    // inserta perdiodo de suspension
+                    println "++++inserta perdiodo de suspension"
                     def prdoNuevo = new PeriodoEjecucion()
                     prdoNuevo.fechaInicio = suspension.fechaInicio
                     prdoNuevo.fechaFin = suspension.fechaFin - 1

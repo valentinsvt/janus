@@ -206,7 +206,7 @@ class ReportePlanillas3Controller {
     }
 
     def reportePlanilla() {
-//        println "reportePlanilla params $params"
+        println("reportePlanilla params " + params.id)
         def planilla = Planilla.get(params.id)
 
         if (planilla.tipoPlanilla.codigo == 'Q') {
@@ -850,7 +850,7 @@ class ReportePlanillas3Controller {
         ]
 
         def reajusteTotal = 0
-//        println "periodos: $periodos"
+        println "periodos: $periodos"
 
         periodos.eachWithIndex { per3, i ->
             if(per3.key == 0){
@@ -942,7 +942,7 @@ class ReportePlanillas3Controller {
         def valoresAnteriores = []
         def totalAnteriores = 0
 
-//        println("ultimo " + ultimoReajuste)
+        println("ultimo " + ultimoReajuste)
 
         if(reajustesPlanilla.size() > 1){
             reajustesPlanilla.each { pl ->
@@ -954,7 +954,7 @@ class ReportePlanillas3Controller {
             planillasReajuste += -1
         }
 
-//        println("planilla reajuste " + planillasReajuste)
+        println("planilla reajuste " + planillasReajuste)
 
         if(planillasReajuste.last() != -1){
             valoresAnteriores = ReajustePlanilla.findAllByPlanilla(planillasReajuste.last())
@@ -1103,29 +1103,30 @@ class ReportePlanillas3Controller {
                 }
             }
 
-            Paragraph tituloMultaUsu = new Paragraph();
-            tituloMultaUsu.setAlignment(Element.ALIGN_CENTER);
-            tituloMultaUsu.add(new Paragraph("Otras multas", fontTitle));
-            addEmptyLine(tituloMultaUsu, 1);
-            document.add(tituloMultaUsu);
+            if(planilla.multaEspecial > 0) {
+                Paragraph tituloMultaUsu = new Paragraph();
+                tituloMultaUsu.setAlignment(Element.ALIGN_CENTER);
+                tituloMultaUsu.add(new Paragraph("Otras multas", fontTitle));
+                addEmptyLine(tituloMultaUsu, 1);
+                document.add(tituloMultaUsu);
 
-            PdfPTable tablaMultaUsu = new PdfPTable(2);
-            tablaMultaUsu.setWidthPercentage(60);
-            tablaMultaUsu.setSpacingAfter(10f);
+                PdfPTable tablaMultaUsu = new PdfPTable(2);
+                tablaMultaUsu.setWidthPercentage(60);
+                tablaMultaUsu.setSpacingAfter(10f);
 
-            tablaMultaUsu.setHorizontalAlignment(Element.ALIGN_LEFT)
+                tablaMultaUsu.setHorizontalAlignment(Element.ALIGN_LEFT)
 
-            addCellTabla(tablaMultaUsu, new Paragraph("Concepto", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaMultaUsu, new Paragraph(planilla.descripcionMulta, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaMultaUsu, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            if(planilla.multaEspecial){
-                addCellTabla(tablaMultaUsu, new Paragraph('$'+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            } else {
-                addCellTabla(tablaMultaUsu, new Paragraph(''+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMultaUsu, new Paragraph("Concepto", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMultaUsu, new Paragraph(planilla.descripcionMulta, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMultaUsu, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                if(planilla.multaEspecial){
+                    addCellTabla(tablaMultaUsu, new Paragraph('$'+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                } else {
+                    addCellTabla(tablaMultaUsu, new Paragraph(''+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                }
+
+                document.add(tablaMultaUsu);
             }
-
-            document.add(tablaMultaUsu);
-
 
             printFirmas([tipo: "otro", orientacion: "vertical"])
         }
@@ -1137,7 +1138,7 @@ class ReportePlanillas3Controller {
         /* ***************************************************** Detalles *****************************************************************/
 
 
-//        println "detalles --- $conDetalles"
+//        println "detalles"
         if (conDetalles) {
 //            println "....1"
             PdfPTable tablaDetalles = null
@@ -1211,11 +1212,6 @@ class ReportePlanillas3Controller {
 
 
                 def planillaAnterior, reajusteAnterior, reajustePlanillar
-
-
-//                planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 2)
-//                reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
-
 
                 //nuevo algoritmo para busqueda de planillas anteriores
                 def promedioActualD4 = 0
@@ -1299,30 +1295,14 @@ class ReportePlanillas3Controller {
                     def cAct = params.act + bAct + cpAct
                     def cAcu = params.acu + bAcu + cpAcu
 
-//                    def dAnt = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.descuentos } ?: 0
-//                    def dAnt = planillasReajusteD4.sum { it.descuentos } ?: 0
-//                    def dAnt = planillasReajusteD4.last().descuentos ?: 0
-
-
-
-
-                  def dAntPlanilla = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(contrato,
+                    def dAntPlanilla = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(contrato,
                           TipoPlanilla.findAllByCodigoInList(["P", "Q"]), planilla.fechaPresentacion, [sort: "fechaPresentacion"])
 
                     def dAnt = 0
 
-//                    dAntPlanilla.pop()
-
                     dAntPlanilla.each {
                         dAnt += it.descuentos
                     }
-
-
-//                    planillasReajusteD4.each {
-////                        println("anterior desc" + it)
-//                        dAnt += it.descuentos
-//                    }
-
 
                     def d = planilla.descuentos
                     def antAnt = dAnt
@@ -1345,45 +1325,18 @@ class ReportePlanillas3Controller {
 
                     def listaPlanillasAnt
 
-//                    def planAnteriores = []
-//                    def planillaAnteriorMulta = reajustesPlanilla.size() -2
-//                    def anteriores1
-//                    if(planillaAnteriorMulta >= 0){
-//                        listaPlanillasAnt = reajustesPlanilla[planillaAnteriorMulta].planillaReajustada
-//                        anteriores1 = ReajustePlanilla.findAllByPlanilla(listaPlanillasAnt)
-//
-//                        anteriores1.each{
-//                            planAnteriores += it.planilla
-//                        }
-//                    }
-
-
-//                    println("pa " + planAnteriores)
-
-//                    def listaMultasAnt = MultasPlanilla.findAllByPlanilla(planAnteriores.unique())
-                    def listaMultasAnt = MultasPlanilla.findAllByPlanillaInList(planillasReajusteD4)
-
-//                    println("lista m" + listaMultasAnt)
 
                     def multasAnt = 0
 
-                    listaMultasAnt.each {
-                        multasAnt += it.monto
+//                    println "planillasReajusteD4: $planillasReajusteD4"
+                    if(planillasReajusteD4.last() != -1) {
+                        def listaMultasAnt = MultasPlanilla.findAllByPlanillaInList(planillasReajusteD4)
+                        listaMultasAnt.each {
+                            multasAnt += it.monto
+                        }
                     }
 
-//                    println("multas anteriores" + multasAnt)
-
-//                    def multasAnt = m1 + m2 + m3 + m4
-//                    def multasAct = planilla.multaIncumplimiento + planilla.multaRetraso + planilla.multaDisposiciones + planilla.multaPlanilla+planilla.multaEspecial
-
-
-//                    println "planilla retraso "+planilla.multaRetraso
-//                    println "planilla inc "+planilla.multaIncumplimiento
                     def multasAcu = multasAnt + multasAct
-
-//                    println "multas Ant = " + m1 + " + " + m2 + " + " + m3 + " + " + m4 + " = " + multasAnt
-//                    println "multas Act = " + planilla.multaIncumplimiento + " + " + planilla.multaRetraso + " + " + planilla.multaDisposiciones + " + " + planilla.multaPlanilla + " = " + multasAct
-//                    println "multas Acu = " + multasAcu
 
                     def totalAnt = cAnt - antAnt - multasAnt
                     def totalAct = cAct - antAct - multasAct
@@ -1590,6 +1543,8 @@ class ReportePlanillas3Controller {
             def valoresAnterioresD5 = []
             def totalAnterioresD5 = 0
 
+            println "+++reajustesPlanilla: ${reajustesPlanilla.size()}, reajustes: ${reajustesPlanilla} y, ultimoReajusteD5: $ultimoReajusteD5"
+
             if(reajustesPlanilla.size() > 1){
                 reajustesPlanilla.each { pl ->
                     if(pl.planillaReajustada != ultimoReajusteD5){
@@ -1600,7 +1555,7 @@ class ReportePlanillas3Controller {
                 planillasReajusteD5 += -1
             }
 
-//                    println("planilla reajuste " + planillasReajusteD.last())
+            println "planilla reajuste $planillasReajusteD5"
 
             if(planillasReajusteD5.last() != -1){
                 valoresAnterioresD5 = ReajustePlanilla.findAllByPlanilla(planillasReajusteD5.last())
@@ -1615,10 +1570,14 @@ class ReportePlanillas3Controller {
                 def det = DetallePlanilla.findByPlanillaAndVolumenObra(planilla, vol)
 //                def anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasAnteriores[0..planillasAnteriores.size() - 2], vol)
 
-                def anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasReajusteD5, vol)
+                def anteriores
+                if(planillasReajusteD5.last() != -1) {
+                    anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasReajusteD5, vol)
+                }
+//                def anteriores = DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasReajusteD5, vol)
 
-                def cantAnt = anteriores.sum { it.cantidad } ?: 0
-                def valAnt = anteriores.sum { it.monto } ?: 0
+                def cantAnt = anteriores?.sum { it.cantidad } ?: 0
+                def valAnt = anteriores?.sum { it.monto } ?: 0
                 def cant = det?.cantidad ?: 0
                 def val = det?.monto ?: 0
                 totalAnterior += valAnt
