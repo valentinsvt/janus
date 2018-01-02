@@ -1251,8 +1251,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def html = ""
 
         println "tabla: $params"
-        def desde = params.desde.toInteger()?:1
-        def hasta = params.hasta.toInteger()?:10
+        def desde = params?.desde?.toInteger()?:1
+        def hasta = params?.hasta?.toInteger()?:10
         def offset = desde - 1
 
 
