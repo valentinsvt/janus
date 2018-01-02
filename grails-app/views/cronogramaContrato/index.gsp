@@ -805,8 +805,9 @@
                                     var $precio = $("#tf_precio");
                                     var $cant = $("#tf_cant");
                                     var total = parseFloat($cant.data("total"));
-                                    var val = (prct / 100) * total;
-                                    var dol = $precio.data("max") * (prct / 100);
+                                    var val = Math.round(((prct / 100) * total)*100)/100;
+                                    var dol = Math.round(($precio.data("total") * (prct / 100)) * 100)/100;
+
                                     $cant.val(number_format(val, 2, ".", "")).data("val", val);
                                     $precio.val(number_format(dol, 2, ".", "")).data("val", dol);
                                     if (ev.keyCode != 110 && ev.keyCode != 190) {
@@ -835,6 +836,7 @@
                     }
                 });
                 $("#tf_precio").keyup(function (ev) {
+//                $("#tf_precio").keydown(function (ev) {
                     if (validarNum(ev)) {
                         var dol = $.trim($(this).val());
                         if (dol == "") {
@@ -853,11 +855,13 @@
                                 var prct = (dol * 100) / total;
                                 var cant = dol * totalCant / total;
 
+//                                console.log("dola " + dol)
+
                                 $("#tf_prct").val(number_format(prct, 2, ".", "")).data("val", prct);
                                 $cant.val(number_format(cant, 2, ".", "")).data("val", cant);
-                                if (ev.keyCode != 110 && ev.keyCode != 190) {
-                                    $("#tf_precio").val(dol).data("val", dol);
-                                }
+//                                if (ev.keyCode != 110 && ev.keyCode != 190) {
+//                                    $("#tf_precio").val(dol).data("val", dol);
+//                                }
                             } catch (e) {
 //                                ////console.log(e);
                             }
@@ -909,7 +913,8 @@
 
                     $("#spCant").text(cantRestante);
                     $("#spPrct").text(prctRestante);
-                    $("#spPrecio").text(number_format(dolRestante, 2, ".", ","));
+//                    $("#spPrecio").text(number_format(dolRestante, 2, ".", ","));
+                    $("#spPrecio").text(number_format(subtotal, 2, ".", ","));
 
                     $("#tf_cant").data({
                         max   : cantRestante,
@@ -945,18 +950,22 @@
 
                             var cant = $("#tf_cant").data("val");
                             var prct = $("#tf_prct").data("val");
+                            var precio = $("#tf_precio").data("val")
 
                             var d, i, dol;
 
                             if (periodoIni == periodoFin) {
-                                dol = subtotal * (prct / 100);
+
+                                dol = Math.round( (subtotal * (prct / 100)) * 100) /100;
+
                                 $(".dol.mes" + periodoIni + ".rubro" + rubro).text(number_format(dol, 2, ".", ",")).data("val", dol);
                                 $(".prct.mes" + periodoIni + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
                                 $(".fis.mes" + periodoIni + ".rubro" + rubro).text(number_format(cant, 2, ".", ",")).data("val", cant);
                                 dataAjax += "&crono=" + rubro + "_" + periodoIni + "_" + dol + "_" + prct + "_" + cant;
                             } else {
                                 var meses = periodoFin - periodoIni + 1;
-                                dol = subtotal * (prct / 100);
+//                                dol = subtotal * (prct / 100);
+                                dol = Math.round( (subtotal * (prct / 100)) * 100) / 100;
 
                                 var dolCalc = dol, prctCalc = prct, cantCalc = cant
 
@@ -1076,6 +1085,7 @@
                                     var periodoFin = parseInt($("#periodosHasta").val());
 
                                     var prct = $("#tf_prct").data("val");
+                                    var precio2 = $("#tf_precio").data("val")
 
                                     $sel.each(function () {
                                         var $tr = $(this);
@@ -1098,7 +1108,10 @@
 
                                             var pr = Math.round((prct / meses) * 100) / 100;
                                             var cn = Math.round((cantCal / meses) * 100) / 100;
-                                            var pe = Math.round((precCal / meses) * 100) / 100;
+//                                            var pe = Math.round((precCal / meses) * 100) / 100;
+                                            var pe = Math.round((precio2) * 100) / 100;
+
+                                            console.log("precios " + pe)
 
                                             var prRest = prct, cnRest = cantCal, peRest = precCal;
 
