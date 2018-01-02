@@ -62,8 +62,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     def suspension_ajax() {
         def obra = Obra.get(params.obra)
         def min = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])[0].fechaInicio
+        def max = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio']).last().fechaFin
         def minDate = min.format("yyyy") + "," + (min.format("MM").toInteger() - 1) + "," + min.format("dd")
-        return [min: minDate]
+        def maxDate = max.format("yyyy") + "," + (max.format("MM").toInteger() - 1) + "," + max.format("dd")
+        return [min: minDate, max: maxDate]
     }
 
 

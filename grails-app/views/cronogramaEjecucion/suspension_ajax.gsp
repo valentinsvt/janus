@@ -13,7 +13,7 @@
         </div>
 
         <div class="controls">
-            <elm:datepicker name="ini" minDate="new Date(${min})" onClose="updateDias" class="required dateEC"/>
+            <elm:datepicker name="ini" minDate="new Date(${min})" maxDate="new Date(${max})" onClose="updateDias" class="required dateEC"/>
             <span class="mandatory">*</span>
             <span style="margin-left: 12px">Dia en el que se inicia la suspensión</span>
             <p class="help-block ui-helper-hidden"></p>
