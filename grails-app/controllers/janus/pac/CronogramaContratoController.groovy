@@ -443,7 +443,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
                 crono = new CronogramaContrato()
                 crono.contrato = contrato
             } else {
-                println "WTF MAS DE UN CRONOGRAMA volumen obra " + vol.id + " periodo " + per + " hay " + crono.size()
+//                println "WTF MAS DE UN CRONOGRAMA volumen obra " + vol.id + " periodo " + per + " hay " + crono.size()
                 cont = false
             }
 

@@ -957,6 +957,7 @@
                             if (periodoIni == periodoFin) {
 
                                 dol = Math.round( (subtotal * (prct / 100)) * 100) /100;
+//                                console.log("dol " + dol)
 
                                 $(".dol.mes" + periodoIni + ".rubro" + rubro).text(number_format(dol, 2, ".", ",")).data("val", dol);
                                 $(".prct.mes" + periodoIni + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);

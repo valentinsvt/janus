@@ -1242,7 +1242,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         println params
         def vol = VolumenesObra.get(params.vol)
         def crejs = CronogramaEjecucion.findAllByVolumenObra(vol)
-        println ".....modificarVolumen" + crejs
+//        println ".....modificarVolumen" + crejs
     }
 
     def tabla() {
@@ -1265,7 +1265,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden", max: hasta - desde + 1, offset: offset])
 
-        println "detalle: $detalle"
+//        println "detalle: $detalle"
 
         def res = preciosService.rbro_pcun_v2(obra.id)
 
@@ -1284,7 +1284,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         }//detalles.each
 
         def fin = new Date()
-        println "cronogramaObraEjec: detalles --> ${TimeCategory.minus(fin, inicio)}"
+//        println "cronogramaObraEjec: detalles --> ${TimeCategory.minus(fin, inicio)}"
 
         def row2 = ""
 
