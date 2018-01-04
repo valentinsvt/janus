@@ -2308,6 +2308,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def finPrej
         def plazoActual = 0
         def fechaFinal
+        def fechaFinalObra
         /** calcula fecha final de la obra **/
         periodos.each { pr ->
             if (iniPrej == null) {
@@ -2322,7 +2323,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
             plazoActual = finPrej - iniPrej + 1
         }
-        fechaFinal = iniPrej + plazoActual + diasSusp - 2 // no cuenta fin de suspension y dia final
+        fechaFinal = iniPrej + plazoActual + diasSusp - 1 // no cuenta fin de suspension y dia final
+        fechaFinalObra = iniPrej + plazoActual + diasSusp - 2 // no cuenta fin de suspension y dia final
         println "fecha final de la obra: ${fechaFinal.format('dd-MMM-yyyy')}"
 
         def cambiar = false
@@ -2330,7 +2332,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def i = 0
         println "periodos: $periodos, fcha: $fcha, fechaFinal: $fechaFinal"
-        while (fcha < fechaFinal) {
+        while (fcha < fechaFinal) {   /* puede existir un periodo de 1 día --nuevo*/
             def pr = periodos[i]
             def pe = new PeriodoEjecucion()
             pe.contrato = pr.contrato
@@ -2344,7 +2346,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
 
             println "procesa peridodo: $pr.id, cambiar = $cambiar, desde ${pr.fechaInicio.format('dd-MMM-yyyy')} a " +
-                    "${pr.fechaFin.format('dd-MMM-yyyy')}"
+                    "${pr.fechaFin.format('dd-MMM-yyyy')}, fcha: ${fcha.format('dd-MMM-yyyy')}"
             if (!cambiar) {
                 if (pr.fechaFin >= suspension.fechaInicio) {
                     def prej = PeriodoEjecucion.get(pe.id)
@@ -2371,13 +2373,16 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def prej = PeriodoEjecucion.get(pe.id)
                 prej.fechaInicio = fcha
                 println "fechaFinal: $fechaFinal,  ultimo día del mes: ${preciosService.ultimoDiaDelMes(fcha)}"
-                if (fechaFinal > preciosService.ultimoDiaDelMes(fcha)) {
+//                if (fechaFinal > preciosService.ultimoDiaDelMes(fcha)) {
+                if (fechaFinalObra > preciosService.ultimoDiaDelMes(fcha)) {
                     println "hace 1...."
                     prej.fechaFin = preciosService.ultimoDiaDelMes(fcha)
                     fcha = prej.fechaFin + 1
                 } else {
                     println "hace 2...."
-                    prej.fechaFin = fechaFinal
+//                    prej.fechaFin = fechaFinal
+                    prej.fechaFin = fechaFinalObra
+//                    fcha = fechaFinal
                     fcha = fechaFinal
                 }
                 if (!prej.save(flush: true)) {
