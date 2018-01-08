@@ -105,7 +105,7 @@
         <i class="icon-refresh"></i>
         Limpiar selección
     </a>
-    <a href="${g.createLink(controller: 'reportes', action: 'matrizExcel', id: "${obra}")}" class="btn btn-ajax btn-new" id="reset" title="Resetear">
+    <a href="${g.createLink(controller: 'reportes', action: 'matrizExcel', id: "${obra}")}" class="btn btn-ajax btn-new" id="reset" title="Exportar matriz a Excel">
         <i class="icon-print"></i>
         a Excel
     </a>

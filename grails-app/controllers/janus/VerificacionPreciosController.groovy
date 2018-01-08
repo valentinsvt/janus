@@ -5,17 +5,14 @@ class VerificacionPreciosController {
     def dbConnectionService
 
     def verificacion () {
+        /** muestra precios no actualizados 7 meses atras */
         def cn = dbConnectionService.getConnection()
         def obra = Obra.get(params.id)
 
-        def sql = "SELECT distinct\n" +
-                  "itemcdgo  codigo,\n"      +
-                  "itemnmbr  item,\n"      +
-                  "unddcdgo  unidad,\n"      +
-                  "rbpcpcun  punitario,\n"      +
-                  "rbpcfcha  fecha\n"      +
-                  "FROM obra_rbpc(${params.id}) \n"  +
-                  "ORDER BY item ASC"
+        def sql = "SELECT distinct itemcdgo codigo, itemnmbr item, unddcdgo unidad, rbpcpcun  punitario, " +
+                "rbpcfcha  fecha FROM obra_rbpc(${params.id}) " +
+                "where rbpcfcha < (cast('${obra.fechaPreciosRubros.format('yyyy-MM-dd')}' as date) - 210)  " +
+                "ORDER BY itemnmbr"
 
         def res = cn.rows(sql.toString())
 
