@@ -3662,7 +3662,7 @@ class PlanillaController extends janus.seguridad.Shield {
             diasMax--
         }
         def res = diasLaborablesService.diasLaborablesDesde(fcfm, diasMax)
-        println " fcfm: $fcfm, multas: $res"
+        println "No presentación de planilla --> fcfm: $fcfm, multas: $res"
         /* si hay error, res[0] = false */
         if (!res[0]) {
             errorDiasLaborables(plnl.contrato.id, res[2], res[1])
@@ -3750,13 +3750,24 @@ class PlanillaController extends janus.seguridad.Shield {
 
             def cn = dbConnectionService.getConnection()
 //            def sql= "select cast(to_char(sum(prejfcfn - prejfcin), 'dd') as integer) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo = 'P'"
-            def sql= "select sum(cast(to_char(prejfcfn - prejfcin, 'dd') as integer) + 1) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo = 'P'"
+            def sql = "select sum(cast(to_char(prejfcfn - prejfcin, 'dd') as integer) + 1) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo = 'P'"
             dias  = (int) cn.rows(sql.toString())[0].dias
             sql = "select sum(mdcedias) dias from mdce where cntr__id = ${plnl.contrato.id} and mdcetipo = 'A'"
             def ampliacion = (int) cn.rows(sql.toString())[0].dias?:0
-//            println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
+
+            println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
 
             dias -= plnl.contrato.plazo + ampliacion
+
+            sql = "select cast(to_char(plnlfcfn - max(prejfcfn), 'dd') as integer) cntd from plnl, prej " +
+                    "where plnl__id = ${plnl.id} and plnl.cntr__id = prej.cntr__id group by plnlfcfn"
+
+            println "retraso sql: $sql"
+            def retrasoObra = cn.rows(sql.toString())[0].cntd
+
+            dias += retrasoObra
+
+            println "retraso de obra: ${dias} dias"
 
             if(dias > 0) {
                 multaPlanilla = Math.round(dias * (plnl.contrato.multaRetraso * total / 1000)*100)/100

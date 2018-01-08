@@ -206,7 +206,7 @@ class ReportePlanillas3Controller {
     }
 
     def reportePlanilla() {
-        println("reportePlanilla params " + params.id)
+//        println("reportePlanilla params " + params.id)
         def planilla = Planilla.get(params.id)
 
         if (planilla.tipoPlanilla.codigo == 'Q') {
@@ -234,7 +234,7 @@ class ReportePlanillas3Controller {
             }
         }
 
-        def reajustesPlanilla = ReajustePlanilla.findAllByPlanilla(planilla, [sort: "periodo", order: "asc"])
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
 
 //        def conDetalles = true
         def conDetalles = planilla.tipoPlanilla.codigo != 'L'
@@ -850,9 +850,10 @@ class ReportePlanillas3Controller {
         ]
 
         def reajusteTotal = 0
-        println "periodos: $periodos"
+//        println "periodos: $periodos"
 
         periodos.eachWithIndex { per3, i ->
+//            println ".... $per3, key: ${per3.key}"
             if(per3.key == 0){
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
@@ -867,11 +868,15 @@ class ReportePlanillas3Controller {
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
                 cells[1][i] = new Paragraph(numero(fr1), fontTd)
-//                cells[2][i] = new Paragraph(numero(totalesPeriodoFr[per3.key]), fontTd)
-                cells[2][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorPo,2), fontTd)
-                def t = (reajustesPlanilla[per3.key].valorPo * fr1).round(2)
-//                cells[3][i] = new Paragraph(numero(t,2), fontTd)
-                cells[3][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorReajustado), fontTd)
+
+//                cells[2][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorPo,2), fontTd)
+
+                cells[2][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorPo,2), fontTd)
+
+//                def t = (reajustesPlanilla[per3.key].valorPo * fr1).round(2)
+                def t = (reajustesPlanilla.find {it.periodo == per3.key}.valorPo * fr1).round(2)
+//                cells[3][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorReajustado), fontTd)
+                cells[3][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorReajustado), fontTd)
                 reajusteTotal += t
             }
         }
@@ -942,7 +947,7 @@ class ReportePlanillas3Controller {
         def valoresAnteriores = []
         def totalAnteriores = 0
 
-        println("ultimo " + ultimoReajuste)
+//        println "último " + ultimoReajuste
 
         if(reajustesPlanilla.size() > 1){
             reajustesPlanilla.each { pl ->
@@ -954,7 +959,7 @@ class ReportePlanillas3Controller {
             planillasReajuste += -1
         }
 
-        println("planilla reajuste " + planillasReajuste)
+//        println("planilla reajuste " + planillasReajuste)
 
         if(planillasReajuste.last() != -1){
             valoresAnteriores = ReajustePlanilla.findAllByPlanilla(planillasReajuste.last())
@@ -1081,6 +1086,28 @@ class ReportePlanillas3Controller {
                 }
 
                 if(mt.tipoMulta.id == 3){
+                    Paragraph tituloMultaNoPres = new Paragraph();
+                    tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
+                    tituloMultaNoPres.add(new Paragraph(mt.tipoMulta.descripcion, fontTitle));
+                    addEmptyLine(tituloMultaNoPres, 1);
+                    document.add(tituloMultaNoPres);
+
+                    PdfPTable tablaMultaDisp = new PdfPTable(2);
+                    tablaMultaDisp.setWidthPercentage(60);
+                    tablaMultaDisp.setSpacingAfter(10f);
+
+                    tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+                    addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.dias,0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(mt.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    document.add(tablaMultaDisp);
+                }
+
+                if(mt.tipoMulta.id == 4){  //retraso de obra
                     Paragraph tituloMultaNoPres = new Paragraph();
                     tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
                     tituloMultaNoPres.add(new Paragraph(mt.tipoMulta.descripcion, fontTitle));
@@ -1543,7 +1570,7 @@ class ReportePlanillas3Controller {
             def valoresAnterioresD5 = []
             def totalAnterioresD5 = 0
 
-            println "+++reajustesPlanilla: ${reajustesPlanilla.size()}, reajustes: ${reajustesPlanilla} y, ultimoReajusteD5: $ultimoReajusteD5"
+//            println "+++reajustesPlanilla: ${reajustesPlanilla.size()}, reajustes: ${reajustesPlanilla} y, ultimoReajusteD5: $ultimoReajusteD5"
 
             if(reajustesPlanilla.size() > 1){
                 reajustesPlanilla.each { pl ->
@@ -1555,7 +1582,7 @@ class ReportePlanillas3Controller {
                 planillasReajusteD5 += -1
             }
 
-            println "planilla reajuste $planillasReajusteD5"
+//            println "planilla reajuste $planillasReajusteD5"
 
             if(planillasReajusteD5.last() != -1){
                 valoresAnterioresD5 = ReajustePlanilla.findAllByPlanilla(planillasReajusteD5.last())
