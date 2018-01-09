@@ -237,7 +237,12 @@ class ReportePlanillas3Controller {
         def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
 
 //        def conDetalles = true
-        def conDetalles = planilla.tipoPlanilla.codigo != 'L'
+//        def conDetalles = planilla.tipoPlanilla.codigo != 'L'
+          def conDetalles = false
+
+        if(planilla.tipoPlanilla.codigo == 'L'){
+            conDetalles = true
+        }
 
         def planillasAnteriores = Planilla.withCriteria {
             eq("contrato", contrato)
