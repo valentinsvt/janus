@@ -58,7 +58,8 @@ class AdministradorContratoController extends janus.seguridad.Shield {
 //                        println it.fechaInicio.format("dd-MM-yyyy") + "    ->    " + it.fechaFin?.format("dd-MM-yyyy")
 //                    }
                     if (overlap.size() > 0) {
-                        error = "NO_No puede asignar una fecha de inicio entre ${overlap.fechaInicio*.format('dd-MM-yyyy')} y ${overlap.fechaFin*.format('dd-MM-yyyy')}"
+//                        error = "NO_No puede asignar una fecha de inicio entre ${overlap.fechaInicio*.format('dd-MM-yyyy')} y ${overlap.fechaFin*.format('dd-MM-yyyy')}"
+                        error = "NO_No puede asignar con esa fecha de inicio"
                     }
                     nuevo.fechaFin = newest.fechaInicio - 1
 //                    error = "NO_No puede asignar una fecha de inicio inferior a " + newest.fechaInicio.format("dd-MM-yyyy")
@@ -91,6 +92,15 @@ class AdministradorContratoController extends janus.seguridad.Shield {
 
         [administradorContratoInstanceList: AdministradorContrato.list(params), params: params, personal: personal]
     } //list
+
+    def adminContrato () {
+        def contrato = Contrato.get(params.contrato)
+        def dptoDireccion = Departamento.get(contrato?.depAdministrador?.id)
+        def personal = Persona.findAllByActivoAndDepartamento(1, dptoDireccion, [sort: 'apellido'])
+
+        [administradorContratoInstanceList: AdministradorContrato.list(params), params: params, personal: personal]
+    }
+
 
     def list() {
         [administradorContratoInstanceList: AdministradorContrato.list(params), params: params]

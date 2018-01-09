@@ -502,12 +502,11 @@
                             </li>
 
                             <li>
-                                <g:if test="${esDirector == 'S'}">
-                                %{--<g:if test="${esDirector == 'N'}">--}%
-                                    <a href="#" id="btnAdmin">
-                                        <i class="icon-user"></i> Administrador
-                                    </a>
-                                </g:if>
+                                %{--<g:if test="${esDirector == 'S'}">--}%
+                                    %{--<a href="#" id="btnAdmin">--}%
+                                        %{--<i class="icon-user"></i> Administrador--}%
+                                    %{--</a>--}%
+                                %{--</g:if>--}%
                             </li>
 
                             <li>

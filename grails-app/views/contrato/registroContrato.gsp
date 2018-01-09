@@ -32,8 +32,11 @@
     }
 
     .comple{
-        /*background: #b07d3d;*/
         background-color: #254897;
+    }
+
+    .adm{
+        background-color: #4341c9;
     }
     </style>
 
@@ -133,7 +136,7 @@
 
         <div class="linea" style="height: 85%;"></div>
 
-        %{--<g:hiddenField name="ofertaAc" class="oferta" value="${contrato?.oferta?.id}"/>--}%
+    %{--<g:hiddenField name="ofertaAc" class="oferta" value="${contrato?.oferta?.id}"/>--}%
 
         <g:if test="${contrato?.codigo != null}">
 
@@ -431,9 +434,17 @@
                 </div>
             </div>
 
-
         </div>
 
+        <div class="span12" style="margin-top: 10px">
+            <div class="span2 formato">Administrador delegado</div>
+
+            <div class="span3">${contrato?.administrador?.titulo} ${contrato?.administrador?.nombre} ${contrato?.administrador?.apellido}</div>
+
+            <div class="span3 formato"></div>
+
+            <div class="span3"></div>
+        </div>
     </fieldset>
 
 </g:form>
@@ -475,6 +486,13 @@
                             <i class="icon-plus"></i> Asignar F. Polinómica
                         </g:link>
                     </li>
+                    <g:if test="${session.perfil.codigo == 'CNTR' && contrato?.estado == 'R'}">
+                        <li>
+                            <a href="#" id="btnAgregarAdmin" class="adm">
+                                <i class="icon-user"></i> Administrador
+                            </a>
+                        </li>
+                    </g:if>
                     <li>
                         <g:link class="comple" controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato Complementario">
                             <i class="icon-th"></i> Cronograma Total
@@ -500,32 +518,32 @@
 
 %{--comentar para no incluir complementearios--}%
 
-    %{--<div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">--}%
-        %{--<div class="navbar-inner">--}%
-            %{--<div class="botones">--}%
-                %{--<ul class="nav">--}%
-                    %{--<li>--}%
-                        %{--<g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">--}%
-                            %{--<i class="icon-th"></i> Cronograma contrato--}%
-                        %{--</g:link>--}%
-                    %{--</li>--}%
-                    %{--<g:if test="${complementario}">--}%
-                        %{--<li>--}%
-                            %{--<a href="#" name="integrarFP_name" id="integrarFP" title="Integración de la FP del contrato y de la FP del contrato complementario">--}%
-                                %{--<i class="fa icon-th"></i> Integrar FP complementario--}%
-                            %{--</a>--}%
-                        %{--</li>--}%
+%{--<div class="navbar navbar-inverse" style="margin-top: -10px;padding-left: 5px;">--}%
+%{--<div class="navbar-inner">--}%
+%{--<div class="botones">--}%
+%{--<ul class="nav">--}%
+%{--<li>--}%
+%{--<g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato">--}%
+%{--<i class="icon-th"></i> Cronograma contrato--}%
+%{--</g:link>--}%
+%{--</li>--}%
+%{--<g:if test="${complementario}">--}%
+%{--<li>--}%
+%{--<a href="#" name="integrarFP_name" id="integrarFP" title="Integración de la FP del contrato y de la FP del contrato complementario">--}%
+%{--<i class="fa icon-th"></i> Integrar FP complementario--}%
+%{--</a>--}%
+%{--</li>--}%
 
-                        %{--<li>--}%
-                            %{--<a href="#" name="integrar_name" id="integrarCronograma" title="Integración del cronograma contrato y del cronograma del contrato complementario">--}%
-                                %{--<i class="fa icon-th"></i> Integrar cronograma complementario--}%
-                            %{--</a>--}%
-                        %{--</li>--}%
-                    %{--</g:if>--}%
-                %{--</ul>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+%{--<li>--}%
+%{--<a href="#" name="integrar_name" id="integrarCronograma" title="Integración del cronograma contrato y del cronograma del contrato complementario">--}%
+%{--<i class="fa icon-th"></i> Integrar cronograma complementario--}%
+%{--</a>--}%
+%{--</li>--}%
+%{--</g:if>--}%
+%{--</ul>--}%
+%{--</div>--}%
+%{--</div>--}%
+%{--</div>--}%
 
 </g:if>
 
@@ -576,25 +594,25 @@
 
 
 <div id="integrarCronoDialog">
-        <fieldset>
-            <div class="span4">
-                Seleccione el contrato complementario cuyo cronograma será integrado al cronograma del contrato: <strong>${contrato?.codigo}</strong>
-            </div>
-        </fieldset>
-        <fieldset style="margin-top: 10px">
-            <div class="span4">
-                <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
-                          name="complementarios_name" id="contratosComp" class="form-control" style="width: 380px"/>
-            </div>
-        </fieldset>
+    <fieldset>
+        <div class="span4">
+            Seleccione el contrato complementario cuyo cronograma será integrado al cronograma del contrato: <strong>${contrato?.codigo}</strong>
+        </div>
+    </fieldset>
+    <fieldset style="margin-top: 10px">
+        <div class="span4">
+            <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+                      name="complementarios_name" id="contratosComp" class="form-control" style="width: 380px"/>
+        </div>
+    </fieldset>
 </div>
 
 <div id="integrarCronoDialogNo">
-        <fieldset>
-            <div class="span4">
-                No tiene ningún contrato complementario cuyo cronograma pueda ser integrado al cronograma del contrato: <p><strong>${contrato?.codigo}</strong></p>
-            </div>
-        </fieldset>
+    <fieldset>
+        <div class="span4">
+            No tiene ningún contrato complementario cuyo cronograma pueda ser integrado al cronograma del contrato: <p><strong>${contrato?.codigo}</strong></p>
+        </div>
+    </fieldset>
 </div>
 
 <div id="integrarFPDialogNo">
@@ -621,6 +639,30 @@
 
 
 <script type="text/javascript">
+
+
+    $("#btnAgregarAdmin").click(function () {
+        $.ajax({
+            type    : "POST",
+            url     : "${createLink(controller: 'administradorContrato', action: 'adminContrato')}",
+            data    : {
+                contrato : "${contrato?.id}"
+            },
+            success : function (msg) {
+                var $btnOk = $('<a href="#" class="btn">Aceptar</a>');
+                $btnOk.click(function () {
+                    $(this).replaceWith(spinner);
+                    location.reload(true);
+                });
+                $("#modal_tittle_var").text("Administradores");
+                $("#modal_body_var").html(msg);
+                $("#administrador").data("contrato", "${contrato?.id}");
+                $("#modal_footer_var").html($btnOk);
+                $("#modal-var").modal("show");
+            }
+        });
+        return false;
+    });
 
 
     $("#integrarFP").click(function () {
