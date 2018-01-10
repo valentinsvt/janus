@@ -240,7 +240,7 @@ class ReportePlanillas3Controller {
 //        def conDetalles = planilla.tipoPlanilla.codigo != 'L'
           def conDetalles = false
 
-        if(planilla.tipoPlanilla.codigo == 'P' && planilla.tipoPLanilla.codigo == 'Q'){
+        if(planilla.tipoPlanilla.codigo in ['P', 'Q']){
             conDetalles = true
         }
 

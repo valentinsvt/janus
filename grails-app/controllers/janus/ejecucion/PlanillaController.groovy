@@ -3990,6 +3990,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //            println "antes del while total: $totalCr"
             def total = 0.0
+            def calcular = true
             while(fchaFinPlanillado < plnl.fechaFin){
                 prdo++
 //                println "fchaFinPlanillado: ${fchaFinPlanillado.format('yyyy-MMM-dd')} periodo: $prdo"
@@ -4019,10 +4020,16 @@ class PlanillaController extends janus.seguridad.Shield {
                         total += ms.parcialCronograma
                     }
 
-//                    println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
+                    println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
 
-                    registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, fcfm, parcial, total, false)
-                    fchaFinPlanillado =  preciosService.sumaUnDia(fcfm)
+                    /** manejo especial de la planilla 217 no reajusto en todos los periodos borrar y dejar solo el ELSE **/
+                    if(plnl.id == 217){
+                        registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, fcfm, parcial, total, true)
+                        fchaFinPlanillado = plnl.fechaFin
+                    } else {
+                        registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, fcfm, parcial, total, false)
+                        fchaFinPlanillado =  preciosService.sumaUnDia(fcfm)
+                    }
 
                 } else {  // se crea el último periodo en rjpl
                     diasEsteMes = preciosService.diasEsteMes(plnl.contrato.id, fchaFinPlanillado.format('yyyy-MM-dd'), plnl.fechaFin.format('yyyy-MM-dd'))
@@ -4455,8 +4462,11 @@ class PlanillaController extends janus.seguridad.Shield {
         def dsct1 = calculaPo(planilla.id, esteMes, planillaFinal, prmt.periodo)
 //                println "+++2: ${calculaPo(plnl.id, 0, false, prmt.periodo)}, anterior: $dsct1"
         prmt.valorPo = dsct1
-//                println "inserta segunda parte: $prmt"
-        insertaRjpl(prmt)
+        println "inserta segunda parte Po: $dsct1"
+
+        if(Math.abs(dsct1) > 0.001) {
+            insertaRjpl(prmt)
+        }
     }
 
 }
