@@ -4,9 +4,14 @@
 }
 
 .dpto {
-    font-size  : smaller;
-    font-style : italic;
+    font-size: smaller;
+    font-style: italic;
 }
+input[readonly] {
+    cursor: pointer !important;
+    background-color: #ebebe5 !important;
+}
+
 </style>
 <g:form name="frmSave-Planilla" action="savePagoPlanilla" id="${planilla.id}">
     <g:hiddenField name="tipo" value="${tipo}"/>
@@ -37,7 +42,7 @@
             </div>
 
             <div class="span4">
-                <elm:datepicker name="fecha" class=" span3 required" maxDate="${fechaMax}" minDate="${fechaMin}" value="${fecha}"/>
+                <elm:datepicker name="fecha" id="fc" class=" span3 required" maxDate="${fechaMax}" minDate="${fechaMin}" value="${fecha}"/>
                 %{--<elm:datepicker name="fecha" class=" span3 required"/>--}%
                 <span class="mandatory">*</span>
 
@@ -67,6 +72,10 @@
 </g:form>
 
 <script type="text/javascript">
+
+
+
+
     $("#frmSave-Planilla").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();

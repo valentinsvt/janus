@@ -21,6 +21,6 @@ class TipoLista {
     static constraints = {
         codigo(blank: false, attributes: [title: 'codigo'], size: 1..2)
         descripcion(size: 1..63, blank: false, attributes: [title: 'descripcion'])
-        unidad(inList: ['Ton', 'm3'])
+        unidad(inList: ['Ton', 'm3', 'no'])
     }
 }

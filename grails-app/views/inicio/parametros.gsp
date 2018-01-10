@@ -135,6 +135,10 @@
                     <g:link controller="valoresAnuales" action="list">Valores Anuales</g:link>
                 </div><br>
 
+                <div class="item" texto="listas">
+                    <g:link controller="tipoLista" action="list">Tipo de Listas de precios</g:link>
+                </div><br>
+
 %{--
                 <div class="item" texto="tpbn">
                     <g:link controller="tipoDeBien" action="list">Tipo de Bien</g:link> Detalle de si el bien se halla dentro de la lista de bienes producidos a nivel nacional.
