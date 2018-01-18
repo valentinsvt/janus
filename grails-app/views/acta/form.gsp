@@ -399,6 +399,7 @@
                                 $("#modal").modal("hide");
                                 editable($sec.find(".editable"));
                             }
+                            location.reload();
                         }
                     });
                 }
@@ -1029,7 +1030,7 @@
 
                 $("#btnPrint").click(function () {
                     var url = "${createLink(controller: 'pdf', action: 'pdfLink')}?url=${createLink(controller:
-                      'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
+                      'reportesPlanillas', action: 'actaRecepcion', id:actaInstance.id)}";
 //                    console.log(url);
                     location.href = url;
                 });

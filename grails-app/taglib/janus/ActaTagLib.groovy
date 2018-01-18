@@ -93,7 +93,8 @@ class ActaTagLib {
         def indirecto = obra.totales / 100
         preciosService.ac_rbroObra(obra.id)
         def detalles = [:]
-        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "subPresupuesto"])
+//        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "subPresupuesto"])
+        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
         volumenes.each { vol ->
             vol.refresh()
