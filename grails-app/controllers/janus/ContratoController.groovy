@@ -246,6 +246,23 @@ class ContratoController extends janus.seguridad.Shield {
             errores += "<li>Debe cargar un documento a la biblioteca con nombre 'Justificativo de cantidad de obra'</li>"
         }
 
+
+
+        if(contrato.padre){
+
+            def padre = Contrato.get(contrato.padre.id)
+            contrato.depAdministrador =  padre.depAdministrador
+            def adminConPadre = AdministradorContrato.findByContratoAndFechaFinIsNull(padre)
+
+            def adminCon = new AdministradorContrato()
+            adminCon.contrato = contrato
+            adminCon.administrador = adminConPadre.administrador
+            adminCon.fechaInicio = adminConPadre.fechaInicio
+
+            adminCon.save(flush:true)
+        }
+
+
         if (errores == "") { //registra el contrato
             contrato.estado = "R"
             if (contrato.save(flush: true)) {
@@ -1015,6 +1032,7 @@ class ContratoController extends janus.seguridad.Shield {
     def save() {
 //        println "-->> save: >>>>>>${params}<<<<<"
         def contratoInstance
+        def padre
 
         if(params."padre.id" == -1) params."padre.id" = null
         if (params.codigo) {
@@ -1043,30 +1061,19 @@ class ContratoController extends janus.seguridad.Shield {
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
             contratoInstance.properties = params
-
-
         }//es edit
         else {
-
-//            if (params.oferta) {
-//                if (params.oferta.id == '-1') {
-//                    flash.clase = "alert-error"
-//                    flash.message = "No se puede grabar el Contrato, elija una oferta válida "
-//                    redirect(action: 'registroContrato')
-//                    return
-//                }
-//            }
-
             contratoInstance = new Contrato()
             contratoInstance.properties = params
             def oferta = Oferta.get(params."oferta.id")
             contratoInstance.oferta = oferta
-
         } //es create
 
 
         if (params."padre.id" == "-1") {
             contratoInstance.padre = null
+        }else{
+
         }
 
         contratoInstance.periodoInec = indice
@@ -1078,6 +1085,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         try {
             contratoInstance.save(flush: true)
+
         } catch (e) {
 //            println "errrr: $e "
             flash.clase = "alert-error"
