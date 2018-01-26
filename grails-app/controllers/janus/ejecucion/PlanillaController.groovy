@@ -1718,6 +1718,14 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def formulasVarias = FormulaPolinomicaReajuste.findAllByContrato(contrato)
 
+        def anticipoN
+
+
+
+
+
+
+
 
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
@@ -4475,6 +4483,20 @@ class PlanillaController extends janus.seguridad.Shield {
         if(Math.abs(dsct1) > 0.001) {
             insertaRjpl(prmt)
         }
+    }
+
+    def anticipo_ajax () {
+//        println("params " + params)
+        def contrato = Contrato.get(params.contrato)
+        def tipoPlanilla = TipoPlanilla.get(params.tipo)
+        def com
+        if(tipoPlanilla.codigo == 'B'){
+            com = Contrato.findByPadre(contrato)
+            return [monto: com.monto, contrato: com]
+        }else{
+            return [monto: contrato.monto, contrato: contrato]
+        }
+
     }
 
 }

@@ -373,13 +373,13 @@
                                     Valor
                                 </div>
 
-                                <div class="span4">
-                                    $<g:formatNumber number="${contrato.anticipo}" minFractionDigits="2"
-                                                     maxFractionDigits="2" format="##,##0" locale="ec"/>
-                                    (anticipo del <g:formatNumber number="${contrato.porcentajeAnticipo}"
-                                                                  maxFractionDigits="0" minFractionDigits="0"/>%
-                                    de $<g:formatNumber number="${contrato.monto}" minFractionDigits="2"
-                                                        maxFractionDigits="2" format="##,##0" locale="ec"/>)
+                                <div class="span4" id="divAnticipo">
+                                    %{--$<g:formatNumber number="${contrato.anticipo}" minFractionDigits="2"--}%
+                                                     %{--maxFractionDigits="2" format="##,##0" locale="ec"/>--}%
+                                    %{--(anticipo del <g:formatNumber number="${contrato.porcentajeAnticipo}"--}%
+                                                                  %{--maxFractionDigits="0" minFractionDigits="0"/>%--}%
+                                    %{--de $<g:formatNumber number="${contrato.monto}" minFractionDigits="2"--}%
+                                                        %{--maxFractionDigits="2" format="##,##0" locale="ec"/>)--}%
                                 </div>
                             </div>
                         </g:if>
@@ -616,9 +616,32 @@
             });
 
             $("#tipoPlanilla").change(function () {
+                var tp = $(this).val();
                 checkPeriodo();
                 cargarAsociada();
+                cargarAnticipo(tp)
             });
+
+            function cargarAnticipo (tipo) {
+                $.ajax({
+                   type:'POST',
+                    url:'${createLink(controller: 'planilla', action: 'anticipo_ajax')}',
+                    data:{
+                        contrato: '${contrato?.id}',
+                        tipo: tipo
+                    },
+                    success: function (msg){
+                       $("#divAnticipo").html(msg)
+                    }
+                });
+            }
+
+            if('${contrato?.id}'){
+                var ant = $("#tipoPlanilla").val();
+                cargarAnticipo(ant);
+            }
+
+
         });
 
     </script>

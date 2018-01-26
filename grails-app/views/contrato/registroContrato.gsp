@@ -101,7 +101,6 @@
 
     <g:hiddenField name="id" value="${contrato?.id}"/>
 
-
     <g:if test="${contrato?.estado == 'R'}">
         <g:if test="${planilla != 0}">
             <div id="alertaEstado" title="Obra en ejecución">
