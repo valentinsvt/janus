@@ -73,7 +73,7 @@
         </g:if>
 
         <g:if test="${contrato?.estado == 'R'}">
-            <g:if test="${planilla == []}">
+            <g:if test="${planilla == 0}">
                 <button class="btn" id="btn-desregistrar"><i class="icon-exclamation"></i> Cambiar Estado
                 </button>
             </g:if>
@@ -103,7 +103,7 @@
 
 
     <g:if test="${contrato?.estado == 'R'}">
-        <g:if test="${planilla != []}">
+        <g:if test="${planilla != 0}">
             <div id="alertaEstado" title="Obra en ejecución">
                 <p>Este contrato ya posee planillas y se halla en ejecución</p>
             </div>
@@ -410,7 +410,7 @@
 
         <div class="span12" style="margin-top: 10px">
 
-            <div class="span1 formato">Dirección Administradora</div>
+            <div class="span1 formato">Departamento Administrador</div>
 
             <div class="span4">
                 <g:select name="depAdministrador.id" from="${janus.Departamento.list([sort: 'descripcion'])}" optionKey="id"
@@ -494,20 +494,23 @@
                         </li>
                     </g:if>
                     <li>
-                        <g:link class="comple" controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" title="Nuevo Cronograma Contrato Complementario">
+                        <g:link class="comple" controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}"
+                                title="Nuevo Cronograma Contrato Complementario">
                             <i class="icon-th"></i> Cronograma Total
                         </g:link>
                     </li>
                     <g:if test="${complementario}">
                         <li>
-                            <a href="#" class="comple" name="integrarFP_name" id="integrarFP" title="Integración de la FP del contrato y de la FP del contrato complementario">
-                                <i class="fa icon-th"></i> Integrar FP complementario
+                            <a href="#" class="comple" name="integrarFP_name" id="integrarFP"
+                               title="Integración al contrato principal la FP del contrato complementario">
+                                <i class="fa icon-th"></i> Integrar FP Comp.
                             </a>
                         </li>
 
                         <li>
-                            <a href="#" class="comple" name="integrar_name" id="integrarCronograma" title="Integración del cronograma contrato y del cronograma del contrato complementario">
-                                <i class="fa icon-th"></i> Integrar cronograma complementario
+                            <a href="#" class="comple" name="integrar_name" id="integrarCronograma"
+                               title="Integración al cronograma principal los rubros del contrato complementario">
+                                <i class="fa icon-th"></i> Integrar cronograma Comp.
                             </a>
                         </li>
                     </g:if>
@@ -610,7 +613,7 @@
 <div id="integrarCronoDialogNo">
     <fieldset>
         <div class="span4">
-            No tiene ningún contrato complementario cuyo cronograma pueda ser integrado al cronograma del contrato: <p><strong>${contrato?.codigo}</strong></p>
+            Ya se ha realizado la integración del cronograma del contrato complementario al contrato: <p><strong>${contrato?.codigo}</strong></p>
         </div>
     </fieldset>
 </div>
@@ -618,7 +621,7 @@
 <div id="integrarFPDialogNo">
     <fieldset>
         <div class="span4">
-            No tiene ninguna FP complementario para ser integrado al contrato: <p><strong>${contrato?.codigo}</strong></p>
+            Ya se ha realizado la integración de la fórmula polinómica del contrato complementario al contrato: <p><strong>${contrato?.codigo}</strong></p>
         </div>
     </fieldset>
 </div>
@@ -631,7 +634,7 @@
     </fieldset>
     <fieldset style="margin-top: 10px">
         <div class="span4">
-            <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+            <g:select from="${formula}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
                       name="complementariosFP_name" id="contratosFP" class="form-control" style="width: 380px"/>
         </div>
     </fieldset>
@@ -666,8 +669,8 @@
 
 
     $("#integrarFP").click(function () {
-        var complementario = $("#contratosFP").val();
-        if(complementario){
+        var fp = parseInt("${compFp}");
+        if(fp == 0){
             $("#integrarFPDialog").dialog("open")
         }else{
             $("#integrarFPDialogNo").dialog("open")
@@ -726,6 +729,8 @@
                                                 }
                                             });
                                         }else{
+                                            location.reload();
+/*
                                             $.box({
                                                 imageClass : "box_info",
                                                 title      : "Integrado",
@@ -743,6 +748,7 @@
                                                     }
                                                 }
                                             });
+*/
                                         }
                                     }
                                 });
@@ -852,7 +858,7 @@
                                                     }
                                                 }
                                             });
-                                        }else{
+                                        } else {
                                             $.box({
                                                 imageClass : "box_info",
                                                 title      : "Integrado",
@@ -871,6 +877,7 @@
                                                 }
                                             });
                                         }
+                                        location.reload();
                                     }
                                 });
                             },

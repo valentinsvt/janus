@@ -60,10 +60,10 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             def obra = contrato.obra
             if(obra.codigo.contains('-OF')) {
                 def cdgo = obra.codigo[0..obra.codigo.indexOf('-OF') - 1]
-                println "nuevo código: $cdgo"
+//                println "nuevo código: $cdgo"
                 obra = Obra.findByCodigo(cdgo)
             }
-            println "obra --> ${obra.codigo}"
+//            println "obra --> ${obra.codigo}"
 
             def documentos = DocumentoObra.findAllByObra(obra)
             def plano = documentos.findAll { it.nombre.toLowerCase().contains("plano") }

@@ -293,19 +293,21 @@ class ContratoController extends janus.seguridad.Shield {
         def contrato
         def planilla  // si hay planillas de inhabilita el desregistrar
         def complementario
-        def complementarios
-        if (params.contrato) {
-            contrato = Contrato.get(params.contrato)
-            planilla = Planilla.findAllByContrato(contrato)
-            complementario = Contrato.findByPadre(contrato)
-            def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-            complementarios = Contrato.findAllByPadre(contrato)
-            def volumenesCopiados = VolumenContrato.findAllByContratoAndContratoComplementarioIsNotNull(contrato).contratoComplementario.unique()
-            def filtrados = complementarios - Contrato.findAllByIdInList(volumenesCopiados.id)
 
+        if (params.contrato) {
+            contrato = Contrato.get(params.contrato).refresh()
+            planilla = Planilla.countByContrato(contrato)
+            complementario = Contrato.findByPadre(contrato)
+            def f1 = FormulaPolinomicaReajuste.get(1).refresh()
+            def fp = FormulaPolinomicaReajuste.countByContratoAndDescripcionIlike(contrato, '%complem%')
+
+            def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
+            def v1 =  VolumenContrato.get(1).refresh()
+            def volumenesCopiados = VolumenContrato.findAllByContratoAndContratoComplementarioIsNotNull(contrato).contratoComplementario.unique()
+            def filtrados = [complementario] - Contrato.findAllByIdInList(volumenesCopiados.id)
 
             [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario,
-             complementarios: filtrados, formula: complementarios]
+             compFp: fp, complementarios: filtrados, formula: complementario]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             [campos: campos]
@@ -1348,22 +1350,22 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
     def integrarCrono () {
-//        println("params " + params)
+        println "integrarCrono: $params"
         def contrato = Contrato.get(params.id)
         def complementario = Contrato.get(params.comp)
         def cronogramaComp = CronogramaContratado.findByContrato(complementario)
-        def cronograma = CronogramaContratado.findByContrato(contrato)
+        def periodos = CronogramaContratado.executeQuery("select max(periodo) from CronogramaContratado " +
+                "where contrato = :c", [c: contrato])
         def errores = ''
-
 
         if(!cronogramaComp){
             render "no_El contrato complementario seleccionado no tiene cronograma!"
-        }else{
+        } else {
 
         def volumenesContrato = VolumenContrato.findAllByContrato(complementario)
 
             volumenesContrato.each{ v ->
-
+                println "procesa ${v.item}"
                 def nuevoVocr = new VolumenContrato(v.properties)
                 nuevoVocr.contrato = contrato
                 nuevoVocr.contratoComplementario = complementario
@@ -1377,14 +1379,17 @@ class ContratoController extends janus.seguridad.Shield {
                         def nuevoCrono = new CronogramaContratado(c.properties)
                         nuevoCrono.contrato = contrato
                         nuevoCrono.volumenContrato = nuevoVocr
-                        try{
-                            nuevoCrono.save(flush:true)
-                        }catch (e){
-                            println("error al guardar la integracion para el cronograma " + e)
-                            errores += e
+                        nuevoCrono.periodo = c.periodo + periodos
+                        println "nuevoCrono: ${c.volumenContrato.item} ${c.periodo + periodos}"
+
+                        nuevoCrono.save(flush:true)
+                        if (!nuevoCrono.save(flush:true)) {
+                            println "error al guardar cronograma: " + nuevoCrono.errors
+                            errores += nuevoCrono.errors
                         }
                     }
-                }catch (e){
+
+                } catch (e) {
                     println("error al guardar el vocr complementario " + e)
                     errores += e
                 }
@@ -1392,7 +1397,9 @@ class ContratoController extends janus.seguridad.Shield {
 
             if(errores == ''){
                 render "ok_Cronogramas integrados correctamente"
-            }else{
+                contrato.plazo += complementario.plazo
+                contrato.save(flush: true)
+            } else {
                 render "no_Error al integrar los cronogramas"
             }
         }

@@ -151,7 +151,8 @@ class CronogramaContratoController extends janus.seguridad.Shield {
 
 
     def nuevoCronograma () {
-        def contrato = Contrato.get(params.id)
+//        println "nuevoCronograma: $params"
+        def contrato = Contrato.get(params.id).refresh()
         def cn = dbConnectionService.getConnection()
         if (!contrato) {
             flash.message = "No se encontró el contrato"
@@ -193,15 +194,22 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         def plazoMesesContrato = Math.ceil(plazoDiasContrato / 30);
         def plazoObra = obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)
 
+        println "meses: ${plazoMesesContrato}, dias: ${plazoDiasContrato},cronoCntr: $cronoCntr "
+//        println "cronoCntr: $cronoCntr, detalle: ${detalle.size()}"
 
         if (cronoCntr == 0) {
             detalle.each { vol ->
 //                def c = CronogramaContratado.findAllByVolumenContrato(vol)
-                def c = Cronograma.findAllByVolumenObra(VolumenesObra.findByItemAndOrdenAndObra(vol.item, vol.volumenOrden, vol.obra))
+//                println "buscar: ${vol.item.id}, ${vol.volumenOrden}, ${vol.obra.id}"
+                def c = Cronograma.findAllByVolumenObra(VolumenesObra.findByItemAndObraAndOrdenAndObra(vol.item, vol.obra, vol.volumenOrden, vol.obra))
                 def resto = c.sum { it.porcentaje }
+//                println "....1 ${c.size()}"
                 c.eachWithIndex { crono, cont ->
+//                    println "procesa: $crono, $cont  plazo: $plazoMesesContrato"
                     if (cont < plazoMesesContrato) {
+//                        println "....2"
                         if (CronogramaContratado.countByPeriodoAndVolumenContrato(crono.periodo, vol) == 0) {
+//                            println "....3"
                             def cronogramaContratado = new CronogramaContratado()
 //                            cronogramaContratado.properties = crono.properties
                             cronogramaContratado.volumenContrato = vol

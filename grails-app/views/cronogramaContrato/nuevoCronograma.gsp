@@ -19,7 +19,7 @@
 </head>
 
 <body>
-<g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
+<g:set var="meses" value="${Math.ceil(contrato.plazo/30).toInteger()}"/>
 %{--<g:set var="plazoOk" value="${detalle.findAll { it.dias && it.dias > 0 }.size() > 0}"/>--}%
 <g:set var="sum" value="${0}"/>
 

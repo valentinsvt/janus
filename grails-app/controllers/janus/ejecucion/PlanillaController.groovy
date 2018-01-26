@@ -1531,18 +1531,15 @@ class PlanillaController extends janus.seguridad.Shield {
             return
         }
 
-        def hayPlanillas = false;
         def planillaInstance = new Planilla(params)
         planillaInstance.contrato = contrato
         if (params.id) {
             planillaInstance = Planilla.get(params.id)
-            hayPlanillas = true
         }
 
         /*** si no hay planilla de este contrato se presenta solo TPPL: Anticipo **/
         def tiposPlanilla = []
-        tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["A", "P","C", "Q", "L", "O"], [sort: 'codigo', order: "asc"])
-//        println "tipos de planilla: " + tiposPlanilla.codigo
+        tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["A", "P","C", "Q", "L"], [sort: 'codigo', order: "asc"])
 
         /***/
         def anticipo = TipoPlanilla.findByCodigo('A')
@@ -1550,10 +1547,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def liquidacion = TipoPlanilla.findByCodigo('Q')
         def liquidacionReajuste = TipoPlanilla.findByCodigo('L')
         def costoPorcentaje = TipoPlanilla.findByCodigo('C')
-        def resumenMateriales = TipoPlanilla.findByCodigo('M')
-        def obrasAdicionales  = TipoPlanilla.findByCodigo('O')
-        /***/
-
+        def anticipoCmpl = TipoPlanilla.findByCodigo('B')
+//        def obrasAdicionales  = TipoPlanilla.findByCodigo('O')
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
         def anticipoPagado = false
@@ -1577,38 +1572,43 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println "3: " + tiposPlanilla.codigo
             esAnticipo = true
         } else {
-            if (pla) {
-                tiposPlanilla -= pla.tipoPlanilla
-//                println "4: " + tiposPlanilla.codigo
-            }
-            def pll = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacion)
-            if (pll) {
-                tiposPlanilla -= avance
-                tiposPlanilla -= liquidacion
-//                println "5: " + tiposPlanilla.codigo
-            }
-            def plr = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacionReajuste)
-            if (plr && !params.id) {
-                tiposPlanilla -= plr.tipoPlanilla
-                liquidado = true
-//                println "7: " + tiposPlanilla.codigo
-            }
+            def cmpl = Contrato.findByPadre(contrato)
+            if(cmpl) {
+                def plaC = Planilla.findByContratoAndTipoPlanilla(contrato, anticipoCmpl)
+                if (!plaC) {
+                    tiposPlanilla = TipoPlanilla.findAllByCodigo('B')
+                    esAnticipo = true
+                }
+            } else {
+                def pll = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacion)
+                if (pll) {
+                    tiposPlanilla -= avance
+                    tiposPlanilla -= liquidacion
+                }
+                def plr = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacionReajuste)
+                if (plr && !params.id) {
+                    tiposPlanilla -= plr.tipoPlanilla
+                    liquidado = true
+                }
 //            println "7...: " + tiposPlanilla.codigo
-            def plc = Planilla.findByContratoAndTipoPlanilla(contrato, costoPorcentaje)
-            if (plc) {
-                def plcs = Planilla.findAllByContratoAndTipoPlanilla(contrato, costoPorcentaje)
-                def tt = plcs.sum { it.valor }
-                println "total planillas C + %: ${tt}"
-                if (tt >= (contrato.monto * 0.1).round(2)) {
-                    tiposPlanilla -= plc.tipoPlanilla
-//                    println "8: " + tiposPlanilla.codigo
+                def plc = Planilla.findByContratoAndTipoPlanilla(contrato, costoPorcentaje)
+                if (plc) {
+                    def plcs = Planilla.findAllByContratoAndTipoPlanilla(contrato, costoPorcentaje)
+                    def tt = plcs.sum { it.valor }
+                    println "total planillas C + %: ${tt}"
+                    if (tt >= (contrato.monto * 0.1).round(2)) {  /* TODO: validar Porcentaje */
+                        tiposPlanilla -= plc.tipoPlanilla
+                    }
                 }
             }
+
+
+/*
             def poa = Planilla.findByContratoAndTipoPlanilla(contrato, obrasAdicionales)
             if (poa) {
                 tiposPlanilla -= poa.tipoPlanilla
-//                println "8a: " + tiposPlanilla.codigo
             }
+*/
         }
 
 //        println "pasa filtros...: ${tiposPlanilla.codigo}, .. planillasAvance: ${planillasAvance.size()}"
@@ -1754,9 +1754,15 @@ class PlanillaController extends janus.seguridad.Shield {
         if (tipo.codigo == "A") {   // anticipo
             params.avanceFisico = 0
         }
-        if (tipo.codigo in ["C", "O"]) {   // costo+%, adicionales
+        if (tipo.codigo in ["C", "B"]) {   // costo+%, anticipo de complementario
             params.avanceFisico = Planilla.executeQuery("select max(avanceFisico) from Planilla where contrato = :c", [c: cntr])[0]
+            if(tipo.codigo == 'B') {
+//                params."formulaPolinomicaReajuste.id" = cntr.padre
+            }
         }
+
+        params."formulaPolinomicaReajuste.id"
+
 //        println "avance físico: ${params.avanceFisico}"
         /** liquidación**/
         if (tipo.codigo == 'L') {
@@ -1879,8 +1885,10 @@ class PlanillaController extends janus.seguridad.Shield {
 
             def contrato = Contrato.get(params.contrato.id)
             planillaInstance.fiscalizador = contrato.fiscalizador
-            planillaInstance.formulaPolinomicaReajuste = FormulaPolinomicaReajuste.get(params."formulaPolinomicaReajuste.id")
+
         } //es create
+
+        planillaInstance.formulaPolinomicaReajuste = FormulaPolinomicaReajuste.get(params."formulaPolinomicaReajuste.id")
 
         if (!planillaInstance.save(flush: true)) {
             println planillaInstance.errors
