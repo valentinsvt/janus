@@ -604,7 +604,7 @@
     </fieldset>
     <fieldset style="margin-top: 10px">
         <div class="span4">
-            <g:select from="${complementarios}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+            <g:select from="${complementarios}" optionKey="id" optionValue="${{it?.codigo + " - " + it?.objeto}}"
                       name="complementarios_name" id="contratosComp" class="form-control" style="width: 380px"/>
         </div>
     </fieldset>
@@ -634,7 +634,7 @@
     </fieldset>
     <fieldset style="margin-top: 10px">
         <div class="span4">
-            <g:select from="${formula}" optionKey="id" optionValue="${{it.codigo + " - " + it.objeto}}"
+            <g:select from="${formula}" optionKey="id" optionValue="${{it?.codigo + " - " + it?.objeto}}"
                       name="complementariosFP_name" id="contratosFP" class="form-control" style="width: 380px"/>
         </div>
     </fieldset>
@@ -1094,7 +1094,7 @@
      */
 
     $("#tpcr").change(function () {
-//                console.log("--->", $("#tpcr").val());
+//        console.log("--->", $("#tpcr").val());
         if($("#tpcr").val() == "3") {
             $("#CntrPrincipal").show();
         } else {

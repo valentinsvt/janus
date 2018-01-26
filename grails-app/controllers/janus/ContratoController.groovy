@@ -304,7 +304,10 @@ class ContratoController extends janus.seguridad.Shield {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             def v1 =  VolumenContrato.get(1).refresh()
             def volumenesCopiados = VolumenContrato.findAllByContratoAndContratoComplementarioIsNotNull(contrato).contratoComplementario.unique()
-            def filtrados = [complementario] - Contrato.findAllByIdInList(volumenesCopiados.id)
+            def filtrados = []
+            if(complementario) {
+                filtrados = [complementario] - Contrato.findAllByIdInList(volumenesCopiados?.id)
+            }
 
             [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario,
              compFp: fp, complementarios: filtrados, formula: complementario]
