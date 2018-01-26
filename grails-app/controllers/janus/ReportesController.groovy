@@ -6139,9 +6139,21 @@ class ReportesController {
         tablaTotalGeneral.setWidthPercentage(100)
         tablaTotalGeneral.setWidths(arregloEnteros([70, 30]))
 
-        addCellTabla(tablaTotalGeneral, new Paragraph("Total General:", times10bold), prmsCellDerecha)
+//        addCellTabla(tablaTotalGeneral, new Paragraph("Total General:", times10bold), prmsCellDerecha)
+        addCellTabla(tablaTotalGeneral, new Paragraph("Total Directo:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalGeneral, new Paragraph(g.formatNumber(number: (valorTotal + valorTotalMano + valorTotalEquipos), minFractionDigits:
                 3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
+
+        addCellTabla(tablaTotalGeneral, new Paragraph("Total Indirecto:", times10bold), prmsCellDerecha)
+        addCellTabla(tablaTotalGeneral, new Paragraph(g.formatNumber(number: (obra?.valor ? obra?.valor - (valorTotal + valorTotalMano + valorTotalEquipos) : 0), minFractionDigits:
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
+
+        addCellTabla(tablaTotalGeneral, new Paragraph("Total:", times10bold), prmsCellDerecha)
+        addCellTabla(tablaTotalGeneral, new Paragraph(g.formatNumber(number: (obra?.valor ?: 0), minFractionDigits:
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
+
+
+
 
 //        println("size: " + document.pageSize.getHeight())
 
