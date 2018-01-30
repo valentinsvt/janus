@@ -1775,7 +1775,7 @@ class PlanillaController extends janus.seguridad.Shield {
         println "params.formulaPolinomicaReajuste.id:" + params."formulaPolinomicaReajuste.id"
 
 //        println "avance físico: ${params.avanceFisico}"
-        /** liquidación**/
+        // liquidación
         if (tipo.codigo == 'L') {
             def contrato = Contrato.get(params.contrato.id)
             def tipoAvance = TipoPlanilla.findAllByCodigoInList(['P', 'Q'])
@@ -1901,6 +1901,19 @@ class PlanillaController extends janus.seguridad.Shield {
 
         planillaInstance.formulaPolinomicaReajuste = FormulaPolinomicaReajuste.get(params."formulaPolinomicaReajuste.id")
 
+
+        //tipoContrato
+
+        if(params."tipoContrato.id" == '1'){
+            println("entro ")
+            planillaInstance.tipoContrato = 'P'
+        }else{
+            if(params."tipoContrato.id" == '3'){
+                println("entro 1")
+                planillaInstance.tipoContrato = 'C'
+            }
+        }
+
         if (!planillaInstance.save(flush: true)) {
             println planillaInstance.errors
             flash.clase = "alert-error"
@@ -1939,6 +1952,8 @@ class PlanillaController extends janus.seguridad.Shield {
             default:
                 redirect(action: 'list', id: planillaInstance.contratoId)
         }
+
+
     }
 
 

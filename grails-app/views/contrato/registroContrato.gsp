@@ -822,7 +822,7 @@
                 $.box({
                     imageClass : "box_info",
                     title      : "Confirmación",
-                    text       : "Está seguro que desea integrar el cronograma del contrato complementario en el cronograma del contrato: ${contrato.codigo} ?",
+                    text       : "Está seguro que desea integrar el cronograma del contrato complementario en el cronograma del contrato: ${contrato?.codigo} ?",
                     iconClose  : false,
                     dialog     : {
                         width         : 400,

@@ -309,7 +309,7 @@
                                 </div>
 
                                 <div class="span3">
-                                    <g:select name="tipoCOntrato.id"
+                                    <g:select name="tipoContrato.id"
                                               from="${janus.pac.TipoContrato.list([sort: 'id'])}"
                                               class="span4 text-info" optionKey="id" optionValue="descripcion"
                                               style="width: 100%" value="${planillaInstance.periodoIndices?.id}"></g:select>
