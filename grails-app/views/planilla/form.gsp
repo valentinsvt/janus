@@ -1,4 +1,4 @@
-<%@ page import="janus.ejecucion.TipoPlanilla; janus.ejecucion.Planilla" contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.pac.TipoContrato; janus.ejecucion.TipoPlanilla; janus.ejecucion.Planilla" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta name="layout" content="main">
@@ -291,7 +291,6 @@
                         </div>
 
 
-                        %{--<g:if test="${!esAnticipo}">--}%
                             <div class="row">
                                 <div class="span2 formato">
                                     Periodo para el reajuste
@@ -302,28 +301,21 @@
                                               from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin', order: 'desc', max: 20])}"
                                               class="span4" optionKey="id" style="width: 100%" value="${planillaInstance.periodoIndices?.id}"></g:select>
                                 </div>
-                            </div>
-                        %{--</g:if>--}%
-                        %{--<g:else>--}%
-                        %{--<g:if test="${planillaInstance.tipoPlanilla?.codigo=='A'}">--}%
 
-%{--
-                            <div class="row">
-                                <div class="span2 formato">
-                                    Periodo para el reajuste
+
+                                <g:if test="${!(esAnticipo)}">
+                                <div class="span2 formato text-info">
+                                    Tipo de Contrato:
                                 </div>
 
-                                <div class="span4" style="width: 400px">
-                                    <g:select name="periodoIndices.id"
-                                              from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin', order: 'desc', max: 20])}"
-                                              optionKey="id" style="width: 100%"
-                                              value="${planillaInstance?.periodoIndices?.id}"></g:select>
+                                <div class="span3">
+                                    <g:select name="tipoCOntrato.id"
+                                              from="${janus.pac.TipoContrato.list([sort: 'id'])}"
+                                              class="span4 text-info" optionKey="id" optionValue="descripcion"
+                                              style="width: 100%" value="${planillaInstance.periodoIndices?.id}"></g:select>
                                 </div>
+                                </g:if>
                             </div>
---}%
-
-                        %{--</g:if>--}%
-                        %{--</g:else>--}%
 
                         <g:if test="${!(esAnticipo || planillaInstance?.tipoPlanilla?.codigo == 'A')}">   %{-- no es anticipo--}%
 
@@ -631,14 +623,19 @@
                         tipo: tipo
                     },
                     success: function (msg){
+                        console.log(msg);
                        $("#divAnticipo").html(msg)
                     }
                 });
             }
 
             if('${contrato?.id}'){
-                var ant = $("#tipoPlanilla").val();
-                cargarAnticipo(ant);
+                var tppl = $("#tipoPlanilla").val();
+//                console.log('tipoplanilla', tppl)
+                if(!tppl) {
+                    tppl = "${planillaInstance?.tipoPlanilla?.id}"
+                }
+                cargarAnticipo(tppl);
             }
 
 

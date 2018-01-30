@@ -7,9 +7,9 @@ class Planilla {
 
     Contrato contrato
     TipoPlanilla tipoPlanilla
-//    EstadoPlanilla estadoPlanilla
     PeriodosInec periodoIndices
     String numero
+//    EstadoPlanilla estadoPlanilla
 //    String numeroFactura
     Date fechaPresentacion
     Date fechaIngreso
@@ -57,24 +57,19 @@ class Planilla {
     Date fechaMemoPagoPlanilla
 
     Persona fiscalizador
-
     Planilla padreCosto
-
     Double avanceFisico
 
-    PeriodosInec periodoAnticipo
-
-
+    /* multa especial y nota de descuento (NOPG) */
     String descripcionMulta
     Double multaEspecial = 0
-
-    String logPagos
-
     String noPago
     Double noPagoValor = 0
 
-
+    String logPagos
     FormulaPolinomicaReajuste formulaPolinomicaReajuste
+
+    String tipoContrato
 
     static auditable = true
     static mapping = {
@@ -89,10 +84,10 @@ class Planilla {
             contrato column: 'cntr__id'
             tipoPlanilla column: 'tppl__id'
 //            estadoPlanilla column: 'edpl__id'
+//            numeroFactura column: 'plnlfctr'
             periodoIndices column: 'prin__id'
 
             numero column: 'plnlnmro'
-//            numeroFactura column: 'plnlfctr'
             fechaPresentacion column: 'plnlfcpr'
             fechaIngreso column: 'plnlfcig'
             fechaPago column: 'plnlfcpg'
@@ -121,7 +116,6 @@ class Planilla {
 
             multaRetraso column: 'plnlmlrt'
             multaPlanilla column: 'plnlmlpl'
-
             multaIncumplimiento column: 'plnlmlin'
             multaDisposiciones column: 'plnlmlds'
 
@@ -138,21 +132,19 @@ class Planilla {
             fechaMemoPagoPlanilla column: 'plnlfcfi'
 
             fiscalizador column: 'prsnfscl'
-
             padreCosto column: 'plnlpdcs'
-
             avanceFisico column: 'plnlavfs'
-            periodoAnticipo column: 'prinantc'
 
-            descripcionMulta column: 'plnldsml'
-            multaEspecial column: 'plnlmles'
             logPagos column: 'plnl_log'
             formulaPolinomicaReajuste column: 'fprj__id'
 
+            /* multa especial y nota de descuento (NOPG) */
+            descripcionMulta column: 'plnldsml'
+            multaEspecial column: 'plnlmles'
             noPago column: 'plnlnopg'
             noPagoValor column: 'plnlnpvl'
 
-//            imprimeReajueste column: 'plnlimid'
+            tipoContrato column: 'plnltipo'
         }
     }
 
@@ -202,13 +194,14 @@ class Planilla {
         fiscalizador(blank: true, nullable: true)
 
         padreCosto(blank: true, nullable: true)
-        periodoAnticipo(blank: true, nullable: true)
+//        periodoAnticipo(blank: true, nullable: true)
 
         multaEspecial(blank: true, nullable: true)
         descripcionMulta(blank: true, nullable: true,size: 1..255)
         logPagos(blank: true, nullable: true,size: 1..255)
         formulaPolinomicaReajuste(blank: true, nullable: true)
         noPago(blank: true, nullable: true)
+        tipoContrato(blank: false, nullable: false)
     }
 
     String toString() {

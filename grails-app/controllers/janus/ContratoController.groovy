@@ -302,12 +302,20 @@ class ContratoController extends janus.seguridad.Shield {
             def fp = FormulaPolinomicaReajuste.countByContratoAndDescripcionIlike(contrato, '%complem%')
 
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-            def v1 =  VolumenContrato.get(1).refresh()
+            def v1 =  VolumenContrato.findByIdGreaterThan(0)
+            if(v1) v1.refresh()
             def volumenesCopiados = VolumenContrato.findAllByContratoAndContratoComplementarioIsNotNull(contrato).contratoComplementario.unique()
             def filtrados = []
+
+            println "complementario: $complementario"
             if(complementario) {
+                println "?????1: ${volumenesCopiados?.id}"
+                println "?????2: ${Contrato.findAllByIdInList(volumenesCopiados?.id)}"
                 filtrados = [complementario] - Contrato.findAllByIdInList(volumenesCopiados?.id)
             }
+
+            println "campos: $campos, contrato: $contrato, planilla: $planilla, complementario: $complementario, \n " +
+                    "compFp: $fp, complementarios: $filtrados, formula: $complementario]"
 
             [campos: campos, contrato: contrato, planilla: planilla, complementario: complementario,
              compFp: fp, complementarios: filtrados, formula: complementario]

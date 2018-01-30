@@ -101,6 +101,11 @@ tr, td {
 
 th {
     vertical-align : middle !important;
+    font-size: 12px !important;
+}
+
+body {
+    font-size: 11px !important;
 }
 
 th.S {

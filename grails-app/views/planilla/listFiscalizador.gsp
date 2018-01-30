@@ -152,8 +152,7 @@
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>
                             <td>
-
-                                <g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                <g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo in ['A', 'B']}">
                                     <g:link action="form" class="btn btn-small" rel="tooltip" title="Editar"
                                             params="[contrato: contrato.id]" id="${planillaInstance.id}">
                                         <i class="icon-pencil icon-large"></i>
@@ -164,19 +163,6 @@
                                         </div>
                                     </g:if>
                                 </g:if>
-
-
-%{--
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                    <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
-                                        <g:if test="${!planillaInstance.fechaMemoPedidoPagoPlanilla}">
-                                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
-                                                <i class="icon-gear"></i>
-                                            </div>
-                                        </g:if>
-                                    </g:if>
-                                </g:if>
---}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C', 'L'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id: planillaInstance.id, contrato: planillaInstance.contrato.id]"
@@ -201,7 +187,7 @@
                                     </g:if>
                                 </g:if>
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['A', 'B']}">
                                     <g:link controller="planilla2" action="resumen" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
                                         <i class="icon-table icon-large"></i>
                                     </g:link>

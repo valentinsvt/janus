@@ -398,49 +398,6 @@
                     <div class="botones">
 
                         <ul class="nav">
-                            %{--<li>--}%
-                            %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
-                            %{--<i class="icon-pencil"></i>Garantías--}%
-                            %{--</g:link>--}%
-                            %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
-                            %{--<g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">--}%
-                            %{--<i class="icon-pencil"></i> Garantías--}%
-                            %{--</g:link>--}%
-
-                            %{--</li>--}%
-                            %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
-                            %{--</a></li>--}%
-                            %{--<li>--}%
-                            %{--<a href="#" id="btnCronograma">--}%
-                            %{--<g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">--}%
-                            %{--<i class="icon-th"></i>Cronograma contrato--}%
-                            %{--</g:link>--}%
-                            %{--</a>--}%
-                            %{--</li>--}%
-                            %{--<g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">--}%
-                            %{--<li>--}%
-                            %{--<g:link controller="cronogramaEjecucion" action="index" id="${contrato?.id}">--}%
-                            %{--<i class="icon-th"></i> Cronograma ejecucion--}%
-                            %{--</g:link>--}%
-                            %{--</li>--}%
-                            %{--</g:if>--}%
-                            %{--<li>--}%
-                            %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
-                            %{--Fórmula Pol.--}%
-                            %{--</g:link>--}%
-                            %{--</li>--}%
-                            %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
-                            %{--<li>--}%
-                            %{--<a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}">--}%
-                            %{--<i class="icon-superscript"></i> F. Polinómica--}%
-                            %{--</a>--}%
-                            %{--</li>--}%
-
-                            %{--<li>--}%
-                            %{--<g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">--}%
-                            %{--<i class="icon-book"></i> Biblioteca--}%
-                            %{--</g:link>--}%
-                            %{--</li>--}%
 
                             <li>
                                 <g:if test="${contrato.obra?.tipo != 'D'}">
@@ -448,37 +405,7 @@
                                         <i class=" icon-file-alt"></i> Planillas
                                     </g:link>
                                 </g:if>
-                            %{--<g:else>--}%
-                            %{--<g:link controller="planilla" action="listDirecta" id="${contrato?.id}">--}%
-                            %{--<i class=" icon-file-alt"></i> Planillas Directas--}%
-                            %{--</g:link>--}%
-                            %{--</g:else>--}%
                             </li>
-
-                            %{--<li>--}%
-                            %{--<g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">--}%
-                            %{--<i class="icon-pencil"></i> Garantías--}%
-                            %{--</g:link>--}%
-                            %{--</li>--}%
-                            %{--<li>--}%
-                            %{--<g:link controller="planilla" action="list" id="${contrato?.id}">--}%
-                            %{--<i class=" icon-file-alt"></i>Planillas Fiscalizador--}%
-                            %{--</g:link>--}%
-                            %{--</li>--}%
-
-
-                            %{--<li>--}%
-                            %{--<g:link controller="planilla" action="listAdmin" id="${contrato?.id}">--}%
-                            %{--<i class=" icon-file-alt"></i>Planillas Admin. Cont.--}%
-                            %{--</g:link>--}%
-                            %{--</li>--}%
-
-
-                            %{--<li>--}%
-                            %{--<g:link controller="planilla" action="listFinanciero" id="${contrato?.id}">--}%
-                            %{--<i class=" icon-file-alt"></i>Planillas Financiero--}%
-                            %{--</g:link>--}%
-                            %{--</li>--}%
 
                             <li>
                                 <g:link action="fechasPedidoRecepcion" id="${contrato?.id}">
@@ -486,28 +413,29 @@
                                 </g:link>
                             </li>
 
+%{--
                             <li>
                                 <a href="#" id="liquidacion">
                                     <i class=" icon-paperclip"></i> Generar FP Liquidación
                                 </a>
                             </li>
+--}%
 
                             <li>
-                            %{--<a href="#" id="btnAvance">--}%
-                            %{--<i class=" icon-paperclip"></i> Reporte de avance--}%
-                            %{--</a>--}%
                                 <g:link controller="reportesPlanillas" action="reporteAvanceUI" id="${contrato?.id}">
                                     <i class=" icon-paperclip"></i> Informe de avance
                                 </g:link>
                             </li>
 
+%{--
                             <li>
-                                %{--<g:if test="${esDirector == 'S'}">--}%
-                                    %{--<a href="#" id="btnAdmin">--}%
-                                        %{--<i class="icon-user"></i> Administrador--}%
-                                    %{--</a>--}%
-                                %{--</g:if>--}%
+                                <g:if test="${esDirector == 'S'}">
+                                    <a href="#" id="btnAdmin">
+                                        <i class="icon-user"></i> Administrador
+                                    </a>
+                                </g:if>
                             </li>
+--}%
 
                             <li>
                                 <g:if test="${esDirFis == 'S'}">

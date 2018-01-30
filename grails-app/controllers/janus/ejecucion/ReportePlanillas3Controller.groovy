@@ -222,10 +222,12 @@ class ReportePlanillas3Controller {
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
 
-        def cs = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "C%", [sort: "numero"])
+//        def cs = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "C%", [sort: "numero"])
+        def cs = FormulaPolinomicaContractual.findAllByContratoAndReajusteAndNumeroIlike(contrato, planilla.formulaPolinomicaReajuste, "C%", [sort: "numero"])
         def ps = FormulaPolinomicaContractual.withCriteria {
             and {
                 eq("contrato", contrato)
+                eq("reajuste", planilla.formulaPolinomicaReajuste)
                 and {
                     ne("numero", "P0")
                     ilike("numero", "p%")
@@ -233,6 +235,8 @@ class ReportePlanillas3Controller {
                 order("numero", "asc")
             }
         }
+
+        println "cs: ${cs.size()}, ps: ${ps.size()}"
 
         def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
 
@@ -715,6 +719,7 @@ class ReportePlanillas3Controller {
         def totalesCoeficientes = [:]
 
         ps.each { c ->
+//            println "----------------1"
             def key = c.id
             if(!datosFr[key]) {
                 datosFr[key] = [:]
@@ -722,6 +727,7 @@ class ReportePlanillas3Controller {
                 datosFr[key].detalles = [:]
             }
             reajustesPlanilla.each { rj ->
+//                println "----------------2"
                 def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
                 datosFr[key].detalles[rj.periodo] = det
 
@@ -734,6 +740,7 @@ class ReportePlanillas3Controller {
                 }
 
                 if(!totalesCoeficientes[rj.periodo]){
+//                    println "----------------3"
                     totalesCoeficientes[rj.periodo] = 0
                 }
             }
@@ -858,7 +865,7 @@ class ReportePlanillas3Controller {
 //        println "periodos: $periodos"
 
         periodos.eachWithIndex { per3, i ->
-//            println ".... $per3, key: ${per3.key}"
+//            println "per: $per3, key: ${per3.key}, totales: $totalesCoeficientes"
             if(per3.key == 0){
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
