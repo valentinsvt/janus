@@ -63,10 +63,19 @@
                     <a href="${g.createLink(action: 'actualizaPrej', params: [contrato: contrato?.id])}"
                        class="btn btn-info">
                         <i class="icon-resize-full"></i>
-                        Actualizar Periodos de Ejecución
+                        Actualizar Periodos
                     </a>
                 </g:if>
+            </div>
 
+            <div class="btn-group">
+                <g:if test="${complementario}">
+                    <a href="${g.createLink(action: 'actualizaPrej', params: [contrato: contrato?.id])}"
+                       class="btn btn-warning">
+                        <i class="icon-resize-full"></i>
+                        Complementario
+                    </a>
+                </g:if>
             </div>
 
             <div class="btn" style="height: 30px">

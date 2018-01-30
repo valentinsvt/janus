@@ -183,15 +183,20 @@ class ElementosTagLib {
         str += "<div class='span2 bold'>Periodo</div>"
         str += "<div class='span3'>"
         if (planilla.tipoPlanilla.codigo == "A") {
-//            str += 'Anticipo (' + PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion).descripcion + ")"
+
             def periodoInec
+/*
             if(!planilla.periodoAnticipo) {
                 periodoInec = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
                 planilla.periodoAnticipo=periodoInec
                 planilla.save()
             }else
                 periodoInec=planilla.periodoAnticipo
-//            def periodoInec = PeriodosInec.list([sort: "fechaFin",order: "desc","limit":3]).first()
+*/
+
+            periodoInec = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
+//            planilla.periodoAnticipo=periodoInec
+            planilla.save()
 
             str += 'Anticipo (' + periodoInec?.descripcion + ")"
         } else {

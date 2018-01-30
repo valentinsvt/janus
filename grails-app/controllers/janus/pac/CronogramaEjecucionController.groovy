@@ -1839,6 +1839,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 }
             }
         }
+
         def ini = Modificaciones.withCriteria {
             eq("obra", obra)
             eq("tipo", "S")
@@ -1848,9 +1849,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
         }
 
+        def comp = Contrato.findByPadreAndTipoContrato(contrato, TipoContrato.findByCodigo('C'))
 
         return [obra: obra, contrato: contrato, suspensiones: suspensiones, ini: ini, desde: desde.toInteger(),
-                hasta: hasta.toInteger(), maximo: 100]
+                hasta: hasta.toInteger(), maximo: 100, complementario: comp?.id?:0]
     }
 
 
