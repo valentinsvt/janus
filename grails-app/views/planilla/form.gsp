@@ -312,7 +312,7 @@
                                     <g:select name="tipoContrato.id"
                                               from="${janus.pac.TipoContrato.list([sort: 'id'])}"
                                               class="span4 text-info" optionKey="id" optionValue="descripcion"
-                                              style="width: 100%" value="${planillaInstance.periodoIndices?.id}"></g:select>
+                                              style="width: 100%" value="${planillaInstance.tipoContrato == 'P' ? 1 : 3}"></g:select>
                                 </div>
                                 </g:if>
                             </div>
