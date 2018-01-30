@@ -1904,13 +1904,21 @@ class PlanillaController extends janus.seguridad.Shield {
 
         //tipoContrato
 
-        if(params."tipoContrato.id" == '1'){
-            println("entro ")
+        if(planillaInstance.tipoPlanilla.codigo == 'A'){
             planillaInstance.tipoContrato = 'P'
         }else{
-            if(params."tipoContrato.id" == '3'){
-                println("entro 1")
+            if(planillaInstance.tipoPlanilla.codigo == 'B'){
                 planillaInstance.tipoContrato = 'C'
+            }else{
+                if(params."tipoContrato.id" == '1'){
+                    println("entro ")
+                    planillaInstance.tipoContrato = 'P'
+                }else{
+                    if(params."tipoContrato.id" == '3'){
+                        println("entro 1")
+                        planillaInstance.tipoContrato = 'C'
+                    }
+                }
             }
         }
 
