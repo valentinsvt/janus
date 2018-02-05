@@ -183,22 +183,7 @@ class ElementosTagLib {
         str += "<div class='span2 bold'>Periodo</div>"
         str += "<div class='span3'>"
         if (planilla.tipoPlanilla.codigo == "A") {
-
-            def periodoInec
-/*
-            if(!planilla.periodoAnticipo) {
-                periodoInec = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
-                planilla.periodoAnticipo=periodoInec
-                planilla.save()
-            }else
-                periodoInec=planilla.periodoAnticipo
-*/
-
-            periodoInec = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
-//            planilla.periodoAnticipo=periodoInec
-            planilla.save()
-
-            str += 'Anticipo (' + periodoInec?.descripcion + ")"
+            str += 'Anticipo (' + planilla?.periodoIndices?.descripcion + ")"
         } else {
             if (planilla.tipoPlanilla.codigo == "L") {
                 str += "Liquidación del reajuste (${planilla.fechaPresentacion.format('dd-MM-yyyy')})"

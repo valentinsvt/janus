@@ -33,7 +33,7 @@ class PeriodoEjecucion {
     }
     static constraints = {
         numero(blank: false, nullable: false, attributes: [title: 'periodo'])
-        tipo(blank: false, nullable: false, inList: ['P', 'S', 'A'], attributes: [title: 'tipo'])
+        tipo(blank: false, nullable: false, inList: ['P', 'S', 'A', 'C'], attributes: [title: 'tipo'])
         fechaInicio(blank: false, nullable: false, attributes: [title: 'fecha inicio'])
         fechaFin(blank: false, nullable: false, attributes: [title: 'fecha fin'])
         contrato(blank: false, nullable: false, attributes: [title: 'contrato'])
