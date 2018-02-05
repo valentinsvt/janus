@@ -15,6 +15,14 @@
 
     <link href="${resource(dir: 'css', file: 'cronograma.css')}" rel="stylesheet">
     <title>Cronograma ejecución</title>
+
+    <style type="text/css">
+    .cmplcss {
+        color: #0c4c85;
+    }
+    </style>
+
+
 </head>
 
 <body>
@@ -185,7 +193,7 @@
         $("#divTabla").html(divLoad);
         $.ajax({
             type: "POST",
-            url: "${createLink(action: 'tabla')}",
+            url: "${createLink(action: 'tablaNueva')}",
             data: {
                 id: ${obra.id},
                 desde: $("#desde").val(),
