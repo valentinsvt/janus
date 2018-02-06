@@ -85,7 +85,12 @@
                 </g:if>
             </div>
 
-            <div class="btn" style="height: 30px">
+            <a href="#" id="btnReporte" class="btn btn-success" title="Imprimir">
+                <i class="icon-print"></i>
+                %{--Imprimir--}%
+            </a>
+
+            <div class="btn" style="height: 30px; font-size: 10px">
                 De:
                 <g:field type="number" name="desde" step="1" pattern="#" value="${desde}" min="0" max="${hasta+1}" class="input-mini"/>
                 a:
@@ -94,11 +99,6 @@
                 <a href="#" id="btnTodos" class="btn" style="margin-top: -8px;"> <i class="icon-all"></i>Todo</a>
             </div>
         </g:if>
-
-        <a href="#" id="btnReporte" class="btn">
-            <i class="icon-print"></i>
-            Imprimir
-        </a>
     </g:if>
 </div>
 
@@ -114,8 +114,8 @@
 </g:if>
 
 
-<div>
-    La ruta crítica se muestra con los rubros marcados en amarillo
+<div style="font-size: 14px">
+    <i class="icon-exclamation-sign" style="color: #cf0e21"></i> La ruta crítica se muestra con los rubros marcados en amarillo
 </div>
 
 <g:if test="${suspensiones.size() != 0}">
@@ -142,6 +142,8 @@
     <div class="modal-footer" id="modalFooter-forms">
     </div>
 </div>
+
+
 
 
 <script type="text/javascript">
@@ -379,9 +381,10 @@
         $("#btnModif").click(function () {
             var vol = $(".rowSelected").first().data("vol");
             if (vol) {
+                $('#modal-forms').css('height', '600px');
                 $.ajax({
                     type: "POST",
-                    url: "${createLink(action: 'modificacion_ajax')}",
+                    url: "${createLink(action: 'modificacionNuevo_ajax')}",
                     data: {
                         obra: "${obra.id}",
                         contrato: "${contrato.id}",
@@ -396,7 +399,7 @@
                             var data = "obra=${obra.id}";
                             $(".tiny").each(function () {
                                 var tipo = $(this).data("tipo");
-                                var val = parseFloat($(this).val()) /*+ parseFloat($(this).data("val1"))*/;
+                                var val = parseFloat($(this).val());
                                 var crono = $(this).data("id");
                                 var periodo = $(this).data("id2");
                                 var vol = $(this).data("id3");
@@ -404,7 +407,8 @@
                             });
                             $.ajax({
                                 type: "POST",
-                                url: "${createLink(action:'modificacion')}",
+                                %{--url: "${createLink(action:'modificacion')}",--}%
+                                url: "${createLink(action:'modificacionNuevo')}",
                                 data: data,
                                 success: function (msg) {
 //                                            console.log(msg);
@@ -422,10 +426,11 @@
                     }
                 });
             } else {
-                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
+                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn btn-info"><i class="icon-remove"></i> Aceptar</a>');
                 $("#modalTitle-forms").html("Modificación");
                 $("#modalBody-forms").html("Seleccione el rubro a modificar haciendo click sobre la fila adecuada (la fila tomará un color azul - o verde si es parte de la ruta crítica)");
                 $("#modalFooter-forms").html("").append(btnCancel);
+                $('#modal-forms').css('height', '180px');
                 $("#modal-forms").modal("show");
             }
             return false;
@@ -500,8 +505,7 @@
         });
 
         $("#btnReporte").click(function () {
-            %{--todo: hacer otro reporte para el cronograma de ejecución, puesto que se usa prej en lugar de meses --}%
-            location.href = "${createLink(controller: 'reportes2', action:'reporteCronogramaEjec', id:contrato.id)}";
+            location.href = "${createLink(controller: 'reportes2', action:'reporteCronogramaEjeComplementario', id:contrato.id)}";
             return false;
         });
 
