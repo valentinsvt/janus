@@ -197,7 +197,7 @@
             type: "POST",
             url: "${createLink(action: 'tablaNueva')}",
             data: {
-                id: ${obra.id},
+                id: ${contrato.id},
                 desde: $("#desde").val(),
                 hasta: $("#hasta").val()
             },
@@ -452,7 +452,7 @@
                                     contrato: "${contrato.id}"
                                 },
                                 success: function (msg) {
-                                    console.log(msg);
+                                    location.reload();
                                 }
                             })
                         },

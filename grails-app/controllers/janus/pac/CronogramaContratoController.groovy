@@ -129,9 +129,12 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         }
 
         if (subpre != "-1") {
-            detalle = VolumenesObra.findAllByObraAndSubPresupuesto(obra, SubPresupuesto.get(subpre), [sort: "orden"])
+//            detalle = VolumenesObra.findAllByObraAndSubPresupuesto(obra, SubPresupuesto.get(subpre), [sort: "orden"])
+            detalle = VolumenContrato.findAllByContratoAndObraAndSubPresupuesto(contrato, obra, SubPresupuesto.get(subpre),
+                    [sort: "orden"])
         } else {
-            detalle =  VolumenesObra.findAllByObra(obra, [sort: 'orden'])
+//            detalle =  VolumenesObra.findAllByObra(obra, [sort: 'orden'])
+            detalle =  VolumenContrato.findAllByContratoAndObra(contrato, obra, [sort: 'orden'])
         }
 
         def precios = [:]
@@ -189,7 +192,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         //solo copia si esta vacio el cronograma del contrato
         def cronoCntr = CronogramaContratado.countByContrato(contrato)
         def detalle = VolumenContrato.findAllByObra(obra, [sort: "volumenOrden"])
-        def detalleV = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+//        def detalleV = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def plazoDiasContrato = contrato.plazo
         def plazoMesesContrato = Math.ceil(plazoDiasContrato / 30);
         def plazoObra = obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)

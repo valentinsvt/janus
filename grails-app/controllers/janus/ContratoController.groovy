@@ -1368,13 +1368,17 @@ class ContratoController extends janus.seguridad.Shield {
         def periodos = CronogramaContratado.executeQuery("select max(periodo) from CronogramaContratado " +
                 "where contrato = :c", [c: contrato])
         def errores = ''
+        def cn = dbConnectionService.getConnection()
+        def sql = "select max(vocrordn) maxi from vocr where cntr__id = ${contrato.id}"
+        def maximo = cn.rows(sql.toString())[0].maxi
+        sql = "update vocr set vocrordn = vocrordn + ${maximo} where cntr__id = ${contrato.id} and cntrcmpl is not null"
+
 
         if(!cronogramaComp){
             render "no_El contrato complementario seleccionado no tiene cronograma!"
         } else {
 
         def volumenesContrato = VolumenContrato.findAllByContrato(complementario)
-
             volumenesContrato.each{ v ->
                 println "procesa ${v.item}"
                 def nuevoVocr = new VolumenContrato(v.properties)
@@ -1407,10 +1411,13 @@ class ContratoController extends janus.seguridad.Shield {
             }
 
             if(errores == ''){
-                render "ok_Cronogramas integrados correctamente"
+                cn.execute(sql.toString())
                 contrato.plazo += complementario.plazo
                 contrato.save(flush: true)
+                cn.close()
+                render "ok_Cronogramas integrados correctamente"
             } else {
+                cn.close()
                 render "no_Error al integrar los cronogramas"
             }
         }

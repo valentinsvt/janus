@@ -1139,7 +1139,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def tablaNueva() {
         def inicio = new Date()
-        def obra = Obra.get(params.id)
+        def cntr = Contrato.get(params.id)
+        def obra = cntr.obra
         def html = ""
 
         println "tablaNueva: $params"
@@ -1155,7 +1156,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def cronos = []
 
 //        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden", max: hasta - desde + 1, offset: offset])
-        def detalle = VolumenContrato.findAllByObra(obra, [sort: "volumenOrden", max: hasta - desde + 1, offset: offset])
+        def detalle = VolumenContrato.findAllByContrato(cntr, [sort: "volumenOrden", max: hasta - desde + 1, offset: offset])
         def clase = ''
 
 //        def res = preciosService.rbro_pcun_v2(obra.id)
@@ -1169,9 +1170,16 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     precioU : vol.volumenPrecio,
                     parcial : vol.volumenSubtotal,
                     volumen : vol,
-                    compl   : vol.contratoComplementario?:0
+                    compl   : vol.contratoComplementario ?: 0
             ])
+/*
+            if (vol.contratoComplementario) {
+                println "CC cant: ${vol.volumenCantidad}, pcun: ${vol.volumenPrecio}, parcial: ${vol.volumenSubtotal}"
+            }
+*/
+
         }//detalles.each
+
 
         def fin = new Date()
         def row2 = ""
@@ -1189,7 +1197,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += '</th>'
         html += '<th rowspan="2" style="width:26px;">'
 //        html += 'Unidad'
-        html += 'U.'
+        html += '*'
         html += '</th>'
         html += '<th rowspan="2" style="width:60px;">'
         html += 'Cantidad Unitario Total'
@@ -1249,11 +1257,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
 
             html += "<td class='unidad' style='text-align: center;'>"
-            html += crono.unidad
+//            html += crono.unidad
+            html += "Subtt"
             html += "</td>"
 
             html += "<td class='num cantidad'>"
-            html += numero(crono.cantidad)
+            crono.parcial = Math.round(crono.parcial.toDouble() * 100) / 100
+            html += numero(crono.parcial) + "</td>"     /* subtotal  **/
             html += "</td>"
 
 /*
@@ -1267,6 +1277,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             periodos.eachWithIndex { periodo, i ->
 //                def cronoPer = CronogramaEjecucion.findAllByVolumenObraAndPeriodo(crono.volumen, periodo)
                 def cronoPer = CrngEjecucionObra.findAllByVolumenObraAndPeriodo(crono.volumen, periodo)
+                if((periodo.id == 628) && crono.compl){
+                    println "---- periodo: $periodo, vocr: ${crono.volumen.id} --> ${cronoPer.size()}"
+                }
+
                 filaDol += "<td class='dol num ${periodo.tipo}'>"
                 filaPor += "<td class='prct num ${periodo.tipo}'>"
                 filaCan += "<td class='fis num ${periodo.tipo}'>"
@@ -1298,9 +1312,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</tr>"
 
             html += "<tr class='click item_prc ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}'>"
-            html += '<td colspan="3"> </td>'
+            html += '<td> </td>'
+            html += "<td>Unidad: ${crono.unidad}</td>"
+            html += '<td>P.U:</td>'
             html += "<td class='num precioU'>"
-            html += numero(crono.precioU)
+            html += numero(crono.precioU) /**** porcentaje ***/
             html += "</td>"
 //            html += '<td colspan="2"> </td>'
 
@@ -1309,7 +1325,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += filaPor
             html += "<td class='num prct total totalRubro'>"
             if (totPor != 100) {
-                println "--- cronograma: ${crono}"
+//                println "--- cronograma: ${crono}"
             }
             html += numero(totPor)
             html += "</td>"
@@ -1317,11 +1333,12 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
             html += "<tr class='click item_f ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}'>"
 //            html += '<td colspan="6"> </td>'
-            html += '<td colspan="3"> </td>'
+            html += '<td colspan="2"> </td>'
+            html += '<td>Cant.</td>'
             html += "<td class='num subtotal'>"
-            crono.parcial = Math.round(crono.parcial.toDouble() * 100) / 100
-            html += numero(crono.parcial) + "</td>"
-//            html += '<td colspan="2"> </td>'
+            html += numero(crono.cantidad)+"A"
+//            crono.parcial = Math.round(crono.parcial.toDouble() * 100) / 100
+//            html += numero(crono.parcial)+ "C" + "</td>"     /* cantidad  **/
 
 
             html += '<td>F</td>'
@@ -2077,45 +2094,48 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def comp = Contrato.findByPadreAndTipoContrato(cntr, TipoContrato.findByCodigo('C'))
         def diasPlzo = comp.plazo
 
-//        def prejOk = insertaSuspension(cntr, diasPlzo, 'C')
+        def prejOk = insertaSuspension(cntr, diasPlzo, 'C')
 
-//        if(prejOk) {
-        if(true) {
+        if(prejOk) {
+//        if (true) {
             def sql = "select max(prejnmro) nmro from prej where cntr__id = ${cntr.id} and prejfcin <= " +
                     "(select min(prejfcin) from prej where cntr__id = ${cntr.id} and prejtipo = 'C') and prejtipo <> 'C'"
             def prdo = cn.rows(sql.toString())[0].nmro
 
             def fraccion = 0.0
             def dias = 0
+            def mess = 30
             def cont = 1
             def creoNuevo
 
-            def crcr = CronogramaContratado.findAllByContratoAndPeriodo(cntr, cont)
-            crcr.each {cr ->
-                println "procesa periodo: ${cr.periodo}"
-                diasPlzo = diasPlzo > 30 * cont ? 30 : diasPlzo % 30
-                def prej = PeriodoEjecucion.findAllByContratoAndTipoAndNumero(cntr, 'C', prdo + cont, [sort: 'fechaInicio'])
-                prej.each {pe ->
-                    dias = pe.fechaFin - pe.fechaInicio + 1
-                    fraccion = cr.cantidad * dias / diasPlzo
-                    println "fracción: $fraccion"
-                    creoNuevo = new CrngEjecucionObra()
-                    creoNuevo.periodo = pe
-                    creoNuevo.volumenObra = cr.volumenContrato
-                    creoNuevo.cantidad = Math.round(cr.cantidad * fraccion * 1000) / 1000
-                    creoNuevo.porcentaje = Math.round(cr.porcentaje * fraccion * 100) / 100
-                    creoNuevo.precio = Math.round(cr.precio * fraccion * 100) / 100
-                    creoNuevo.save(flush: true)
+            while (diasPlzo > 0) {
+                def crcr = CronogramaContratado.findAllByContratoAndPeriodo(cntr, cont+prdo)
+//                println "procesa periodo: $cont"
+                mess = diasPlzo >= 30 ? 30 : diasPlzo % 30
+                crcr.each { cr ->
+//                    println "dias: $diasPlzo"
+                    def prej = PeriodoEjecucion.findAllByContratoAndTipoAndNumero(cntr, 'C', prdo + cont, [sort: 'fechaInicio'])
+                    prej.each { pe ->
+                        dias = pe.fechaFin - pe.fechaInicio + 1
+                        fraccion = dias / mess
+//                        println "dias: $dias, diasPlzo: $mess, fracción: $fraccion, diasPlzo: $diasPlzo"
+                        creoNuevo = new CrngEjecucionObra()
+                        creoNuevo.periodo = pe
+                        creoNuevo.volumenObra = cr.volumenContrato
+                        creoNuevo.cantidad = Math.round(cr.cantidad * fraccion * 1000) / 1000
+                        creoNuevo.porcentaje = Math.round(cr.porcentaje * fraccion * 100) / 100
+                        creoNuevo.precio = Math.round(cr.precio * fraccion * 100) / 100
+                        creoNuevo.save(flush: true)
+                    }
                 }
+                diasPlzo -= 30
+                cont++
             }
-
             cn.close()
-
         }
 
-
-
         if (prejOk) {
+//        if (true) {
             render "OK"
         } else {
             render "NO"
@@ -2255,7 +2275,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def modificacionNuevo() {
 
-        println("params grabar mod "  + params)
+        println("params grabar mod " + params)
 
         def obra = Obra.get(params.obra.toLong())
         def modificaciones = [:]
@@ -2347,9 +2367,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     }
 
 
-    def modificacionNuevo_ajax () {
-
-
+    def modificacionNuevo_ajax() {
 //        println("params modajax " + params)
 
         def contrato = Contrato.get(params.contrato.toLong())
