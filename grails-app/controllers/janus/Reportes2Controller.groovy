@@ -6,6 +6,8 @@ import com.lowagie.text.*
 import com.lowagie.text.pdf.*
 import janus.apus.ArchivoEspecificacion
 import janus.ejecucion.*
+import janus.pac.CrngEjecucionObra
+import janus.pac.CronogramaContratado
 import janus.pac.CronogramaContrato
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -3261,12 +3263,14 @@ class Reportes2Controller {
         def contrato = Contrato.get(params.id)
         def obra = contrato.obra
         def prej = PeriodoEjecucion.findAllByContrato(contrato, [sort: 'fechaInicio'])  //meses
-        def vlob = preciosService.rbro_pcun_v2(obra.id)
+//        def vlob = preciosService.rbro_pcun_v2(obra.id)
+
+        def vocr = VolumenContrato.findAllByContrato(contrato)
         def rubros = []
 
-        vlob.each {
-            rubros.add([id: it.vlob__id, cdgo: it.rbrocdgo, rbro: it.rbronmbr, undd: it.unddcdgo, cntd: it.vlobcntd, pcun: it.pcun, totl: it.totl])
-        }
+//        vlob.each {
+//            rubros.add([id: it.vlob__id, cdgo: it.rbrocdgo, rbro: it.rbronmbr, undd: it.unddcdgo, cntd: it.vlobcntd, pcun: it.pcun, totl: it.totl])
+//        }
 
         def baos = new ByteArrayOutputStream()
 
@@ -3290,7 +3294,7 @@ class Reportes2Controller {
         def pdfw = PdfWriter.getInstance(document, baos);
         document.open();
         PdfContentByte cb = pdfw.getDirectContent();
-        document.addTitle("Cronograma de Ejecucón de " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addTitle("Cronograma de Ejecución de " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
         document.addSubject("Generado por el sistema Janus");
         document.addKeywords("reporte, janus, planillas");
         document.addAuthor("Janus");
@@ -3302,15 +3306,13 @@ class Reportes2Controller {
         preface.setAlignment(Element.ALIGN_CENTER);
 
         preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", catFont3));
-        preface.add(new Paragraph("CRONOGRAMA DE EJECUÓN DE OBRA", catFont2));
+        preface.add(new Paragraph("CRONOGRAMA DE EJECUCIÓN DE OBRA", catFont2));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
         document.add(preface);
         document.add(preface2);
         Paragraph pMeses = new Paragraph();
         pMeses.add(new Paragraph("Obra: ${obra.descripcion}", info))
-//        pMeses.add(new Paragraph("Obra: ${obra.descripcion} (${meses} mes${meses == 1 ? '' : 'es'})", info))
-//        addEmptyLine(pMeses, 1);
         document.add(pMeses);
 
         Paragraph pRequirente = new Paragraph();
@@ -3374,28 +3376,32 @@ class Reportes2Controller {
         def sum = 0.0
         def borderWidth = 2
 
-        rubros.each { rb ->
+//        rubros.each { rb ->
+        vocr.each { rb ->
             def totalDolRow = 0, totalPrcRow = 0, totalCanRow = 0
-            sum += rb.totl //total por rubro
+//            sum += rb.totl //total por rubro
+            sum += rb.volumenSubtotal //total por rubro
+            sum += 0
 
-//            addCellTabla(tabla, new Paragraph((vol.rutaCritica == 'S' ? "* " : "") + vol.item.codigo, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tabla, new Paragraph(rb.cdgo, fontTd), celdaDatoIzq)
-            addCellTabla(tabla, new Paragraph(rb.rbro, fontTd), celdaDatoIzq)
-            addCellTabla(tabla, new Paragraph(rb.undd, fontTd), celdaDatoCen)
-            addCellTabla(tabla, new Paragraph(numero(rb.cntd, 2), fontTd), celdaDatoDer)
-            addCellTabla(tabla, new Paragraph(numero(rb.pcun, 2), fontTd), celdaDatoDer)
-            addCellTabla(tabla, new Paragraph(numero(rb.totl, 2), fontTd), celdaDatoDer)
+//            addCellTabla(tabla, new Paragraph(rb.cdgo, fontTd), celdaDatoIzq)
+            addCellTabla(tabla, new Paragraph(rb.item.codigo, fontTd), celdaDatoIzq)
+//            addCellTabla(tabla, new Paragraph(rb.rbro, fontTd), celdaDatoIzq)
+            addCellTabla(tabla, new Paragraph(rb.item.nombre, fontTd), celdaDatoIzq)
+            addCellTabla(tabla, new Paragraph(rb.item.unidad.codigo, fontTd), celdaDatoCen)
+            addCellTabla(tabla, new Paragraph(numero(rb.volumenCantidad, 2), fontTd), celdaDatoDer)
+            addCellTabla(tabla, new Paragraph(numero(rb.volumenPrecio, 2), fontTd), celdaDatoDer)
+            addCellTabla(tabla, new Paragraph(numero(rb.volumenSubtotal, 2), fontTd), celdaDatoDer)
             addCellTabla(tabla, new Paragraph('$', fontTd), celdaDatoIzq)
             def i = 0
             def crej
             prej.each { pr ->
-                crej = CronogramaEjecucion.findByVolumenObraAndPeriodo(VolumenesObra.get(rb.id), pr)
+//                crej = CronogramaEjecucion.findByVolumenObraAndPeriodo(VolumenesObra.get(rb.id), pr)
+                crej = CrngEjecucionObra.findByVolumenObraAndPeriodo(VolumenContrato.get(rb.id), pr)
                 totalDolRow += crej?.precio?:0
                 if (!totalMes[i]) {
                     totalMes[i] = 0
                 }
                 totalMes[i++] += crej?.precio?:0
-//                println "crje: $crej ------- ${crej.precio}, ${crej.porcentaje}, ${crej.cantidad}"
                 addCellTabla(tabla, new Paragraph(numero(crej?.precio?:0, 2), fontTd), celdaDatoDer)
             }
             addCellTabla(tabla, new Paragraph(numero(totalDolRow, 2) + ' $', fontTh), celdaDatoDer)
@@ -3403,7 +3409,7 @@ class Reportes2Controller {
             addCellTabla(tabla, new Paragraph(' ', fontTd), celdaDatoDer + [colspan: 6])
             addCellTabla(tabla, new Paragraph('%', fontTd), celdaDatoIzq)
             prej.each { pr ->
-                crej = CronogramaEjecucion.findByVolumenObraAndPeriodo(VolumenesObra.get(rb.id), pr)
+                crej = CrngEjecucionObra.findByVolumenObraAndPeriodo(VolumenContrato.get(rb.id), pr)
                 totalPrcRow += crej?.porcentaje?:0
                 addCellTabla(tabla, new Paragraph(numero(crej?.porcentaje?:0, 2), fontTd), celdaDatoDer)
             }
@@ -3412,7 +3418,7 @@ class Reportes2Controller {
             addCellTabla(tabla, new Paragraph(' ', fontTd), celdaDatoDer + [colspan: 6])
             addCellTabla(tabla, new Paragraph('F', fontTd), celdaDatoIzq)
             prej.each { pr ->
-                crej = CronogramaEjecucion.findByVolumenObraAndPeriodo(VolumenesObra.get(rb.id), pr)
+                crej = CrngEjecucionObra.findByVolumenObraAndPeriodo(VolumenContrato.get(rb.id), pr)
                 totalCanRow += crej?.cantidad?:0
                 addCellTabla(tabla, new Paragraph(numero(crej?.cantidad?:0, 2), fontTd), celdaDatoDer)
             }
@@ -3456,7 +3462,7 @@ class Reportes2Controller {
         addCellTabla(tabla, new Paragraph("T", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         acu = 0
         prej.size().times { i ->
-            def prc = 100 * totalMes[i] / sum
+            def prc = 100 * totalMes[i]/ sum
             acu += prc
             addCellTabla(tabla, new Paragraph(numero(acu, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         }
@@ -3486,8 +3492,8 @@ class Reportes2Controller {
 
         if(contrato?.administrador){
             addCellTabla(tablaFirmas, new Paragraph((contrato.administrador?.titulo?.toUpperCase() ?: '') + " " +
-                    (contrato.administrador?.nombre.toUpperCase() ?: '' ) + " " +
-                    (contrato.administrador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+                    (contrato?.administrador?.nombre?.toUpperCase() ?: '' ) + " " +
+                    (contrato?.administrador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
         } else {
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
