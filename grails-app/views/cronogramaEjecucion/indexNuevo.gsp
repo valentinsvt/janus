@@ -71,7 +71,7 @@
                     <a href="${g.createLink(action: 'actualizaPrej', params: [contrato: contrato?.id])}"
                        class="btn btn-info">
                         <i class="icon-resize-full"></i>
-                        Actualizar Periodos
+                        Actualizar Períodos
                     </a>
                 </g:if>
             </div>
@@ -128,14 +128,14 @@
 
 </div>
 
-<div class="modal fade hide long" id="modal-forms" style="height: 600px">
+<div class="modal fade hide long" id="modal-forms" style="height: 600px;">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modalTitle-forms"></h3>
     </div>
 
-    <div class="modal-body" id="modalBody-forms" style="max-height: 450px;">
+    <div class="modal-body" id="modalBody-forms" style="max-height: 460px;">
 
     </div>
 
