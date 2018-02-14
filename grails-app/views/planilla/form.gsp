@@ -484,6 +484,13 @@
         </div>
     </g:else>
 
+    <p>
+        Si está ingresando una planilla de Reliquidación, se debe cumplir con las siguientes condiciones:<br/>
+        <ul><li>La fecha de ingreso debe ser mayor a la fecha de finalización de la planilla de liquidación</li>
+            <li>La fecha de finalización de la planilla de reliquidación debe ser mayor a la fecha de ingreso de esta planilla</li>
+        </ul>
+    </p>
+
     <script type="text/javascript">
 
 

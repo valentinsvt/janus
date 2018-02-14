@@ -1559,7 +1559,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def vlor
 
         prej.each { pe ->
-            vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
+//            vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
+            vlor = CrngEjecucionObra.executeQuery("select sum(precio) from CrngEjecucionObra where periodo = :p", [p: pe])
             def pr = PeriodoEjecucion.get(pe.id)
             pr.parcialCronograma = vlor[0]
             if (!pr.save(flush: true)) {

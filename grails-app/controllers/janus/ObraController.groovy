@@ -282,7 +282,10 @@ class ObraController extends janus.seguridad.Shield {
             }
         }
 //        println "totp "+totalP
-        def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
+        def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD")?.techo
+        def consultoria = janus.Parametros.findByEmpresaLike(message(code: 'ambiente2'))
+        if(consultoria) valorMenorCuantia = 0
+        println "es consultoría: ${consultoria}"
         def valorObra = obra.valor
         if (valorObra <= valorMenorCuantia) {
             if (obra.tipo != 'D') {

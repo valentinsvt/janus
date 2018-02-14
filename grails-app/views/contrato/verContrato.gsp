@@ -391,7 +391,7 @@
 
 
 
-        <g:if test="${contrato}">
+        <g:if test="${contrato && contrato.tipoContrato?.codigo.trim() != 'C'}">
             <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;">
 
                 <div class="navbar-inner">
@@ -401,6 +401,7 @@
 
                             <li>
                                 <g:if test="${contrato.obra?.tipo != 'D'}">
+                                %{--<g:if test="${contrato.tipoContrato?.codigo.trim() != 'C'}">--}%
                                     <g:link controller="planilla" action="list" id="${contrato?.id}">
                                         <i class=" icon-file-alt"></i> Planillas
                                     </g:link>

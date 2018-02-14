@@ -164,13 +164,13 @@
                                     </g:if>
                                 </g:if>
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C', 'L'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C', 'L', 'R'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id: planillaInstance.id, contrato: planillaInstance.contrato.id]"
                                             rel="tooltip" title="Editar" class="btn btn-small">
                                         <i class="icon-pencil"></i>
                                     </g:link>
                                 </g:if>
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'L']}">
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'L', 'R']}">
                                     <g:if test="${(contrato?.fiscalizador?.id == session.usuario.id)}">
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo != 'L'}">
                                         <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]"
