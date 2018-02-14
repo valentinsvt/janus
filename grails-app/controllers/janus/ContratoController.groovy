@@ -298,7 +298,8 @@ class ContratoController extends janus.seguridad.Shield {
             contrato = Contrato.get(params.contrato).refresh()
             planilla = Planilla.countByContrato(contrato)
             complementario = Contrato.findByPadre(contrato)
-            def f1 = FormulaPolinomicaReajuste.get(1).refresh()
+//            def f1 = FormulaPolinomicaReajuste.get(1).refresh()
+            def f1 = FormulaPolinomicaReajuste.findByIdGreaterThan(0)?.refresh()
             def fp = FormulaPolinomicaReajuste.countByContratoAndDescripcionIlike(contrato, '%complem%')
 
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
@@ -1097,10 +1098,15 @@ class ContratoController extends janus.seguridad.Shield {
 //        println "graba contrato... ${contratoInstance.depAdministrador}"
 
         try {
-            contratoInstance.save(flush: true)
+//            println "...1"
+            if(!contratoInstance.save(flush: true)) {
+                println "err: ${contratoInstance.errors}"
+            }  else {
+//                println "-----ok"
+            }
 
         } catch (e) {
-//            println "errrr: $e "
+            println "errrr: $e "
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Contrato </h4>"
             str += "<ul>"
