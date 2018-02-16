@@ -131,10 +131,10 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         if (subpre != "-1") {
 //            detalle = VolumenesObra.findAllByObraAndSubPresupuesto(obra, SubPresupuesto.get(subpre), [sort: "orden"])
             detalle = VolumenContrato.findAllByContratoAndObraAndSubPresupuesto(contrato, obra, SubPresupuesto.get(subpre),
-                    [sort: "orden"])
+                    [sort: "volumenOrden"])
         } else {
 //            detalle =  VolumenesObra.findAllByObra(obra, [sort: 'orden'])
-            detalle =  VolumenContrato.findAllByContratoAndObra(contrato, obra, [sort: 'orden'])
+            detalle =  VolumenContrato.findAllByContratoAndObra(contrato, obra, [sort: 'volumenOrden'])
         }
 
         def precios = [:]

@@ -512,12 +512,12 @@
         $("#btnRango").click(function () {
             var dsde = $("#desde").val()
             var hsta = $("#hasta").val()
-            location.href = "${createLink(action:'index', id:contrato.id)}" + "?desde=" + dsde + "&hasta=" + hsta;
+            location.href = "${createLink(action:'indexNuevo', id:contrato.id)}" + "?desde=" + dsde + "&hasta=" + hsta;
             return false;
         });
 
         $("#btnTodos").click(function () {
-            location.href = "${createLink(action:'index', id:contrato.id)}" + "?desde=1&hasta=1000";
+            location.href = "${createLink(action:'indexNuevo', id:contrato.id)}" + "?desde=1&hasta=1000";
             return false;
         });
 

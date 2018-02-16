@@ -86,19 +86,24 @@
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
                 %{--<g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">--}%
                     <g:link controller="cronogramaEjecucion" class="btn" action="creaCronogramaEjec" id="${contrato?.id}">
-                        <i class="icon-th"></i> Cronograma ejecucion
+                        <i class="icon-th"></i> Cronograma
                     </g:link>
                 </g:if>
 
+                <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
+                    <g:link controller="cronogramaEjecucion" class="btn btn-info" action="indexNuevo" id="${contrato?.id}">
+                        <i class="icon-th"></i> Cronograma Comp.
+                    </g:link>
+                </g:if>
 
                 <g:if test="${contrato?.id}">
                     <a href="#" class="btn  " id="imprimir_sub">
                         <i class="icon-print"></i>
-                        Imprimir Presupuesto
+                        Imp. Presupuesto
                     </a>
                     <a href="#" class="btn  " id="btnRubros">
                         <i class="icon-print"></i>
-                        Imprimir Rubros con o sin desglose VAE
+                        Imp. Rubros y VAE
                     </a>
                 %{--
                                     <a href="#" class="btn  " id="imprimir_sub">
