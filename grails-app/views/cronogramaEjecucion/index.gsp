@@ -68,6 +68,7 @@
                 </g:if>
             </div>
 
+%{--
             <div class="btn-group">
                 <g:if test="${complementario}">
                     <a href="#" class="btn btn-warning" id="btnComp">
@@ -76,6 +77,7 @@
                     </a>
                 </g:if>
             </div>
+--}%
 
             <div class="btn" style="height: 30px">
                 De:
