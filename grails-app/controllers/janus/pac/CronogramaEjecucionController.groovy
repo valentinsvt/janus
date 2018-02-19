@@ -1767,7 +1767,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             actualizaPrej()  /** pone para cada prej los valores de cronograma **/
         } //if cronogramas == 0
 
-        redirect(action: "indexNuevo", params: [obra: obra, id: contrato.id, ini: fcin])
+        redirect(action: "index", params: [obra: obra, id: contrato.id, ini: fcin])
     }
 
     def insertaPrej(prmt) {
