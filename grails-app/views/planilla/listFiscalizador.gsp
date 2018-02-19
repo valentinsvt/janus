@@ -8,6 +8,13 @@
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+
+        <style type="text/css">
+        .cmplcss {
+            color: #0067df;
+            font-weight: bold;
+        }
+        </style>
     </head>
 
     <body>
@@ -123,7 +130,7 @@
                         <g:set var="periodosOk" value="${janus.ejecucion.ReajustePlanilla.findAllByPlanilla(planillaInstance)}"/>
                         <g:set var="eliminable" value="${planillaInstance.fechaMemoSalidaPlanilla == null}"/>
 
-                        <tr style="font-size: 10px">
+                        <tr style="font-size: 10px" class="${planillaInstance.tipoContrato == 'C' ? 'cmplcss' : ''}">
                             <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
                             <td>
                                 ${planillaInstance.tipoPlanilla.nombre}

@@ -620,7 +620,8 @@
 <div id="integrarFPDialogNo">
     <fieldset>
         <div class="span4">
-            Ya se ha realizado la integración de la fórmula polinómica del contrato complementario al contrato: <p><strong>${contrato?.codigo}</strong></p>
+            Ya se ha realizado la integración de la fórmula polinómica del contrato complementario al contrato:
+            <p><strong>${contrato?.codigo}</strong></p>
         </div>
     </fieldset>
 </div>

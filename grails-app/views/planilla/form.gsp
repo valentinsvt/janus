@@ -291,7 +291,7 @@
                         </div>
 
 
-                            <div class="row">
+                            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
                                 <div class="span2 formato">
                                     Periodo para el reajuste
                                 </div>
@@ -299,20 +299,26 @@
                                 <div class="span4">
                                     <g:select name="periodoIndices.id"
                                               from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin', order: 'desc', max: 20])}"
-                                              class="span4" optionKey="id" style="width: 100%" value="${planillaInstance.periodoIndices?.id}"></g:select>
+                                              class="span3" optionKey="id" style="width: 100%" value="${planillaInstance.periodoIndices?.id}"></g:select>
                                 </div>
 
 
-                                <g:if test="${!(esAnticipo)}">
+                                <g:if test="${!(esAnticipo) && planillaInstance?.tipoContrato != 'C'}">
                                 <div class="span2 formato text-info">
-                                    Tipo de Contrato:
+                                    Generar planilla para el Complementario:
                                 </div>
 
-                                <div class="span3">
+                                <div class="span1">
+                                    <g:select name="complementario" from="${['S': 'Generar Planilla', 'E': 'No']}"
+                                              optionKey="key" optionValue="value" class="form-control text-info"
+                                              value="${planillaInstance?.tipoContrato}" />
+
+%{--
                                     <g:select name="tipoContrato.id"
                                               from="${janus.pac.TipoContrato.list([sort: 'id'])}"
                                               class="span4 text-info" optionKey="id" optionValue="descripcion"
                                               style="width: 100%" value="${planillaInstance.tipoContrato == 'P' ? 1 : 3}"></g:select>
+--}%
                                 </div>
                                 </g:if>
                             </div>

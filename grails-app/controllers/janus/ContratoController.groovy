@@ -1479,7 +1479,7 @@ class ContratoController extends janus.seguridad.Shield {
             }
 
             /* una vez creada la FP se inserta en FPSP los subpresupuestos que se reajustan con esta FP */
-            def sbpr = VolumenContrato.findAllByContratoAndObra(contrato, contrato.obra, [sort: "volumenOrden"]).subPresupuesto.unique()
+            def sbpr = VolumenContrato.findAllByContratoAndObra(complementario, complementario.obra, [sort: "volumenOrden"]).subPresupuesto.unique()
             sbpr.each {
                 def fpsp = new FormulaSubpresupuesto(reajuste: reajuste, subPresupuesto: it)
                 fpsp.save(flush: true)

@@ -596,7 +596,8 @@ class PlanillaController extends janus.seguridad.Shield {
 //        def tipoAvance = TipoPlanilla.findByCodigo('P')
         def liquidacion = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('Q'))?.id > 0
 
-        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma, liquidacion: liquidacion]
+        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList,
+                firma: firma, liquidacion: liquidacion]
     }
 
     def listAdmin() {
@@ -1754,6 +1755,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def cntr = Contrato.get(params.contrato.id)
         def tipo
         def fechaInicio = ""
+        def generaCmpl = false
 
         if (params.id) {
             tipo = Planilla.get(params.id).tipoPlanilla
@@ -1802,9 +1804,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
         if (params.fechaOficioEntradaPlanilla) params.fechaOficioEntradaPlanilla = new Date().parse("dd-MM-yyyy", params.fechaOficioEntradaPlanilla)
 
-        if (params.fechaInicio && !fechaInicio) {
+        if(params.fechaInicio && !fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
-        }   else {
+        } else if(fechaInicio) {
             params.fechaInicio = fechaInicio
         }
 
@@ -1908,6 +1910,20 @@ class PlanillaController extends janus.seguridad.Shield {
             def contrato = Contrato.get(params.contrato.id)
             planillaInstance.fiscalizador = contrato.fiscalizador
 
+            if(planillaInstance.tipoPlanilla.codigo == 'A'){
+                planillaInstance.tipoContrato = 'P'
+            } else {
+                if(planillaInstance.tipoPlanilla.codigo == 'B'){
+                    planillaInstance.tipoContrato = 'C'
+                } else {
+                    planillaInstance.tipoContrato = 'P'
+                    if(params."complementario" == 'S'){
+                        generaCmpl = true
+                    }
+                }
+            }
+
+
         } //es create
 
         planillaInstance.formulaPolinomicaReajuste = FormulaPolinomicaReajuste.get(params."formulaPolinomicaReajuste.id")
@@ -1915,23 +1931,6 @@ class PlanillaController extends janus.seguridad.Shield {
 
         //tipoContrato
 
-        if(planillaInstance.tipoPlanilla.codigo == 'A'){
-            planillaInstance.tipoContrato = 'P'
-        }else{
-            if(planillaInstance.tipoPlanilla.codigo == 'B'){
-                planillaInstance.tipoContrato = 'C'
-            }else{
-                if(params."tipoContrato.id" == '1'){
-//                    println("entro ")
-                    planillaInstance.tipoContrato = 'P'
-                }else{
-                    if(params."tipoContrato.id" == '3'){
-//                        println("entro 1")
-                        planillaInstance.tipoContrato = 'C'
-                    }
-                }
-            }
-        }
 
         if (!planillaInstance.save(flush: true)) {
             println planillaInstance.errors
@@ -1954,6 +1953,18 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.message = "Se ha creado correctamente Planilla " + planillaInstance.id
         }
 
+        if(generaCmpl){
+            def plnlCmpl = new Planilla()
+            def fp = FormulaPolinomicaReajuste.findByContratoAndDescripcionIlike(cntr, '%compl%')
+            if(!fp) println "Error: no se ha definido la FP para complementario"
+            plnlCmpl.properties = planillaInstance.properties
+            plnlCmpl.tipoContrato = 'C'
+            plnlCmpl.numero += '-C'
+            plnlCmpl.descripcion += "Contrato Complementario"
+            plnlCmpl.formulaPolinomicaReajuste = fp
+            plnlCmpl.save(flush: true)
+        }
+
         switch (planillaInstance.tipoPlanilla.codigo) {
             case 'A':
                 redirect(controller: 'planilla', action: 'listAdmin', id: planillaInstance.contrato.id)
@@ -1963,7 +1974,12 @@ class PlanillaController extends janus.seguridad.Shield {
                 redirect(action: 'listFiscalizador', id: planillaInstance.contrato.id)
                 break;
             case ['P', 'Q', 'O']:  //avance, liquidación y obras adicionales
-                redirect(action: 'detalle', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])
+                def hayCmpl = Contrato.findByPadre(planillaInstance.contrato)
+                if(hayCmpl && planillaInstance.tipoContrato in ['P', 'C']) {
+                    redirect(action: 'detalleNuevo', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])
+                } else {
+                    redirect(action: 'detalle', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])
+                }
                 break;
             case 'C':
                 redirect(action: 'detalleCosto', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])
@@ -2985,6 +3001,10 @@ class PlanillaController extends janus.seguridad.Shield {
     def detalle() {
         def planilla = Planilla.get(params.id)
         def contrato = Contrato.get(params.contrato)
+        def cmpl = Contrato.findByPadre(contrato)
+
+        if(cmpl) redirect (action: "detalleNuevo", params: params)
+
         def obra = contrato.obra
         def detalle = [:]
         def obrasAdicionales = 1.25
@@ -3016,7 +3036,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def planillasAnteriores
 
-        if(planilla.tipoPlanilla.codigo == "O"){
+        if(planilla.tipoPlanilla.codigo.trim() == "O"){
             planillasAnteriores = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['P', 'Q']))
         } else {
             planillasAnteriores = Planilla.withCriteria {
@@ -3031,6 +3051,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        obrasAdicionales = 0
 
         println "adicionales: $obrasAdicionales"
+        println "planillasAnteriores: ${planillasAnteriores.id}"
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, adicionales: obrasAdicionales,
                 planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
