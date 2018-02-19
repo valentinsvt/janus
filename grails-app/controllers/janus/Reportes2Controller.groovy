@@ -1722,6 +1722,14 @@ class Reportes2Controller {
                 number = new jxl.write.Number(7, ultimaFila + 3, totalDirecto.toDouble()?.round(2) ?: 0);
                 sheet.addCell(number);
 
+                label = new jxl.write.Label(6, ultimaFila + 4, "TOTAL Indirecto: ", times16format); sheet.addCell(label);
+                number = new jxl.write.Number(7, ultimaFila + 4, (obra?.valor ? obra?.valor - totalDirecto : 0)?.round(2) ?: 0);
+                sheet.addCell(number);
+
+                label = new jxl.write.Label(6, ultimaFila + 5, "TOTAL: ", times16format); sheet.addCell(label);
+                number = new jxl.write.Number(7, ultimaFila + 5, (obra?.valor ?:0)?.round(2) ?: 0);
+                sheet.addCell(number);
+
                 workbook.write();
                 workbook.close();
                 def output = response.getOutputStream()
