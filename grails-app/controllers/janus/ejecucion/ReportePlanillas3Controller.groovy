@@ -526,10 +526,10 @@ class ReportePlanillas3Controller {
                 datos[key].fp = c
                 datos[key].detalles = [:]
             }
-            println "+++reajustesPlanilla: ${reajustesPlanilla.id}"
+//            println "+++reajustesPlanilla: ${reajustesPlanilla.id}"
             reajustesPlanilla.each { rj ->
                 def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
-                println "det ----> $det"
+//                println "det ----> $det"
 //                datos[key].detalles[rj.periodo] = det
                 datos[key].detalles[rj.id - prdodsde] = det
             }
@@ -578,7 +578,7 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaB0, new Paragraph("Indice: " + pago.indice ?: '', fontTh), formatoVR)
         }
 
-        println "DDDD datos: $datos"
+//        println "DDDD datos: $datos"
         datos.each { k, v ->
             def c = v.fp
             def det = v.detalles
@@ -587,21 +587,21 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaB0, new Paragraph(numero(c.valor), fontTd), prmsNmBorder)
             coeficientes = (coeficientes + c.valor)
 
-            println ">>>> det: $det"
+//            println ">>>> det: $det"
             det.each { per, dt ->
 
                 if (dt) {
                     dt = dt.first()
-                    println "per: $per, dt: $dt"
+//                    println "per: $per, dt: $dt"
                     if (per == 0) {
                         addCellTabla(tablaB0, new Paragraph(numero(dt.indiceOferta, 2), fontTd), [border: Color.BLACK, bcr: Color.BLACK, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         addCellTabla(tablaB0, new Paragraph(numero(dt.valorIndcOfrt), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         totalOferta = (totalOferta + dt.valorIndcOfrt)
                         totalAnticipo = (totalAnticipo + dt.valorIndcPrdo)
                     } else {
-                        println "per: $per, totoalAvance: ${totalAvance}"
-                        println "dt: ${dt}"
-                        println "totalAvance[per]?:0 ${totalAvance[per.toInteger()]} dt.valorIndcPrdo: ${dt.valorIndcPrdo}"
+//                        println "per: $per, totoalAvance: ${totalAvance}"
+//                        println "dt: ${dt}"
+//                        println "totalAvance[per]?:0 ${totalAvance[per.toInteger()]} dt.valorIndcPrdo: ${dt.valorIndcPrdo}"
                         totalAvance[per.toInteger()] = (totalAvance[per.toInteger()] + dt.valorIndcPrdo)
                     }
                     addCellTabla(tablaB0, new Paragraph(numero(dt.indicePeriodo, 2), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
@@ -909,7 +909,7 @@ class ReportePlanillas3Controller {
                 cells[3][i] = new Paragraph(numero(reajustesPlanilla[0].valorReajustado,2), fontTd)
                 reajusteTotal += t
             } else {
-                println ">>>>>>per: $per3, key: ${per3.key}, totales: $totalesCoeficientes"
+//                println ">>>>>>per: $per3, key: ${per3.key}, totales: $totalesCoeficientes"
                 def fr1 = (totalesCoeficientes[per3.key] - 1).toDouble().round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
                 cells[1][i] = new Paragraph(numero(fr1), fontTd)
