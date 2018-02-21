@@ -1550,6 +1550,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def costoPorcentaje = TipoPlanilla.findByCodigo('C')
         def anticipoCmpl = TipoPlanilla.findByCodigo('B')
 //        def obrasAdicionales  = TipoPlanilla.findByCodigo('O')
+        def cmpl
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
         def anticipoPagado = false
@@ -1573,7 +1574,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println "3: " + tiposPlanilla.codigo
             esAnticipo = true
         } else {
-            def cmpl = Contrato.findByPadre(contrato)
+            cmpl = Contrato.findByPadre(contrato)
             println "hay complementario"
             if(cmpl) {
                 def plaC = Planilla.findByContratoAndTipoPlanillaInList(contrato, [anticipoCmpl])
@@ -1731,7 +1732,7 @@ class PlanillaController extends janus.seguridad.Shield {
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
                 minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax,
-                suspensiones:suspensiones, ini:ini, planillas: planillasAvanceAsociada, formulas: formulasVarias]
+                suspensiones:suspensiones, ini:ini, planillas: planillasAvanceAsociada, formulas: formulasVarias, hayCmpl: (cmpl?.size()?:0 > 0)]
     }
 
 
@@ -4105,23 +4106,35 @@ class PlanillaController extends janus.seguridad.Shield {
             insertaRjpl(prmt)
 
         } else if(plnl.tipoPlanilla.toString() in ['P', 'Q', 'R']) { /** planillas de avance y liquidacion**/
-            def listPl = ['A', 'P']
+            def listPl = ['A', 'B']
             if(plnl.tipoPlanilla.toString() == 'R') listPl.add('Q')
 
             println "----------planillas anteriores----------... ${listPl}"
             def pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(plnl.contrato,
                     TipoPlanilla.findAllByCodigoInList(listPl), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])
+            println "planillas AB porcesar: ${pl.size()}: ${pl.id}"
             pl.each { p ->   /** las planillas anteriores solo son A o P **/
                 println "procesa planilla ${p.id} tipo: ${p.tipoPlanilla}"
                 prmt = [:]
-                if(p.tipoPlanilla.toString() == 'A'){
+                if(p.tipoPlanilla.toString() in ['A', 'B']){
                     fcha = p.periodoIndices? p.periodoIndices.fechaInicio : plnl.fechaIngreso
-                    prdoInec = indicesDisponiblesAnticipo(p, p.fechaPago, 'R') // para recalcular reajuste
+
                     println "P_Q:+++ existe indices para prdo: $prdoInec"
-                    FormulaPolinomicaReajuste.findAllByContrato(p.contrato).each {
+
+//                    FormulaPolinomicaReajuste.findAllByContrato(p.contrato).each {
+
                         /** debe reajustar con índices de la fecha de pago si ya esá apgada y si existen los índices **/
-                    println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${p.fechaPago}"
+                    if(p.fechaPago) {
+                        prdoInec = indicesDisponiblesAnticipo(p, p.fechaPago, 'R') // para recalcular reajuste
                         prmt.periodoInec = prdoInec ?: indicesDisponibles(p, fcha, '')
+                        prmt.mes = preciosService.componeMes(p.fechaPago.format('MMM-yyyy'))
+                    } else {
+                        prmt.periodoInec = indicesDisponiblesAnticipo(p, fcha, null)
+                        prmt.mes = preciosService.componeMes(p.fechaIngreso.format('MMM-yyyy'))
+                    }
+                    println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${p?.fechaPago}"
+
+                    prmt.periodoInec = prdoInec ?: indicesDisponibles(p, fcha, '')
                         prmt.planilla = plnl
                         prmt.planillaReajustada = p
                         prmt.parcialCronograma = 0
@@ -4130,16 +4143,24 @@ class PlanillaController extends janus.seguridad.Shield {
                         prmt.acumuladoPlanillas = 0
                         prmt.valorPo = p.valor
                         prmt.periodo = 0
-                        prmt.mes = preciosService.componeMes(p.fechaPago.format('MMM-yyyy'))
-//                    prmt.fpReajuste = pl.formulaPolinomicaReajuste
-                        prmt.fpReajuste = it
+                        prmt.fpReajuste = p.formulaPolinomicaReajuste
+//                        prmt.fpReajuste = it
 //                        println "  inserta ... rjpl: ${it.id}, prmt: $prmt"
                         insertaRjpl(prmt)
 //                        println "inserta ok..."
-                    }
+
+                }
 
 //                } else if((p.tipoPlanilla.toString() == 'P') && (p == pl.last())) {  // reajusta sólo planillas de avance
-                } else if((p == pl.last())) {  // reajusta sólo planillas de avance
+            }
+
+            listPl = ['P']
+            pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(plnl.contrato,
+                        TipoPlanilla.findAllByCodigoInList(listPl), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])
+            println "planillas P porcesar: ${pl.size()}: ${pl.id}"
+            pl.each { p ->   /** las planillas anteriores solo son A o P **/
+
+                if((p == pl.last())) {  // reajusta sólo planillas de avance
                     /** recalcula Po en base a lo recalculado de la planilla anterior **/
 //                    println "planilla de avance anterior -------------------- ${p.id}"
 //                    plAcumulado += p.valor
@@ -4213,9 +4234,8 @@ class PlanillaController extends janus.seguridad.Shield {
             def restoMes = 0.0
             def planilladoEsteMes = 0.0
             def diasPlanillados = preciosService.diasPlanillados(plnl.id)
-//            println "dias planillados: $diasPlanillados"
             def fchaFinPlanillado = plnl.fechaInicio
-//            prdo = 0
+            println "dias planillados: $diasPlanillados, fchaFinPlanillado: $fchaFinPlanillado, periodo: $prdo"
 
 //            println "antes del while total: $totalCr"
             def total = 0.0

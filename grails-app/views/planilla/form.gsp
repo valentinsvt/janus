@@ -303,7 +303,7 @@
                                 </div>
 
 
-                                <g:if test="${!(esAnticipo) && planillaInstance?.tipoContrato != 'C'}">
+                                <g:if test="${!(esAnticipo) && planillaInstance?.tipoContrato != 'C' && hayCmpl}">
                                 <div class="span2 formato text-info">
                                     Generar planilla para el Complementario:
                                 </div>

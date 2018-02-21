@@ -222,7 +222,6 @@ class ReportePlanillas3Controller {
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
 
-//        def cs = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "C%", [sort: "numero"])
         def cs = FormulaPolinomicaContractual.findAllByContratoAndReajusteAndNumeroIlike(contrato, planilla.formulaPolinomicaReajuste, "C%", [sort: "numero"])
         def ps = FormulaPolinomicaContractual.withCriteria {
             and {
@@ -238,7 +237,16 @@ class ReportePlanillas3Controller {
 
         println "cs: ${cs.size()}, ps: ${ps.size()}"
 
-        def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
+//        def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
+        def reajustesPlanilla = ReajustePlanilla.withCriteria {
+            eq('planilla', planilla)
+            ne('valorPo', 0.0.toDouble())
+            order('periodo', 'asc')
+            order('id', 'asc')
+        }
+        println "##################### rjpl: ${reajustesPlanilla.id}"
+
+        def prdodsde = reajustesPlanilla[0].id
 
 //        def conDetalles = true
 //        def conDetalles = planilla.tipoPlanilla.codigo != 'L'
@@ -257,6 +265,7 @@ class ReportePlanillas3Controller {
                 }
                 or {
                     eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
+                    eq("tipoPlanilla", TipoPlanilla.findByCodigo("B"))
                     eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
                 }
             }
@@ -482,14 +491,15 @@ class ReportePlanillas3Controller {
         def reajustesTotales = [:]
 
         reajustesPlanilla.each { rj ->
-            def key = rj.periodo
+//            def key = rj.periodo
+            def key = (rj.id - prdodsde).toInteger()
             if(!periodos[key]) {
                 periodos[key] = []
                 pagos[key] = [:]
                 pagos[key].indice = preciosService.componeMes(rj.periodoInec.fechaInicio.format("MMM-yyyy"))
                 pagos[key].valor = rj.valorReajustado
             }
-            if(rj.periodo == 0) {
+            if(key == 0) {   /** antes: rj.periodo **/
                 periodos[key] += contrato.periodoInec.descripcion
                 tams.add(10)
                 tams.add(10)
@@ -516,9 +526,12 @@ class ReportePlanillas3Controller {
                 datos[key].fp = c
                 datos[key].detalles = [:]
             }
+            println "+++reajustesPlanilla: ${reajustesPlanilla.id}"
             reajustesPlanilla.each { rj ->
                 def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
-                datos[key].detalles[rj.periodo] = det
+                println "det ----> $det"
+//                datos[key].detalles[rj.periodo] = det
+                datos[key].detalles[rj.id - prdodsde] = det
             }
         }
 
@@ -536,29 +549,36 @@ class ReportePlanillas3Controller {
         def totalAvance = new double[30]
         def totalAnticipo = 0
 
-        addCellTabla(tablaB0, new Paragraph("Cuadrilla Tipo", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        def formatoCs2 = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2]
+        def formatoVR = [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def formatoVL = [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+
+
+        addCellTabla(tablaB0, new Paragraph("Cuadrilla Tipo", fontTh), formatoCs2)
+        println "B0: $periodos"
         periodos.each { per, meses ->
             if(per == 0) {
-                addCellTabla(tablaB0, new Paragraph("OFERTA", fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph("OFERTA", fontTh), formatoVR)
+                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), formatoVL)
 
-                addCellTabla(tablaB0, new Paragraph("ANTICIPO", fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaB0, new Paragraph(meses[1], fontTh), [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph("ANTICIPO", fontTh), formatoVR)
+                addCellTabla(tablaB0, new Paragraph(meses[1], fontTh), formatoVL)
             } else {
-                addCellTabla(tablaB0, new Paragraph("AVANCE", fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph("AVANCE", fontTh), formatoVR)
+                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), formatoVL)
             }
         }
-        addCellTabla(tablaB0, new Paragraph("", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(tablaB0, new Paragraph("", fontTh), formatoCs2)
         pagos.each { per, pago ->
             if(per == 0) {
-                addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(" "), formatoVR)
+                addCellTabla(tablaB0, new Paragraph(" "), formatoVR)
             }
-            addCellTabla(tablaB0, new Paragraph(pago.fecha, fontTh), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaB0, new Paragraph("Indice: " + pago.indice ?: '', fontTh), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaB0, new Paragraph(pago.fecha, fontTh), formatoVR)
+            addCellTabla(tablaB0, new Paragraph("Indice: " + pago.indice ?: '', fontTh), formatoVR)
         }
 
+        println "DDDD datos: $datos"
         datos.each { k, v ->
             def c = v.fp
             def det = v.detalles
@@ -567,21 +587,30 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaB0, new Paragraph(numero(c.valor), fontTd), prmsNmBorder)
             coeficientes = (coeficientes + c.valor)
 
+            println ">>>> det: $det"
             det.each { per, dt ->
-                if (dt.size == 1) {
+
+                if (dt) {
                     dt = dt.first()
+                    println "per: $per, dt: $dt"
                     if (per == 0) {
                         addCellTabla(tablaB0, new Paragraph(numero(dt.indiceOferta, 2), fontTd), [border: Color.BLACK, bcr: Color.BLACK, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         addCellTabla(tablaB0, new Paragraph(numero(dt.valorIndcOfrt), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         totalOferta = (totalOferta + dt.valorIndcOfrt)
                         totalAnticipo = (totalAnticipo + dt.valorIndcPrdo)
                     } else {
-                        totalAvance[per] = (totalAvance[per] + dt.valorIndcPrdo)
+                        println "per: $per, totoalAvance: ${totalAvance}"
+                        println "dt: ${dt}"
+                        println "totalAvance[per]?:0 ${totalAvance[per.toInteger()]} dt.valorIndcPrdo: ${dt.valorIndcPrdo}"
+                        totalAvance[per.toInteger()] = (totalAvance[per.toInteger()] + dt.valorIndcPrdo)
                     }
                     addCellTabla(tablaB0, new Paragraph(numero(dt.indicePeriodo, 2), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaB0, new Paragraph(numero(dt.valorIndcPrdo), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
                 } else {
+                    addCellTabla(tablaB0, new Paragraph('', fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaB0, new Paragraph('', fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
                     println "Hay mas de 1 detalle para la fp ${c} periodo ${per}"
                 }
             }
@@ -630,18 +659,20 @@ class ReportePlanillas3Controller {
 
         tablaP0.setSpacingAfter(5f);
 
-        addCellTabla(tablaP0, new Paragraph("Mes y año", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        def formatoVl = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+
+        addCellTabla(tablaP0, new Paragraph("Mes y año", fontTh), formatoCs2)
         PdfPTable inner1 = new PdfPTable(2);
-        addCellTabla(inner1, new Paragraph("Cronograma", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
-        addCellTabla(inner1, new Paragraph("Parcial", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(inner1, new Paragraph("Acumulado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaP0, inner1, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(inner1, new Paragraph("Cronograma", fontTh), formatoCs2)
+        addCellTabla(inner1, new Paragraph("Parcial", fontTh), formatoVl)
+        addCellTabla(inner1, new Paragraph("Acumulado", fontTh), formatoVl)
+        addCellTabla(tablaP0, inner1, formatoCs2)
         PdfPTable inner2 = new PdfPTable(2);
-        addCellTabla(inner2, new Paragraph("Planillado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
-        addCellTabla(inner2, new Paragraph("Parcial", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(inner2, new Paragraph("Acumulado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaP0, inner2, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
-        addCellTabla(tablaP0, new Paragraph("Valor P0", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, rowspan: 2])
+        addCellTabla(inner2, new Paragraph("Planillado", fontTh), formatoCs2)
+        addCellTabla(inner2, new Paragraph("Parcial", fontTh), formatoVl)
+        addCellTabla(inner2, new Paragraph("Acumulado", fontTh), formatoVl)
+        addCellTabla(tablaP0, inner2, formatoCs2)
+        addCellTabla(tablaP0, new Paragraph("Valor P0", fontTh), formatoCs2)
 
 
         PdfPTable tablaMl = new PdfPTable(5);
@@ -727,21 +758,22 @@ class ReportePlanillas3Controller {
                 datosFr[key].detalles = [:]
             }
             reajustesPlanilla.each { rj ->
+                def indice = (rj.id - prdodsde).toInteger()
 //                println "----------------2"
                 def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
-                datosFr[key].detalles[rj.periodo] = det
+                datosFr[key].detalles[indice] = det    /*** antes: rj.periodo **/
 
-                if(!totalesFr[rj.periodo]) {
-                    totalesFr[rj.periodo] = 0
+                if(!totalesFr[indice]) {   /*** antes: rj.periodo **/
+                    totalesFr[indice] = 0.0
                 }
 
-                if(!totalesPeriodoFr[rj.periodo]){
-                    totalesPeriodoFr[rj.periodo] = 0
+                if(!totalesPeriodoFr[indice]){
+                    totalesPeriodoFr[indice] = 0.0
                 }
 
-                if(!totalesCoeficientes[rj.periodo]){
+                if(!totalesCoeficientes[indice]){
 //                    println "----------------3"
-                    totalesCoeficientes[rj.periodo] = 0
+                    totalesCoeficientes[indice] = 0.0
                 }
             }
         }
@@ -862,10 +894,10 @@ class ReportePlanillas3Controller {
         ]
 
         def reajusteTotal = 0
-//        println "periodos: $periodos"
+        println "periodos: $periodos"
 
         periodos.eachWithIndex { per3, i ->
-//            println "per: $per3, key: ${per3.key}, totales: $totalesCoeficientes"
+            println "per: $per3, key: ${per3.key}, totales: $totalesCoeficientes --> ${totalesCoeficientes[per3.key]}"
             if(per3.key == 0){
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
@@ -877,18 +909,19 @@ class ReportePlanillas3Controller {
                 cells[3][i] = new Paragraph(numero(reajustesPlanilla[0].valorReajustado,2), fontTd)
                 reajusteTotal += t
             } else {
-                def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
+                println ">>>>>>per: $per3, key: ${per3.key}, totales: $totalesCoeficientes"
+                def fr1 = (totalesCoeficientes[per3.key] - 1).toDouble().round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
                 cells[1][i] = new Paragraph(numero(fr1), fontTd)
 
-//                cells[2][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorPo,2), fontTd)
+//                cells[2][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorPo,2), fontTd)
+                cells[2][i] = new Paragraph(numero(reajustesPlanilla.find {it.id == (per3.key + prdodsde)}.valorPo,2), fontTd)
 
-                cells[2][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorPo,2), fontTd)
+//                def t = (reajustesPlanilla.find {it.periodo == per3.key}.valorPo * fr1).round(2)
+                def t = (reajustesPlanilla.find {it.id == (per3.key + prdodsde)}.valorPo * fr1).round(2)
 
-//                def t = (reajustesPlanilla[per3.key].valorPo * fr1).round(2)
-                def t = (reajustesPlanilla.find {it.periodo == per3.key}.valorPo * fr1).round(2)
-//                cells[3][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorReajustado), fontTd)
-                cells[3][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorReajustado), fontTd)
+//                cells[3][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorReajustado), fontTd)
+                cells[3][i] = new Paragraph(numero(reajustesPlanilla.find {it.id == (per3.key + prdodsde)}.valorReajustado), fontTd)
                 reajusteTotal += t
             }
         }
