@@ -1781,7 +1781,7 @@ class ReportePlanillas3Controller {
             contador++
 
             println "invoca detalle"
-            pl = detalle(planilla)
+            pl = detalle(planilla, planilla.tipoContrato)
             pdfs.add(pl.toByteArray())
             contador++
         }
@@ -1823,7 +1823,7 @@ class ReportePlanillas3Controller {
      * crear reporte de resumen de reajustes
      **/
     def reportePlanillaTotal() {
-        println "reportePlanillaTotal params: $params"
+//        println "reportePlanillaTotal params: $params"
         def planilla = Planilla.get(params.id)
 
         if (planilla.tipoPlanilla.codigo == 'Q') {
@@ -1847,9 +1847,9 @@ class ReportePlanillas3Controller {
         rjpl.each {rj ->
             reajustes.add([planilla: rj.planilla, reajuste: rj.fpReajuste])
         }
-        println "reajustes: $reajustes"
+//        println "reajustes: $reajustes"
         reajustes.unique()
-        println "reajustes unique: $reajustes"
+//        println "reajustes unique: $reajustes"
 
         /* parte de complemetario */
         def rjplCmpl = ReajustePlanilla.findAllByPlanilla(planilla.planillaCmpl)
@@ -1859,12 +1859,12 @@ class ReportePlanillas3Controller {
             rjCmpl.add([planilla: rj.planilla, reajuste: rj.fpReajuste])
         }
         rjCmpl.unique()
-        println "rlCmpl unique: $rjCmpl"
+//        println "rlCmpl unique: $rjCmpl"
 
 
 
         //** genera B0, P0 y Fr de la planilla **
-        println "reajustes: ${reajustes}"
+//        println "reajustes: ${reajustes}"
         reajustes.each {
             pl = reporteTablas(it.planilla, it.reajuste)
             pdfs.add(pl.toByteArray())
@@ -1878,24 +1878,20 @@ class ReportePlanillas3Controller {
         }
 
         if(planilla.tipoPlanilla.codigo == 'A') {
-            println "invoca a resumen... planilla"
+//            println "invoca a resumen... planilla"
             pl = resumenAnticipo(planilla)
             pdfs.add(pl.toByteArray())
             contador++
         }
 
         if(planilla.tipoPlanilla.codigo in ['P', 'Q']) {
-            println "invoca multas"
+//            println "invoca multas"
             pl = multas(planilla)
             pdfs.add(pl.toByteArray())
             contador++
 
-            pl = multas(planilla.planillaCmpl)
-            pdfs.add(pl.toByteArray())
-            contador++
-
-            println "invoca detalle"
-            pl = detalle(planilla)
+//            println "invoca detalle"
+            pl = detalle(planilla, 'T')
             pdfs.add(pl.toByteArray())
             contador++
         }
@@ -1942,7 +1938,7 @@ class ReportePlanillas3Controller {
         def contrato = planilla.contrato
         def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndFpReajuste(planilla, fpReajuste, [sort: "periodo", order: "asc"])
         def rjpl = reajustesPlanilla.first()
-        println "reajustesPlanilla: $reajustesPlanilla, Po: ${reajustesPlanilla.valorPo}"
+//        println "reajustesPlanilla: $reajustesPlanilla, Po: ${reajustesPlanilla.valorPo}"
 
         /* crea el PDF */
         def baos = new ByteArrayOutputStream()
@@ -2582,7 +2578,7 @@ class ReportePlanillas3Controller {
     }
 
 
-    def detalle(planilla) {
+    def detalle(planilla, tipoRprt) {
 //        println "reporteTablas de la planilla ${planilla.id}"
         def obra = planilla.contrato.obra
         def cntr = planilla.contrato
@@ -2674,7 +2670,7 @@ class ReportePlanillas3Controller {
 
         def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
         def height = 12
-        def maxRows = 48     //45
+        def maxRows = 43     //45
         def extraRows = 18   //9
         def currentRows = 1
         def chequeoPg = 0
@@ -2703,10 +2699,11 @@ class ReportePlanillas3Controller {
 
 
         def sql = "select count(distinct(sbpr__id)) cnta from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, " +
-                "'${planilla.tipoContrato}')"
-        println "sql: $sql"
+                "'${tipoRprt}')"
+
         def sps = cn.rows(sql.toString())[0].cnta
-        sql = "select * from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, '${planilla.tipoContrato}')"
+        sql = "select * from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, '${tipoRprt}')"
+//        println "sql: $sql"
         def vocr = cn.rows(sql.toString())
 
         def totalPags = Math.ceil((vocr.size() + sps + extraRows) / maxRows).toInteger()
@@ -2766,16 +2763,19 @@ class ReportePlanillas3Controller {
             sumaPrclActl += vo.vloractl
             sumaPrclAcml += vo.vloracml
 
-            if(currentRows >= maxRows) {
+//            println "currentRows $currentRows, maxRows $maxRows"
+            if(currentRows >= (maxRows) ) {
                 printFooterDetalle([ant: sumaPrclAntr, act: sumaPrclActl, acu: sumaPrclAcml])
 
                 sumaPrclAntr = 0
                 sumaPrclActl = 0
                 sumaPrclAcml = 0
+                currentRows = 0
 
                 document.add(tablaDetalles)
 
-                printFirmas([tipo: "detalle", orientacion: "vertical"])
+                document.add(firmas("detalle", "vertical", planilla))
+//                printFirmas([tipo: "detalle", orientacion: "vertical"])
                 currentPag++
 
                 //-------------------
@@ -2811,7 +2811,7 @@ class ReportePlanillas3Controller {
         def cstoAntr = cn.rows(sql.toString())[0].suma?:0
         sql = "select plnlmnto from plnl where plnl__id = (select plnl__id from plnl " +
                 "where plnlpdcs = ${planilla.id})"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         def cstoActl = cn.rows(sql.toString())[0]?.plnlmnto?:0
         def cstoAcml = cstoAntr + cstoActl
 
@@ -2836,12 +2836,18 @@ class ReportePlanillas3Controller {
 
         addCellTabla(tablaDetalles, new Paragraph("DESCUENTOS CONTRACTUALES", fontThFooter), frmtCol11)
 
+
         sql = "select sum(plnldsct) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
                 "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo = '${planilla.tipoContrato}'"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         def antcAntr = cn.rows(sql.toString())[0].suma?:0
         def antcActl = planilla.descuentos
         def antcAcml = antcAntr + antcActl
+
+        if(tipoRprt == 'T') {
+            antcActl = planilla.descuentos + Planilla.get(planilla.planillaCmpl.id).descuentos
+            antcAcml = antcAntr + antcActl
+        }
 
         addCellTabla(tablaDetalles, new Paragraph("ANTICIPO", fontThFooter), frmtCol8)
         addCellTabla(tablaDetalles, new Paragraph(numero(antcAntr, 2), fontThFooter), frmtSuma)
@@ -2851,21 +2857,21 @@ class ReportePlanillas3Controller {
         sql = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl where " +
                 "cntr__id = ${planilla.contrato.id} and plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' " +
                 " and plnltipo = '${planilla.tipoContrato}')"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         def mltaAntr = cn.rows(sql.toString())[0].suma?:0
 
         sql = "select sum(plnlmles) suma from plnl where " +
                 "cntr__id = ${planilla.contrato.id} and plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and " +
                 "plnltipo = '${planilla.tipoContrato}'"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         mltaAntr += cn.rows(sql.toString())[0].suma?:0
 
         sql = "select sum(mlplmnto) suma from mlpl where plnl__id = ${planilla.id}"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         def mltaActl = cn.rows(sql.toString())[0].suma?:0
 
         sql = "select sum(plnlmles) suma from plnl where plnl__id = ${planilla.id}"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         mltaActl += cn.rows(sql.toString())[0].suma?:0
 
         def mltaAcml = mltaAntr + mltaActl
@@ -2878,7 +2884,7 @@ class ReportePlanillas3Controller {
 
         sql = "select sum(plnlnpvl) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
                 "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}'"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         def nopgAntr = cn.rows(sql.toString())[0].suma?:0
         def nopgActl = planilla.noPagoValor
         def nopgAcml = nopgAntr + nopgActl
@@ -3009,8 +3015,11 @@ class ReportePlanillas3Controller {
         if (tipo == "detalle") {
             fontThFirmas = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
             fontTdFirmas = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL);
+            def frmtCol5 = [height: 10, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE,  colspan: 5]
 
             tablaFirmas.setWidths(arregloEnteros([35, 5, 30, 5, 35]))
+
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), frmtCol5)
 
             addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
