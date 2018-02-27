@@ -2399,7 +2399,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         ]
 
         totlCan = vol.volumenCantidad
-        totlDol = vol.volumenCantidad * precio
+        totlDol = vol.volumenSubtotal
 
 
         html += "<table class='table table-condensed'>"
