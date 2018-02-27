@@ -258,13 +258,27 @@ class PlanillasService {
         tblaPo  //retorna tabla armada
     }
 
-    def reajusteAnterior(plnl, fprj) {
-        println "arma reajsute anterior de plnl: $plnl, fprj: $fprj"
+    def reajusteAnterior(plnl) {
+        println "arma reajsute anterior de plnl: ${plnl.id}"
         def cn = dbConnectionService.getConnection()
-        def sql = "select sum(rjplvlor) suma from rjpl where plnl__id = (select plnlrjst from rjpl " +
-                "where plnl__id = ${plnl} and  plnlrjst < plnl__id and rjpl.fprj__id = ${fprj} " +
-                "order by plnlrjst desc limit 1) and rjpl.fprj__id = ${fprj}"
+        def sql = "select sum(rjplvlor) suma from rjpl where plnl__id = (select rjpl.plnlrjst from rjpl, plnl " +
+                "where rjpl.plnl__id = ${plnl.id} and rjpl.plnlrjst < rjpl.plnl__id and " +
+                "rjpl.fprj__id = ${plnl.formulaPolinomicaReajuste.id} and plnl.plnl__id = rjpl.plnlrjst and " +
+                "plnltipo = '${plnl.tipoContrato}' " +
+                "order by plnlrjst desc limit 1) and rjpl.fprj__id = ${plnl.formulaPolinomicaReajuste.id}"
         println "sql reajusteAnterior: $sql"
+        def valor = cn.rows(sql.toString())[0].suma
+        if(!valor) return 0
+        return valor
+        cn.close()
+    }
+
+    def reajusteAcumulado(plnl) {
+        println "arma reajsute total cn esta planilla: ${plnl.id}"
+        def cn = dbConnectionService.getConnection()
+        def sql = "select sum(rjplvlor) suma from rjpl where plnl__id = ${plnl.id} and  " +
+                "fprj__id = ${plnl.formulaPolinomicaReajuste.id}"
+        println "sql reajusteAcumulado: $sql"
         def valor = cn.rows(sql.toString())[0].suma
         if(!valor) return 0
         return valor

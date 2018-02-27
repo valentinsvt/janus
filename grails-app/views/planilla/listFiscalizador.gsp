@@ -179,13 +179,14 @@
                                 </g:if>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'L', 'R']}">
                                     <g:if test="${(contrato?.fiscalizador?.id == session.usuario.id)}">
+%{--
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo != 'L'}">
                                         <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]"
                                                 rel="tooltip" title="Detalles" class="btn btn-small">
                                             <i class="icon-reorder icon-large"></i>
                                         </g:link>
                                         </g:if>
-                                        %{--<g:if test="${!planillaInstance.fechaMemoSalidaPlanilla || planillaInstance.tipoPlanilla.codigo == 'L'}">--}%
+--}%
                                         <g:if test="${!planillaInstance.fechaMemoSalidaPlanilla}">
                                             <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
                                                 <i class="icon-gear"></i>
@@ -204,13 +205,6 @@
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:elseif>
-%{--
-                                <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                    <g:link controller="planilla2" action="liquidacion" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                                        <i class="icon-table icon-large"></i>
-                                    </g:link>
-                                </g:elseif>
---}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
                                     <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
@@ -219,11 +213,26 @@
                                         </g:link>
                                     </g:if>
                                 </g:if>
+%{--
                                 <g:if test="${janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
                                     <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planillaInstance.id}"
                                             class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
                                     </g:link>
+                                </g:if>
+--}%
+
+                                <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
+                                        class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="ImprimirNuevo">
+                                    <i class="icon-print"></i>
+                                </g:link>
+
+                                <g:if test="${planillaInstance.planillaCmpl && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) > 0}">
+                                <g:link controller="reportePlanillas3" action="reportePlanillaTotal" id="${planillaInstance.id}"
+                                        class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="ImprimirTotal">
+                                    <i class="icon-copy"></i>
+                                    %{--<i class="icon-paper-clip"></i>--}%
+                                </g:link>
                                 </g:if>
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
@@ -232,14 +241,6 @@
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
-%{--
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                    <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planillaInstance.id}"
-                                            class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                        <i class="icon-print"></i>
-                                    </g:link>
-                                </g:if>
---}%
                             </td>
 
                             <td style="text-align: center;">

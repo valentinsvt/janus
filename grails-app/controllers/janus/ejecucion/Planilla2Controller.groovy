@@ -193,19 +193,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             eq("liquidacion", 1)
             eq("codigo", obra.codigo + "LQ")
         }
-/*
-        if (obraLiquidacion.size() == 0) {
-            println "error 1"
-            flash.message = "No se encontró la obra de liquidación"
-            redirect(action: "errores")
-            return
-        } else if (obraLiquidacion.size() > 1) {
-            println "error 2"
-            flash.message = "Se encontró más de una obra de liquidación"
-            redirect(action: "errores")
-            return
-        } else
-*/
+
 //        if (obraLiquidacion.size() == 1) {
         if (obra) {
             obraLiquidacion = obra

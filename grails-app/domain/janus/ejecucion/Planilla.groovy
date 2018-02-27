@@ -70,6 +70,7 @@ class Planilla {
     FormulaPolinomicaReajuste formulaPolinomicaReajuste
 
     String tipoContrato
+    Planilla planillaCmpl
 
     static auditable = true
     static mapping = {
@@ -145,6 +146,7 @@ class Planilla {
             noPagoValor column: 'plnlnpvl'
 
             tipoContrato column: 'plnltipo'
+            planillaCmpl column: 'plnlcmpl'
         }
     }
 
@@ -202,6 +204,7 @@ class Planilla {
         formulaPolinomicaReajuste(blank: true, nullable: true)
         noPago(blank: true, nullable: true)
         tipoContrato(blank: false, nullable: false)
+        planillaCmpl(blank: true, nullable: true)
     }
 
     String toString() {

@@ -13,8 +13,10 @@ import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.PdfWriter
 import com.lowagie.text.Rectangle
+import janus.DbConnectionService
 import janus.Obra
 import janus.Parametros
+import janus.VolumenContrato
 import janus.VolumenesObra
 import janus.pac.PeriodoEjecucion
 
@@ -23,6 +25,7 @@ import java.awt.Color
 class ReportePlanillas3Controller {
     def preciosService
     def planillasService
+    def dbConnectionService
 
 
     def componeMes(mes) {
@@ -32,7 +35,6 @@ class ReportePlanillas3Controller {
         if(mes[0..2] == 'Dec') mes = 'Dic' + mes[3..-1]
         mes
     }
-
 
 
     private String fechaConFormato(fecha, formato) {
@@ -222,6 +224,7 @@ class ReportePlanillas3Controller {
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
 
+//        def cs = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "C%", [sort: "numero"])
         def cs = FormulaPolinomicaContractual.findAllByContratoAndReajusteAndNumeroIlike(contrato, planilla.formulaPolinomicaReajuste, "C%", [sort: "numero"])
         def ps = FormulaPolinomicaContractual.withCriteria {
             and {
@@ -237,20 +240,11 @@ class ReportePlanillas3Controller {
 
         println "cs: ${cs.size()}, ps: ${ps.size()}"
 
-//        def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
-        def reajustesPlanilla = ReajustePlanilla.withCriteria {
-            eq('planilla', planilla)
-            ne('valorPo', 0.0.toDouble())
-            order('periodo', 'asc')
-            order('id', 'asc')
-        }
-        println "##################### rjpl: ${reajustesPlanilla.id}"
-
-        def prdodsde = reajustesPlanilla[0].id
+        def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
 
 //        def conDetalles = true
 //        def conDetalles = planilla.tipoPlanilla.codigo != 'L'
-          def conDetalles = false
+        def conDetalles = false
 
         if(planilla.tipoPlanilla.codigo in ['P', 'Q', 'R']){
             conDetalles = true
@@ -265,7 +259,6 @@ class ReportePlanillas3Controller {
                 }
                 or {
                     eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
-                    eq("tipoPlanilla", TipoPlanilla.findByCodigo("B"))
                     eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
                 }
             }
@@ -300,11 +293,10 @@ class ReportePlanillas3Controller {
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
 
+
         def printFirmas = { params ->
             def tablaFirmas = new PdfPTable(5);
             tablaFirmas.setWidthPercentage(100);
-//            tablaFirmas.setSpacingBefore(0)
-//            tablaFirmas.setSpacingAfter(0)
 
             def parametros = Parametros.get(1)
 
@@ -313,10 +305,8 @@ class ReportePlanillas3Controller {
             def subdirector = parametros.subdirector
             def administrador = contrato.administrador
 
-//            def strContratista = cap(contratista.titulo + " " + contratista.nombreContacto + " " + contratista.apellidoContacto + "\nContratista")
             def strContratista = nombrePersona(contratista, "prov") + "\nContratista"
             def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
-//            def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
             def strSubdirector = "Ing. Miguel Velasteguí" + "\nSubdirector"
             def strAdmin = nombrePersona(administrador) + "\nAdministrador del Contrato - Delegado"
             def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
@@ -332,9 +322,10 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                /* un espacio en blanco hace que no se imprima la línea para la firma */
+
+/* un espacio en blanco hace que no se imprima la línea para la firma */
+
                 addCellTabla(tablaFirmas, new Paragraph(" ", fontThFirmas), [height: 40, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-//                addCellTabla(tablaFirmas, new Paragraph("y ", fontThFirmas), [height: 40, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 // pone linea en blanco //
                 addCellTabla(tablaFirmas, new Paragraph(" ", fontThFirmas), [height: 40, bwb: 1, bcb: Color.WHITE, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
@@ -343,7 +334,6 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph(strFiscalizador, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-//                addCellTabla(tablaFirmas, new Paragraph(strSubdirector, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
                 addCellTabla(tablaFirmas, new Paragraph(strFechaPresentacion, fontTdFirmas), [height: 35, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_TOP])
@@ -352,11 +342,9 @@ class ReportePlanillas3Controller {
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
-
                 tablaFirmas.setKeepTogether(true)
 
             } else if (params.tipo == "otro") {
-//                if (planilla.tipoPlanilla.codigo != 'A') {
                 if (params.orientacion == "horizontal") {
                     tablaFirmas.setWidths(arregloEnteros([30,5, 30,5, 30]))
                 } else if (params.orientacion == "vertical") {
@@ -370,16 +358,14 @@ class ReportePlanillas3Controller {
 
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-//                addCellTabla(tablaFirmas, new Paragraph(planilla.tipoPlanilla.codigo == 'A' ? strAdmin : strFiscalizador, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph(strFiscalizador, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-//                }
             }
-
 
             document.add(tablaFirmas)
         }
+
 
         def tablaObservaciones = new PdfPTable(3);
         tablaObservaciones.setWidthPercentage(100);
@@ -491,15 +477,14 @@ class ReportePlanillas3Controller {
         def reajustesTotales = [:]
 
         reajustesPlanilla.each { rj ->
-//            def key = rj.periodo
-            def key = (rj.id - prdodsde).toInteger()
+            def key = rj.periodo
             if(!periodos[key]) {
                 periodos[key] = []
                 pagos[key] = [:]
                 pagos[key].indice = preciosService.componeMes(rj.periodoInec.fechaInicio.format("MMM-yyyy"))
                 pagos[key].valor = rj.valorReajustado
             }
-            if(key == 0) {   /** antes: rj.periodo **/
+            if(rj.periodo == 0) {
                 periodos[key] += contrato.periodoInec.descripcion
                 tams.add(10)
                 tams.add(10)
@@ -526,12 +511,9 @@ class ReportePlanillas3Controller {
                 datos[key].fp = c
                 datos[key].detalles = [:]
             }
-//            println "+++reajustesPlanilla: ${reajustesPlanilla.id}"
             reajustesPlanilla.each { rj ->
                 def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
-//                println "det ----> $det"
-//                datos[key].detalles[rj.periodo] = det
-                datos[key].detalles[rj.id - prdodsde] = det
+                datos[key].detalles[rj.periodo] = det
             }
         }
 
@@ -549,36 +531,29 @@ class ReportePlanillas3Controller {
         def totalAvance = new double[30]
         def totalAnticipo = 0
 
-        def formatoCs2 = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2]
-        def formatoVR = [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-        def formatoVL = [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-
-
-        addCellTabla(tablaB0, new Paragraph("Cuadrilla Tipo", fontTh), formatoCs2)
-        println "B0: $periodos"
+        addCellTabla(tablaB0, new Paragraph("Cuadrilla Tipo", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
         periodos.each { per, meses ->
             if(per == 0) {
-                addCellTabla(tablaB0, new Paragraph("OFERTA", fontTh), formatoVR)
-                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), formatoVL)
+                addCellTabla(tablaB0, new Paragraph("OFERTA", fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
-                addCellTabla(tablaB0, new Paragraph("ANTICIPO", fontTh), formatoVR)
-                addCellTabla(tablaB0, new Paragraph(meses[1], fontTh), formatoVL)
+                addCellTabla(tablaB0, new Paragraph("ANTICIPO", fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(meses[1], fontTh), [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             } else {
-                addCellTabla(tablaB0, new Paragraph("AVANCE", fontTh), formatoVR)
-                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), formatoVL)
+                addCellTabla(tablaB0, new Paragraph("AVANCE", fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(meses[0], fontTh), [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             }
         }
-        addCellTabla(tablaB0, new Paragraph("", fontTh), formatoCs2)
+        addCellTabla(tablaB0, new Paragraph("", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
         pagos.each { per, pago ->
             if(per == 0) {
-                addCellTabla(tablaB0, new Paragraph(" "), formatoVR)
-                addCellTabla(tablaB0, new Paragraph(" "), formatoVR)
+                addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             }
-            addCellTabla(tablaB0, new Paragraph(pago.fecha, fontTh), formatoVR)
-            addCellTabla(tablaB0, new Paragraph("Indice: " + pago.indice ?: '', fontTh), formatoVR)
+            addCellTabla(tablaB0, new Paragraph(pago.fecha, fontTh), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaB0, new Paragraph("Indice: " + pago.indice ?: '', fontTh), [border: Color.BLACK, bcr: Color.BLACK, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         }
 
-//        println "DDDD datos: $datos"
         datos.each { k, v ->
             def c = v.fp
             def det = v.detalles
@@ -587,30 +562,21 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaB0, new Paragraph(numero(c.valor), fontTd), prmsNmBorder)
             coeficientes = (coeficientes + c.valor)
 
-//            println ">>>> det: $det"
             det.each { per, dt ->
-
-                if (dt) {
+                if (dt.size == 1) {
                     dt = dt.first()
-//                    println "per: $per, dt: $dt"
                     if (per == 0) {
                         addCellTabla(tablaB0, new Paragraph(numero(dt.indiceOferta, 2), fontTd), [border: Color.BLACK, bcr: Color.BLACK, bwr: 1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         addCellTabla(tablaB0, new Paragraph(numero(dt.valorIndcOfrt), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         totalOferta = (totalOferta + dt.valorIndcOfrt)
                         totalAnticipo = (totalAnticipo + dt.valorIndcPrdo)
                     } else {
-//                        println "per: $per, totoalAvance: ${totalAvance}"
-//                        println "dt: ${dt}"
-//                        println "totalAvance[per]?:0 ${totalAvance[per.toInteger()]} dt.valorIndcPrdo: ${dt.valorIndcPrdo}"
-                        totalAvance[per.toInteger()] = (totalAvance[per.toInteger()] + dt.valorIndcPrdo)
+                        totalAvance[per] = (totalAvance[per] + dt.valorIndcPrdo)
                     }
                     addCellTabla(tablaB0, new Paragraph(numero(dt.indicePeriodo, 2), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaB0, new Paragraph(numero(dt.valorIndcPrdo), fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
                 } else {
-                    addCellTabla(tablaB0, new Paragraph('', fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                    addCellTabla(tablaB0, new Paragraph('', fontTd), [border: Color.BLACK, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-
                     println "Hay mas de 1 detalle para la fp ${c} periodo ${per}"
                 }
             }
@@ -636,7 +602,8 @@ class ReportePlanillas3Controller {
 
 
         document.add(tablaB0)
-        printFirmas([tipo: "otro", orientacion: "horizontal"])
+//        printFirmas([tipo: "otro", orientacion: "horizontal"])
+        document.add(firmas("otro", "horizontal", planilla))
 
         /* ***************************************************** Fin Tabla B0 *************************************************************/
 
@@ -659,20 +626,18 @@ class ReportePlanillas3Controller {
 
         tablaP0.setSpacingAfter(5f);
 
-        def formatoVl = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-
-        addCellTabla(tablaP0, new Paragraph("Mes y año", fontTh), formatoCs2)
+        addCellTabla(tablaP0, new Paragraph("Mes y año", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
         PdfPTable inner1 = new PdfPTable(2);
-        addCellTabla(inner1, new Paragraph("Cronograma", fontTh), formatoCs2)
-        addCellTabla(inner1, new Paragraph("Parcial", fontTh), formatoVl)
-        addCellTabla(inner1, new Paragraph("Acumulado", fontTh), formatoVl)
-        addCellTabla(tablaP0, inner1, formatoCs2)
+        addCellTabla(inner1, new Paragraph("Cronograma", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(inner1, new Paragraph("Parcial", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(inner1, new Paragraph("Acumulado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaP0, inner1, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
         PdfPTable inner2 = new PdfPTable(2);
-        addCellTabla(inner2, new Paragraph("Planillado", fontTh), formatoCs2)
-        addCellTabla(inner2, new Paragraph("Parcial", fontTh), formatoVl)
-        addCellTabla(inner2, new Paragraph("Acumulado", fontTh), formatoVl)
-        addCellTabla(tablaP0, inner2, formatoCs2)
-        addCellTabla(tablaP0, new Paragraph("Valor P0", fontTh), formatoCs2)
+        addCellTabla(inner2, new Paragraph("Planillado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(inner2, new Paragraph("Parcial", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(inner2, new Paragraph("Acumulado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaP0, inner2, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(tablaP0, new Paragraph("Valor P0", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, rowspan: 2])
 
 
         PdfPTable tablaMl = new PdfPTable(5);
@@ -728,7 +693,8 @@ class ReportePlanillas3Controller {
 
 
         document.add(tablaP0);
-        printFirmas([tipo: "otro", orientacion: "horizontal"])
+//        printFirmas([tipo: "otro", orientacion: "horizontal"])
+        document.add(firmas("otro", "horizontal", planilla))
 
         /* ***************************************************** Fin Tabla P0 *************************************************************/
 
@@ -758,22 +724,21 @@ class ReportePlanillas3Controller {
                 datosFr[key].detalles = [:]
             }
             reajustesPlanilla.each { rj ->
-                def indice = (rj.id - prdodsde).toInteger()
 //                println "----------------2"
                 def det = DetalleReajuste.findAllByReajustePlanillaAndFpContractual(rj, c)
-                datosFr[key].detalles[indice] = det    /*** antes: rj.periodo **/
+                datosFr[key].detalles[rj.periodo] = det
 
-                if(!totalesFr[indice]) {   /*** antes: rj.periodo **/
-                    totalesFr[indice] = 0.0
+                if(!totalesFr[rj.periodo]) {
+                    totalesFr[rj.periodo] = 0
                 }
 
-                if(!totalesPeriodoFr[indice]){
-                    totalesPeriodoFr[indice] = 0.0
+                if(!totalesPeriodoFr[rj.periodo]){
+                    totalesPeriodoFr[rj.periodo] = 0
                 }
 
-                if(!totalesCoeficientes[indice]){
+                if(!totalesCoeficientes[rj.periodo]){
 //                    println "----------------3"
-                    totalesCoeficientes[indice] = 0.0
+                    totalesCoeficientes[rj.periodo] = 0
                 }
             }
         }
@@ -894,10 +859,10 @@ class ReportePlanillas3Controller {
         ]
 
         def reajusteTotal = 0
-        println "periodos: $periodos"
+//        println "periodos: $periodos"
 
         periodos.eachWithIndex { per3, i ->
-            println "per: $per3, key: ${per3.key}, totales: $totalesCoeficientes --> ${totalesCoeficientes[per3.key]}"
+//            println "per: $per3, key: ${per3.key}, totales: $totalesCoeficientes"
             if(per3.key == 0){
                 def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
@@ -909,19 +874,18 @@ class ReportePlanillas3Controller {
                 cells[3][i] = new Paragraph(numero(reajustesPlanilla[0].valorReajustado,2), fontTd)
                 reajusteTotal += t
             } else {
-//                println ">>>>>>per: $per3, key: ${per3.key}, totales: $totalesCoeficientes"
-                def fr1 = (totalesCoeficientes[per3.key] - 1).toDouble().round(3)
+                def fr1 = (totalesCoeficientes[per3.key] - 1).round(3)
                 cells[0][i] = new Paragraph(numero(totalesCoeficientes[per3.key]), fontTd)
                 cells[1][i] = new Paragraph(numero(fr1), fontTd)
 
-//                cells[2][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorPo,2), fontTd)
-                cells[2][i] = new Paragraph(numero(reajustesPlanilla.find {it.id == (per3.key + prdodsde)}.valorPo,2), fontTd)
+//                cells[2][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorPo,2), fontTd)
 
-//                def t = (reajustesPlanilla.find {it.periodo == per3.key}.valorPo * fr1).round(2)
-                def t = (reajustesPlanilla.find {it.id == (per3.key + prdodsde)}.valorPo * fr1).round(2)
+                cells[2][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorPo,2), fontTd)
 
-//                cells[3][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorReajustado), fontTd)
-                cells[3][i] = new Paragraph(numero(reajustesPlanilla.find {it.id == (per3.key + prdodsde)}.valorReajustado), fontTd)
+//                def t = (reajustesPlanilla[per3.key].valorPo * fr1).round(2)
+                def t = (reajustesPlanilla.find {it.periodo == per3.key}.valorPo * fr1).round(2)
+//                cells[3][i] = new Paragraph(numero(reajustesPlanilla[per3.key].valorReajustado), fontTd)
+                cells[3][i] = new Paragraph(numero(reajustesPlanilla.find {it.periodo == per3.key}.valorReajustado), fontTd)
                 reajusteTotal += t
             }
         }
@@ -1039,7 +1003,8 @@ class ReportePlanillas3Controller {
         document.add(tablaFr);
         document.add(tablaObservaciones)
 
-        printFirmas([tipo: "otro", orientacion: "vertical"])
+//        printFirmas([tipo: "otro", orientacion: "vertical"])
+        document.add(firmas("otro", "vertical", planilla))
 
         /* ***************************************************** Fin Tabla Fr *************************************************************/
 
@@ -1368,7 +1333,7 @@ class ReportePlanillas3Controller {
                     def cAcu = params.acu + bAcu + cpAcu
 
                     def dAntPlanilla = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(contrato,
-                          TipoPlanilla.findAllByCodigoInList(["P", "Q"]), planilla.fechaPresentacion, [sort: "fechaPresentacion"])
+                            TipoPlanilla.findAllByCodigoInList(["P", "Q"]), planilla.fechaPresentacion, [sort: "fechaPresentacion"])
 
                     def dAnt = 0
 
@@ -1765,6 +1730,17 @@ class ReportePlanillas3Controller {
     def reportePlanillaNuevo() {
         println "reportePlanillaNuevo params: $params"
         def planilla = Planilla.get(params.id)
+
+        if (planilla.tipoPlanilla.codigo == 'Q') {
+            if (!planilla.contrato.fechaPedidoRecepcionContratista || !planilla.contrato.fechaPedidoRecepcionFiscalizador) {
+                flash.message = "Por favor ingrese las fechas de pedido de recepción para generar la planilla " +
+                        "final de avance (liquidación)"
+                flash.clase = "alert-error"
+                redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: planilla.contrato.id)
+                return
+            }
+        }
+
         def rjpl = ReajustePlanilla.findAllByPlanilla(planilla)
         def reajustes = []
         def pl = new ByteArrayOutputStream()
@@ -1798,6 +1774,18 @@ class ReportePlanillas3Controller {
             contador++
         }
 
+        if(planilla.tipoPlanilla.codigo in ['P', 'Q']) {
+            println "invoca multas"
+            pl = multas(planilla)
+            pdfs.add(pl.toByteArray())
+            contador++
+
+            println "invoca detalle"
+            pl = detalle(planilla)
+            pdfs.add(pl.toByteArray())
+            contador++
+        }
+
         if(contador > 1) {
             def baos = new ByteArrayOutputStream()
             Document document
@@ -1824,13 +1812,12 @@ class ReportePlanillas3Controller {
             b = pl.toByteArray();
         }
 
-
-
         response.setContentType("application/pdf")
         response.setHeader("Content-disposition", "attachment; filename=${name}")
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
+
 
     /**
      * Imprime B0, P0 y Fr de la planilla
@@ -1845,11 +1832,10 @@ class ReportePlanillas3Controller {
 
         /* crea el PDF */
         def baos = new ByteArrayOutputStream()
-        def name = "planilla_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+//        def name = "planilla_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
         Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
-//        Font fontTitle1 = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
         Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
 
@@ -1880,65 +1866,14 @@ class ReportePlanillas3Controller {
         def bordeTdRecuadro = [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def bordeTdRecuadroDer = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
-        /* ***************************************************** Header planilla **********************************************************/
-        def headerPlanilla = { params ->
-            if (!params.espacio) {
-                params.espacio = 1
-            }
 
-            Font fontThUsar = new Font(Font.TIMES_ROMAN, params.size, Font.BOLD);
-            Font fontTdUsar = new Font(Font.TIMES_ROMAN, params.size, Font.NORMAL);
-
-            Paragraph preface = new Paragraph();
-            addEmptyLine(preface, 1);
-            preface.setAlignment(Element.ALIGN_CENTER);
-            preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
-            preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, fontTituloGad));
-            addEmptyLine(preface, params.espacio);
-            Paragraph preface2 = new Paragraph();
-            preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-            addEmptyLine(preface2, 1);
-            document.add(logo)
-            document.add(preface);
-            document.add(preface2);
-
-            PdfPTable tablaHeaderPlanilla = new PdfPTable(5);
-            tablaHeaderPlanilla.setWidthPercentage(100);
-            tablaHeaderPlanilla.setWidths(arregloEnteros([12, 24, 10, 12, 24]))
-            tablaHeaderPlanilla.setWidthPercentage(100);
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Obra", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.nombre, fontTdUsar), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Lugar", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph((obra.lugar?.descripcion ?: ""), fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Planilla", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.numero, fontTdUsar), bordeTdSinBorde)
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Ubicación", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre, fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Monto contrato", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Contratista", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Período", fontThUsar), bordeTdSinBorde)
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(ponePeriodoPlanilla(planilla), fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Plazo", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.plazo, 0) + " días", fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Valor obra", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
-
-            document.add(tablaHeaderPlanilla);
-        }
-
-        headerPlanilla([size: 10])
+//        headerPlanilla([size: 10])
         /* ---------------------- Fin Header planilla --------------------------*/
+
+        document.add(titlLogo())
+        document.add(titlInst(1, planilla, obra));
+        document.add(titlSbtt());
+        document.add(encabezado(2, 10, planilla))
 
         /* ********************************************* Tabla B0 *****************************************************/
 
@@ -1992,14 +1927,14 @@ class ReportePlanillas3Controller {
         def planillas = (tbBo[0].size() - 5)/2
         tbBo.each { d ->
             addCellTabla(tablaB0, new Paragraph(d.descripcion + "(" + d.numero + ")", fontTd), bordeTdRecuadro)
-            addCellTabla(tablaB0, new Paragraph(numero(d.coeficiente), fontTd), bordeTdRecuadroDer)
-            addCellTabla(tablaB0, new Paragraph(numero(d.indice), fontTd), bordeTdRecuadroDer)
-            addCellTabla(tablaB0, new Paragraph(numero(d.valor), fontTd), bordeTdRecuadroDer)
+            addCellTabla(tablaB0, new Paragraph(numero(d.coeficiente,3), fontTd), bordeTdRecuadroDer)
+            addCellTabla(tablaB0, new Paragraph(numero(d.indice,2), fontTd), bordeTdRecuadroDer)
+            addCellTabla(tablaB0, new Paragraph(numero(d.valor,3), fontTd), bordeTdRecuadroDer)
 
             for(i in 1..planillas){
                 if(!totalAvance[i-1]) totalAvance[i-1] = 0
                 addCellTabla(tablaB0, new Paragraph(numero(d["indc$i"], 2), fontTd), bordeTdRecuadroDer)
-                addCellTabla(tablaB0, new Paragraph(numero(d["vlor$i"], 2), fontTd), bordeTdRecuadroDer)
+                addCellTabla(tablaB0, new Paragraph(numero(d["vlor$i"], 3), fontTd), bordeTdRecuadroDer)
                 totalAvance[i-1] += d["vlor$i"]
             }
             totalIndiceOferta += d.valor
@@ -2017,12 +1952,19 @@ class ReportePlanillas3Controller {
 
         document.add(tablaB0)
 
+//        imprimirFirmas([tipo: "otro", orientacion: "horizontal"])
+        document.add(firmas("otro", "horizontal", planilla))
+
         /* --------------------------- Fin Tabla B0 ----------------------------*/
 
         /* ***************************************************** Tabla P0 *****************************************************************/
 
         document.newPage()
-        headerPlanilla([size: 10, espacio: 2])
+//        headerPlanilla([size: 10, espacio: 2])
+        document.add(titlLogo())
+        document.add(titlInst(1, planilla, obra));
+        document.add(titlSbtt());
+        document.add(encabezado(2, 10, planilla))
 
         Paragraph tituloP0 = new Paragraph();
         addEmptyLine(tituloP0, 1);
@@ -2083,12 +2025,18 @@ class ReportePlanillas3Controller {
 
         document.add(tablaP0);
 
+//        imprimirFirmas([tipo: "otro", orientacion: "horizontal"])
+        document.add(firmas("otro", "horizontal", planilla))
         /* --------------------------- Fin Tabla P0 ----------------------------*/
 
         /* ***************************************************** Tabla Fr *****************************************************************/
         document.setPageSize(PageSize.A4);
         document.newPage();
-        headerPlanilla([size: 10, espacio: 1])
+//        headerPlanilla([size: 10, espacio: 1])
+        document.add(titlLogo())
+        document.add(titlInst(1, planilla, obra));
+        document.add(titlSbtt());
+        document.add(encabezado(2, 10, planilla))
 
         Paragraph tituloFr = new Paragraph();
         addEmptyLine(tituloFr, 1);
@@ -2204,7 +2152,8 @@ class ReportePlanillas3Controller {
         tablaDatos4.setWidths(arregloEnteros([25]))
         tablaDatos4.setWidthPercentage(100);
 
-        def anterior = planillasService.reajusteAnterior(rjpl.planilla.id, rjpl.fpReajuste.id)
+//        def anterior = planillasService.reajusteAnterior(rjpl.planilla.id, rjpl.fpReajuste.id)
+        def anterior = planillasService.reajusteAnterior(rjpl.planilla)
 
         addCellTabla(tablaDatos4, new Paragraph(numero(anterior ?: 0,2), fontTh), bordeThRecuadro + [align: Element.ALIGN_RIGHT])
         addCellTabla(tablaDatos4, new Paragraph(numero(reajusteTotal ?: 0,2), fontTh), bordeThRecuadro + [align: Element.ALIGN_RIGHT])
@@ -2216,6 +2165,8 @@ class ReportePlanillas3Controller {
 
         document.add(tablaFr);
 
+//        imprimirFirmas([tipo: "otro", orientacion: "vertical"])
+        document.add(firmas("otro", "vertical", planilla))
         /* ------------------------- Fin Tabla Fr ---------------------------*/
 
         document.close();
@@ -2274,77 +2225,20 @@ class ReportePlanillas3Controller {
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
 
-        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
-        Image logo = Image.getInstance(logoPath);
-        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
-
-
         def bordeThRecuadro = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-        def bordeThRecuadroDer= [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
-
-        def bordeTdSinBorde = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def bordeTdRecuadro = [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def bordeThRecuadroDer= [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def bordeTdRecuadroDer = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
-        /* ***************************************************** Header planilla **********************************************************/
-        def headerPlanilla = { params ->
-            if (!params.espacio) {
-                params.espacio = 1
-            }
 
-            Font fontThUsar = new Font(Font.TIMES_ROMAN, params.size, Font.BOLD);
-            Font fontTdUsar = new Font(Font.TIMES_ROMAN, params.size, Font.NORMAL);
+        document.setPageSize(PageSize.A4);
+        document.newPage();
+//            headerPlanilla([size: 10, espacio: 2])
+        document.add(titlLogo())
+        document.add(titlInst(1, planilla, obra));
+        document.add(titlSbtt());
+        document.add(encabezado(2, 10, planilla))
 
-            Paragraph preface = new Paragraph();
-            addEmptyLine(preface, 1);
-            preface.setAlignment(Element.ALIGN_CENTER);
-            preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
-            preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, fontTituloGad));
-            addEmptyLine(preface, params.espacio);
-            Paragraph preface2 = new Paragraph();
-            preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-            addEmptyLine(preface2, 1);
-            document.add(logo)
-            document.add(preface);
-            document.add(preface2);
-
-            PdfPTable tablaHeaderPlanilla = new PdfPTable(5);
-            tablaHeaderPlanilla.setWidthPercentage(100);
-            tablaHeaderPlanilla.setWidths(arregloEnteros([12, 24, 10, 12, 24]))
-            tablaHeaderPlanilla.setWidthPercentage(100);
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Obra", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.nombre, fontTdUsar), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Lugar", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph((obra.lugar?.descripcion ?: ""), fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Planilla", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.numero, fontTdUsar), bordeTdSinBorde)
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Ubicación", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre, fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Monto contrato", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Contratista", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Período", fontThUsar), bordeTdSinBorde)
-
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(ponePeriodoPlanilla(planilla), fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Plazo", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.plazo, 0) + " días", fontTdUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph("Valor obra", fontThUsar), bordeTdSinBorde)
-            addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
-
-            document.add(tablaHeaderPlanilla);
-        }
-
-        headerPlanilla([size: 10])
-        //-- fin header --/
 
         Paragraph titulo = new Paragraph();
         addEmptyLine(titulo, 1);
@@ -2352,6 +2246,8 @@ class ReportePlanillas3Controller {
         titulo.add(new Paragraph("Resumen del Reajuste del Anticipo", fontTitle));
         addEmptyLine(titulo, 1);
         document.add(titulo);
+
+        /** anticipo */
 
         PdfPTable tbAntc = new PdfPTable(3);
         tbAntc.setWidths(arregloEnteros([30, 10, 10]))
@@ -2380,6 +2276,671 @@ class ReportePlanillas3Controller {
         document.close();
         pdfw.close()
         return baos
+    }
+
+
+    def multas(planilla) {
+//        println "reporteTablas de la planilla ${planilla.id}"
+        def obra = planilla.contrato.obra
+
+        /* crea el PDF */
+        def baos = new ByteArrayOutputStream()
+        def multaPlanilla = MultasPlanilla.findAllByPlanilla(planilla)
+
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Document document
+        document = new Document();
+        document.setMargins(50,30,30,28)  // 28 equivale a 1 cm: izq, derecha, arriba y abajo
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.resetHeader()
+        document.resetFooter()
+
+        document.open();
+        document.addTitle("Planillas de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, planillas");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+//        def bordeTdSinBorde = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+
+//        println("otra multa " + planilla.multaEspecial)
+        if(multaPlanilla.size() != 0 || (planilla.multaEspecial != 0 && planilla.multaEspecial != null)){
+            document.setPageSize(PageSize.A4);
+            document.newPage();
+//            headerPlanilla([size: 10, espacio: 2])
+            document.add(titlLogo())
+            document.add(titlInst(1, planilla, obra));
+            document.add(titlSbtt());
+            document.add(encabezado(2, 10, planilla))
+
+
+            Paragraph tituloMt = new Paragraph();
+            addEmptyLine(tituloMt, 1);
+            tituloMt.setAlignment(Element.ALIGN_CENTER);
+            tituloMt.add(new Paragraph("Multas", fontTitle));
+            addEmptyLine(tituloMt, 1);
+            document.add(tituloMt);
+
+            multaPlanilla.each { mt ->
+
+                if(mt.tipoMulta.id == 1){
+
+                    Paragraph tituloMultaNoPres = new Paragraph();
+                    tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
+                    tituloMultaNoPres.add(new Paragraph(mt.tipoMulta.descripcion, fontTitle));
+                    addEmptyLine(tituloMultaNoPres, 1);
+                    document.add(tituloMultaNoPres);
+
+                    PdfPTable tablaPml = new PdfPTable(2);
+                    tablaPml.setWidthPercentage(60);
+
+                    tablaPml.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+                    addCellTabla(tablaPml, new Paragraph("Fecha de presentación de planilla", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph(planilla.fechaPresentacion.format("dd-MM-yyyy"), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph("Periodo de la planilla", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph(planilla?.fechaInicio?.format("dd-MM-yyyy") + " a " + planilla?.fechaFin?.format("dd-MM-yyyy"), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph("Fecha máxima de presentación", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph(mt?.fechaMaxima?.format("dd-MM-yyyy"), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph(numero(mt.dias,0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph(numero(mt.descripcion, 2) + " x 1000 de \$" + numero((planilla.valor > 0 ? planilla.valor : mt.valorCronograma), 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaPml, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+                    document.add(tablaPml);
+                }
+
+                def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndValorPoNotEqual(planilla, 0, [sort: "periodo", order: "asc"])
+
+                if(mt.tipoMulta.id == 2){   // incumplimiento del cronograma
+                    def acPlanilla = reajustesPlanilla.last().acumuladoPlanillas
+                    def acCronograma = reajustesPlanilla.last().acumuladoCronograma
+//                    println "reajustes: ${reajustesPlanilla.last().acumuladoCronograma}"
+
+                    Paragraph tituloMultaNoPres = new Paragraph();
+                    tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
+                    tituloMultaNoPres.add(new Paragraph(mt.tipoMulta.descripcion, fontTitle));
+                    addEmptyLine(tituloMultaNoPres, 1);
+                    document.add(tituloMultaNoPres);
+
+                    PdfPTable tablaMultaDisp = new PdfPTable(2);
+                    tablaMultaDisp.setWidthPercentage(60);
+                    tablaMultaDisp.setSpacingAfter(10f);
+
+                    tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+                    addCellTabla(tablaMultaDisp, new Paragraph("Mes y Año", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(mt.periodo, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Cronograma", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(numero(acCronograma,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Planillado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.planilla.valor,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(numero(acPlanilla,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(mt.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    document.add(tablaMultaDisp);
+
+                }
+
+                if(mt.tipoMulta.id == 3){
+                    Paragraph tituloMultaNoPres = new Paragraph();
+                    tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
+                    tituloMultaNoPres.add(new Paragraph(mt.tipoMulta.descripcion, fontTitle));
+                    addEmptyLine(tituloMultaNoPres, 1);
+                    document.add(tituloMultaNoPres);
+
+                    PdfPTable tablaMultaDisp = new PdfPTable(2);
+                    tablaMultaDisp.setWidthPercentage(60);
+                    tablaMultaDisp.setSpacingAfter(10f);
+
+                    tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+                    addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.dias,0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(mt.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    document.add(tablaMultaDisp);
+                }
+
+                if(mt.tipoMulta.id == 4){  //retraso de obra
+                    Paragraph tituloMultaNoPres = new Paragraph();
+                    tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
+                    tituloMultaNoPres.add(new Paragraph(mt.tipoMulta.descripcion, fontTitle));
+                    addEmptyLine(tituloMultaNoPres, 1);
+                    document.add(tituloMultaNoPres);
+
+                    PdfPTable tablaMultaDisp = new PdfPTable(2);
+                    tablaMultaDisp.setWidthPercentage(60);
+                    tablaMultaDisp.setSpacingAfter(10f);
+
+                    tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+                    addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.dias,0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(mt.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    document.add(tablaMultaDisp);
+                }
+            }
+
+            if(planilla.multaEspecial > 0) {
+                Paragraph tituloMultaUsu = new Paragraph();
+                tituloMultaUsu.setAlignment(Element.ALIGN_CENTER);
+                tituloMultaUsu.add(new Paragraph("Otras multas", fontTitle));
+                addEmptyLine(tituloMultaUsu, 1);
+                document.add(tituloMultaUsu);
+
+                PdfPTable tablaMultaUsu = new PdfPTable(2);
+                tablaMultaUsu.setWidthPercentage(60);
+                tablaMultaUsu.setSpacingAfter(10f);
+
+                tablaMultaUsu.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+                addCellTabla(tablaMultaUsu, new Paragraph("Concepto", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMultaUsu, new Paragraph(planilla.descripcionMulta, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMultaUsu, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                if(planilla.multaEspecial){
+                    addCellTabla(tablaMultaUsu, new Paragraph('$'+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                } else {
+                    addCellTabla(tablaMultaUsu, new Paragraph(''+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                }
+                document.add(tablaMultaUsu);
+            }
+        }
+
+        document.add(firmas("otro", "vertical", planilla))
+
+        document.close();
+        pdfw.close()
+        return baos
+    }
+
+
+    def detalle(planilla) {
+//        println "reporteTablas de la planilla ${planilla.id}"
+        def obra = planilla.contrato.obra
+        def cntr = planilla.contrato
+        def cn = dbConnectionService.getConnection()
+
+        /* crea el PDF */
+        def baos = new ByteArrayOutputStream()
+        def multaPlanilla = MultasPlanilla.findAllByPlanilla(planilla)
+
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Font fontThTiny = new Font(Font.TIMES_ROMAN, 7, Font.BOLD);
+        Font fontTdTiny = new Font(Font.TIMES_ROMAN, 7, Font.NORMAL);
+        def prmsTdNoBorder = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+
+        Document document
+        document = new Document();
+        document.setMargins(50,30,30,28)  // 28 equivale a 1 cm: izq, derecha, arriba y abajo
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.resetHeader()
+        document.resetFooter()
+
+        document.open();
+        document.addTitle("Planillas de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, planillas");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
+        Image logo = Image.getInstance(logoPath);
+        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
+
+        PdfPTable tablaDetalles = null
+        def borderWidth = 1
+
+        def printHeaderDetalle = { params ->
+            def tablaHeaderDetalles = new PdfPTable(11);
+            tablaHeaderDetalles.setWidthPercentage(100);
+            tablaHeaderDetalles.setWidths(arregloEnteros([13, 35, 5, 10, 11, 10, 10, 10, 13, 13, 14]))
+
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Obra", fontThTiny), prmsTdNoBorder)
+            addCellTabla(tablaHeaderDetalles, new Paragraph(obra.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 10])
+
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Lugar", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaHeaderDetalles, new Paragraph((obra.lugar?.descripcion ?: ""), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Planilla", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(planilla.numero, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Ubicación", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Parroquia " + obra.parroquia?.nombre + " Cantón " + obra.parroquia?.canton?.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Monto", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(numero(planilla.contrato.monto, 2), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Pág. " + params.pag + " de " + params.total, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Contratista", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Período", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(ponePeriodoPlanilla(planilla), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tablaDetalles, logo, [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, tablaHeaderDetalles, [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 10, pl: 40])
+            addCellTabla(tablaDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 11])
+
+            addCellTabla(tablaDetalles, new Paragraph("N.", fontThTiny), [border: Color.BLACK, bwb: 0.1, bcb: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph("Descripción del rubro", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, bwr: borderWidth, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph("U.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph("Precio unitario", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph("Volumen contratado", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+            PdfPTable inner6 = new PdfPTable(3);
+            addCellTabla(inner6, new Paragraph("Cantidades", fontThTiny), [border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+            addCellTabla(inner6, new Paragraph("Anterior", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(inner6, new Paragraph("Actual", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(inner6, new Paragraph("Acumulado", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, inner6, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+
+            PdfPTable inner7 = new PdfPTable(3);
+            addCellTabla(inner7, new Paragraph("Valores", fontThTiny), [border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+            addCellTabla(inner7, new Paragraph("Anterior", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(inner7, new Paragraph("Actual", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(inner7, new Paragraph("Acumulado", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, inner7, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+        }
+
+        def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
+        def height = 12
+        def maxRows = 48     //45
+        def extraRows = 18   //9
+        def currentRows = 1
+        def chequeoPg = 0
+
+        def rowsCurPag = 1
+        document.newPage()
+        tablaDetalles = new PdfPTable(11);
+        tablaDetalles.setWidthPercentage(100);
+        tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+        tablaDetalles.setSpacingAfter(1f);
+        def currentPag = 1
+        def sumaPrclAntr = 0, sumaTotlAntr = 0
+        def sumaPrclActl = 0, sumaTotlActl = 0
+        def sumaPrclAcml = 0, sumaTotlAcml = 0
+
+
+
+        def frmtSbpr = [height: height, bwr: borderWidth, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY,
+                        border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 11]
+        def frmtDtIz = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
+                        align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def frmtDtDr = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
+                        align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def frmtDtDrBorde = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, bwr: borderWidth,
+                             border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+
+        def sql = "select count(distinct(sbpr__id)) cnta from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, " +
+                "'${planilla.tipoContrato}')"
+        println "sql: $sql"
+        def sps = cn.rows(sql.toString())[0].cnta
+        sql = "select * from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, '${planilla.tipoContrato}')"
+        def vocr = cn.rows(sql.toString())
+
+        def totalPags = Math.ceil((vocr.size() + sps + extraRows) / maxRows).toInteger()
+        printHeaderDetalle([pag: currentPag, total: totalPags])
+
+        Font fontThFooter = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        def frmtCol8 = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8]
+        def frmtCol11 = [border: Color.BLACK, bg: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 11]
+        def frmtSuma = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def printFooterDetalle = { params ->
+
+
+            def txt = "AVANCE DE OBRA PARCIAL"
+            if (params.completo) {
+                txt = "AVANCE DE OBRA"
+            }
+
+            addCellTabla(tablaDetalles, new Paragraph(txt, fontThFooter), frmtCol8)
+            addCellTabla(tablaDetalles, new Paragraph(numero(params.ant, 2), fontThFooter), frmtSuma)
+            addCellTabla(tablaDetalles, new Paragraph(numero(params.act, 2), fontThFooter), frmtSuma)
+            addCellTabla(tablaDetalles, new Paragraph(numero(params.acu, 2), fontThFooter), frmtSuma)
+        }
+
+
+        sp = 0
+        vocr.each {vo ->
+            if (sp != vo.sbpr__id) {
+                addCellTabla(tablaDetalles, new Paragraph('Subpresupuesto: ' + vo.sbprdscr, fontThTiny), frmtSbpr)
+
+                sp = vo.sbpr__id
+                currentRows++
+                rowsCurPag++
+            }
+
+            addCellTabla(tablaDetalles, new Paragraph(vo.rbrocdgo, fontTdTiny), frmtDtIz)
+            addCellTabla(tablaDetalles, new Paragraph(vo.rbronmbr, fontTdTiny), frmtDtIz)
+
+            addCellTabla(tablaDetalles, new Paragraph(vo.unddcdgo, fontTdTiny), frmtDtDr)
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.vocrpcun, 2, "hide"), fontTdTiny), frmtDtDr)
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.vocrcntd, 2, "hide"), fontTdTiny), frmtDtDr)
+
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.cntdantr, 2, "hide"), fontTdTiny), frmtDtDrBorde)
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.cntdactl, 2, "hide"), fontTdTiny), frmtDtDrBorde)
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.cntdacml, 2, "hide"), fontTdTiny), frmtDtDrBorde)
+
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.vlorantr, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.vloractl, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(vo.vloracml, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+            currentRows++
+            rowsCurPag++
+            sumaTotlAntr += vo.vlorantr
+            sumaTotlActl += vo.vloractl
+            sumaTotlAcml += vo.vloracml
+
+            sumaPrclAntr += vo.vlorantr
+            sumaPrclActl += vo.vloractl
+            sumaPrclAcml += vo.vloracml
+
+            if(currentRows >= maxRows) {
+                printFooterDetalle([ant: sumaPrclAntr, act: sumaPrclActl, acu: sumaPrclAcml])
+
+                sumaPrclAntr = 0
+                sumaPrclActl = 0
+                sumaPrclAcml = 0
+
+                document.add(tablaDetalles)
+
+                printFirmas([tipo: "detalle", orientacion: "vertical"])
+                currentPag++
+
+                //-------------------
+                document.newPage()
+                tablaDetalles = new PdfPTable(11);
+                tablaDetalles.setWidthPercentage(100);
+                tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+                tablaDetalles.setSpacingAfter(1f);
+                printHeaderDetalle([pag: currentPag, total: totalPags])
+                rowsCurPag = 1
+            }
+        }
+
+        printFooterDetalle([ant: sumaTotlAntr,  act: sumaTotlActl, acu: sumaTotlAcml, completo: true])
+
+        def rjplAntr = planillasService.reajusteAnterior(planilla)
+        def rjplAcml = planillasService.reajusteAcumulado(planilla)
+        def rjplActl = rjplAcml - rjplAntr
+
+        addCellTabla(tablaDetalles, new Paragraph("REAJUSTE DE PRECIOS", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(rjplAntr, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(rjplActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(rjplAcml, 2), fontThFooter), frmtSuma)
+
+        addCellTabla(tablaDetalles, new Paragraph("SUBTOTAL", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr + rjplAntr, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl + rjplActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml + rjplAcml, 2), fontThFooter), frmtSuma)
+
+        sql = "select sum(plnlmnto) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
+                "tppl__id = 5 and plnlfcfn < '${planilla.fechaInicio.format('yyy-MM-yy')}'"
+
+        def cstoAntr = cn.rows(sql.toString())[0].suma?:0
+        sql = "select plnlmnto from plnl where plnl__id = (select plnl__id from plnl " +
+                "where plnlpdcs = ${planilla.id})"
+        println "sql.....: $sql"
+        def cstoActl = cn.rows(sql.toString())[0]?.plnlmnto?:0
+        def cstoAcml = cstoAntr + cstoActl
+
+        addCellTabla(tablaDetalles, new Paragraph("RUBROS NO CONTRACTUALES COSTO + PORCENTAJE", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(cstoAntr, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(cstoActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(cstoAcml, 2), fontThFooter), frmtSuma)
+
+        addCellTabla(tablaDetalles, new Paragraph("SUMATORIA DE AVANCE DE OBRA Y COSTO + PORCENTAJE", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr + cstoAntr, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl + cstoActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml + cstoAcml, 2), fontThFooter), frmtSuma)
+
+        sumaTotlAntr += rjplAntr + cstoAntr
+        sumaTotlActl += rjplActl + cstoActl
+        sumaTotlAcml += rjplAcml + cstoAcml
+
+        addCellTabla(tablaDetalles, new Paragraph("TOTAL PLANILLA REAJUSTADA INCLUIDO COSTO + PORCENTAJE", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml, 2), fontThFooter), frmtSuma)
+
+        addCellTabla(tablaDetalles, new Paragraph("DESCUENTOS CONTRACTUALES", fontThFooter), frmtCol11)
+
+        sql = "select sum(plnldsct) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
+                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo = '${planilla.tipoContrato}'"
+        println "sql.....: $sql"
+        def antcAntr = cn.rows(sql.toString())[0].suma?:0
+        def antcActl = planilla.descuentos
+        def antcAcml = antcAntr + antcActl
+
+        addCellTabla(tablaDetalles, new Paragraph("ANTICIPO", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(antcAntr, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(antcActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(antcAcml, 2), fontThFooter), frmtSuma)
+
+        sql = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl where " +
+                "cntr__id = ${planilla.contrato.id} and plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' " +
+                " and plnltipo = '${planilla.tipoContrato}')"
+        println "sql.....: $sql"
+        def mltaAntr = cn.rows(sql.toString())[0].suma?:0
+
+        sql = "select sum(plnlmles) suma from plnl where " +
+                "cntr__id = ${planilla.contrato.id} and plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and " +
+                "plnltipo = '${planilla.tipoContrato}'"
+        println "sql.....: $sql"
+        mltaAntr += cn.rows(sql.toString())[0].suma?:0
+
+        sql = "select sum(mlplmnto) suma from mlpl where plnl__id = ${planilla.id}"
+        println "sql.....: $sql"
+        def mltaActl = cn.rows(sql.toString())[0].suma?:0
+
+        sql = "select sum(plnlmles) suma from plnl where plnl__id = ${planilla.id}"
+        println "sql.....: $sql"
+        mltaActl += cn.rows(sql.toString())[0].suma?:0
+
+        def mltaAcml = mltaAntr + mltaActl
+
+
+        addCellTabla(tablaDetalles, new Paragraph("MULTAS", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(mltaAntr, 2, "hide"), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(mltaActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(mltaAcml, 2), fontThFooter), frmtSuma)
+
+        sql = "select sum(plnlnpvl) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
+                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}'"
+        println "sql.....: $sql"
+        def nopgAntr = cn.rows(sql.toString())[0].suma?:0
+        def nopgActl = planilla.noPagoValor
+        def nopgAcml = nopgAntr + nopgActl
+
+        sumaTotlAntr -= mltaAntr + antcAntr + nopgAntr
+        sumaTotlActl -= mltaActl + antcActl + nopgActl
+        sumaTotlAcml -= mltaAcml + antcAcml + nopgAcml
+
+        if((nopgAntr + nopgActl + nopgAcml) > 0) {
+            addCellTabla(tablaDetalles, new Paragraph(planilla.noPago, fontThFooter), frmtCol8)
+            addCellTabla(tablaDetalles, new Paragraph(numero(nopgAntr,2), fontThFooter), frmtSuma)
+            addCellTabla(tablaDetalles, new Paragraph(numero(nopgActl, 2), fontThFooter), frmtSuma)
+            addCellTabla(tablaDetalles, new Paragraph(numero(nopgAcml, 2), fontThFooter), frmtSuma)
+        }
+
+        addCellTabla(tablaDetalles, new Paragraph("VALOR LIQUIDO A PAGAR", fontThFooter), frmtCol8)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl, 2), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml, 2), fontThFooter), frmtSuma)
+
+        document.add(tablaDetalles)
+
+        document.add(firmas("detalle", "vertical", planilla))
+
+        document.close();
+        pdfw.close()
+        return baos
+    }
+
+
+    def titlLogo() {
+        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
+        Image logo = Image.getInstance(logoPath);
+        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
+
+        return logo
+    }
+
+    def titlInst(espacio, planilla, obra) {
+        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("PLANILLA DE ${planilla.tipoPlanilla.nombre.toUpperCase()} DE LA OBRA " + obra.nombre, fontTituloGad));
+        addEmptyLine(preface, espacio);
+
+        return preface
+    }
+
+    def titlSbtt() {
+        Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+        Paragraph preface2 = new Paragraph();
+        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        addEmptyLine(preface2, 1);
+
+        return preface2
+    }
+
+    def encabezado(espacio, size, planilla) {
+        def obra = planilla.contrato.obra
+        def contrato = planilla.contrato
+
+        Font fontThUsar = new Font(Font.TIMES_ROMAN, size, Font.BOLD);
+        Font fontTdUsar = new Font(Font.TIMES_ROMAN, size, Font.NORMAL);
+        def bordeTdSinBorde = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+
+        PdfPTable tablaHeaderPlanilla = new PdfPTable(5);
+        tablaHeaderPlanilla.setWidthPercentage(100);
+        tablaHeaderPlanilla.setWidths(arregloEnteros([12, 24, 10, 12, 24]))
+        tablaHeaderPlanilla.setWidthPercentage(100);
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Obra", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.nombre, fontTdUsar), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Lugar", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph((obra.lugar?.descripcion ?: ""), fontTdUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Planilla", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.numero, fontTdUsar), bordeTdSinBorde)
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Ubicación", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre, fontTdUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Monto contrato", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Contratista", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Período", fontThUsar), bordeTdSinBorde)
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(ponePeriodoPlanilla(planilla), fontTdUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Plazo", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.plazo, 0) + " días", fontTdUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Valor obra", fontThUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+
+        return tablaHeaderPlanilla
+    }
+
+    def firmas(tipo, orientacion, planilla) {
+        def obra = planilla.contrato.obra
+        def contrato = planilla.contrato
+
+        def tablaFirmas = new PdfPTable(5);
+        tablaFirmas.setWidthPercentage(100);
+
+        def parametros = Parametros.get(1)
+
+        def contratista = planilla.contrato.oferta.proveedor
+        def fiscalizador = planilla.fiscalizador
+        def subdirector = parametros.subdirector
+        def administrador = contrato.administrador
+
+        def strContratista = nombrePersona(contratista, "prov") + "\nContratista"
+        def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
+        def strSubdirector = "Ing. Miguel Velasteguí" + "\nSubdirector"
+        def strAdmin = nombrePersona(administrador) + "\nAdministrador del Contrato - Delegado"
+        def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
+        def strFechaAprobacion = "\nFecha de aprobación"
+
+        Font fontThFirmas = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdFirmas = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        if (tipo == "detalle") {
+            fontThFirmas = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
+            fontTdFirmas = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL);
+
+            tablaFirmas.setWidths(arregloEnteros([35, 5, 30, 5, 35]))
+
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 40, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            /* un espacio en blanco hace que no se imprima la línea para la firma */
+            addCellTabla(tablaFirmas, new Paragraph(" ", fontThFirmas), [height: 40, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            // pone linea en blanco //
+            addCellTabla(tablaFirmas, new Paragraph(" ", fontThFirmas), [height: 40, bwb: 1, bcb: Color.WHITE, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+
+            addCellTabla(tablaFirmas, new Paragraph(strContratista, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph(strFiscalizador, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tablaFirmas, new Paragraph(strFechaPresentacion, fontTdFirmas), [height: 35, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_TOP])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph(strFechaAprobacion, fontTdFirmas), [height: 35, bcb: Color.WHITE, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_TOP])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+            tablaFirmas.setKeepTogether(true)
+
+        } else if (tipo == "otro") {
+            if (orientacion == "horizontal") {
+                tablaFirmas.setWidths(arregloEnteros([30,5, 30,5, 30]))
+            } else if (orientacion == "vertical") {
+                tablaFirmas.setWidths(arregloEnteros([25, 5,35,5, 25]))
+            }
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 35, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph(strFiscalizador, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        }
+
+        return tablaFirmas
     }
 
 

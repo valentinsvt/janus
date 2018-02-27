@@ -2393,8 +2393,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 nombre  : vol.item.nombre,
                 unidad  : vol.item.unidad.codigo,
                 cantidad: vol.volumenCantidad,
-                precioU : precio,
-                parcial : precio * vol.volumenCantidad,
+                precioU : vol.volumenPrecio,
+                parcial : vol.volumenSubtotal,
                 volumen : vol
         ]
 
