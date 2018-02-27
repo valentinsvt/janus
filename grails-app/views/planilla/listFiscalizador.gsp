@@ -179,14 +179,12 @@
                                 </g:if>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'L', 'R']}">
                                     <g:if test="${(contrato?.fiscalizador?.id == session.usuario.id)}">
-%{--
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo != 'L'}">
                                         <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]"
                                                 rel="tooltip" title="Detalles" class="btn btn-small">
                                             <i class="icon-reorder icon-large"></i>
                                         </g:link>
                                         </g:if>
---}%
                                         <g:if test="${!planillaInstance.fechaMemoSalidaPlanilla}">
                                             <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
                                                 <i class="icon-gear"></i>
@@ -195,6 +193,7 @@
                                     </g:if>
                                 </g:if>
 
+%{--
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['A', 'B']}">
                                     <g:link controller="planilla2" action="resumen" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
                                         <i class="icon-table icon-large"></i>
@@ -205,6 +204,7 @@
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:elseif>
+--}%
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
                                     <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">

@@ -1818,6 +1818,120 @@ class ReportePlanillas3Controller {
         response.getOutputStream().write(b)
     }
 
+    /**
+     * Obtiene los reportes pdf de tablas, resumen de reajustes, multas y detalle de planilla si existe
+     * crear reporte de resumen de reajustes
+     **/
+    def reportePlanillaTotal() {
+        println "reportePlanillaTotal params: $params"
+        def planilla = Planilla.get(params.id)
+
+        if (planilla.tipoPlanilla.codigo == 'Q') {
+            if (!planilla.contrato.fechaPedidoRecepcionContratista || !planilla.contrato.fechaPedidoRecepcionFiscalizador) {
+                flash.message = "Por favor ingrese las fechas de pedido de recepción para generar la planilla " +
+                        "final de avance (liquidación)"
+                flash.clase = "alert-error"
+                redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: planilla.contrato.id)
+                return
+            }
+        }
+
+        def rjpl = ReajustePlanilla.findAllByPlanilla(planilla)
+        def reajustes = []
+        def pl = new ByteArrayOutputStream()
+        byte[] b
+        def pdfs = []  /** pdfs a armar en el nuevo documento **/
+        def contador = 0
+        def name = "reajustes_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+
+        rjpl.each {rj ->
+            reajustes.add([planilla: rj.planilla, reajuste: rj.fpReajuste])
+        }
+        println "reajustes: $reajustes"
+        reajustes.unique()
+        println "reajustes unique: $reajustes"
+
+        /* parte de complemetario */
+        def rjplCmpl = ReajustePlanilla.findAllByPlanilla(planilla.planillaCmpl)
+        def rjCmpl = []
+
+        rjplCmpl.each {rj ->
+            rjCmpl.add([planilla: rj.planilla, reajuste: rj.fpReajuste])
+        }
+        rjCmpl.unique()
+        println "rlCmpl unique: $rjCmpl"
+
+
+
+        //** genera B0, P0 y Fr de la planilla **
+        println "reajustes: ${reajustes}"
+        reajustes.each {
+            pl = reporteTablas(it.planilla, it.reajuste)
+            pdfs.add(pl.toByteArray())
+            contador++
+        }
+
+        rjCmpl.each {
+            pl = reporteTablas(it.planilla, it.reajuste)
+            pdfs.add(pl.toByteArray())
+            contador++
+        }
+
+        if(planilla.tipoPlanilla.codigo == 'A') {
+            println "invoca a resumen... planilla"
+            pl = resumenAnticipo(planilla)
+            pdfs.add(pl.toByteArray())
+            contador++
+        }
+
+        if(planilla.tipoPlanilla.codigo in ['P', 'Q']) {
+            println "invoca multas"
+            pl = multas(planilla)
+            pdfs.add(pl.toByteArray())
+            contador++
+
+            pl = multas(planilla.planillaCmpl)
+            pdfs.add(pl.toByteArray())
+            contador++
+
+            println "invoca detalle"
+            pl = detalle(planilla)
+            pdfs.add(pl.toByteArray())
+            contador++
+        }
+
+        if(contador > 1) {
+            def baos = new ByteArrayOutputStream()
+            Document document
+            document = new Document(PageSize.A4);
+
+            def pdfw = PdfWriter.getInstance(document, baos);
+            document.open();
+            PdfContentByte cb = pdfw.getDirectContent();
+
+            pdfs.each {f ->
+                PdfReader reader = new PdfReader(f);
+                for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+                    //nueva página
+                    document.newPage();
+                    //importa la página "i" de la fuente "reader"
+                    PdfImportedPage page = pdfw.getImportedPage(reader, i);
+                    //añade página
+                    cb.addTemplate(page, 0, 0);
+                }
+            }
+            document.close();
+            b = baos.toByteArray();
+        } else {
+            b = pl.toByteArray();
+        }
+
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=${name}")
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
 
     /**
      * Imprime B0, P0 y Fr de la planilla
