@@ -2798,12 +2798,12 @@ class ReportePlanillas3Controller {
         printFooterDetalle([ant: sumaTotlAntr,  act: sumaTotlActl, acu: sumaTotlAcml, completo: true])
 
         def rjplAntr = planillasService.reajusteAnterior(planilla)
-        def rjplAntrCp = planillasService.reajusteAnterior(planilla.planillaCmpl)
         def rjplAcml = planillasService.reajusteAcumulado(planilla)
-        def rjplAcmlCp = planillasService.reajusteAcumulado(planilla.planillaCmpl)
         def rjplActl = rjplAcml - rjplAntr
 
         if(tipoRprt == 'T') {
+            def rjplAntrCp = planillasService.reajusteAnterior(planilla.planillaCmpl)
+            def rjplAcmlCp = planillasService.reajusteAcumulado(planilla.planillaCmpl)
             rjplAntr += rjplAntrCp
             rjplAcml += rjplAcmlCp
             rjplActl = rjplAcml - rjplAntr
