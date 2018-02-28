@@ -3339,8 +3339,15 @@ class Reportes2Controller {
         fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
         document.add(fecha);
 
+        def cmpl = Contrato.findByPadre(contrato)
+        def txto = " "
+        if(cmpl) {
+            txto = " Incluye plazo del contrato complementario: ${cmpl.codigo}"
+        }
         Paragraph plazo = new Paragraph();
-        plazo.add(new Paragraph("Plazo: ${obra?.plazoEjecucionMeses} Meses" + " ${obra?.plazoEjecucionDias} Días", info))
+//        plazo.add(new Paragraph("Plazo: ${obra?.plazoEjecucionMeses} Meses" + " ${obra?.plazoEjecucionDias} Días", info))
+        plazo.add(new Paragraph("Plazo: ${contrato?.plazo} Días ${txto}", info))
+
         document.add(plazo);
 
         Paragraph rutaCritica = new Paragraph();
