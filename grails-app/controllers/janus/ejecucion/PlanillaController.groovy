@@ -1719,7 +1719,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println "final..: ${tiposPlanilla.codigo} contrato: $contrato"
 
         //planilla asociada
-        def tiposPlan = TipoPlanilla.findAllByCodigoInList(["P", "Q", "O"])
+        def tiposPlan = TipoPlanilla.findAllByCodigoInList(["P", "Q", "R", ])
         def planillasAvanceAsociada = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, tiposPlan, [sort: 'fechaInicio'])
 
         def formulasVarias = FormulaPolinomicaReajuste.findAllByContrato(contrato)

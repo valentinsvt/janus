@@ -4,7 +4,7 @@
     <data-source source="LOCAL" name="janus dev" uuid="17c36bb3-0605-4ec5-8714-438fc43737d7">
       <driver-ref>postgresql</driver-ref>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://10.0.0.9:5432/janus_prba</jdbc-url>
+      <jdbc-url>jdbc:postgresql://10.0.0.9:5432/janus_prba2</jdbc-url>
       <libraries>
         <library>
           <url>file://$PROJECT_DIR$/../happyNew/lib/postgresql-9.1-903.jdbc4.jar</url>

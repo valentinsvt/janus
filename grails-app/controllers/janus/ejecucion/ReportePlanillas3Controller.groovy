@@ -1728,7 +1728,7 @@ class ReportePlanillas3Controller {
      * crear reporte de resumen de reajustes
      **/
     def reportePlanillaNuevo() {
-        println "reportePlanillaNuevo params: $params"
+//        println "reportePlanillaNuevo params: $params"
         def planilla = Planilla.get(params.id)
 
         if (planilla.tipoPlanilla.codigo == 'Q') {
@@ -1752,16 +1752,16 @@ class ReportePlanillas3Controller {
         rjpl.each {rj ->
             reajustes.add([planilla: rj.planilla, reajuste: rj.fpReajuste])
         }
-        println "reajustes: $reajustes"
+//        println "reajustes: $reajustes"
         reajustes.unique()
-        println "reajustes unique: $reajustes"
+//        println "reajustes unique: $reajustes"
 
         /* todo: hacer que se imprima el reporteTablas tantas veces como fprj hayan
         * crear nuevas FP en el contrato 24, igual que en la BD janus_prdc para probar */
 
 
         //** genera B0, P0 y Fr de la planilla **
-        println "reajustes: ${reajustes}"
+//        println "reajustes: ${reajustes}"
         reajustes.each {
             pl = reporteTablas(it.planilla, it.reajuste)
             pdfs.add(pl.toByteArray())
@@ -1774,11 +1774,13 @@ class ReportePlanillas3Controller {
             contador++
         }
 
-        if(planilla.tipoPlanilla.codigo in ['P', 'Q']) {
+        if(planilla.tipoPlanilla.codigo in ['P', 'Q', 'R']) {
             println "invoca multas"
             pl = multas(planilla)
-            pdfs.add(pl.toByteArray())
-            contador++
+            if(pl) {
+                pdfs.add(pl.toByteArray())
+                contador++
+            }
 
             println "invoca detalle"
             pl = detalle(planilla, planilla.tipoContrato)
@@ -2568,13 +2570,17 @@ class ReportePlanillas3Controller {
                 }
                 document.add(tablaMultaUsu);
             }
+
+            document.add(firmas("otro", "vertical", planilla))
+            document.close();
+            pdfw.close()
+            return baos
+        } else {
+            return null
         }
 
-        document.add(firmas("otro", "vertical", planilla))
 
-        document.close();
-        pdfw.close()
-        return baos
+
     }
 
 
@@ -2878,7 +2884,7 @@ class ReportePlanillas3Controller {
 
 
         addCellTabla(tablaDetalles, new Paragraph("MULTAS", fontThFooter), frmtCol8)
-        addCellTabla(tablaDetalles, new Paragraph(numero(mltaAntr, 2, "hide"), fontThFooter), frmtSuma)
+        addCellTabla(tablaDetalles, new Paragraph(numero(mltaAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(mltaActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(mltaAcml, 2), fontThFooter), frmtSuma)
 
@@ -2893,8 +2899,9 @@ class ReportePlanillas3Controller {
         sumaTotlActl -= mltaActl + antcActl + nopgActl
         sumaTotlAcml -= mltaAcml + antcAcml + nopgAcml
 
+//        println "nopgAntr $nopgAntr, nopgActl $nopgActl, nopgAcml $nopgAcml"
         if((nopgAntr + nopgActl + nopgAcml) > 0) {
-            addCellTabla(tablaDetalles, new Paragraph(planilla.noPago, fontThFooter), frmtCol8)
+            addCellTabla(tablaDetalles, new Paragraph(planilla.noPago?:" ", fontThFooter), frmtCol8)
             addCellTabla(tablaDetalles, new Paragraph(numero(nopgAntr,2), fontThFooter), frmtSuma)
             addCellTabla(tablaDetalles, new Paragraph(numero(nopgActl, 2), fontThFooter), frmtSuma)
             addCellTabla(tablaDetalles, new Paragraph(numero(nopgAcml, 2), fontThFooter), frmtSuma)
