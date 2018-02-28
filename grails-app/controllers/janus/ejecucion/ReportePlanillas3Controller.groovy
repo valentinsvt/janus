@@ -2798,8 +2798,16 @@ class ReportePlanillas3Controller {
         printFooterDetalle([ant: sumaTotlAntr,  act: sumaTotlActl, acu: sumaTotlAcml, completo: true])
 
         def rjplAntr = planillasService.reajusteAnterior(planilla)
+        def rjplAntrCp = planillasService.reajusteAnterior(planilla.planillaCmpl)
         def rjplAcml = planillasService.reajusteAcumulado(planilla)
+        def rjplAcmlCp = planillasService.reajusteAcumulado(planilla.planillaCmpl)
         def rjplActl = rjplAcml - rjplAntr
+
+        if(tipoRprt == 'T') {
+            rjplAntr += rjplAntrCp
+            rjplAcml += rjplAcmlCp
+            rjplActl = rjplAcml - rjplAntr
+        }
 
         addCellTabla(tablaDetalles, new Paragraph("REAJUSTE DE PRECIOS", fontThFooter), frmtCol8)
         addCellTabla(tablaDetalles, new Paragraph(numero(rjplAntr, 2), fontThFooter), frmtSuma)
