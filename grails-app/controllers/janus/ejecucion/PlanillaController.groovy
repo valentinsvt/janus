@@ -3007,7 +3007,9 @@ class PlanillaController extends janus.seguridad.Shield {
         def contrato = Contrato.get(params.contrato)
         def cmpl = Contrato.findByPadre(contrato)
 
-        if(cmpl) redirect (action: "detalleNuevo", params: params)
+        redirect (action: "detalleNuevo", params: params)
+
+//        if(cmpl) redirect (action: "detalleNuevo", params: params)
 
         def obra = contrato.obra
         def detalle = [:]
@@ -4156,7 +4158,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //                } else if((p.tipoPlanilla.toString() == 'P') && (p == pl.last())) {  // reajusta sólo planillas de avance
             }
 
-            listPl = ['P']
+            listPl = ['P', 'Q']
             pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThanAndTipoContrato(plnl.contrato,
                         TipoPlanilla.findAllByCodigoInList(listPl), plnl.fechaPresentacion, plnl.tipoContrato, [sort: 'fechaPresentacion'])
             println "planillas P porcesar: ${pl.size()}: ${pl.id}"
