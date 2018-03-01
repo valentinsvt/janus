@@ -13,6 +13,7 @@ import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfReader
 import com.lowagie.text.pdf.PdfWriter
 import com.lowagie.text.Rectangle
+import janus.Contrato
 import janus.DbConnectionService
 import janus.Obra
 import janus.Parametros
@@ -1776,7 +1777,7 @@ class ReportePlanillas3Controller {
 
         if(planilla.tipoPlanilla.codigo in ['P', 'Q', 'R']) {
             println "invoca multas"
-            pl = multas(planilla)
+            pl = multas(planilla, "")
             if(pl) {
                 pdfs.add(pl.toByteArray())
                 contador++
@@ -1866,7 +1867,7 @@ class ReportePlanillas3Controller {
 
 
         //** genera B0, P0 y Fr de la planilla **
-//        println "reajustes: ${reajustes}"
+        println "reajustes: ${reajustes}"
         reajustes.each {
             pl = reporteTablas(it.planilla, it.reajuste)
             pdfs.add(pl.toByteArray())
@@ -1888,7 +1889,7 @@ class ReportePlanillas3Controller {
 
         if(planilla.tipoPlanilla.codigo in ['P', 'Q']) {
 //            println "invoca multas"
-            pl = multas(planilla)
+            pl = multas(planilla, 'T')
             pdfs.add(pl.toByteArray())
             contador++
 
@@ -1985,7 +1986,7 @@ class ReportePlanillas3Controller {
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
         document.add(titlSbtt());
-        document.add(encabezado(2, 10, planilla))
+        document.add(encabezado(2, 10, planilla, ""))
 
         /* ********************************************* Tabla B0 *****************************************************/
 
@@ -2076,7 +2077,7 @@ class ReportePlanillas3Controller {
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
         document.add(titlSbtt());
-        document.add(encabezado(2, 10, planilla))
+        document.add(encabezado(2, 10, planilla, ""))
 
         Paragraph tituloP0 = new Paragraph();
         addEmptyLine(tituloP0, 1);
@@ -2148,7 +2149,7 @@ class ReportePlanillas3Controller {
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
         document.add(titlSbtt());
-        document.add(encabezado(2, 10, planilla))
+        document.add(encabezado(2, 10, planilla, ""))
 
         Paragraph tituloFr = new Paragraph();
         addEmptyLine(tituloFr, 1);
@@ -2349,7 +2350,7 @@ class ReportePlanillas3Controller {
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
         document.add(titlSbtt());
-        document.add(encabezado(2, 10, planilla))
+        document.add(encabezado(2, 10, planilla, ""))
 
 
         Paragraph titulo = new Paragraph();
@@ -2391,10 +2392,14 @@ class ReportePlanillas3Controller {
     }
 
 
-    def multas(planilla) {
+    def multas(planilla, tipo) {
 //        println "reporteTablas de la planilla ${planilla.id}"
         def obra = planilla.contrato.obra
-
+        def monto = planilla.contrato.monto
+        if(tipo == 'T') {
+            def cmpl = Contrato.findByPadre(planilla.contrato)
+            monto += cmpl.monto
+        }
         /* crea el PDF */
         def baos = new ByteArrayOutputStream()
         def multaPlanilla = MultasPlanilla.findAllByPlanilla(planilla)
@@ -2427,7 +2432,7 @@ class ReportePlanillas3Controller {
             document.add(titlLogo())
             document.add(titlInst(1, planilla, obra));
             document.add(titlSbtt());
-            document.add(encabezado(2, 10, planilla))
+            document.add(encabezado(2, 10, planilla, tipo))
 
 
             Paragraph tituloMt = new Paragraph();
@@ -2589,6 +2594,15 @@ class ReportePlanillas3Controller {
         def obra = planilla.contrato.obra
         def cntr = planilla.contrato
         def cn = dbConnectionService.getConnection()
+        def monto = planilla.contrato.monto
+        if(tipoRprt in ['C', 'T']) {
+            def cmpl = Contrato.findByPadre(planilla.contrato)
+            if(tipoRprt == 'C') {
+                monto = cmpl.monto
+            } else {
+                monto += cmpl.monto
+            }
+        }
 
         /* crea el PDF */
         def baos = new ByteArrayOutputStream()
@@ -2640,7 +2654,8 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaHeaderDetalles, new Paragraph("Ubicación", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaHeaderDetalles, new Paragraph("Parroquia " + obra.parroquia?.nombre + " Cantón " + obra.parroquia?.canton?.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
             addCellTabla(tablaHeaderDetalles, new Paragraph("Monto", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaHeaderDetalles, new Paragraph(numero(planilla.contrato.monto, 2), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+//            addCellTabla(tablaHeaderDetalles, new Paragraph(numero(planilla.contrato.monto, 2), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(numero(monto, 2), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
             addCellTabla(tablaHeaderDetalles, new Paragraph("Pág. " + params.pag + " de " + params.total, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
             addCellTabla(tablaHeaderDetalles, new Paragraph("Contratista", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -2960,9 +2975,21 @@ class ReportePlanillas3Controller {
         return preface2
     }
 
-    def encabezado(espacio, size, planilla) {
+    def encabezado(espacio, size, planilla, tipo) {
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
+//        def cntrCmpl = janus.Contrato.findByPadre(planilla.contrato)
+//        println "contrato cmpl: $cntrCmpl"
+        def monto = planilla.contrato.monto
+        if(tipo == 'T') {
+            def cmpl = Contrato.findByPadre(planilla.contrato)
+            monto += cmpl.monto
+        }
+        if(planilla.tipoContrato == 'C') {
+            contrato = janus.Contrato.findByPadre(planilla.contrato)
+            monto = contrato.monto
+        }
+
 
         Font fontThUsar = new Font(Font.TIMES_ROMAN, size, Font.BOLD);
         Font fontTdUsar = new Font(Font.TIMES_ROMAN, size, Font.NORMAL);
@@ -2986,7 +3013,8 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre, fontTdUsar), bordeTdSinBorde)
         addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
         addCellTabla(tablaHeaderPlanilla, new Paragraph("Monto contrato", fontThUsar), bordeTdSinBorde)
-        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+//        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(monto, 2), fontTdUsar), bordeTdSinBorde)
 
         addCellTabla(tablaHeaderPlanilla, new Paragraph("Contratista", fontThUsar), bordeTdSinBorde)
         addCellTabla(tablaHeaderPlanilla, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdUsar), bordeTdSinBorde)
@@ -2998,7 +3026,8 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(planilla.contrato.plazo, 0) + " días", fontTdUsar), bordeTdSinBorde)
         addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThUsar), bordeTdSinBorde)
         addCellTabla(tablaHeaderPlanilla, new Paragraph("Valor obra", fontThUsar), bordeTdSinBorde)
-        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+//        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdUsar), bordeTdSinBorde)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(monto, 2), fontTdUsar), bordeTdSinBorde)
 
         return tablaHeaderPlanilla
     }

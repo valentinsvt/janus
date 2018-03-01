@@ -4241,8 +4241,9 @@ class PlanillaController extends janus.seguridad.Shield {
             def fchaFinPlanillado = plnl.fechaInicio
             println "dias planillados: $diasPlanillados, fchaFinPlanillado: $fchaFinPlanillado, periodo: $prdo"
 
-//            println "antes del while total: $totalCr"
+            println "antes del while total: $totalCr"
             def total = 0.0
+            def totalCmpl = 0.0
             def calcular = true
             if(plnl.tipoPlanilla.codigo == 'R') {
                 prdo = ReajustePlanilla.executeQuery("select max(periodo) from ReajustePlanilla where planilla = :c", [c: pl?.last()])[0]
@@ -4275,11 +4276,19 @@ class PlanillaController extends janus.seguridad.Shield {
 
                     parcial = 0.0
                     total = totalCr
+                    totalCmpl = 0.0
                     pems.each {ms ->
                         if(ms.fechaFin >= fchaFinPlanillado){
-                            parcial += ms.parcialCronograma
+                            if(plnl.tipoContrato == 'P') {
+                                parcial += ms.parcialContrato
+                            } else {
+                                parcial += ms.parcialCmpl
+                                totalCmpl += ms.parcialCmpl
+                            }
                         }
-                        total += ms.parcialCronograma
+//                        total += ms.parcialCronograma
+                        total += parcial
+
                     }
 
                     println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
@@ -4307,13 +4316,21 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
 
                     parcial = 0.0
-                    total = totalCr
+                    total = totalCr /* revisar TODO */
+                    if((totalCmpl > 0) && pems[0].fechaFin < fchaFinPlanillado) total += totalCmpl
                     pems.each { ms ->
-//                        println "ms.parcialCronograma ${ms.parcialCronograma}"
+                        println "ms.parcialCronograma ${ms.parcialCmpl}, ${ms.fechaFin} >= ${fchaFinPlanillado}"
                         if(ms.fechaFin >= fchaFinPlanillado) {
-                            parcial += ms.parcialCronograma
-                        }
-                        total += ms.parcialCronograma
+                            if(plnl.tipoContrato == 'P') {
+                                parcial += ms.parcialContrato
+
+                            } else {
+                                parcial += ms.parcialCmpl
+                            }
+//                            parcial += ms.parcialCronograma
+                        } else parcial = 0
+                        total += parcial
+                        println ".....total: $total"
                     }
 
                     println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total, prdo: $prdo"
@@ -4695,7 +4712,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def sql= "select sum(vlobsbtt) suma from fpsp, vlob where vlob.sbpr__id = fpsp.sbpr__id and " +
                 "fprj__id = ${fprj} and obra__id = ${cntr.obraContratada.id}"
-//        println "--sql: $sql"
+        println "prorrateaPo--sql: $sql"
         def valor = cn.rows(sql.toString())[0].suma * plnl/cntr.monto
         println "valor: $valor"
         return valor

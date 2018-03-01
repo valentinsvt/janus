@@ -12,6 +12,8 @@ class PeriodoEjecucion {
     Date fechaFin
     Contrato contrato
     double parcialCronograma=0
+    double parcialContrato=0
+    double parcialCmpl=0
 
     static auditable = true
     static mapping = {
@@ -29,6 +31,8 @@ class PeriodoEjecucion {
             fechaFin column: 'prejfcfn'
             contrato column: 'cntr__id'
             parcialCronograma column: 'prejcrpa'
+            parcialContrato column: 'prejcntr'
+            parcialCmpl column: 'prejcmpl'
         }
     }
     static constraints = {
@@ -38,6 +42,8 @@ class PeriodoEjecucion {
         fechaFin(blank: false, nullable: false, attributes: [title: 'fecha fin'])
         contrato(blank: false, nullable: false, attributes: [title: 'contrato'])
         parcialCronograma(blank: false, nullable: false)
+        parcialContrato(blank: false, nullable: false)
+        parcialCmpl(blank: false, nullable: false)
     }
 
 }
