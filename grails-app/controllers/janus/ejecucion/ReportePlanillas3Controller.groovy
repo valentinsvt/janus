@@ -2477,6 +2477,9 @@ class ReportePlanillas3Controller {
 
                 if(mt.tipoMulta.id == 2){   // incumplimiento del cronograma
                     def acPlanilla = reajustesPlanilla.last().acumuladoPlanillas
+                    if(tipo == 'T') {
+                        acPlanilla += planilla.planillaCmpl.valor
+                    }
                     def acCronograma = reajustesPlanilla.last().acumuladoCronograma
 //                    println "reajustes: ${reajustesPlanilla.last().acumuladoCronograma}"
 
