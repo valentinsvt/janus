@@ -37,5 +37,10 @@ ${html}
             return false;
         });
 
+        $(".btnPrintTotal").click(function () {
+            location.href = "${createLink(action:'reporteAvanceTotal', id:contrato.id, params:[plnl:plnl])}";
+            return false;
+        });
+
     });
 </script>

@@ -3,6 +3,7 @@ package janus.ejecucion
 import groovy.json.JsonBuilder
 import janus.*
 import janus.actas.Acta
+import janus.pac.CrngEjecucionObra
 import janus.pac.CronogramaContrato
 import janus.pac.CronogramaEjecucion
 import janus.pac.DocumentoProceso
@@ -2609,7 +2610,8 @@ class PlanillaController extends janus.seguridad.Shield {
                             def diasUsados = 0
                             def diasPeriodo = pe.fechaFin - pe.fechaInicio + 1
 //                            println "\t\tdias periodo: " + diasPeriodo
-                            def crono = CronogramaEjecucion.findAllByPeriodo(pe)
+//                            def crono = CronogramaEjecucion.findAllByPeriodo(pe)
+                            def crono = CrngEjecucionObra.findAllByPeriodo(pe)
                             def valorPeriodo = crono.sum { it.precio }
 //                            println "\t\tvalor periodo: " + valorPeriodo
                             if (per) {
