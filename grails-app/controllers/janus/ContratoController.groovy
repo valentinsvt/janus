@@ -164,8 +164,10 @@ class ContratoController extends janus.seguridad.Shield {
         def errores = ""
 
         //tiene q tener cronograma y formula polinomica
-        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
-        def cronos = CronogramaContrato.findAllByVolumenObraInList(detalle)
+//        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def detalle = VolumenContrato.findAllByObra(obra, [sort: "volumenOrden"])
+//        def cronos = CronogramaContrato.findAllByVolumenObraInList(detalle)
+        def cronos = CronogramaContratado.findAllByVolumenContratoInList(detalle)
 
         println "suma de la obra: ${cronos.precio.sum()}, valor de la obra: ${contrato.monto}"
         if (cronos?.precio?.sum()?.round(2) != contrato?.monto?.round(2)) {
@@ -195,7 +197,7 @@ class ContratoController extends janus.seguridad.Shield {
         }
         def crono = 0
         detalle.each {
-            def tmp = CronogramaContrato.findAllByVolumenObra(it)
+            def tmp = CronogramaContratado.findAllByVolumenContrato(it)
             tmp.each { tm ->
                 crono += tm.porcentaje
 //                crono += tm.precio

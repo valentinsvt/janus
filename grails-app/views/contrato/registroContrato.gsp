@@ -455,21 +455,13 @@
             <div class="botones">
 
                 <ul class="nav">
+%{--
                     <li>
                         <g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">
                             <i class="icon-th"></i> Cronograma
                         </g:link>
                     </li>
-                    %{--<li>--}%
-                    %{--<g:link controller="cronogramaContrato" action="nuevoCronograma" id="${contrato?.id}" style="color: #702213;" title="Nuevo Cronograma Contrato">--}%
-                    %{--<i class="icon-th"></i> Cronograma contrato--}%
-                    %{--</g:link>--}%
-                    %{--</li>--}%
-                    %{--<li>--}%
-                    %{--<g:link controller="contrato" action="fpComple" id="${contrato?.id}" title="Fórmula Polinómica del Complementario">--}%
-                    %{--<i class="fa icon-th"></i> FP del Complementario--}%
-                    %{--</g:link>--}%
-                    %{--</li>--}%
+--}%
                     <li>
                         <g:link action="copiarPolinomica" id="${contrato?.id}"><i class="icon-superscript"></i> F. polinómica</g:link>
                     </li>
