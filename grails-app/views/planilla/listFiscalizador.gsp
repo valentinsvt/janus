@@ -208,7 +208,8 @@
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
                                     <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
-                                        <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
+                                        <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]"
+                                                rel="tooltip" title="Detalles" class="btn btn-small">
                                             <i class="icon-reorder icon-large"></i>
                                         </g:link>
                                     </g:if>
@@ -221,11 +222,12 @@
                                     </g:link>
                                 </g:if>
 --}%
-
+                            <g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) > 0}">
                                 <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
-                                        class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="ImprimirNuevo">
+                                        class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Nuevo">
                                     <i class="icon-print"></i>
                                 </g:link>
+                            </g:if>
 
                                 <g:if test="${planillaInstance.planillaCmpl && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) > 0}">
                                 <g:link controller="reportePlanillas3" action="reportePlanillaTotal" id="${planillaInstance.id}"
