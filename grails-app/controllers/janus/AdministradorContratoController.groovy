@@ -96,7 +96,9 @@ class AdministradorContratoController extends janus.seguridad.Shield {
     def adminContrato () {
         def contrato = Contrato.get(params.contrato)
         def dptoDireccion = Departamento.get(contrato?.depAdministrador?.id)
-        def personal = Persona.findAllByActivoAndDepartamento(1, dptoDireccion, [sort: 'apellido'])
+        def dptos = Departamento.findAllByDireccion(Direccion.get(dptoDireccion.direccion.id))
+//        def personal = Persona.findAllByActivoAndDepartamento(1, dptoDireccion, [sort: 'apellido'])
+        def personal = Persona.findAllByActivoAndDepartamentoInList(1, dptos, [sort: 'apellido'])
 
         [administradorContratoInstanceList: AdministradorContrato.list(params), params: params, personal: personal]
     }
