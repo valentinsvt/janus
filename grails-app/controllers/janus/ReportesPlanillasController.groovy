@@ -424,7 +424,7 @@ class ReportesPlanillasController {
 
     def reporteAvanceUI() {
         def contrato = Contrato.get(params.id.toLong())
-        def tppl = TipoPlanilla.findAllByCodigoInList(["P", "Q"])
+        def tppl = TipoPlanilla.findAllByCodigoInList(["P", "Q", "R"])
 
         def tipoObras = TipoPlanilla.findByCodigo("O")
 
