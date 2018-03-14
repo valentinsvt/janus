@@ -485,12 +485,14 @@ class ReportePlanillas3Controller {
                 pagos[key].indice = preciosService.componeMes(rj.periodoInec.fechaInicio.format("MMM-yyyy"))
                 pagos[key].valor = rj.valorReajustado
             }
+
             if(rj.periodo == 0) {
                 periodos[key] += contrato.periodoInec.descripcion
                 tams.add(10)
                 tams.add(10)
                 tamsFr.add(10)
             }
+
             if(rj.planillaReajustadaId != rj.planillaId) {
                 pagos[key].fecha = rj.planillaReajustada?.fechaPago ? "Pago: "+rj.planillaReajustada.fechaPago.format("dd-MM-yyyy") : ""
             }
@@ -1993,8 +1995,8 @@ class ReportePlanillas3Controller {
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
         def titlIndices = tbBo.pop()
         def titulos = tbBo.pop()
-//        println "resumen titulos: $titulos"
-//        println "resumen titulosIndices: $titlIndices"
+        println "resumen titulos: $titulos"
+        println "resumen titulosIndices: $titlIndices"
 
         Paragraph tituloB0 = new Paragraph();
         addEmptyLine(tituloB0, 1);

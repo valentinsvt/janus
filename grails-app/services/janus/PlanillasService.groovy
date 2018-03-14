@@ -1,6 +1,7 @@
 package janus
 
 import janus.ejecucion.PeriodoPlanilla
+import janus.ejecucion.Planilla
 import janus.ejecucion.ReajustePlanilla
 import janus.ejecucion.ValorIndice
 import janus.ejecucion.ValorReajuste
@@ -130,6 +131,7 @@ class PlanillasService {
     def armaTablaFr(plnl, fprj, tp) {
 //        println "arma tablaFr plnl: $plnl, fprj: $fprj, tp: $tp"
         def cn = dbConnectionService.getConnection()
+        def planilla = Planilla.get(plnl)
         def tblaBo = []
         def sql = ""
         def orden = 1
@@ -163,17 +165,28 @@ class PlanillasService {
     /* Oferta y fecha de oferta, tipo planilla y fecha de presentación */
     def tituloSuperior(plnl, fprj){
         def cn = dbConnectionService.getConnection()
+        def planilla = Planilla.get(plnl)
         def titlSuperior = ["OFERTA"]
         def titlIndices = ["", ""]
         def pcan
         def sql = "select inof.prindscr prin__of, inpl.prindscr prin__pl, cntrpcan, plnlfcpr from prin inof, prin inpl, rjpl, cntr, plnl " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
                 "cntr.cntr__id = plnl.cntr__id and inof.prin__id = cntr.prin__id and inpl.prin__id = rjpl.prin__id limit 1"
-//        println "sql tituloSuperior: $sql"
-        cn.eachRow(sql.toString()) {d ->
-            titlSuperior.add(d.prin__of)
-            pcan = d.cntrpcan
+        if(planilla.tipoContrato == 'C') {
+            def cmpl = Contrato.findByPadre(planilla.contrato)
+            sql = "select prindscr prin__of, cntrpcan from prin, cntr " +
+                    "where cntr__id = ${cmpl.id} and prin.prin__id = cntr.prin__id"
+            cn.eachRow(sql.toString()) {d ->
+                titlSuperior.add(d.prin__of)
+                pcan = d.cntrpcan
+            }
+        } else {
+            cn.eachRow(sql.toString()) {d ->
+                titlSuperior.add(d.prin__of)
+                pcan = d.cntrpcan
+            }
         }
+//        println "sql tituloSuperior: $sql"
 
         sql = "select rjpl__id, prindscr, rjplprdo, rjpl_mes, plnlfcpr, plnlfcpg from rjpl, plnl, prin " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnlrjst and " +

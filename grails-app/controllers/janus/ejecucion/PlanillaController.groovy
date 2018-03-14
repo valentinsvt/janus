@@ -3603,7 +3603,7 @@ class PlanillaController extends janus.seguridad.Shield {
      *   - actualizar rjpl.rjplfctr --factor -- ya está en dtrj */
 
     def detalleReajusteAnticipo(id) {
-//        println "inicia detalleReajuste...."
+        println "inicia detalleReajuste Anticipo"
         def prmt = [:]
         def plnl = Planilla.get(id)
         def tpfp = TipoFormulaPolinomica.findByCodigo('C')  /* FP contractual */
@@ -3618,6 +3618,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def valorFr = 0.0
 
         def rjpl = ReajustePlanilla.findAllByPlanilla(plnl, [sort: 'planillaReajustada'])
+
         rjpl.each { rj ->
 //            println "Bo: Reajuste de planilla ${plnl.id}, reajustando: ${rjpl.planillaReajustada.id}"
             frpl = FormulaPolinomicaContractual.findAllByContratoAndTipoFormulaPolinomicaAndNumeroIlikeAndReajuste(plnl.contrato,
@@ -3724,7 +3725,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def valorFr = 0.0
 
         def rjpl = ReajustePlanilla.findAllByPlanilla(plnl, [sort: 'planillaReajustada'])
-//        println "rjpl para plnl__id = ${plnl.id}: $rjpl"
+        println "rjpl para plnl__id = ${plnl.id}: $rjpl"
         rjpl.each { rj ->
 //            println "Bo: Reajuste de planilla ${plnl.id}, reajustando: ${rjpl.planillaReajustada.id}"
 
@@ -3736,9 +3737,10 @@ class PlanillaController extends janus.seguridad.Shield {
 
             frpl.each {fp ->
                 /** calcula valores para halla Bo **/
-                if(plnl.tipoPlanilla.codigo == 'B') {
+                if(plnl.tipoContrato == 'C') {
                     def comp = Contrato.findByPadre(plnl.contrato)
                     inof = valorIndice(fp.indice , comp.periodoInec)
+                    println "contrato cmpl: ${comp.codigo}, perdiodo: ${comp.periodoInec.id}:${comp.periodoInec.descripcion}"
                 } else {
                     inof = valorIndice(fp.indice , plnl.contrato.periodoInec)
                 }
@@ -4232,6 +4234,7 @@ class PlanillaController extends janus.seguridad.Shield {
             }
             println "dias planillados: $diasPlanillados, fchaFinPlanillado: $fchaFinPlanillado, periodo: $prdo"
             println "antes del while total: $totalCr"
+            total = totalCr
             while(fchaFinPlanillado < plnl.fechaFin){
                 prdo++
                 if(pl) println "fchaFinPlanillado: ${fchaFinPlanillado.format('yyyy-MMM-dd')} periodo: $prdo, pl: ${pl?.last()?.id}"
@@ -4252,7 +4255,7 @@ class PlanillaController extends janus.seguridad.Shield {
                        plnl.fechaInicio, fcfm, 'P')
                     println "pems ---> ${pems}"
                     parcial = 0.0
-                    total = totalCr
+//                    total = totalCr
                     totalCmpl = 0.0
                     pems.each {ms ->
 //                        if(ms.fechaFin >= fchaFinPlanillado){
@@ -4288,6 +4291,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
 
                     parcial = 0.0
+
 //                    total = totalCr /* revisar TODO */
 //                    if((totalCmpl > 0) && pems[0].fechaFin < fchaFinPlanillado) total += totalCmpl
                     println "---- pems: ${pems.parcialContrato}"

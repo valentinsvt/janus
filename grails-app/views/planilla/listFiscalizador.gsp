@@ -214,14 +214,14 @@
                                         </g:link>
                                     </g:if>
                                 </g:if>
-%{--
-                                <g:if test="${janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
-                                    <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planillaInstance.id}"
-                                            class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['A', 'B']}">
+                                    <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
+                                            class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Anticipo">
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
---}%
+
                             <g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) > 0}">
                                 <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
                                         class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Nuevo">
