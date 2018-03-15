@@ -3392,7 +3392,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 // el Po puede superar el valor del anticipo.
 //                println "calcula descuentos planilla P"
                 def totDsct = Planilla.executeQuery("select sum(descuentos) from Planilla where contrato = :c and id <> :p" +
-                        " and fechaPresentacion < :f", [c: plnl.contrato, p: plnl.id, f: plnl.fechaPresentacion])
+                        " and fechaPresentacion < :f and tipoContrato = :t",
+                        [c: plnl.contrato, p: plnl.id, f: plnl.fechaPresentacion, t: plnl.tipoContrato])
                 def dsct = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
                         "planillaReajustada = :p", [p: plnl])
 
@@ -3774,7 +3775,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     inof = valorBoOf
                     inpr = valorBoPr
                 } else {
-                    if(plnl.tipoPlanilla.codigo == 'B') {
+                    if(plnl.tipoContrato == 'C') {
                         def comp = Contrato.findByPadre(plnl.contrato)
                         inof = valorIndice(fp.indice , comp.periodoInec)
                     } else {
@@ -3782,6 +3783,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
                     inpr = valorIndice(fp.indice , rj.periodoInec)
                 }
+
                 vlof = Math.round(inof * fp.valor *1000)/1000
                 vlpr = Math.round(inpr * fp.valor *1000)/1000
                 valor = Math.round(vlpr / vlof * fp.valor * 1000)/1000
@@ -4165,9 +4167,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     /** pone Po en base a lo recalculado de la planilla anterior **/
                     if (p.fechaInicio < plnl.fechaInicio) {    //verifica que es de un periodo anterior
                         prdo++
-//                        println "anterior: ${p.id}, periodo: $prdo"
+                        println "anterior: ${p.id}, periodo: $prdo"
                         def poAnteriores = ReajustePlanilla.findAllByPlanillaAndPeriodoGreaterThan(p, 0, [sort: 'periodo'])
-//                        println "valores de Po anteriores--: ${poAnteriores}"
+                        println "valores de Po anteriores--: ${poAnteriores.valorPo}"
 
                         /* procesa planillas anteriores con los mismos valores de rjpl ya alamcenados **/
                         poAnteriores.each { po ->
@@ -4417,7 +4419,7 @@ class PlanillaController extends janus.seguridad.Shield {
     def calculaPo(id, vlor, plFinal, prdo) { /** calcula Po para cada periodo -- uno o varios meses **/
         /** hasta el valor contratado al Po se le debe descontar la proporción del anticipo, si ya se supera este
          ** valor el valor, el Po es el valorplanillado completo                                                  */
-//        println "calculaPo recibe: id: $id, vlor: $vlor, plFinal: $plFinal"
+        println "calculaPo recibe: id: $id, vlor: $vlor, plFinal: $plFinal"
         def plnl = Planilla.get(id)
         def valorPo = 0.0
 
@@ -4443,14 +4445,15 @@ class PlanillaController extends janus.seguridad.Shield {
         if (resto < 0) resto = 0  // ya nop se aplica deducción de anticipo
 //        println "------------resto: $resto"
 
-//        println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
+        println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
 
         if((estePo > resto) && (plnl.tipoPlanilla.codigo != 'Q')) {
-            valorPo = vlor - resto
+            valorPo = resto
         } else if((plnl.tipoPlanilla.codigo == 'Q') && plFinal) {
             valorPo = totPlnl - cntr.anticipo - totPo - totPoAc
 //            valorPo = vlor - cntr.anticipo - totPo + totPoAc
         } else {
+            println "------- $estePo"
             valorPo = estePo
         }
 //        println "valor de Po a aplicar: $valorPo"
