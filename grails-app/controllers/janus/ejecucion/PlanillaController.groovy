@@ -3391,18 +3391,25 @@ class PlanillaController extends janus.seguridad.Shield {
             if(plnl.tipoPlanilla.toString() in ['P']) {
                 // el Po puede superar el valor del anticipo.
 //                println "calcula descuentos planilla P"
+
+
+
+
                 def totDsct = Planilla.executeQuery("select sum(descuentos) from Planilla where contrato = :c and id <> :p" +
                         " and fechaPresentacion < :f and tipoContrato = :t",
                         [c: plnl.contrato, p: plnl.id, f: plnl.fechaPresentacion, t: plnl.tipoContrato])
-                def dsct = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
-                        "planillaReajustada = :p", [p: plnl])
 
-                println "totDsct[0]: ${totDsct[0]}, dsct[0]: ${dsct[0]}"
+                def dsct   = Math.round(plnl.valor*(1 - plnl.contrato.porcentajeAnticipo/100)*100)/100
+                def resto  = Math.round((plnl.contrato.anticipo - totDsct[0])*100)/100
 
-                if((totDsct[0] + dsct[0]) <= plnl.contrato.anticipo) {
-                    plnl.descuentos = dsct[0]
+                println "totDsct[0]: ${totDsct[0]}, resto: ${resto}"
+
+                if(dsct > resto) {
+                    plnl.descuentos = resto
+                } else if(plnl.tipoPlanilla.codigo == 'Q') {
+                    plnl.descuentos = resto
                 } else {
-                    plnl.descuentos = plnl.contrato.anticipo - totDsct[0]
+                    plnl.descuentos = dsct
                 }
                 plnl.save(flush: true)
             }
@@ -4430,36 +4437,29 @@ class PlanillaController extends janus.seguridad.Shield {
         def cntr = plnl.contrato
         def estePo = Math.round(vlor*(1 - cntr.porcentajeAnticipo/100)*100)/100
 
-//        def totPo = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
-//                "planillaReajustada <> :p and periodo > 0", [p: plnl])[0]?:0
-        def totDs = Planilla.executeQuery("select sum(descuentos) from Planilla where contrato = :c and " +
-                "tipoContrato = :t and fechaInicio < :f", [c: plnl.contrato, t: plnl.tipoContrato, f: plnl.fechaInicio])[0]?:0
-//        def totPoAc = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
-//                "planillaReajustada = :p and periodo < :pr ", [p: plnl, pr: prdo])[0]?:0
-//        def totPoAc = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
-//                "planillaReajustada = :p and periodo < :pr ", [p: plnl, pr: prdo])[0]?:0
+        def totPo = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
+                "planillaReajustada <> :p and periodo > 0", [p: plnl])[0]?:0
+        def totPoAc = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
+                "planillaReajustada = :p and periodo < :pr ", [p: plnl, pr: prdo])[0]?:0
 
 //        println ".....1"
         def totPlnl = ReajustePlanilla.executeQuery("select max(acumuladoPlanillas) from ReajustePlanilla where planilla = :p and " +
                 "planillaReajustada = :p", [p: plnl])[0]?:0
 //        println ".....2 $totPlnl"
 
-//        def resto  = Math.round((plnl.contrato.anticipo - totPo - totPoAc)*100)/100
-        def resto  = Math.round((plnl.contrato.anticipo - totDs)*100)/100
+        def resto  = Math.round((plnl.contrato.anticipo - totPo - totPoAc)*100)/100
 
 //        def resto  = Math.round((plnl.contrato.anticipo - totPo)*100)/100
         if (resto < 0) resto = 0  // ya nop se aplica deducción de anticipo
 //        println "------------resto: $resto"
 
-//        println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
-        println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totDs}, resto: $resto, estePo: $estePo"
+        println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
 
         if((estePo > resto) && (plnl.tipoPlanilla.codigo != 'Q')) {
-            println "*********************** no debería existir *************************"
             valorPo = resto   //nunca existe
         } else if((plnl.tipoPlanilla.codigo == 'Q') && plFinal) {
-//            valorPo = totPlnl - cntr.anticipo - totPo - totPoAc
-            valorPo = cntr.anticipo - resto
+            valorPo = totPlnl - cntr.anticipo - totPo - totPoAc
+//            valorPo = cntr.anticipo - resto
         } else {
             println "------- $estePo"
             valorPo = estePo
