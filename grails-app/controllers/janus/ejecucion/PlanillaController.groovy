@@ -4258,7 +4258,8 @@ class PlanillaController extends janus.seguridad.Shield {
                     esteMes = Math.round(plnl.valor * diasEsteMes / diasPlanillados * 100) / 100
                     plAcumulado += esteMes
                     planilladoEsteMes += esteMes
-//                    println "fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado"
+
+                    println "fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, fcfm: $fcfm"
 
                     pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipo(plnl.contrato,
                        plnl.fechaInicio, fcfm, 'P')
@@ -4287,7 +4288,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         fchaFinPlanillado =  preciosService.sumaUnDia(fcfm)
                     }
                 } else {  // se crea el último periodo en rjpl
-                    println "------------ fechaFin: ${plnl.fechaFin} > finMes: ${fcfm}"
+                    println "------------ fechaFin: ${plnl.fechaFin} > finMes: ${fcfm}, fchaFinPlanillado $fchaFinPlanillado"
                     diasEsteMes = preciosService.diasEsteMes(plnl.contrato.id, fchaFinPlanillado.format('yyyy-MM-dd'), plnl.fechaFin.format('yyyy-MM-dd'))
                     esteMes = plnl.valor - planilladoEsteMes
                     plAcumulado += esteMes
@@ -4295,6 +4296,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     if(plnl.tipoPlanilla.codigo in ['Q', 'R']){
                         pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndTipo(plnl.contrato, plnl.fechaInicio, 'P')
                     } else if(plnl.tipoPlanilla.codigo == 'P') {
+                        println "ejecuta con: ${plnl.contrato.id}, $fchaFinPlanillado, ${plnl.fechaFin}"
                         pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipo(plnl.contrato,
                                 fchaFinPlanillado, plnl.fechaFin, 'P')
                     }

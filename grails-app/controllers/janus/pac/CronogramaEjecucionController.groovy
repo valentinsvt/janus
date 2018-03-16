@@ -1555,22 +1555,33 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         /** en base a prej ingresa o actualiza dato en prej **/
         println "actualizaPrej params: $params"
         def cntr = Contrato.get(params.contrato)
+        def cn = dbConnectionService.getConnection()
         def prej = PeriodoEjecucion.findAllByContratoAndTipoNotEqual(cntr, 'S')
         def vlor
+        def cmpl = Contrato.findByPadre(cntr)
+        def sql = "update prej set prejcrpa = (select sum(creoprco) from creo " +
+                "where creo.prej__id = prej.prej__id) where cntr__id = ${cntr.id}"
+        cn.execute(sql.toString())
 
-        prej.each { pe ->
-//            vlor = CronogramaEjecucion.executeQuery("select sum(precio) from CronogramaEjecucion where periodo = :p", [p: pe])
-            vlor = CrngEjecucionObra.executeQuery("select sum(precio) from CrngEjecucionObra where periodo = :p", [p: pe])
-            def pr = PeriodoEjecucion.get(pe.id)
-            pr.parcialCronograma = vlor[0]
-            if (!pr.save(flush: true)) {
-                flash.message = "No se pudo actualizar prej"
-                println "Error al actualizar prej: " + prej.errors
-            } else {
-                flash.message = "Prej actualizado exitosamente"
-            }
+        sql = "update prej set prejcntr = (select sum(creoprco) from creo " +
+                "where creo.prej__id = prej.prej__id and vocr__id in (select vocr__id from vocr " +
+                "where cntr__id = ${cntr.id} and cntrcmpl is null)) where cntr__id = ${cntr.id}"
+        def cnta = cn.executeUpdate(sql.toString())
+        if(cmpl) {
+            sql = "update prej set prejcmpl = (select sum(creoprco) from creo " +
+                    "where creo.prej__id = prej.prej__id and vocr__id in (select vocr__id from vocr " +
+                    "where cntr__id = ${cntr.id} and cntrcmpl is not null)) where cntr__id = ${cntr.id}"
+            cn.execute(sql.toString())
         }
-        render "ok"
+
+        if(cnta > 0) {
+            flash.message = "Se actualizador ${cnta} registros en períodos de ejecución"
+        } else {
+            flash.message = "No se pudo actualizar los períodos de ejecución"
+            flash.clase = "alert-error"
+        }
+
+        redirect(action: "indexNuevo", params: [id: params.contrato])
     }
 
 
