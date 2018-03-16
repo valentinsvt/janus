@@ -384,7 +384,7 @@
 
             <div class="span1">
                 <g:textField name="porcentajeAnticipo" class="anticipo activo"
-                             value="${g.formatNumber(number: contrato?.porcentajeAnticipo ?: 50, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"
+                             value="${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"
                              style="width: 30px; text-align: right"/> %
             </div>
 

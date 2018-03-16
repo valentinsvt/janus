@@ -187,6 +187,7 @@ class ContratoController extends janus.seguridad.Shield {
                 order("numero", "asc")
             }
         }
+/*
         if (cronos.size() == 0 || pcs.size() == 0) {
             if (cronos.size() == 0) {
                 errores += "<li>No ha generado el cronograma de contrato.</li>"
@@ -195,6 +196,11 @@ class ContratoController extends janus.seguridad.Shield {
                 errores += "<li>No ha generado la fórmula polinómica contractual.</li>"
             }
         }
+*/
+        if (cronos.size() == 0) {
+            errores += "<li>No ha generado el cronograma de contrato.</li>"
+        }
+
         def crono = 0
         detalle.each {
             def tmp = CronogramaContratado.findAllByVolumenContrato(it)
@@ -211,27 +217,27 @@ class ContratoController extends janus.seguridad.Shield {
         def fps = FormulaPolinomicaContractual.findAllByContrato(contrato)
 //        println "fps "+fps
         def totalP = 0
-        fps.each { fp ->
-            if (fp.numero =~ "p") {
-//                println "sumo "+fp.numero+"  "+fp.valor
-                totalP += fp.valor
+        def totalC = 0
+        if(fps) {
+            fps.each { fp ->
+                if (fp.numero =~ "p") {
+                    totalP += fp.valor
+                }
+            }
+            fps.each { fp ->
+                if (fp.numero =~ "c") {
+                    totalC += fp.valor
+                }
+            }
+            if (totalP.toDouble().round(6) != 1.000) {
+                errores += "<li>La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000</li>"
+            }
+            if (totalC.toDouble().round(6) != 1.000) {
+                errores += "<li>La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000</li>"
             }
         }
 
-        def totalC = 0
-        fps.each { fp ->
-            if (fp.numero =~ "c") {
-//                println "sumo "+fp.numero+"  "+fp.valor
-                totalC += fp.valor
-            }
-        }
 //        println "totp "+totalP
-        if (totalP.toDouble().round(6) != 1.000) {
-            errores += "<li>La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000</li>"
-        }
-        if (totalC.toDouble().round(6) != 1.000) {
-            errores += "<li>La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000</li>"
-        }
 
         //tiene q tener al menos 2 documentos: plano y justificativo de cantidad de obra
         def concurso = Concurso.findByObra(obra)
@@ -1046,7 +1052,7 @@ class ContratoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-//        println "-->> save: >>>>>>${params}<<<<<"
+        println "-->> save: >>>>>>${params}<<<<<"
         def contratoInstance
         def padre
 
@@ -1124,26 +1130,6 @@ class ContratoController extends janus.seguridad.Shield {
             redirect(action: 'registroContrato')
             return
         }
-/*
-        if (!contratoInstance.save(flush: true)) {
-            flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar Contrato " + (contratoInstance.id ? contratoInstance.id : "") + "</h4>"
-            str += "<ul>"
-            contratoInstance.errors.allErrors.each { err ->
-                def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
-                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
-                }
-                str += "<li>" + msg + "</li>"
-            }
-            str += "</ul>"
-            flash.message = str
-            redirect(action: 'registroContrato')
-            return
-        }  else {
-            println "errores: ${contratoInstance.errors}"
-        }
-*/
 
         if (params.id) {
             flash.clase = "alert-success"

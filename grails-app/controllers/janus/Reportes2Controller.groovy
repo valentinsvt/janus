@@ -3273,7 +3273,7 @@ class Reportes2Controller {
         def prej = PeriodoEjecucion.findAllByContrato(contrato, [sort: 'fechaInicio'])  //meses
 //        def vlob = preciosService.rbro_pcun_v2(obra.id)
 
-        def vocr = VolumenContrato.findAllByContrato(contrato)
+        def vocr = VolumenContrato.findAllByContrato(contrato, [sort: 'volumenOrden'])
         def rubros = []
 
 //        vlob.each {
