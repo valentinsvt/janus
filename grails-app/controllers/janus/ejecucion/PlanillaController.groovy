@@ -1879,7 +1879,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     //es anticipo hay q ingresar el valor de la planilla
                     planillaInstance.valor = planillaInstance.contrato.anticipo
                     println "llego al save !!!!!  "+params.periodoPlan
-                    planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
+//                    planillaInstance.periodoAnticipo = PeriodosInec.get(params.periodoPlan)
                     break;
                 case ['P', 'Q']:
 
