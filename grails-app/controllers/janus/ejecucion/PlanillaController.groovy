@@ -4,6 +4,7 @@ import groovy.json.JsonBuilder
 import janus.*
 import janus.actas.Acta
 import janus.pac.CrngEjecucionObra
+import janus.pac.CronogramaContratado
 import janus.pac.CronogramaContrato
 import janus.pac.CronogramaEjecucion
 import janus.pac.DocumentoProceso
@@ -1518,7 +1519,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println "obra: $obra.id"
 
         /* aqui se valida que haya cronograma de contrato y formula polinomica de contrato */
-        def existeCrng = CronogramaContrato.findAllByContrato(contrato).size()
+        def existeCrng = CronogramaContratado.findAllByContrato(contrato).size()
         def pcs = FormulaPolinomicaContractual.findAllByContrato(contrato).size()
         if (existeCrng == 0 || pcs < 8) {
             flash.message = "<h3>No es posible crear planillas</h3><ul>"
