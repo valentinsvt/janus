@@ -1511,16 +1511,17 @@ class PlanillaController extends janus.seguridad.Shield {
         }
     }
 
+
     def form() {
         println "form... planillas: $params"
         def contrato = Contrato.get(params.contrato)
         def obra = contrato.obra
         def liquidado = false
-//        println "obra: $obra.id"
 
         /* aqui se valida que haya cronograma de contrato y formula polinomica de contrato */
         def existeCrng = CronogramaContratado.findAllByContrato(contrato).size()
         def pcs = FormulaPolinomicaContractual.findAllByContrato(contrato).size()
+
         if (existeCrng == 0 || pcs < 8) {
             flash.message = "<h3>No es posible crear planillas</h3><ul>"
             if (existeCrng == 0) {
@@ -1736,6 +1737,45 @@ class PlanillaController extends janus.seguridad.Shield {
                 minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax,
                 suspensiones:suspensiones, ini:ini, planillas: planillasAvanceAsociada, formulas: formulasVarias,
                 hayCmpl: (cmpl? true : false)]
+    }
+
+    /* este tipod eobras no requieren anticipo ni FP:
+    *  es contratentrega, sin reajuste de precios
+    *  no hay control de planillas ni periodos*/
+    def sinAnticipo() {
+        println "sinAnticipo planillas: $params"
+        def contrato = Contrato.get(params.contrato)
+        def obra = contrato.obra
+
+        def planillaInstance = new Planilla(params)
+        planillaInstance.contrato = contrato
+        if (params.id) {
+            planillaInstance = Planilla.get(params.id)
+        }
+
+        /*** solo existe planillas P **/
+        def tiposPlanilla = TipoPlanilla.findAllByCodigoInList(["E"])
+
+        def now = new Date()
+        def maxDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},"
+
+        if (now.format("dd").toInteger() > 14) {
+            maxDatePres += "14"
+        } else {
+            maxDatePres += now.format("dd")
+        }
+        maxDatePres += ")"
+
+        def minDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},1)"
+
+        def fechaMax
+        if (contrato.fechaSubscripcion)
+            fechaMax = contrato.fechaSubscripcion.plus(720)
+        else
+            fechaMax = new Date()
+
+        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
+                maxDatePres: maxDatePres, minDatePres: minDatePres, fechaMax: fechaMax]
     }
 
 

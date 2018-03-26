@@ -67,11 +67,12 @@ class ActaTagLib {
 
 
     Closure tabla = { attrs ->
+//        println "closure --- ${attrs}"
         def str = ""
         def acta = attrs.acta
         if (attrs.tipo && acta) {
             def tipo = attrs.tipo.toLowerCase()
-            str += "$tipo"(acta)
+            str += "$tipo"(acta)     /* llama a las funciones tipoTabla(acta), ej: dtp(acta) **/
         }
         out << str
     }
@@ -210,7 +211,9 @@ class ActaTagLib {
             order("fechaIngreso", "asc")
         }
 */
-        def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso'])
+        def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), [sort: 'fechaIngreso'])
+        println "planillas: ${planillas.numero}"
 
         def tabla = "<table class='table table-bordered table-condensed'>"
         tabla += "<thead>"
@@ -292,7 +295,7 @@ class ActaTagLib {
 */
 
         def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
-                TipoPlanilla.findAllByCodigoInList(['P', 'Q', 'O']))
+                TipoPlanilla.findAllByCodigoInList(['P', 'Q', 'R']))
 
         def planillasCosto = Planilla.withCriteria {
             eq("contrato", contrato)
@@ -427,7 +430,8 @@ class ActaTagLib {
         def contrato = acta.contrato
 
 //        def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso'])
-        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso']).last()
+        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), [sort: 'fechaIngreso']).last()
         def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl, [sort: 'periodo'])
 
         def tabla = "<table class='table table-bordered table-condensed'>"
@@ -479,14 +483,17 @@ class ActaTagLib {
 
         def planillaAnticipo = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A'))
         def planillasCosto = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('C'))
-        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['P', 'Q', 'O']), [sort: 'fechaIngreso'])
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
+                TipoPlanilla.findAllByCodigoInList(['P', 'Q', 'R']), [sort: 'fechaIngreso'])
 
         def av = planillasAvance.sum { it.valor } ?: 0
         def cp = planillasCosto.sum { it.valor } ?: 0
         def total1 = av + cp
 
-        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso']).last()
-        def total2 = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p:ultimaPlnl])[0]?:0
+        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'R']), [sort: 'fechaIngreso']).last()
+        def total2 = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p",
+                [p:ultimaPlnl])[0]?:0
 
 //        def ran = planillaAnticipo.sum { it.reajuste } ?: 0
 //        def rav = planillasAvance.sum { it.reajuste } ?: 0
@@ -590,7 +597,8 @@ class ActaTagLib {
         def cn = dbConnectionService.getConnection()
         def contrato = acta.contrato
 //        def planillas = Planilla.findAllByContrato(contrato, [sort: "numero"])
-        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso']).last()
+        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'R']), [sort: 'fechaIngreso']).last()
         def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl, [sort: 'periodo'])
 
 
