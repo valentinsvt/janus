@@ -35,9 +35,8 @@
             Cancelar
         </g:link>
 
-        <g:if test="${(anticipoPagado && !liquidado) || (planillaInstance?.id && planillaInstance.fechaMemoSalidaPlanilla == null) || (tipos.find {
-            it.codigo == 'A'
-        } && planillaInstance?.fechaMemoSalidaPlanilla == null)}">
+        <g:if test="${((planillaInstance?.id && planillaInstance.fechaMemoSalidaPlanilla == null) || (tipos.find {
+            it.codigo == 'E'} && planillaInstance?.fechaMemoSalidaPlanilla == null))}">
             <a href="#" id="btnSave" class="btn btn-success">
                 <i class="icon-save"></i>
                 Guardar

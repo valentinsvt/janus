@@ -2037,6 +2037,110 @@ class PlanillaController extends janus.seguridad.Shield {
 
     }
 
+    def saveSinAntc() {  /* guarda planilla */
+        println "saveSinAntc " + params
+        def cntr = Contrato.get(params.contrato.id)
+        def tipo
+        def fechaInicio = ""
+        def generaCmpl = false
+
+        if (params.id) {
+            tipo = Planilla.get(params.id).tipoPlanilla
+        } else {
+            tipo = TipoPlanilla.get(params.tipoPlanilla.id.toLong())
+        }
+
+        if (!params.diasMultaDisposiciones) params.diasMultaDisposiciones = 0
+        if (params.fechaPresentacion) params.fechaPresentacion = new Date().parse("dd-MM-yyyy", params.fechaPresentacion)
+        if (params.fechaIngreso) params.fechaIngreso = new Date().parse("dd-MM-yyyy", params.fechaIngreso)
+        if (params.fechaOficioSalida) params.fechaOficioSalida = new Date().parse("dd-MM-yyyy", params.fechaOficioSalida)
+        if (params.fechaMemoSalida) params.fechaMemoSalida = new Date().parse("dd-MM-yyyy", params.fechaMemoSalida)
+        if (params.fechaOficioEntradaPlanilla) params.fechaOficioEntradaPlanilla = new Date().parse("dd-MM-yyyy", params.fechaOficioEntradaPlanilla)
+
+        println "params.formulaPolinomicaReajuste.id:" + params."formulaPolinomicaReajuste.id"
+        println "fecha inicio: ${params.fechaInicio}"
+
+        if(params.fechaInicio && !fechaInicio) {
+            params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        } else if(fechaInicio) {
+            params.fechaInicio = fechaInicio
+        }
+
+        if (params.fechaFin) {
+            params.fechaFin = new Date().parse("dd-MM-yyyy", params.fechaFin)
+        } else if(tipo.codigo == 'R') {
+            params.fechaFin = fechaInicio + 1
+        }
+
+        if (!params.fechaPresentacion) params.fechaPresentacion = params.fechaIngreso
+        params.tipoContrato = 'E'
+
+        if (params.oficioEntradaPlanilla) params.oficioEntradaPlanilla = params.oficioEntradaPlanilla.toString().toUpperCase()
+        if (params.numero) params.numero = params.numero.toString().toUpperCase()
+
+        def planillaInstance
+
+        if (params.id) {
+//            println("entro")
+            params.fechaPresentacion = params.fechaIngreso
+            def planillaPorAsociar
+            if(params.asociada != 'null') {
+                planillaPorAsociar = Planilla.get(params.asociada)
+            }
+
+            planillaInstance = Planilla.get(params.id)
+            if (!planillaInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Planilla con id " + params.id
+                params.contrato = params.contrato.id
+                redirect(action: 'form', params: params)
+                return
+            }//no existe el objeto
+            planillaInstance.properties = params
+
+            if(!params.noPagoValor || (params.noPagoValor == "")) params.noPagoValor = 0
+
+            planillaInstance.noPago = params.noPago
+            planillaInstance.noPagoValor = params.noPagoValor.toDouble()
+        }//es edit
+        else {
+            println "params luego de override: ${params}"
+
+            planillaInstance = new Planilla(params)
+            println " creando planilla: ${params.id} con ${params.descripcionMulta}"
+
+            def contrato = Contrato.get(params.contrato.id)
+            planillaInstance.fiscalizador = contrato.fiscalizador
+
+        } //es create
+
+        planillaInstance.formulaPolinomicaReajuste = FormulaPolinomicaReajuste.get(params."formulaPolinomicaReajuste.id")
+
+        if (!planillaInstance.save(flush: true)) {
+            println planillaInstance.errors
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Planilla " + (planillaInstance.id ? planillaInstance.id : "") + "</h4>"
+
+            str += g.renderErrors(bean: planillaInstance)
+
+            flash.message = str
+            params.contrato = params.contrato.id
+            redirect(action: 'form', params: params)
+            return
+        }
+
+        if (params.id) {
+            flash.clase = "alert-success"
+            flash.message = "Se ha actualizado correctamente Planilla " + planillaInstance.id
+        } else {
+            flash.clase = "alert-success"
+            flash.message = "Se ha creado correctamente Planilla " + planillaInstance.id
+        }
+
+        redirect(action: 'dtEntrega', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])
+
+    }
+
 
     private String fechaConFormato(fecha, formato) {
         def meses = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
@@ -3157,6 +3261,49 @@ class PlanillaController extends janus.seguridad.Shield {
                 planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
 
+    def dtEntrega() {
+        def planilla = Planilla.get(params.id)
+        def contrato = Contrato.get(params.contrato)
+        def obra = contrato.obra
+        def detalle = [:]
+        def obrasAdicionales = 1.25
+        def respaldo = DocumentoProceso.findByConcursoAndDescripcionIlike(contrato.oferta.concurso, '%respaldo%adicio%')
+
+        /** máximo valor a considerar de obras adicionales desde el 20-mar-2017 --> 5% */
+        if(contrato.fechaSubscripcion > Date.parse('dd-MM-yyy', '20-03-2017')) {
+            obrasAdicionales = 1.05
+        }
+
+        def sbpr = []
+        detalle = VolumenContrato.findAllByContratoAndObra(contrato, obra, [sort: "volumenOrden"])
+
+        def precios = [:]
+
+        detalle.each {
+            def res
+            precios.put(it.id.toString(), it.volumenPrecio)
+            sbpr.add(it.subPresupuesto)
+        }
+        sbpr = sbpr.unique()
+        println "detalle: $detalle"
+
+        def planillasAnteriores
+
+        planillasAnteriores = Planilla.withCriteria {
+                eq("contrato", contrato)
+                lt("fechaFin", planilla.fechaInicio)
+        }
+
+        def editable = planilla.fechaMemoSalidaPlanilla == null && contrato.fiscalizador.id == session.usuario.id
+
+        if(!respaldo) obrasAdicionales = 0
+//        obrasAdicionales = 0
+
+        println "adicionales: $obrasAdicionales"
+        return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, adicionales: obrasAdicionales,
+                planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
+    }
+
     private boolean updatePlanilla(planilla) {
         def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla)
 //        def totalMonto = detalles.size() > 0 ? detalles.sum { it.montoIva } : 0
@@ -3483,6 +3630,62 @@ class PlanillaController extends janus.seguridad.Shield {
 //          println "2.completa procesaReajuste"
         }
         poneTotalReajuste(plnl) // actualiza en plnlrjst el valor a reconocer de reajuste de esta planilla: actual - diferencias de anteriores
+        render "ok" //debe retornar a planillas y habilitar botón de resumen.
+    }
+
+    def procEntrega() {
+        println "Inicio de procesar contra entrega, params: $params"
+        //TODO: hacer una funcion para que aplique descuentos a las planillas
+        def plnl = Planilla.get(params.id)
+
+        if(plnl.tipoPlanilla.codigo == 'E') {
+            flash.message = "Procesa planilla contra entrega"
+//            detalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
+        }
+/*
+        else {
+            if(plnl.tipoPlanilla.toString() == 'R') {  // reliquidación de la obra
+                if (!plnl.fechaFin) {
+                    def lq = Planilla.findByContratoAndTipoPlanilla(plnl.contrato, TipoPlanilla.findByCodigo('Q'))
+                    plnl.fechaFin = lq.fechaFin
+                    plnl.save(flush: true)
+                }
+            }
+            procesaReajusteLq(params.id) */
+            /** inserta valores de reajuste --> rjpl **//*
+
+            detalleReajuste(params.id) */
+            /** inserta valores del detalle del reajuste --> dtrj **//*
+
+
+            if(Planilla.get(params.id).tipoPlanilla.codigo in ['P', 'Q']){
+                procesaMultas(params.id)  */
+                /* multas *//*
+
+            }
+
+            if(plnl.tipoPlanilla.toString() in ['P']) {
+                def totDsct = Planilla.executeQuery("select sum(descuentos) from Planilla where contrato = :c and id <> :p" +
+                        " and fechaPresentacion < :f and tipoContrato = :t",
+                        [c: plnl.contrato, p: plnl.id, f: plnl.fechaPresentacion, t: plnl.tipoContrato])
+
+                def dsct   = Math.round(plnl.valor*(1 - plnl.contrato.porcentajeAnticipo/100)*100)/100
+                def resto  = Math.round((plnl.contrato.anticipo - totDsct[0])*100)/100
+
+                println "totDsct[0]: ${totDsct[0]}, resto: ${resto}"
+
+                if(dsct > resto) {
+                    plnl.descuentos = resto
+                } else if(plnl.tipoPlanilla.codigo == 'Q') {
+                    plnl.descuentos = resto
+                } else {
+                    plnl.descuentos = dsct
+                }
+                plnl.save(flush: true)
+            }
+        }
+*/
+//        poneTotalReajuste(plnl) // actualiza en plnlrjst el valor a reconocer de reajuste de esta planilla: actual - diferencias de anteriores
         render "ok" //debe retornar a planillas y habilitar botón de resumen.
     }
 

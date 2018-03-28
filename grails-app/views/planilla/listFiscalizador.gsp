@@ -175,6 +175,20 @@
                                     </g:if>
                                 </g:if>
 
+                                <g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo in ['E']}">
+                                    <g:link action="sinAnticipo" class="btn btn-small text-info" rel="tooltip" title="Editar Entrega"
+                                            params="[contrato: contrato.id]" id="${planillaInstance.id}">
+                                        <i class="icon-pencil icon-large"></i>
+                                    </g:link>
+%{--
+                                    <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
+                                        <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesa">
+                                            <i class="icon-gear"></i>
+                                        </div>
+                                    </g:if>
+--}%
+                                </g:if>
+
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q', 'O', 'C', 'L', 'R'] && !planillaInstance.fechaMemoSalidaPlanilla && contrato?.fiscalizador?.id == session.usuario.id}">
                                     <g:link controller="planilla" action="form" params="[id: planillaInstance.id, contrato: planillaInstance.contrato.id]"
                                             rel="tooltip" title="Editar" class="btn btn-small">
@@ -190,7 +204,23 @@
                                         </g:link>
                                         </g:if>
                                         <g:if test="${!planillaInstance.fechaMemoSalidaPlanilla}">
-                                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar" class="btn btn-small btnProcesaQ">
+                                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar"
+                                                 class="btn btn-small btnProcesaQ">
+                                                <i class="icon-gear"></i>
+                                            </div>
+                                        </g:if>
+                                    </g:if>
+                                </g:if>
+
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo in ['E']}">
+                                    <g:if test="${(contrato?.fiscalizador?.id == session.usuario.id)}">
+                                        <g:link action="dtEntrega" id="${planillaInstance.id}" params="[contrato: contrato.id]"
+                                                rel="tooltip" title="Detalles Entrega" class="btn btn-small">
+                                            <i class="icon-reorder icon-large"></i>
+                                        </g:link>
+                                        <g:if test="${!planillaInstance.fechaMemoSalidaPlanilla}">
+                                            <div data-id="${planillaInstance.id}" rel="tooltip" title="Procesar Entrega"
+                                                 class="btn btn-small btnProcesaE">
                                                 <i class="icon-gear"></i>
                                             </div>
                                         </g:if>
@@ -516,6 +546,27 @@
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'procesarLq')}",
+                        data    : {
+                            id : id
+                        },
+                        success : function (msg) {
+                            if (msg == 'fechas') {
+                                location.href = "${g.createLink(controller: 'contrato', action: 'fechasPedidoRecepcion' )}?id=" +
+                                ${contrato?.id}
+                            } else {
+                                location.reload();
+                            }
+                        }
+                    });
+                    return false;
+                }); //click btn show
+
+                $(".btnProcesaE").click(function () {
+                    var id = $(this).data("id");
+                    console.log("id:" + id)
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'procEntrega')}",
                         data    : {
                             id : id
                         },
