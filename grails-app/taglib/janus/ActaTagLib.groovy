@@ -3,6 +3,7 @@ package janus
 import janus.actas.Acta
 import janus.ejecucion.DetallePlanilla
 import janus.ejecucion.DetallePlanillaCosto
+import janus.ejecucion.DetallePlanillaEjecucion
 import janus.ejecucion.MultasPlanilla
 import janus.ejecucion.PeriodoPlanilla
 import janus.ejecucion.Planilla
@@ -94,13 +95,13 @@ class ActaTagLib {
         def indirecto = obra.totales / 100
         preciosService.ac_rbroObra(obra.id)
         def detalles = [:]
-//        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "subPresupuesto"])
-        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+//        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def volumenes = VolumenContrato.findAllByObra(obra, [sort: "volumenOrden"])
 
         volumenes.each { vol ->
             vol.refresh()
-            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
-            def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
+//            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
+//            def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
 
             if (!detalles[vol.subPresupuesto]) {
                 detalles[vol.subPresupuesto] = [:]
@@ -110,7 +111,7 @@ class ActaTagLib {
                         codigo  : vol.item.codigo,
                         nombre  : vol.item.nombre,
                         unidad  : vol.item.unidad.codigo,
-                        precio  : precio,
+                        precio  : vol.volumenSubtotal,
                         cantidad: [
                                 contratado: 0,
                                 ejecutado : 0
@@ -121,18 +122,19 @@ class ActaTagLib {
                         ]
                 ]
             }
-            detalles[vol.subPresupuesto][vol.item].cantidad.contratado += vol.cantidad
-            detalles[vol.subPresupuesto][vol.item].valor.contratado += ((vol.cantidad * precio).toDouble().round(2))
+            detalles[vol.subPresupuesto][vol.item].cantidad.contratado += vol.volumenCantidad
+            detalles[vol.subPresupuesto][vol.item].valor.contratado += vol.volumenSubtotal
         }
 
         planillasAvance.each { pla ->
-            def det = DetallePlanilla.findAllByPlanilla(pla)
+//            def det = DetallePlanilla.findAllByPlanilla(pla)
+            def det = DetallePlanillaEjecucion.findAllByPlanilla(pla)
             det.each { dt ->
-                if (detalles[dt.volumenObra.subPresupuesto][dt.volumenObra.item]) {
-                    detalles[dt.volumenObra.subPresupuesto][dt.volumenObra.item].cantidad.ejecutado += dt.cantidad
-                    detalles[dt.volumenObra.subPresupuesto][dt.volumenObra.item].valor.ejecutado += dt.monto
+                if (detalles[dt.volumenContrato.subPresupuesto][dt.volumenContrato.item]) {
+                    detalles[dt.volumenContrato.subPresupuesto][dt.volumenContrato.item].cantidad.ejecutado += dt.cantidad
+                    detalles[dt.volumenContrato.subPresupuesto][dt.volumenContrato.item].valor.ejecutado += dt.monto
                 } else {
-                    println "no existe detalle para " + dt.volumenObra.item + "???"
+                    println "no existe detalle para " + dt.volumenContrato.item + "???"
                 }
             }
         }
@@ -213,7 +215,7 @@ class ActaTagLib {
 */
         def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
                 TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), [sort: 'fechaIngreso'])
-        println "planillas: ${planillas.numero}"
+//        println "planillas: ${planillas.valor}"
 
         def tabla = "<table class='table table-bordered table-condensed'>"
         tabla += "<thead>"
@@ -238,7 +240,8 @@ class ActaTagLib {
             def periodo, valor, anticipo, multas
             if (planilla.tipoPlanilla.codigo == "A") {
                 periodo = "ANTICIPO"
-                valor = planilla.reajuste
+//                valor = planilla.reajuste
+                valor = 0
             } else {
                 periodo = "DEL " + fechaConFormato(fecha: planilla.fechaInicio, formato: "dd-MM-yyyy") +
                         " AL " + fechaConFormato(fecha: planilla.fechaFin, formato: "dd-MM-yyyy")
@@ -357,7 +360,7 @@ class ActaTagLib {
         return tabla
     }
 
-    def ocp(Acta acta) {    // resmen de obra bajo la modalidad de costo + %
+    def ocp(Acta acta) {    // 4.4 resmen de obra bajo la modalidad de costo + %
         def contrato = acta.contrato
 
         def planillasCosto = Planilla.withCriteria {
@@ -403,7 +406,7 @@ class ActaTagLib {
                     tabla += "<td>${fechaConFormato(fecha: planilla.fechaIngreso)}</td>"
                     tabla += "<td>${planilla.numero}</td>"
 //                    tabla += "<td>${periodos.last().periodo.descripcion}</td>"
-                    tabla += "<td>periordo</td>"
+                    tabla += "<td>DEL ${planilla.padreCosto.fechaInicio.format('dd-MM-yyyy')} AL ${planilla.padreCosto.fechaFin.format('dd-MM-yyyy')}</td>"
                     tabla += "<td class='tar'>${numero(numero: valor)}</td>"
                     tabla += "<td class='tar'>${numero(numero: indi)}</td>"
                     tabla += "<td class='tar'>${numero(numero: valor + indi)}</td>"
