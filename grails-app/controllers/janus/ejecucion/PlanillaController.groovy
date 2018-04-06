@@ -3639,6 +3639,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def plnl = Planilla.get(params.id)
 
         if(plnl.tipoPlanilla.codigo == 'E') {
+            multasEntrega(params.id)
             flash.message = "Procesa planilla contra entrega"
 //            detalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
         }
@@ -4259,6 +4260,27 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
+    }
+
+    /** calcula multas se aplica sólo a planillas de avance **/
+    def multasEntrega(id){
+        def plnl = Planilla.get(id)
+        def cmpl = Contrato.findByPadre(plnl.contrato)
+        def retraso = 0
+        def multaPlanilla = 0.0
+        def prmt = [:]
+        def dias = 0
+        def formatoNum = new DecimalFormat("#,###.##")
+
+        /********* multa por no acatar disposiciones del fiscalizador  **********/
+        multaPlanilla = Math.round(plnl.contrato.monto * plnl.diasMultaDisposiciones * (plnl.contrato.multaDisposiciones / 1000)*100)/100
+        prmt = [:]
+        prmt.planilla = plnl
+        prmt.tipoMulta = TipoMulta.get(3) //// 3 multa por por no aactar disposiciones del fiscalizador
+        prmt.descripcion = "${plnl.contrato.multaDisposiciones} x 1000 de ${formatoNum.format(plnl.contrato.monto.toDouble())} por día"
+        prmt.dias = plnl.diasMultaDisposiciones
+        prmt.monto = multaPlanilla
+        insertaMulta(prmt)
     }
 
     def errorDiasLaborables(cntr, anio, mnsj){

@@ -1733,6 +1733,9 @@ class ReportePlanillas3Controller {
     def reportePlanillaNuevo() {
 //        println "reportePlanillaNuevo params: $params"
         def planilla = Planilla.get(params.id)
+        if(planilla.tipoPlanilla.codigo.trim() == 'E') {
+            redirect action: 'rptPlnlEntrega', params: params
+        }
 
         if (planilla.tipoPlanilla.codigo == 'Q') {
             if (!planilla.contrato.fechaPedidoRecepcionContratista || !planilla.contrato.fechaPedidoRecepcionFiscalizador) {
@@ -1790,6 +1793,63 @@ class ReportePlanillas3Controller {
             pdfs.add(pl.toByteArray())
             contador++
         }
+
+        if(contador > 1) {
+            def baos = new ByteArrayOutputStream()
+            Document document
+            document = new Document(PageSize.A4);
+
+            def pdfw = PdfWriter.getInstance(document, baos);
+            document.open();
+            PdfContentByte cb = pdfw.getDirectContent();
+
+            pdfs.each {f ->
+                PdfReader reader = new PdfReader(f);
+                for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+                    //nueva página
+                    document.newPage();
+                    //importa la página "i" de la fuente "reader"
+                    PdfImportedPage page = pdfw.getImportedPage(reader, i);
+                    //añade página
+                    cb.addTemplate(page, 0, 0);
+                }
+            }
+            document.close();
+            b = baos.toByteArray();
+        } else {
+            b = pl.toByteArray();
+        }
+
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=${name}")
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
+    /**
+     * Obtiene los reportes pdf de tablas, resumen de reajustes, multas y detalle de planilla si existe
+     * crear reporte de resumen de reajustes
+     **/
+    def rptPlnlEntrega() {
+//        println "reportePlanillaNuevo params: $params"
+        def planilla = Planilla.get(params.id)
+        def pl = new ByteArrayOutputStream()
+        byte[] b
+        def pdfs = []  /** pdfs a armar en el nuevo documento **/
+        def contador = 0
+        def name = "planilla_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+
+            println "invoca multas"
+            pl = multas(planilla, "")
+            if(pl) {
+                pdfs.add(pl.toByteArray())
+                contador++
+            }
+
+//            println "invoca detalle"
+//            pl = detalle(planilla, planilla.tipoContrato)
+//            pdfs.add(pl.toByteArray())
+//            contador++
 
         if(contador > 1) {
             def baos = new ByteArrayOutputStream()

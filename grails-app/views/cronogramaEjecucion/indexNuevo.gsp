@@ -118,7 +118,7 @@
     <i class="icon-exclamation-sign" style="color: #cf0e21"></i> La ruta crítica se muestra con los rubros marcados en amarillo
 </div>
 
-<g:if test="${suspensiones.size() != 0}">
+<g:if test="${(suspensiones.size() != 0) && ini}">
     <div class="alert alert-danger">
         <strong>La obra se encuentra suspendida desde ${ini*.format("dd-MM-yyyy")}</strong>
     </div>
@@ -316,7 +316,7 @@
                             data += "&cntr=${contrato.id}";
                             $.ajax({
                                 type: "POST",
-                                url: "${createLink(action:'terminaSuspensionTemp')}",
+                                url: "${createLink(action:'terminaSuspensionNuevo')}",
                                 data: data,
                                 success: function (msg) {
 //                                            ////console.log(msg);

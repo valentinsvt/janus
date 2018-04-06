@@ -68,22 +68,45 @@
 
             <div class="row">
                 <div class='span2 formato'>
-                    Tipo de Planilla
+                    Tipo de Planilla2
                 </div>
 
-                <div class="span10">
+                <div class="span3">
                     <g:if test="${planillaInstance?.id}">
-                        <g:if test="${planillaInstance?.tipoPlanilla.toString() != 'A'}">
-                            ${planillaInstance?.tipoPlanilla?.nombre} <span
-                                style="margin-left: 290px;">Planillado del: ${planillaInstance?.fechaInicio?.format('dd-MM-yyyy')} Hasta: ${planillaInstance?.fechaFin?.format('dd-MM-yyyy')}</span>
-                        </g:if>
-                        <g:else>
                             ${planillaInstance?.tipoPlanilla?.nombre}
-                        </g:else>
                     </g:if>
                 </div>
 
-                <div class="span4">
+            <div class="span1 formato" style="width: 120px">
+                Fecha desde
+            </div>
+
+            <div class="span2">
+                <elm:datepicker name="fechaInicio" class=" span2 required" style="width: 100px;"
+                                value="${planillaInstance?.fechaInicio}"
+                                minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
+                                maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+
+            <div class="span1 formato">
+                Fecha hasta
+            </div>
+
+            <div class="span2">
+                <elm:datepicker name="fechaFin" class=" span2 required" style="width: 100px;"
+                                value="${planillaInstance?.fechaFin}"
+                                minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
+                                maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+
+
+            <div class="span4">
                     <g:if test="${!planillaInstance?.id}">
                         <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id"
                                   optionValue="nombre"

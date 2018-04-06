@@ -68,6 +68,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
 
     def terminaSuspension_ajax() {
+        println "terminaSuspension_ajax: $params"
         def obra = Obra.get(params.obra)
         def fi = Modificaciones.withCriteria {
             eq("obra", obra)
@@ -92,7 +93,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         println "suspensionNueva, params: $params"
         def cntr = Contrato.get(params.cntr)
         def obra = cntr.obra
-        def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
+        def periodos = PeriodoEjecucion.findAllByContratoAndObra(cntr, obra, [sort: 'fechaInicio'])
         def fin = null
         def finSusp = null
         def dias = -1
@@ -101,7 +102,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def plnl = Planilla.findAllByContratoAndFechaFinGreaterThan(cntr, ini, [sort: 'fechaInicio'])
         println "planillas: ${plnl.fechaInicio} - ${plnl.fechaFin}"
-
 
         if (plnl.size() > 0) {
             flash.message = "La fecha ingresada corresponde a un periodo planillado con la planilla: ${plnl.numero} del " +
@@ -115,6 +115,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 dias = finSusp - ini + 1
             }
 
+            /* crea la modificación */
             def modificacion = new Modificaciones([
                     contrato     : cntr,
                     obra         : obra,
@@ -138,7 +139,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     params.suspension = modificacion.id
                     params.fcfn = finSusp.format("dd-MM-yyyy")
                     println "registra suspesión e invoca a terminaSuspensionTemp con $params.fcfn"
-                    terminaSuspensionTemp()
+                    terminaSuspensionNuevo()
                 }
                 render "OK"
             }
@@ -1277,7 +1278,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             periodos.eachWithIndex { periodo, i ->
 //                def cronoPer = CronogramaEjecucion.findAllByVolumenObraAndPeriodo(crono.volumen, periodo)
                 def cronoPer = CrngEjecucionObra.findAllByVolumenObraAndPeriodo(crono.volumen, periodo)
-                if((periodo.id == 628) && crono.compl){
+                if ((periodo.id == 628) && crono.compl) {
                     println "---- periodo: $periodo, vocr: ${crono.volumen.id} --> ${cronoPer.size()}"
                 }
 
@@ -1336,7 +1337,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += '<td colspan="2"> </td>'
             html += '<td>Cant.</td>'
             html += "<td class='num subtotal'>"
-            html += numero(crono.cantidad)+"A"
+            html += numero(crono.cantidad) + "A"
 //            crono.parcial = Math.round(crono.parcial.toDouble() * 100) / 100
 //            html += numero(crono.parcial)+ "C" + "</td>"     /* cantidad  **/
 
@@ -1534,6 +1535,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 }
             }
         }
+//        println "--suspensiones: ${suspensiones.id}"
 
         def ini = Modificaciones.withCriteria {
             eq("obra", obra)
@@ -1543,10 +1545,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 min("fechaInicio")
             }
         }
+//        println "--suspensiones+: ${ini?.fechaInicio}"
 
         def comp = Contrato.findByPadreAndTipoContrato(contrato, TipoContrato.findByCodigo('C'))
 
-        return [obra : obra, contrato: contrato, suspensiones: suspensiones, ini: ini, desde: desde.toInteger(),
+        return [obra : obra, contrato: contrato, suspensiones: suspensiones, ini: ini.last(), desde: desde.toInteger(),
                 hasta: hasta.toInteger(), maximo: 100, complementario: comp?.id ?: 0]
     }
 
@@ -1560,21 +1563,22 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def vlor
         def cmpl = Contrato.findByPadre(cntr)
         def sql = "update prej set prejcrpa = (select sum(creoprco) from creo " +
-                "where creo.prej__id = prej.prej__id) where cntr__id = ${cntr.id}"
+                "where creo.prej__id = prej.prej__id) where cntr__id = ${cntr.id} and prejtipo <> 'S'"
         cn.execute(sql.toString())
 
         sql = "update prej set prejcntr = (select sum(creoprco) from creo " +
                 "where creo.prej__id = prej.prej__id and vocr__id in (select vocr__id from vocr " +
-                "where cntr__id = ${cntr.id} and cntrcmpl is null)) where cntr__id = ${cntr.id}"
+                "where cntr__id = ${cntr.id} and cntrcmpl is null)) where cntr__id = ${cntr.id} and prejtipo <> 'S'"
         def cnta = cn.executeUpdate(sql.toString())
-        if(cmpl) {
+        if (cmpl) {
             sql = "update prej set prejcmpl = (select sum(creoprco) from creo " +
                     "where creo.prej__id = prej.prej__id and vocr__id in (select vocr__id from vocr " +
-                    "where cntr__id = ${cntr.id} and cntrcmpl is not null)) where cntr__id = ${cntr.id}"
+                    "where cntr__id = ${cntr.id} and cntrcmpl is not null)) where cntr__id = ${cntr.id} and " +
+                    "prejtipo <> 'S'"
             cn.execute(sql.toString())
         }
 
-        if(cnta > 0) {
+        if (cnta > 0) {
             flash.message = "Se actualizador ${cnta} registros en períodos de ejecución"
         } else {
             flash.message = "No se pudo actualizar los períodos de ejecución"
@@ -2094,6 +2098,282 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         actualizaPrej()
         render "OK"
     }
+    /**
+     * copia PREJ actual a prej_t y CREJ actual a crej_t
+     * crea nuevos periodos e inserta los valores correspondientes en el cronograma de acuerdo
+     * a lo que se ejecuta en el periodo correspondiente
+     */
+
+    def terminaSuspensionNuevo() {
+        println "termina suspension nuevo (2018) params: $params"
+        def cn = dbConnectionService.getConnection()
+        def cntr = Contrato.get(params.cntr)
+        def prejActual = PeriodoEjecucion.findAllByContrato(cntr)
+        def tx1 = ""
+        def tx2 = ""
+
+        /** Cargar en prej_t y crej_t el CREJ actual, borrando el anterior **/
+
+        //================== rspalda en Xrej_t valores de cronograma y periodo
+        tx1 = "delete from creo_t where prej__id in (select prej__id from prej_t where cntr__id = ${cntr.id})"
+        tx2 = "delete from prej_t where cntr__id = ${cntr.id}"
+//        println "tx1: $tx1"
+//        println "tx2: $tx2"
+        cn.execute(tx1.toString())
+        cn.execute(tx2.toString())
+        println "ha borrado registros temporales, prejActual: ${prejActual.id}"
+
+        tx1 = "insert into prej_t(prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
+                "prejcrpa, prejcntr, prejcmpl) " +
+                "select prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
+                "prejcrpa, prejcntr, prejcmpl from prej where cntr__id = ${cntr.id}"
+        cn.execute(tx1.toString())
+
+        tx1 = "insert into creo_t(creo__id, prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                "select creo__id, prej__id, vocr__id, creocntd, creoprct, creoprco " +
+                "from creo where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})"
+        cn.execute(tx1.toString())
+        println "se ha creado registros temporales en prej_t y creo_t"
+        //=================
+
+        /** borra crej y prej actuales **/
+        cn.execute("delete from crej where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})".toString())
+        cn.execute("delete from creo where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})".toString())
+        cn.execute("delete from prej where cntr__id = ${cntr.id}".toString())
+        println "borrado de datos actuales de prej y crej"
+
+        def suspension
+        def diasSusp = 0
+        def suspensiones
+
+        def fcfn
+        if (params.fcfn) {
+            fcfn = new Date().parse("dd-MM-yyyy", params.fcfn)
+        }
+        if (fcfn) {
+            suspensiones = Modificaciones.findAllByContratoAndTipoAndFechaFin(cntr, "S", fcfn)
+        } else {
+            suspensiones = Modificaciones.findAllByContratoAndTipoAndFechaFinIsNull(cntr, "S")
+        }
+//        println "suspensión: ${suspensiones.size()}, inicio en ${suspensiones[0].fechaInicio.format('dd-MMM-yyyy'.toString())}"
+
+        def fin = new Date().parse("dd-MM-yyyy", params.fin)
+        def finSusp = fin
+        cn.close()
+
+        if (suspensiones.size() > 1) {
+            return "Error... existe mas de una suspension en curso"
+        } else {
+            suspension = suspensiones[0]
+            diasSusp = finSusp - suspension.fechaInicio + 1
+            suspension.dias = diasSusp
+            suspension.fechaFin = finSusp
+            if (params.observaciones && params.observaciones.trim() != "") {
+                suspension.observaciones = params.observaciones + "||" + suspension.observaciones
+            }
+            if (!suspension.save(flush: true)) {
+                println "ERROR EN TEMINAR SUSSPENSION: " + suspension.errors
+                render "NO"
+            } else {
+                def prejOk = insertaSuspensionNuevo(cntr, suspension.fechaInicio, suspension.fechaFin, 'S')
+
+                if (prejOk) {
+                    println "Fin de suspensión actualizada a: ${suspension.fechaFin}, dias: ${suspension.dias}"
+                    params.contrato = cntr.id
+                    actualizaPrej()
+                    render "OK"
+                }
+            }
+        }
+    }
+
+    def insertaSuspensionNuevo(cntr, pfcin, pfcfn, tipo) {
+        println "insertaSuspensionNuevo: $params"
+        def cn = dbConnectionService.getConnection()
+//        def cntr = Contrato.get(params.contrato)
+        def comp = Contrato.findByPadreAndTipoContrato(cntr, TipoContrato.findByCodigo(tipo))
+//        def dias = comp.plazo
+        def obra = cntr.obra
+        def sql = ""
+        def errores = false
+
+//        def mdfc = Modificaciones.findByContratoAndTipo(cntr, 'C')
+        def mdfc = Modificaciones.findByContratoAndTipoAndFechaInicio(cntr, tipo, pfcin)
+        /* los periodos hasta la susupensión quedan igual */
+        sql = "insert into prej(prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
+                "prejcrpa, prejcntr, prejcmpl) " +
+                "select prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
+                "prejcrpa, prejcntr, prejcmpl from prej_t where cntr__id = ${cntr.id} and " +
+                "prejfcfn <= '${pfcin}'"
+        println "--> $sql"
+        cn.execute(sql.toString())
+
+        sql = "insert into creo(creo__id, prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                "select creo__id, prej__id, vocr__id, creocntd, creoprct, creoprco " +
+                "from creo_t where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})"
+        println "-- creo> $sql"
+        cn.execute(sql.toString())
+
+        sql = "delete from creo_t where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})"
+        cn.execute(sql.toString())
+
+        sql = "delete from prej_t where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})"
+        cn.execute(sql.toString())
+
+        println "---> mdce: ${mdfc.id}, insertados periodos hasta suspensión"
+
+        sql = "select prej__id, prejfcin, prejfcfn, prejnmro, prejfcfn - prejfcin dias from prej_t " +
+                "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') order by prejfcin limit 1"
+        println "---> $sql"
+
+        def fcin
+        def fcfn
+        def prdo
+        def diasPrdo
+        def prej_id
+        def fctr = 1.0
+        def fcha
+
+        cn.eachRow(sql.toString()) {d ->
+            prej_id = d.prej__id
+            fcin = d.prejfcin
+            fcfn = d.prejfcfn
+            prdo = d.prejnmro
+            diasPrdo = d.dias +1
+        }
+        def dias = pfcin - fcin
+        def diasrsto = fcfn - pfcin + 1
+        def fcfm = preciosService.ultimoDiaDelMes(pfcfn)
+
+        println "procesa primer periodo: ${prej_id} --> ${fcfn} > ${pfcin}, fcin: $fcin"
+        if(fcfn > pfcin){
+            diasrsto = fcfn - pfcin + 1
+            fctr = 1 - (diasrsto / diasPrdo)
+            fcha = (pfcin - 1).format('yyyy-MM-dd')
+            println "diasrsto: $diasrsto, fctr: $fctr"
+            sql = "insert into prej(prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
+                    "prejcrpa, prejcntr, prejcmpl) " +
+                    "select prej__id, cntr__id, obra__id, '${fcha}', prejfcin, prejnmro, prejtipo, " +
+                    "prejcrpa, prejcntr, prejcmpl from prej_t where prej__id = ${prej_id}"
+            println "--1> $sql"
+            cn.execute(sql.toString())
+            sql = "insert into creo(creo__id, prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                    "select creo__id, prej__id, vocr__id, creocntd*${fctr}, creoprct*${fctr}, creoprco * ${fctr} " +
+                    "from creo_t where prej__id = ${prej_id} "
+            println "--2> $sql"
+            cn.execute(sql.toString())
+            println "se ha modificado el último periodo antes de la susp."
+
+            def nuevoId = insertaPrejNuevo(obra, prdo, 'S', pfcin, pfcfn, cntr)
+            if (nuevoId) {
+                if(fcfm > pfcfn) {
+                    dias = fcfm - pfcfn
+                    fcin = pfcfn + 1
+
+                    if(dias < diasrsto) {
+                        diasrsto -=  dias
+                        fctr = dias / diasPrdo
+                        println "----crea nuevo periodo hasta ${fcfm} --> diasPrdo $diasPrdo"
+                        nuevoId = insertaPrejNuevo(obra, prdo, 'P', fcin, fcfm, cntr)
+                        println "----creado con id: ${nuevoId}"
+                        sql = "insert into creo(prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                                "select ${nuevoId}, vocr__id, creocntd*${fctr}, creoprct*${fctr}, creoprco * ${fctr} " +
+                                "from creo_t where prej__id = ${prej_id} "
+                        println "inserta nuevo con $sql"
+                        cn.execute(sql.toString())
+                        println "---------insertado"
+                        /* se debe crear otro periodo con el mismo número y factor */
+                        fcin = fcfm + 1
+                        fcfn = fcin + diasrsto - 1
+                        fctr = diasrsto / diasPrdo
+                        println "----crea periodo adicional hasta ${fcfn}"
+                        nuevoId = insertaPrejNuevo(obra, prdo, 'P', fcin, fcfn, cntr)
+                        println "----creado con id: ${nuevoId}"
+
+                        sql = "insert into creo(prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                                "select ${nuevoId}, vocr__id, creocntd*${fctr}, creoprct*${fctr}, creoprco * ${fctr} " +
+                                "from creo_t where prej__id = ${prej_id} "
+                        println "-- inserta con: $sql"
+                        cn.execute(sql.toString())
+                        println "---------insertadoAdicional $nuevoId"
+
+                    } else {
+                        fctr = diasrsto / diasPrdo
+                        fcfn = pfcfn + diasrsto
+                        nuevoId = insertaPrejNuevo(obra, prdo, 'P', fcin, fcfn, cntr)
+
+                        sql = "insert into creo(prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                                "select ${nuevoId}, vocr__id, creocntd*${fctr}, creoprct*${fctr}, creoprco * ${fctr} " +
+                                "from creo_t where prej__id = ${prej_id} "
+                        println "--2r> $sql"
+                        cn.execute(sql.toString())
+                    }
+                } else {
+                    fcin = fcfm + 1
+                    fcfn = fcin + diasrsto
+                    fctr = diasrsto / diasPrdo
+                    nuevoId = insertaPrejNuevo(obra, prdo, 'P', fcin, fcfn, cntr)
+
+                    sql = "insert into creo(prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                            "select ${nuevoId}, vocr__id, creocntd*${fctr}, creoprct*${fctr}, creoprco * ${fctr} " +
+                            "from creo_t where prej__id = ${prej_id} "
+                    println "====> $sql"
+                    cn.execute(sql.toString())
+                }
+
+                /* insertar siguientes periodos recalculando las partes */
+                fcin = fcfn + 1
+                println "**** procesa periodos posteriores: $fcin"
+                fcfm = preciosService.ultimoDiaDelMes(fcin)
+
+                sql = "delete from creo_t where prej__id = ${prej_id}"
+                cn.execute(sql.toString())
+                sql = "delete from prej_t where prej__id = ${prej_id}"
+                cn.execute(sql.toString())
+                sql = "select prejnmro, sum(prejfcfn - prejfcin + 1) dias, prejtipo from prej_t " +
+                        "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') " +
+                        "group by prejnmro, prejtipo order by 1"
+                println "---> $sql"
+
+                def periodos = cn.rows(sql.toString())
+                def prejtipo = ''
+                periodos.each { pr ->
+                    prdo = pr.prejnmro
+                    diasPrdo = pr.dias
+                    prejtipo = pr.prejtipo
+                    println "....reprogramar periodo $prdo"
+
+                    diasrsto = (fcfm - fcin + 1)
+
+                    println "+++++ rsto: $diasrsto, diasPrdo: $diasPrdo"
+                    if(diasrsto < diasPrdo) {
+                        println "+++++ se debe dividir en otro mes ++++++"
+                    } else {
+                        println "+++++ crea nuevo periodo posterior ++++++"
+                        fctr = 1
+                        fcfn = fcin + diasPrdo.toInteger() - 1
+                        println "NuevoPrej: ${obra.id}, $prdo, $prejtipo, $fcin, $fcfn, ${cntr.id}"
+                        nuevoId = insertaPrejNuevo(obra, prdo, prejtipo, fcin, fcfn, cntr)
+                        println "+++++ creado ++++++"
+
+                        sql = "insert into creo(prej__id, vocr__id, creocntd, creoprct, creoprco) " +
+                                "select ${nuevoId}, vocr__id, sum(creocntd)*${fctr}, sum(creoprct)*${fctr}, " +
+                                "sum(creoprco) * ${fctr} " +
+                                "from creo_t where prej__id in (select prej__id from prej_t " +
+                                "where prejnmro = ${prdo} and cntr__id = ${cntr.id}) " +
+                                "group by vocr__id"
+                        println "--suma> $sql"
+                        cn.execute(sql.toString())
+
+                    }
+                }
+            }
+        }
+
+        println "continua el proceso..."
+        return true
+
+    }
 
     /** Se debe incluir en el cronograma de jecución los periodos adicionales por el complementario
      * 1. Crear nuevos PREJ
@@ -2108,7 +2388,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def prejOk = insertaSuspension(cntr, diasPlzo, 'C')
 
-        if(prejOk) {
+        if (prejOk) {
 //        if (true) {
             def sql = "select max(prejnmro) nmro from prej where cntr__id = ${cntr.id} and prejfcin <= " +
                     "(select min(prejfcin) from prej where cntr__id = ${cntr.id} and prejtipo = 'C') and prejtipo <> 'C'"
@@ -2121,7 +2401,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             def creoNuevo
 
             while (diasPlzo > 0) {
-                def crcr = CronogramaContratado.findAllByContratoAndPeriodo(cntr, cont+prdo)
+                def crcr = CronogramaContratado.findAllByContratoAndPeriodo(cntr, cont + prdo)
 //                println "procesa periodo: $cont"
                 mess = diasPlzo >= 30 ? 30 : diasPlzo % 30
                 crcr.each { cr ->
@@ -2254,7 +2534,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         }
                     }
                 }
-
             }
 
             if (!errores) {
@@ -2273,13 +2552,17 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 tipo       : tipo,
                 fechaInicio: fcin,
                 fechaFin   : fcfn,
-                contrato   : cntr
+                contrato   : cntr,
+                parcialCronograma: 0,
+                parcialContrato: 0,
+                parcialCmpl: 0
         ])
         if (!periodo.save(flush: true)) {
             println "ERROR!!!!: " + periodo.errors
             return false
         } else {
-            return true
+            println "+++ insertado periodo"
+            return periodo.refresh().id
         }
 //        return true
     }

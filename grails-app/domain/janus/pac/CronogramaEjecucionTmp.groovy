@@ -1,10 +1,11 @@
 package janus.pac
 
+import janus.VolumenContrato
 import janus.VolumenesObra
 
 class CronogramaEjecucionTmp {
 
-    VolumenesObra volumenObra
+    VolumenContrato volumenObra
     PeriodoEjecucionTmp periodo
 //    Integer periodo
 //    String tipo
@@ -15,21 +16,21 @@ class CronogramaEjecucionTmp {
     Double cantidad
     static auditable = true
     static mapping = {
-        table 'crej_t'
+        table 'creo_t'
         cache usage: 'read-write', include: 'non-lazy'
         id column: 'crej__id'
         id generator: 'identity'
         version false
         columns {
-            id column: 'crej__id'
-            volumenObra column: 'vlob__id'
+            id column: 'creo__id'
+            volumenObra column: 'vocr__id'
             periodo column: 'prej__id'
 //            tipo column: 'crejtipo'
 //            fechaInicio column: 'crejfcin'
 //            fechaFin column: 'crejfcfn'
-            precio column: 'crejprco'
-            porcentaje column: 'crejprct'
-            cantidad column: 'crejcntd'
+            precio column: 'creoprco'
+            porcentaje column: 'creoprct'
+            cantidad column: 'creocntd'
         }
     }
     static constraints = {
