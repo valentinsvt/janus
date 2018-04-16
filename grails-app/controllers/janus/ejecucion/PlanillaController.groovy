@@ -568,6 +568,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def listFiscalizador() {
+        params.max = 15
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
         switch (codigoPerfil) {
@@ -598,6 +599,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        def tipoAvance = TipoPlanilla.findByCodigo('P')
         def liquidacion = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('Q'))?.id > 0
 
+        println "---> $params"
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList,
                 firma: firma, liquidacion: liquidacion]
     }
@@ -1629,7 +1631,7 @@ class PlanillaController extends janus.seguridad.Shield {
         } else {
             def hasta = planillasAvance[-1].fechaFin
 //            println "fecha hasta: $hasta"
-            periodosEjec = PeriodoEjecucion.findAllByContratoAndTipoInListAndFechaInicioGreaterThan(contrato, ['P', 'A'], hasta, [sort: "fechaFin"])
+            periodosEjec = PeriodoEjecucion.findAllByContratoAndTipoInListAndFechaInicioGreaterThan(contrato, ['P', 'A', 'C'], hasta, [sort: "fechaFin"])
         }
         def finalObra = null
 //        println "periodosEjec: ${periodosEjec.size()}"
@@ -4846,7 +4848,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     /**
-     * se presenta el o losp eriodos a planillarse, si no se ajuste el mes se crea un periodo opcional que
+     * se presenta el o los periodos a planillarse, si no se ajuste el mes se crea un periodo opcional que
      * abarca el mes inicial y el siguiente
      * @param tipos         tipos de planilla
      * @param cntr          contrato

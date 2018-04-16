@@ -1790,6 +1790,7 @@ class ReportePlanillas3Controller {
 
             println "invoca detalle"
             pl = detalle(planilla, planilla.tipoContrato)
+//            pl = detalleAdicional(planilla, planilla.tipoContrato)  /* columna adicional */
             pdfs.add(pl.toByteArray())
             contador++
         }
@@ -2708,11 +2709,12 @@ class ReportePlanillas3Controller {
             def tablaHeaderDetalles = new PdfPTable(12);
             tablaHeaderDetalles.setWidthPercentage(100);
 //            tablaHeaderDetalles.setWidths(arregloEnteros([13, 34, 5, 9, 9, 7, 7, 11, 13, 13, 13, 4]))
-            tablaHeaderDetalles.setWidths(arregloEnteros([12, 31, 5, 8, 9, 9, 11, 15, 11, 11, 11, 7]))
+//            tablaHeaderDetalles.setWidths(arregloEnteros([12, 31, 5, 8, 9, 9, 11, 15, 11, 11, 11, 7]))
+            tablaHeaderDetalles.setWidths(arregloEnteros([2, 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2]))
 
 
 
-            addCellTabla(tablaHeaderDetalles, new Paragraph("Obra", fontThTiny), prmsTdNoBorder)
+            addCellTabla(tablaHeaderDetalles, new Paragraph("ObraDDDD", fontThTiny), prmsTdNoBorder)
             addCellTabla(tablaHeaderDetalles, new Paragraph(obra.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 11])
 
             addCellTabla(tablaHeaderDetalles, new Paragraph("Lugar", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -2771,7 +2773,9 @@ class ReportePlanillas3Controller {
         document.newPage()
         tablaDetalles = new PdfPTable(12);
         tablaDetalles.setWidthPercentage(100);
-        tablaDetalles.setWidths(arregloEnteros([12, 38, 5, 8, 9, 10, 10, 10, 11, 11, 11, 7]))
+//        tablaDetalles.setWidths(arregloEnteros([12, 38, 5, 8, 9, 10, 10, 10, 11, 11, 11, 7]))
+//        tablaDetalles.setWidths(arregloEnteros([2, 6, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2]))
+        tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
         tablaDetalles.setSpacingAfter(1f);
         def currentPag = 1
         def sumaPrclAntr = 0, sumaTotlAntr = 0
@@ -2879,7 +2883,8 @@ class ReportePlanillas3Controller {
                 tablaDetalles = new PdfPTable(12);
                 tablaDetalles.setWidthPercentage(100);
 //                tablaDetalles.setWidths(arregloEnteros([12, 34, 5, 9, 9, 9, 10, 11, 11, 11, 11, 8]))
-                tablaDetalles.setWidths(arregloEnteros([12, 31, 5, 8, 9, 9, 11, 15, 11, 11, 11, 7]))
+//                tablaDetalles.setWidths(arregloEnteros([12, 31, 5, 8, 9, 9, 11, 15, 11, 11, 11, 7]))
+                tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
                 tablaDetalles.setSpacingAfter(1f);
                 printHeaderDetalle([pag: currentPag, total: totalPags])
                 rowsCurPag = 1
