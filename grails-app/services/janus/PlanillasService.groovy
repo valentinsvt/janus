@@ -326,5 +326,27 @@ class PlanillasService {
         tblaRs  //retorna tabla armada
     }
 
+    def nombrePersona(persona, tipo) {  /** personas y proveedores */
+//        println "nombrePersona" + persona
+//        println tipo
+        def str = ""
+        if (persona) {
+            switch (tipo) {
+                case "pers":
+                    str = ((persona.titulo ? persona.titulo + " " : "") + persona.nombre + " " + persona.apellido).toUpperCase()
+                    break;
+                case "prov":
+                    str = ((persona.titulo ? persona.titulo + " " : "").toUpperCase() + persona.nombreContacto +
+                            " " + persona.apellidoContacto).toUpperCase()
+                    break;
+            }
+        }
+//        println str
+//        println "****************************************************"
+        return str
+    }
+
+
+
 
 }

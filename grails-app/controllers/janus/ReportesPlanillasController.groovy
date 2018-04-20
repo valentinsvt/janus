@@ -42,6 +42,7 @@ class ReportesPlanillasController {
     def preciosService
     def dbConnectionService
     def diasLaborablesService
+    def planillasService
 
 
     private String cap(str) {
@@ -607,7 +608,7 @@ class ReportesPlanillasController {
     }
 
     def reporteAvance() {
-//        println "reporteAvance $params"
+        println "reporteAvance $params"
         def cn = dbConnectionService.getConnection()
         def plnl = Planilla.get(params.plnl)
 
@@ -986,12 +987,16 @@ class ReportesPlanillasController {
         /* **************************************************************** FIN RESUMEN ******************************************************************************/
 
         /* **************************************************************** FIRMA ******************************************************************************/
+        def strFiscalizador = planillasService.nombrePersona(plnl.fiscalizador, 'pers') + "\n                FISCALIZADOR"
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph("_________________________________________", fontTd))
-        document.add(new Paragraph("           FIRMA FISCALIZADOR", fontTd))
+//        document.add(new Paragraph("           FIRMA FISCALIZADOR", fontTd))
+
+        document.add(new Paragraph(strFiscalizador, fontTd))
+//        addCellTabla(tablaClima, new Paragraph(valT, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         /* **************************************************************** FIN FIRMA ******************************************************************************/
 
         document.close();
@@ -1002,6 +1007,8 @@ class ReportesPlanillasController {
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
+
+
 
     def reporteAvanceTotal() {
         println "reporteAvanceTotal: $params"

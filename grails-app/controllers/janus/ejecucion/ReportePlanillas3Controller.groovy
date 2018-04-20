@@ -1789,8 +1789,8 @@ class ReportePlanillas3Controller {
             }
 
             println "invoca detalle"
-            pl = detalle(planilla, planilla.tipoContrato)
-//            pl = detalleAdicional(planilla, planilla.tipoContrato)  /* columna adicional */
+//            pl = detalle(planilla, planilla.tipoContrato)
+            pl = detalleAdicional(planilla, planilla.tipoContrato)  /* columna adicional */
             pdfs.add(pl.toByteArray())
             contador++
         }
@@ -2685,7 +2685,8 @@ class ReportePlanillas3Controller {
         def prmsTdNoBorder = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
 
         Document document
-        document = new Document(PageSize.A4.rotate());
+//        document = new Document(PageSize.A4.rotate());
+        document = new Document(PageSize.A4);
         document.setMargins(50,30,30,28)  // 28 equivale a 1 cm: izq, derecha, arriba y abajo
         def pdfw = PdfWriter.getInstance(document, baos);
         document.resetHeader()
@@ -2708,13 +2709,12 @@ class ReportePlanillas3Controller {
         def printHeaderDetalle = { params ->
             def tablaHeaderDetalles = new PdfPTable(12);
             tablaHeaderDetalles.setWidthPercentage(100);
-//            tablaHeaderDetalles.setWidths(arregloEnteros([13, 34, 5, 9, 9, 7, 7, 11, 13, 13, 13, 4]))
-//            tablaHeaderDetalles.setWidths(arregloEnteros([12, 31, 5, 8, 9, 9, 11, 15, 11, 11, 11, 7]))
-            tablaHeaderDetalles.setWidths(arregloEnteros([2, 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2]))
+            tablaHeaderDetalles.setWidths(arregloEnteros([14, 31, 8, 8, 9, 16, 8, 8, 8, 8, 8, 8]))
+//            tablaHeaderDetalles.setWidths(arregloEnteros([2, 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2]))
 
 
 
-            addCellTabla(tablaHeaderDetalles, new Paragraph("ObraDDDD", fontThTiny), prmsTdNoBorder)
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Obra", fontThTiny), prmsTdNoBorder)
             addCellTabla(tablaHeaderDetalles, new Paragraph(obra.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 11])
 
             addCellTabla(tablaHeaderDetalles, new Paragraph("Lugar", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -2726,8 +2726,8 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaHeaderDetalles, new Paragraph("Ubicación", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaHeaderDetalles, new Paragraph("Parroquia " + obra.parroquia?.nombre + " Cantón " + obra.parroquia?.canton?.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 3])
             addCellTabla(tablaHeaderDetalles, new Paragraph("Monto", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaHeaderDetalles, new Paragraph(numero(monto, 2), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
-            addCellTabla(tablaHeaderDetalles, new Paragraph("Pág. " + params.pag + " de " + params.total, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 3])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(numero(monto, 2), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5])
+            addCellTabla(tablaHeaderDetalles, new Paragraph("Pág. " + params.pag + " de " + params.total, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
 
             addCellTabla(tablaHeaderDetalles, new Paragraph("Contratista", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaHeaderDetalles, new Paragraph(planilla.contrato.oferta.proveedor.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 3])
@@ -2743,28 +2743,28 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaDetalles, new Paragraph("Descripción del rubro", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, bwr: borderWidth, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph("U.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph("Precio unitario", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaDetalles, new Paragraph("Volumen contratado", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph("Vol. contrat.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
             PdfPTable inner6 = new PdfPTable(3);
             addCellTabla(inner6, new Paragraph("Cantidades", fontThTiny), [border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
             addCellTabla(inner6, new Paragraph("Anterior", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(inner6, new Paragraph("Actual", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(inner6, new Paragraph("Acumulado", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(inner6, new Paragraph("Acumul.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, inner6, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
 
             PdfPTable inner7 = new PdfPTable(3);
             addCellTabla(inner7, new Paragraph("Valores", fontThTiny), [border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
             addCellTabla(inner7, new Paragraph("Anterior", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(inner7, new Paragraph("Actual", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(inner7, new Paragraph("Acumulado", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(inner7, new Paragraph("Acumul.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, inner7, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
 
-            addCellTabla(tablaDetalles, new Paragraph("Cantidad Adicional", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph("Cant. Adicio.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         }
 
         def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
         def height = 12
-        def maxRows = 25     //45 0riginal 43
+        def maxRows = 43     // en horizontal: 25
         def extraRows = 18   //9
         def currentRows = 1
         def chequeoPg = 0
@@ -2773,9 +2773,8 @@ class ReportePlanillas3Controller {
         document.newPage()
         tablaDetalles = new PdfPTable(12);
         tablaDetalles.setWidthPercentage(100);
-//        tablaDetalles.setWidths(arregloEnteros([12, 38, 5, 8, 9, 10, 10, 10, 11, 11, 11, 7]))
-//        tablaDetalles.setWidths(arregloEnteros([2, 6, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2]))
-        tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
+        tablaDetalles.setWidths(arregloEnteros([14, 40, 5, 9, 9, 9, 9, 9, 11, 11, 11, 8]))
+//        tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
         tablaDetalles.setSpacingAfter(1f);
         def currentPag = 1
         def sumaPrclAntr = 0, sumaTotlAntr = 0
@@ -2882,9 +2881,8 @@ class ReportePlanillas3Controller {
                 document.newPage()
                 tablaDetalles = new PdfPTable(12);
                 tablaDetalles.setWidthPercentage(100);
-//                tablaDetalles.setWidths(arregloEnteros([12, 34, 5, 9, 9, 9, 10, 11, 11, 11, 11, 8]))
-//                tablaDetalles.setWidths(arregloEnteros([12, 31, 5, 8, 9, 9, 11, 15, 11, 11, 11, 7]))
-                tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
+                tablaDetalles.setWidths(arregloEnteros([14, 40, 5, 9, 9, 9, 9, 9, 11, 11, 11, 8]))
+//                tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
                 tablaDetalles.setSpacingAfter(1f);
                 printHeaderDetalle([pag: currentPag, total: totalPags])
                 rowsCurPag = 1
