@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 1/14/13
-  Time: 11:49 AM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page import="janus.ejecucion.TipoPlanilla" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -83,15 +75,17 @@
 
                 </g:if>
 
-                %{--<g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">--}%
-                    %{--<g:link controller="cronogramaEjecucion" class="btn" action="creaCronogramaEjec" id="${contrato?.id}">--}%
-                        %{--<i class="icon-th"></i> Cronograma--}%
-                    %{--</g:link>--}%
-                %{--</g:if>--}%
+%{--
+                <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
+                    <g:link controller="cronogramaEjecucion" class="btn" action="creaCronogramaEjec" id="${contrato?.id}">
+                        <i class="icon-th"></i> Cronograma
+                    </g:link>
+                </g:if>
+--}%
 
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
-                    <g:link controller="cronogramaEjecucion" class="btn btn-info" action="indexNuevo" id="${contrato?.id}">
-                        <i class="icon-th"></i> Cronograma Comp.
+                    <g:link controller="cronogramaEjecucion" class="btn btn-info" action="creaCrngEjecNuevo" id="${contrato?.id}">
+                        <i class="icon-th"></i> Cronograma
                     </g:link>
                 </g:if>
 

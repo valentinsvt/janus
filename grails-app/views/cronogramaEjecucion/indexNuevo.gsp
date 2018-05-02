@@ -68,8 +68,7 @@
 
             <div class="btn-group">
                 <g:if test="${suspensiones.size() == 0}">
-                    <a href="${g.createLink(action: 'actualizaPrej', params: [contrato: contrato?.id])}"
-                       class="btn btn-info">
+                    <a href="#" class="btn btn-info" id="actualizaPrej">
                         <i class="icon-resize-full"></i>
                         Actualizar Períodos
                     </a>
@@ -335,6 +334,20 @@
 
                 }
             });
+        });
+
+        $("#actualizaPrej").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "${createLink(action:'actualizaPrej')}",
+                data: {
+                    cntr: "${contrato.id}"
+                },
+                success: function (msg) {
+                    location.reload(true);
+                }
+            });
+            return false;
         });
 
         $("#btnSusp").click(function () {
