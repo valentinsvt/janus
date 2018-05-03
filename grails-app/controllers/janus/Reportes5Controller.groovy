@@ -1609,7 +1609,7 @@ class Reportes5Controller {
         label = new Label(0, 10, "CÓDIGO CONTRATO", times16format); sheet.addCell(label);
         label = new Label(1, 10, "MONTO", times16format); sheet.addCell(label);
         label = new Label(2, 10, "ANTICIPO PAGADO", times16format); sheet.addCell(label);
-        label = new Label(3, 10, "PLANILLADO", times16format); sheet.addCell(label);
+        label = new Label(3, 10, "TOTAL PLANILLADO", times16format); sheet.addCell(label);
         label = new Label(4, 10, "PLAZO", times16format); sheet.addCell(label);
         label = new Label(5, 10, "CÓDIGO OBRA", times16format); sheet.addCell(label);
         label = new Label(6, 10, "NOMBRE OBRA", times16format); sheet.addCell(label);

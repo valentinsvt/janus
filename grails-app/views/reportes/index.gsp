@@ -150,9 +150,9 @@
             <li text="cnfc" class="item" texto="cnfc">
                 <g:link controller="reportes5" action="contratoFechas" file=""
                         class="link">
-                    Contratos con fechas
+                    Detalle de Contratos y Obras contratadas
                 </g:link>
-                Listado de contratos con fechas de inicio y finalizacion de obras
+                Listado de contratos y obras contratadas inluyendo valores planillados y actas
             </li>
         </ul>
     </div>
@@ -232,6 +232,14 @@
         <p>Listado de obras finalizadas.</p>
         <p>Estas obras cuentan ya con el acta de entrega - rececpción provicional o definitiva.</p>
         <p>El reprote muestra fechas de inicio de obra y fechas de la firma de actas.</p>
+    </div>
+
+    <div id="cnfc" style="display: none">
+        <h3>Detalle de contratos</h3><br>
+
+        <p>Listado de contratos</p>
+        <p>Obras contratadas, monto, plazo y valores totales planillados</p>
+        <p>Fechas de contrato, inicio de obra, recepción de obra y actas de entrega - recepción provisional y definitiva</p>
     </div>
 
 
