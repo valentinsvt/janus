@@ -147,6 +147,13 @@
                 </g:link>
                 Listado de obras finalizadas.
             </li>
+            <li text="cnfc" class="item" texto="cnfc">
+                <g:link controller="reportes5" action="contratoFechas" file=""
+                        class="link">
+                    Contratos con fechas
+                </g:link>
+                Listado de contratos con fechas de inicio y finalizacion de obras
+            </li>
         </ul>
     </div>
 

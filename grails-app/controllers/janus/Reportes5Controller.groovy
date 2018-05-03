@@ -1555,6 +1555,105 @@ class Reportes5Controller {
 
     }
 
+    def contratoFechas () {
+
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rp_contrato()"
+        def res =  cn.rows(sql.toString())
+
+        //excel
+
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+
+
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        sheet.setColumnView(0, 20)
+        sheet.setColumnView(1, 20)
+        sheet.setColumnView(2, 20)
+        sheet.setColumnView(3, 20)
+        sheet.setColumnView(4, 15)
+        sheet.setColumnView(5, 20)
+        sheet.setColumnView(6, 45)
+        sheet.setColumnView(7, 20)
+        sheet.setColumnView(8, 20)
+        sheet.setColumnView(9, 15)
+        sheet.setColumnView(10, 15)
+        sheet.setColumnView(11, 15)
+        sheet.setColumnView(12, 15)
+        sheet.setColumnView(13, 15)
+
+        def label
+        def number
+        def fila = 12;
+
+
+        //cabecera
+        label = new Label(2, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "FISCALIZACIÓN", times16format); sheet.addCell(label);
+        label = new Label(2, 6, "CONTRATOS", times16format); sheet.addCell(label);
+
+        //columnas
+        label = new Label(0, 10, "CÓDIGO CONTRATO", times16format); sheet.addCell(label);
+        label = new Label(1, 10, "MONTO", times16format); sheet.addCell(label);
+        label = new Label(2, 10, "ANTICIPO PAGADO", times16format); sheet.addCell(label);
+        label = new Label(3, 10, "PLANILLADO", times16format); sheet.addCell(label);
+        label = new Label(4, 10, "PLAZO", times16format); sheet.addCell(label);
+        label = new Label(5, 10, "CÓDIGO OBRA", times16format); sheet.addCell(label);
+        label = new Label(6, 10, "NOMBRE OBRA", times16format); sheet.addCell(label);
+        label = new Label(7, 10, "CANTÓN", times16format); sheet.addCell(label);
+        label = new Label(8, 10, "PARROQUIA", times16format); sheet.addCell(label);
+        label = new Label(9, 10, "FECHA DE SUBSCRIPCIÓN", times16format); sheet.addCell(label);
+        label = new Label(10, 10, "FECHA INICIO OBRA", times16format); sheet.addCell(label);
+        label = new Label(11, 10, "FECHA FINALIZACIÓN", times16format); sheet.addCell(label);
+        label = new Label(12, 10, "FECHA ACTA PROVISIONAL", times16format); sheet.addCell(label);
+        label = new Label(13, 10, "FECHA ACTA DEFINITIVA", times16format); sheet.addCell(label);
+
+
+        res.each{ contrato->
+
+            label = new Label(0, fila, contrato.cntrcdgo.toString() ?: ''); sheet.addCell(label);
+            number = new Number(1, fila, contrato.cntrmnto ?: 0); sheet.addCell(number);
+            number = new Number(2, fila, contrato.cntrantc ?: 0); sheet.addCell(number);
+            number = new Number(3, fila, contrato.plnltotl ?: 0); sheet.addCell(number);
+            number = new Number(4, fila, contrato.cntrplzo ?: 0); sheet.addCell(number);
+            label = new Label(5, fila, contrato?.obracdgo?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(6, fila, contrato?.obranmbr?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(7, fila, contrato?.cntnnmbr?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(8, fila, contrato?.parrnmbr?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(9, fila, contrato?.cntrfcsb?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(10, fila, contrato?.obrafcin?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(11, fila, contrato?.cntrfcfs?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(12, fila, contrato?.acprfcha?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(13, fila, contrato?.acdffcha?.toString() ?: ''); sheet.addCell(label);
+
+            fila++
+        }
+
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "contratos.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
+
+    }
+
 
 
 }
