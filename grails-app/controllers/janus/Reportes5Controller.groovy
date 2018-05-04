@@ -1594,6 +1594,8 @@ class Reportes5Controller {
         sheet.setColumnView(11, 15)
         sheet.setColumnView(12, 15)
         sheet.setColumnView(13, 15)
+        sheet.setColumnView(14, 15)
+        sheet.setColumnView(15, 15)
 
         def label
         def number
@@ -1617,9 +1619,11 @@ class Reportes5Controller {
         label = new Label(8, 10, "PARROQUIA", times16format); sheet.addCell(label);
         label = new Label(9, 10, "FECHA DE SUBSCRIPCIÓN", times16format); sheet.addCell(label);
         label = new Label(10, 10, "FECHA INICIO OBRA", times16format); sheet.addCell(label);
-        label = new Label(11, 10, "FECHA FINALIZACIÓN", times16format); sheet.addCell(label);
-        label = new Label(12, 10, "FECHA ACTA PROVISIONAL", times16format); sheet.addCell(label);
-        label = new Label(13, 10, "FECHA ACTA DEFINITIVA", times16format); sheet.addCell(label);
+        label = new Label(11, 10, "F ADMINISTRADOR", times16format); sheet.addCell(label);
+        label = new Label(12, 10, "F PIDE PAGO ANTC", times16format); sheet.addCell(label);
+        label = new Label(13, 10, "FECHA FINALIZACIÓN", times16format); sheet.addCell(label);
+        label = new Label(14, 10, "FECHA ACTA PROVISIONAL", times16format); sheet.addCell(label);
+        label = new Label(15, 10, "FECHA ACTA DEFINITIVA", times16format); sheet.addCell(label);
 
 
         res.each{ contrato->
@@ -1635,9 +1639,12 @@ class Reportes5Controller {
             label = new Label(8, fila, contrato?.parrnmbr?.toString() ?: ''); sheet.addCell(label);
             label = new Label(9, fila, contrato?.cntrfcsb?.toString() ?: ''); sheet.addCell(label);
             label = new Label(10, fila, contrato?.obrafcin?.toString() ?: ''); sheet.addCell(label);
-            label = new Label(11, fila, contrato?.cntrfcfs?.toString() ?: ''); sheet.addCell(label);
-            label = new Label(12, fila, contrato?.acprfcha?.toString() ?: ''); sheet.addCell(label);
-            label = new Label(13, fila, contrato?.acdffcha?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(11, fila, contrato?.fchaadmn?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(12, fila, contrato?.fchapdpg?.toString() ?: ''); sheet.addCell(label);
+
+            label = new Label(13, fila, contrato?.cntrfcfs?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(14, fila, contrato?.acprfcha?.toString() ?: ''); sheet.addCell(label);
+            label = new Label(15, fila, contrato?.acdffcha?.toString() ?: ''); sheet.addCell(label);
 
             fila++
         }
