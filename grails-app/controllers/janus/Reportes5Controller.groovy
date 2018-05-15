@@ -19,6 +19,7 @@ import jxl.WorkbookSettings
 import jxl.write.Label
 import jxl.write.Number
 import jxl.write.NumberFormat
+import jxl.write.WritableCellFeatures
 import jxl.write.WritableCellFormat
 import jxl.write.WritableFont
 import jxl.write.WritableSheet
@@ -1648,6 +1649,17 @@ class Reportes5Controller {
 
             fila++
         }
+
+
+/*Para dropdown*/
+//        WritableCellFeatures cellFeatures = new WritableCellFeatures();
+//        cellFeatures.setComment("Seleccione:", 5, 2);
+//        cellFeatures.setDataValidationList([1,2,3]);
+//        jxl.write.Label dropDown = new jxl.write.Label(2, 5, "Select");
+//        dropDown.setCellFeatures(cellFeatures);
+//        sheet.addCell(dropDown);
+
+
 
 
         workbook.write();

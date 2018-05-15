@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="janus.ejecucion.TipoPlanilla" contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.Contrato; janus.ejecucion.FormulaPolinomicaContractual; janus.ejecucion.TipoPlanilla" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
 
@@ -455,15 +455,31 @@
             <div class="botones">
 
                 <ul class="nav">
-%{--
+                    %{--
+                                        <li>
+                                            <g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">
+                                                <i class="icon-th"></i> Cronograma
+                                            </g:link>
+                                        </li>
+                    --}%
                     <li>
-                        <g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">
-                            <i class="icon-th"></i> Cronograma
-                        </g:link>
-                    </li>
---}%
-                    <li>
-                        <g:link action="copiarPolinomica" id="${contrato?.id}"><i class="icon-superscript"></i> F. polinómica</g:link>
+
+                        <g:if test="${contrato?.estado == 'R'}">
+                            <g:if test="${!janus.ejecucion.FormulaPolinomicaContractual.findAllByContrato(janus.Contrato.get(contrato?.id))}">
+                                <a href="#" class="icon-superscript" id="btnFPoli"> F. polinómica</a>
+                            </g:if>
+                            <g:else>
+                                <g:link action="copiarPolinomica" id="${contrato?.id}"><i class="icon-superscript"></i> F. polinómica</g:link>
+                            </g:else>
+                        </g:if>
+                        <g:else>
+                            <g:if test="${!janus.ejecucion.FormulaPolinomicaContractual.findAllByContrato(janus.Contrato.get(contrato?.id))}">
+                                <a href="#" class="icon-superscript" id="btnFPoliPregunta" data-id="${contrato?.id}"> F. polinómica</a>
+                            </g:if>
+                            <g:else>
+                                <g:link action="copiarPolinomica" id="${contrato?.id}"><i class="icon-superscript"></i> F. polinómica</g:link>
+                            </g:else>
+                        </g:else>
                     </li>
 
                     <li>
@@ -635,6 +651,77 @@
 
 <script type="text/javascript">
 
+    $("#btnFPoliPregunta").click(function () {
+        var id = $(this).data("id");
+        $.box({
+            imageClass : "box_info",
+            title      : "Confirmación",
+            text       : "Está seguro que desea copiar la FP de la obra al contrato?",
+            iconClose  : false,
+            dialog     : {
+                width         : 400,
+                resizable     : false,
+                draggable     : false,
+                closeOnEscape : false,
+                buttons       : {
+                    "Aceptar" : function () {
+                         location.href="${createLink(controller: 'contrato', action: 'copiarPolinomica')}?id=" + id
+                    },
+                    "Cancelar" : function () {
+                    }
+                }
+            }
+        });
+
+
+    });
+
+
+
+    $("#preguntarFPDialog").dialog({
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 450,
+        height    : 220,
+        position  : 'center',
+        title     : 'Generar Fórmula Polinómica',
+        buttons   : {
+            "Aceptar"  : function () {
+                $.box({
+                    imageClass : "box_info",
+                    title      : "Confirmación",
+                    text       : "Está seguro que desea generar la FP del contrato?",
+                    iconClose  : false,
+                    dialog     : {
+                        width         : 400,
+                        resizable     : false,
+                        draggable     : false,
+                        closeOnEscape : false,
+                        buttons       : {
+                            "Aceptar" : function () {
+
+                            },
+                            "Cancelar" : function () {
+                                $("#preguntarFPDialog").dialog("close");
+                            }
+                        }
+                    }
+                });
+            },
+            "Cancelar" : function () {
+                $("#preguntarFPDialog").dialog("close");
+            }
+        }
+    });
+
+
+
+    $("#btnFPoli").click(function () {
+       alert("Este contrato fue registrado sin fórmula polinómica")
+    });
+
 
     $("#btnAgregarAdmin").click(function () {
         $.ajax({
@@ -722,25 +809,25 @@
                                             });
                                         }else{
                                             location.reload();
-/*
-                                            $.box({
-                                                imageClass : "box_info",
-                                                title      : "Integrado",
-                                                text       : parts[1],
-                                                iconClose  : false,
-                                                dialog     : {
-                                                    width         : 400,
-                                                    resizable     : false,
-                                                    draggable     : false,
-                                                    closeOnEscape : false,
-                                                    buttons       : {
-                                                        "Aceptar" : function () {
-                                                            $("#integrarFPDialog").dialog("close");
-                                                        }
-                                                    }
-                                                }
-                                            });
-*/
+                                            /*
+                                             $.box({
+                                             imageClass : "box_info",
+                                             title      : "Integrado",
+                                             text       : parts[1],
+                                             iconClose  : false,
+                                             dialog     : {
+                                             width         : 400,
+                                             resizable     : false,
+                                             draggable     : false,
+                                             closeOnEscape : false,
+                                             buttons       : {
+                                             "Aceptar" : function () {
+                                             $("#integrarFPDialog").dialog("close");
+                                             }
+                                             }
+                                             }
+                                             });
+                                             */
                                         }
                                     }
                                 });
