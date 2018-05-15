@@ -3296,6 +3296,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 lt("fechaFin", planilla.fechaInicio)
         }
 
+        println "anteriores: ${planillasAnteriores.id}"
         def editable = planilla.fechaMemoSalidaPlanilla == null && contrato.fiscalizador.id == session.usuario.id
 
         if(!respaldo) obrasAdicionales = 0
