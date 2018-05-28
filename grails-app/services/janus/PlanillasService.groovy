@@ -262,7 +262,7 @@ class PlanillasService {
                 "from rjpl, plnl, tppl, plnl rj " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
                 "rj.plnl__id = rjpl.plnlrjst and tppl.tppl__id = rj.tppl__id order by rjpl.rjplprdo"
-//        println "sql armaTablaPo: $sql"
+        println "sql armaTablaPo: $sql"
         cn.eachRow(sql.toString()) {rj ->
             tblaPo.add([tipo: rj.tppldscr, mes: rj.rjpl_mes, crpa: rj.rjplcrpa, crac: rj.rjplcrac, plpa: rj.rjplplpa,
               plac: rj.rjplplac, po: rj.rjplvlpo])
