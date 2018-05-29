@@ -119,6 +119,13 @@ class Obra implements Serializable {
     Persona oferente=null
     double distanciaDesalojo = 0
 
+    double indiceAlquiler = 0
+    double indiceProfesionales = 0
+    double indiceSeguros = 0
+    double indiceSeguridad = 0
+    double indiceCampo = 0
+    double indiceCampamento = 0
+
     static auditable = true
     static mapping = {
         table 'obra'
@@ -243,6 +250,13 @@ class Obra implements Serializable {
             estadoSif column: 'obraetsf'
             distanciaDesalojo column: 'obradsda'
 
+            indiceAlquiler column: 'indialqr'
+            indiceProfesionales column: 'indiprof'
+            indiceSeguros column: 'indimate'
+            indiceSeguridad column: 'indisgro'
+            indiceCampo column: 'indicmpo'
+            indiceCampamento column: 'indicmpm'
+
         }
     }
     static constraints = {
@@ -362,6 +376,13 @@ class Obra implements Serializable {
         estadoSif(blank: true, maxSize: 1, nullable: true)
         oferente(blank:true,nullable:true)
         distanciaDesalojo(blank:true,nullable:true)
+
+        indiceAlquiler(blank: true, nullable: true)
+        indiceProfesionales(blank: true, nullable: true)
+        indiceSeguros(blank:true, nullable:true)
+        indiceSeguridad(blank:true, nullable:true)
+        indiceCampo(blank:true, nullable:true)
+        indiceCampamento(blank:true, nullable:true)
     }
 
     String toString() {

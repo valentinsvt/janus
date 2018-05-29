@@ -32,6 +32,13 @@ class Parametros implements Serializable {
 
     Persona subdirector
 
+    double indiceAlquiler = 0
+    double indiceProfesionales = 0
+    double indiceSeguros = 0
+    double indiceSeguridad = 0
+    double indiceCampo = 0
+    double indiceCampamento = 0
+
     static auditable = true
     static mapping = {
         table 'paux'
@@ -71,6 +78,13 @@ class Parametros implements Serializable {
 
             subdirector column: 'prsnsbdr'
             valida column: 'pauxvlda'
+
+            indiceAlquiler column: 'indialqr'
+            indiceProfesionales column: 'indiprof'
+            indiceSeguros column: 'indimate'
+            indiceSeguridad column: 'indisgro'
+            indiceCampo column: 'indicmpo'
+            indiceCampamento column: 'indicmpm'
         }
     }
     static constraints = {
@@ -101,5 +115,12 @@ class Parametros implements Serializable {
         iva(nullable: true, blank: true)
         inflacion(nullable: true, blank: true)
         subdirector(nullable: true, blank: true)
+
+        indiceAlquiler(blank: true, nullable: true)
+        indiceProfesionales(blank: true, nullable: true)
+        indiceSeguros(blank:true, nullable:true)
+        indiceSeguridad(blank:true, nullable:true)
+        indiceCampo(blank:true, nullable:true)
+        indiceCampamento(blank:true, nullable:true)
     }
 }
