@@ -2614,6 +2614,20 @@ class ReportePlanillas3Controller {
                     addCellTabla(tablaMultaDisp, new Paragraph(mt.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+                    if(tipo == 'T') {
+                        def mlCp = MultasPlanilla.findByPlanillaAndTipoMulta(planilla.planillaCmpl, TipoMulta.get(4))
+                        addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMultaDisp, new Paragraph(numero(mlCp.dias,0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMultaDisp, new Paragraph(mlCp.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mlCp.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+                        addCellTabla(tablaMultaDisp, new Paragraph("Valor total", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(mt.monto + mlCp.monto, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    }
+
                     document.add(tablaMultaDisp);
                 }
             }
@@ -3341,12 +3355,12 @@ class ReportePlanillas3Controller {
 //        println "sql.....: $sql"
         mltaAntr += cn.rows(sql.toString())[0].suma?:0
 
-        sql = "select sum(mlplmnto) suma from mlpl where plnl__id = ${planilla.id}"
+        sql = "select sum(mlplmnto) suma from mlpl where plnl__id in (${planilla.id}, ${planilla.planillaCmpl?.id?:0})"
 //        println "sql.....: $sql"
         def mltaActl = cn.rows(sql.toString())[0].suma?:0
 
-        sql = "select sum(plnlmles) suma from plnl where plnl__id = ${planilla.id}"
-//        println "sql.....: $sql"
+        sql = "select sum(plnlmles) suma from plnl where plnl__id in (${planilla.id}, ${planilla.planillaCmpl?.id?:0})"
+        println "sql. multas....: $sql"
         mltaActl += cn.rows(sql.toString())[0].suma?:0
 
         def mltaAcml = mltaAntr + mltaActl

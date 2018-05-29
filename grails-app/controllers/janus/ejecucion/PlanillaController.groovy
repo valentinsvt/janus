@@ -4259,11 +4259,19 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //            dias = 4
             if(dias > 0) {
-                multaPlanilla = Math.round(dias * (plnl.contrato.multaRetraso * total / 1000)*100)/100
                 prmt = [:]
+
+                if(plnl.tipoContrato == 'P') {
+                    multaPlanilla = Math.round(dias * (plnl.contrato.multaRetraso * total / 1000)*100)/100
+                    prmt.descripcion = "${plnl.contrato.multaRetraso} x 1000 de ${formatoNum.format(total)} por día"
+                } else {
+                    def cntrCmpl = Contrato.findByPadre(plnl.contrato)
+                    multaPlanilla = Math.round(dias * (cntrCmpl?.multaRetraso?:0) * cntrCmpl.monto / 1000*100)/100
+                    prmt.descripcion = "${cntrCmpl.multaRetraso} x 1000 de ${formatoNum.format(cntrCmpl.monto)} por día"
+                }
                 prmt.planilla = plnl
                 prmt.tipoMulta = tpml
-                prmt.descripcion = "${plnl.contrato.multaRetraso} x 1000 de ${formatoNum.format(total)} por día"
+
                 prmt.dias = dias
                 prmt.monto = multaPlanilla
                 insertaMulta(prmt)
@@ -4745,7 +4753,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         if((estePo > resto) && (plnl.tipoPlanilla.codigo != 'Q')) {
             valorPo = resto   //nunca existe
-        } else if((plnl.tipoPlanilla.codigo == 'Q') && plFinal) {
+        } else if((plnl.tipoPlanilla.codigo == 'Q') && (plFinal || (plnl.valor == vlor))) {
             if(plnl.tipoContrato == 'P') {
                 valorPo = totPlnl - cntr.anticipo - totPo - totPoAc
             } else {
