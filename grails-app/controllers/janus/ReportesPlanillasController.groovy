@@ -611,7 +611,6 @@ class ReportesPlanillasController {
         println "reporteAvance $params"
         def cn = dbConnectionService.getConnection()
         def plnl = Planilla.get(params.plnl)
-
         if (!params.id) {
             flash.message = "No se puede mostrar el reporte de avance sin seleccionar un contrato."
             redirect(action: "errores")
@@ -1367,12 +1366,13 @@ class ReportesPlanillasController {
         /* **************************** FIN RESUMEN ************************************/
 
         /* ******************************* FIRMA ***************************************/
+        def strFiscalizador = planillasService.nombrePersona(plnl.fiscalizador, 'pers') + "\n                FISCALIZADOR"
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph(" ", fontTd))
         document.add(new Paragraph("_________________________________________", fontTd))
-        document.add(new Paragraph("           FIRMA FISCALIZADOR", fontTd))
+        document.add(new Paragraph(strFiscalizador, fontTd))
         /* ***************************** FIN FIRMA *************************************/
 
         document.close();
