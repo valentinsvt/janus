@@ -2947,6 +2947,240 @@ class Reportes2Controller {
 
     }
 
+    def reporteCostosIndirectosNuevo () {
+
+        //        println("params" + params)
+
+        def obra = Obra.get(params.id)
+
+
+        def fechaIngreso = printFecha(obra?.fechaCreacionObra)
+        def fechaPrecios = printFecha(obra?.fechaPreciosRubros)
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+//        def prmsHeaderHojaBorde = [border: Color.WHITE, bordeBot:"1"]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsDerecha = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_RIGHT]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsDerecha: prmsDerecha]
+
+
+        def baos = new ByteArrayOutputStream()
+        def name = "costos_indirectos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+//        document.setMargins(2,2,2,2)
+        document.addTitle("Costos Indirectos " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", times14bold));
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+        addEmptyLine(headersTitulo, 1)
+        headersTitulo.add(new Paragraph("COSTOS INDIRECTOS", times12bold));
+        addEmptyLine(headersTitulo, 1);
+        document.add(headersTitulo);
+//
+
+        PdfPTable tablaHeader = new PdfPTable(3);
+        tablaHeader.setWidthPercentage(100);
+        tablaHeader.setWidths(arregloEnteros([20, 2, 70]))
+
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("OBRA", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(obra?.nombre, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("MEMO CANT. OBRA", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(obra?.memoCantidadObra, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("FECHA ACT. PRECIOS", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+        document.add(tablaHeader);
+
+        Paragraph headers = new Paragraph();
+        headers.setAlignment(Element.ALIGN_LEFT);
+        headers.add(new Paragraph("___________________________________________________________________________________________________________", times8bold));
+        addEmptyLine(headers, 1);
+        document.add(headers);
+
+        PdfPTable tablaDesgloseBody = new PdfPTable(4);
+        tablaDesgloseBody.setWidthPercentage(90);
+        tablaDesgloseBody.setWidths(arregloEnteros([40, 8, 16, 40]))
+
+        tablaDesgloseBody.setHorizontalAlignment(Element.ALIGN_RIGHT)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Alquiler y depreciación", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceAlquiler, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Cargos Administrativos", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.administracion, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Cargos Profesionales", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceProfesionales, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Materiales de consumo y mantenimiento", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCostosIndirectosMantenimiento, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Seguros", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceSeguros, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Seguridad", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceSeguridad, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph("_______"), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Gastos Administración Central", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastosGenerales, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Cargos de Campo", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCampo, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Financiamiento", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCostosIndirectosCostosFinancieros, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Garantías", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCostosIndirectosGarantias, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Campamento", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCampamento, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph("_______"), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Gastos Administración de Obra", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastoObra, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Imprevistos", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.impreso, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Utilidad", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceUtilidad, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph("_______"), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Costo total de indirectos", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastosGenerales + obra?.indiceGastoObra + obra?.impreso + obra?.indiceUtilidad, minFractionDigits:
+                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+
+
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+
+        document.add(tablaDesgloseBody)
+        document.close();
+        pdfw.close()
+        byte[] b1 = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b1.length)
+        response.getOutputStream().write(b1)
+
+    }
+
 //    def addCellTabla(table, paragraph, params) {
 //        PdfPCell cell = new PdfPCell(paragraph);
 ////        println "params "+params

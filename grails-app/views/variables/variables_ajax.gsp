@@ -433,7 +433,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCampo" class="inputVar sum1 num" value="${g.formatNumber(number: (obra?.indiceCampo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="7"/>
+                    <g:textField type="text" name="indiceCampo" class="inputVar sum3 num" value="${g.formatNumber(number: (obra?.indiceCampo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="7"/>
                 </div>
             </div>
 
@@ -451,7 +451,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosCostosFinancieros" class="inputVar sum2 num" value="${g.formatNumber(number: (obra?.indiceCostosIndirectosCostosFinancieros), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" />
+                    <g:textField type="text" name="indiceCostosIndirectosCostosFinancieros" class="inputVar sum3 num" value="${g.formatNumber(number: (obra?.indiceCostosIndirectosCostosFinancieros), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" />
                 </div>
             </div>
 
@@ -469,7 +469,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosGarantias" class="inputVar  sum2 num" value="${g.formatNumber(number: (obra?.indiceCostosIndirectosGarantias), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="8"/>
+                    <g:textField type="text" name="indiceCostosIndirectosGarantias" class="inputVar  sum3 num" value="${g.formatNumber(number: (obra?.indiceCostosIndirectosGarantias), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="8"/>
                 </div>
             </div>
 
@@ -487,7 +487,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCampamento" class="inputVar sum2  num" value="${g.formatNumber(number: (obra?.indiceCampamento), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="9"/>
+                    <g:textField type="text" name="indiceCampamento" class="inputVar sum3 num" value="${g.formatNumber(number: (obra?.indiceCampamento), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="9"/>
                 </div>
             </div>
 
@@ -505,7 +505,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="gastoAdministracionObra" class="inputVar num" value="${g.formatNumber(number: (total1), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="10" readonly=""/>
+                    <g:textField type="text" name="indiceGastoObra" style="font-weight: bold" class="inputVar sum2 num" value="${g.formatNumber(number: (total2), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="10" readonly=""/>
                 </div>
             </div>
 
@@ -523,7 +523,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="impreso" class="inputVar num" value="${g.formatNumber(number: (obra?.impreso) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="impreso" class="inputVar sum2 num" value="${g.formatNumber(number: (obra?.impreso) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
 
@@ -533,7 +533,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="gastoAdministracionCentral" class="inputVar num" value="${g.formatNumber(number: (total2), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="6" readonly=""/>
+                    <g:textField type="text" name="indiceGastosGenerales" style="font-weight: bold" class="inputVar sum2 num" value="${g.formatNumber(number: (obra?.indiceGastosGenerales), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="6" readonly=""/>
                 </div>
 
                 <div class="span4">
@@ -541,7 +541,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceUtilidad" class="inputVar num" value="${g.formatNumber(number: (obra?.indiceUtilidad) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="indiceUtilidad" class="inputVar sum2 num" value="${g.formatNumber(number: (obra?.indiceUtilidad) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
 
@@ -557,12 +557,14 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="totales3" class="inputVar num" value="${g.formatNumber(number: (obra?.totales) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" readonly=""/>
+                    <g:textField type="text" style="font-weight: bold" name="totales" class="inputVar num" value="${g.formatNumber(number: (obra?.totales) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" readonly=""/>
                 </div>
             </div>
 
             <div class="row-fluid" style="margin-top: 10px;">
                 <div class="span1" style="margin-left: 0px; width: 120px;"><g:link controller="reportes2" action="reporteCostosIndirectos"  id="${obra.id}" style="margin-left: 0px; margin-top: -60px" class="btn btn-info"><i class="icon-print"></i> Reporte</g:link></div>
+                <div class="span2" style="margin-left: 0px; width: 150px;"><g:link controller="reportes2" action="reporteCostosIndirectosNuevo"  id="${obra.id}" style="margin-left: 0px; margin-top: -60px" class="btn btn-info"><i class="icon-print"></i> Reporte Nuevo</g:link></div>
+
             </div>
         </div>
 
@@ -853,6 +855,17 @@
         $("#tabs").tabs({
             heightStyle : "fill"
         });
+
+
+        $(".sum3").keyup(function (ev) {
+            suma($(".sum3"), $("#indiceGastoObra"));
+            suma($(".sum2"), $("#totales"));
+        }).blur(function () {
+            suma($(".sum3"), $("#indiceGastoObra"));
+            suma($(".sum2"), $("#totales"));
+        });
+
+
 
         costoItem($("#cmb_vol"), $("#costo_volqueta"));
         costoItem($("#cmb_chof"), $("#costo_chofer"));

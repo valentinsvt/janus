@@ -280,7 +280,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCampo" class="inputVar sum1 num" value="${g.formatNumber(number: (paux?.indiceCampo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="7"/>
+                    <g:textField type="text" name="indiceCampo" class="inputVar sum3 num" value="${g.formatNumber(number: (paux?.indiceCampo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="7"/>
                 </div>
             </div>
 
@@ -298,7 +298,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosCostosFinancieros" class="inputVar sum2 num" value="${g.formatNumber(number: (paux?.indiceCostosIndirectosCostosFinancieros), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" />
+                    <g:textField type="text" name="indiceCostosIndirectosCostosFinancieros" class="inputVar sum3 num" value="${g.formatNumber(number: (paux?.indiceCostosIndirectosCostosFinancieros), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" />
                 </div>
             </div>
 
@@ -316,7 +316,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosGarantias" class="inputVar  sum2 num" value="${g.formatNumber(number: (paux?.indiceCostosIndirectosGarantias), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="8"/>
+                    <g:textField type="text" name="indiceCostosIndirectosGarantias" class="inputVar sum3 num" value="${g.formatNumber(number: (paux?.indiceCostosIndirectosGarantias), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="8"/>
                 </div>
             </div>
 
@@ -334,7 +334,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCampamento" class="inputVar sum2  num" value="${g.formatNumber(number: (paux?.indiceCampamento), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="9"/>
+                    <g:textField type="text" name="indiceCampamento" class="inputVar sum3  num" value="${g.formatNumber(number: (paux?.indiceCampamento), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="9"/>
                 </div>
             </div>
 
@@ -352,7 +352,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="gastoAdministracionObra" class="inputVar num" value="${g.formatNumber(number: (totalObra), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="10" readonly=""/>
+                    <g:textField type="text" name="indiceGastoObra" class="inputVar sum2 num" value="${g.formatNumber(number: (totalObra), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="10" readonly=""/>
                 </div>
             </div>
 
@@ -370,7 +370,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="impreso" class="inputVar num" value="${g.formatNumber(number: (paux?.impreso) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="impreso" class="inputVar sum2 num" value="${g.formatNumber(number: (paux?.impreso) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
 
@@ -380,7 +380,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="gastoAdministracionCentral" class="inputVar num" value="${g.formatNumber(number: (totalCentral), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="6" readonly=""/>
+                    <g:textField type="text" name="gastoAdministracionCentral" class="inputVar  sum2 num" value="${g.formatNumber(number: (totalCentral), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" tabindex="6" readonly=""/>
                 </div>
 
                 <div class="span4">
@@ -388,7 +388,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceUtilidad" class="inputVar num" value="${g.formatNumber(number: (paux?.indiceUtilidad) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="indiceUtilidad" class="inputVar sum2 num" value="${g.formatNumber(number: (paux?.indiceUtilidad) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
 
@@ -404,7 +404,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="totales3" class="inputVar num" value="${g.formatNumber(number: (paux?.totales) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" readonly=""/>
+                    <g:textField type="text" name="totales" class="inputVar num" value="${g.formatNumber(number: (paux?.totales) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" readonly=""/>
                 </div>
             </div>
         </div>
@@ -468,10 +468,12 @@
 
     $(function () {
         $(".sum1").keyup(function (ev) {
-            suma($(".sum1"), $("#indiceGastosGenerales"));
+//            suma($(".sum1"), $("#indiceGastosGenerales"));
+            suma($(".sum1"), $("#gastoAdministracionCentral"));
             suma($(".sum2"), $("#totales"));
         }).blur(function () {
-            suma($(".sum1"), $("#indiceGastosGenerales"));
+//            suma($(".sum1"), $("#indiceGastosGenerales"));
+            suma($(".sum1"), $("#gastoAdministracionCentral"));
             suma($(".sum2"), $("#totales"));
         });
         $(".sum2").keyup(function (ev) {
@@ -479,11 +481,22 @@
         }).blur(function () {
             suma($(".sum2"), $("#totales"));
         });
+
         $(".sum1").blur();
         $(".sum2").blur();
         $("#tabs").tabs({
             heightStyle : "fill"
         });
+
+        $(".sum3").keyup(function (ev) {
+            suma($(".sum3"), $("#indiceGastoObra"));
+            suma($(".sum2"), $("#totales"));
+        }).blur(function () {
+            suma($(".sum3"), $("#indiceGastoObra"));
+            suma($(".sum2"), $("#totales"));
+        });
+
+
     });
 
     $(function () {
