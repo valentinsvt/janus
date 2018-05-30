@@ -22,24 +22,21 @@ class VariablesController  extends janus.seguridad.Shield{
                 choferes = Item.findAllByDepartamento(it)
             if (it.transporte.codigo == "T")
                 volquetes = Item.findAllByDepartamento(it)
-
             volquetes2 += volquetes
-
-//            println("volquetes" + volquetes)
-
-
         }
-
-//        println("volquetes2" + volquetes2)
-
 
         def transporteCamioneta =  Item.findAllByCodigoIlike('tc-%');
         def transporteAcemila =  Item.findAllByCodigoIlike('ta-%');
-//
-//        println("TC" + transporteCamioneta);
-//        println("TA" + transporteAcemila);
+        def total1 = (obra?.indiceAlquiler ?: 0) + (obra?.administracion ?: 0) + (obra?.indiceCostosIndirectosMantenimiento ?: 0) + (obra?.indiceProfesionales ?: 0) + (obra?.indiceSeguros ?: 0)  + (obra?.indiceSeguridad ?: 0)
+        def total2 = (obra?.indiceCampo ?: 0) + (obra?.indiceCostosIndirectosCostosFinancieros ?: 0) + (obra?.indiceCostosIndirectosGarantias ?: 0) + (obra?.indiceCampamento ?: 0)
+        def total3 = (total1 ?:0 ) + (total2 ?: 0) + (obra?.impreso ?: 0) + (obra?.indiceUtilidad ?: 0)
 
-        [choferes: choferes, volquetes: volquetes, obra: obra, par: par, volquetes2: volquetes2, transporteCamioneta: transporteCamioneta, transporteAcemila: transporteAcemila]
+        obra.indiceGastosGenerales = total1
+        obra.indiceGastoObra = total2
+        obra.totales = total3
+        obra.save(flush: true)
+
+        [choferes: choferes, volquetes: volquetes, obra: obra, par: par, volquetes2: volquetes2, transporteCamioneta: transporteCamioneta, transporteAcemila: transporteAcemila, total1: total1, total2: total2]
     }
 
     def saveVar_ajax() {

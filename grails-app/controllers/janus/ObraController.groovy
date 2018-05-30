@@ -1318,6 +1318,13 @@ class ObraController extends janus.seguridad.Shield {
                 obraInstance.indiceUtilidad = par.indiceUtilidad
                 obraInstance.indiceCostosIndirectosTimbresProvinciales = par.indiceCostosIndirectosTimbresProvinciales
 
+                obraInstance.indiceAlquiler = par.indiceAlquiler
+                obraInstance.indiceProfesionales = par.indiceProfesionales
+                obraInstance.indiceSeguros = par.indiceSeguros
+                obraInstance.indiceSeguridad = par.indiceSeguridad
+                obraInstance.indiceCampo = par.indiceCampo
+                obraInstance.indiceCampamento = par.indiceCampamento
+
                 /** variables por defecto para las nuevas obras **/
                 obraInstance.lugar = Lugar.findAll('from Lugar  where tipoLista=1')[0]
                 obraInstance.listaVolumen0 = Lugar.findAll('from Lugar  where tipoLista=3')[0]
@@ -1325,10 +1332,16 @@ class ObraController extends janus.seguridad.Shield {
                 obraInstance.distanciaVolumen = 30
 
 
-                obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
-                        obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
+//                obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
+//                        obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
 
-                obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
+
+                obraInstance.indiceGastosGenerales = (obraInstance?.indiceAlquiler + obraInstance?.administracion + obraInstance?.indiceProfesionales + obraInstance?.indiceCostosIndirectosMantenimiento + obraInstance?.indiceSeguros + obraInstance?.indiceSeguridad)
+
+                obraInstance.indiceGastoObra = (obraInstance?.indiceCampo + obraInstance?.indiceCostosIndirectosCostosFinancieros + obraInstance?.indiceCostosIndirectosGarantias + obraInstance?.indiceCampamento)
+
+//                obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
+                obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceGastoObra + obraInstance.indiceGastosGenerales)
 
                 /* si pefiles administración directa o cogestion pone obratipo = 'D' */
                 if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {

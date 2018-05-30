@@ -50,7 +50,14 @@ class InicioController extends janus.seguridad.Shield {
     def variables () {
         def paux = Parametros.get(1);
         def par = Parametros.list()
-        return[paux: paux, par: par]
+        def total1 = (paux?.indiceAlquiler ?: 0) + (paux?.administracion ?: 0) + (paux?.indiceCostosIndirectosMantenimiento ?: 0) + (paux?.indiceProfesionales ?: 0) + (paux?.indiceSeguros ?: 0)  + (paux?.indiceSeguridad ?: 0)
+        def total2 = (paux?.indiceCampo ?: 0) + (paux?.indiceCostosIndirectosCostosFinancieros ?: 0) + (paux?.indiceCostosIndirectosGarantias ?: 0) + (paux?.indiceCampamento ?: 0)
+        def total3 = (total1 ?:0 ) + (total2 ?: 0) + (paux?.impreso ?: 0) + (paux?.indiceUtilidad ?: 0)
+        
+        paux.totales = total3
+        paux.save(flush: true)
+
+        return[paux: paux, par: par, totalCentral: total1, totalObra: total2]
     }
 
 
