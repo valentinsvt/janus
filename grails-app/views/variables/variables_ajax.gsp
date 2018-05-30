@@ -563,7 +563,7 @@
 
             <div class="row-fluid" style="margin-top: 10px;">
                 <div class="span1" style="margin-left: 0px; width: 120px;"><g:link controller="reportes2" action="reporteCostosIndirectos"  id="${obra.id}" style="margin-left: 0px; margin-top: -60px" class="btn btn-info"><i class="icon-print"></i> Reporte</g:link></div>
-                <div class="span2" style="margin-left: 0px; width: 150px;"><g:link controller="reportes2" action="reporteCostosIndirectosNuevo"  id="${obra.id}" style="margin-left: 0px; margin-top: -60px" class="btn btn-info"><i class="icon-print"></i> Reporte Nuevo</g:link></div>
+                <div class="span2" style="margin-left: 0px; width: 160px;"><g:link controller="reportes2" action="reporteCostosIndirectosNuevo"  id="${obra.id}" style="margin-left: 0px; margin-top: -60px" class="btn btn-info"><i class="icon-print"></i> Desglose Nuevo</g:link></div>
 
             </div>
         </div>

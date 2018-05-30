@@ -3014,7 +3014,7 @@ class Reportes2Controller {
         addEmptyLine(headersTitulo, 1);
         headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
         addEmptyLine(headersTitulo, 1)
-        headersTitulo.add(new Paragraph("COSTOS INDIRECTOS", times12bold));
+        headersTitulo.add(new Paragraph("COSTO INDIRECTOS IMPREVISTOS Y UTILIDAD", times12bold));
         addEmptyLine(headersTitulo, 1);
         document.add(headersTitulo);
 //
