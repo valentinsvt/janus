@@ -2055,8 +2055,8 @@ class ReportePlanillas3Controller {
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
         def titlIndices = tbBo.pop()
         def titulos = tbBo.pop()
-        println "resumen titulos: $titulos"
-        println "resumen titulosIndices: $titlIndices"
+//        println "resumen titulos: $titulos"
+//        println "resumen titulosIndices: $titlIndices"
 
         Paragraph tituloB0 = new Paragraph();
         addEmptyLine(tituloB0, 1);
@@ -2173,7 +2173,7 @@ class ReportePlanillas3Controller {
         def totPlan = 0
         def totlPo = 0
 
-        println "----> tbpo: $tbPo"
+//        println "----> tbpo: $tbPo"
         for(i in 0..tbPo.size()-1 ){
             def tipo = ""
             if(tbPo[i].tipo.indexOf(' ') > 0) {
@@ -2998,7 +2998,7 @@ class ReportePlanillas3Controller {
         mltaAntr += cn.rows(sql.toString())[0].suma?:0
 
         sql = "select sum(mlplmnto) suma from mlpl where plnl__id = ${planilla.id}"
-//        println "sql.....: $sql"
+        println "sql...multa..: $sql"
         def mltaActl = cn.rows(sql.toString())[0].suma?:0
 
         sql = "select sum(plnlmles) suma from plnl where plnl__id = ${planilla.id}"
@@ -3050,7 +3050,7 @@ class ReportePlanillas3Controller {
     }
 
     def detalle(planilla, tipoRprt) {
-//        println "reporteTablas de la planilla ${planilla.id}"
+        println "detalle de la planilla ${planilla.id}, tipo: $tipoRprt"
         def obra = planilla.contrato.obra
         def cntr = planilla.contrato
         def cn = dbConnectionService.getConnection()
@@ -3343,6 +3343,14 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaDetalles, new Paragraph(numero(antcActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(antcAcml, 2), fontThFooter), frmtSuma)
 
+        def plnlIn = ""
+        if(tipoRprt == 'T'){
+            plnlIn = "${planilla.id}, ${planilla.planillaCmpl?.id?:0}"
+        } else {
+            plnlIn = "${planilla.id}"
+        }
+
+        /* Todo: incluir planillas de complementario  ---- */
         sql = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl where " +
                 "cntr__id = ${planilla.contrato.id} and plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' " +
                 " and plnltipo = '${planilla.tipoContrato}')"
@@ -3355,11 +3363,12 @@ class ReportePlanillas3Controller {
 //        println "sql.....: $sql"
         mltaAntr += cn.rows(sql.toString())[0].suma?:0
 
-        sql = "select sum(mlplmnto) suma from mlpl where plnl__id in (${planilla.id}, ${planilla.planillaCmpl?.id?:0})"
+
+        sql = "select sum(mlplmnto) suma from mlpl where plnl__id in (${plnlIn})"
 //        println "sql.....: $sql"
         def mltaActl = cn.rows(sql.toString())[0].suma?:0
 
-        sql = "select sum(plnlmles) suma from plnl where plnl__id in (${planilla.id}, ${planilla.planillaCmpl?.id?:0})"
+        sql = "select sum(plnlmles) suma from plnl where plnl__id in (${plnlIn})"
         println "sql. multas....: $sql"
         mltaActl += cn.rows(sql.toString())[0].suma?:0
 
@@ -3802,7 +3811,7 @@ class ReportePlanillas3Controller {
         def valorCmpl = Planilla.executeQuery("select sum(valor) from Planilla where tipoContrato = 'C' and " +
                 "contrato = :c and tipoPlanilla != :t", [c: planilla.contrato, t: TipoPlanilla.get(10)])[0]?:0
 
-        println "---->> tipo: <${tipo}>"
+//        println "---->> tipo: <${tipo}>"
         if(tipo == 'T') {
             def cmpl = Contrato.findByPadre(planilla.contrato)
             monto += cmpl.monto
@@ -3814,7 +3823,7 @@ class ReportePlanillas3Controller {
             valorObra = valorCmpl
         }
 
-        println "-----valor obra: $valorObra, valorCmpl: ${valorCmpl}, cmpl: ${monto}"
+//        println "-----valor obra: $valorObra, valorCmpl: ${valorCmpl}, cmpl: ${monto}"
 
         Font fontThUsar = new Font(Font.TIMES_ROMAN, size, Font.BOLD);
         Font fontTdUsar = new Font(Font.TIMES_ROMAN, size, Font.NORMAL);
