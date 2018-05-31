@@ -501,7 +501,7 @@
                 </div>
 
                 <div class="span4 bold" style="border-top: solid 1px #D3D3D3;">
-                    Gastos Administración de Obra
+                    Gasto Administración de Campo
                 </div>
 
                 <div class="span2">

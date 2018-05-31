@@ -3133,7 +3133,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph("_______"), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
-        addCellTabla(tablaDesgloseBody, new Paragraph("Gastos Administración de Obra", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph("Gasto Administración de Campo", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastoObra, minFractionDigits:
                 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
