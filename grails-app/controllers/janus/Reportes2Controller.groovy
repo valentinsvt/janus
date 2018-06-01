@@ -2893,7 +2893,10 @@ class Reportes2Controller {
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Gastos Generales (subtotal)", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastosGenerales, minFractionDigits:
+//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastosGenerales, minFractionDigits:
+//                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: (obra?.indiceCostosIndirectosObra + obra?.indiceCostosIndirectosMantenimiento + obra?.administracion + obra?.indiceCostosIndirectosGarantias + obra?.indiceCostosIndirectosCostosFinancieros +
+                obra?.indiceCostosIndirectosVehiculos + obra?.indiceCostosIndirectosPromocion), minFractionDigits:
                 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2922,9 +2925,16 @@ class Reportes2Controller {
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Total Costos Indirectos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastosGenerales + obra?.impreso + obra?.indiceUtilidad +
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCostosIndirectosObra + obra?.indiceCostosIndirectosMantenimiento + obra?.administracion + obra?.indiceCostosIndirectosGarantias + obra?.indiceCostosIndirectosCostosFinancieros +
+                obra?.indiceCostosIndirectosVehiculos +  obra?.indiceCostosIndirectosPromocion + obra?.impreso + obra?.indiceUtilidad +
                 obra?.indiceCostosIndirectosTimbresProvinciales, minFractionDigits:
                 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
+
+//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceGastosGenerales + obra?.impreso + obra?.indiceUtilidad +
+//                obra?.indiceCostosIndirectosTimbresProvinciales, minFractionDigits:
+//                2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10bold), prmsDerecha)
+
+
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
 
