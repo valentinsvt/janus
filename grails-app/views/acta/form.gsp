@@ -123,7 +123,7 @@
             <div class="span9" role="navigation">
                 <div class="btn-group">
                     <g:if test="${actaInstance.contrato}">
-                        <g:link controller="contrato" action="verContrato" params="[contrato: params.contrato]" class="btn" title="Regresar al contrato">
+                        <g:link controller="contrato" action="verContrato" id="${actaInstance.contratoId}" class="btn" title="Regresar al contrato">
                             <i class="icon-arrow-left"></i>
                             Contrato
                         </g:link>

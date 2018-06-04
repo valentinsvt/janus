@@ -68,7 +68,8 @@ class ContratoController extends janus.seguridad.Shield {
         def contrato
         def complementario
 
-//        println "params de verContrato: $params"
+        println "params de verContrato: $params"
+        if(params.id) params.contrato = params.id
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
             complementario = Contrato.findByPadre(contrato)
