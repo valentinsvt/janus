@@ -111,7 +111,8 @@ class ActaTagLib {
                         codigo  : vol.item.codigo,
                         nombre  : vol.item.nombre,
                         unidad  : vol.item.unidad.codigo,
-                        precio  : vol.volumenSubtotal,
+//                        precio  : vol.volumenSubtotal,
+                        precio  : vol.volumenPrecio,
                         cantidad: [
                                 contratado: 0,
                                 ejecutado : 0

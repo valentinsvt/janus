@@ -1223,6 +1223,7 @@ class ReportesController {
 
             preciosService.ac_rbroObra(obra.id)
             def res = preciosService.precioUnitarioVolumenObraAsc("*", obra.id, rubro.id)
+
             tablaHer = '<table class=""> '
             tablaMano = '<table class=""> '
             tablaMat = '<table class=""> '
