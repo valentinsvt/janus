@@ -3325,10 +3325,16 @@ class ReportePlanillas3Controller {
 
         addCellTabla(tablaDetalles, new Paragraph("DESCUENTOS CONTRACTUALES", fontThFooter), frmtCol11)
 
+        def tipoplnl = "'${planilla.tipoContrato}'"
+
+        if(tipoRprt =='T'){
+            tipoplnl += ",'C'"
+        }
 
         sql = "select sum(plnldsct) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
-                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo = '${planilla.tipoContrato}'"
-//        println "sql.....: $sql"
+//                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo = '${planilla.tipoContrato}'"
+                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo in (${tipoplnl})"
+        println "sql.....: $sql"
         def antcAntr = cn.rows(sql.toString())[0].suma?:0
         def antcActl = planilla.descuentos
         def antcAcml = antcAntr + antcActl
