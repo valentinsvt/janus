@@ -434,9 +434,16 @@ class ActaTagLib {
         def contrato = acta.contrato
 
 //        def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso'])
-        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), [sort: 'fechaIngreso']).last()
+        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'P', [sort: 'fechaIngreso']).last()
+        def planillasCmpl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'C', [sort: 'fechaIngreso'])
+        def ultimaPlnlCmpl = planillasCmpl? planillasCmpl.last() : null
+        println "---- principal: ${ultimaPlnl.id}"
         def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl, [sort: 'periodo'])
+        println "---- cmpl: ${ultimaPlnlCmpl?.id}"
+        def rjplCmpl
+        if(ultimaPlnlCmpl) rjplCmpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnlCmpl, [sort: 'periodo'])
 
         def tabla = "<table class='table table-bordered table-condensed'>"
 
@@ -453,7 +460,7 @@ class ActaTagLib {
         def total = 0
         rjpl.each { rj ->
             def periodo
-            if (rj.planillaReajustada.tipoPlanilla.codigo == "A") {
+            if (rj.planillaReajustada.tipoPlanilla.codigo in ["A", 'B']) {
                 periodo = "ANTICIPO"
             } else {
 //                periodo = "DEL " + fechaConFormato(fecha: rj.planillaReajustada.fechaInicio, formato: "dd-MM-yyyy") +
@@ -469,6 +476,27 @@ class ActaTagLib {
             tabla += "<td class='tar'>${numero(numero: rj.valorReajustado)}</td>"
             tabla += "</tr>"
         }
+
+        if(rjplCmpl) {
+            rjplCmpl.each { rj ->
+                def periodo
+                if (rj.planillaReajustada.tipoPlanilla.codigo in ['B']) {
+                    periodo = "ANTICIPO COMPL."
+                } else {
+//                periodo = "DEL " + fechaConFormato(fecha: rj.planillaReajustada.fechaInicio, formato: "dd-MM-yyyy") +
+//                        " AL " + fechaConFormato(fecha: rj.planillaReajustada.fechaFin, formato: "dd-MM-yyyy")
+                    periodo = "DEL " + fechaConFormato(fecha: rj.fechaInicio, formato: "dd-MM-yyyy") +
+                            " AL " + fechaConFormato(fecha: rj.fechaFin, formato: "dd-MM-yyyy")
+                }
+                total += rj.valorReajustado
+                tabla += "<tr>"
+                tabla += "<td>${fechaConFormato(fecha: rj.planillaReajustada.fechaIngreso)}</td>"
+                tabla += "<td>${rj.planillaReajustada.numero}</td>"
+                tabla += "<td>${periodo}</td>"
+                tabla += "<td class='tar'>${numero(numero: rj.valorReajustado)}</td>"
+                tabla += "</tr>"
+            }
+        }
         tabla += "</tbody>"
 
         tabla += "<tfoot>"
@@ -482,7 +510,7 @@ class ActaTagLib {
         return tabla
     }
 
-    def rgv(Acta acta) {  // RESUMEN GENERAL DE VALORES
+    def rgv(Acta acta) {  // 4.6 RESUMEN GENERAL DE VALORES
         def contrato = acta.contrato
 
         def planillaAnticipo = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A'))
@@ -494,10 +522,25 @@ class ActaTagLib {
         def cp = planillasCosto.sum { it.valor } ?: 0
         def total1 = av + cp
 
-        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'R']), [sort: 'fechaIngreso']).last()
-        def total2 = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p",
-                [p:ultimaPlnl])[0]?:0
+        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'P', [sort: 'fechaIngreso']).last()
+        def planillasCmpl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'C', [sort: 'fechaIngreso'])
+        def ultimaPlnlCmpl = planillasCmpl? planillasCmpl.last() : null
+//        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
+//                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'R']), [sort: 'fechaIngreso']).last()
+
+        def total2 = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla " +
+                "where planilla = :p", [p:ultimaPlnl])[0]?:0
+
+        def total2Cmpl
+
+        if(ultimaPlnlCmpl) total2Cmpl = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla " +
+                "where planilla = :p", [p:ultimaPlnlCmpl])[0]?:0
+
+        if(total2Cmpl) {
+            total2 += total2Cmpl
+        }
 
 //        def ran = planillaAnticipo.sum { it.reajuste } ?: 0
 //        def rav = planillasAvance.sum { it.reajuste } ?: 0
@@ -601,10 +644,18 @@ class ActaTagLib {
         def cn = dbConnectionService.getConnection()
         def contrato = acta.contrato
 //        def planillas = Planilla.findAllByContrato(contrato, [sort: "numero"])
-        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'R']), [sort: 'fechaIngreso']).last()
-        def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl, [sort: 'periodo'])
+        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'P', [sort: 'fechaIngreso']).last()
+        def planillasCmpl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'C', [sort: 'fechaIngreso'])
+        def ultimaPlnlCmpl = planillasCmpl? planillasCmpl.last() : null
 
+        println "---- principal: ${ultimaPlnl?.id}"
+        def rjpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnl, [sort: 'periodo'])
+        println "---- cmpl: ${ultimaPlnlCmpl?.id}"
+
+        def rjplCmpl
+        if(ultimaPlnlCmpl) rjplCmpl = ReajustePlanilla.findAllByPlanilla(ultimaPlnlCmpl, [sort: 'periodo'])
 
 //        println "---------------------------------------------------------------"
 //        println acta
@@ -677,6 +728,54 @@ class ActaTagLib {
                 tabla += "<td style='text-align:center;'>${numero(numero: rj.valorReajustado)}</td>"
                 tabla += "<td style='text-align:center;'></td>"
                 tabla += "<td style='text-align:center;'></td>"
+            }
+        }
+
+        if(rjplCmpl) {
+            rjplCmpl.each { rj ->
+                if (rj.planillaReajustada.tipoPlanilla.codigo != "L" && rj.planillaReajustada.tipoPlanilla.codigo != "M" && rj.planillaReajustada.tipoPlanilla.codigo != "C") {
+                    tabla += "<tr>"
+                    tabla += "<td style='text-align:center;'>${rj.planillaReajustada.numero}</td>"
+                    tabla += "<td style='text-align:center;'>"
+                    if (rj.planillaReajustada.tipoPlanilla.codigo == "A") {
+                        tabla += "ANTICIPO"
+                    } else {
+//                    tabla += "DEL ${rj.planillaReajustada.fechaInicio?.format('yyyy-MM-dd')} AL ${rj.planillaReajustada.fechaFin?.format('yyyy-MM-dd')}"
+                        tabla += "DEL ${rj.fechaInicio?.format('yyyy-MM-dd')} AL ${rj.fechaFin?.format('yyyy-MM-dd')}"
+                    }
+                    tabla += "</td>"
+
+                    if(liquidacion) {
+//                    println "liquidación.... ${ultimaPlnl.id}, lq: ${liquidacion.id}"
+                        rj_lq = cn.rows(sql + " ${rj.planillaReajustada.id}".toString())[0].rjplvlor
+                        diferencia = rj_lq - rj.valorReajustado
+                        tabla += "<td style='text-align:center;'>${numero(numero: rj.valorReajustado)}</td>"
+                        tabla += "<td style='text-align:center;'>${numero(numero: rj_lq)}</td>"
+                        tabla += "<td style='text-align:center;'>${numero(numero: diferencia)}</td>"
+                    } else {
+                        diferencia = 0
+                        tabla += "<td style='text-align:center;'>${numero(numero: rj.valorReajustado)}</td>"
+                        tabla += "<td style='text-align:center;'></td>"
+                        tabla += "<td style='text-align:center;'></td>"
+                    }
+
+
+                    totalProvisional += rj.valorReajustado
+                    if(liquidacion) {
+                        totalDefinitivo += rj_lq
+                    } else {
+                        totalDefinitivo += rj.planillaReajustada.reajusteLiq
+                    }
+                    totalDiferencia += diferencia
+
+                    tabla += "</tr>"
+                } else if(rj.planillaReajustada.tipoPlanilla == 'L'){
+
+                    diferencia = rj.valorReajustado
+                    tabla += "<td style='text-align:center;'>${numero(numero: rj.valorReajustado)}</td>"
+                    tabla += "<td style='text-align:center;'></td>"
+                    tabla += "<td style='text-align:center;'></td>"
+                }
             }
         }
         tabla += "</tbody>"
