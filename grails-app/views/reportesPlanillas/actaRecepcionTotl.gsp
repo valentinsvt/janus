@@ -131,7 +131,7 @@
             min-height : 15px;
         }
 
-        .span10, .span9, .span1 {
+        .span10, .span9, .span1, .span4, .span6 {
             /*float : left;*/
             display : inline-block;
         }
@@ -142,6 +142,14 @@
 
         .span10 {
             width : 575px;
+        }
+
+        .span4{
+            width: 170px;
+        }
+
+        .span6{
+            width: 400px;
         }
 
         .numero {
@@ -302,16 +310,16 @@
             <g:set var="obra" value="${actaInstance.contrato.oferta.concurso.obra}"/>
             <g:set var="fisc" value="${Planilla.findAllByContrato(actaInstance.contrato, [sort: "id", order: "desc"]).first().fiscalizador}"/>
             <div class="well">
-                <div class='row'>
-                    <div class="bold span1">Contrato N.</div>
+                <div class="span12">
+                    <div class="bold span4">Contrato N.</div>
 
-                    <div class="span10">${actaInstance.contrato.codigo}</div>
+                    <div class="span6">${actaInstance.contrato.codigo}</div>
                 </div>
 
                 <div class='row'>
-                    <div class="bold span1">Garantías N.</div>
+                    <div class="bold span4">Garantías N.</div>
 
-                    <div class="span10">
+                    <div class="span6">
                         <g:each in="${garantias}" var="gar" status="i">
                             ${gar.tipoDocumentoGarantia.descripcion} N. ${gar.codigo} - ${gar.aseguradora.nombre} ${i < garantias.size() - 1 ? "," : ""}
                         </g:each>
@@ -319,50 +327,55 @@
                 </div>
 
                 <div class='row'>
-                    <div class="bold span1">Objeto</div>
+                    <div class="bold span4">Objeto</div>
 
-                    <div class="span10">${actaInstance.contrato.objeto}</div>
+                    <div class="span6">${actaInstance.contrato.objeto}</div>
                 </div>
 
                 <div class='row'>
-                    <div class="bold span1">Lugar</div>
+                    <div class="bold span4">Lugar</div>
 
-                    <div class="span10">${obra.sitio}</div>
+                    <div class="span6">${obra.sitio}</div>
                 </div>
 
                 <div class='row'>
-                    <div class="bold span1">Ubicación</div>
+                    <div class="bold span4">Ubicación</div>
 
-                    <div class="span10">Parroquia ${obra.parroquia.nombre} - Cantón ${obra.parroquia.canton.nombre}</div>
+                    <div class="span6">Parroquia ${obra.parroquia.nombre} - Cantón ${obra.parroquia.canton.nombre}</div>
                 </div>
 
                 <div class='row'>
-                    <div class="bold span4">Monto contrato principal $.
+                    <div class="bold span4">Monto contrato principal $.</div>
+                    <div class="span6">
                         <acta:numero numero="${actaInstance.contrato.monto}"/>
                     </div>
                 </div>
 
                 <div class='row'>
                     <div class="bold span4">Monto contrato complementario $.
+                    </div>
+                    <div class="span6">
                         <acta:numero numero="${cmpl}"/>
                     </div>
                 </div>
                 <div class='row'>
                     <div class="bold span4">Monto total $.
+                    </div>
+                    <div class="span6">
                         <acta:numero numero="${total}"/>
                     </div>
                 </div>
 
                 <div class='row'>
-                    <div class="bold span1">Contratista</div>
+                    <div class="bold span4">Contratista</div>
 
-                    <div class="span10">${actaInstance.contrato.oferta.proveedor.nombre}</div>
+                    <div class="span6">${actaInstance.contrato.oferta.proveedor.nombre}</div>
                 </div>
 
                 <div class='row'>
-                    <div class="bold span1">Fiscalizador</div>
+                    <div class="bold span4">Fiscalizador</div>
 
-                    <div class="span10">${fisc.titulo} ${fisc.nombre} ${fisc.apellido}</div>
+                    <div class="span6">${fisc.titulo} ${fisc.nombre} ${fisc.apellido}</div>
                 </div>
 
             </div> %{-- well contrato --}%
