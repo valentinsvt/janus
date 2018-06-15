@@ -77,7 +77,7 @@ environments {
         dataSource {
             dbCreate = "update"
             //url = "jdbc:postgresql://127.0.0.1:5432/janus"
-            url = "jdbc:postgresql://127.0.0.1:5432/prueba"
+            url = "jdbc:postgresql://127.0.0.1:5432/consultoria"
             username = "postgres"
             password = "janus"
         }
