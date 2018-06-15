@@ -144,6 +144,8 @@
                         <g:if test="${editable}">
                             <a href="#" class="btn " id="btnRegistro"><i class="icon-lock"></i> Registrar</a>
                         </g:if>
+
+                        <a href="#" class="btn text-info" id="btnPrintCmpl"><i class="icon-print text-info"></i> Impr. Complementario</a>
                     </g:if>
                 </div>
 
@@ -1031,6 +1033,13 @@
                 $("#btnPrint").click(function () {
                     var url = "${createLink(controller: 'pdf', action: 'pdfLink')}?url=${createLink(controller:
                       'reportesPlanillas', action: 'actaRecepcion', id:actaInstance.id)}";
+//                    console.log(url);
+                    location.href = url;
+                });
+
+                $("#btnPrintCmpl").click(function () {
+                    var url = "${createLink(controller: 'pdf', action: 'pdfLink')}?url=${createLink(controller:
+                      'reportesPlanillas', action: 'actaRecepcionTotl', id:actaInstance.id)}";
 //                    console.log(url);
                     location.href = url;
                 });
