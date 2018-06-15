@@ -97,7 +97,9 @@ class ReportesPlanillasController {
     def actaRecepcionTotl() {
         println "acta recepcion total: " + params
         def acta = Acta.get(params.id)
-//        println ">>>> " + acta
+        def cmpl = Contrato.findByPadre(acta.contrato)
+        def total = acta.contrato.monto + cmpl.monto
+        println ">>>> " + acta
         def direccion = Direccion.findAllByNombreIlike("%FISCALIZACI%")
         def delegadoFiscalizacion = null
         if(acta.contrato.delegadoFiscalizacion) {
@@ -110,8 +112,9 @@ class ReportesPlanillasController {
             }
         }
 
-///        println "espacios: $espacios"
-        return [actaInstance: acta, directorDeFiscalizacion: delegadoFiscalizacion, espacios: espacios]
+        println "cmpl: $cmpl, ${cmpl.monto}"
+        return [actaInstance: acta, directorDeFiscalizacion: delegadoFiscalizacion, espacios: espacios,
+        total: total, cmpl: cmpl.monto]
     }
 
     def reporteDiferencias() {
