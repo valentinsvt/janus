@@ -2420,7 +2420,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         println "---> mdce: ${mdfc.id}, insertados periodos hasta suspensión"
 
-        sql = "select prej__id, prejfcin, prejfcfn, prejnmro, prejfcfn - prejfcin dias from prej_t " +
+        sql = "select prej__id, prejfcin, prejfcfn, prejnmro, prejfcfn::date - prejfcin::date dias from prej_t " +
                 "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') order by prejfcin limit 1"
         println "---> $sql"
 
@@ -2528,7 +2528,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 cn.execute(sql.toString())
                 sql = "delete from prej_t where prej__id = ${prej_id}"
                 cn.execute(sql.toString())
-                sql = "select prejnmro, sum(prejfcfn - prejfcin + 1) dias, prejtipo from prej_t " +
+                sql = "select prejnmro, sum((prejfcfn::date - prejfcin::date) + 1) dias, prejtipo from prej_t " +
                         "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') " +
                         "group by prejnmro, prejtipo order by 1"
                 println "---> $sql"
