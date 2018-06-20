@@ -31,10 +31,12 @@ class VariablesController  extends janus.seguridad.Shield{
         def total2 = (obra?.indiceCampo ?: 0) + (obra?.indiceCostosIndirectosCostosFinancieros ?: 0) + (obra?.indiceCostosIndirectosGarantias ?: 0) + (obra?.indiceCampamento ?: 0)
         def total3 = (total1 ?:0 ) + (total2 ?: 0) + (obra?.impreso ?: 0) + (obra?.indiceUtilidad ?: 0)
 
-        obra.indiceGastosGenerales = total1
-        obra.indiceGastoObra = total2
-        obra.totales = total3
-        obra.save(flush: true)
+        if(obra.estado != 'R') {
+            obra.indiceGastosGenerales = total1
+            obra.indiceGastoObra = total2
+            obra.totales = total3
+            obra.save(flush: true)
+        }
 
         [choferes: choferes, volquetes: volquetes, obra: obra, par: par, volquetes2: volquetes2, transporteCamioneta: transporteCamioneta, transporteAcemila: transporteAcemila, total1: total1, total2: total2]
     }
