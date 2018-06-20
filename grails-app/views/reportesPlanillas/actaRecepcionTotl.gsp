@@ -311,13 +311,19 @@
             <g:set var="fisc" value="${Planilla.findAllByContrato(actaInstance.contrato, [sort: "id", order: "desc"]).first().fiscalizador}"/>
             <div class="well">
                 <div class="span12">
-                    <div class="bold span4">Contrato N.</div>
+                    <div class="bold span4">Contrato Principal N°</div>
 
                     <div class="span6">${actaInstance.contrato.codigo}</div>
                 </div>
 
+                <div class="span12">
+                    <div class="bold span4">Contrato Complementario N°</div>
+
+                    <div class="span6">${cmpl.codigo}</div>
+                </div>
+
                 <div class='row'>
-                    <div class="bold span4">Garantías N.</div>
+                    <div class="bold span4">Garantías N°</div>
 
                     <div class="span6">
                         <g:each in="${garantias}" var="gar" status="i">
@@ -355,7 +361,7 @@
                     <div class="bold span4">Monto contrato complementario $.
                     </div>
                     <div class="span6">
-                        <acta:numero numero="${cmpl}"/>
+                        <acta:numero numero="${cmpl.monto}"/>
                     </div>
                 </div>
                 <div class='row'>

@@ -114,7 +114,7 @@ class ReportesPlanillasController {
 
 //        println "cmpl: $cmpl, ${cmpl.monto}"
         return [actaInstance: acta, directorDeFiscalizacion: delegadoFiscalizacion, espacios: espacios,
-        total: total, cmpl: cmpl.monto]
+        total: total, cmpl: cmpl]
     }
 
     def reporteDiferencias() {
