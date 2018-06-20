@@ -347,6 +347,7 @@
     }
 
     function treeSelection($item) {
+
         var $parent = $item.parent();
         var strId = $parent.attr("id");
         var parts = strId.split("_");
@@ -361,8 +362,9 @@
             //padres
             %{--////console.log("${tipo}", index, "${tipo}" == 'p', index == 0, "${tipo}" == 'p' && index == 0);--}%
 //                    if (index) { //el primero (p01) de la formula no es seleccionable (el de cuadrilla tipo si es)
+
             if ("${tipo}" == 'p' && index == 0) { //el primero (p01) de la formula no es seleccionable (el de cuadrilla tipo si es)
-//                        ////console.log("true");
+                       console.log("true");
                 $seleccionados.removeClass("selected editable");
                 $parent.children("a, .jstree-grid-cell").addClass("editable parent");
             } else {
@@ -372,6 +374,7 @@
                 updateCoef($item.parents("li"));
             }
         } else if (tipo == 'it') {
+
             //hijos AQUI
             $seleccionados.removeClass("selected editable");
             $parent.children("a, .jstree-grid-cell").addClass("editable child");
@@ -415,6 +418,7 @@
     }
 
     function createContextmenu(node) {
+
         var parent = node.parent().parent();
         var nodeStrId = node.attr("id");
         var nodeText = $.trim(node.attr("nombre"));
@@ -435,97 +439,99 @@
 
         switch (nodeTipo) {
             case "fp":
-                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
-                btnSave.click(function () {
-                    var indice = $("#indice").val();
-                    var valor = $.trim($("#valor").val());
+                if(num != 'p01'){
+                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
-                    var indiceNombre = $("#indice option:selected").text();
+                    btnSave.click(function () {
+                        var indice = $("#indice").val();
 
-                    var cantNombre = 0;
+                        var valor = $.trim($("#valor").val());
+                        var indiceNombre = $("#indice option:selected").text();
+                        var cantNombre = 0;
 
-                    var $spans = $("#tree").find("span:contains('" + indiceNombre + "')");
-                    $spans.each(function () {
-                        var t = $.trim($(this).text());
-                        if (t == indiceNombre) {
-                            cantNombre++;
+                        var $spans = $("#tree").find("span:contains('" + indiceNombre + "')");
+                        $spans.each(function () {
+                            var t = $.trim($(this).text());
+                            if (t == indiceNombre) {
+                                cantNombre++;
+                            }
+                        });
+
+                        if (indiceNombre == nodeText) {
+                            cantNombre = 0;
                         }
-                    });
 
-                    if (indiceNombre == nodeText) {
-                        cantNombre = 0;
-                    }
-
-                    if (cantNombre == 0) {
-                        if (valor != "") {
-                            btnSave.replaceWith(spinner);
-                            $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(action: 'guardarGrupo')}",
-                                data    : {
-                                    id     : nodeId,
-                                    indice : indice,
-                                    valor  : valor
-                                },
-                                success : function (msg) {
-                                    if (msg == "OK") {
-                                        node.attr("nombre", indiceNombre).trigger("change_node.jstree");
-                                        node.attr("valor", valor).trigger("change_node.jstree");
-                                        $("#modal-formula").modal("hide");
-                                        updateSumaTotal();
+                        if (cantNombre == 0) {
+                            if (valor != "") {
+                                btnSave.replaceWith(spinner);
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action: 'guardarGrupo')}",
+                                    data    : {
+                                        id     : nodeId,
+                                        indice : indice,
+                                        valor  : valor
+                                    },
+                                    success : function (msg) {
+                                        if (msg == "OK") {
+                                            node.attr("nombre", indiceNombre).trigger("change_node.jstree");
+                                            node.attr("valor", valor).trigger("change_node.jstree");
+                                            $("#modal-formula").modal("hide");
+                                            updateSumaTotal();
+                                        }
+                                    }
+                                });
+                            } else {
+                            }
+                        } else {
+                            $("#modal-formula").modal("hide");
+                            $.box({
+                                imageClass : "box_info",
+                                text       : "No puede ingresar dos coeficientes con el mismo nombre",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable     : false,
+                                    draggable     : false,
+                                    closeOnEscape : false,
+                                    buttons       : {
+                                        "Aceptar" : function () {
+                                        }
                                     }
                                 }
                             });
-                        } else {
                         }
-                    } else {
-                        $("#modal-formula").modal("hide");
-                        $.box({
-                            imageClass : "box_info",
-                            text       : "No puede ingresar dos coeficientes con el mismo nombre",
-                            title      : "Alerta",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable     : false,
-                                draggable     : false,
-                                closeOnEscape : false,
-                                buttons       : {
-                                    "Aceptar" : function () {
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
+                    });
 
-                menuItems.editar = {
-                    label            : "Editar",
-                    separator_before : false,
-                    separator_after  : false,
-                    icon             : icons.edit,
-                    action           : function (obj) {
-                        <g:if test="${obra?.liquidacion==1 || obra?.estado!='R' || obra?.codigo[-1..-2] != 'OF'}">
-                        $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(action: 'editarGrupo')}",
-                            data    : {
-                                id : nodeId
-                            },
-                            success : function (msg) {
-                                $("#modalTitle-formula").html("Editar grupo");
-                                $("#modalBody-formula").html(msg);
-                                $("#modalFooter-formula").html("").append(btnCancel).append(btnSave);
-                                $("#modal-formula").modal("show");
-                            }
-                        });
-                        </g:if>
-                        <g:else>
-                        alert("No puede modificar los coeficientes de una obra ya registrada");
-                        </g:else>
-                    }
-                };
+                    menuItems.editar = {
+                        label            : "Editar",
+                        separator_before : false,
+                        separator_after  : false,
+                        icon             : icons.edit,
+                        action           : function (obj) {
+                            <g:if test="${obra?.liquidacion==1 || obra?.estado!='R' || obra?.codigo[-1..-2] != 'OF'}">
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action: 'editarGrupo')}",
+                                data    : {
+                                    id : nodeId
+                                },
+                                success : function (msg) {
+                                    $("#modalTitle-formula").html("Editar grupo");
+                                    $("#modalBody-formula").html(msg);
+                                    $("#modalFooter-formula").html("").append(btnCancel).append(btnSave);
+                                    $("#modal-formula").modal("show");
+                                }
+                            });
+                            </g:if>
+                            <g:else>
+                            alert("No puede modificar los coeficientes de una obra ya registrada");
+                            </g:else>
+                        }
+                    };
+                }
 
                 break;
 
