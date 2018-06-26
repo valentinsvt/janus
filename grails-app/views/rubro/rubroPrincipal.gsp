@@ -214,7 +214,7 @@
 
         <div class="span3" style="width: 180px;">
             % costos indirectos
-            <input type="text" style="width: 30px;" id="costo_indi" value="21">
+            <input type="text" style="width: 30px;" id="costo_indi" value="22.5">
         </div>
 
         <div class="span2">
