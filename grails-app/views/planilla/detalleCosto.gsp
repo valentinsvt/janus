@@ -292,9 +292,11 @@
                 var valorIndi = parseFloat($.trim($("#txtIndirectos").val()));
                 var total = 0;
                 if (!error && valor != "" && valorIva != "" && valorIndi != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(valorIndi)) {
-                    total = valorIva + valorIndi;
+//                    total = valorIva + valorIndi;
+                    total = valor + valorIndi;
                     total = total.toFixed(2);
-                    $("#tdTotal").text(number_format(total, 2, ".", "")).data("val", total);
+//                    $("#tdTotal").text(number_format(total, 2, ".", "")).data("val", total);
+                    $("#tdTotal").text(number_format(valor + valorIndi, 2, ".", "")).data("val", valor + valorIndi);
                 }
 
                 if (!error && factura != "" && rubro != "" && valor != "" && valorIva != "" && valorIndi != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(valorIndi)) {
@@ -520,7 +522,9 @@
                     var val = parseFloat(data.total) + parseFloat(tot) - parseFloat(anterior);
                     var respaldo
 
-                    console.log('max: ', max)
+//                    console.log('clic Save');
+//                    console.log('max edit: ', max, 'val:', val);
+
                     if(max < 0.1) {
                         respaldo = "No se ha subido documento de respaldo de obras adicionales"
                     } else {
@@ -570,14 +574,23 @@
                 $("#btnAdd").click(function () {
                     if (check($(this))) {
                         $(this).hide().after(spinner);
+
+//                        var $tr = $("#trRubro");
+//                        var data = $tr.data();
+//                        var val = parseFloat(data.total) + parseFloat(tot) - parseFloat(anterior);
+
                         var $tr = $("#trRubro");
                         var data = $tr.data();
                         var $tdTotal = $("#tdTotalFinal");
                         var max = parseFloat($tdTotal.data("max"));
-                        var tot = parseFloat($tdTotal.data("val"));
+                        var tot = parseFloat($tdTotal.data("valor"));
+//                        var valTotal = parseFloat($("#tdTotal").val())
                         var val = parseFloat(data.total) + parseFloat(tot);
+//                        var val = valTotal + parseFloat(tot);
                         var respaldo = ""
-//                        console.log('max Agregar:', max);
+
+//                        console.log('max Agregar:', max, 'val:', val, 'tot:', tot);
+
                         if(max < 0.001) {
                             respaldo = "No se ha subido documento de respaldo de obras adicionales"
                         } else {

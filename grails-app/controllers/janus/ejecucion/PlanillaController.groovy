@@ -3371,7 +3371,8 @@ class PlanillaController extends janus.seguridad.Shield {
                     montoIva       : dp.montoIva,
                     montoIndirectos: dp.montoIndirectos,
 //                    indirectos     : dp.indirectos,
-                    total          : dp.montoIva + dp.montoIndirectos
+//                    total          : dp.montoIva + dp.montoIndirectos
+                    total          : dp.monto + dp.montoIndirectos
             ])
         }
 
@@ -3400,7 +3401,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def json = new JsonBuilder(dets)
 //        println json.toPrettyString()
-//        println "max: $max, totalAnterior: $totalAnterior, anteriores: ${anteriores.valor} "
+        println "max: $max, totalAnterior: $totalAnterior, anteriores: ${anteriores.valor} "
 
 
 
