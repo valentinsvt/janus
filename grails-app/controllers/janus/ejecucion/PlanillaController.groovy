@@ -1508,8 +1508,8 @@ class PlanillaController extends janus.seguridad.Shield {
             redirect(action: "list", id: planilla.contratoId)
         } else {
             flash.message = "Obra iniciada exitosamente"
-//            redirect(controller: "cronogramaEjecucion", action: "index", id: planilla.contratoId)
-            redirect(controller: "cronogramaEjecucion", action: "creaCronogramaEjec", id: planilla.contratoId)
+//            redirect(controller: "cronogramaEjecucion", action: "creaCronogramaEjec", id: planilla.contratoId)
+            redirect(controller: "cronogramaEjecucion", action: "creaCrngEjecNuevo", id: planilla.contratoId)
         }
     }
 
