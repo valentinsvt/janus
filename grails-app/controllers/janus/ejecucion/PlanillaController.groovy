@@ -1319,6 +1319,7 @@ class PlanillaController extends janus.seguridad.Shield {
         fechaMax = "new Date(${y + 2},${m},${d})"
 
         def firma = Persona.findAllByCargoIlike("Direct%");
+        println "fache min: $fechaMin"
 
         [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha, firma: firma]
     }

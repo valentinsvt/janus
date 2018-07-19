@@ -2374,6 +2374,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 render "NO"
             } else {
                 def prejOk = insertaSuspensionNuevo(cntr, suspension.fechaInicio, suspension.fechaFin, 'S')
+/*
+                def prejOk = insertaSuspensionNuevo(cntr, suspension.fechaInicio.format('yyyy-MM-dd'),
+                        suspension.fechaFin.format('yyyy-MM-dd'), 'S')
+*/
 
                 if (prejOk) {
                     println "Fin de suspensión actualizada a: ${suspension.fechaFin}, dias: ${suspension.dias}"
@@ -2402,7 +2406,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 "prejcrpa, prejcntr, prejcmpl) " +
                 "select prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
                 "prejcrpa, prejcntr, prejcmpl from prej_t where cntr__id = ${cntr.id} and " +
-                "prejfcfn <= '${pfcin}'"
+                "prejfcfn <= '${pfcin.format('yyyy-MM-dd')}'"
         println "--> $sql"
         cn.execute(sql.toString())
 
