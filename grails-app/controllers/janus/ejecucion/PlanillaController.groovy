@@ -4463,9 +4463,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     /** pone Po en base a lo recalculado de la planilla anterior **/
                     if (p.fechaInicio < plnl.fechaInicio) {    //verifica que es de un periodo anterior
                         prdo++
-                        println "anterior: ${p.id}, periodo: $prdo"
+//                        println "anterior: ${p.id}, periodo: $prdo"
                         def poAnteriores = ReajustePlanilla.findAllByPlanillaAndPeriodoGreaterThan(p, 0, [sort: 'periodo'])
-                        println "valores de Po anteriores--: ${poAnteriores.valorPo}"
+//                        println "valores de Po anteriores--: ${poAnteriores.valorPo}"
 
                         /* procesa planillas anteriores con los mismos valores de rjpl ya alamcenados **/
                         poAnteriores.each { po ->
@@ -4540,7 +4540,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
                 fcfm = preciosService.ultimoDiaDelMes(fchaFinPlanillado)
 
-                println "(0)fecha fin Planillado: $fchaFinPlanillado, fchaFin: ${plnl.fechaFin}, fcfm: $fcfm"
+//                println "(0)fecha fin Planillado: $fchaFinPlanillado, fchaFin: ${plnl.fechaFin}, fcfm: $fcfm"
                 if(plnl.fechaFin > fcfm)   /*** la planilla sobrepasa el mes: tiene dos o mas Po  **/
                 {
                     diasEsteMes = preciosService.diasEsteMes(plnl.contrato.id, fchaFinPlanillado.format('yyyy-MM-dd'), fcfm.format('yyyy-MM-dd'))
@@ -4549,11 +4549,13 @@ class PlanillaController extends janus.seguridad.Shield {
                     plAcumulado += esteMes
                     planilladoEsteMes += esteMes
 
-                    println "(1)fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, fcfm: $fcfm"
+//                    println "(1)fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, fcfm: $fcfm"
 
+//                    pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipoInList(plnl.contrato,
+//                       plnl.fechaInicio, fcfm, ['P', 'C'])
                     pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipoInList(plnl.contrato,
-                       plnl.fechaInicio, fcfm, ['P', 'C'])
-                    println "pems ---> ${pems}"
+                       fchaFinPlanillado, fcfm, ['P', 'C'])
+//                    println "pems ---> ${pems}"
                     parcial = 0.0
 //                    total = totalCr
                     totalCmpl = 0.0
@@ -4568,7 +4570,7 @@ class PlanillaController extends janus.seguridad.Shield {
                             }
 //                        }
                     }
-                    println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
+//                    println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
                     /** manejo especial de la planilla 217 no reajusto en todos los periodos borrar y dejar solo el ELSE **/
                     if(plnl.id == 217){
                         registraRjpl(prdo, esteMes, plAcumulado, plnl.contrato, plnl, fchaFinPlanillado, fcfm, parcial, total, true)
@@ -5035,7 +5037,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def dsct1 = calculaPo(planilla.id, esteMes, planillaFinal, prmt.periodo)
 //                println "+++2: ${calculaPo(plnl.id, 0, false, prmt.periodo)}, anterior: $dsct1"
         prmt.valorPo = dsct1
-        println "inserta segunda parte Po: $dsct1"
+//        println "inserta segunda parte Po: $dsct1"
 
         if(Math.abs(dsct1) > 0.001) {
             insertaRjpl(prmt)
