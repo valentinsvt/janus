@@ -3592,9 +3592,11 @@ class PlanillaController extends janus.seguridad.Shield {
                         " and fechaPresentacion < :f and tipoContrato = :t",
                         [c: plnl.contrato, p: plnl.id, f: plnl.fechaPresentacion, t: plnl.tipoContrato])
 
-                def dsct   = Math.round(plnl.valor*(1 - plnl.contrato.porcentajeAnticipo/100)*100)/100
-                def resto  = Math.round((plnl.contrato.anticipo - totDsct[0])*100)/100
+//                def dsct   = Math.round(plnl.valor*(1 - plnl.contrato.porcentajeAnticipo/100)*100)/100
 
+                /* aplica el descuento del anticipo */
+                def dsct   = Math.round(plnl.valor*(plnl.contrato.porcentajeAnticipo/100)*100)/100
+                def resto  = Math.round((plnl.contrato.anticipo - totDsct[0])*100)/100
                 println "totDsct[0]: ${totDsct[0]}, resto: ${resto}"
 
                 if(dsct > resto) {
