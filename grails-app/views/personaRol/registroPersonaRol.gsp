@@ -34,10 +34,6 @@
 
 
     <div class="span12" id="filaPersonas"></div>
-
-    %{--<div class="span1" style="font-weight: bold">Persona:</div>--}%
-    %{--<g:select name="persona.id" class="persona" from="${janus.Persona?.list()}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"--}%
-    %{--style="width: 300px"/>--}%
     <hr>
     <div class="span4" id="funcionDiv" style="margin-top: 10px;">
         <div class="span2" style="margin-left: -1px; font-weight: bold">Nueva Función:</div>

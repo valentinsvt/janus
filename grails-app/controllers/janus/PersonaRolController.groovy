@@ -40,8 +40,7 @@ class PersonaRolController extends janus.seguridad.Shield {
 
         def departamentos = Departamento.findAllByDireccion(direccion)
 
-        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
-
+        def personas = Persona.findAllByDepartamentoInListAndActivo(departamentos, 1, [sort: 'nombre'])
 
         return [personas : personas]
     }
