@@ -3152,7 +3152,7 @@ class ReportePlanillas3Controller {
         def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
         def height = 12
         def maxRows = 43     //45
-        def extraRows = 18   //9
+        def extraRows = 12   //18
         def currentRows = 1
         def chequeoPg = 0
 
@@ -3187,6 +3187,7 @@ class ReportePlanillas3Controller {
 //        println "sql: $sql"
         def vocr = cn.rows(sql.toString())
 
+        println "registros: ${vocr.size()}, sps: $sps, extra: $extraRows --> num: ${(vocr.size() + sps + extraRows)} / $maxRows "
         def totalPags = Math.ceil((vocr.size() + sps + extraRows) / maxRows).toInteger()
         printHeaderDetalle([pag: currentPag, total: totalPags])
 
