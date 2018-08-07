@@ -256,7 +256,8 @@
                                     </g:link>
                                 </g:if>
 
-                            <g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) > 0}">
+                            %{--<g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) > 0}">--}%
+                            <g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
                                 <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
                                         class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Nuevo">
                                     <i class="icon-print"></i>

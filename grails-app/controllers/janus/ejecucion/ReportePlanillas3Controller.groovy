@@ -1736,6 +1736,7 @@ class ReportePlanillas3Controller {
             redirect action: 'rptPlnlEntrega', params: params
         }
 
+        println "tipo planilla: ${planilla.tipoPlanilla.codigo}"
         if (planilla.tipoPlanilla.codigo == 'Q') {
             if (!planilla.contrato.fechaPedidoRecepcionContratista || !planilla.contrato.fechaPedidoRecepcionFiscalizador) {
                 flash.message = "Por favor ingrese las fechas de pedido de recepción para generar la planilla " +
@@ -1779,7 +1780,7 @@ class ReportePlanillas3Controller {
             contador++
         }
 
-        if(planilla.tipoPlanilla.codigo in ['P', 'Q', 'R']) {
+        if(planilla.tipoPlanilla.codigo in ['P', 'Q', 'R', 'L']) {
             println "invoca multas"
             pl = multas(planilla, "")
             if(pl) {

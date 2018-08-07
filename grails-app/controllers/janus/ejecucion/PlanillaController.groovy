@@ -4440,7 +4440,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         prmt.periodoInec = indicesDisponiblesAnticipo(p, fcha, null)
                         prmt.mes = preciosService.componeMes(p.fechaIngreso.format('MMM-yyyy'))
                     }
-//                    println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${p?.fechaPago}"
+//                    println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${p?.fechaPago}, --> $prdoInec"
 
                     prmt.periodoInec = prdoInec ?: indicesDisponibles(p, fcha, '')
                         prmt.planilla = plnl
@@ -4500,7 +4500,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
                             /**para recalcular el prin se requiere la fecha a la que corresponde el reajuste po.fechaInicio, po.fechaFin ok **/
                             prdoInec = indicesDisponibles(po.planillaReajustada, po.planillaReajustada.fechaPago, 'R') /* para recalcular reajuste */
-//                            println "********** para plnl: ${po.id} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec, fcha: $po.fechaInicio "
+                            println "********** para plnl: ${po.id} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec, fcha: $po.fechaInicio "
                             prmt.periodoInec = prdoInec?: indicesDisponibles(po.planillaReajustada, po.fechaInicio, '')
 
 //                            println "  inserta avance RR... si hay indices actuales $prmt"
@@ -4699,7 +4699,8 @@ class PlanillaController extends janus.seguridad.Shield {
 
                             /**para recalcular el prin se requiere la fecha a la que corresponde el reajuste po.fechaInicio, po.fechaFin ok **/
                             prdoInec = indicesDisponibles(po.planillaReajustada, po.planillaReajustada.fechaPago, 'R') /* para recalcular reajuste */
-//                            println "********** para plnl: ${po.id} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec, fcha: $po.fechaInicio "
+//                            println "****L***** para plnl: ${po.id} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec, fcha: $po.fechaInicio "
+                            println "**** plnl: ${po.planillaReajustada.id} fecha de pago: ${po.planillaReajustada.fechaPago} --> $prdoInec"
                             prmt.periodoInec = prdoInec?: indicesDisponibles(po.planillaReajustada, po.fechaInicio, '')
 
 //                            println "  inserta avance RR... si hay indices actuales $prmt"
