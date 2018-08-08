@@ -3152,8 +3152,8 @@ class ReportePlanillas3Controller {
 
         def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
         def height = 12
-        def maxRows = 43     //45
-        def extraRows = 12   //18
+        def maxRows = 45     //45
+        def extraRows = 10   //18
         def currentRows = 1
         def chequeoPg = 0
 

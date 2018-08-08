@@ -212,7 +212,7 @@
             var id = $(this).attr("id");
             var valor = $(this).data("valor");
 
-            if (parseFloat(valor) > 0 && parseFloat($(this).data("original")) != parseFloat(valor)) {
+            if (parseFloat(valor) >= 0 && parseFloat($(this).data("original")) != parseFloat(valor)) {
                 if (data != "") {
                     data += "&";
                 }
