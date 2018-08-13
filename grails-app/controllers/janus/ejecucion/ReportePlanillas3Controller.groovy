@@ -20,6 +20,7 @@ import janus.Parametros
 import janus.VolumenContrato
 import janus.VolumenesObra
 import janus.pac.PeriodoEjecucion
+import janus.pac.Proveedor
 
 import java.awt.Color
 
@@ -195,8 +196,12 @@ class ReportePlanillas3Controller {
                     str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombre + " " + persona.apellido)
                     break;
                 case "prov":
-                    str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombreContacto + " " + persona.apellidoContacto)
-                    break;
+                    if(persona.tipo == 'N'){
+                        str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombreContacto + " " + persona.apellidoContacto)
+                    } else {
+                        str = cap(persona.nombreContacto)
+                }
+                break;
             }
         }
 //        println str
