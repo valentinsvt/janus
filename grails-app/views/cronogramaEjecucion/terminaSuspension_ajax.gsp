@@ -15,7 +15,7 @@
         </div>
 
         <div class="controls">
-            <elm:datepicker name="fin"  minDate="new Date(${min})"  class="required dateEC" onClose="updateDias"/>
+            <elm:datepicker name="fcfn"  minDate="new Date(${min})"  class="required dateEC" onClose="updateDias"/>
             <span class="mandatory">*</span>
             <span style="margin-left: 20px">Dia en el que se reinicia la obra</span>
             <p class="help-block ui-helper-hidden"></p>
