@@ -2017,7 +2017,7 @@ class ReportePlanillas3Controller {
         Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
         Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
-        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 7, Font.BOLD);
         Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
 
         Document document
@@ -2068,7 +2068,8 @@ class ReportePlanillas3Controller {
         addEmptyLine(tituloB0, 1);
         tituloB0.setAlignment(Element.ALIGN_CENTER);
         tituloB0.add(new Paragraph("Cálculo de B0: ${rjpl.fpReajuste.descripcion}", fontTitle));
-        addEmptyLine(tituloB0, 1);
+        tituloB0.setSpacingAfter(10); //pone espacio luego de la línea
+//        addEmptyLine(tituloB0, 1);
         document.add(tituloB0);
 
         def periodos = [:]
@@ -3806,9 +3807,11 @@ class ReportePlanillas3Controller {
 
     def titlSbtt() {
         Font info = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)
-        Paragraph preface2 = new Paragraph();
+        Paragraph preface2 = new Paragraph()
+//        preface2.setAlignment(Element.ALIGN_RIGHT)
         preface2.add(new Paragraph("Generado por: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-        addEmptyLine(preface2, 1);
+        preface2.setSpacingAfter(5);
+//        addEmptyLine(preface2, 1);
 
         return preface2
     }
