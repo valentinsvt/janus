@@ -1794,7 +1794,7 @@ class ReportePlanillas3Controller {
             }
 
             println "invoca detalle"
-            pl = detalle(planilla, planilla.tipoContrato)
+//            pl = detalle(planilla, planilla.tipoContrato)
             pl = detalleAdicional(planilla, planilla.tipoContrato)  /* columna adicional */
 
             pdfs.add(pl.toByteArray())
