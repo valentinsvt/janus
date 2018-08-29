@@ -1794,8 +1794,8 @@ class ReportePlanillas3Controller {
             }
 
             println "invoca detalle"
-            pl = detalle(planilla, planilla.tipoContrato)
-//            pl = detalleAdicional(planilla, planilla.tipoContrato)  /* columna adicional */
+//            pl = detalle(planilla, planilla.tipoContrato)
+            pl = detalleAdicional(planilla, planilla.tipoContrato)  /* columna adicional */
             pdfs.add(pl.toByteArray())
             contador++
         }
@@ -2794,7 +2794,8 @@ class ReportePlanillas3Controller {
         document.newPage()
         tablaDetalles = new PdfPTable(12);
         tablaDetalles.setWidthPercentage(100);
-        tablaDetalles.setWidths(arregloEnteros([14, 40, 5, 9, 9, 9, 9, 9, 11, 11, 11, 8]))
+//        tablaDetalles.setWidths(arregloEnteros([14, 40, 5, 9, 9, 9, 9, 9, 11, 11, 11, 8]))
+        tablaDetalles.setWidths(arregloEnteros([14, 34, 5, 9, 9, 9, 9, 9, 14, 11, 14, 8]))
 //        tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
         tablaDetalles.setSpacingAfter(1f);
         def currentPag = 1
