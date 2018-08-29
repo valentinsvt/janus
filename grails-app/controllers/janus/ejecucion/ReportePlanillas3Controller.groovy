@@ -200,8 +200,8 @@ class ReportePlanillas3Controller {
                         str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombreContacto + " " + persona.apellidoContacto)
                     } else {
                         str = cap(persona.nombreContacto)
-                }
-                break;
+                    }
+                    break;
             }
         }
 //        println str
@@ -1794,8 +1794,9 @@ class ReportePlanillas3Controller {
             }
 
             println "invoca detalle"
-//            pl = detalle(planilla, planilla.tipoContrato)
+            pl = detalle(planilla, planilla.tipoContrato)
             pl = detalleAdicional(planilla, planilla.tipoContrato)  /* columna adicional */
+
             pdfs.add(pl.toByteArray())
             contador++
         }
@@ -1846,16 +1847,16 @@ class ReportePlanillas3Controller {
         def name = "planilla_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
 
 //            println "invoca multas"
-            pl = multas(planilla, "")
-            if(pl) {
-                pdfs.add(pl.toByteArray())
-                contador++
-            }
-
-//            println "invoca detalle"
-            pl = detalleEntrega(planilla, planilla.tipoContrato)
+        pl = multas(planilla, "")
+        if(pl) {
             pdfs.add(pl.toByteArray())
             contador++
+        }
+
+//            println "invoca detalle"
+        pl = detalleEntrega(planilla, planilla.tipoContrato)
+        pdfs.add(pl.toByteArray())
+        contador++
 
         if(contador > 1) {
             def baos = new ByteArrayOutputStream()
@@ -2201,10 +2202,10 @@ class ReportePlanillas3Controller {
             totlPo += tbPo[i].po
         }
 
-            addCellTabla(tablaP0, new Paragraph("TOTAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaP0, new Paragraph(numero(totCrono, 2) , fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaP0, new Paragraph(numero(totPlan, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaP0, new Paragraph(numero(totlPo, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaP0, new Paragraph("TOTAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(tablaP0, new Paragraph(numero(totCrono, 2) , fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(tablaP0, new Paragraph(numero(totPlan, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(tablaP0, new Paragraph(numero(totlPo, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaP0);
 
@@ -2727,13 +2728,35 @@ class ReportePlanillas3Controller {
         PdfPTable tablaDetalles = null
         def borderWidth = 0.3
 
+        def sql = "select count(distinct(sbpr__id)) cnta from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, " +
+                "'${tipoRprt}')"
+        def sps = cn.rows(sql.toString())[0].cnta
+        sql = "select * from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, '${tipoRprt}')"
+        def vocr = cn.rows(sql.toString())
+
+        def existe = 0
+
+        vocr.each {mk ->
+            if(mk.cntdacml > mk.vocrcntd){
+                existe ++
+            }
+        }
+
+        println("existe " + existe)
+
         def printHeaderDetalle = { params ->
-            def tablaHeaderDetalles = new PdfPTable(12);
-            tablaHeaderDetalles.setWidthPercentage(100);
-            tablaHeaderDetalles.setWidths(arregloEnteros([14, 31, 8, 8, 9, 16, 8, 8, 8, 8, 8, 8]))
-//            tablaHeaderDetalles.setWidths(arregloEnteros([2, 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2]))
 
+            def tablaHeaderDetalles
 
+            if(existe == 0){
+                tablaHeaderDetalles = new PdfPTable(11);
+                tablaHeaderDetalles.setWidthPercentage(100);
+                tablaHeaderDetalles.setWidths(arregloEnteros([13, 35, 5, 10, 11, 10, 10, 10, 13, 13, 14]))
+            }else{
+                tablaHeaderDetalles = new PdfPTable(12);
+                tablaHeaderDetalles.setWidthPercentage(100);
+                tablaHeaderDetalles.setWidths(arregloEnteros([14, 31, 8, 8, 9, 16, 8, 8, 8, 8, 8, 8]))
+            }
 
             addCellTabla(tablaHeaderDetalles, new Paragraph("Obra", fontThTiny), prmsTdNoBorder)
             addCellTabla(tablaHeaderDetalles, new Paragraph(obra.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 11])
@@ -2780,23 +2803,37 @@ class ReportePlanillas3Controller {
             addCellTabla(inner7, new Paragraph("Acumul.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, inner7, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
 
-            addCellTabla(tablaDetalles, new Paragraph("Cant. Adicio.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            if(existe != 0){
+                addCellTabla(tablaDetalles, new Paragraph("Cant. Adicio.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            }
         }
 
         def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
         def height = 12
-        def maxRows = 43     // en horizontal: 25
-        def extraRows = 18   //9
         def currentRows = 1
         def chequeoPg = 0
-
         def rowsCurPag = 1
-        document.newPage()
-        tablaDetalles = new PdfPTable(12);
-        tablaDetalles.setWidthPercentage(100);
+        def maxRows = 0
+        def extraRows = 0
+
+        if(existe == 0){
+            maxRows = 45     //45
+            extraRows = 10   //18
+            document.newPage()
+            tablaDetalles = new PdfPTable(11);
+            tablaDetalles.setWidthPercentage(100);
+            tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+        }else{
+            maxRows = 43     // en horizontal: 25
+            extraRows = 18   //9
+            document.newPage()
+            tablaDetalles = new PdfPTable(12);
+            tablaDetalles.setWidthPercentage(100);
 //        tablaDetalles.setWidths(arregloEnteros([14, 40, 5, 9, 9, 9, 9, 9, 11, 11, 11, 8]))
-        tablaDetalles.setWidths(arregloEnteros([14, 34, 5, 9, 9, 9, 9, 9, 14, 11, 14, 8]))
-//        tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
+            tablaDetalles.setWidths(arregloEnteros([14, 34, 5, 9, 9, 9, 9, 9, 14, 11, 14, 8]))
+        }
+
+
         tablaDetalles.setSpacingAfter(1f);
         def currentPag = 1
         def sumaPrclAntr = 0, sumaTotlAntr = 0
@@ -2811,15 +2848,6 @@ class ReportePlanillas3Controller {
                         align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def frmtDtDrBorde = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, bwr: borderWidth,
                              border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
-
-
-        def sql = "select count(distinct(sbpr__id)) cnta from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, " +
-                "'${tipoRprt}')"
-
-        def sps = cn.rows(sql.toString())[0].cnta
-        sql = "select * from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, '${tipoRprt}')"
-//        println "sql: $sql"
-        def vocr = cn.rows(sql.toString())
 
         def totalPags = Math.ceil((vocr.size() + sps + extraRows) / maxRows).toInteger()
         printHeaderDetalle([pag: currentPag, total: totalPags])
@@ -2840,7 +2868,9 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaDetalles, new Paragraph(numero(params.ant, 2), fontThFooter), frmtSuma)
             addCellTabla(tablaDetalles, new Paragraph(numero(params.act, 2), fontThFooter), frmtSuma)
             addCellTabla(tablaDetalles, new Paragraph(numero(params.acu, 2), fontThFooter), frmtSuma)
-            addCellTabla(tablaDetalles, new Paragraph('', fontThFooter), frmtCol8)
+            if(existe != 0){
+                addCellTabla(tablaDetalles, new Paragraph('', fontThFooter), frmtCol8)
+            }
         }
 
 
@@ -2868,11 +2898,16 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaDetalles, new Paragraph(numero(vo.vlorantr, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph(numero(vo.vloractl, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph(numero(vo.vloracml, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-            if(vo.cntdacml > vo.vocrcntd){
-                addCellTabla(tablaDetalles, new Paragraph(numero(vo.cntdacml - vo.vocrcntd, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-            }else{
-                addCellTabla(tablaDetalles, new Paragraph('', fontTdTiny), frmtDtIz)
+
+            if(existe != 0){
+                if(vo.cntdacml > vo.vocrcntd){
+                    addCellTabla(tablaDetalles, new Paragraph(numero(vo.cntdacml - vo.vocrcntd, 2, "hide"), fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                }else{
+                    addCellTabla(tablaDetalles, new Paragraph('', fontTdTiny), frmtDtIz)
+                }
             }
+
+
 
             currentRows++
             rowsCurPag++
@@ -2901,10 +2936,17 @@ class ReportePlanillas3Controller {
 
                 //-------------------
                 document.newPage()
-                tablaDetalles = new PdfPTable(12);
-                tablaDetalles.setWidthPercentage(100);
-                tablaDetalles.setWidths(arregloEnteros([14, 40, 5, 9, 9, 9, 9, 9, 11, 11, 11, 8]))
-//                tablaDetalles.setWidths(arregloEnteros([8, 30, 3, 6, 7, 7, 7, 7, 7, 7, 7, 7]))
+
+                if(existe == 0){
+                    tablaDetalles = new PdfPTable(11);
+                    tablaDetalles.setWidthPercentage(100);
+                    tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+                }else{
+                    tablaDetalles = new PdfPTable(12);
+                    tablaDetalles.setWidthPercentage(100);
+                    tablaDetalles.setWidths(arregloEnteros([14, 40, 5, 9, 9, 9, 9, 9, 11, 11, 11, 8]))
+                }
+
                 tablaDetalles.setSpacingAfter(1f);
                 printHeaderDetalle([pag: currentPag, total: totalPags])
                 rowsCurPag = 1
@@ -2929,13 +2971,18 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaDetalles, new Paragraph(numero(rjplAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(rjplActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(rjplAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+
+        }
 
         addCellTabla(tablaDetalles, new Paragraph("SUBTOTAL", fontThFooter), frmtCol8)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr + rjplAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl + rjplActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml + rjplAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        }
 
 
         sql = "select sum(plnlmnto) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
@@ -2952,14 +2999,17 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaDetalles, new Paragraph(numero(cstoAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(cstoActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(cstoAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
-
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        }
 
         addCellTabla(tablaDetalles, new Paragraph("SUMATORIA DE AVANCE DE OBRA Y COSTO + PORCENTAJE", fontThFooter), frmtCol8)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr + cstoAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl + cstoActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml + cstoAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        }
 
         sumaTotlAntr += rjplAntr + cstoAntr
         sumaTotlActl += rjplActl + cstoActl
@@ -2969,7 +3019,9 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        }
 
         addCellTabla(tablaDetalles, new Paragraph("DESCUENTOS CONTRACTUALES", fontThFooter), frmtCol11)
 
@@ -2990,7 +3042,9 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaDetalles, new Paragraph(numero(antcAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(antcActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(antcAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        }
 
 
         sql = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl where " +
@@ -3020,7 +3074,9 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaDetalles, new Paragraph(numero(mltaAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(mltaActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(mltaAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        }
 
         sql = "select sum(plnlnpvl) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
                 "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}'"
@@ -3039,14 +3095,18 @@ class ReportePlanillas3Controller {
             addCellTabla(tablaDetalles, new Paragraph(numero(nopgAntr,2), fontThFooter), frmtSuma)
             addCellTabla(tablaDetalles, new Paragraph(numero(nopgActl, 2), fontThFooter), frmtSuma)
             addCellTabla(tablaDetalles, new Paragraph(numero(nopgAcml, 2), fontThFooter), frmtSuma)
-            addCellTabla(tablaDetalles, new Paragraph(" ", fontThFooter), frmtCol8)
+            if(existe != 0) {
+                addCellTabla(tablaDetalles, new Paragraph(" ", fontThFooter), frmtCol8)
+            }
         }
 
         addCellTabla(tablaDetalles, new Paragraph("VALOR LIQUIDO A PAGAR", fontThFooter), frmtCol8)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAntr, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlActl, 2), fontThFooter), frmtSuma)
         addCellTabla(tablaDetalles, new Paragraph(numero(sumaTotlAcml, 2), fontThFooter), frmtSuma)
-        addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        if(existe != 0) {
+            addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), frmtCol8)
+        }
 
         document.add(tablaDetalles)
 
@@ -3343,7 +3403,7 @@ class ReportePlanillas3Controller {
         sql = "select sum(plnldsct) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
 //                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo = '${planilla.tipoContrato}'"
                 "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo in (${tipoplnl})"
-        println "sql.....: $sql"
+//        println "sql.....: $sql"
         def antcAntr = cn.rows(sql.toString())[0].suma?:0
         def antcActl = planilla.descuentos
         def antcAcml = antcAntr + antcActl
