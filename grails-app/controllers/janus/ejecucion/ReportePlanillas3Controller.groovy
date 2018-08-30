@@ -1,5 +1,6 @@
 package janus.ejecucion
 
+import com.itextpdf.text.BaseColor
 import com.lowagie.text.Document
 import com.lowagie.text.Element
 import com.lowagie.text.Font
@@ -23,6 +24,7 @@ import janus.pac.PeriodoEjecucion
 import janus.pac.Proveedor
 
 import java.awt.Color
+import java.text.DecimalFormat
 
 class ReportePlanillas3Controller {
     def preciosService
@@ -4020,6 +4022,7 @@ class ReportePlanillas3Controller {
 
         return tablaFirmas
     }
+
 
 
 }

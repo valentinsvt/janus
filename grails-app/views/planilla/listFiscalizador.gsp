@@ -104,6 +104,10 @@
                         Imprimir Orden de Inicio de Obra
                     </a>
                 </g:if>
+                <g:link controller="reportes6" action="reporteOrdenCambio"
+                        class="btn btnPrint btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">
+                    <i class="icon-print"></i> Imprimir Orden de Cambio
+                </g:link>
             </div>
         </div>
 

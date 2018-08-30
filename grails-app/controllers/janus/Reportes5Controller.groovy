@@ -1,5 +1,6 @@
 package janus
 
+import com.itextpdf.text.BaseColor
 import com.lowagie.text.Document
 import com.lowagie.text.Element
 import com.lowagie.text.Font
@@ -26,6 +27,7 @@ import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
 
 import java.awt.Color
+import java.text.DecimalFormat
 
 class Reportes5Controller {
 
@@ -614,6 +616,77 @@ class Reportes5Controller {
                 cell.setBorderWidthTop(0)
             }
         }
+        table.addCell(cell);
+    }
+
+    private static void addCellTabla2(PdfPTable table, paragraph, params) {
+        PdfPCell cell = new PdfPCell(paragraph);
+        if (params.height) {
+            cell.setFixedHeight(params.height.toFloat());
+        }
+        if (params.border) {
+            cell.setBorderColor(params.border);
+        }
+        if (params.bg) {
+            cell.setBackgroundColor(params.bg);
+        }
+        if (params.colspan) {
+            cell.setColspan(params.colspan);
+        }
+        if (params.align) {
+            cell.setHorizontalAlignment(params.align);
+        }
+        if (params.valign) {
+            cell.setVerticalAlignment(params.valign);
+        }
+        if (params.w) {
+            cell.setBorderWidth(params.w);
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwl) {
+            cell.setBorderWidthLeft(params.bwl.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwb) {
+            cell.setBorderWidthBottom(params.bwb.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwr) {
+            cell.setBorderWidthRight(params.bwr.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwt) {
+            cell.setBorderWidthTop(params.bwt.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bcl) {
+            cell.setBorderColorLeft(params.bcl);
+        }
+        if (params.bcb) {
+            cell.setBorderColorBottom(params.bcb);
+        }
+        if (params.bcr) {
+            cell.setBorderColorRight(params.bcr);
+        }
+        if (params.bct) {
+            cell.setBorderColorTop(params.bct);
+        }
+        if (params.padding) {
+            cell.setPadding(params.padding.toFloat());
+        }
+        if (params.pl) {
+            cell.setPaddingLeft(params.pl.toFloat());
+        }
+        if (params.pr) {
+            cell.setPaddingRight(params.pr.toFloat());
+        }
+        if (params.pt) {
+            cell.setPaddingTop(params.pt.toFloat());
+        }
+        if (params.pb) {
+            cell.setPaddingBottom(params.pb.toFloat());
+        }
+
         table.addCell(cell);
     }
 
@@ -1669,8 +1742,6 @@ class Reportes5Controller {
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
-
-
     }
 
 
