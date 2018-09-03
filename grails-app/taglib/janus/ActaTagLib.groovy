@@ -717,9 +717,10 @@ class ActaTagLib {
                 totalProvisional += rj.valorReajustado
                 if(liquidacion) {
                     totalDefinitivo += rj_lq
-                } else {
-                    totalDefinitivo += rj.planillaReajustada.reajusteLiq
                 }
+//                else {
+//                    totalDefinitivo += rj.planillaReajustada.reajusteLiq
+//                }
                 totalDiferencia += diferencia
 
                 tabla += "</tr>"
@@ -764,9 +765,12 @@ class ActaTagLib {
                     totalProvisional += rj.valorReajustado
                     if(liquidacion) {
                         totalDefinitivo += rj_lq
-                    } else {
+                    }
+/*
+                    else {
                         totalDefinitivo += rj.planillaReajustada.reajusteLiq
                     }
+*/
                     totalDiferencia += diferencia
 
                     tabla += "</tr>"

@@ -568,7 +568,8 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def listFiscalizador() {
-        params.max = 15
+        println "listFiscalizador: $params"
+//        params.max = 15 //controlao por javascript $(".paginate").paginate(...
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
         switch (codigoPerfil) {
@@ -594,6 +595,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
         def firma = Persona.findAllByCargoIlike("Direct%");
+//        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'], [max: 25])
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
 
 //        def tipoAvance = TipoPlanilla.findByCodigo('P')

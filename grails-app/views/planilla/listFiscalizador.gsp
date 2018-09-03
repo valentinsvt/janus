@@ -522,11 +522,11 @@
     $(function () {
         $('[rel=tooltip]').tooltip();
 
-        $(".paginate").paginate({
-            maxRows        : 10,
-            searchPosition : $("#busqueda-Planilla"),
-            float          : "right"
-        });
+                $(".paginate").paginate({
+                    maxRows        : 12,  /** paginación javascript max por página **/
+                    searchPosition : $("#busqueda-Planilla"),
+                    float          : "right"
+                });
 
         $(".btnPedidoPagoAnticipo").click(function () {
             location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPagoAnticipo')}/" + $(this).data("id");

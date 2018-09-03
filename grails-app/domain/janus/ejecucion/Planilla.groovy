@@ -15,7 +15,6 @@ class Planilla {
     double valor
     double descuentos
     double reajuste
-    double reajusteLiq = 0
 
 //    Date fechaReajuste
 //    double diferenciaReajuste
@@ -25,17 +24,8 @@ class Planilla {
     Date fechaInicio
     Date fechaFin
 
-    Double multaRetraso = 0                 //multa por retraso de obra (solo en la ultima planilla de avance)
-    Double multaPlanilla = 0                //multa por no presentacion de la planilla (retraso en la presentacion)
 
-    Double multaIncumplimiento = 0          //multa por incumplimiento del cronograma (retraso de obra en las planillas de avance)
-    Double multaDisposiciones = 0           //multa por no acatar las disposiciones del fiscalizador
 
-    Integer diasMultaDisposiciones = 0          //dias de multa por no acatar las disposiciones del fiscalizador
-
-    String memoSalida
-    String memoOrdenPago
-    String memoPago
 
 //    String aprobado
 //    String oficioSalida
@@ -44,8 +34,20 @@ class Planilla {
 //    Date fechaOficioPago
 //    Date fechaMemoSalida
 
+//    String memoSalida
+//    Double multaRetraso = 0                 //multa por retraso de obra (solo en la ultima planilla de avance)
+//    Double multaPlanilla = 0                //multa por no presentacion de la planilla (retraso en la presentacion)
+//    Date fechaOrdenPago
+//    String memoOrdenPago
+//    String memoPago
+
+//    double reajusteLiq = 0
+//    Double multaIncumplimiento = 0          //multa por incumplimiento del cronograma (retraso de obra en las planillas de avance)
+//    Double multaDisposiciones = 0           //multa por no acatar las disposiciones del fiscalizador
+
+
+    Integer diasMultaDisposiciones = 0          //dias de multa por no acatar las disposiciones del fiscalizador
     Date fechaPago
-    Date fechaOrdenPago
 
     String oficioEntradaPlanilla
     String memoSalidaPlanilla
@@ -109,12 +111,10 @@ class Planilla {
             fechaPresentacion column: 'plnlfcpr'
             fechaIngreso column: 'plnlfcig'
             fechaPago column: 'plnlfcpg'
-            fechaOrdenPago column: 'plnlfcod'
             descripcion column: 'plnldscr'
             valor column: 'plnlmnto'
             descuentos column: 'plnldsct'
             reajuste column: 'plnlrjst'
-            reajusteLiq column: 'plnlrjlq'
 
 //            estadoPlanilla column: 'edpl__id'
 //            numeroFactura column: 'plnlfctr'
@@ -134,14 +134,18 @@ class Planilla {
             fechaInicio column: 'plnlfcin'
             fechaFin column: 'plnlfcfn'
 
-            memoSalida column: 'plnlmmsl'
-            memoOrdenPago column: 'plnlmmop'
-            memoPago column: 'plnlmmpg'
+//            memoSalida column: 'plnlmmsl'
+//            multaRetraso column: 'plnlmlrt'
+//            multaPlanilla column: 'plnlmlpl'
+//            fechaOrdenPago column: 'plnlfcod'
+//            memoOrdenPago column: 'plnlmmop'
+//            memoPago column: 'plnlmmpg'
 
-            multaRetraso column: 'plnlmlrt'
-            multaPlanilla column: 'plnlmlpl'
-            multaIncumplimiento column: 'plnlmlin'
-            multaDisposiciones column: 'plnlmlds'
+//            reajusteLiq column: 'plnlrjlq'
+//            multaIncumplimiento column: 'plnlmlin'
+//            multaDisposiciones column: 'plnlmlds'
+
+
 
             diasMultaDisposiciones column: 'plnldsmd'
 
@@ -218,14 +222,14 @@ class Planilla {
 //        fechaOficioPago(blank: true, nullable: true)
 //        fechaMemoSalida(blank: true, nullable: true)
 
+//        memoSalida(blank: true, nullable: true)
+//        fechaOrdenPago(blank: true, nullable: true)
+//        memoOrdenPago(maxSize: 20, blank: true, nullable: true)
+//        memoPago(maxSize: 20, blank: true, nullable: true)
+
         observaciones(maxSize: 127, blank: true, nullable: true)
         fechaInicio(blank: true, nullable: true)
         fechaFin(blank: true, nullable: true)
-        fechaOrdenPago(blank: true, nullable: true)
-        memoSalida(blank: true, nullable: true)
-
-        memoOrdenPago(maxSize: 20, blank: true, nullable: true)
-        memoPago(maxSize: 20, blank: true, nullable: true)
 
         oficioEntradaPlanilla(maxSize: 20, blank: true, nullable: true)
         memoSalidaPlanilla(maxSize: 20, blank: true, nullable: true)
