@@ -9,22 +9,21 @@ class Planilla {
     TipoPlanilla tipoPlanilla
     PeriodosInec periodoIndices
     String numero
-//    EstadoPlanilla estadoPlanilla
-//    String numeroFactura
     Date fechaPresentacion
     Date fechaIngreso
     String descripcion
     double valor
     double descuentos
-    String reajustada
     double reajuste
     double reajusteLiq = 0
-    Date fechaReajuste
-    double diferenciaReajuste
+
+//    Date fechaReajuste
+//    double diferenciaReajuste
+//    String reajustada
+
     String observaciones
     Date fechaInicio
     Date fechaFin
-    String aprobado
 
     Double multaRetraso = 0                 //multa por retraso de obra (solo en la ultima planilla de avance)
     Double multaPlanilla = 0                //multa por no presentacion de la planilla (retraso en la presentacion)
@@ -37,13 +36,15 @@ class Planilla {
     String memoSalida
     String memoOrdenPago
     String memoPago
-    String oficioSalida
-    String oficioPago
 
-    Date fechaOficioPago
-    Date fechaMemoSalida
+//    String aprobado
+//    String oficioSalida
+//    Date fechaOficioSalida
+//    String oficioPago
+//    Date fechaOficioPago
+//    Date fechaMemoSalida
+
     Date fechaPago
-    Date fechaOficioSalida
     Date fechaOrdenPago
 
     String oficioEntradaPlanilla
@@ -102,8 +103,6 @@ class Planilla {
 
             contrato column: 'cntr__id'
             tipoPlanilla column: 'tppl__id'
-//            estadoPlanilla column: 'edpl__id'
-//            numeroFactura column: 'plnlfctr'
             periodoIndices column: 'prin__id'
 
             numero column: 'plnlnmro'
@@ -114,24 +113,30 @@ class Planilla {
             descripcion column: 'plnldscr'
             valor column: 'plnlmnto'
             descuentos column: 'plnldsct'
-            reajustada column: 'plnlrjtd'
             reajuste column: 'plnlrjst'
             reajusteLiq column: 'plnlrjlq'
-            fechaReajuste column: 'plnlfcrj'
-            diferenciaReajuste column: 'plnldfrj'
+
+//            estadoPlanilla column: 'edpl__id'
+//            numeroFactura column: 'plnlfctr'
+//            fechaReajuste column: 'plnlfcrj'
+//            diferenciaReajuste column: 'plnldfrj'
+//            reajustada column: 'plnlrjtd'
+
+//            aprobado column: 'plnlaprb'
+//            oficioSalida column: 'plnlofsl'
+//            fechaOficioSalida column: 'plnlfcsl'
+//            oficioPago column: 'plnlofpg'
+//            fechaOficioPago column: 'plnlfcop'
+//            fechaMemoSalida column: 'plnlfcms'
+
+
             observaciones column: 'plnlobsr'
             fechaInicio column: 'plnlfcin'
             fechaFin column: 'plnlfcfn'
-            oficioSalida column: 'plnlofsl'
-            fechaOficioSalida column: 'plnlfcsl'
-            oficioPago column: 'plnlofpg'
-            fechaOficioPago column: 'plnlfcop'
-            aprobado column: 'plnlaprb'
 
             memoSalida column: 'plnlmmsl'
             memoOrdenPago column: 'plnlmmop'
             memoPago column: 'plnlmmpg'
-            fechaMemoSalida column: 'plnlfcms'
 
             multaRetraso column: 'plnlmlrt'
             multaPlanilla column: 'plnlmlpl'
@@ -189,32 +194,35 @@ class Planilla {
     static constraints = {
         contrato(blank: true, nullable: true)
         tipoPlanilla(blank: true, nullable: true)
-//        estadoPlanilla(blank: true, nullable: true)
         periodoIndices(blank: true, nullable: true)
 
         numero(blank: true, nullable: true, maxSize: 30)
-//        numeroFactura(maxSize: 15, blank: true, nullable: true)
         fechaPresentacion(blank: true, nullable: true)
         fechaIngreso(blank: true, nullable: true)
         fechaPago(blank: true, nullable: true)
         descripcion(maxSize: 254, blank: true, nullable: true)
         valor(blank: true, nullable: true)
         descuentos(blank: true, nullable: true)
-        reajustada(blank: true, nullable: true)
         reajuste(blank: true, nullable: true)
-        fechaReajuste(blank: true, nullable: true)
-        diferenciaReajuste(blank: true, nullable: true)
+
+//        estadoPlanilla(blank: true, nullable: true)
+//        numeroFactura(maxSize: 15, blank: true, nullable: true)
+//        fechaReajuste(blank: true, nullable: true)
+//        diferenciaReajuste(blank: true, nullable: true)
+//        reajustada(blank: true, nullable: true)
+
+//        aprobado(blank: true, nullable: true)
+//        oficioSalida(maxSize: 12, blank: true, nullable: true)
+//        fechaOficioSalida(blank: true, nullable: true)
+//        oficioPago(maxSize: 12, blank: true, nullable: true)
+//        fechaOficioPago(blank: true, nullable: true)
+//        fechaMemoSalida(blank: true, nullable: true)
+
         observaciones(maxSize: 127, blank: true, nullable: true)
         fechaInicio(blank: true, nullable: true)
         fechaFin(blank: true, nullable: true)
-        oficioSalida(maxSize: 12, blank: true, nullable: true)
-        fechaOficioSalida(blank: true, nullable: true)
-        oficioPago(maxSize: 12, blank: true, nullable: true)
-        fechaOficioPago(blank: true, nullable: true)
-        aprobado(blank: true, nullable: true)
         fechaOrdenPago(blank: true, nullable: true)
         memoSalida(blank: true, nullable: true)
-        fechaMemoSalida(blank: true, nullable: true)
 
         memoOrdenPago(maxSize: 20, blank: true, nullable: true)
         memoPago(maxSize: 20, blank: true, nullable: true)
