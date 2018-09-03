@@ -5048,7 +5048,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def anticipo_ajax () {
-        println("params " + params)
+//        println("params " + params)
         def contrato = Contrato.get(params.contrato)
         def tipoPlanilla = TipoPlanilla.get(params.tipo)
         def com
@@ -5059,6 +5059,28 @@ class PlanillaController extends janus.seguridad.Shield {
             return [monto: contrato.monto, contrato: contrato]
         }
 
+    }
+
+    def ordenCambio_ajax () {
+
+        def planilla = Planilla.get(params.id)
+
+        return [planilla: planilla]
+    }
+
+    def ordenTrabajo_ajax () {
+
+    }
+    
+    def saveOrdenCambio () {
+        println("parmas oc " + params)
+
+        def planilla = Planilla.get(params.id)
+
+            flash.clase = "alert-success"
+            flash.message = "Se guardado correctamente la Orden de Cambio"
+
+        redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
     }
 
 }
