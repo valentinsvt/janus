@@ -104,9 +104,13 @@
                         Imprimir Orden de Inicio de Obra
                     </a>
                 </g:if>
-                <g:link controller="reportes6" action="reporteOrdenCambio"
+                <g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id]"
                         class="btn btnPrint btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">
                     <i class="icon-print"></i> Imprimir Orden de Cambio
+                </g:link>
+                <g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id]"
+                        class="btn btnPrint btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">
+                    <i class="icon-print"></i> Imprimir Orden de Trabajo
                 </g:link>
             </div>
         </div>

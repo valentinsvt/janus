@@ -2744,7 +2744,7 @@ class ReportePlanillas3Controller {
             }
         }
 
-        println("existe " + existe)
+//        println("existe " + existe)
 
         def printHeaderDetalle = { params ->
 

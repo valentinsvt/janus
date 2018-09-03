@@ -72,6 +72,24 @@ class Planilla {
     String tipoContrato
     Planilla planillaCmpl
 
+    /*Orden de Cambio - Trabajo*/
+
+    String numeroOrden
+    String memoOrden
+    String numeroCertificacionOrden
+    Date fechaCertificacionOrden
+    String garantiaOrden
+    Date fechaSuscripcionOrden
+
+    String numeroTrabajo
+    String memoTrabajo
+    String numeroCertificacionTrabajo
+    Date fechaCertificacionTrabajo
+    String garantiaTrabajo
+    Date fechaSuscripcionTrabajo
+
+
+
     static auditable = true
     static mapping = {
         table 'plnl'
@@ -147,6 +165,24 @@ class Planilla {
 
             tipoContrato column: 'plnltipo'
             planillaCmpl column: 'plnlcmpl'
+
+            /*Orden*/
+            numeroOrden column: 'plnlordn'
+            memoOrden column: 'plnlocmm'
+            numeroCertificacionOrden column: 'plnloccp'
+            fechaCertificacionOrden column: 'plnlocfp'
+            garantiaOrden column: 'plnlocgr'
+            fechaSuscripcionOrden column: 'plnlocfc'
+
+            /*Trabajo*/
+            numeroTrabajo column: 'plnlortb'
+            memoTrabajo column: 'plnlotmm'
+            numeroCertificacionTrabajo column: 'plnlotcp'
+            fechaCertificacionTrabajo column: 'plnlotfp'
+            garantiaTrabajo column: 'plnlotgr'
+            fechaSuscripcionTrabajo column: 'plnlotfc'
+
+
         }
     }
 
@@ -205,6 +241,21 @@ class Planilla {
         noPago(blank: true, nullable: true)
         tipoContrato(blank: false, nullable: false)
         planillaCmpl(blank: true, nullable: true)
+
+        numeroOrden(blank: true, nullable: true)
+        memoOrden(blank: true, nullable: true)
+        numeroCertificacionOrden(blank: true, nullable: true)
+        fechaCertificacionOrden(blank: true, nullable: true)
+        garantiaOrden(blank: true, nullable: true)
+        fechaSuscripcionOrden(blank: true, nullable: true)
+
+        numeroTrabajo(blank: true, nullable: true)
+        memoTrabajo(blank: true, nullable: true)
+        numeroCertificacionTrabajo(blank: true, nullable: true)
+        fechaCertificacionTrabajo(blank: true, nullable: true)
+        garantiaTrabajo(blank: true, nullable: true)
+        fechaSuscripcionTrabajo(blank: true, nullable: true)
+
     }
 
     String toString() {
