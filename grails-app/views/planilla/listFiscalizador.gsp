@@ -269,8 +269,6 @@
                             <i class="icon-print"></i>
                         </g:link>
                     </g:if>
-
-                %{--<g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) > 0}">--}%
                     <g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
                         <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
                                 class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Nuevo">
@@ -292,13 +290,23 @@
                         </g:link>
                     </g:if>
 
-                    <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']}">
+                    <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']  && planillaInstance.id in adicionales}">
                         <a href="#" class="btn btn-small btn-info btnOrdenCambio" title="Orden de Cambio" data-id="${planillaInstance?.id}">
                             <i class="icon-calendar"></i>
                         </a>
-                        <a href="#" class="btn btn-small btn-info btnOrdenTrabajo" title="Orden de Trabajo">
+                        <g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id, planilla: planillaInstance?.id]"
+                                class="btn btn-small btn-info btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">
+                            <i class="icon-print"></i>
+                        </g:link>
+                    </g:if>
+                    <g:if test="${planillaInstance.tipoPlanilla.codigo in ['C']}">
+                        <a href="#" class="btn btn-small btn-warning btnOrdenTrabajo" title="Orden de Trabajo" data-id="${planillaInstance?.id}">
                             <i class="icon-calendar"></i>
                         </a>
+                        <g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id, planilla: planillaInstance?.id]"
+                                class="btn btn-small btn-warning btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">
+                            <i class="icon-print"></i>
+                        </g:link>
                     </g:if>
                 </td>
 
@@ -434,6 +442,13 @@
         $("#frmSave-OrdenCambio").submit();
     }
 
+    function submitFormOT(btn) {
+        if ($("#frmSave-OrdenTrabajo").valid()) {
+            btn.replaceWith(spinner);
+        }
+        $("#frmSave-OrdenTrabajo").submit();
+    }
+
     $(".btnOrdenCambio").click(function () {
         var id = $(this).data("id");
         $.ajax({
@@ -447,22 +462,8 @@
                 var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
 
                 $btnSave.click(function () {
-
                     submitFormOC($btnSave);
                     return false;
-
-                    %{--var pref = $("#delegadoPrefecto").val();--}%
-                    %{--$.ajax({--}%
-                    %{--type    : "POST",--}%
-                    %{--url     : "${createLink(controller: 'planilla', action:'saveOrdenCambio')}",--}%
-                    %{--data    : {--}%
-                    %{--id   : "${contrato?.id}",--}%
-                    %{--pref : pref--}%
-                    %{--},--}%
-                    %{--success : function (msg) {--}%
-                    %{--location.reload(true);--}%
-                    %{--}--}%
-                    %{--});--}%
                 });
                 $("#modal_tittle_var").text("Orden de Cambio");
                 $("#modal_body_var").html(msg);
@@ -473,30 +474,20 @@
         return false;
     });
 
-    $("#btnOrdenTrabajo").click(function () {
+    $(".btnOrdenTrabajo").click(function () {
+        var id = $(this).data("id");
         $.ajax({
             type    : "POST",
             url: '${createLink(controller: 'planilla', action: 'ordenTrabajo_ajax')}',
             data    : {
-                id : "${contrato?.id}"
+                id : id
             },
             success : function (msg) {
                 var $btnSave = $('<a href="#" class="btn btn-success"><i class="icon icon-save"></i> Guardar</a>');
                 var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
                 $btnSave.click(function () {
-                    $(this).replaceWith(spinner);
-                    var pref = $("#delegadoPrefecto").val();
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(controller: 'planilla', action:'saveOrdenTrabajo')}",
-                        data    : {
-                            id   : "${contrato?.id}",
-                            pref : pref
-                        },
-                        success : function (msg) {
-                            location.reload(true);
-                        }
-                    });
+                    submitFormOT($btnSave);
+                    return false;
                 });
                 $("#modal_tittle_var").text("Orden de Trabajo");
                 $("#modal_body_var").html(msg);
@@ -522,11 +513,11 @@
     $(function () {
         $('[rel=tooltip]').tooltip();
 
-                $(".paginate").paginate({
-                    maxRows        : 12,  /** paginación javascript max por página **/
-                    searchPosition : $("#busqueda-Planilla"),
-                    float          : "right"
-                });
+        $(".paginate").paginate({
+            maxRows        : 12,  /** paginación javascript max por página **/
+            searchPosition : $("#busqueda-Planilla"),
+            float          : "right"
+        });
 
         $(".btnPedidoPagoAnticipo").click(function () {
             location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPagoAnticipo')}/" + $(this).data("id");

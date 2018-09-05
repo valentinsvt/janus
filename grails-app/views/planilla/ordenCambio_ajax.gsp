@@ -47,7 +47,7 @@
             Garantía:
         </div>
         <div class="span3">
-            <g:textField name="garantia_name" class="form-control required" id="garantiaOrden" maxlength="30" required="" value="${planilla?.garantiaOrden}"/>
+            <g:textArea name="garantia_name" class="form-control required" id="garantiaOrden" maxlength="255" required="" value="${planilla?.garantiaOrden}"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
