@@ -13,12 +13,14 @@
 --%>
 <g:form class="form-horizontal" name="frmSave-OrdenTrabajo" action="saveOrdenTrabajo">
     <g:hiddenField name="id" value="${planilla?.id}"/>
+    <g:hiddenField name="adi2_name" id="adi2" value="${0}"/>
+
     <div class="row control-group">
         <div class="span3">
             Número de Orden de Trabajo:
         </div>
         <div class="span3">
-            <g:textField name="numeroT_name" class="form-control required" id="numeroTrabajoT" maxlength="30" required="" value="${planilla?.numeroTrabajo}"/>
+            <g:textField name="numeroT_name" class="allCaps form-control required" id="numeroTrabajoT" maxlength="30" required="" value="${planilla?.numeroTrabajo}"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -28,7 +30,7 @@
             Memorando de Orden de Trabajo:
         </div>
         <div class="span3">
-            <g:textField name="memoT_name" class="form-control required " id="memoOrdenT" maxlength="30" required="" value="${planilla?.memoTrabajo}"/>
+            <g:textField name="memoT_name" class="allCaps form-control required " id="memoOrdenT" maxlength="30" required="" value="${planilla?.memoTrabajo}"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -37,7 +39,7 @@
             Número de Certificación Presupuestaria:
         </div>
         <div class="span3">
-            <g:textField name="certificacionT_name" class="form-control required" id="certificacionOrdenT" maxlength="30" required="" value="${planilla?.numeroCertificacionTrabajo}"/>
+            <g:textField name="certificacionT_name" class="allCaps form-control required" id="certificacionOrdenT" maxlength="30" required="" value="${planilla?.numeroCertificacionTrabajo}"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -82,7 +84,7 @@
         },
         errorClass     : "label label-important",
         submitHandler  : function(form) {
-            $(".btn-success").replaceWith(spinner);
+//            $(".btn-success").replaceWith(spinner);
             form.submit();
         }
     });

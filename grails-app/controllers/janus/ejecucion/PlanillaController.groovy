@@ -605,9 +605,9 @@ class PlanillaController extends janus.seguridad.Shield {
         def listaAdicionales = []
 
         planillaInstanceList.each{
-        def cn = dbConnectionService.getConnection()
-        def sql = "select rbrocdgo, rbronmbr, unddcdgo, vocrcntd, cntdacml - cntdantr - vocrcntd diff, vocrpcun, vloracml-vlorantr-vocrsbtt vlor from detalle(${it.contrato.id}, ${it.contrato.obra.id}, ${it.id}, 'P') where (cntdacml - cntdantr) > vocrcntd ;"
-        def res = cn.rows(sql.toString())
+            def cn = dbConnectionService.getConnection()
+            def sql = "select rbrocdgo, rbronmbr, unddcdgo, vocrcntd, cntdacml - cntdantr - vocrcntd diff, vocrpcun, vloracml-vlorantr-vocrsbtt vlor from detalle(${it.contrato.id}, ${it.contrato.obra.id}, ${it.id}, 'P') where (cntdacml - cntdantr) > vocrcntd ;"
+            def res = cn.rows(sql.toString())
 
             if(res){
                 listaAdicionales.add(it.id)
@@ -615,7 +615,6 @@ class PlanillaController extends janus.seguridad.Shield {
 
         }
 
-        println("res " + listaAdicionales)
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList,
                 firma: firma, liquidacion: liquidacion, adicionales: listaAdicionales]
     }
@@ -5078,15 +5077,12 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def ordenCambio_ajax () {
-
         def planilla = Planilla.get(params.id)
-
         return [planilla: planilla]
     }
 
     def ordenTrabajo_ajax () {
         def planilla = Planilla.get(params.id)
-
         return [planilla: planilla]
     }
 
@@ -5114,7 +5110,14 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.message = "Error al guardar la Orden de Cambio"
         }
 
-        redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+
+        if(params."adi_name" == '1'){
+            redirect(controller: 'reportes6', action: 'reporteOrdenCambio' , id: planilla.id)
+        }else{
+            redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+        }
+
+
     }
 
     def saveOrdenTrabajo () {
@@ -5141,7 +5144,11 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.message = "Error al guardar la Orden de Trabajo"
         }
 
-        redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+        if(params."adi2_name" == '1'){
+            redirect(controller: 'reportes6', action: 'reporteOrdenDeTrabajo' , id: planilla.id)
+        }else{
+            redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+        }
     }
 
 }

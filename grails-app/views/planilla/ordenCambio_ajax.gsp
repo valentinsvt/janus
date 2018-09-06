@@ -6,12 +6,13 @@
 --%>
 <g:form class="form-horizontal" name="frmSave-OrdenCambio" action="saveOrdenCambio">
     <g:hiddenField name="id" value="${planilla?.id}"/>
+    <g:hiddenField name="adi_name" id="adi" value="${0}"/>
     <div class="row control-group">
         <div class="span3">
             Número de Orden de Cambio:
         </div>
         <div class="span3">
-            <g:textField name="numero_name" class="form-control required" id="numeroOrden" maxlength="30" required="" value="${planilla?.numeroOrden}"/>
+            <g:textField name="numero_name" class="allCaps form-control required" id="numeroOrden" maxlength="30" required="" value="${planilla?.numeroOrden}"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -21,7 +22,7 @@
             Memorando de Orden de Cambio:
         </div>
         <div class="span3">
-            <g:textField name="memo_name" class="form-control required " id="memoOrden" maxlength="30" required="" value="${planilla?.memoOrden}"/>
+            <g:textField name="memo_name" class="allCaps form-control required " id="memoOrden" maxlength="30" required="" value="${planilla?.memoOrden}"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -30,7 +31,7 @@
             Número de Certificación Presupuestaria:
         </div>
         <div class="span3">
-            <g:textField name="certificacion_name" class="form-control required" id="certificacionOrden" maxlength="30" required="" value="${planilla?.numeroCertificacionOrden}"/>
+            <g:textField name="certificacion_name" class="allCaps form-control required" id="certificacionOrden" maxlength="30" required="" value="${planilla?.numeroCertificacionOrden}"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -75,7 +76,7 @@
         },
         errorClass     : "label label-important",
         submitHandler  : function(form) {
-            $(".btn-success").replaceWith(spinner);
+//            $(".btn-success").replaceWith(spinner);
             form.submit();
         }
     });

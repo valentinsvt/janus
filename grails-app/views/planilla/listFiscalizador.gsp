@@ -294,19 +294,19 @@
                         <a href="#" class="btn btn-small btn-info btnOrdenCambio" title="Orden de Cambio" data-id="${planillaInstance?.id}">
                             <i class="icon-calendar"></i>
                         </a>
-                        <g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id, planilla: planillaInstance?.id]"
-                                class="btn btn-small btn-info btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">
-                            <i class="icon-print"></i>
-                        </g:link>
+                    %{--<g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id, planilla: planillaInstance?.id]"--}%
+                    %{--class="btn btn-small btn-info btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">--}%
+                    %{--<i class="icon-print"></i>--}%
+                    %{--</g:link>--}%
                     </g:if>
                     <g:if test="${planillaInstance.tipoPlanilla.codigo in ['C']}">
                         <a href="#" class="btn btn-small btn-warning btnOrdenTrabajo" title="Orden de Trabajo" data-id="${planillaInstance?.id}">
                             <i class="icon-calendar"></i>
                         </a>
-                        <g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id, planilla: planillaInstance?.id]"
-                                class="btn btn-small btn-warning btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">
-                            <i class="icon-print"></i>
-                        </g:link>
+                    %{--<g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id, planilla: planillaInstance?.id]"--}%
+                    %{--class="btn btn-small btn-warning btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">--}%
+                    %{--<i class="icon-print"></i>--}%
+                    %{--</g:link>--}%
                     </g:if>
                 </td>
 
@@ -437,14 +437,20 @@
 
     function submitFormOC(btn) {
         if ($("#frmSave-OrdenCambio").valid()) {
-            btn.replaceWith(spinner);
+//            btn.replaceWith(spinner);
         }
         $("#frmSave-OrdenCambio").submit();
     }
 
+    function submitFormOC2(btn,id) {
+        if ($("#frmSave-OrdenCambio").valid()) {
+            $("#frmSave-OrdenCambio").submit();
+        }
+    }
+
     function submitFormOT(btn) {
         if ($("#frmSave-OrdenTrabajo").valid()) {
-            btn.replaceWith(spinner);
+//            btn.replaceWith(spinner);
         }
         $("#frmSave-OrdenTrabajo").submit();
     }
@@ -460,14 +466,25 @@
             success : function (msg) {
                 var $btnSave = $('<a href="#" class="btn btn-success"><i class="icon icon-save"></i> Guardar</a>');
                 var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                var $btnImprimir = $('<a href="#" data-dismiss="modal" class="btn btn-info"><i class="icon icon-print"></i> Imprimir</a>');
+
+                var ca = $('<g:hiddenField name="adi" value="${0}"/>');
 
                 $btnSave.click(function () {
+                    $("#adi").val(0);
                     submitFormOC($btnSave);
                     return false;
                 });
+
+                $btnImprimir.click(function () {
+                    $("#adi").val(1);
+                    submitFormOC2($btnSave,id);
+                    return false;
+                });
+
                 $("#modal_tittle_var").text("Orden de Cambio");
                 $("#modal_body_var").html(msg);
-                $("#modal_footer_var").html($btnCerrar).append($btnSave);
+                $("#modal_footer_var").html($btnCerrar).append($btnImprimir).append($btnSave);
                 $("#modal-var").modal("show");
             }
         });
@@ -485,13 +502,23 @@
             success : function (msg) {
                 var $btnSave = $('<a href="#" class="btn btn-success"><i class="icon icon-save"></i> Guardar</a>');
                 var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                var $btnImprimir = $('<a href="#" data-dismiss="modal" class="btn btn-info"><i class="icon icon-print"></i> Imprimir</a>');
+
                 $btnSave.click(function () {
+                    $("#adi2").val(0);
                     submitFormOT($btnSave);
                     return false;
                 });
+
+                $btnImprimir.click(function () {
+                    $("#adi2").val(1);
+                    submitFormOT($btnSave);
+                    return false;
+                });
+
                 $("#modal_tittle_var").text("Orden de Trabajo");
                 $("#modal_body_var").html(msg);
-                $("#modal_footer_var").html($btnCerrar).append($btnSave);
+                $("#modal_footer_var").html($btnCerrar).append($btnImprimir).append($btnSave);
                 $("#modal-var").modal("show");
             }
         });
