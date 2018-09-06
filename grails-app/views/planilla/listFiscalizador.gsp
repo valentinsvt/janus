@@ -104,20 +104,6 @@
                 Imprimir Orden de Inicio de Obra
             </a>
         </g:if>
-    %{--<g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id]"--}%
-    %{--class="btn btnPrint btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">--}%
-    %{--<i class="icon-calendar"></i> Orden de Cambio--}%
-    %{--</g:link>--}%
-    %{--<a href="#" class="btn btn-info" id="btnOrdenCambio">--}%
-    %{--<i class="icon-calendar"></i> Orden de Cambio--}%
-    %{--</a>--}%
-    %{--<a href="#" class="btn btn-info" id="btnOrdenTrabajo">--}%
-    %{--<i class="icon-calendar"></i> Orden de Trabajo--}%
-    %{--</a>--}%
-    %{--<g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id]"--}%
-    %{--class="btn btnPrint btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">--}%
-    %{--<i class="icon-calendar"></i> Orden de Trabajo--}%
-    %{--</g:link>--}%
     </div>
 </div>
 
@@ -291,18 +277,27 @@
                     </g:if>
 
                     <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']  && planillaInstance.id in adicionales}">
+                        %{--comentar esto nicio--}%
+%{--
                         <a href="#" class="btn btn-small btn-info btnOrdenCambio" title="Orden de Cambio" data-id="${planillaInstance?.id}">
                             <i class="icon-calendar"></i>
                         </a>
+--}%
+                        %{--comentar esto fin--}%
                     %{--<g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id, planilla: planillaInstance?.id]"--}%
                     %{--class="btn btn-small btn-info btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">--}%
                     %{--<i class="icon-print"></i>--}%
                     %{--</g:link>--}%
                     </g:if>
                     <g:if test="${planillaInstance.tipoPlanilla.codigo in ['C']}">
+                    %{--comentar esto nicio--}%
+%{--
                         <a href="#" class="btn btn-small btn-warning btnOrdenTrabajo" title="Orden de Trabajo" data-id="${planillaInstance?.id}">
                             <i class="icon-calendar"></i>
                         </a>
+--}%
+                    %{--comentar esto fin--}%
+
                     %{--<g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id, planilla: planillaInstance?.id]"--}%
                     %{--class="btn btn-small btn-warning btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">--}%
                     %{--<i class="icon-print"></i>--}%
