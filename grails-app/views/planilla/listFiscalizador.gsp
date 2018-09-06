@@ -468,8 +468,6 @@
                 var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
                 var $btnImprimir = $('<a href="#" data-dismiss="modal" class="btn btn-info"><i class="icon icon-print"></i> Imprimir</a>');
 
-                var ca = $('<g:hiddenField name="adi" value="${0}"/>');
-
                 $btnSave.click(function () {
                     $("#adi").val(0);
                     submitFormOC($btnSave);
