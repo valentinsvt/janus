@@ -470,8 +470,19 @@
 
                 $btnSave.click(function () {
                     $("#adi").val(0);
-                    submitFormOC($btnSave);
-                    return false;
+//                    submitFormOC($btnSave);
+                    $.ajax({
+                        type: "POST",
+                        url: "${createLink(controller: 'planilla', action:'saveOrdenCambio')}",
+                        data: $("#frmSave-OrdenCambio").serialize(),
+                        success: function (msg) {
+                            if (msg != 'no') {
+                                alert('Orden de Cambio Guardada!')
+                            } else {
+                                alert('No se pudo guardar la orden de cambio')
+                            }
+                        }
+                    });
                 });
 
                 $btnImprimir.click(function () {
@@ -504,9 +515,22 @@
 
                 $btnSave.click(function () {
                     $("#adi2").val(0);
-                    submitFormOT($btnSave);
-                    return false;
+//                   submitFormOT($btnSave);
+                    $.ajax({
+                        type: "POST",
+                        url: "${createLink(controller: 'planilla', action:'saveOrdenTrabajo')}",
+                        data: $("#frmSave-OrdenTrabajo").serialize(),
+                        success: function (msg) {
+                            if (msg != 'no') {
+                                alert('Orden de Trabajo Guardada!')
+                            } else {
+                                alert('No se pudo guardar la orden de trabajo')
+                            }
+                        }
+                    });
                 });
+
+
 
                 $btnImprimir.click(function () {
                     $("#adi2").val(1);

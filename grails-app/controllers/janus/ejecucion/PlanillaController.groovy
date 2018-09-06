@@ -5114,7 +5114,8 @@ class PlanillaController extends janus.seguridad.Shield {
         if(params."adi_name" == '1'){
             redirect(controller: 'reportes6', action: 'reporteOrdenCambio' , id: planilla.id)
         }else{
-            redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+//            redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+            render "ok"
         }
 
 
@@ -5147,7 +5148,8 @@ class PlanillaController extends janus.seguridad.Shield {
         if(params."adi2_name" == '1'){
             redirect(controller: 'reportes6', action: 'reporteOrdenDeTrabajo' , id: planilla.id)
         }else{
-            redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+//            redirect(action: 'listFiscalizador' , id: planilla.contrato.id)
+            render "ok"
         }
     }
 
