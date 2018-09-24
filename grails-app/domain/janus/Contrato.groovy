@@ -56,8 +56,9 @@ class Contrato implements Serializable {
 
     Obra obraContratada
     Proveedor contratista
-    int conReajuste
+    int conReajuste = 0
     String adicionales
+    int aplicaReajuste = 1
 
     static auditable = true
     static mapping = {
@@ -118,6 +119,7 @@ class Contrato implements Serializable {
             contratista column: 'prve__id'
             conReajuste column: 'cntrrjst'
             adicionales column: 'cntradcn'
+            aplicaReajuste column: 'cntraprj'
         }
     }
 
@@ -163,7 +165,6 @@ class Contrato implements Serializable {
         obraContratada(blank: true, nullable: true)
         contratista(blank: true, nullable: true)
         adicionales(maxSize: 20, blank: true, nullable: true)
-
     }
 
     def getObra() {
