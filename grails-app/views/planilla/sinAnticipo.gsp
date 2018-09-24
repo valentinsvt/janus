@@ -68,16 +68,39 @@
 
             <div class="row">
                 <div class='span2 formato'>
-                    Tipo de Planilla2
+                    Tipo de Planilla
                 </div>
 
-                <div class="span3">
+                <div class="span4">
                     <g:if test="${planillaInstance?.id}">
                             ${planillaInstance?.tipoPlanilla?.nombre}
                     </g:if>
+                    <g:else>
+                        <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id"
+                                  optionValue="nombre"
+                                  class="many-to-one span3 required"
+                                  value="${planillaInstance?.tipoPlanilla?.id}"/>
+                        <span class="mandatory">*</span>
+
+                        <p class="help-block ui-helper-hidden"></p>
+                    </g:else>
                 </div>
 
-            <div class="span1 formato" style="width: 120px">
+%{--
+            <div class="span4">
+                <g:if test="${!planillaInstance?.id}">
+                    <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id"
+                              optionValue="nombre"
+                              class="many-to-one span3 required"
+                              value="${planillaInstance?.tipoPlanilla?.id}"/>
+                    <span class="mandatory">*</span>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </g:if>
+            </div>
+--}%
+
+            <div class="span1 formato" style="width: 80px">
                 Fecha desde
             </div>
 
@@ -106,17 +129,7 @@
             </div>
 
 
-            <div class="span4">
-                    <g:if test="${!planillaInstance?.id}">
-                        <g:select id="tipoPlanilla" name="tipoPlanilla.id" from="${tipos}" optionKey="id"
-                                  optionValue="nombre"
-                                  class="many-to-one span3 required"
-                                  value="${planillaInstance?.tipoPlanilla?.id}"/>
-                        <span class="mandatory">*</span>
 
-                        <p class="help-block ui-helper-hidden"></p>
-                    </g:if>
-                </div>
             </div>
 
 

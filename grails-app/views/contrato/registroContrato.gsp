@@ -285,13 +285,15 @@
 
             <div class="span2"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
-            %{--
-                                <g:if test="${complementario}">
-                                    <div class="text-info">
-                                        <strong>Tiene el contrato complementario: ${complementario?.codigo}</strong>
-                                    </div>
-                                </g:if>
-            --}%
+            <div class="span 3">
+                <div class="span1 formato" style="width: 90px">Aplica reajuste</div>
+
+                <div class="span1">
+                    <g:select name="conReajuste" from="${[0 : 'NO', 1 : 'SI']}" optionKey="key" optionValue="value"
+                              value="${contrato?.conReajuste == 1 ? 1 : 1}" style="width: 60px"/>
+                </div>
+            </div>
+
 
         </div>
 
