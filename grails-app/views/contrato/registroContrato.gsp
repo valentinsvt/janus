@@ -289,12 +289,10 @@
                 <div class="span1 formato" style="width: 90px">Aplica reajuste</div>
 
                 <div class="span1">
-                    <g:select name="conReajuste" from="${[0 : 'NO', 1 : 'SI']}" optionKey="key" optionValue="value"
-                              value="${contrato?.conReajuste == 1 ? 1 : 1}" style="width: 60px"/>
+                    <g:select name="aplicaReajuste" from="${[0 : 'NO', 1 : 'SI']}" optionKey="key" optionValue="value"
+                              value="${contrato?.aplicaReajuste == 1 ? 1 : 0}" style="width: 60px"/>
                 </div>
             </div>
-
-
         </div>
 
         <div class="span12" style="margin-top: 5px">

@@ -1053,7 +1053,7 @@ class ContratoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-        println "-->> save: >>>>>>${params}<<<<<"
+//        println "-->> save: >>>>>>${params}<<<<<"
         def contratoInstance
         def padre
 
@@ -1103,6 +1103,7 @@ class ContratoController extends janus.seguridad.Shield {
 //        contratoInstance.oferta = oferta
         contratoInstance.tipoContrato = tipoContrato
         contratoInstance.depAdministrador = Departamento.get(params."depAdministrador.id")
+        contratoInstance.aplicaReajuste = params.aplicaReajuste.toInteger()
 
 //        println "graba contrato... ${contratoInstance.depAdministrador}"
 
