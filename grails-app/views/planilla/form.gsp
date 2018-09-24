@@ -68,6 +68,13 @@
                         Guardar
                     </a>
                 </g:if>
+                <g:if test="${contrato.aplicaReajuste ==0}">
+                <a href="#" id="btnSave" class="btn btn-mean" style="margin-left: 300px;" >
+                    <i class="icon-check"></i>
+                    Este contrato no aplica Reajuste de Precios
+                </a>
+                </g:if>
+
             </div>
         </div>
 

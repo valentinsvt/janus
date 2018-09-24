@@ -1540,7 +1540,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def existeCrng = CronogramaContratado.findAllByContrato(contrato).size()
         def pcs = FormulaPolinomicaContractual.findAllByContrato(contrato).size()
 
-        if (existeCrng == 0 || pcs < 8) {
+        if ((existeCrng == 0 || pcs < 8 ) && (contrato.aplicaReajuste == 1)) {
             flash.message = "<h3>No es posible crear planillas</h3><ul>"
             if (existeCrng == 0) {
                 flash.message += "<li>No se ha generado el cronograma de contrato.</li>"
