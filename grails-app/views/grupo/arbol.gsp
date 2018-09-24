@@ -115,7 +115,7 @@
             </div>
 
             <div class="span1">
-                <input type="text" style="width: 30px;" id="costo_indi" value="21">
+                <input type="text" style="width: 30px;" id="costo_indi" value="22.5">
             </div>
         </div>
         <hr style="margin: 5px 0 10px 0;"/>
@@ -321,7 +321,7 @@
             </div>
 
             <div class="span1">
-                <input type="text" style="width: 30px;" id="costo_indi2" value="21">
+                <input type="text" style="width: 30px;" id="costo_indi2" value="22.5">
             </div>
         </div>
         <hr style="margin: 5px 0 10px 0;"/>
@@ -1302,7 +1302,7 @@
                     "Wlugar=" + $("#ciudad").val() + "Wlista1=" + lista1 + "Wlista2=" + lista2 + "Wlista3=" + lista3 +
                     "Wlista4=" + lista4 + "Wlista5=" + lista5 + "Wlista6=" + lista6 + "Wprincipal=" + principal
                     + "Wchof=" + $("#cmb_chof").val() +
-                    "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
+                    "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi2").val() + "Wtrans=" + trans;
             var url = "${g.createLink(controller: 'reportes2',action: 'imprimirRubrosConsolidado2')}?" + datos;
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=rubros_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
             $("#modal-transporte2").modal("hide");
@@ -1354,7 +1354,7 @@
                     "&lugar=" + $("#ciudad").val() + "&lista1=" + lista1 + "&lista2=" + lista2 + "&lista3=" + lista3 +
                     "&lista4=" + lista4 + "&lista5=" + lista5 + "&lista6=" + lista6 + "&principal=" + principal
                     + "&chof=" + $("#cmb_chof").val() +
-                    "&volq=" + $("#cmb_vol").val() + "&indi=" + $("#costo_indi").val() + "&trans=" + trans;
+                    "&volq=" + $("#cmb_vol").val() + "&indi=" + $("#costo_indi2").val() + "&trans=" + trans;
            location.href = "${g.createLink(controller: 'reportes2',action: 'consolidadoExcel')}?" + datos;
             $("#modal-transporte2").modal("hide");
             return false;
