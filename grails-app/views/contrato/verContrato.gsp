@@ -445,12 +445,11 @@
                             </li>
 
                             <li>
-                                <g:if test="${esDirFis == 'S'}">
-                                %{--<g:if test="${contrato.fiscalizador?.id == session.usuario.id}">--}%
+                                %{--<g:if test="${esDirFis == 'S'}">--}%
                                     <a href="#" id="btnDelFisc">
                                         <i class="icon-user"></i> Delegado fiscalización
                                     </a>
-                                </g:if>
+                                %{--</g:if>--}%
                             </li>
 
                             <li>
