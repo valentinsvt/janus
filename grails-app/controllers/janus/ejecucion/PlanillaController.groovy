@@ -4260,7 +4260,7 @@ class PlanillaController extends janus.seguridad.Shield {
             sql = "select sum(mdcedias) dias from mdce where cntr__id = ${plnl.contrato.id} and mdcetipo = 'A'"
             def ampliacion = (int) cn.rows(sql.toString())[0].dias?:0
 
-//            println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
+            println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
 
             dias -= plnl.contrato.plazo + ampliacion
 
@@ -4269,7 +4269,7 @@ class PlanillaController extends janus.seguridad.Shield {
             sql = "select plnlfcfn - max(prejfcfn) cntd from plnl, prej " +
                     "where plnl__id = ${plnl.id} and plnl.cntr__id = prej.cntr__id group by plnlfcfn"
 
-//            println "retraso sql: $sql"
+            println "retraso sql: $sql"
             def retrasoObra = cn.rows(sql.toString())[0].cntd
 
             dias += retrasoObra
