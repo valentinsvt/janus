@@ -15,6 +15,7 @@ import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
 import janus.pac.CronogramaContratado
 import janus.pac.CronogramaContrato
+import janus.seguridad.Shield
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.Label
@@ -29,7 +30,7 @@ import jxl.write.WritableWorkbook
 import java.awt.Color
 import java.text.DecimalFormat
 
-class Reportes5Controller {
+class Reportes5Controller extends Shield{
 
     def dbConnectionService
     def preciosService
