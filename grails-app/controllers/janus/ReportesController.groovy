@@ -12,6 +12,7 @@ import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.Garantia
 import janus.pac.PeriodoEjecucion
+import janus.seguridad.Shield
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.*
@@ -25,7 +26,7 @@ import com.itextpdf.text.pdf.ColumnText;
 //import java.awt.Label
 
 
-class ReportesController {
+class ReportesController extends Shield{
 
     def index() {
 

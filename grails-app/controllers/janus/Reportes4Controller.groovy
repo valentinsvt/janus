@@ -11,6 +11,7 @@ import com.lowagie.text.Rectangle
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
+import janus.seguridad.Shield
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.Label
@@ -24,7 +25,7 @@ import jxl.write.WritableWorkbook
 import java.awt.Color
 
 
-class Reportes4Controller {
+class Reportes4Controller extends Shield {
 
     def index() {}
     def dbConnectionService
