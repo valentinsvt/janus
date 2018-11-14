@@ -179,7 +179,8 @@ class Reportes2Controller {
     def reporteRubroIlustracion() {
         def obra = Obra.get(params.id)
         def persona = Persona.get(session.usuario.id)
-        def rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()
+//        def rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()
+        def rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()[0..100]
 
 //        println "rubros: ${rubros.codigo}"
 
@@ -317,9 +318,15 @@ class Reportes2Controller {
                 addCellTabla(tablaRubro, new Paragraph("Ilustración", fontTh), prmsTh)
                 if (extIlustracion.toLowerCase() != "pdf") { //es una imgaen png, jpg...
                     def img = Image.getInstance(pathIlustracion);
+
+//                    println "ilust: $pathIlustracion"
+//                    println "w: ${img.getScaledWidth()}, h: ${img.getScaledHeight()}"
+
                     if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
                         img.scaleToFit(maxImageSize, maxImageSize);
+//                        img.scaleAbsolute(maxImageSize, maxImageSize);
                     }
+
                     addCellTabla(tablaRubro, img, prmsEs)
                 } else {
                     def str = "- PDF de ${pagesIlustracion} página${pagesIlustracion == 1 ? '' : 's'} adjunto "
