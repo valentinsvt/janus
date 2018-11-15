@@ -180,7 +180,14 @@ class Reportes2Controller {
         def obra = Obra.get(params.id)
         def persona = Persona.get(session.usuario.id)
 //        def rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()
-        def rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()[0..100]
+        def tama = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique().size()
+        def rubros
+
+        if((tama -1) >= 100){
+            rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()[0..100]
+        }else{
+            rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()[0..(tama - 1)]
+        }
 
 //        println "rubros: ${rubros.codigo}"
 
@@ -230,7 +237,8 @@ class Reportes2Controller {
 
         def tipo = params.tipo //i: ilustraciones, e: especificaciones, ie: ambas
 
-        rubros.each { rubro ->
+        rubros.eachWithIndex { rubro, ik ->
+
             Paragraph paragraphRubro = new Paragraph();
             paragraphRubro.add(new Paragraph(rubro.nombre, fontTitle));
 
@@ -301,9 +309,9 @@ class Reportes2Controller {
                 addCellTabla(tablaRubro, new Paragraph("Especificación", fontTh), prmsTh)
                 if (extEspecificacion.toLowerCase() != "pdf") { //es una imgaen png, jpg...
                     def img = Image.getInstance(pathEspecificacion);
-                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
+//                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
                         img.scaleToFit(maxImageSize, maxImageSize);
-                    }
+//                    }
                     addCellTabla(tablaRubro, img, prmsEs)
                 } else {
                     def str = "- PDF de ${pagesEspecificacion} página${pagesEspecificacion == 1 ? '' : 's'} adjunto a partir de la siguiente página -"
@@ -322,10 +330,232 @@ class Reportes2Controller {
 //                    println "ilust: $pathIlustracion"
 //                    println "w: ${img.getScaledWidth()}, h: ${img.getScaledHeight()}"
 
-                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
+//                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
                         img.scaleToFit(maxImageSize, maxImageSize);
-//                        img.scaleAbsolute(maxImageSize, maxImageSize);
+//                    }
+
+                    addCellTabla(tablaRubro, img, prmsEs)
+                } else {
+                    def str = "- PDF de ${pagesIlustracion} página${pagesIlustracion == 1 ? '' : 's'} adjunto "
+                    def adj = "a partir de la siguiente página -"
+                    if (pagesIlustracion == 1) {
+                        str = "- PDF de ${pagesIlustracion} página${pagesIlustracion == 1 ? '' : 's'} adjunto "
+                        adj = "en la siguiente página -"
                     }
+
+                    if (pagesEspecificacion > 0) {
+                        adj = "después de la especificación - "
+                    }
+
+                    addCellTabla(tablaRubro, new Paragraph(str + adj, fontTd), prmsEs)
+                }
+            }
+
+            document.add(tablaRubro)
+
+            infoText(cb, document, rubrosText, DOC)
+//            infoText(cb, document, pagAct.toString(), PAG)
+//            pagAct++
+
+            if (extEspecificacion == "pdf") {
+                pagesEspecificacion.times {
+                    document.newPage();
+                    PdfImportedPage page = pdfw.getImportedPage(readerEspecificacion, it + 1);
+                    cb.addTemplate(page, 0, 0);
+
+                    infoText(cb, document, "Especificación del rubro " + truncText(rubro.nombre) + " pág. " + (it + 1) + "/" + pagesEspecificacion, ADJ)
+                    infoText(cb, document, rubrosText, DOC)
+                    infoText(cb, document, pagAct.toString(), PAG)
+                    pagAct++
+                }
+                document.newPage();
+            }
+
+            if (extIlustracion == "pdf") {
+                pagesIlustracion.times {
+                    document.newPage();
+                    PdfImportedPage page = pdfw.getImportedPage(readerIlustracion, it + 1);
+                    cb.addTemplate(page, 0, 0);
+
+                    infoText(cb, document, "Ilustración del rubro " + truncText(rubro.nombre) + " pág. " + (it + 1) + "/" + pagesIlustracion, ADJ)
+                    infoText(cb, document, rubrosText, DOC)
+                    infoText(cb, document, pagAct.toString(), PAG)
+                    pagAct++
+                }
+                document.newPage();
+            }
+//            document.newPage();
+        }
+
+
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
+
+    def reporteRubroIlustracion2() {
+        def obra = Obra.get(params.id)
+        def persona = Persona.get(session.usuario.id)
+//        def rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()
+        def tama = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique().size()
+        def rubros
+        if((tama - 1) >= 101){
+            rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()[101..(tama - 1)]
+        }else{
+            rubros = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()[0..(tama - 1)]
+        }
+
+
+//        println "rubros: ${rubros.codigo}"
+
+        def baos = new ByteArrayOutputStream()
+        def name = "rubros_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        HeaderFooter footer1 = new HeaderFooter(new Phrase('', fontTd), true);
+        footer1.setBorder(Rectangle.NO_BORDER);
+        footer1.setAlignment(Element.ALIGN_CENTER);
+        document.setFooter(footer1);
+        document.open();
+        PdfContentByte cb = pdfw.getDirectContent();
+        document.addTitle("Rubros de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, rubros");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", catFont));
+        preface.add(new Paragraph("ANEXO DE ESPECIFICACIÓN DE RUBROS DE LA OBRA " + obra.nombre, catFont));
+        addEmptyLine(preface, 1);
+        Paragraph preface2 = new Paragraph();
+//        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        preface2.add(new Paragraph("Generado por el usuario: " + (persona?.titulo ?: '') + ' ' + (persona?.nombre ?: '') + ' ' + (persona?.apellido ?: '') + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        addEmptyLine(preface2, 1);
+        document.add(preface);
+        document.add(preface2);
+
+        def prmsTh = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def prmsTd = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def prmsEs = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5]
+
+        def pagAct = 1
+
+        def rubrosText = "Rubros de la obra " + truncText(obra.nombre)
+
+        def tipo = params.tipo //i: ilustraciones, e: especificaciones, ie: ambas
+
+        rubros.eachWithIndex { rubro, ik ->
+
+            Paragraph paragraphRubro = new Paragraph();
+            paragraphRubro.add(new Paragraph(rubro.nombre, fontTitle));
+
+            document.add(paragraphRubro)
+
+            PdfPTable tablaRubro = new PdfPTable(6);
+            tablaRubro.setWidths(arregloEnteros([12, 24, 10, 24, 10, 20]))
+            tablaRubro.setWidthPercentage(100);
+            tablaRubro.setSpacingBefore(10f);
+
+            def extIlustracion = "", extEspecificacion = "", pagesEspecificacion = 0, pagesIlustracion = 0, pathEspecificacion, pathIlustracion
+            PdfReader readerEspecificacion
+            PdfReader readerIlustracion
+
+            if (rubro.foto && tipo.contains("i")) {
+                extIlustracion = rubro.foto.split("\\.")
+                extIlustracion = extIlustracion[extIlustracion.size() - 1]
+
+                pathIlustracion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.foto
+
+                if (extIlustracion.toLowerCase() in ["pdf"]) {
+                    readerIlustracion = new PdfReader(new FileInputStream(pathIlustracion));
+                    pagesIlustracion = readerIlustracion.getNumberOfPages()
+                }
+            }
+
+//            def ares = ArchivoEspecificacion.findByItem(rubro)
+            def ares = ArchivoEspecificacion.findByCodigo(rubro.codigoEspecificacion)
+//            if (rubro.especificaciones && tipo.contains("e")) {
+            if (ares && tipo.contains("e")) {
+//                extEspecificacion = rubro.especificaciones.split("\\.")
+                extEspecificacion = ares.ruta.split("\\.")
+                extEspecificacion = extEspecificacion[extEspecificacion.size() - 1]
+
+//                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.especificaciones
+                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + ares?.ruta
+
+                if (extEspecificacion.toLowerCase() == "pdf") {
+                    readerEspecificacion = new PdfReader(new FileInputStream(pathEspecificacion));
+                    pagesEspecificacion = readerEspecificacion.getNumberOfPages()
+                }
+            }
+
+            def maxImageSize = 400
+
+            addCellTabla(tablaRubro, new Paragraph("Código", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.codigo, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Unidad", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.unidad.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph("", fontTd), prmsTd)
+
+            addCellTabla(tablaRubro, new Paragraph("Fecha creación", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.fecha?.format("dd-MM-yyyy"), fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Fecha modificación", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.fechaModificacion?.format("dd-MM-yyyy"), fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph("", fontTd), prmsTd)
+
+            addCellTabla(tablaRubro, new Paragraph("Solicitante", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.subgrupo?.grupo?.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Grupo", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.subgrupo?.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Subgrupo", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.descripcion, fontTd), prmsTd)
+
+            if (extEspecificacion && extEspecificacion != "") {
+                addCellTabla(tablaRubro, new Paragraph("Especificación", fontTh), prmsTh)
+                if (extEspecificacion.toLowerCase() != "pdf") { //es una imgaen png, jpg...
+                    def img = Image.getInstance(pathEspecificacion);
+//                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
+                    img.scaleToFit(maxImageSize, maxImageSize);
+//                    }
+                    addCellTabla(tablaRubro, img, prmsEs)
+                } else {
+                    def str = "- PDF de ${pagesEspecificacion} página${pagesEspecificacion == 1 ? '' : 's'} adjunto a partir de la siguiente página -"
+                    if (pagesEspecificacion == 1) {
+                        str = "- PDF de ${pagesEspecificacion} página${pagesEspecificacion == 1 ? '' : 's'} adjunto en la siguiente página -"
+                    }
+                    addCellTabla(tablaRubro, new Paragraph(str, fontTd), prmsEs)
+                }
+            }
+
+            if (extIlustracion && extIlustracion != "") {
+                addCellTabla(tablaRubro, new Paragraph("Ilustración", fontTh), prmsTh)
+                if (extIlustracion.toLowerCase() != "pdf") { //es una imgaen png, jpg...
+                    def img = Image.getInstance(pathIlustracion);
+
+//                    println "ilust: $pathIlustracion"
+//                    println "w: ${img.getScaledWidth()}, h: ${img.getScaledHeight()}"
+
+//                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
+                    img.scaleToFit(maxImageSize, maxImageSize);
+//                    }
 
                     addCellTabla(tablaRubro, img, prmsEs)
                 } else {

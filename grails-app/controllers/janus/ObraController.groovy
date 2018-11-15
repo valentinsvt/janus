@@ -1571,5 +1571,18 @@ class ObraController extends janus.seguridad.Shield {
         }
     }
 
+    def revisarSizeRubros_ajax () {
+        println("params " + params)
+        def obra = Obra.get(params.id)
+        def tamano = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique().size()
+        def tamano1 = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()
+
+        if(tamano > 100){
+            render "ok"
+        }else{
+            render "no"
+        }
+    }
+
 
 } //fin controller
