@@ -28,8 +28,8 @@ class Shield {
             if (isAllowed()) {
 //                if (request.method != "POST") {
                     Sql sql = new Sql(dataSource)
-                    def sale = new Date().format("yyyy-MM-dd HH:mm:ss")
-                    def fcha = new Date().format("yyyy-MM-dd")
+                    def sale = new Date().format("yyyy-MM-dd HH:mm:ss.SSS")
+                    def fcha = new Date().format("yyyy-MM-dd HH:mm:ss.SSS")
                     def tx = "select accn__id, tpac__id from accn, ctrl where accnnmbr ilike '${actionName}' and " +
                             "ctrl.ctrl__id = accn.ctrl__id and ctrlnmbr ilike '${controllerName}'"
                     println "---> ${entero(session.id)}"
