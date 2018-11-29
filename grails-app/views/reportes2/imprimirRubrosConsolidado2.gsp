@@ -1,4 +1,4 @@
-<%@ page import="janus.Lugar" contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.Item; janus.Lugar" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>
@@ -204,7 +204,7 @@
         <g:set var="total" value="${0}"></g:set>
         <g:each in="${res}" var="rubro" status="j">
             <tr>
-                <td>${rubro.rbrocdgo}</td>
+                <td>${rubro.rbrocdgo} <br> ${"( " + (janus.Item.get(rubro.item__id)?.codigoEspecificacion ?: '') + " )"} </br>  </td>
                 <td>${nombres[j]}</td>
                 <td>${rubro.unddcdgo}</td>
                 <td style="text-align: right"><g:formatNumber number="${rubro.rbropcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
