@@ -1109,11 +1109,12 @@ class Reportes2Controller {
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         WritableCellFormat times16No = new WritableCellFormat(times16);
         sheet.setColumnView(0, 30)
-        sheet.setColumnView(1, 70)
-        sheet.setColumnView(2, 15)
-        sheet.setColumnView(3, 20)
+        sheet.setColumnView(1, 30)
+        sheet.setColumnView(2, 70)
+        sheet.setColumnView(3, 15)
         sheet.setColumnView(4, 20)
         sheet.setColumnView(5, 20)
+        sheet.setColumnView(6, 20)
 
         def label
         def number
@@ -1157,20 +1158,22 @@ class Reportes2Controller {
         label = new jxl.write.Label(3, 14,  Item.get(params.volq).nombre + " (\$ " + params.prvl.toDouble().round(2) + ")", times16No); sheet.addCell(label);
 
         label = new jxl.write.Label(0, 17, "CODIGO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 17, "NOMBRE", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(2, 17, "UNIDAD", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(3, 17, "PRECIO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(4, 17, "ESPECIFICACIONES", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(5, 17, "PLANO DE DETALLE", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 17, "CODIGO ESP", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 17, "NOMBRE", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 17, "UNIDAD", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(4, 17, "PRECIO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(5, 17, "ESPECIFICACIONES", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(6, 17, "PLANO DE DETALLE", times16format); sheet.addCell(label);
 
         res.each{ k->
 
             label = new jxl.write.Label(0, fila, k?.rbrocdgo); sheet.addCell(label);
-            label = new jxl.write.Label(1, fila, k?.rbronmbr); sheet.addCell(label);
-            label = new jxl.write.Label(2, fila, k?.unddcdgo); sheet.addCell(label);
-            number = new jxl.write.Number(3, fila, k?.rbropcun ?: 0); sheet.addCell(number);
-            label = new jxl.write.Label(4, fila, k?.rbroespc); sheet.addCell(label);
-            label = new jxl.write.Label(5, fila, k?.rbrofoto); sheet.addCell(label);
+            label = new jxl.write.Label(1, fila, janus.Item.get(k?.item__id)?.codigoEspecificacion ?: ''); sheet.addCell(label);
+            label = new jxl.write.Label(2, fila, k?.rbronmbr); sheet.addCell(label);
+            label = new jxl.write.Label(3, fila, k?.unddcdgo); sheet.addCell(label);
+            number = new jxl.write.Number(4, fila, k?.rbropcun ?: 0); sheet.addCell(number);
+            label = new jxl.write.Label(5, fila, k?.rbroespc); sheet.addCell(label);
+            label = new jxl.write.Label(6, fila, k?.rbrofoto); sheet.addCell(label);
 
             fila++
 
