@@ -623,7 +623,7 @@ class Reportes2Controller {
 
 
     def comprobarIlustracion (){
-//        println ".... comprobarIlustracion, params: $params"
+        println ".... comprobarIlustracion, params: $params"
         def obra
         if(params.id){
             obra = Obra.get(params.id)

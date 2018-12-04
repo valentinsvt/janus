@@ -19,7 +19,7 @@ class PdfService {
             return b
         }
         catch (Throwable e) {
-            println "error pdf service "+e
+            println "error pdf service " + e
         }
     }
 

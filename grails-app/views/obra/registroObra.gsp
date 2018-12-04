@@ -1888,7 +1888,8 @@
                         if(msg == 'ok'){
                             $.box({
                                 imageClass: "box_info",
-                                text: "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br><span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
+                                text: "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br>" +
+                                   "<span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
                                 title: "Imprimir Rubros de la Obra",
                                 iconClose: true,
                                 dialog: {

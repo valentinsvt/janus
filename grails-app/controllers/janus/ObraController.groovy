@@ -1572,7 +1572,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def revisarSizeRubros_ajax () {
-        println("params " + params)
+//        println "revisarSizeRubros_ajax $params"
         def obra = Obra.get(params.id)
         def tamano = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique().size()
         def tamano1 = VolumenesObra.findAllByObra(obra, [sort: 'orden']).item.unique()

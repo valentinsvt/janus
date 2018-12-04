@@ -26,7 +26,8 @@ import com.itextpdf.text.pdf.ColumnText;
 //import java.awt.Label
 
 
-class ReportesController extends Shield{
+//class ReportesController extends Shield {
+class ReportesController {
 
     def index() {
 
@@ -1106,7 +1107,7 @@ class ReportesController extends Shield{
 
 
     def imprimirRubros() {
-
+        println "imprimirRubros... $params"
         def obra = Obra.get(params.obra)
         def fecha1
         def fecha2
