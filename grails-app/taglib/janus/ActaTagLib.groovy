@@ -215,7 +215,7 @@ class ActaTagLib {
         }
 */
         def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), [sort: 'fechaIngreso'])
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'B']), [sort: 'fechaIngreso'])
 //        println "planillas: ${planillas.valor}"
 
         def tabla = "<table class='table table-bordered table-condensed'>"
@@ -239,7 +239,7 @@ class ActaTagLib {
         def totalValor = 0, totalAnticipo = 0, totalMultas = 0
         planillas.each { planilla ->
             def periodo, valor, anticipo, multas
-            if (planilla.tipoPlanilla.codigo == "A") {
+            if (planilla.tipoPlanilla.codigo in ["A", "B"]) {
                 periodo = "ANTICIPO"
 //                valor = planilla.reajuste
                 valor = 0
@@ -254,12 +254,19 @@ class ActaTagLib {
                 valor += c_mas_p
             }
 
-            anticipo = planilla.descuentos
+            if(planilla.tipoPlanilla.codigo in ["A", "B"]) {
+                anticipo = -planilla.valor
+            } else {
+                anticipo = planilla.descuentos
+            }
 //            multas = planilla.multaPlanilla + planilla.multaRetraso
+            println ".... inicia multas con $multas"
             multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+            println "ml1.... inicia multas con $multas"
             multas += cn.rows("select coalesce(plnlmles,0) suma from plnl where plnl__id = ${planilla.id}")[0].suma
+            println ".... inicia multas con $multas"
             multas += cn.rows("select coalesce(plnlnpvl,0) suma from plnl where plnl__id = ${planilla.id}")[0].suma
-//            println "&&&multas: $multas"
+            println "plnl: ${planilla.id} multas: $multas"
             totalValor += valor
             totalAnticipo += anticipo
             totalMultas += multas
