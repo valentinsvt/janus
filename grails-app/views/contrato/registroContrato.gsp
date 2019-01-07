@@ -260,7 +260,7 @@
 
     </fieldset>
 
-    <fieldset class="" style="position: relative; height: 120px; border-bottom: 1px solid black;">
+    <fieldset class="" style="position: relative; height: 130px; border-bottom: 1px solid black;">
 
         <div class="span12" style="margin-top: 10px">
 
@@ -272,7 +272,7 @@
                           optionKey="id" optionValue="descripcion" style="font-weight: bolder"/></div>
 
             <div id="CntrPrincipal" hidden>
-                <div class="span2 formato text-info" style="margin-left:-20px; width: 140px;">Contrato Principal</div>
+                <div class="span1 formato text-info" style="margin-left:-20px; width: 100px;">Contrato Principal</div>
 
                 <div class="span2" style="margin-left:-20px">
                     <g:select from="${janus.Contrato.list([sort: 'fechaSubscripcion'])}" name="padre.id"
@@ -281,12 +281,12 @@
                               style="width: 140px" />
                 </div>
             </div>
-            <div class="span2 formato">Fecha de Suscripción</div>
+            <div class="span1 formato">Fecha de Suscripción</div>
 
-            <div class="span2"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
+            <div class="span1"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
             <div class="span 3">
-                <div class="span1 formato" style="width: 90px">Aplica reajuste</div>
+                <div class="span1 formato" style="width: 100px">Aplica reajuste</div>
 
                 <div class="span1">
                     <g:select name="aplicaReajuste" from="${[0 : 'NO', 1 : 'SI']}" optionKey="key" optionValue="value"
@@ -428,21 +428,30 @@
                 <div class="span2 formato">La multa por retraso de obra incluye el valor del reajuste</div>
 
                 <div class="span1">
-                    %{--<g:checkBox name="conReajuste" checked="${contrato?.conReajuste == 1 ? true : false}" />--}%
                     <g:select name="conReajuste" from="${[0 : 'NO', 1 : 'SI']}" optionKey="key" optionValue="value" value="${contrato?.conReajuste == 1 ? 1 : 0}" style="width: 60px"/>
                 </div>
             </div>
+
+
 
         </div>
 
         <div class="span12" style="margin-top: 10px">
             <div class="span2 formato">Administrador delegado</div>
 
-            <div class="span3">${contrato?.administrador?.titulo} ${contrato?.administrador?.nombre} ${contrato?.administrador?.apellido}</div>
+            <div class="${contrato?.administrador?.nombre ? 'span6' : 'span9'}">${contrato?.administrador?.titulo} ${contrato?.administrador?.nombre} ${contrato?.administrador?.apellido}</div>
 
             <div class="span3 formato"></div>
 
             <div class="span3"></div>
+
+            <div class="span 3" style="border-color: #888; border-style: solid; border-width: thin">
+                <div class="span2 formato">Aplica multa al saldo por planillar</div>
+
+                <div class="span1">
+                    <g:select name="saldoMulta" from="${[0 : 'NO', 1 : 'SI']}" optionKey="key" optionValue="value" value="${contrato?.saldoMulta == 1 ? 1 : 0}" style="width: 60px"/>
+                </div>
+            </div>
         </div>
     </fieldset>
 
@@ -1149,28 +1158,6 @@
         var enteros = $(this).val();
     });
 
-    /*
-     $("#codigo").click(function () {
-     $("#btn-aceptar").attr("disabled", false)
-     });
-
-     $("#memo").click(function () {
-     $("#btn-aceptar").attr("disabled", false)
-     })
-
-     $("#objeto").click(function () {
-     $("#btn-aceptar").attr("disabled", false)
-     });
-
-
-     $("#monto").click(function () {
-     $("#btn-aceptar").attr("disabled", false)
-     });
-
-     $("#financiamiento").click(function () {
-     $("#btn-aceptar").attr("disabled", false)
-     });
-     */
 
     $("#tpcr").change(function () {
 //        console.log("--->", $("#tpcr").val());

@@ -1104,6 +1104,7 @@ class ContratoController extends janus.seguridad.Shield {
         contratoInstance.tipoContrato = tipoContrato
         contratoInstance.depAdministrador = Departamento.get(params."depAdministrador.id")
         contratoInstance.aplicaReajuste = params.aplicaReajuste.toInteger()
+        contratoInstance.saldoMulta = params.saldoMulta.toInteger()
 
 //        println "graba contrato... ${contratoInstance.depAdministrador}"
 
