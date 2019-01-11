@@ -291,6 +291,22 @@
                         <div class="span10" style="margin-left: -40px">${contrato?.objeto}</div>
                     </g:else>
                 </div>
+
+                <div class="col-md-5" style="margin-top: 5px">
+                    <div class="span2 formato" style="margin-left:60px;">Aplica Reajuste</div>
+                    <div class="span1">${contrato?.aplicaReajuste == 1 ? 'SI' : 'NO'}</div>
+                </div>
+
+                <div class="col-md-5" style="margin-top: 5px">
+                    <div class="span4 formato" style="margin-left:10px;">La multa por retraso de obra incluye el valor del reajuste</div>
+                    <div class="span1">${contrato?.conReajuste == 1 ? 'SI' : 'NO'}</div>
+                </div>
+
+                <div class="col-md-5" style="margin-top: 5px">
+                    <div class="span3 formato" style="margin-left:10px;">Aplica multa al saldo por planillar</div>
+                    <div class="span1">${contrato?.saldoMulta == 1 ? 'SI' : 'NO'}</div>
+                </div>
+
             </fieldset>
 
             <fieldset class="" style="position: relative;  padding: 10px;border-bottom: 1px solid black;">
