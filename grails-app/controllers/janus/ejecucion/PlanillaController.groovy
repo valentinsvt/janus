@@ -1786,7 +1786,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def anticipoN
 
 
-        println "esAnticipo: $esAnticipo"
+        println "esAnticipo: $esAnticipo, tipos: $tiposPlanilla, periodos: $periodos"
 
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
