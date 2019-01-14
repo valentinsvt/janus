@@ -98,16 +98,12 @@
                         <i class="icon-print"></i>
                         Imp. Rubros y VAE
                     </a>
-                %{--
-                                    <a href="#" class="btn  " id="imprimir_sub">
-                                        <i class="icon-print"></i>
-                                        Imprimir Presupuesto VAE
-                                    </a>
-                                    <a href="#" class="btn  " id="btnRubros">
-                                        <i class="icon-print"></i>
-                                        Rubros VAE
-                                    </a>
-                --}%
+                    <g:if test="${contrato?.aplicaReajuste == 0}">
+                        <a href="#" class="btn btn-warning" id="inicioObra">
+                            <i class="icon-check text_info"></i>
+                           Inicio de Obra
+                        </a>
+                    </g:if>
                 </g:if>
 
             </div>
@@ -1097,6 +1093,60 @@
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}" + datos
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
 
+            });
+
+//            $("#inicioObra").click(function () {
+                %{--var cntr = "${contrato.id}"--}%
+                %{--if ("${contrato.id}") {--}%
+//                    $.ajax({
+                        %{--type    : "POST", url : "${g.createLink(controller: 'planilla', action:'iniObraNoReajuste')}",--}%
+//                        data    : "id=" + cntr,
+//                        success : function (msg) {
+//                            $("#canton").val(msg)
+//                        }
+//                    });
+//                }
+//            });
+
+            $("#inicioObra").click(function () {
+                $.ajax({
+                    type    : "POST",
+                    url     : "${g.createLink(controller: 'planilla', action:'iniObraNoReajuste')}",
+                    data    : {
+                        id : "${contrato?.id}"
+                    },
+                    success : function (msg) {
+                        var $btnSave = $('<a href="#" class="btn btn-success"><i class="icon icon-save"></i> Guardar</a>');
+                        var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                        $btnSave.click(function () {
+                            $(this).replaceWith(spinner);
+                            var fcha = $("#fecha").val()
+                            var memo = $("#memo").val()
+                            console.log('...va inicio',fcha, memo)
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(controller: 'planilla', action:'iniciarObra')}",
+                                data    : {
+                                    cntr  : "${contrato?.id}",
+                                    fecha  : fcha,
+                                    memo  : memo
+                                },
+                                success : function (msg) {
+                                    if(msg == "ok") {
+                                        location.reload(true);
+                                    } else {
+                                        log("Un error ha ocurrido al iniciar la obra", success)
+                                    }
+                                }
+                            });
+                        });
+                        $("#modal_tittle_var").text("Inicio de Obra sin Reajustes");
+                        $("#modal_body_var").html(msg);
+                        $("#modal_footer_var").html($btnCerrar).append($btnSave);
+                        $("#modal-var").modal("show");
+                    }
+                });
+                return false;
             });
 
             $("#btnRubros").click(function () {

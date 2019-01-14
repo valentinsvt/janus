@@ -817,6 +817,7 @@
                 });
             }
 
+/*
             function seguimiento() {
                 $.ajax({
                     type    : "POST",
@@ -827,6 +828,7 @@
                 });
             }
             seguimiento();
+*/
             $('#myTab a').click(function (e) {
                 e.preventDefault();
                 $(this).tab('show');

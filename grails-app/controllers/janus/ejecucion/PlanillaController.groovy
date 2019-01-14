@@ -1312,7 +1312,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def inicioObra_ajax() {
-//        println "PARAMS: " + params
+        println "inicioObra_ajax: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -1337,6 +1337,33 @@ class PlanillaController extends janus.seguridad.Shield {
         println "fache min: $fechaMin"
 
         [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha, firma: firma]
+    }
+
+    def iniObraNoReajuste() {
+        println "iniObraNoReajuste: " + params
+
+        def fechaMin, fechaMax, fecha
+        def contrato = Contrato.get(params.id)
+
+        def tipo = params.tipo
+        def lblMemo, lblFecha, extra, nombres = ""
+
+        lblFecha = "Fecha de inicio de obra"
+        lblMemo = "Oficio de inicio de obra"
+        fechaMin = contrato.fechaSubscripcion
+        fecha = contrato.fechaFirma
+
+        def y = fechaMin.format("yyyy").toInteger()
+        def m = fechaMin.format("MM").toInteger() - 1
+        def d = fechaMin.format("dd").toInteger()
+
+        fechaMin = "new Date(${y},${m},${d})"
+        fechaMax = "new Date(${y + 2},${m},${d})"
+
+        def firma = Persona.findAllByCargoIlike("Direct%");
+        println "fache min: $fechaMin"
+
+        [cntr: contrato.id, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha, firma: firma]
     }
 
     def savePagoPlanilla() {
@@ -1496,36 +1523,47 @@ class PlanillaController extends janus.seguridad.Shield {
     /** Guarda fecha de inicio de obra **/
     def iniciarObra() {
         println "iniciarObra: $params"
-        def planilla = Planilla.get(params.id)
+
         def memo = params.memo.toString().toUpperCase()
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-//        def personaFirma = Persona.get(params.firma.toLong())
 
-        def contrato = Contrato.get(planilla.contratoId)
+        def planilla
+        def contrato
+        if(params.id){
+            planilla = Planilla.get(params.id)
+            contrato = planilla.contrato
+        } else {
+            contrato = Contrato.get(params.cntr)
+        }
+
+        println "contrato: $contrato"
         contrato.numeralPlazo = params.numeralPlazo
         contrato.numeralAnticipo = params.numeralAnticipo
         contrato.clausula = params.clausula
         if (!contrato.save(flush: true)) {
             flash.message = "No se pudo iniciar la obra"
             println "Error al guardar datos del contrato desde el boton azul: " + contrato.errors
-            redirect(action: "list", id: planilla.contratoId)
+            redirect(action: "list", id: contrato.id)
             return
         }
 
-        def obra = Obra.get(planilla.contrato.obra.id)
+        def obra = Obra.get(contrato.obra.id)
         println "obra a iniciar: ${obra.id}"
         obra.fechaInicio = fecha
         obra.memoInicioObra = memo
-//        obra.firmaInicioObra = personaFirma
         obra.fechaImpresionInicioObra = new Date()
         if (!obra.save(flush: true)) {
             flash.message = "No se pudo iniciar la obra"
             println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors
-            redirect(action: "list", id: planilla.contratoId)
+            redirect(action: "list", id: contrato.id)
         } else {
             flash.message = "Obra iniciada exitosamente"
 //            redirect(controller: "cronogramaEjecucion", action: "creaCronogramaEjec", id: planilla.contratoId)
-            redirect(controller: "cronogramaEjecucion", action: "creaCrngEjecNuevo", id: planilla.contratoId)
+            if(params.cntr) {
+                render "ok"
+            } else {
+                redirect(controller: "cronogramaEjecucion", action: "creaCrngEjecNuevo", id: contrato.id)
+            }
         }
     }
 
@@ -1596,7 +1634,7 @@ class PlanillaController extends janus.seguridad.Shield {
             esAnticipo = true
         } else {
             cmpl = Contrato.findByPadre(contrato)
-            println "hay complementario"
+            println "hay complementario: $cmpl"
             if(cmpl) {
                 def plaC = Planilla.findByContratoAndTipoPlanillaInList(contrato, [anticipoCmpl])
                 if(!plaC){
@@ -3574,6 +3612,7 @@ class PlanillaController extends janus.seguridad.Shield {
         println "Inicio de procesar planilla Lq, params: $params"
         //TODO: hacer una funcion para que aplique descuentos a las planillas
         def plnl = Planilla.get(params.id)
+        def conReajuste = plnl.contrato.conReajuste == 1
 
         if(plnl.tipoPlanilla.codigo == 'O') {
             procesaAdicionales(plnl)
@@ -3593,7 +3632,13 @@ class PlanillaController extends janus.seguridad.Shield {
             detalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
 
             if(Planilla.get(params.id).tipoPlanilla.codigo in ['P', 'Q']){
-                procesaMultas(params.id)  /* multas */
+                println "---multas con reajuste $conReajuste"
+                if(conReajuste) {
+                    procesaMultas(params.id)  /* multas */
+                } else {
+//                    procesaMultasSinRj(params.id)  /* multas */
+                }
+
             }
 
             if(plnl.tipoPlanilla.toString() in ['P']) {
@@ -4137,6 +4182,172 @@ class PlanillaController extends janus.seguridad.Shield {
 
     /** calcula multas se aplica sólo a planillas de avance **/
     def procesaMultas(id){
+        def plnl = Planilla.get(id)
+        def cmpl = Contrato.findByPadre(plnl.contrato)
+        def diasMax = 5
+        def fechaFinPer = plnl.fechaFin
+        def fechaPresentacion = plnl.fechaPresentacion
+        def fechaMax = fechaFinPer
+        def retraso = 0
+        def multaPlanilla = 0.0
+        def prmt = [:]
+        def dias = 0
+
+        /*** No presentación de planilla */
+        def fcfm = preciosService.ultimoDiaDelMes(plnl.fechaFin)
+        def anio =  new Date().format("yyyy").toInteger()
+        anio -= 1
+        def diciembre31 = new Date().parse("dd-MM-yyyy", "31-12-" + anio)
+//        println "fcfm: $fcfm, diciembre31: $diciembre31"
+        if(fcfm == diciembre31) {
+            fcfm++
+            diasMax--
+        }
+        def res = diasLaborablesService.diasLaborablesDesde(fcfm, diasMax)
+//        println "No presentación de planilla --> fcfm: $fcfm, multas: $res"
+        /* si hay error, res[0] = false */
+        if (!res[0]) {
+            errorDiasLaborables(plnl.contrato.id, res[2], res[1])
+        } else {
+            fechaMax = res[1]
+        }
+//        println "fechaPresentacion: $fechaPresentacion, fechaMax: $fechaMax "
+
+        res = diasLaborablesService.diasLaborablesEntre(fechaPresentacion, fechaMax)
+        if (!res[0]) {
+            errorDiasLaborables(plnl.contrato.id, res[2], res[1])
+        } else {
+            retraso = res[1]
+        }
+
+        if (fechaPresentacion < fechaMax) {
+            retraso *= -1
+        }
+
+        if (retraso > 0 || plnl.valor == 0) {
+            retraso = 1
+        } else {
+            retraso = 0
+        }
+
+        /** manejar datos de:  * tipo de multa, * dias de retraso, * multa descripción y * valor de la multa */
+        def rjpl = ReajustePlanilla.findAllByPlanillaAndPlanillaReajustada(plnl, plnl, [sort: 'periodo'])
+//        println "rjpl --- multas: ${rjpl.size()}"
+
+        def baseMulta = 0
+        def formatoNum = new DecimalFormat("#,###.##")
+
+        def rj_cr = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
+        def acCronograma = rj_cr[0] > 0 ? rj_cr[0] : 0
+
+        /********* retraso en presentación de la planilla *************/
+        baseMulta = plnl.valor > 0 ? plnl.valor : rjpl.last().parcialCronograma
+        multaPlanilla = Math.round((plnl.contrato.multaPlanilla / 1000) * (baseMulta)*retraso*100)/100
+        prmt = [:]
+        prmt.planilla = plnl
+        prmt.tipoMulta = TipoMulta.get(1) ///// 1 retraso en presentación
+        prmt.descripcion = "${plnl.contrato.multaPlanilla} x 1000 de ${formatoNum.format(baseMulta)}"
+        prmt.valorCronograma = rjpl.last().parcialCronograma
+        prmt.dias = retraso
+        prmt.monto = multaPlanilla
+        prmt.monto = multaPlanilla
+        prmt.fechaMaxima = fechaMax
+        insertaMulta(prmt)
+
+        /********  multa por incumplimiento cronograma -- no se aplica a Liquidación "Q" **********/
+        if(plnl.tipoPlanilla.codigo == 'P'){
+            multaPlanilla = Math.round(((rjpl.last().acumuladoPlanillas / rjpl.last().acumuladoCronograma < 0.80) ? plnl.contrato.monto / 1000 : 0) * 100) / 100
+            dias = 0
+            dias = (plnl?.fechaFin - plnl?.fechaInicio) - plnl.valor / rjpl.last().parcialCronograma * (plnl?.fechaFin - plnl?.fechaInicio)
+            dias = (dias > 0) ? dias : 0
+            prmt = [:]
+            prmt.planilla = plnl
+            prmt.tipoMulta = TipoMulta.get(2) ////// 2 multa por incumplimiento cronograma
+            if(plnl.tipoContrato == 'P') {
+                prmt.descripcion = "${plnl.contrato.multaIncumplimiento} x 1000 de ${formatoNum.format(plnl.contrato.monto)}"
+            } else {
+                prmt.descripcion = "${cmpl.multaIncumplimiento} x 1000 de ${formatoNum.format(cmpl.monto)}"
+            }
+            prmt.valorCronograma = rjpl.last().parcialCronograma
+            prmt.monto = multaPlanilla
+            prmt.periodo = "${rjpl.last().mes}"
+            insertaMulta(prmt)
+        }
+
+        /********* multa por no acatar disposiciones del fiscalizador  **********/
+        multaPlanilla = Math.round(plnl.contrato.monto * plnl.diasMultaDisposiciones * (plnl.contrato.multaDisposiciones / 1000)*100)/100
+        prmt = [:]
+        prmt.planilla = plnl
+        prmt.tipoMulta = TipoMulta.get(3) //// 3 multa por por no aactar disposiciones del fiscalizador
+        if(plnl.tipoContrato == 'P') {
+            prmt.descripcion = "${plnl.contrato.multaDisposiciones} x 1000 de ${formatoNum.format(plnl.contrato.monto.toDouble())} por día"
+        } else {
+            prmt.descripcion = "${cmpl.multaDisposiciones} x 1000 de ${formatoNum.format(cmpl.monto.toDouble())} por día"
+        }
+
+        prmt.dias = plnl.diasMultaDisposiciones
+        prmt.monto = multaPlanilla
+        insertaMulta(prmt)
+
+
+        /** multa por retraso de obra: fechaFinObra - FechaCronograma * valor de multa **/
+        if(plnl.tipoPlanilla.codigo == 'Q'){
+            def valor = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
+            def reajustado = valor[0] > 0 ? valor[0] : 0
+            def total = plnl.contrato.monto.toDouble() + reajustado
+            def tpml = TipoMulta.get(4)  /** 4 retraso de obra **/
+
+            def cn = dbConnectionService.getConnection()
+//            def sql = "select sum(cast(to_char(prejfcfn - prejfcin, 'dd') as integer) + 1) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo = 'P'"
+            def sql = "select sum((prejfcfn - prejfcin) + 1) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo in ('P', 'C')"
+            println "sql: $sql"
+            dias  = (int) cn.rows(sql.toString())[0].dias
+            sql = "select sum(mdcedias) dias from mdce where cntr__id = ${plnl.contrato.id} and mdcetipo = 'A'"
+            def ampliacion = (int) cn.rows(sql.toString())[0].dias?:0
+
+            println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
+
+            dias -= plnl.contrato.plazo + ampliacion
+
+//            sql = "select cast(to_char(plnlfcfn - max(prejfcfn), 'dd') as integer) cntd from plnl, prej " +
+//                    "where plnl__id = ${plnl.id} and plnl.cntr__id = prej.cntr__id group by plnlfcfn"
+            sql = "select plnlfcfn - max(prejfcfn) cntd from plnl, prej " +
+                    "where plnl__id = ${plnl.id} and plnl.cntr__id = prej.cntr__id group by plnlfcfn"
+
+            println "retraso sql: $sql"
+            def retrasoObra = cn.rows(sql.toString())[0].cntd
+
+            dias += retrasoObra
+
+            println "retraso de obra: ${dias} dias"
+
+//            dias = 4
+            if(dias > 0) {
+                prmt = [:]
+
+                if(plnl.tipoContrato == 'P') {
+                    multaPlanilla = Math.round(dias * (plnl.contrato.multaRetraso * total / 1000)*100)/100
+                    prmt.descripcion = "${plnl.contrato.multaRetraso} x 1000 de ${formatoNum.format(total)} por día"
+                } else {
+                    def cntrCmpl = Contrato.findByPadre(plnl.contrato)
+                    multaPlanilla = Math.round(dias * (cntrCmpl?.multaRetraso?:0) * cntrCmpl.monto / 1000*100)/100
+                    prmt.descripcion = "${cntrCmpl.multaRetraso} x 1000 de ${formatoNum.format(cntrCmpl.monto)} por día"
+                }
+                prmt.planilla = plnl
+                prmt.tipoMulta = tpml
+
+                prmt.dias = dias
+                prmt.monto = multaPlanilla
+                insertaMulta(prmt)
+            } else {
+                MultasPlanilla.findAllByPlanillaAndTipoMulta(plnl, tpml).each {
+                    it.delete()
+                }
+            }
+        }
+    }
+
+    def procesaMultasSinRj(id){
         def plnl = Planilla.get(id)
         def cmpl = Contrato.findByPadre(plnl.contrato)
         def diasMax = 5

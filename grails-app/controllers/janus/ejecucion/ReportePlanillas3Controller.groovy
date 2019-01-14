@@ -1773,20 +1773,21 @@ class ReportePlanillas3Controller {
         * crear nuevas FP en el contrato 24, igual que en la BD janus_prdc para probar */
 
 
-        //** genera B0, P0 y Fr de la planilla **
+        if(planilla.contrato.aplicaReajuste == 1) {
+            //** genera B0, P0 y Fr de la planilla **
 //        println "reajustes: ${reajustes}"
-        reajustes.each {
-            pl = reporteTablas(it.planilla, it.reajuste)
-            pdfs.add(pl.toByteArray())
-            contador++
+            reajustes.each {
+                pl = reporteTablas(it.planilla, it.reajuste)
+                pdfs.add(pl.toByteArray())
+                contador++
+            }
+            if(planilla.tipoPlanilla.codigo == 'A') {
+                println "invoca a resumen... planilla"
+                pl = resumenAnticipo(planilla)
+                pdfs.add(pl.toByteArray())
+                contador++
+            }
         }
-        if(planilla.tipoPlanilla.codigo == 'A') {
-            println "invoca a resumen... planilla"
-            pl = resumenAnticipo(planilla)
-            pdfs.add(pl.toByteArray())
-            contador++
-        }
-
         if(planilla.tipoPlanilla.codigo in ['P', 'Q', 'R', 'L']) {
             println "invoca multas"
             pl = multas(planilla, "")
