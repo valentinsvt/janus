@@ -3612,7 +3612,7 @@ class PlanillaController extends janus.seguridad.Shield {
         println "Inicio de procesar planilla Lq, params: $params"
         //TODO: hacer una funcion para que aplique descuentos a las planillas
         def plnl = Planilla.get(params.id)
-        def conReajuste = plnl.contrato.conReajuste == 1
+        def conReajuste = plnl.contrato.aplicaReajuste == 1
 
         if(plnl.tipoPlanilla.codigo == 'O') {
             procesaAdicionales(plnl)
@@ -3632,11 +3632,11 @@ class PlanillaController extends janus.seguridad.Shield {
             detalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
 
             if(Planilla.get(params.id).tipoPlanilla.codigo in ['P', 'Q']){
-                println "---multas con reajuste $conReajuste"
+                println "---multas con reajuste ${plnl.contrato.aplicaReajuste}, --> $conReajuste"
                 if(conReajuste) {
                     procesaMultas(params.id)  /* multas */
                 } else {
-//                    procesaMultasSinRj(params.id)  /* multas */
+                    procesaMultasSinRj(params.id)  /* multas */
                 }
 
             }
@@ -4182,6 +4182,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     /** calcula multas se aplica sólo a planillas de avance **/
     def procesaMultas(id){
+        println "procesaMultas"
         def plnl = Planilla.get(id)
         def cmpl = Contrato.findByPadre(plnl.contrato)
         def diasMax = 5
