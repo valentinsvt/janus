@@ -717,7 +717,7 @@ class PreciosService {
     def diasPlanillados(plnl) {
         def cn = dbConnectionService.getConnection()
         def sql = "select prej.* from prej, plnl where prej.cntr__id = plnl.cntr__id and plnl__id = ${plnl} and " +
-                "prej.prejfcin >= plnl.plnlfcin and prejfcin <= plnlfcfn and prejtipo in ('P', 'C')"
+                "prej.prejfcin >= plnl.plnlfcin and prejfcin <= plnlfcfn and prejtipo in ('P', 'A', 'C')"
         def dias = 0
         cn.eachRow(sql.toString()){ d ->
             dias += (d.prejfcfn - d.prejfcin) + 1
@@ -731,7 +731,7 @@ class PreciosService {
         def cn = dbConnectionService.getConnection()
         def sql = "select sum(cast(to_char(prejfcfn, 'J') as integer) - cast(to_char(prejfcin, 'J') as integer)) + count(*) dias " +
                 "from prej where cntr__id = ${cntr} and prejfcin >= '${fcin}' and prejfcfn <= '${fcfn}' and " +
-                "prejtipo in ('P', 'C')"
+                "prejtipo in ('P', 'A', 'C')"
 //        println "sql: $sql"
         def dias = cn.rows(sql.toString())[0].dias
         return dias?:0

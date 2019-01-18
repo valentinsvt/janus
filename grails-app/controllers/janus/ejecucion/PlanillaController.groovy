@@ -3636,7 +3636,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 if(conReajuste) {
                     procesaMultas(params.id)  /* multas */
                 } else {
-                    procesaMultasSinRj(params.id)  /* multas */
+                    procesaMultasSinRj(params.id)  /* multas --actualmeente es lo mismo que multas 18-ene-2019 */
                 }
 
             }
@@ -4727,7 +4727,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
                             /**para recalcular el prin se requiere la fecha a la que corresponde el reajuste po.fechaInicio, po.fechaFin ok **/
                             prdoInec = indicesDisponibles(po.planillaReajustada, po.planillaReajustada.fechaPago, 'R') /* para recalcular reajuste */
-                            println "********** para plnl: ${po.id} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec, fcha: $po.fechaInicio "
+//                            println "********** para plnl: ${po.id} con pr: ${po.periodoInec} se retorna de indicesDisponibles: $prdoInec, fcha: $po.fechaInicio "
                             prmt.periodoInec = prdoInec?: indicesDisponibles(po.planillaReajustada, po.fechaInicio, '')
 
 //                            println "  inserta avance RR... si hay indices actuales $prmt"
@@ -4780,16 +4780,11 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //                    println "(1)fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, fcfm: $fcfm"
 
-//                    pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipoInList(plnl.contrato,
-//                       plnl.fechaInicio, fcfm, ['P', 'C'])
                     pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipoInList(plnl.contrato,
-                            fchaFinPlanillado, fcfm, ['P', 'C'])
-//                    println "pems ---> ${pems}"
+                            fchaFinPlanillado, fcfm, ['P', 'A', 'C'])
                     parcial = 0.0
-//                    total = totalCr
                     totalCmpl = 0.0
                     pems.each {ms ->
-//                        if(ms.fechaFin >= fchaFinPlanillado){
                         if(plnl.tipoContrato == 'P') {
                             parcial += ms.parcialContrato
                             total += ms.parcialContrato
@@ -4797,7 +4792,6 @@ class PlanillaController extends janus.seguridad.Shield {
                             parcial += ms.parcialCmpl
                             total += ms.parcialCmpl
                         }
-//                        }
                     }
 //                    println "**-- fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total"
                     /** manejo especial de la planilla 217 no reajusto en todos los periodos borrar y dejar solo el ELSE **/
@@ -4815,11 +4809,12 @@ class PlanillaController extends janus.seguridad.Shield {
                     plAcumulado += esteMes
 
                     if(plnl.tipoPlanilla.codigo in ['Q', 'R']){
-                        pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndTipoInList(plnl.contrato, plnl.fechaInicio, ['P','C'])
+                        pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndTipoInList(plnl.contrato, plnl.fechaInicio, ['P', 'A', 'C'])
+                        println "------ pems: ${pems}"
                     } else if(plnl.tipoPlanilla.codigo == 'P') {
                         println "ejecuta con: ${plnl.contrato.id}, $fchaFinPlanillado, ${plnl.fechaFin}"
                         pems = PeriodoEjecucion.findAllByContratoAndFechaInicioGreaterThanEqualsAndFechaFinLessThanEqualsAndTipoInList(plnl.contrato,
-                                fchaFinPlanillado, plnl.fechaFin, ['P', 'C'])
+                                fchaFinPlanillado, plnl.fechaFin, ['P', 'A', 'C'])
                     }
 
                     parcial = 0.0
@@ -4838,7 +4833,7 @@ class PlanillaController extends janus.seguridad.Shield {
                                 total += ms.parcialCmpl
                             }
                         } //else parcial = 0
-                        println ".....total: $total"
+//                        println ".....total: $total"
                     }
 
                     println "**fecha fin Planillado: $fchaFinPlanillado, esteMes: $esteMes, plAcumulado: $plAcumulado, cr: $parcial -- $total, prdo: $prdo"
@@ -5246,7 +5241,7 @@ class PlanillaController extends janus.seguridad.Shield {
      * @return
      */
     def registraRjpl(prdo, esteMes, plAcumulado, contrato, planilla, fcin, fcfn, crpa, crac, planillaFinal) {
-
+        println "***prdo: $prdo, esteMes: $esteMes, fcin: $fcin, fcfn: $fcfn,  crpa: $crpa, crac: $crac"
         def prmt = [:]
         def prdoInec = indicesDisponibles(planilla, fcin, null) /* para recalcular reajuste */
         prmt.periodoInec = prdoInec
