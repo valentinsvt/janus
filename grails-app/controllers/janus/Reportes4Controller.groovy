@@ -3741,8 +3741,7 @@ class Reportes4Controller extends Shield {
             label = new Label(1, fila, i?.itemnmbr?.toString()); sheet.addCell(label);
             label = new Label(2, fila, i?.unddcdgo?.toString()); sheet.addCell(label);
             label = new Label(3, fila, i?.item_vae?.toString()); sheet.addCell(label);
-            label = new Label(4, fila, i?.itvapcnt?.toString()); sheet.addCell(label);
-//            number = new jxl.write.Number(4, fila, i?.itvapcnt); sheet.addCell(number);
+            number = new jxl.write.Number(4, fila, i?.itvapcnt ?: 0); sheet.addCell(number);
             fila++
         }
         workbook.write();
