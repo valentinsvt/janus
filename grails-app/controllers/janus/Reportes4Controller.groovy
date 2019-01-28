@@ -3688,9 +3688,10 @@ class Reportes4Controller extends Shield {
 
         sql = "select * from items_ver_vae( cast( '${fecha}' as date))"
 
+//        println("vae " + sql)
+
         cn = dbConnectionService.getConnection()
         res = cn.rows(sql.toString())
-
 
         WorkbookSettings workbookSettings = new WorkbookSettings()
         workbookSettings.locale = Locale.default
@@ -3714,6 +3715,7 @@ class Reportes4Controller extends Shield {
         sheet.setColumnView(1, 80)
         sheet.setColumnView(2, 20)
         sheet.setColumnView(3, 20)
+        sheet.setColumnView(4, 30)
 
         // inicia textos y numeros para asocias a columnas
 
@@ -3721,7 +3723,6 @@ class Reportes4Controller extends Shield {
         def nmro
         def number
         def fila = 6;
-
 
         NumberFormat nf = new NumberFormat("#.##");
         WritableCellFormat cf2obj = new WritableCellFormat(nf);
@@ -3733,14 +3734,15 @@ class Reportes4Controller extends Shield {
         label = new Label(1, 4, "Nombre", times16format); sheet.addCell(label);
         label = new Label(2, 4, "Unidad", times16format); sheet.addCell(label);
         label = new Label(3, 4, "VAE", times16format); sheet.addCell(label);
-
+        label = new Label(4, 4, "Valor", times16format); sheet.addCell(label);
 
         res.eachWithIndex {i, j->
             label = new Label(0, fila, i?.itemcdgo?.toString()); sheet.addCell(label);
             label = new Label(1, fila, i?.itemnmbr?.toString()); sheet.addCell(label);
-            label = new Label(2, fila, i?.unddcdgo.toString()); sheet.addCell(label);
+            label = new Label(2, fila, i?.unddcdgo?.toString()); sheet.addCell(label);
             label = new Label(3, fila, i?.item_vae?.toString()); sheet.addCell(label);
-//            number = new jxl.write.Number(9, fila, i.monto); sheet.addCell(number);
+            label = new Label(4, fila, i?.itvapcnt?.toString()); sheet.addCell(label);
+//            number = new jxl.write.Number(4, fila, i?.itvapcnt); sheet.addCell(number);
             fila++
         }
         workbook.write();
