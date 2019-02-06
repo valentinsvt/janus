@@ -260,13 +260,13 @@ class ActaTagLib {
                 anticipo = planilla.descuentos
             }
 //            multas = planilla.multaPlanilla + planilla.multaRetraso
-            println ".... inicia multas con $multas"
+//            println ".... inicia multas con $multas"
             multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
-            println "ml1.... inicia multas con $multas"
+//            println "ml1.... inicia multas con $multas"
             multas += cn.rows("select coalesce(plnlmles,0) suma from plnl where plnl__id = ${planilla.id}")[0].suma
-            println ".... inicia multas con $multas"
+//            println ".... inicia multas con $multas"
             multas += cn.rows("select coalesce(plnlnpvl,0) suma from plnl where plnl__id = ${planilla.id}")[0].suma
-            println "plnl: ${planilla.id} multas: $multas"
+//            println "plnl: ${planilla.id} multas: $multas"
             totalValor += valor
             totalAnticipo += anticipo
             totalMultas += multas
