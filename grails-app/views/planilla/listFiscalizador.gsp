@@ -53,10 +53,12 @@
                         <i class="icon-file"></i>
                         Nueva planilla
                     </g:link>
+%{--
                     <g:link action="sinAnticipo" class="btn" params="[contrato: contrato?.id]">
                         <i class="icon-file"></i>
                         Planilla Contraentrega
                     </g:link>
+--}%
                     <g:link controller="documentoProceso" action="list" params="[id: contrato?.oferta?.concurso?.id, contrato: contrato?.id]"
                             class="btn btn-info" title="Cargar Docuemnto de repaldo para Obras adicionales">
                         <i class="icon-file"></i>

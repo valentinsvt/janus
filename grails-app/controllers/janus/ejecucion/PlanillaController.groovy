@@ -3614,6 +3614,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def plnl = Planilla.get(params.id)
         def conReajuste = plnl.contrato.aplicaReajuste == 1
 
+        println "---tipo planilla: ${plnl.tipoPlanilla.toString()}"
         if(plnl.tipoPlanilla.codigo == 'O') {
             procesaAdicionales(plnl)
             flash.message = "Procesa obras adicionales"
@@ -4248,7 +4249,11 @@ class PlanillaController extends janus.seguridad.Shield {
         prmt.planilla = plnl
         prmt.tipoMulta = TipoMulta.get(1) ///// 1 retraso en presentación
         prmt.descripcion = "${plnl.contrato.multaPlanilla} x 1000 de ${formatoNum.format(baseMulta)}"
-        prmt.valorCronograma = rjpl.last().parcialCronograma
+        if(rjpl) {
+            prmt.valorCronograma = rjpl.last().parcialCronograma
+        } else {
+            prmt.valorCronograma = 0
+        }
         prmt.dias = retraso
         prmt.monto = multaPlanilla
         prmt.monto = multaPlanilla
@@ -4414,7 +4419,12 @@ class PlanillaController extends janus.seguridad.Shield {
         prmt.planilla = plnl
         prmt.tipoMulta = TipoMulta.get(1) ///// 1 retraso en presentación
         prmt.descripcion = "${plnl.contrato.multaPlanilla} x 1000 de ${formatoNum.format(baseMulta)}"
-        prmt.valorCronograma = rjpl.last().parcialCronograma
+        if(rjpl) {
+            prmt.valorCronograma = rjpl.last().parcialCronograma
+        } else {
+            prmt.valorCronograma = 0
+        }
+
         prmt.dias = retraso
         prmt.monto = multaPlanilla
         prmt.monto = multaPlanilla
@@ -4654,6 +4664,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     TipoPlanilla.findAllByCodigoInList(listPl), plnl.fechaPresentacion, plnl.tipoContrato,
                     [sort: 'fechaPresentacion'])
             println "planillas AB por procesar: ${pl.size()}: ${pl.id}"
+            println "${plnl.contrato}, ${TipoPlanilla.findAllByCodigoInList(listPl)}, ${plnl.fechaPresentacion}, ${plnl.tipoContrato}"
             pl.each { p ->   /** las planillas anteriores solo son A o B **/
                 println "procesa planilla ${p.id} tipo: ${p.tipoPlanilla}"
                 prmt = [:]
