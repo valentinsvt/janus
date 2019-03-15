@@ -49,16 +49,23 @@
         %{--/** todo: validar que se haya iniciado la obra para planillas de avance **/--}%
             <g:if test="${anticipo >= 0}">
                 <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
-                    <g:link action="form" class="btn" params="[contrato: contrato?.id]">
+                %{--<g:link action="form" class="btn" params="[contrato: contrato?.id]">--}%
+                %{--<i class="icon-file"></i>--}%
+                %{--Nueva planilla--}%
+                %{--</g:link>--}%
+
+
+                    <a href="#" class="btn btn-default" id="btnNuevaPlanilla">
                         <i class="icon-file"></i>
                         Nueva planilla
-                    </g:link>
-%{--
-                    <g:link action="sinAnticipo" class="btn" params="[contrato: contrato?.id]">
-                        <i class="icon-file"></i>
-                        Planilla Contraentrega
-                    </g:link>
---}%
+                    </a>
+
+                %{--
+                                    <g:link action="sinAnticipo" class="btn" params="[contrato: contrato?.id]">
+                                        <i class="icon-file"></i>
+                                        Planilla Contraentrega
+                                    </g:link>
+                --}%
                     <g:link controller="documentoProceso" action="list" params="[id: contrato?.oferta?.concurso?.id, contrato: contrato?.id]"
                             class="btn btn-info" title="Cargar Docuemnto de repaldo para Obras adicionales">
                         <i class="icon-file"></i>
@@ -279,17 +286,17 @@
                     </g:if>
 
                     <g:if test="${planillaInstance.tipoPlanilla.codigo in ['P', 'Q']  && planillaInstance.id in adicionales}">
-                        %{--comentar esto nicio--}%
+                    %{--comentar esto nicio--}%
 
                         <a href="#" class="btn btn-small btn-info btnOrdenCambio" title="Orden de Cambio" data-id="${planillaInstance?.id}">
                             <i class="icon-calendar"></i>
                         </a>
 
-                        %{--comentar esto fin--}%
-                    <g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id, planilla: planillaInstance?.id]"
-                    class="btn btn-small btn-info btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">
-                    <i class="icon-print"></i>
-                    </g:link>
+                    %{--comentar esto fin--}%
+                        <g:link controller="reportes6" action="reporteOrdenCambio" params="[id: contrato.id, planilla: planillaInstance?.id]"
+                                class="btn btn-small btn-info btn-ajax" rel="tooltip" title="Imprimir Orden de Cambio">
+                            <i class="icon-print"></i>
+                        </g:link>
                     </g:if>
                     <g:if test="${planillaInstance.tipoPlanilla.codigo in ['C']}">
                     %{--comentar esto nicio--}%
@@ -300,10 +307,10 @@
 
                     %{--comentar esto fin--}%
 
-                    <g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id, planilla: planillaInstance?.id]"
-                    class="btn btn-small btn-warning btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">
-                    <i class="icon-print"></i>
-                    </g:link>
+                        <g:link controller="reportes6" action="reporteOrdenDeTrabajo" params="[id: contrato.id, planilla: planillaInstance?.id]"
+                                class="btn btn-small btn-warning btn-ajax" rel="tooltip" title="Imprimir Orden de Trabajo">
+                            <i class="icon-print"></i>
+                        </g:link>
                     </g:if>
                 </td>
 
@@ -431,6 +438,21 @@
 
 
 <script type="text/javascript">
+
+
+    $("#btnNuevaPlanilla").click(function () {
+        <g:if test="${contrato?.obra?.fechaInicio}">
+        location.href = "${g.createLink(controller: 'planilla',action: 'form')}?contrato=" + ${contrato?.id};
+        </g:if>
+        <g:else>
+        var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+        $("#modal_tittle_var").text("Advertencia");
+        $("#modal_body_var").html("La obra perteneciente a este contrato no ha iniciado, no puede crear mas planillas!");
+        $("#modal_footer_var").html($btnCerrar)
+        $("#modal-var").modal("show");
+        </g:else>
+    });
+
 
     function submitFormOC(btn) {
         if ($("#frmSave-OrdenCambio").valid()) {

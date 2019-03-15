@@ -1612,15 +1612,16 @@ class PlanillaController extends janus.seguridad.Shield {
         def cmpl
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
+
         def anticipoPagado = false
         def esAnticipo = false
         if (!pla) {
             esAnticipo = false
         } else {
-            if (pla.fechaMemoPagoPlanilla) {
+//            if (pla.fechaMemoPagoPlanilla) {
                 anticipoPagado = true
                 tiposPlanilla -= pla.tipoPlanilla
-            }
+//            }
         }
 
         def cPlanillas = Planilla.findAllByContrato(contrato, [sort: 'fechaInicio']).size()
