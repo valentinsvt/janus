@@ -337,7 +337,7 @@
                                 <i class="icon-print"></i>
                             </a>
                         </g:if>
-                        <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q']) && Math.abs(lblBtn) > 3}">
+                        <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">
                             <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memorandum de pedido de pago"
                                data-id="${planillaInstance.id}">
                                 <i class="icon-print"></i>

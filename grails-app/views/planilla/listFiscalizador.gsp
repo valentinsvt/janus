@@ -446,8 +446,8 @@
         </g:if>
         <g:else>
         var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-        $("#modal_tittle_var").text("Advertencia");
-        $("#modal_body_var").html("La obra perteneciente a este contrato no ha iniciado, no puede crear mas planillas!");
+        $("#modal_tittle_var").text("Sin Inicio de Obra");
+        $("#modal_body_var").html("La obra perteneciente a este contrato no ha sido iniciada, no se puede crear planillas");
         $("#modal_footer_var").html($btnCerrar)
         $("#modal-var").modal("show");
         </g:else>

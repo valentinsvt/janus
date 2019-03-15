@@ -4068,6 +4068,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
             frpl.each {fp ->
                 /** calcula valores para halla Bo **/
+                println "indice: ${fp.indice.id}, periodo: ${plnl.contrato.periodoInec.id}"
                 if(plnl.tipoContrato == 'C') {
                     def comp = Contrato.findByPadre(plnl.contrato)
                     inof = valorIndice(fp.indice , comp.periodoInec)
@@ -4178,7 +4179,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     /** halla el valor del índice en PRIN de la oferta**/
     def valorIndice(indc, prin) {
-//        println "valor Indice de: $indc, periodo: $prin"
+        println "valor Indice de: $indc : ${indc.id} periodo: $prin"
         ValorIndice.findByIndiceAndPeriodo(indc, prin).valor
     }
 
