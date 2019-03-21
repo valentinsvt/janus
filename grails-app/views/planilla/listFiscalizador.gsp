@@ -1,4 +1,4 @@
-<%@ page import="janus.ejecucion.TipoPlanilla; janus.ejecucion.Planilla" %>
+<%@ page import="janus.Contrato; janus.ejecucion.TipoPlanilla; janus.ejecucion.Planilla" %>
 <!doctype html>
 <html>
 <head>
@@ -441,6 +441,8 @@
 
 
     $("#btnNuevaPlanilla").click(function () {
+
+        <g:if test="${Planilla.findByContratoAndTipoPlanilla(janus.Contrato.get(contrato?.id), TipoPlanilla.findByCodigo('A'))}">
         <g:if test="${contrato?.obra?.fechaInicio}">
         location.href = "${g.createLink(controller: 'planilla',action: 'form')}?contrato=" + ${contrato?.id};
         </g:if>
@@ -451,6 +453,11 @@
         $("#modal_footer_var").html($btnCerrar)
         $("#modal-var").modal("show");
         </g:else>
+        </g:if>
+        <g:else>
+        location.href = "${g.createLink(controller: 'planilla',action: 'form')}?contrato=" + ${contrato?.id};
+        </g:else>
+
     });
 
 
