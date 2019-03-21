@@ -444,14 +444,14 @@
 
         <g:if test="${Planilla.findByContratoAndTipoPlanilla(janus.Contrato.get(contrato?.id), TipoPlanilla.findByCodigo('A'))}">
         <g:if test="${contrato?.obra?.fechaInicio}">
-        location.href = "${g.createLink(controller: 'planilla',action: 'form')}?contrato=" + ${contrato?.id};
+            location.href = "${g.createLink(controller: 'planilla', action: 'form')}?contrato=" + ${contrato?.id};
         </g:if>
         <g:else>
-        var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-        $("#modal_tittle_var").text("Sin Inicio de Obra");
-        $("#modal_body_var").html("La obra perteneciente a este contrato no ha sido iniciada, no se puede crear planillas");
-        $("#modal_footer_var").html($btnCerrar)
-        $("#modal-var").modal("show");
+            var $btnCerrar = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+            $("#modal_tittle_var").text("Sin Inicio de Obra");
+            $("#modal_body_var").html("La obra perteneciente a este contrato no ha sido iniciada, no se puede crear planillas");
+            $("#modal_footer_var").html($btnCerrar)
+            $("#modal-var").modal("show");
         </g:else>
         </g:if>
         <g:else>
