@@ -267,7 +267,7 @@
                         <div class="row">
 
                             <div class="span2 formato">
-                                Fecha Ingreso
+                                Fecha de Aprobación
                             </div>
 
                             <div class="span4">
