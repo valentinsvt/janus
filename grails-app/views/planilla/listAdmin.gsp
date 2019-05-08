@@ -272,15 +272,7 @@
 
                         <g:if test="${lblBtn > 0}">
                             <g:if test="${lblBtn == 2}">
-                                %{--<g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">--}%
                                     Enviar planilla
-                                %{--</g:if>--}%
-                            %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
-                            %{--Enviar reajuste--}%
-                            %{--</g:if>--}%
-                            %{--<g:else>--}%
-                            %{--Enviar planilla--}%
-                            %{--</g:else>--}%
                             </g:if>
 
                         %{--${contrato.administrador.id} session: ${session.usuario.id}  garantía: ${garantia}--}%
@@ -342,17 +334,7 @@
                                data-id="${planillaInstance.id}">
                                 <i class="icon-print"></i>
                             </a>
-
                         </g:if>
-                    %{--<a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">--}%
-                    %{--Iniciar Obra--}%
-                    %{--</a>--}%
-                    %{--</g:if>--}%
-                    %{--<g:else>--}%
-                    %{--<div class="badge badge-important">--}%
-                    %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
-                    %{--</div>--}%
-                    %{--</g:else>--}%
                 </td>
             </tr>
         </g:each>
@@ -377,35 +359,13 @@
     </div>
 </div>
 
-
-%{--<div id="imprimirDialog">--}%
-
-%{--<fieldset>--}%
-%{--<div class="span4" style="margin-top: 10px">--}%
-
-%{--Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>--}%
-
-%{--</div>--}%
-
-%{--<div class="span4" style="margin-top: 10px">--}%
-%{--Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>--}%
-
-%{--</div>--}%
-
-%{--</fieldset>--}%
-%{--</div>--}%
-
 <div id="errorImpresion">
     <fieldset>
         <div class="spa3" style="margin-top: 30px; margin-left: 10px">
-
             Debe ingresar un número de Oficio!
-
         </div>
     </fieldset>
 </div>
-
-
 
 <script type="text/javascript">
     var url = "${resource(dir:'images', file:'spinner_24.gif')}";
@@ -429,8 +389,6 @@
 
         $("#imprimir").click(function () {
             location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val();
-//                    $("#imprimirDialog").dialog("open");
-
         });
 
         $(".btnPedidoPagoAnticipo").click(function () {
@@ -467,20 +425,6 @@
                         return false;
                     });
                     $("#modalTitle").html($btn.text());
-//                            switch (tipo) {
-//                                case "2":
-//                                    $("#modalTitle").html("Enviar reajuste");
-//                                    break;
-//                                case "3":
-//                                    $("#modalTitle").html("Pedir pago");
-//                                    break;
-//                                case "4":
-//                                    $("#modalTitle").html("Informar pago");
-//                                    break;
-//                                case "5":
-//                                    $("#modalTitle").html("Iniciar obra");
-//                                    break;
-//                            }
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
 
@@ -497,7 +441,6 @@
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                         }
                     }
-
                     $("#modal-Planilla").modal("show");
                 }
             });
@@ -651,49 +594,9 @@
 
         $("#imprimir").click(function () {
             location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val();
-//                    $("#imprimirDialog").dialog("open");
-
         });
 
-        %{--$("#imprimirDialog").dialog({--}%
-
-        %{--autoOpen  : false,--}%
-        %{--resizable : false,--}%
-        %{--modal     : true,--}%
-        %{--draggable : false,--}%
-        %{--width     : 420,--}%
-        %{--height    : 280,--}%
-        %{--position  : 'center',--}%
-        %{--title     : 'Datos del documento a ser impreso',--}%
-        %{--buttons   : {--}%
-        %{--"Aceptar"  : function () {--}%
-
-        %{--if ($("#oficio").val()) {--}%
-
-        %{--location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()--}%
-
-        %{--$("#imprimirDialog").dialog("close")--}%
-
-        %{--} else {--}%
-
-        %{--$("#errorImpresion").dialog("open")--}%
-
-        %{--}--}%
-
-        %{--},--}%
-        %{--"Cancelar" : function () {--}%
-
-        %{--$("#imprimirDialog").dialog("close")--}%
-
-        %{--}--}%
-
-        %{--}--}%
-
-        %{--})--}%
-
         $("#errorImpresion").dialog({
-
-
             autoOpen: false,
             resizable: false,
             modal: true,
@@ -710,9 +613,7 @@
                 }
             }
 
-
         });
-
     });
 
 </script>
