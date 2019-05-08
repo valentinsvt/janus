@@ -197,16 +197,16 @@
 
 
                     <g:if test="${janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
-                        <g:link controller="reportePlanillas3" action="reportePlanilla" id="${planillaInstance.id}"
-                                class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                            <i class="icon-print"></i>
-                        </g:link>
+                        %{--<g:link controller="reportePlanillas3" action="reportePlanilla" id="${planillaInstance.id}"--}%
+                                %{--class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">--}%
+                            %{--<i class="icon-print"></i>--}%
+                        %{--</g:link>--}%
 
                         %{--pruebas para planillas con varias FP--}%
 
                         <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
-                                class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="ImprimirNuevo">
-                            <i class="icon-star-empty"></i>
+                                class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                            <i class="icon-print"></i>
                         </g:link>
 
 
@@ -324,10 +324,12 @@
                             <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                         </g:elseif>
                         <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
-                            <a href="#" class="btn btn-small btnPedidoPagoAnticipo"
-                               title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
-                                <i class="icon-print"></i>
-                            </a>
+                            <g:if test="${planillaInstance?.valor > 0}">
+                                <a href="#" class="btn btn-small btnPedidoPagoAnticipo"
+                                   title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                    <i class="icon-print"></i>
+                                </a>
+                            </g:if>
                         </g:if>
                         <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">
                             <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memorandum de pedido de pago"
