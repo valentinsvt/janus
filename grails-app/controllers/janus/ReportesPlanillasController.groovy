@@ -689,8 +689,8 @@ class ReportesPlanillasController {
         def anticipoDescontado = planillasAvance.sum { it.descuentos } ?: 0
         def prctAnticipo = 100 * anticipoDescontado / contrato.anticipo;
 
-        def detalles = VolumenesObra.findAllByObra(obra, [sort: "orden"])
-        def crej = CronogramaEjecucion.withCriteria {
+        def detalles = VolumenContrato.findAllByObra(obra, [sort: "volumenOrden"])
+        def crej = CrngEjecucionObra.withCriteria {
             inList("volumenObra", detalles)
             if(plnl.tipoPlanilla.id != tipoQ.id) {
                 periodo {
@@ -702,6 +702,8 @@ class ReportesPlanillasController {
 //                le("fechaFin", plnl.fechaFin)
 //            }
         }
+
+        println "crej: ${crej.size()}"
 
         def inversionProgramada = crej.sum { it.precio } ?: 0
         def inversionReal = planillasAvance.sum { it.valor } ?: 0
