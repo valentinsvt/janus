@@ -1921,8 +1921,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
         }
 
+         def cronogramas = CrngEjecucionObra.countByVolumenObraInList(detalle)
 //        println "datos de cronograma $cronogramas"
-        def cronogramas = CrngEjecucionObra.countByVolumenObraInList(detalle)
 
         if (cronogramas == 0) {
 //            println "no hay datos de cronograma ... inicia cargado"
@@ -2942,8 +2942,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def plAvance = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"))
         def plLiquidacion = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("Q"))
 
-//        println("pl 1 " + plAvance.id)
-//        println("pl 2 " + plLiquidacion.id)
+        println("pl 1 " + plAvance.id)
+        println("pl 2 " + plLiquidacion.id)
 
 
         def sql1
@@ -2962,7 +2962,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def fechasFinPlanilla = []
 
-
         resP.each{
             fechasFinPlanilla += formatDate(date: it.max, format: "yyyy-MM-dd")
         }
@@ -2970,7 +2969,6 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         fechasFinPlanilla.sort(true)
 
 //        println("fec " + fechasFinPlanilla)
-
 
         def html = "", row2 = ""
 
@@ -3031,14 +3029,19 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         periodos.eachWithIndex { per, i ->
 
 //            println("fecha per " + per.fechaFin)
+//            println("fecha sin planilla " + fechasFinPlanilla)
 
 //            if(formatDate(date: per.fechaFin, format: "yyyy-MM-dd") in fechasFinPlanilla){
-            if(formatDate(date: per.fechaFin, format: "yyyy-MM-dd") <= fechasFinPlanilla.last()){
-                html += "<th class='${per.tipo}' style='color: #cf0e21'>"
+
+            if(fechasFinPlanilla){
+                if(formatDate(date: per.fechaFin, format: "yyyy-MM-dd") <= fechasFinPlanilla.last()){
+                    html += "<th class='${per.tipo}' style='color: #cf0e21'>"
+                }else{
+                    html += "<th class='${per.tipo}'>"
+                }
             }else{
                 html += "<th class='${per.tipo}'>"
-              }
-
+            }
 
 //            html += "<th class='${per.tipo}'>"
             html += formatDate(date: per.fechaInicio, format: "dd-MM-yyyy") + " a " + formatDate(date: per.fechaFin, format: "dd-MM-yyyy")
@@ -3150,20 +3153,34 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 maxPrctAcu += por.toDouble()
                 maxCanAcu += can.toDouble()
 
+                if(fechasFinPlanilla){
+                    if(formatDate(date: periodo.fechaFin, format: "yyyy-MM-dd") <= fechasFinPlanilla.last()){
 
-                if(formatDate(date: periodo.fechaFin, format: "yyyy-MM-dd") <= fechasFinPlanilla.last()){
+                        filaDolMod += "<input type='text' readonly='' class='input-mini tiny dol p${i}' value='${cronosPer[0]?.precio ?: 0.00}' data-tipo='dol' data-total='${totlDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
+                                " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                                " data-val1='${totalPlanilla.toDouble().round(2)}' /> "
+                        filaPorMod += "<input type='text' readonly='' class='input-mini tiny prct p${i}' value='${cronosPer[0]?.porcentaje ?: 0.00}' data-tipo='prct' data-total='${totPor}' data-periodo='${i}' data-max='" + maxPrctAcu + "' " +
+                                " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                                " data-val1='${porPla.toDouble().round(2)}'  /> "
+                        filaCanMod += "<input type='text' readonly='' class='input-mini tiny fis p${i}' value='${cronosPer[0]?.cantidad ?: 0.00}' data-tipo='fis' data-total='${totlCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
+                                " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                                " data-val1='${canPla.toDouble().round(2)}' /> "
+                    }else{
 
-                    filaDolMod += "<input type='text' readonly='' class='input-mini tiny dol p${i}' value='${cronosPer[0]?.precio ?: 0.00}' data-tipo='dol' data-total='${totlDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
-                            " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
-                            " data-val1='${totalPlanilla.toDouble().round(2)}' /> "
-                    filaPorMod += "<input type='text' readonly='' class='input-mini tiny prct p${i}' value='${cronosPer[0]?.porcentaje ?: 0.00}' data-tipo='prct' data-total='${totPor}' data-periodo='${i}' data-max='" + maxPrctAcu + "' " +
-                            " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
-                            " data-val1='${porPla.toDouble().round(2)}'  /> "
-                    filaCanMod += "<input type='text' readonly='' class='input-mini tiny fis p${i}' value='${cronosPer[0]?.cantidad ?: 0.00}' data-tipo='fis' data-total='${totlCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
-                            " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
-                            " data-val1='${canPla.toDouble().round(2)}' /> "
+                        filaDolMod += "<input type='text' class='input-mini tiny dol p${i}' value='" + "0.00" +
+                                "' data-tipo='dol' data-total='${totlDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
+                                " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                                " data-val1='${totalPlanilla.toDouble().round(2)}' /> "
+                        filaPorMod += "<input type='text' class='input-mini tiny prct p${i}' value='" + "0.00" +
+                                "' data-tipo='prct' data-total='${totPor}' data-periodo='${i}' data-max='" + maxPrctAcu + "' " +
+                                " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                                " data-val1='${porPla.toDouble().round(2)}'  /> "
+                        filaCanMod += "<input type='text' class='input-mini tiny fis p${i}' value='" + "0.00" +
+                                "' data-tipo='fis' data-total='${totlCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
+                                " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                                " data-val1='${canPla.toDouble().round(2)}' /> "
+                    }
                 }else{
-
                     filaDolMod += "<input type='text' class='input-mini tiny dol p${i}' value='" + "0.00" +
                             "' data-tipo='dol' data-total='${totlDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
                             " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
@@ -3176,8 +3193,10 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             "' data-tipo='fis' data-total='${totlCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
                             " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
                             " data-val1='${canPla.toDouble().round(2)}' /> "
-
                 }
+
+
+
 
             }
 
