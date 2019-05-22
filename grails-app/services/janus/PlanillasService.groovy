@@ -262,7 +262,7 @@ class PlanillasService {
                 "from rjpl, plnl, tppl, plnl rj " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
                 "rj.plnl__id = rjpl.plnlrjst and tppl.tppl__id = rj.tppl__id order by rjpl.rjplprdo"
-        println "sql armaTablaPo: $sql"
+//        println "sql armaTablaPo: $sql"
         cn.eachRow(sql.toString()) {rj ->
             tblaPo.add([tipo: rj.tppldscr, mes: rj.rjpl_mes, crpa: rj.rjplcrpa, crac: rj.rjplcrac, plpa: rj.rjplplpa,
               plac: rj.rjplplac, po: rj.rjplvlpo])
@@ -279,7 +279,7 @@ class PlanillasService {
                 "rjpl.fprj__id = ${plnl.formulaPolinomicaReajuste.id} and plnl.plnl__id = rjpl.plnlrjst and " +
                 "plnltipo = '${plnl.tipoContrato}' " +
                 "order by plnlrjst desc limit 1) and rjpl.fprj__id = ${plnl.formulaPolinomicaReajuste.id}"
-        println "sql reajusteAnterior: $sql"
+//        println "sql reajusteAnterior: $sql"
         def valor = cn.rows(sql.toString())[0].suma
         if(!valor) return 0
         return valor

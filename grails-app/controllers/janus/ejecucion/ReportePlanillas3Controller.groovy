@@ -201,7 +201,7 @@ class ReportePlanillas3Controller {
                     if(persona.tipo == 'N'){
                         str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombreContacto + " " + persona.apellidoContacto)
                     } else {
-                        str = cap(persona.nombreContacto)
+                        str = cap(persona.nombre)
                     }
                     break;
             }
