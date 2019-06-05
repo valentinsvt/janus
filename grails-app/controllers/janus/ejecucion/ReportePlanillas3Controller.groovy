@@ -3599,25 +3599,28 @@ class ReportePlanillas3Controller {
 
 
     def graficarFooter(pdfw, planilla){
-        HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+        HeaderFooterPageEvent event = new HeaderFooterPageEvent(planilla);
         pdfw.setPageEvent(event);
     }
 
 
     public class HeaderFooterPageEvent extends PdfPageEventHelper {
 
-
+          Planilla planilla
 //        public void onStartPage(PdfWriter writer, Document document) {
 //            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Top Left"), 30, 800, 0);
 //            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Top Right"), 550, 800, 0);
 //            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Página " + document.getPageNumber()), 550, 10, 0);
 //        }
 
+        public HeaderFooterPageEvent(planilla) {
+            this.planilla = planilla
+        }
 
         public void onEndPage(PdfWriter writer, Document document) {
 
 
-//            document.add(firmas("detalle", "vertical", planilla))
+            document.add(firmas("detalle", "vertical", planilla))
             ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Página " + document.getPageNumber()), 550, 10, 0);
         }
 
