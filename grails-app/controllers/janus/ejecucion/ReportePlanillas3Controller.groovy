@@ -26,6 +26,18 @@ import janus.pac.Proveedor
 import java.awt.Color
 import java.text.DecimalFormat
 
+
+import com.lowagie.text.Phrase
+import com.lowagie.text.pdf.PdfPageEventHelper
+import com.lowagie.text.pdf.ColumnText
+
+//import com.itextpdf.text.Document;
+//import com.itextpdf.text.Element;
+//import com.itextpdf.text.Phrase;
+//import com.itextpdf.text.pdf.ColumnText;
+//import com.itextpdf.text.pdf.PdfPageEventHelper;
+//import com.itextpdf.text.pdf.PdfWriter;
+
 class ReportePlanillas3Controller {
     def preciosService
     def planillasService
@@ -179,6 +191,81 @@ class ReportePlanillas3Controller {
             cell.setPaddingBottom(params.pb.toFloat());
         }
 
+        table.addCell(cell);
+    }
+
+
+    private static void addCellTablaWrap(PdfPTable table, paragraph, params) {
+        PdfPCell cell = new PdfPCell(paragraph);
+        if (params.height) {
+            cell.setFixedHeight(params.height.toFloat());
+        }
+        if (params.border) {
+            cell.setBorderColor(params.border);
+        }
+        if (params.bg) {
+            cell.setBackgroundColor(params.bg);
+        }
+        if (params.colspan) {
+            cell.setColspan(params.colspan);
+        }
+        if (params.align) {
+            cell.setHorizontalAlignment(params.align);
+        }
+        if (params.valign) {
+            cell.setVerticalAlignment(params.valign);
+        }
+        if (params.w) {
+            cell.setBorderWidth(params.w);
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwl) {
+            cell.setBorderWidthLeft(params.bwl.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwb) {
+            cell.setBorderWidthBottom(params.bwb.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwr) {
+            cell.setBorderWidthRight(params.bwr.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bwt) {
+            cell.setBorderWidthTop(params.bwt.toFloat());
+            cell.setUseBorderPadding(true);
+        }
+        if (params.bcl) {
+            cell.setBorderColorLeft(params.bcl);
+        }
+        if (params.bcb) {
+            cell.setBorderColorBottom(params.bcb);
+        }
+        if (params.bcr) {
+            cell.setBorderColorRight(params.bcr);
+        }
+        if (params.bct) {
+            cell.setBorderColorTop(params.bct);
+        }
+        if (params.padding) {
+            cell.setPadding(params.padding.toFloat());
+        }
+        if (params.pl) {
+            cell.setPaddingLeft(params.pl.toFloat());
+        }
+        if (params.pr) {
+            cell.setPaddingRight(params.pr.toFloat());
+        }
+        if (params.pt) {
+            cell.setPaddingTop(params.pt.toFloat());
+        }
+        if (params.pb) {
+            cell.setPaddingBottom(params.pb.toFloat());
+        }
+
+//        cell.setNoWrap(true);
+        cell.setMinimumHeight(10f);
+//        cell.setFixedHeight(36f)
         table.addCell(cell);
     }
 
@@ -3157,8 +3244,13 @@ class ReportePlanillas3Controller {
         document = new Document();
         document.setMargins(50,30,30,28)  // 28 equivale a 1 cm: izq, derecha, arriba y abajo
         def pdfw = PdfWriter.getInstance(document, baos);
-        document.resetHeader()
-        document.resetFooter()
+//        document.resetHeader()
+//        document.resetFooter()
+
+//        HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+//        pdfw.setPageEvent(event);
+
+        graficarFooter(pdfw,planilla)
 
         document.open();
         document.addTitle("Planillas de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
@@ -3239,6 +3331,7 @@ class ReportePlanillas3Controller {
         tablaDetalles.setWidthPercentage(100);
         tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
         tablaDetalles.setSpacingAfter(1f);
+        tablaDetalles.setSplitLate(false);
         def currentPag = 1
         def sumaPrclAntr = 0, sumaTotlAntr = 0
         def sumaPrclActl = 0, sumaTotlActl = 0
@@ -3249,6 +3342,8 @@ class ReportePlanillas3Controller {
         def frmtSbpr = [height: height, bwr: borderWidth, bwt: 0.1, bct: Color.LIGHT_GRAY, bwb: 0.1, bcb: Color.LIGHT_GRAY,
                         border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 11]
         def frmtDtIz = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
+                        align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def frmtDtIz2 = [bwt: 0.1, bct: Color.BLACK, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
                         align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def frmtDtDr = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
                         align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
@@ -3288,6 +3383,7 @@ class ReportePlanillas3Controller {
 
 
         sp = 0
+        println("---- " + vocr.size())
         vocr.each {vo ->
             if (sp != vo.sbpr__id) {
                 addCellTabla(tablaDetalles, new Paragraph('Subpresupuesto: ' + vo.sbprdscr, fontThTiny), frmtSbpr)
@@ -3298,7 +3394,7 @@ class ReportePlanillas3Controller {
             }
 
             addCellTabla(tablaDetalles, new Paragraph(vo.rbrocdgo, fontTdTiny), frmtDtIz)
-            addCellTabla(tablaDetalles, new Paragraph(vo.rbronmbr, fontTdTiny), frmtDtIz)
+            addCellTablaWrap(tablaDetalles, new Paragraph(vo.rbronmbr, fontTdTiny), frmtDtIz2)
 
             addCellTabla(tablaDetalles, new Paragraph(vo.unddcdgo, fontTdTiny), frmtDtDr)
             addCellTabla(tablaDetalles, new Paragraph(numero(vo.vocrpcun, 2, "hide"), fontTdTiny), frmtDtDr)
@@ -3349,6 +3445,7 @@ class ReportePlanillas3Controller {
         }
 
         printFooterDetalle([ant: sumaTotlAntr,  act: sumaTotlActl, acu: sumaTotlAcml, completo: true])
+
 
         def rjplAntr = planillasService.reajusteAnterior(planilla)
         def rjplAcml = planillasService.reajusteAcumulado(planilla)
@@ -3492,10 +3589,41 @@ class ReportePlanillas3Controller {
 
         document.add(firmas("detalle", "vertical", planilla))
 
+//        HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+//        pdfw.setPageEvent(event);
+
         document.close();
         pdfw.close()
         return baos
     }
+
+
+    def graficarFooter(pdfw, planilla){
+        HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+        pdfw.setPageEvent(event);
+    }
+
+
+    public class HeaderFooterPageEvent extends PdfPageEventHelper {
+
+
+//        public void onStartPage(PdfWriter writer, Document document) {
+//            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Top Left"), 30, 800, 0);
+//            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Top Right"), 550, 800, 0);
+//            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Página " + document.getPageNumber()), 550, 10, 0);
+//        }
+
+
+        public void onEndPage(PdfWriter writer, Document document) {
+
+
+//            document.add(firmas("detalle", "vertical", planilla))
+            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Página " + document.getPageNumber()), 550, 10, 0);
+        }
+
+    }
+
+
 
     def detalleEntrega(planilla, tipoRprt) {
 //        println "detalleEntrega ${planilla.id}"
