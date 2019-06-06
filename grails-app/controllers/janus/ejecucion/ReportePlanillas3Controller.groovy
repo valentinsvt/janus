@@ -3330,7 +3330,7 @@ class ReportePlanillas3Controller {
         tablaDetalles = new PdfPTable(11);
         tablaDetalles.setWidthPercentage(100);
         tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
-        tablaDetalles.setSpacingAfter(1f);
+//        tablaDetalles.setSpacingAfter(1f);
         tablaDetalles.setSplitLate(false);
         def currentPag = 1
         def sumaPrclAntr = 0, sumaTotlAntr = 0
@@ -3344,7 +3344,7 @@ class ReportePlanillas3Controller {
         def frmtDtIz = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
                         align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def frmtDtIz2 = [bwt: 0.1, bct: Color.BLACK, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
-                        align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+                         align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def frmtDtDr = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK,
                         align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def frmtDtDrBorde = [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, bwr: borderWidth,
@@ -3383,7 +3383,6 @@ class ReportePlanillas3Controller {
 
 
         sp = 0
-        println("---- " + vocr.size())
         vocr.each {vo ->
             if (sp != vo.sbpr__id) {
                 addCellTabla(tablaDetalles, new Paragraph('Subpresupuesto: ' + vo.sbprdscr, fontThTiny), frmtSbpr)
@@ -3429,7 +3428,7 @@ class ReportePlanillas3Controller {
 
                 document.add(tablaDetalles)
 
-                document.add(firmas("detalle", "vertical", planilla))
+//                document.add(firmas("detalle", "vertical", planilla))
 //                printFirmas([tipo: "detalle", orientacion: "vertical"])
                 currentPag++
 
@@ -3444,8 +3443,8 @@ class ReportePlanillas3Controller {
             }
         }
 
-        printFooterDetalle([ant: sumaTotlAntr,  act: sumaTotlActl, acu: sumaTotlAcml, completo: true])
 
+        printFooterDetalle([ant: sumaTotlAntr,  act: sumaTotlActl, acu: sumaTotlAcml, completo: true])
 
         def rjplAntr = planillasService.reajusteAnterior(planilla)
         def rjplAcml = planillasService.reajusteAcumulado(planilla)
@@ -3587,7 +3586,7 @@ class ReportePlanillas3Controller {
 
         document.add(tablaDetalles)
 
-        document.add(firmas("detalle", "vertical", planilla))
+//        document.add(firmas("detalle", "vertical", planilla))
 
 //        HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 //        pdfw.setPageEvent(event);
@@ -3606,8 +3605,10 @@ class ReportePlanillas3Controller {
 
     public class HeaderFooterPageEvent extends PdfPageEventHelper {
 
-          Planilla planilla
+        Planilla planilla
 //        public void onStartPage(PdfWriter writer, Document document) {
+//            document.add(firmas("detalle", "vertical", planilla))
+
 //            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Top Left"), 30, 800, 0);
 //            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Top Right"), 550, 800, 0);
 //            ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Página " + document.getPageNumber()), 550, 10, 0);
@@ -3618,8 +3619,6 @@ class ReportePlanillas3Controller {
         }
 
         public void onEndPage(PdfWriter writer, Document document) {
-
-
             document.add(firmas("detalle", "vertical", planilla))
             ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER, new Phrase("Página " + document.getPageNumber()), 550, 10, 0);
         }
@@ -4113,6 +4112,7 @@ class ReportePlanillas3Controller {
             def frmtCol5 = [height: 10, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE,  colspan: 5]
 
             tablaFirmas.setWidths(arregloEnteros([35, 5, 30, 5, 35]))
+            tablaFirmas.totalHeight = 100f
 
             addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), frmtCol5)
 
