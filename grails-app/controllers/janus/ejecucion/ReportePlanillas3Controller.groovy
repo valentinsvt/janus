@@ -4495,8 +4495,8 @@ class ReportePlanillas3Controller {
         def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
         def strSubdirector = "Ing. Miguel Velasteguí" + "\nSubdirector"
         def strAdmin = nombrePersona(administrador) + "\nAdministrador del Contrato - Delegado"
-        def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
-        def strFechaAprobacion = fechaConFormato(planilla.fechaIngreso, "dd-MMM-yyyy") + "\nFecha de aprobación"
+        def strFechaPresentacion = fechaConFormato(planilla.fechaIngreso, "dd-MMM-yyyy") + "\nFecha de presentación"
+        def strFechaAprobacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de aprobación"
 
         Font fontThFirmas = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font fontTdFirmas = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
