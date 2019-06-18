@@ -1927,7 +1927,12 @@ class PlanillaController extends janus.seguridad.Shield {
 //        session.override = false
         if (params.id) {
 //            println("entro")
-            params.fechaPresentacion = params.fechaIngreso
+//            params.fechaPresentacion = params.fechaIngreso
+
+            if (!params.fechaPresentacion) {
+                params.fechaPresentacion = params.fechaIngreso
+            }
+
             def planillaPorAsociar
             if(params.asociada != 'null') {
                 planillaPorAsociar = Planilla.get(params.asociada)
