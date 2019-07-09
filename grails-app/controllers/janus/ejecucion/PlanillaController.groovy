@@ -3664,7 +3664,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 /* aplica el descuento del anticipo */
                 def dsct   = Math.round(plnl.valor*(plnl.contrato.porcentajeAnticipo/100)*100)/100
                 def resto  = Math.round((plnl.contrato.anticipo - totDsct[0])*100)/100
-                println "totDsct[0]: ${totDsct[0]}, resto: ${resto}"
+                println "totDsct[0]: ${totDsct[0]}, resto: ${resto}, dsct: $dsct"
 
                 if(dsct > resto) {
                     plnl.descuentos = resto
@@ -4073,7 +4073,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
             frpl.each {fp ->
                 /** calcula valores para halla Bo **/
-                println "indice: ${fp.indice.id}, periodo: ${plnl.contrato.periodoInec.id}"
+//                println "indice: ${fp.indice.id}, periodo: ${plnl.contrato.periodoInec.id}"
                 if(plnl.tipoContrato == 'C') {
                     def comp = Contrato.findByPadre(plnl.contrato)
                     inof = valorIndice(fp.indice , comp.periodoInec)
@@ -4184,7 +4184,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     /** halla el valor del índice en PRIN de la oferta**/
     def valorIndice(indc, prin) {
-        println "valor Indice de: $indc : ${indc.id} periodo: $prin"
+//        println "valor Indice de: $indc : ${indc.id} periodo: $prin"
         ValorIndice.findByIndiceAndPeriodo(indc, prin).valor
     }
 
