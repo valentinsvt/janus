@@ -19,7 +19,7 @@ class DocumentoObraController extends janus.seguridad.Shield {
         def path = servletContext.getRealPath("/") + folder + File.separatorChar + doc.path
 
 //        println servletContext.getRealPath("/")
-//        println path
+        println path
 
         def file = new File(path)
         if(file.exists()) {

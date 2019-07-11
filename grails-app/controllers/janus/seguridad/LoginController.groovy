@@ -111,10 +111,12 @@ class LoginController {
 
     def perfiles() {
         def usuarioLog = session.usuario
-        def perfilesUsr = Sesn.findAllByUsuario(usuarioLog, [sort: 'perfil'])
+        def perfilesUsr = Sesn.findAllByUsuario(usuarioLog)
         def empr = Parametros.get(1)
+        def perfiles = perfilesUsr.sort{it.perfil.descripcion}
+//        println "perfiles: ${perfiles.perfil.descripcion}"
 
-        return [perfilesUsr: perfilesUsr, empr: empr]
+        return [perfilesUsr: perfiles, empr: empr]
     }
 
 
