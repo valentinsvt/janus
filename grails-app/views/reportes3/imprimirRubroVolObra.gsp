@@ -138,7 +138,7 @@
         </p>
 
         <p style="font-size: 14px">
-            <b>DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b>
+            <b>DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS</b>
         </p>
 
         <p style="font-size: 14px">

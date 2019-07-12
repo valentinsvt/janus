@@ -443,7 +443,7 @@
                     %{--disabled="true"/></div>--}%
 
 
-                    <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS'}" disabled="true"/></div>
+                    <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS'}" disabled="true"/></div>
 
                 </div>
 

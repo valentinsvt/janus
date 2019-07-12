@@ -160,7 +160,7 @@
             <b>SEP - G.A.D. PROVINCIA DE PICHINCHA</b>
         </p>
         <p style="font-size: 14px; margin-top: -15px">
-            <b>DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b><br/>
+            <b>DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS</b><br/>
             <g:if test="${subPre == -1}">
                 <b>PRESUPUESTO</b>
             </g:if>

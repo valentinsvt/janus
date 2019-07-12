@@ -912,7 +912,7 @@ class ReportesController {
         sheet.setColumnView(6, 15)
 
         def label = new Label(0, 1, "SEP - G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 2, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2, "DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 
         sheet.mergeCells(0, 1, 1, 1)
@@ -1159,7 +1159,7 @@ class ReportesController {
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
-                            "                    <b>DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b>\n" +
+                            "                    <b>DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS</b>\n" +
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
@@ -2156,7 +2156,7 @@ class ReportesController {
         if(session.perfil.id == 16){
             headers.add(new Paragraph(obra?.departamento?.codigo + " - Presupuesto borrador", times12bold));
         }else{
-            headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+            headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
         }
 
 
@@ -2967,7 +2967,7 @@ class ReportesController {
         if(session.perfil.id == 16){
             headers.add(new Paragraph(obra?.departamento?.codigo + " - Presupuesto borrador", times12bold));
         }else{
-            headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+            headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
         }
 
         if (obra?.oficioSalida == null) {
@@ -3772,7 +3772,7 @@ class ReportesController {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+        headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
 
         if (obra?.oficioSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
@@ -4594,7 +4594,7 @@ class ReportesController {
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
 //        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times14bold));
-        headers.add(new Paragraph("DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", times14bold));
+        headers.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS", times14bold));
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("MEMORANDO", times14bold))
 
@@ -5071,7 +5071,7 @@ class ReportesController {
 
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
-        headers.add(new Paragraph("DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", times12bold))
+        headers.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS", times12bold))
         headers.add(new Paragraph("FÓRMULA POLINÓMICA: " + obra?.formulaPolinomica, times12bold))
 //        headers.add(new Paragraph(obra?.formulaPolinomica, times12bold))
         document.add(headers);
@@ -5620,7 +5620,7 @@ class ReportesController {
 
 
         label = new Label(2, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
-        label = new Label(2, 4, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
         label = new Label(2, 6, "PRESUPUESTO", times16format); sheet.addCell(label);
         label = new Label(2, 8, "FECHA: " + obra?.fechaCreacionObra.format("dd-MM-yyyy"), times16format);
         sheet.addCell(label);

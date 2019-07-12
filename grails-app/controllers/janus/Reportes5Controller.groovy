@@ -1202,7 +1202,7 @@ class Reportes5Controller extends Shield{
 
         //cabecera
         label = new Label(2, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
-        label = new Label(2, 4, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
         label = new Label(2, 6, "PRESUPUESTO", times16format); sheet.addCell(label);
         label = new Label(2, 8, "REQUIRENTE: " + obra?.departamento?.direccion?.nombre, times16format); sheet.addCell(label);
         label = new Label(2, 9, "FECHA: " + fechaNueva, times16format);
@@ -1372,7 +1372,7 @@ class Reportes5Controller extends Shield{
         preface.setAlignment(Element.ALIGN_CENTER);
         preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", catFont3));
         preface.add(new Paragraph("CRONOGRAMA", catFont2));
-        preface.add(new Paragraph("DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", catFont2));
+        preface.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS", catFont2));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
         document.add(preface);
