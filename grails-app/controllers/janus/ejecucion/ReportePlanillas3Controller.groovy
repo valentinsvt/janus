@@ -3362,7 +3362,8 @@ class ReportePlanillas3Controller {
 
         def sps = cn.rows(sql.toString())[0].cnta
         sql = "select * from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, '${tipoRprt}')"
-//        println "sql: $sql"
+
+        println "+++sql: $sql"
         def vocr = cn.rows(sql.toString())
 
         println "registros: ${vocr.size()}, ln: ${vocr.vocrlnea.sum()} sps: $sps, extra: $extraRows --> num: ${(vocr.size() + sps + extraRows)} / $maxRows "
