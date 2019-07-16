@@ -2145,7 +2145,7 @@ class ReportePlanillas3Controller {
 
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
-        document.add(titlSbtt());
+        document.add(titlSbtt(planilla.fechaIngreso));
         document.add(encabezado(2, 10, planilla, ""))
 
         /* ********************************************* Tabla B0 *****************************************************/
@@ -2237,7 +2237,7 @@ class ReportePlanillas3Controller {
 //        headerPlanilla([size: 10, espacio: 2])
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
-        document.add(titlSbtt());
+        document.add(titlSbtt(planilla.fechaIngreso));
         document.add(encabezado(2, 10, planilla, ""))
 
         Paragraph tituloP0 = new Paragraph();
@@ -2310,7 +2310,7 @@ class ReportePlanillas3Controller {
 //        headerPlanilla([size: 10, espacio: 1])
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
-        document.add(titlSbtt());
+        document.add(titlSbtt(planilla.fechaIngreso));
         document.add(encabezado(2, 10, planilla, ""))
 
         Paragraph tituloFr = new Paragraph();
@@ -2511,7 +2511,7 @@ class ReportePlanillas3Controller {
 //            headerPlanilla([size: 10, espacio: 2])
         document.add(titlLogo())
         document.add(titlInst(1, planilla, obra));
-        document.add(titlSbtt());
+        document.add(titlSbtt(planilla.fechaIngreso));
         document.add(encabezado(2, 10, planilla, ""))
 
 
@@ -2593,7 +2593,7 @@ class ReportePlanillas3Controller {
 //            headerPlanilla([size: 10, espacio: 2])
             document.add(titlLogo())
             document.add(titlInst(1, planilla, obra));
-            document.add(titlSbtt());
+            document.add(titlSbtt(planilla.fechaIngreso));
             document.add(encabezado(2, 10, planilla, tipo))
 
 
@@ -4400,11 +4400,13 @@ class ReportePlanillas3Controller {
         return preface
     }
 
-    def titlSbtt() {
+    def titlSbtt(fcha) {
         Font info = new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)
         Paragraph preface2 = new Paragraph()
 //        preface2.setAlignment(Element.ALIGN_RIGHT)
-        preface2.add(new Paragraph("Generado por: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+//        preface2.add(new Paragraph("Generado por: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        println "fcha: $fcha"
+        preface2.add(new Paragraph("Generado por: " + session.usuario + "   el: " + fcha.format("dd/MM/yyyy hh:mm"), info))
         preface2.setSpacingAfter(5);
 //        addEmptyLine(preface2, 1);
 
@@ -4495,8 +4497,8 @@ class ReportePlanillas3Controller {
         def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
         def strSubdirector = "Ing. Miguel Velasteguí" + "\nSubdirector"
         def strAdmin = nombrePersona(administrador) + "\nAdministrador del Contrato - Delegado"
-        def strFechaPresentacion = fechaConFormato(planilla.fechaIngreso, "dd-MMM-yyyy") + "\nFecha de presentación"
-        def strFechaAprobacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de aprobación"
+        def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
+        def strFechaAprobacion = fechaConFormato(planilla.fechaIngreso, "dd-MMM-yyyy") + "\nFecha de aprobación"
 
         Font fontThFirmas = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font fontTdFirmas = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
