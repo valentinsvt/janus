@@ -4995,7 +4995,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 "planillaReajustada = :p", [p: plnl])[0]?:0
 //        println ".....2 $totPlnl"
 
-        def resto  = Math.round((plnl.contrato.anticipo - totPo - totPoAc)*100)/100
+//        def resto  = Math.round((plnl.contrato.anticipo - totPo - totPoAc)*100)/100
+        /* el resto de Po debería ser respecto del monto del contrato - lo aplicado en Po */
+        def resto  = Math.round((plnl.contrato.monto - totPo - totPoAc)*100)/100
         def cmpl = Contrato.findByPadre(plnl.contrato)
         if(plnl.tipoContrato == 'C'){
             resto = Math.round((cmpl.anticipo - totPo - totPoAc)*100)/100
