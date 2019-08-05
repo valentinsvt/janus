@@ -2425,7 +2425,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 "prejcrpa, prejcntr, prejcmpl) " +
                 "select prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
                 "prejcrpa, prejcntr, prejcmpl from prej_t where cntr__id = ${cntr.id} and " +
-                "prejfcfn <= '${pfcin.format('yyyy-MM-dd')}'"
+                //"prejfcfn <= '${pfcin.format('yyyy-MM-dd')}'"
+                "prejfcfn <= '${pfcin.format('yyyy-MM-dd')}' and prejfcin < '${pfcin.format('yyyy-MM-dd')}'"
 //        println "--> $sql"
         cn.execute(sql.toString())
 
@@ -2446,8 +2447,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         /* se procesa el prime periodo luego de la suspensión */
         sql = "select prej__id, prejfcin, prejfcfn, prejnmro, prejfcfn::date - prejfcin::date dias from prej_t " +
                 "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') and " +
-                "prejfcin < '${pfcin.format('yyyy-MM-dd')}' order by prejfcin limit 1"
-//        println "1 ---> $sql"
+                "prejfcin <= '${pfcin.format('yyyy-MM-dd')}' order by prejfcin limit 1"
+        println "1 ---> $sql"
 
         def fcin = pfcin
         def fcfn = pfcin
@@ -2552,6 +2553,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
             }
         } else {
+            println "---> obra: $obra, prdo: $prdo, 'S', de: $pfcin, a. $pfcfn, cntr: $cntr"
             nuevoId = insertaPrejNuevo(obra, prdo, 'S', pfcin, pfcfn, cntr)
             fcfn = pfcfn
             prej_id = 0
@@ -2560,7 +2562,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
          * hay que procesar sólo los eriodos siguientes           **/
 
         /* insertar siguientes periodos recalculando las partes */
-        fcin = fcfn + 1
+//        fcin = fcfn + 1
+        fcin = fcfn
         println "**** procesa periodos posteriores: $fcin"
         fcfm = preciosService.ultimoDiaDelMes(fcin)
 
