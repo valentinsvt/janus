@@ -585,19 +585,12 @@ class Reportes6Controller {
 
 
     def graficoAvance () {
-
-//        println "grafico avance " + params
-
         def cn = dbConnectionService.getConnection()
-        def cn2 = dbConnectionService.getConnection()
-        def data = [:]
-        def la
-        def textos = []
-        def cont = []
-        def eco = []
-        def fis = []
+        def data = []
+        def cont = 0
 
-        def sql = "select cntnnmbr, sum(cntrmnto) contratado, avg(avncecon)::numeric(6,2)*100 economico, avg(avncfsco)::numeric(6,2) fisico from rp_contrato() group by cntnnmbr order by cntnnmbr;"
+        def sql = "select cntnnmbr, sum(cntrmnto) contratado, avg(avncecon)::numeric(6,2)*100 economico, " +
+                "avg(avncfsco)::numeric(6,2) fisico from rp_contrato() group by cntnnmbr order by 2 desc;"
         def datos = cn.rows(sql.toString())
 
         com.itextpdf.text.Font fontTitulo = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 14, com.itextpdf.text.Font.BOLD);
@@ -607,14 +600,13 @@ class Reportes6Controller {
         def subtitulo = 'AVANCE DE OBRAS'
         def tituloArchivo = 'Por Cantón'
 
-        data = [:]
+        data = []
+
         cn.eachRow(sql.toString()) { d ->
-            data.put((d.cntnnmbr), d.contratado + "_" + d.economico + "_" + d.fisico )
-            textos.add(d.cntnnmbr)
-            cont.add(d.contratado)
-            eco.add(d.economico)
-            fis.add(d.fisico)
+            data.add([nmro: cont, nmbr: d.cntnnmbr, vlor: d.contratado, econ: d.economico, fsco: d.fisico])
+            cont++
         }
+//        println "data: $data"
 
         def baos = new ByteArrayOutputStream()
 
@@ -623,7 +615,7 @@ class Reportes6Controller {
 
         document.open();
 
-        com.itextpdf.text.Paragraph parrafoUniversidad = new com.itextpdf.text.Paragraph("GOBIERNO PROVINCIAL DE PICHINCHA", fontTitulo)
+        com.itextpdf.text.Paragraph parrafoUniversidad = new com.itextpdf.text.Paragraph("GOBIERNO DE PICHINCHA", fontTitulo)
         parrafoUniversidad.setAlignment(com.lowagie.text.Element.ALIGN_CENTER)
         com.itextpdf.text.Paragraph parrafoFacultad = new com.itextpdf.text.Paragraph("", fontTitulo)
         parrafoFacultad.setAlignment(com.lowagie.text.Element.ALIGN_CENTER)
@@ -684,30 +676,29 @@ class Reportes6Controller {
             e.printStackTrace();
         }
 
-        float[] columnas = [10,45,15,15,15]
+        float[] columnas = [18,75,30,20,20]
 
         com.itextpdf.text.pdf.PdfPTable table = new com.itextpdf.text.pdf.PdfPTable(columnas); // 3 columns.
         table.setWidthPercentage(100);
         com.itextpdf.text.pdf.PdfPTable table2 = new com.itextpdf.text.pdf.PdfPTable(columnas); // 3 columns.
         table2.setWidthPercentage(100);
 
-        com.itextpdf.text.pdf.PdfPCell cell1 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Símbolo"))
+        com.itextpdf.text.pdf.PdfPCell cell1 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Leyenda"))
         com.itextpdf.text.pdf.PdfPCell cell2 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Cantón"));
-        com.itextpdf.text.pdf.PdfPCell cell3 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Contratado"));
-        com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Económico"));
-        com.itextpdf.text.pdf.PdfPCell cell5 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Físico"));
+        com.itextpdf.text.pdf.PdfPCell cell3 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Valor Total Contratado"));
+        com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Avance Económico"));
+        com.itextpdf.text.pdf.PdfPCell cell5 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Avance Físico"));
 
         cell1.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
         cell2.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
-        cell3.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
-        cell4.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
-        cell5.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
-
         cell1.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
         cell2.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
         cell3.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
         cell4.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
         cell5.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell3.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell4.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell5.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
 
         cell1.setBackgroundColor(BaseColor.LIGHT_GRAY)
         cell2.setBackgroundColor(BaseColor.LIGHT_GRAY)
@@ -721,41 +712,14 @@ class Reportes6Controller {
         table.addCell(cell4);
         table.addCell(cell5);
 
-        def tam = textos.size()
-
-        println("cont " + cont[0])
-
-        tam.times{
-            println("it " + it)
-            println(cont)
-//            table2.addCell()
-//            table2.addCell()
-//            table2.addCell(crearCeldaTexto("2"))
-//            table2.addCell(crearCeldaTexto("2"))
-//            table2.addCell(crearCeldaTexto("2"))
+        data.each { d ->
+            table2.addCell(crearCelda(tipo, 'G' + (d.nmro), 'C' + (d.nmro + 1)))
+//            println "------> ${d.fsco}, ${d.econ}"
+            table2.addCell(crearCeldaTexto(d.nmbr))
+            table2.addCell(crearCeldaNumero(numero(d.vlor, 2)))
+            table2.addCell(crearCeldaNumero(numero(d.econ, 2) + '%'))
+            table2.addCell(crearCeldaNumero(numero(d.fsco, 2) + '%'))
         }
-
-
-        cn.close()
-
-//        cn.eachRow(sql.toString()) { d ->
-//            table2.addCell(crearCelda(1, 'G1', 'C1'))
-//            table2.addCell(crearCeldaTexto(d.cntnnmbr))
-//            table2.addCell(crearCeldaTexto(d.contratado.toString()))
-//            table2.addCell(crearCeldaTexto(d.economico.toString()))
-//            table2.addCell(crearCeldaTexto(d.fisico.toString()))
-//        }
-//        println("sql2 " + sql)
-
-//        cn2.eachRow(sql.toString()) { da ->
-//            println("da " + da.contratado)
-//            table2.addCell(crearCelda(tipo, 'G' + ("1"), 'C' + ("1")))
-//            table2.addCell(crearCeldaTexto(d.cntnnmbr))
-//            table2.addCell(crearCeldaTexto(d.contratado))
-//            table2.addCell(crearCeldaTexto(d.economico))
-//            table2.addCell(crearCeldaTexto(d.fisico))
-//        }
-
 
         document.add(table);
         document.add(table2);
@@ -781,12 +745,18 @@ class Reportes6Controller {
         return cell
     }
 
+    def crearCeldaNumero (txt) {
+        com.itextpdf.text.pdf.PdfPCell cell = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(txt));
+        cell.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_RIGHT)
+        return cell
+    }
+
 
     private JFreeChart createChart(final CategoryDataset dataset) {
 
-        final JFreeChart chart = ChartFactory.createBarChart("Avance de obras", // chart
+        final JFreeChart chart = ChartFactory.createBarChart("Avance de Obras Contratadas", // chart
                 // title
-                "Valores", // domain axis label
+                "Cantones", // domain axis label
                 "Contratado", // range axis label
                 dataset, // data
                 PlotOrientation.VERTICAL, // orientation
@@ -798,9 +768,11 @@ class Reportes6Controller {
         chart.setBackgroundPaint(Color.white);
 
         final CategoryPlot plot = chart.getCategoryPlot();
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setRangeGridlinePaint(Color.white);
+//        plot.setBackgroundPaint(Color.lightGray);
+        plot.setBackgroundPaint(Color.white);
+//        plot.setDomainGridlinePaint(Color.white);
+        plot.setDomainGridlinePaint(Color.lightGray);
+        plot.setRangeGridlinePaint(Color.lightGray);
 
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -829,7 +801,8 @@ class Reportes6Controller {
         def parts1 = []
         def parts2 = []
 
-        def sql = "select cntnnmbr, sum(cntrmnto) contratado, avg(avncecon)::numeric(6,2)*100 economico, avg(avncfsco)::numeric(6,2) fisico from rp_contrato() group by cntnnmbr order by cntnnmbr;"
+        def sql = "select cntnnmbr, sum(cntrmnto) contratado, avg(avncecon)::numeric(6,2)*100 economico, " +
+                "avg(avncfsco)::numeric(6,2) fisico from rp_contrato() group by cntnnmbr order by 2 desc"
         def datos = cn.rows(sql.toString())
         data = [:]
         cn.eachRow(sql.toString()) { d ->
