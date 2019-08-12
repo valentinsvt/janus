@@ -589,9 +589,13 @@ class Reportes6Controller {
 //        println "grafico avance " + params
 
         def cn = dbConnectionService.getConnection()
+        def cn2 = dbConnectionService.getConnection()
         def data = [:]
         def la
         def textos = []
+        def cont = []
+        def eco = []
+        def fis = []
 
         def sql = "select cntnnmbr, sum(cntrmnto) contratado, avg(avncecon)::numeric(6,2)*100 economico, avg(avncfsco)::numeric(6,2) fisico from rp_contrato() group by cntnnmbr order by cntnnmbr;"
         def datos = cn.rows(sql.toString())
@@ -607,6 +611,9 @@ class Reportes6Controller {
         cn.eachRow(sql.toString()) { d ->
             data.put((d.cntnnmbr), d.contratado + "_" + d.economico + "_" + d.fisico )
             textos.add(d.cntnnmbr)
+            cont.add(d.contratado)
+            eco.add(d.economico)
+            fis.add(d.fisico)
         }
 
         def baos = new ByteArrayOutputStream()
@@ -677,7 +684,7 @@ class Reportes6Controller {
             e.printStackTrace();
         }
 
-        float[] columnas = [20,80]
+        float[] columnas = [10,45,15,15,15]
 
         com.itextpdf.text.pdf.PdfPTable table = new com.itextpdf.text.pdf.PdfPTable(columnas); // 3 columns.
         table.setWidthPercentage(100);
@@ -686,24 +693,69 @@ class Reportes6Controller {
 
         com.itextpdf.text.pdf.PdfPCell cell1 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Símbolo"))
         com.itextpdf.text.pdf.PdfPCell cell2 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Cantón"));
+        com.itextpdf.text.pdf.PdfPCell cell3 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Contratado"));
+        com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Económico"));
+        com.itextpdf.text.pdf.PdfPCell cell5 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph("Físico"));
 
         cell1.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
         cell2.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell3.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell4.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell5.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+
         cell1.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
         cell2.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell3.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell4.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
+        cell5.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_CENTER)
 
         cell1.setBackgroundColor(BaseColor.LIGHT_GRAY)
         cell2.setBackgroundColor(BaseColor.LIGHT_GRAY)
+        cell3.setBackgroundColor(BaseColor.LIGHT_GRAY)
+        cell4.setBackgroundColor(BaseColor.LIGHT_GRAY)
+        cell5.setBackgroundColor(BaseColor.LIGHT_GRAY)
 
         table.addCell(cell1);
         table.addCell(cell2);
+        table.addCell(cell3);
+        table.addCell(cell4);
+        table.addCell(cell5);
 
         def tam = textos.size()
 
+        println("cont " + cont[0])
+
         tam.times{
-            table2.addCell(crearCelda(tipo, 'G' + (it), 'C' + (it + 1)))
-            table2.addCell(crearCeldaTexto(textos[it]))
+            println("it " + it)
+            println(cont)
+//            table2.addCell()
+//            table2.addCell()
+//            table2.addCell(crearCeldaTexto("2"))
+//            table2.addCell(crearCeldaTexto("2"))
+//            table2.addCell(crearCeldaTexto("2"))
         }
+
+
+        cn.close()
+
+//        cn.eachRow(sql.toString()) { d ->
+//            table2.addCell(crearCelda(1, 'G1', 'C1'))
+//            table2.addCell(crearCeldaTexto(d.cntnnmbr))
+//            table2.addCell(crearCeldaTexto(d.contratado.toString()))
+//            table2.addCell(crearCeldaTexto(d.economico.toString()))
+//            table2.addCell(crearCeldaTexto(d.fisico.toString()))
+//        }
+//        println("sql2 " + sql)
+
+//        cn2.eachRow(sql.toString()) { da ->
+//            println("da " + da.contratado)
+//            table2.addCell(crearCelda(tipo, 'G' + ("1"), 'C' + ("1")))
+//            table2.addCell(crearCeldaTexto(d.cntnnmbr))
+//            table2.addCell(crearCeldaTexto(d.contratado))
+//            table2.addCell(crearCeldaTexto(d.economico))
+//            table2.addCell(crearCeldaTexto(d.fisico))
+//        }
+
 
         document.add(table);
         document.add(table2);
