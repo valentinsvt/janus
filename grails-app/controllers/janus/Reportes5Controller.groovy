@@ -209,6 +209,7 @@ class Reportes5Controller extends Shield{
         params.criterio = reportesService.limpiaCriterio(params.criterio)
 
         def sql = armaSqlAvance(params)
+        println "sql: $sql"
         def obras = cn.rows(sql)
 
 //        println "registro retornados del sql: ${obras.size()}"

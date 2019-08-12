@@ -2447,7 +2447,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         /* se procesa el prime periodo luego de la suspensión */
         sql = "select prej__id, prejfcin, prejfcfn, prejnmro, prejfcfn::date - prejfcin::date dias from prej_t " +
                 "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') and " +
-                "prejfcin <= '${pfcin.format('yyyy-MM-dd')}' order by prejfcin limit 1"
+//                "prejfcin <= '${pfcin.format('yyyy-MM-dd')}' order by prejfcin limit 1"
+                "prejfcin < '${pfcin.format('yyyy-MM-dd')}' order by prejfcin limit 1"
         println "1 ---> $sql"
 
         def fcin = pfcin
@@ -2455,7 +2456,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def prdo = 0
         def diasPrdo = 0
         def prej_id = 0
-        def fctr = 1.0
+        def fctr = 0
         def fcha = pfcin
 
         cn.eachRow(sql.toString()) {d ->
@@ -2562,8 +2563,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
          * hay que procesar sólo los eriodos siguientes           **/
 
         /* insertar siguientes periodos recalculando las partes */
-//        fcin = fcfn + 1
-        fcin = fcfn
+        fcin = fcfn + 1
+//        fcin = fcfn
         println "**** procesa periodos posteriores: $fcin"
         fcfm = preciosService.ultimoDiaDelMes(fcin)
 
@@ -2574,7 +2575,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         sql = "select prejnmro, sum((prejfcfn::date - prejfcin::date) + 1) dias, prejtipo from prej_t " +
                 "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') " +
                 "group by prejnmro, prejtipo order by 1"
-        println "---> $sql"
+        println "2 ---> $sql"
 
         def periodos = cn.rows(sql.toString())
         def prejtipo = ''
@@ -2585,6 +2586,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             println "....reprogramar periodo $prdo +++ rsto: $diasrsto, diasPrdo: $diasPrdo"
             while(diasPrdo > 0) {
                 diasrsto = (fcfm - fcin + 1)
+                println "-------diasresto: $diasrsto"
                 if(diasrsto < diasPrdo) {
                     fctr = diasrsto / diasPrdo
                     println "+++++ se debe dividir en otro mes ++++++"
@@ -2609,7 +2611,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     fcfm = preciosService.ultimoDiaDelMes(fcin)
 
                 } else {
-                    println "+++++ completa el periodo, diasresto: $diasrsto"
+                    println "+++++ completa el periodo, diasresto: $diasrsto, fctr: $fctr"
                     fctr = 1 - fctr
                     fcfn = fcin + diasPrdo.toInteger() - 1
                     println "NuevoPrej: ${obra.id}, $prdo, $prejtipo, $fcin, $fcfn, ${cntr.id}"
