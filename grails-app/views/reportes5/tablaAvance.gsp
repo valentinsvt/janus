@@ -31,15 +31,16 @@
             <i class="icon-print"></i>
             Imprimir
         </a>
-
         <a href="#" class="btn" id="excel" >
             <i class="icon-print"></i>
             Excel
         </a>
-
+        <a href="#" class="btn btn-info" id="imprimirGrafico" >
+            <i class="icon-print"></i>
+            Gráfico
+        </a>
     </div>
 </div>
-
 
 <div class="row-fluid"  style="width: 99.7%;height: 600px;overflow-y: auto;float: right;">
     <div class="span12">
@@ -77,10 +78,8 @@
         <th style="width: 80px">
             Avance físico
         </th>
-        %{--<th style="width: 80px">--}%
-            %{--Estado--}%
-        %{--</th>--}%
     </tr>
+
     </thead>
     <tbody id="tabla_material">
         <g:each in="${obras}" var="fila" status="j">
@@ -95,19 +94,8 @@
                 <td><g:formatNumber number="${fila.cntrplzo}" maxFractionDigits="0" minFractionDigits="0"/> días</td>
                 <td><g:formatNumber number="${(fila.av_economico) * 100}" maxFractionDigits="2" minFractionDigits="2"/>%</td>
                 <td><g:formatNumber number="${fila.av_fisico}" maxFractionDigits="2" minFractionDigits="2"/></td>
-                %{--<td>--}%
-                    %{--<g:set var="estado" value=""/>--}%
-                    %{--<g:if test="${fila.obrafcin}">--}%
-                        %{--<g:set var="estado" value="Iniciada el ${fila.obrafcin?.format('dd-MM-yyyy')}"/>--}%
-                        %{--<g:if test="${fila.cntrfcfs}">--}%
-                            %{--<g:set var="estado" value="Finalizada el ${fila.cntrfcfs?.format('dd-MM-yyyy')}"/>--}%
-                        %{--</g:if>--}%
-                    %{--</g:if>--}%
-                    %{--${estado}--}%
-                %{--</td>--}%
             </tr>
         </g:each>
-
     </tbody>
 </table>
 
@@ -142,6 +130,10 @@
     $("#excel").click(function () {
         location.href = "${g.createLink(controller: 'reportes5', action:'reporteExcelAvance' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val() + "&operador=" + $("#oprd").val()
     });
+
+    $("#imprimirGrafico").click(function () {
+        location.href = "${g.createLink(controller: 'reportes6', action:'graficoAvance' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val() + "&operador=" + $("#oprd").val()
+    })
 
     $("#buscador_con").change(function(){
         var anterior = "${params.operador}"
