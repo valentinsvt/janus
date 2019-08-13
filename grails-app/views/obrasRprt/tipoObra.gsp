@@ -103,7 +103,7 @@
                         labels: json.cabecera.split(','),
                         datasets: [
                             {
-                                backgroundColor: ["#20a5da", "#00af30", "#80ff80", "#d45840", "#be5882", "#80af30", "#f0ff80", "#4e68a2"],
+                                backgroundColor: ["#20a5da", "#00af30", "#80ff80", "#d45840", "#be5882", "#80af30", "#d0bf80", "#4e68a2"],
 //                                 backgroundColor: ["rgba(32,165,218,0.5)", "#00af30","#80ff80", "#d45840", "rgba(206,88,130,0.6)"],
 //                                 data: [json.promedio, json.ptnv, json.fcex, json.ccbb, json.rcmn] }
                                 data: json.datos.split(',')
@@ -126,93 +126,6 @@
         });
     });
 
-    var barChartData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-            label: 'Sistema Vial',
-            backgroundColor: "#20a5da",
-            stack: 'Stack 0',
-            data: [
-                20,
-                21,
-                25,
-                30,
-                40,
-                50,
-                55
-            ]
-        }, {
-            label: 'Obra Civil',
-            backgroundColor: "#80a5da",
-            stack: 'Stack 0',
-            data: [
-                40,
-                21,
-                25,
-                30,
-                40,
-                50,
-                15
-            ]
-        }, {
-            label: 'Riego',
-            backgroundColor: "#4035fa",
-            stack: 'Stack 0',
-            data: [
-                40,
-                21,
-                25,
-                30,
-                40,
-                50,
-                15
-            ]
-        }, {
-            label: 'Otros',
-            backgroundColor: "#f0f5da",
-            stack: 'Stack 1',
-            data: [
-                20,
-                21,
-                25,
-                30,
-                40,
-                50,
-                55
-            ]
-        }]
-
-    };
-
-/*
-    $("#graficar2").click(function () {
-        console.log('graf2')
-        var ctx = $("#canvas4")
-        myBar = new Chart(ctx, {
-            type: 'bar',
-            data: barChartData,
-            options: {
-                title: {
-                    display: true,
-                    text: 'Inversión por tipo de obra y Cantón'
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false
-                },
-                responsive: true,
-                scales: {
-                    xAxes: [{
-                        stacked: true,
-                    }],
-                    yAxes: [{
-                        stacked: true
-                    }]
-                }
-            }
-        });
-    });
-*/
 
     $("#graficar2").click(function () {
         $("#chart-area").removeClass('hidden');
@@ -239,7 +152,7 @@
                         datasets: [
                             {
                                 label: 'Obras Viales',
-                                backgroundColor: "#204060",
+                                backgroundColor: "#205060",
                                 stack: 'Stack 1',
                                 data: json.vias.split(',')
                             },
@@ -251,7 +164,7 @@
                             },
                             {
                                 label: 'Obras de Riego',
-                                backgroundColor: "#00af60",
+                                backgroundColor: "#00af80",
                                 stack: 'Stack 1',
                                 data: json.riego.split(',')
                             }
