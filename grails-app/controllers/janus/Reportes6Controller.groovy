@@ -818,8 +818,8 @@ class Reportes6Controller {
         }
 
         final String series1 = "Contratado";
-        final String series2 = "Económico";
-        final String series3 = "Físico";
+        final String series2 = "Avance Económico";
+        final String series3 = "Avance Físico";
 
         final String category1 = "Category 1";
         final String category2 = "Category 2";
