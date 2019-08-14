@@ -12,7 +12,7 @@ class ObrasRprtController {
     }
 
     def tpobData() {
-        println "tpobData $params"
+//        println "tpobData $params"
         def cn = dbConnectionService.getConnection()
         def data = [:]
         def cantones = ""
@@ -59,7 +59,7 @@ class ObrasRprtController {
             cantones += cantones == ''? d.cntnnmbr : "," + d.cntnnmbr
             def sql2 = "select sum(obravlor) suma, progdscr from obra, parr, prog where parr.parr__id = obra.parr__id and " +
                     "prog.prog__id = obra.prog__id and cntn__id = ${d.cntn__id} and prog.prog__id <> 6 group by progdscr"
-            println "sql2: $sql2"
+//            println "sql2: $sql2"
             cn1.eachRow(sql2.toString()) { c ->
                 if(c.progdscr == 'VIAS') {
                     vias += vias == ''? c.suma : "," + c.suma

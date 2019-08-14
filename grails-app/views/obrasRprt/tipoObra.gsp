@@ -45,7 +45,7 @@
 </div>
 
 
-<div class="btn btn-info graficar">
+<div class="btn btn-info graficar ">
     <i class="fa fa-pie-chart"></i> Inversión por Cantón
 </div>
 
@@ -81,6 +81,8 @@
 
     $(".graficar").click(function () {
         $("#chart-area").removeClass('hidden');
+        $(this).addClass("active");
+        $("#graficar2,  #graficar3").removeClass("active");
         $.ajax({
             type: 'POST',
             url: '${createLink(controller: 'obrasRprt', action: 'tpobData')}',
@@ -131,6 +133,8 @@
 
     $("#graficar2").click(function () {
         $("#chart-area").removeClass('hidden');
+        $(this).addClass("active");
+        $(".graficar,  #graficar3").removeClass("active");
         $.ajax({
             type: 'POST',
             url: '${createLink(controller: 'obrasRprt', action: 'cantones')}',
@@ -195,6 +199,8 @@
 
     $("#graficar3").click(function () {
         $("#chart-area").removeClass('hidden');
+        $(this).addClass("active");
+        $(".graficar,  #graficar2").removeClass("active");
         $.ajax({
             type: 'POST',
             url: "${createLink(controller: 'obrasRprt', action: 'estadosObras')}",
