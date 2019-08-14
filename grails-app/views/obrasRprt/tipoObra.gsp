@@ -230,7 +230,7 @@
                                 data: json.contratadas.split(',')
                             },
                             {
-                                label: 'Construcción',
+                                label: 'En Construcción',
                                 backgroundColor: "#00af80",
                                 stack: 'Stack 3',
                                 data: json.construccion.split(',')
