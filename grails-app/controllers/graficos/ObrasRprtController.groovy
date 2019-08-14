@@ -31,8 +31,8 @@ class ObrasRprtController {
         }
         data.datos = valores
         data.cabecera = cantones
-        println "++data: $data"
-        println "++data: ${data as JSON}"
+//        println "++data: $data"
+//        println "++data: ${data as JSON}"
 
         /** valores para demostración **/
 //        data = [titulo: "Inversión por Cantón", datos: "84.8,14,17.1,34.2,31.1,42.8,40,45",
@@ -42,7 +42,7 @@ class ObrasRprtController {
     }
 
     def cantones() {
-        println "cantones $params"
+//        println "cantones $params"
         def cn = dbConnectionService.getConnection()
         def cn1 = dbConnectionService.getConnection()
         def data = [:]
@@ -78,8 +78,81 @@ class ObrasRprtController {
         data.infra = infra
         data.riego = riego
         data.cabecera = cantones
-        println "++data: $data"
-        println "++data: ${data as JSON}"
+//        println "++data: $data"
+//        println "++data: ${data as JSON}"
+
+        /** valores para demostración **/
+//        data = [titulo: "Inversión por Cantón", datos: "84.8,14,17.1,34.2,31.1,42.8,40,45",
+//                cabecera: "cantón 1,cantón 2,cantón 3,cantón 4,cantón 5,cantón 6,cantón 7,cantón 8"]
+
+        render data as JSON
+    }
+
+
+    def estadosObras() {
+//        println "estados $params"
+        def cn = dbConnectionService.getConnection()
+        def cn1 = dbConnectionService.getConnection()
+        def cn2 = dbConnectionService.getConnection()
+        def cn3 = dbConnectionService.getConnection()
+        def cn4 = dbConnectionService.getConnection()
+        def data = [:]
+        def presupuestadas = ""
+        def contratadas = ""
+        def construccion = ''
+        def terminadas = ""
+        def cantones = ""
+
+        data.titulo = "Estado de Obras por Cantón"
+
+        //cantones
+        def sql = "select distinct cntn.cntn__id, cntnnmbr from obra, parr, cntn " +
+                "where parr.parr__id = obra.parr__id and cntn.cntn__id = parr.cntn__id order by cntn__id desc"
+
+        //presupuestadas
+        def sql1 = "select count(*) cnta, cntn__id from obra, parr where prog__id <> 6 and obraetdo ='R' and " +
+                "parr.parr__id = obra.parr__id group by cntn__id order by cntn__id desc"
+        //contratadas
+        def sql2 = "select count(*) cnta, cntn__id from obra, parr where prog__id <> 6 and obraetdo ='R' and " +
+                "parr.parr__id = obra.parr__id and obra__id in (select distinct obra__id from cntr) " +
+                "group by cntn__id order by cntn__id desc"
+        //construccion
+        def sql3 = "select count(*) cnta, cntn__id from obra, parr where prog__id <> 6 and obraetdo ='R' and " +
+                "parr.parr__id = obra.parr__id and obra__id in (select distinct obra__id from cntr) and " +
+                "obrafcin is not null " +
+                "group by cntn__id order by cntn__id desc"
+        //terminadas
+        def sql4 = "select count(*) cnta, cntn__id from obra, parr where prog__id <> 6 and obraetdo ='R' and " +
+                "parr.parr__id = obra.parr__id and obra__id in (select distinct obra__id from cntr, plnl " +
+                "where plnl.cntr__id = cntr.cntr__id and tppl__id = 9) group by cntn__id order by cntn__id desc"
+
+
+        cn.eachRow(sql.toString()){d->
+            cantones += cantones == ''? d.cntnnmbr : "," + d.cntnnmbr
+
+            cn1.eachRow(sql1.toString()) { c ->
+                presupuestadas += presupuestadas == '' ? c.cnta : ',' + c.cnta
+            }
+            cn2.eachRow(sql2.toString()) { r ->
+                contratadas += contratadas == '' ? r.cnta : ',' + r.cnta
+            }
+            cn3.eachRow(sql3.toString()) { t ->
+                construccion += construccion == '' ? t.cnta : ',' + t.cnta
+            }
+            cn4.eachRow(sql4.toString()) { y ->
+                terminadas += terminadas == '' ? y.cnta : ',' + y.cnta
+            }
+        }
+
+//        println "cantones: $sql"
+
+        data.presupuestadas = presupuestadas
+        data.contratadas = contratadas
+        data.construccion = construccion
+        data.terminadas = terminadas
+        data.cabecera = cantones
+//        println "++data: $data"
+//        println "++data: ${data as JSON}"
 
         /** valores para demostración **/
 //        data = [titulo: "Inversión por Cantón", datos: "84.8,14,17.1,34.2,31.1,42.8,40,45",

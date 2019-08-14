@@ -38,7 +38,7 @@
 
 <body>
 <div align="center">
-    <h1>Inversión en los Cantones</h1>
+    %{--<h1>Inversión en los Cantones</h1>--}%
     %{--<g:if test="${session.perfil.codigo != 'ADMG'}">--}%
     %{--<p style="font-size: 28px; color: rgba(63,113,186,0.9)">${seguridad.Persona.get(session.usuario.id)?.universidad?.nombre}</p>--}%
     %{--</g:if>--}%
@@ -49,11 +49,13 @@
     <i class="fa fa-pie-chart"></i> Inversión por Cantón
 </div>
 
-
 <div class="btn btn-info" id="graficar2" style="margin-left: 2px">
     <i class="fa fa-pie-chart"></i> Tipos de Obra
 </div>
 
+<a href="#" class="btn btn-info" id="graficar3">
+    <i class="fa fa-pencil"></i> Estado de Obras
+</a>
 
 
 <div class="col-md-5"></div>
@@ -84,7 +86,7 @@
             url: '${createLink(controller: 'obrasRprt', action: 'tpobData')}',
             data: {cntn: 2},
             success: function (json) {
-                console.log("json:", json.cabecera)
+//                console.log("json:", json.cabecera)
 
                 $("#titulo").html(json.titulo)
                 $("#clases").remove();
@@ -134,7 +136,7 @@
             url: '${createLink(controller: 'obrasRprt', action: 'cantones')}',
             data: {cntn: 2},
             success: function (json) {
-                console.log("json:", json.cabecera)
+//                console.log("json:", json.cabecera)
 
                 $("#titulo").html(json.titulo)
                 $("#clases").remove();
@@ -167,6 +169,77 @@
                                 backgroundColor: "#00af80",
                                 stack: 'Stack 1',
                                 data: json.riego.split(',')
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: 'rgb(20, 80, 100)',
+                                fontSize: 14
+                            },
+                            pointLabels: {
+                                fontSize: 16
+                            }
+                        }
+
+                    }
+                };
+
+                myChart = new Chart(canvas, chartData, 1);
+            }
+        });
+    });
+
+
+    $("#graficar3").click(function () {
+        $("#chart-area").removeClass('hidden');
+        $.ajax({
+            type: 'POST',
+            url: "${createLink(controller: 'obrasRprt', action: 'estadosObras')}",
+            data: {cntn: 2},
+            success: function (json) {
+//                console.log("json:", json.cabecera)
+
+                $("#titulo").html(json.titulo)
+                $("#clases").remove();
+                $("#chart-area").removeAttr('hidden')
+
+                /* se crea dinámicamente el canvas y la función "click" */
+                $('#graf').append('<canvas id="clases" style="margin-top: 30px"></canvas>');
+
+                canvas = $("#clases")
+
+                var chartData = {
+                    type: 'bar',
+                    data: {
+                        labels: json.cabecera.split(','),
+                        datasets: [
+                            {
+                                label: 'Presupuestadas',
+                                backgroundColor: "#205060",
+                                stack: 'Stack 1',
+//                                data: json.vias.split(',')
+                                data: json.presupuestadas.split(',')
+                            },
+                            {
+                                label: 'Contratadas',
+                                backgroundColor: "#d45840",
+                                stack: 'Stack 2',
+                                data: json.contratadas.split(',')
+                            },
+                            {
+                                label: 'Construcción',
+                                backgroundColor: "#00af80",
+                                stack: 'Stack 3',
+                                data: json.construccion.split(',')
+                            },
+                            {
+                                label: 'Finalizadas',
+                                backgroundColor: "#9a53af",
+                                stack: 'Stack 4',
+                                data: json.terminadas.split(',')
                             }
                         ]
                     },
