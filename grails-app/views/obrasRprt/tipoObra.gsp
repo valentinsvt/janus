@@ -49,6 +49,10 @@
     <i class="fa fa-pie-chart"></i> Inversión por Cantón
 </div>
 
+<div class="btn btn-info" id="graficar4">
+    <i class="fa fa-pie-chart"></i> Inversión por Cantón (Pie)
+</div>
+
 <div class="btn btn-info" id="graficar2" style="margin-left: 2px">
     <i class="fa fa-pie-chart"></i> Tipos de Obra
 </div>
@@ -79,10 +83,63 @@
     var canvas = $("#clases");
     var myChart;
 
+    //pie
+    $("#graficar4").click(function () {
+        $("#chart-area").removeClass('hidden');
+        $(this).addClass("active");
+        $("#graficar2,  #graficar3, .graficar").removeClass("active");
+        $.ajax({
+            type: 'POST',
+            url: '${createLink(controller: 'obrasRprt', action: 'tpobData')}',
+            data: {cntn: 2},
+            success: function (json) {
+//                console.log("json:", json.cabecera)
+
+                $("#titulo").html(json.titulo)
+                $("#clases").remove();
+                $("#chart-area").removeAttr('hidden')
+
+                /* se crea dinámicamente el canvas y la función "click" */
+                $('#graf').append('<canvas id="clases" style="margin-top: 30px"></canvas>');
+
+                canvas = $("#clases")
+
+                var chartData = {
+                    type: 'pie',
+                    data: {
+//                            labels: ['Evaluación Total', 'Potenciadores', 'Factores de Éxito', 'Cuellos de Botella', 'Recomendaciones'],
+                        labels: json.cabecera.split(','),
+                        datasets: [
+                            {
+                                backgroundColor: ["#20a5da", "#00af30", "#80ff80", "#d45840", "#be5882", "#80af30", "#d0bf80", "#4e68a2"],
+//                                 backgroundColor: ["rgba(32,165,218,0.5)", "#00af30","#80ff80", "#d45840", "rgba(206,88,130,0.6)"],
+//                                 data: [json.promedio, json.ptnv, json.fcex, json.ccbb, json.rcmn] }
+                                data: json.datos.split(',')
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            display: false,
+                            pointLabels: {
+                                fontSize: 16
+                            }
+                        }
+
+                    }
+                };
+
+                myChart = new Chart(canvas, chartData, 1);
+            }
+        });
+    });
+
+
+    //barras
     $(".graficar").click(function () {
         $("#chart-area").removeClass('hidden');
         $(this).addClass("active");
-        $("#graficar2,  #graficar3").removeClass("active");
+        $("#graficar2,  #graficar3, #graficar4").removeClass("active");
         $.ajax({
             type: 'POST',
             url: '${createLink(controller: 'obrasRprt', action: 'tpobData')}',
@@ -134,7 +191,7 @@
     $("#graficar2").click(function () {
         $("#chart-area").removeClass('hidden');
         $(this).addClass("active");
-        $(".graficar,  #graficar3").removeClass("active");
+        $(".graficar,  #graficar3, #graficar4").removeClass("active");
         $.ajax({
             type: 'POST',
             url: '${createLink(controller: 'obrasRprt', action: 'cantones')}',
