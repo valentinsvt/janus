@@ -172,7 +172,7 @@ class ObrasRprtController {
         def fisico = ''
         def cantones = ""
 
-        data.titulo = "Estado de las Obras por Cantón"
+        data.titulo = "Avance de las Obras por Cantón"
 
         //cantones
         def sql = "select distinct cntn.cntn__id, cntnnmbr from obra, parr, cntn " +
