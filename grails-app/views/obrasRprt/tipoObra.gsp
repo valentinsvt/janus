@@ -61,6 +61,11 @@
     <i class="fa fa-pencil"></i> Estado de Obras
 </a>
 
+<a href="#" class="btn btn-info" id="graficar5">
+    <i class="fa fa-pencil"></i> Avance de Obras
+</a>
+
+
 
 <div class="col-md-5"></div>
 
@@ -83,63 +88,12 @@
     var canvas = $("#clases");
     var myChart;
 
-    //pie
-    $("#graficar4").click(function () {
-        $("#chart-area").removeClass('hidden');
-        $(this).addClass("active");
-        $("#graficar2,  #graficar3, .graficar").removeClass("active");
-        $.ajax({
-            type: 'POST',
-            url: '${createLink(controller: 'obrasRprt', action: 'tpobData')}',
-            data: {cntn: 2},
-            success: function (json) {
-//                console.log("json:", json.cabecera)
-
-                $("#titulo").html(json.titulo)
-                $("#clases").remove();
-                $("#chart-area").removeAttr('hidden')
-
-                /* se crea dinámicamente el canvas y la función "click" */
-                $('#graf').append('<canvas id="clases" style="margin-top: 30px"></canvas>');
-
-                canvas = $("#clases")
-
-                var chartData = {
-                    type: 'pie',
-                    data: {
-//                            labels: ['Evaluación Total', 'Potenciadores', 'Factores de Éxito', 'Cuellos de Botella', 'Recomendaciones'],
-                        labels: json.cabecera.split(','),
-                        datasets: [
-                            {
-                                backgroundColor: ["#20a5da", "#00af30", "#80ff80", "#d45840", "#be5882", "#80af30", "#d0bf80", "#4e68a2"],
-//                                 backgroundColor: ["rgba(32,165,218,0.5)", "#00af30","#80ff80", "#d45840", "rgba(206,88,130,0.6)"],
-//                                 data: [json.promedio, json.ptnv, json.fcex, json.ccbb, json.rcmn] }
-                                data: json.datos.split(',')
-                            }
-                        ]
-                    },
-                    options: {
-                        legend: {
-                            display: true,
-                            pointLabels: {
-                                fontSize: 16
-                            }
-                        }
-
-                    }
-                };
-
-                myChart = new Chart(canvas, chartData, 1);
-            }
-        });
-    });
-
 
     //barras
     $(".graficar").click(function () {
         $("#chart-area").removeClass('hidden');
         $(this).addClass("active");
-        $("#graficar2,  #graficar3, #graficar4").removeClass("active");
+        $("#graficar2,  #graficar3, #graficar4, #graficar5").removeClass("active");
         $.ajax({
             type: 'POST',
             url: '${createLink(controller: 'obrasRprt', action: 'tpobData')}',
@@ -191,7 +145,7 @@
     $("#graficar2").click(function () {
         $("#chart-area").removeClass('hidden');
         $(this).addClass("active");
-        $(".graficar,  #graficar3, #graficar4").removeClass("active");
+        $(".graficar,  #graficar3, #graficar4, #graficar5").removeClass("active");
         $.ajax({
             type: 'POST',
             url: '${createLink(controller: 'obrasRprt', action: 'cantones')}',
@@ -257,7 +211,7 @@
     $("#graficar3").click(function () {
         $("#chart-area").removeClass('hidden');
         $(this).addClass("active");
-        $(".graficar,  #graficar2").removeClass("active");
+        $(".graficar,  #graficar2, #graficar4, #graficar5").removeClass("active");
         $.ajax({
             type: 'POST',
             url: "${createLink(controller: 'obrasRprt', action: 'estadosObras')}",
@@ -303,6 +257,123 @@
                                 backgroundColor: "#9a53af",
                                 stack: 'Stack 4',
                                 data: json.terminadas.split(',')
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: 'rgb(20, 80, 100)',
+                                fontSize: 14
+                            },
+                            pointLabels: {
+                                fontSize: 16
+                            }
+                        }
+
+                    }
+                };
+
+                myChart = new Chart(canvas, chartData, 1);
+            }
+        });
+    });
+
+    //pie
+    $("#graficar4").click(function () {
+        $("#chart-area").removeClass('hidden');
+        $(this).addClass("active");
+        $("#graficar2,  #graficar3, .graficar, #graficar5").removeClass("active");
+        $.ajax({
+            type: 'POST',
+            url: '${createLink(controller: 'obrasRprt', action: 'tpobData')}',
+            data: {cntn: 2},
+            success: function (json) {
+//                console.log("json:", json.cabecera)
+
+                $("#titulo").html(json.titulo)
+                $("#clases").remove();
+                $("#chart-area").removeAttr('hidden')
+
+                /* se crea dinámicamente el canvas y la función "click" */
+                $('#graf').append('<canvas id="clases" style="margin-top: 30px"></canvas>');
+
+                canvas = $("#clases")
+
+                var chartData = {
+                    type: 'pie',
+                    data: {
+//                            labels: ['Evaluación Total', 'Potenciadores', 'Factores de Éxito', 'Cuellos de Botella', 'Recomendaciones'],
+                        labels: json.cabecera.split(','),
+                        datasets: [
+                            {
+                                backgroundColor: ["#20a5da", "#00af30", "#80ff80", "#d45840", "#be5882", "#80af30", "#d0bf80", "#4e68a2"],
+//                                 backgroundColor: ["rgba(32,165,218,0.5)", "#00af30","#80ff80", "#d45840", "rgba(206,88,130,0.6)"],
+//                                 data: [json.promedio, json.ptnv, json.fcex, json.ccbb, json.rcmn] }
+                                data: json.datos.split(',')
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            display: true,
+                            pointLabels: {
+                                fontSize: 16
+                            }
+                        }
+
+                    }
+                };
+
+                myChart = new Chart(canvas, chartData, 1);
+            }
+        });
+    });
+
+
+    //grafico de avance
+    $("#graficar5").click(function () {
+        $("#chart-area").removeClass('hidden');
+        $(this).addClass("active");
+        $(".graficar,  #graficar2, #graficar3, #graficar4").removeClass("active");
+        $.ajax({
+            type: 'POST',
+            url: "${createLink(controller: 'obrasRprt', action: 'avanceObras')}",
+            data: {cntn: 2},
+            success: function (json) {
+
+                $("#titulo").html(json.titulo);
+                $("#clases").remove();
+                $("#chart-area").removeAttr('hidden');
+
+                /* se crea dinámicamente el canvas y la función "click" */
+                $('#graf').append('<canvas id="clases" style="margin-top: 30px"></canvas>');
+
+                canvas = $("#clases")
+
+                var chartData = {
+                    type: 'bar',
+                    data: {
+                        labels: json.cabecera.split(','),
+                        datasets: [
+                            {
+                                label: 'Contratado',
+                                backgroundColor: "#205060",
+                                stack: 'Stack 1',
+                                data: json.contratado.split(',')
+                            },
+                            {
+                                label: 'Avance económico',
+                                backgroundColor: "#d45840",
+                                stack: 'Stack 2',
+                                data: json.economico.split(',')
+                            },
+                            {
+                                label: 'Avance físico',
+                                backgroundColor: "#00af80",
+                                stack: 'Stack 3',
+                                data: json.fisico.split(',')
                             }
                         ]
                     },

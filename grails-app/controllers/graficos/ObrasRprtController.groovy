@@ -160,4 +160,41 @@ class ObrasRprtController {
 
         render data as JSON
     }
+
+
+    def avanceObras (){
+
+        //        println "estados $params"
+        def cn = dbConnectionService.getConnection()
+        def data = [:]
+        def contratado = ""
+        def economico = ""
+        def fisico = ''
+        def cantones = ""
+
+        data.titulo = "Estado de las Obras por Cantón"
+
+        //cantones
+        def sql = "select distinct cntn.cntn__id, cntnnmbr from obra, parr, cntn " +
+                "where parr.parr__id = obra.parr__id and cntn.cntn__id = parr.cntn__id order by cntn__id desc"
+
+        //avances
+        def sql1 = "select cntnnmbr, sum(cntrmnto) contratado, avg(avncecon)::numeric(6,2)*100 economico, " +
+                "avg(avncfsco)::numeric(6,2) fisico from rp_contrato() group by cntnnmbr order by 2 desc;"
+
+
+        cn.eachRow(sql1.toString()){ d->
+            cantones += cantones == ''? d.cntnnmbr : "," + d.cntnnmbr
+            contratado += contratado == '' ? d.contratado : ',' + d.contratado
+            economico += economico == '' ? ((d.economico * d.contratado) / 100) : ',' + ((d.economico * d.contratado) / 100)
+            fisico += fisico == '' ? ((d.fisico * d.contratado) / 100) : ',' + ((d.fisico * d.contratado) / 100)
+        }
+
+        data.contratado = contratado
+        data.economico = economico
+        data.fisico = fisico
+        data.cabecera = cantones
+
+        render data as JSON
+    }
 }
