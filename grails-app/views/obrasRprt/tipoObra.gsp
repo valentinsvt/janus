@@ -120,7 +120,7 @@
                     },
                     options: {
                         legend: {
-                            display: false,
+                            display: true,
                             pointLabels: {
                                 fontSize: 16
                             }
