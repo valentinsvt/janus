@@ -84,11 +84,14 @@
     <h1 class="titl" style="font-size: 24px;">${empr.nombre}</h1>
 
     <div class="dialog ui-corner-all logo">
-        <div style="text-align: center; margin-top: 50px; color: #810;">
+        <div style="text-align: center; margin-top: 40px; color: #810;">
             <img src="${resource(dir: 'images', file: 'logotipo.png')}"/>
         </div>
+        <div style="text-align: center ; color:#002040; margin-top:0px; ">
+            (Logotipo proporcionado por la COORDINACION DE INFORMACION Y MEDIOS del GADPP)
+        </div>
 
-        <div style="width: 100%;height: 30px;float: left;margin-top: 30px;text-align: center">
+        <div style="width: 100%;height: 30px;float: left;margin-top: 40px;text-align: center">
             <a href="#" id="ingresar" class="btn btn-inverse">
                 <i class="icon-off"></i>
                 Ingresar
