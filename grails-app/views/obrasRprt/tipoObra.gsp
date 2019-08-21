@@ -358,7 +358,7 @@
                         labels: json.cabecera.split(','),
                         datasets: [
                             {
-                                label: 'Contratado',
+                                label: 'Obras Contratadas',
                                 backgroundColor: "#205060",
                                 stack: 'Stack 1',
                                 data: json.contratado.split(',')

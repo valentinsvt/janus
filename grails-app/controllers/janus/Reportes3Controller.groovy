@@ -1091,10 +1091,10 @@ class Reportes3Controller {
 
         if (total == 0 || params.trans == "no")
             tablaTrans = ""
-        if (totalMan == 0)
-            tablaMano = ""
-        if (totalMat == 0)
-            tablaMat = ""
+//        if (totalMan == 0)
+//            tablaMano = ""
+//        if (totalMat == 0)
+//            tablaMat = ""
         [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaTrans2: tablaTrans2, band: band, tablaMat2: tablaMat2, bandMat: bandMat, bandTrans: bandTrans , tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat,
                 tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra, fechaPala: fecha1]
     }
@@ -1355,10 +1355,10 @@ class Reportes3Controller {
 
         if (total == 0 || params.trans == "no")
             tablaTrans = ""
-        if (totalMan == 0)
-            tablaMano = ""
-        if (totalMat == 0)
-            tablaMat = ""
+//        if (totalMan == 0)
+//            tablaMano = ""
+//        if (totalMat == 0)
+//            tablaMat = ""
         [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaTrans2: tablaTrans2, band: band, tablaMat2: tablaMat2, bandMat: bandMat, bandTrans: bandTrans , tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat,
          tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra, fechaPala: fecha1, totalRelativo: totalRelativo, totalVae: totalVae]
     }

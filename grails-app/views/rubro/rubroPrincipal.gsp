@@ -642,13 +642,13 @@
 
         <fieldset>
 
-            <div class="span2" style="margin-top: 10px">
-              Fecha:
-              <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${rubro?.fechaModificacion}" style="width: 100px"/>
+            <div class="span4" style="margin-top: 10px;">
+                <strong>¿Desea imprimir el reporte desglosando el transporte?</strong>
             </div>
 
-            <div class="span3" style="margin-top: 20px;">
-                ¿Desea imprimir el reporte desglosando el transporte?
+            <div class="span4" style="margin-top: 10px">
+              Se imprime a la Fecha de:
+              <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${rubro?.fechaModificacion}" style="width: 100px"/>
             </div>
 
         </fieldset>
@@ -2224,8 +2224,8 @@
             resizable : false,
             modal     : true,
             dragable  : false,
-            width     : 350,
-            height    : 220,
+            width     : 470,
+            height    : 230,
             position  : 'center',
             title     : 'Imprimir Rubro',
 /*
