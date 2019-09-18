@@ -109,7 +109,7 @@ class PreciosService {
         def res = []
 
         def sqltx = "select min(rbpcfcha) fecha from rbpc where item__id in (${itemsId}) and lgar__id = ${lugar.id} and rbpcrgst != 'R'"
-//        println "getPrecioRubroItemEstadoNoFecha -- sql: $sqltx"
+        println "getPrecioRubroItemEstadoNoFecha -- sql: $sqltx"
         def fecha = cn.rows(sqltx.toString())[0].fecha  // fecha más anterior de items sin registro
 //        println "getPrecioRubroItemEstadoNoFecha $fecha"
 

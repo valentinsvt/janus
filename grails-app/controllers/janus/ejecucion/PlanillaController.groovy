@@ -4208,12 +4208,19 @@ class PlanillaController extends janus.seguridad.Shield {
         anio -= 1
         def diciembre31 = new Date().parse("dd-MM-yyyy", "31-12-" + anio)
 //        println "fcfm: $fcfm, diciembre31: $diciembre31"
+
+        if(plnl.tipoPlanilla.codigo == 'Q') {
+            fcfm = plnl.fechaFin
+        } else {
+            fcfm = preciosService.ultimoDiaDelMes(plnl.fechaFin)
+        }
+
         if(fcfm == diciembre31) {
             fcfm++
             diasMax--
         }
         def res = diasLaborablesService.diasLaborablesDesde(fcfm, diasMax)
-//        println "No presentación de planilla --> fcfm: $fcfm, multas: $res"
+        println "No presentación de planilla --> fcfm: $fcfm, multas: $res, diasMax: ${diasMax}"
         /* si hay error, res[0] = false */
         if (!res[0]) {
             errorDiasLaborables(plnl.contrato.id, res[2], res[1])

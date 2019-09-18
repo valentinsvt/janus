@@ -2934,22 +2934,16 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def modificacionNuevo_ajax() {
 //        println("params modajax " + params)
-
-
-
-
         def contrato = Contrato.get(params.contrato.toLong())
         def obra = contrato.obra
         def vol = VolumenContrato.get(params.vol.toLong())
         def totlDol = 0, totlCan = 0
-
 
         def plAvance = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"))
         def plLiquidacion = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("Q"))
 
         println("pl 1 " + plAvance.id)
         println("pl 2 " + plLiquidacion.id)
-
 
         def sql1
         def resP = []
@@ -2973,7 +2967,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         fechasFinPlanilla.sort(true)
 
-//        println("fec " + fechasFinPlanilla)
+        println("fec " + fechasFinPlanilla)
 
         def html = "", row2 = ""
 

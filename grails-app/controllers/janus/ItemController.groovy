@@ -65,7 +65,7 @@ class ItemController extends janus.seguridad.Shield {
 
         def estado = "and r1.rbpcrgst!='R'"
 
-//            println ">>" + sql
+            println ">>" + sql
 
         def itemsIds = ""
 
@@ -78,14 +78,14 @@ class ItemController extends janus.seguridad.Shield {
             itemsIds += row[0]
         }
 //
-//          println itemsIds
+          println "itemsIds.size(): ${itemsIds.size()}"
         if (itemsIds == "") itemsIds = '-1'
 
 
 
         def precios = preciosService.getPrecioRubroItemEstadoNoFecha(lugar, itemsIds, estado)
         def rubroPrecio = []
-//            println ">>" + precios
+            println ">>" + precios.size()
         precios.each {
             def pri = PrecioRubrosItems.get(it)
 //                println "\t" + it + "   " + pri.registrado + "    " + pri.itemId
