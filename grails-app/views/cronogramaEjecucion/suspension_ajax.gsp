@@ -71,7 +71,7 @@
         </div>
 
         <div class="controls">
-            <g:textArea name="motivo" class="required span6" style="height: 65px; width: 750px"/>
+            <g:textArea name="motivo" class="required span6" maxlength="255"  style="height: 65px; width: 750px; resize: none"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
