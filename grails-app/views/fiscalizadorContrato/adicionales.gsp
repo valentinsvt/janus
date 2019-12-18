@@ -5,7 +5,8 @@
     <div class="alert alert-error hide" id="divError">
     </div>
 
-<g:form class="registroContrato" name="frmaIndi" action="guardarAdicionales">
+%{--<g:form class="registroContrato" name="frmaIndi" action="guardarAdicionales">--}%
+<g:form class="registroContrato" name="frmAdicionales" action="guardarAdicionales">
     <g:hiddenField name="cntr" value="${cntr.id}"/>
     <div class="span6" style="margin-top: 10px; width: 500px">
 
