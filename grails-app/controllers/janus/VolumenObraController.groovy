@@ -299,12 +299,19 @@ class VolumenObraController extends janus.seguridad.Shield {
 
         if (responsableRol) {
 //            println "..................."
-//            println "${obra?.responsableObra?.departamento?.id} ==== ${Persona.get(session.usuario.id).departamento?.id}"
+            println "${obra?.responsableObra?.departamento?.id} ==== ${Persona.get(session.usuario.id).departamento?.id}"
 //            println "${Persona.get(session.usuario.id)}"
+/*
             if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
                 dueno = true
             } else {
                 dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+            }
+*/
+            if (personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU') {
+                dueno = true
+            } else if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
+                dueno = true
             }
         }
 

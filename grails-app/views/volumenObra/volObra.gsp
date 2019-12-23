@@ -204,6 +204,7 @@
                                 <i class="icon-plus"></i>
                             </a>
                         </g:if>
+%{--
                         <g:else>
                             <g:if test="${obra.estado != 'R' && obra?.departamento?.id == persona?.departamento?.id}">
                                 <a href="#" class="btn btn-primary" title="agregar" id="item_agregar">
@@ -211,6 +212,7 @@
                                 </a>
                             </g:if>
                         </g:else>
+--}%
 
                     </div>
                 </div>
