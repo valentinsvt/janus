@@ -2565,7 +2565,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         /* insertar siguientes periodos recalculando las partes */
         fcin = fcfn + 1
 //        fcin = fcfn
-        println "**** procesa periodos posteriores: $fcin"
+        println "**** procesa periodos posteriores: $fcin, prej__id: $prej_id"
         fcfm = preciosService.ultimoDiaDelMes(fcin)
 
         sql = "delete from creo_t where prej__id = ${prej_id}"
@@ -2634,6 +2634,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     diasPrdo = 0
                     fcin = fcfn + 1
                     fcfm = preciosService.ultimoDiaDelMes(fcin)
+                    fctr = 0
                 }
             }
         }
