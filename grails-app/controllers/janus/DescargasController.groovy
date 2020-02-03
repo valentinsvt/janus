@@ -112,5 +112,16 @@ class DescargasController extends janus.seguridad.Shield {
         response.getOutputStream().write(b)
     }
 
+    def materiales() {
+        def filePath = "ATRIBUTOS Y CARACTERISTICAS DE MATERIALES.xlsx"
+        def path = servletContext.getRealPath("/") + File.separatorChar + filePath
+        def file = new File(path)
+        def b = file.getBytes()
+        response.setContentType("application/excel")
+        response.setHeader("Content-disposition", "attachment; filename=" + filePath)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
 
 } //fin controller

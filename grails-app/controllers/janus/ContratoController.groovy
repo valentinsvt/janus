@@ -95,7 +95,7 @@ class ContratoController extends janus.seguridad.Shield {
 //            println ".........." + obra
                 /** direccion administradora del contrato **/
                 def dptoDireccion = Departamento.findAllByDireccion(contrato.depAdministrador.direccion)
-                println "departamentos... a listar:" + dptoDireccion
+//                println "departamentos... a listar:" + dptoDireccion
                 def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion)
                 def directores = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalDireccion).persona.id
 //            println "directores:" + directores + "  usurio: $session.usuario id:" + session.usuario.id
