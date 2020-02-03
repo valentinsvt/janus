@@ -643,7 +643,7 @@ class ReportesPlanillasController {
         def contrato = plnl.contrato
         def avanceContrato
 
-        def modificaciones = Modificaciones.findAllByContrato(contrato)
+        def modificaciones = Modificaciones.findAllByContratoAndFechaFinIsNotNull(contrato)
 
 //        println("Modificaciones " + modificaciones)
 
