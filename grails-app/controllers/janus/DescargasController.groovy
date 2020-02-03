@@ -113,7 +113,7 @@ class DescargasController extends janus.seguridad.Shield {
     }
 
     def materiales() {
-        def filePath = "ATRIBUTOS Y CARACTERISTICAS DE MATERIALES.xlsx"
+        def filePath = "materiales.xlsx"
         def path = servletContext.getRealPath("/") + File.separatorChar + filePath
         def file = new File(path)
         def b = file.getBytes()
