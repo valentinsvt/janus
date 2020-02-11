@@ -1578,10 +1578,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 "where cntr__id = ${cntr.id} and cntrcmpl is null)) where cntr__id = ${cntr.id} and prejtipo <> 'S'"
         def cnta = cn.executeUpdate(sql.toString())
         if (cmpl) {
-            sql = "update prej set prejcmpl = (select sum(creoprco) from creo " +
+            sql = "update prej set prejcmpl = (select coalesce(sum(creoprco),0) from creo " +
                     "where creo.prej__id = prej.prej__id and vocr__id in (select vocr__id from vocr " +
                     "where cntr__id = ${cntr.id} and cntrcmpl is not null)) where cntr__id = ${cntr.id} and " +
                     "prejtipo <> 'S'"
+//            println "--> prejcmpl $sql"
             cn.execute(sql.toString())
         }
 
