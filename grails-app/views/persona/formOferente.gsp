@@ -10,7 +10,7 @@
                 </span>
             </td>
             <td width="250px">
-                <g:textField name="cedula" maxlength="10" class="span2 required" value="${personaInstance?.cedula}"/>
+                <g:textField name="cedula" maxlength="13" class="span2 required" value="${personaInstance?.cedula}"/>
                 <p class="help-block ui-helper-hidden"></p>
                 <span class="mandatory">*</span>
             </td>

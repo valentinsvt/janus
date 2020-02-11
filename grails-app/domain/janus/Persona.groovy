@@ -65,7 +65,7 @@ class Persona implements Serializable {
         }
     }
     static constraints = {
-        cedula(size: 1..10, unique: true, attributes: [title: 'cedula'])
+        cedula(size: 1..13, unique: true, attributes: [title: 'cedula'])
         nombre(size: 1..30, attributes: [title: 'nombre'])
         apellido(size: 1..30, attributes: [title: 'apellido'])
         codigo(blank: true, nullable: true, attributes: [title: 'numero'])
