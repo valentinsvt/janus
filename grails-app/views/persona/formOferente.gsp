@@ -6,7 +6,7 @@
         <tr>
             <td width="100px">
                 <span class="control-label label label-inverse">
-                    Cédula
+                    Cédula o RUC(Empresas)
                 </span>
             </td>
             <td width="250px">
