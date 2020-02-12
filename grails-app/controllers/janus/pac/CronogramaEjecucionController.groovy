@@ -1569,11 +1569,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def prej = PeriodoEjecucion.findAllByContratoAndTipoNotEqual(cntr, 'S')
         def vlor
         def cmpl = Contrato.findByPadre(cntr)
-        def sql = "update prej set prejcrpa = (select sum(creoprco) from creo " +
+        def sql = "update prej set prejcrpa = (select coalesce(sum(creoprco),0) from creo " +
                 "where creo.prej__id = prej.prej__id) where cntr__id = ${cntr.id} and prejtipo <> 'S'"
         cn.execute(sql.toString())
 
-        sql = "update prej set prejcntr = (select sum(creoprco) from creo " +
+        sql = "update prej set prejcntr = (select coalesce(sum(creoprco),0) from creo " +
                 "where creo.prej__id = prej.prej__id and vocr__id in (select vocr__id from vocr " +
                 "where cntr__id = ${cntr.id} and cntrcmpl is null)) where cntr__id = ${cntr.id} and prejtipo <> 'S'"
         def cnta = cn.executeUpdate(sql.toString())

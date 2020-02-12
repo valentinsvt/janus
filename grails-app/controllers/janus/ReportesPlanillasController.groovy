@@ -2837,6 +2837,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         Document document

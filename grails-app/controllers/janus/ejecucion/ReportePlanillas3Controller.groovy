@@ -2096,7 +2096,7 @@ class ReportePlanillas3Controller {
      * Imprime B0, P0 y Fr de la planilla
      **/
     def reporteTablas(planilla, fpReajuste) {
-//        println "reporteTablas de la planilla ${planilla.id} y fpReajuste: ${fpReajuste.id}"
+        println "reporteTablas de la planilla ${planilla.id} y fpReajuste: ${fpReajuste.id}"
         def obra = planilla.contrato.obra
         def contrato = planilla.contrato
         def reajustesPlanilla = ReajustePlanilla.findAllByPlanillaAndFpReajuste(planilla, fpReajuste, [sort: "periodo", order: "asc"])
@@ -2126,11 +2126,6 @@ class ReportePlanillas3Controller {
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
 
-        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
-        Image logo = Image.getInstance(logoPath);
-        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
-
-
         def bordeThDerecho = [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def bordeThIzquierdo = [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def bordeThRecuadro = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
@@ -2153,7 +2148,7 @@ class ReportePlanillas3Controller {
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
         def titlIndices = tbBo.pop()
         def titulos = tbBo.pop()
-//        println "resumen titulos: $titulos"
+        println "tbBo: $tbBo"
 //        println "resumen titulosIndices: $titlIndices"
 
         Paragraph tituloB0 = new Paragraph();
@@ -2209,7 +2204,9 @@ class ReportePlanillas3Controller {
                 if(!totalAvance[i-1]) totalAvance[i-1] = 0
                 addCellTabla(tablaB0, new Paragraph(numero(d["indc$i"], 2), fontTd), bordeTdRecuadroDer)
                 addCellTabla(tablaB0, new Paragraph(numero(d["vlor$i"], 3), fontTd), bordeTdRecuadroDer)
+//                println "----- d[vlor $i ]: ${d["vlor$i"]}"
                 totalAvance[i-1] += d["vlor$i"]
+//                totalAvance[i-1] += d["vlor$i"]?:0
             }
             totalIndiceOferta += d.valor
             coeficientes += d.coeficiente
@@ -4383,6 +4380,7 @@ class ReportePlanillas3Controller {
     def titlLogo() {
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52,52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         return logo
