@@ -3458,6 +3458,7 @@ class PlanillaController extends janus.seguridad.Shield {
         if(!respaldo) max = 0
 
         max -= totalAnterior
+        max = Math.round(max*100)/100
 
         def json = new JsonBuilder(dets)
 //        println json.toPrettyString()
@@ -3635,7 +3636,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
             procesaReajusteLq(params.id) /** inserta valores de reajuste --> rjpl **/
-//            println "1.completa procesaReajuste"
+            println "1.completa procesaReajuste"
             detalleReajuste(params.id) /** inserta valores del detalle del reajuste --> dtrj **/
 
             if(Planilla.get(params.id).tipoPlanilla.codigo in ['P', 'Q']){
@@ -3878,7 +3879,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def insertaRjpl(prmt) {
         def rjpl = new ReajustePlanilla()
-//        println "inserta reajuste planilla : ${prmt}"
+        println "inserta reajuste planilla : ${prmt}"
         def rjpl_an = ReajustePlanilla.findByPlanillaAndPlanillaReajustadaAndPeriodoAndFpReajuste(prmt.planilla,
                 prmt.planillaReajustada, prmt.periodo, prmt.fpReajuste)
         if (rjpl_an) {
@@ -5007,12 +5008,12 @@ class PlanillaController extends janus.seguridad.Shield {
         def resto  = Math.round((plnl.contrato.monto - totPo - totPoAc)*100)/100
         def cmpl = Contrato.findByPadre(plnl.contrato)
         if(plnl.tipoContrato == 'C'){
-            resto = Math.round((cmpl.anticipo - totPo - totPoAc)*100)/100
+            resto = Math.round((cmpl.monto - cmpl.anticipo - totPo - totPoAc)*100)/100
         }
 
-//        def resto  = Math.round((plnl.contrato.anticipo - totPo)*100)/100
+//        println "------------resto: $resto, monto: ${plnl.contrato.monto} - totPo: $totPo - totPoAc: $totPoAc"
         if (resto < 0) resto = 0  // ya nop se aplica deducción de anticipo
-//        println "------------resto: $resto"
+
 
         println "totalPo --> totPlnl: $totPlnl, vlor: $vlor, anterior: ${totPo}, actual: ${totPoAc}, resto: $resto, estePo: $estePo"
 

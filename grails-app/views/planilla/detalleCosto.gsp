@@ -528,7 +528,7 @@
                     if(max < 0.1) {
                         respaldo = "No se ha subido documento de respaldo de obras adicionales"
                     } else {
-                        respaldo = "El valor de las planillas de Costo + porcentaje " +
+                        respaldo = max + "El valor total de las planillas de Costo + porcentaje " +
                         "superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})"
                     }
 
@@ -594,8 +594,8 @@
                         if(max < 0.001) {
                             respaldo = "No se ha subido documento de respaldo de obras adicionales"
                         } else {
-                            respaldo = "El valor de las planillas de Costo + porcentaje " +
-                                    "superaría el valor permitido (${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')})"
+                            respaldo =  max + "El valor total de las planillas de Costo + porcentaje superaría el valor permitido " +
+                                    "(${formatNumber(number: max, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale:'ec')}) "
                         }
 
                         if (val <= max) {
