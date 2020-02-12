@@ -200,6 +200,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         Document document
@@ -734,6 +735,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         Document document
@@ -1139,6 +1141,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         Document document
@@ -1512,6 +1515,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         Document document
@@ -1939,6 +1943,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         /* ***************************************************** Titulo del reporte *******************************************************/
@@ -3218,6 +3223,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         Document document
@@ -3502,6 +3508,7 @@ class ReportesPlanillasController {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         Document document
@@ -3768,6 +3775,7 @@ class ReportesPlanillasController {
             def planillaDesc = Planilla.findByContratoAndTipoPlanilla(contrato, tipoPlanilla)
             def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
             Image logo = Image.getInstance(logoPath);
+            logo.scaleToFit(52, 52)
             logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
             def prmsHeaderHoja = [border: Color.WHITE]

@@ -1824,7 +1824,7 @@ class ReportePlanillas3Controller {
      * crear reporte de resumen de reajustes
      **/
     def reportePlanillaNuevo() {
-        println "reportePlanillaNuevo params: $params"
+        println "reportePlanillaNuevo --> params: $params"
         def planilla = Planilla.get(params.id)
         if(planilla.tipoPlanilla.codigo.trim() == 'E') {
             redirect action: 'rptPlnlEntrega', params: params
@@ -2811,6 +2811,7 @@ class ReportePlanillas3Controller {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         PdfPTable tablaDetalles = null
@@ -3259,6 +3260,7 @@ class ReportePlanillas3Controller {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52,52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         PdfPTable tablaDetalles = null
@@ -3654,6 +3656,7 @@ class ReportePlanillas3Controller {
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52,52)
         logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
 
         PdfPTable tablaDetalles = null
