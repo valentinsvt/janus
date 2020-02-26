@@ -179,7 +179,7 @@
                     <td class="borderTop num totalAct" data-valor="${totalActual}" data-valoro="${totalActual}" style="font-size: larger">
                         <elm:numero number="${totalActual}" cero="hide"/>
                     </td>
-                    <td class="borderTop num totalAcu" data-valor="${totalAcumulado}" data-valoro="${totalAcumulado}" data-max="${contrato.monto}" style="font-size: larger">
+                    <td class="borderTop num totalAcu" data-valor="${totalAcumulado}" data-valoro="${totalAcumulado}" data-max="${contrato.monto + cmpl}" style="font-size: larger">
                         <elm:numero number="${totalAcumulado}" cero="hide"/>
                     </td>
                 </tr>

@@ -3275,6 +3275,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         def contrato = Contrato.get(params.contrato)
         def obra = contrato.obra
+        def cmpl = Contrato.findByPadre(contrato)?.monto
+        cmpl = cmpl?:0
         def detalle = [:]
         def obrasAdicionales = 1.25
         def respaldo = DocumentoProceso.findByConcursoAndDescripcionIlike(contrato.oferta.concurso, '%respaldo%adicio%')
@@ -3318,9 +3320,9 @@ class PlanillaController extends janus.seguridad.Shield {
         if(!respaldo) obrasAdicionales = 0
 //        obrasAdicionales = 0
 
-        println "adicionales: $obrasAdicionales"
+        println "adicionales: $obrasAdicionales, complementario: $cmpl"
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, adicionales: obrasAdicionales,
-                planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
+                planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable, cmpl: cmpl]
     }
 
     def dtEntrega() {
@@ -4984,7 +4986,13 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         def cntr = plnl.contrato
-        def estePo = Math.round(vlor*(1 - cntr.porcentajeAnticipo/100)*100)/100
+        def cmpl = Contrato.findByPadre(cntr)
+        def estePo = 0
+        if(plnl.tipoContrato == 'C'){
+            estePo = Math.round(vlor*(1 - cmpl.porcentajeAnticipo/100)*100)/100
+        } else {
+            estePo = Math.round(vlor*(1 - cntr.porcentajeAnticipo/100)*100)/100
+        }
 
         def totPo = ReajustePlanilla.executeQuery("select sum(valorPo) from ReajustePlanilla where planilla = :p and " +
                 "planillaReajustada <> :p and periodo > 0", [p: plnl])[0]?:0
@@ -5006,7 +5014,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        def resto  = Math.round((plnl.contrato.anticipo - totPo - totPoAc)*100)/100
         /* el resto de Po debería ser respecto del monto del contrato - lo aplicado en Po */
         def resto  = Math.round((plnl.contrato.monto - totPo - totPoAc)*100)/100
-        def cmpl = Contrato.findByPadre(plnl.contrato)
+
         if(plnl.tipoContrato == 'C'){
             resto = Math.round((cmpl.monto - cmpl.anticipo - totPo - totPoAc)*100)/100
         }
