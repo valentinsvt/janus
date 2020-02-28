@@ -2148,7 +2148,7 @@ class ReportePlanillas3Controller {
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
         def titlIndices = tbBo.pop()
         def titulos = tbBo.pop()
-        println "tbBo: $tbBo"
+//        println "tbBo: $tbBo"
 //        println "resumen titulosIndices: $titlIndices"
 
         Paragraph tituloB0 = new Paragraph();
@@ -3516,9 +3516,16 @@ class ReportePlanillas3Controller {
             tipoplnl += ",'C'"
         }
 
-        sql = "select sum(plnldsct) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
+        def cmpl = Contrato.findByPadre(planilla.contrato)
+        if(tipoRprt == 'C') {
+            sql = "select sum(plnldsct) suma from plnl where cntr__id = ${cmpl.id} and " +
+                    "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo in (${tipoplnl})"
+
+        } else {
+            sql = "select sum(plnldsct) suma from plnl where cntr__id = ${planilla.contrato.id} and " +
 //                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo = '${planilla.tipoContrato}'"
-                "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo in (${tipoplnl})"
+                    "plnlfcfn < '${planilla.fechaInicio.format('yyyy-MM-dd')}' and plnltipo in (${tipoplnl})"
+        }
 //        println "sql.....: $sql"
         def antcAntr = cn.rows(sql.toString())[0].suma?:0
         def antcActl = planilla.descuentos
@@ -4407,7 +4414,7 @@ class ReportePlanillas3Controller {
         Paragraph preface2 = new Paragraph()
 //        preface2.setAlignment(Element.ALIGN_RIGHT)
 //        preface2.add(new Paragraph("Generado por: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-        println "fcha: $fcha"
+//        println "fcha: $fcha"
         preface2.add(new Paragraph("Generado por: " + session.usuario + "   el: " + fcha.format("dd/MM/yyyy hh:mm"), info))
         preface2.setSpacingAfter(5);
 //        addEmptyLine(preface2, 1);

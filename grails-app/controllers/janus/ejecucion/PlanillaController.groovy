@@ -3665,7 +3665,15 @@ class PlanillaController extends janus.seguridad.Shield {
 //                def dsct   = Math.round(plnl.valor*(1 - plnl.contrato.porcentajeAnticipo/100)*100)/100
 
                 /* aplica el descuento del anticipo */
-                def dsct   = Math.round(plnl.valor*(plnl.contrato.porcentajeAnticipo/100)*100)/100
+                def dsct = 0
+                def cmpl = Contrato.findByPadre(plnl.contrato)
+                if(cmpl && plnl.tipoContrato == 'C') {
+                    dsct   = Math.round(plnl.valor*(cmpl.porcentajeAnticipo/100)*100)/100
+                } else {
+                    dsct   = Math.round(plnl.valor*(plnl.contrato.porcentajeAnticipo/100)*100)/100
+                }
+
+//                dsct   = Math.round(plnl.valor*(plnl.contrato.porcentajeAnticipo/100)*100)/100
                 def resto  = Math.round((plnl.contrato.anticipo - totDsct[0])*100)/100
                 println "totDsct[0]: ${totDsct[0]}, resto: ${resto}, dsct: $dsct"
 
@@ -5009,7 +5017,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         def totPlnlCmpl = ReajustePlanilla.executeQuery("select max(acumuladoPlanillas) from ReajustePlanilla where planilla = :p and " +
                 "planillaReajustada = :p", [p: plnl])[0]?:0
-//        println ".....2 $totPlnl"
+        println ".....2 $totPlnl"
 
 //        def resto  = Math.round((plnl.contrato.anticipo - totPo - totPoAc)*100)/100
         /* el resto de Po debería ser respecto del monto del contrato - lo aplicado en Po */
@@ -5309,9 +5317,12 @@ class PlanillaController extends janus.seguridad.Shield {
         def dsct1 = calculaPo(planilla.id, esteMes, planillaFinal, prmt.periodo)
 //                println "+++2: ${calculaPo(plnl.id, 0, false, prmt.periodo)}, anterior: $dsct1"
         prmt.valorPo = dsct1
-//        println "inserta segunda parte Po: $dsct1"
+        println "inserta segunda parte Po: $dsct1"
 
-        if(Math.abs(dsct1) > 0.001) {
+        if(Math.abs(dsct1) > 0.001 && planilla.valor > 0) {
+            insertaRjpl(prmt)
+        } else if(planilla.valor == 0) {
+            prmt.valorPo = 0
             insertaRjpl(prmt)
         }
     }
