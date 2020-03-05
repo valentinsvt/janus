@@ -243,6 +243,11 @@ class ContratoController extends janus.seguridad.Shield {
         //tiene q tener al menos 2 documentos: plano y justificativo de cantidad de obra
         def concurso = Concurso.findByObra(obra)
         def documentosContrato = DocumentoProceso.findAllByConcurso(concurso)
+//        println "--1-- obra: ${obra.id} --> $documentosContrato"
+        if(!documentosContrato) {
+            documentosContrato = DocumentoProceso.findAllByConcurso(contrato.oferta.concurso)
+        }
+//        println "--2-- obra: ${obra.id} --> $documentosContrato"
 
         def planoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("plano") }
         def justificativoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("justificativo") }
@@ -1053,7 +1058,7 @@ class ContratoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-//        println "-->> save: >>>>>>${params}<<<<<"
+        println "-->> save: >>>>>>${params}<<<<<"
         def contratoInstance
         def padre
 
