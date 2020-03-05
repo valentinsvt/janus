@@ -142,8 +142,10 @@
             <div class="span12">
 
                 <div class="span1 formato">Obra</div>
-                <div class="span4"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off"
+                <div class="span3"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off"
                                                 value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
+
+                <div class="span2" style="color: #4877ff">${contrato?.obra?.codigo}</div>
 
                 <div class="span1 formato">Nombre</div>
                 <div class="span3">
