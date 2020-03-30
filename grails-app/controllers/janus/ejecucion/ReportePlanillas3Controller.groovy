@@ -3989,7 +3989,7 @@ class ReportePlanillas3Controller {
 
         document.add(tablaDetalles)
 
-//        document.add(firmas("detalle", "vertical", planilla))
+        document.add(firmas("detalle", "vertical", planilla))  //gdo mar-2020
 
 //        HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 //        pdfw.setPageEvent(event);
