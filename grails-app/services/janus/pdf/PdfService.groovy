@@ -15,6 +15,7 @@ class PdfService {
             renderer.setDocument(url);
             renderer.layout();
             renderer.createPDF(baos);
+            renderer.finishPDF();
             byte[] b = baos.toByteArray();
             return b
         }
