@@ -50,8 +50,8 @@ class PdfController {
             def baseUri = request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request)
             if (request.method == "GET") {
                 def url = baseUri + params.url + '?' + request.getQueryString()
-                //println "BaseUri is $baseUri"
-                //println "Fetching url $url"
+                println "BaseUri is $baseUri"
+                println "Fetching url $url"
                 b = pdfService.buildPdf(url)
             }
             if (request.method == "POST") {
