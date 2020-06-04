@@ -1115,12 +1115,12 @@ class Reportes2Controller {
         sheet.setColumnView(4, 20)
         sheet.setColumnView(5, 20)
         sheet.setColumnView(6, 20)
+        sheet.setColumnView(7, 20)
 
         def label
         def number
         def fila = 18;
         def ultimaFila
-
 
         label = new jxl.write.Label(1, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
         label = new jxl.write.Label(1, 3, "GESTIÓN DE PRESUPUESTOS", times16format); sheet.addCell(label);
@@ -1164,8 +1164,11 @@ class Reportes2Controller {
         label = new jxl.write.Label(4, 17, "PRECIO", times16format); sheet.addCell(label);
         label = new jxl.write.Label(5, 17, "ESPECIFICACIONES", times16format); sheet.addCell(label);
         label = new jxl.write.Label(6, 17, "PLANO DE DETALLE", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(7, 17, "# OBRAS", times16format); sheet.addCell(label);
 
         res.each{ k->
+            def volumenes = VolumenesObra.findAllByItem(Item.get(k?.item__id));
+            def obras = volumenes.obra.nombre.unique()
 
             label = new jxl.write.Label(0, fila, k?.rbrocdgo); sheet.addCell(label);
             label = new jxl.write.Label(1, fila, janus.Item.get(k?.item__id)?.codigoEspecificacion ?: ''); sheet.addCell(label);
@@ -1174,12 +1177,12 @@ class Reportes2Controller {
             number = new jxl.write.Number(4, fila, k?.rbropcun ?: 0); sheet.addCell(number);
             label = new jxl.write.Label(5, fila, k?.rbroespc); sheet.addCell(label);
             label = new jxl.write.Label(6, fila, k?.rbrofoto); sheet.addCell(label);
+            number = new jxl.write.Number(7, fila, obras.size() ?: 0); sheet.addCell(number);
 
             fila++
-
             ultimaFila = fila
-
         }
+
         workbook.write();
         workbook.close();
         def output = response.getOutputStream()
@@ -1187,13 +1190,7 @@ class Reportes2Controller {
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
-
     }
-
-
-
-
-
 
     def tablasPlanilla_bck() {
         def planilla = Planilla.get(params.id)
