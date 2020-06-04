@@ -209,7 +209,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
 //                println "....1 ${c.size()}"
                 c.eachWithIndex { crono, cont ->
 //                    println "procesa: $crono, $cont  plazo: $plazoMesesContrato"
-                    if (cont < plazoMesesContrato) {
+//                    if (cont < plazoMesesContrato) {
 //                        println "....2"
                         if (CronogramaContratado.countByPeriodoAndVolumenContrato(crono.periodo, vol) == 0) {
 //                            println "....3"
@@ -220,33 +220,36 @@ class CronogramaContratoController extends janus.seguridad.Shield {
                             cronogramaContratado.periodo = crono.periodo
                             cronogramaContratado.cantidad = crono.cantidad
                             cronogramaContratado.precio = crono.precio
+                            cronogramaContratado.porcentaje = crono.porcentaje
+                            cronogramaContratado.precio = crono.precio
 
-                            def pf, cf, df
+//                            def pf, cf, df
 //                        println "resto... " + resto
-                            if (cont < c.size() - 1) {
-                                pf = Math.floor(crono.porcentaje)
-                                resto -= pf
-                            } else {
-                                pf = resto
-                                resto -= pf
-                            }
+//                            if (cont < c.size() - 1) {
+//                                pf = Math.floor(crono.porcentaje)
+//                                resto -= pf
+//                            } else {
+//                                pf = resto
+//                                resto -= pf
+//                            }
 //                        println "resto... " + resto
-                            cf = (pf * cronogramaContratado.cantidad) / crono.porcentaje
-                            df = (pf * cronogramaContratado.precio) / crono.porcentaje
+//                            cf = (pf * cronogramaContratado.cantidad) / crono.porcentaje
+//                            df = (pf * cronogramaContratado.precio) / crono.porcentaje
 
-                            cronogramaContratado.porcentaje = pf
-                            cronogramaContratado.cantidad = cf?.toDouble()
-                            cronogramaContratado.precio = df?.toDouble()
+//                            cronogramaContratado.porcentaje = pf
+//                            cronogramaContratado.cantidad = cf?.toDouble()
+//                            cronogramaContratado.precio = df?.toDouble()
 
                             if (!cronogramaContratado.save(flush: true)) {
                                 println "Error al guardar el crono contrato del crono " + crono.id
                                 println cronogramaContratado.errors
                             }
 
-                        } else {
-                            def pf = Math.floor(crono.porcentaje)
-                            resto -= pf
-                        }
+//                        }
+//                        else {
+//                            def pf = Math.floor(crono.porcentaje)
+//                            resto -= pf
+//                        }
                     }
                 }
             }
