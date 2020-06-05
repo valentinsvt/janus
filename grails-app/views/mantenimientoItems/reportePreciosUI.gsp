@@ -24,6 +24,9 @@ fieldset {
             <a href="#" id="f" class="col btn">
                 Fecha de Act.
             </a>
+            <a href="#" id="o" class="col btn">
+                Obras
+            </a>
         </div>
     </fieldset>
     <fieldset>

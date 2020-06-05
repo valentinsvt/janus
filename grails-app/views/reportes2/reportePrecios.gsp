@@ -129,6 +129,11 @@
                                 FECHA ACT.
                             </th>
                         </g:if>
+                        <g:if test="${cols?.contains('o')}">
+                            <th>
+                                # OBRAS.
+                            </th>
+                        </g:if>
                     </tr>
                     </thead>
                     <tbody>
@@ -166,6 +171,11 @@
                             <g:if test="${cols?.contains('f')}">
                                 <td class="tright">
                                     <g:formatDate date="${precio?.fecha}" format="dd-MM-yyyy"/>
+                                </td>
+                            </g:if>
+                            <g:if test="${cols?.contains('o')}">
+                                <td class="tright">
+
                                 </td>
                             </g:if>
                         </tr>
