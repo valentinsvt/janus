@@ -293,7 +293,7 @@ class PreciosService {
     def nv_rubros(parametros){
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rubros(" + parametros + ") "
-//        println "sql " + sql
+        println "sql " + sql
         def result = []
         cn.eachRow(sql) { r ->
             result.add(r.toRowResult())
