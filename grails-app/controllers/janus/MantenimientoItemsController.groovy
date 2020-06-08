@@ -1096,11 +1096,11 @@ class MantenimientoItemsController extends Shield {
         def item = Item.get(params.id)
         try {
             item.delete(flush: true)
-            render "OK"
+            render 'OK'
         }
-        catch (DataIntegrityViolationException e) {
-            println "mantenimiento items controller l 797: " + e
-            render "NO"
+        catch (Exception e) {
+            println "Error: mantenimiento items: " + e
+            render "NO_existen datos dependientes"
         }
     }
 

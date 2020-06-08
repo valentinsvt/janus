@@ -219,8 +219,16 @@
                     },
                     success : function (msg) {
 
-                        $("#tree").jstree('delete_node', $("#" + idItem));
-                        $("#modal-tree").modal("hide");
+                        var parts = msg.split("_");
+                        if (parts[0] == "OK") {
+                            $("#tree").jstree('delete_node', $("#" + idItem));
+                            $("#modal-tree").modal("hide");
+                            log(params.log + " eliminado correctamente");
+                        } else {
+//                            $("#modal-tree").modal("hide");
+                            log("Ha ocurrido un error al eliminar" + parts[1], true);
+                        }
+
 
                     }
 
