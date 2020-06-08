@@ -977,9 +977,34 @@ class RubroController extends janus.seguridad.Shield {
 
     def borrarArchivo(){
 
-        println("params " + params)
+//        println("params " + params)
+        def errores = ''
 
+        switch (params.tipo) {
+            case "il":
+                def rubro = Item.get(params.rubro)
+                rubro.foto = null
+                if(!rubro.save(flush: true)){
+                    errores += rubro.errors
+                }else{
+
+                }
+                break;
+            case "dt":
+                def ares = ArchivoEspecificacion.get(params.id)
+                if(!ares.delete(flush: true)){
+                    errores += ares.errors
+                }else{
+
+                }
+                break;
+        }
+
+        if(errores == ''){
+            render "ok"
+        }else{
+            render "no"
+        }
     }
-
 
 } //fin controller
