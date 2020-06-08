@@ -56,12 +56,12 @@
         <i class="icon-truck"></i>
         Transporte
     </a>
-<g:if test="${rubro}">
-    <a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
-        <i class="icon-print"></i>
-        Imprimir
-    </a>
-</g:if>
+    <g:if test="${rubro}">
+        <a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
+            <i class="icon-print"></i>
+            Imprimir
+        </a>
+    </g:if>
     <g:if test="${rubro}">
         <a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">
             <i class="icon-print"></i>
@@ -76,7 +76,7 @@
                 Especificaciones
             </a>
         </g:if>
-   </g:if>
+    </g:if>
     <g:if test="${rubro}">
         <a href="#" id="foto" class="btn btn-ajax btn-new">
             <i class="icon-picture"></i>
@@ -94,338 +94,338 @@
 
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: -10px">
 
-<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;">
-    <g:form name="frmRubro" action="save" style="height: 100px;">
-        <input type="hidden" id="rubro__id" name="rubro.id" value="${rubro?.id}">
+    <div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;">
+        <g:form name="frmRubro" action="save" style="height: 100px;">
+            <input type="hidden" id="rubro__id" name="rubro.id" value="${rubro?.id}">
 
-        <p class="css-vertical-text">Rubro</p>
+            <p class="css-vertical-text">Rubro</p>
+
+            <div class="linea" style="height: 100px;"></div>
+
+            <div class="row-fluid">
+                <div class="span2" style="width: 150px;">
+                    Código
+                    <input type="text" name="rubro.codigo" class="span20 allCaps required input-small" value="${rubro?.codigo}"
+                           id="input_codigo" maxlength="30">
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+
+                <div class="span2" style="width: 130px; margin-left: 10px">
+                    Código Especificación
+                    <input type="text" name="rubro.codigoEspecificacion" class="span24 allCaps required input-small" value="${rubro?.codigoEspecificacion}" id="input_codigo_es" maxlength="30">
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+
+                <div class="span6" style="width: 550px; margin-left: 10px">
+                    Descripción
+                    <input type="text" name="rubro.nombre" class="span72" value="${rubro?.nombre}" id="input_descripcion">
+                </div>
+
+                <div class="span2" style="width: 105px; margin-left: 10px">
+                    Fecha Creación
+                    <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fecha}" disabled="true" id="fechaCreacion"/>
+                </div>
+
+                <div class="span2"  style="width: 140px; margin-left: 10px">
+                    Fecha Modificación
+                    <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fechaModificacion}" format="dd-MM-yyyy hh:mm " disabled="true" id="fchaMod"/>
+                </div>
+
+            </div>
+
+            <div class="row-fluid">
+                <div class="span2" style="width: 150px;">
+                    Dirección responsable
+                    <g:select name="rubro.grupo.id" id="selClase" from="${grupos}" class="span12" optionKey="id" optionValue="descripcion"
+                              value="${rubro?.departamento?.subgrupo?.grupo?.id}" noSelection="['': '--Seleccione--']"/>
+                </div>
+
+                <div class="span2" style="width: 350px; margin-left: 10px">
+                    Grupo
+                    <g:if test="${rubro?.departamento?.subgrupo?.id}">
+                        <g:select id="selGrupo" name="rubro.suggrupoItem.id" from="${janus.SubgrupoItems.findAllByGrupo(rubro?.departamento?.subgrupo?.grupo)}"
+                                  class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.departamento?.subgrupo?.id}" noSelection="['': '--Seleccione--']"/>
+                    </g:if>
+                    <g:else>
+                        <select id="selGrupo" class="span12"></select>
+                    </g:else>
+                </div>
+
+                <div class="span3" style="width: 200px; margin-left: 10px">
+                    Sub grupo
+                    <g:if test="${rubro?.departamento?.id}">
+                        <g:select name="rubro.departamento.id" id="selSubgrupo" from="${janus.DepartamentoItem.findAllBySubgrupo(rubro?.departamento?.subgrupo)}"
+                                  class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.departamento?.id}"/>
+                    </g:if>
+                    <g:else>
+                        <select id="selSubgrupo" class="span12"></select>
+                    </g:else>
+                </div>
+
+                <div class="span1" style="width: 75px; margin-left: 10px">
+                    Unidad
+                    <g:select name="rubro.unidad.id" from="${janus.Unidad.list()}" class="span12" optionKey="id" optionValue="codigo" value="${rubro?.unidad?.id}"/>
+                </div>
+
+                <div class="span4" style="color: #01a; width: 300px; margin-left: 10px" >
+                    Responsable: <br>
+                    <g:if test="${modifica}">
+                    %{--<g:select name="rubro.responsable.id" id="selResponsable" from="${resps}" value="${rubro?.responsable?.id?:session.usuario.id}"--}%
+                    %{--optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;" readonly="true"></g:select>--}%
+                        <input type="hidden" name="rubro.responsable" class="span72" value="${rubro?.responsable?.id?:session.usuario.id}" id="selResponsable">
+                        <input type="text" name="persona" class="span72" value="${rubro?.responsable?:session.usuario}" id="Responsable" readonly>
+                    </g:if>
+                    <g:else>
+                        ${rubro?.responsable}
+                    </g:else>
+                %{--<input type="text" name="rubro.nombre" class="span12" value="${session.usuario}" readonly="" style="color: #01a">--}%
+                </div>
+
+                %{--<div class="span2"  >--}%
+                %{--Rendimiento--}%
+                %{--<input type="text" name="rubro.rendimiento" class="span24">--}%
+                %{--</div>--}%
+
+            </div>
+        </g:form>
+    </div>
+
+    <div style="border-bottom: 1px solid black;padding-left: 50px;margin-top: 10px;position: relative;">
+        <p class="css-vertical-text">Items</p>
 
         <div class="linea" style="height: 100px;"></div>
 
-        <div class="row-fluid">
-            <div class="span2" style="width: 150px;">
-                Código
-                <input type="text" name="rubro.codigo" class="span20 allCaps required input-small" value="${rubro?.codigo}"
-                       id="input_codigo" maxlength="30">
+        <div class="row-fluid" style="color: #248">
+            %{--<div class="span3">--}%
+            %{--<div style="height: 40px;float: left;width: 100px">Lista de precios</div>--}%
 
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-
-            <div class="span2" style="width: 130px; margin-left: 10px">
-                Código Especificación
-                <input type="text" name="rubro.codigoEspecificacion" class="span24 allCaps required input-small" value="${rubro?.codigoEspecificacion}" id="input_codigo_es" maxlength="30">
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-
-            <div class="span6" style="width: 550px; margin-left: 10px">
-                Descripción
-                <input type="text" name="rubro.nombre" class="span72" value="${rubro?.nombre}" id="input_descripcion">
-            </div>
-
-            <div class="span2" style="width: 105px; margin-left: 10px">
-                Fecha Creación
-                <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fecha}" disabled="true" id="fechaCreacion"/>
-            </div>
-
-            <div class="span2"  style="width: 140px; margin-left: 10px">
-                Fecha Modificación
-                <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fechaModificacion}" format="dd-MM-yyyy hh:mm " disabled="true" id="fchaMod"/>
-            </div>
-
-        </div>
-
-        <div class="row-fluid">
-            <div class="span2" style="width: 150px;">
-                Dirección responsable
-                <g:select name="rubro.grupo.id" id="selClase" from="${grupos}" class="span12" optionKey="id" optionValue="descripcion"
-                          value="${rubro?.departamento?.subgrupo?.grupo?.id}" noSelection="['': '--Seleccione--']"/>
-            </div>
-
-            <div class="span2" style="width: 350px; margin-left: 10px">
-                Grupo
-                <g:if test="${rubro?.departamento?.subgrupo?.id}">
-                    <g:select id="selGrupo" name="rubro.suggrupoItem.id" from="${janus.SubgrupoItems.findAllByGrupo(rubro?.departamento?.subgrupo?.grupo)}"
-                              class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.departamento?.subgrupo?.id}" noSelection="['': '--Seleccione--']"/>
-                </g:if>
-                <g:else>
-                    <select id="selGrupo" class="span12"></select>
-                </g:else>
-            </div>
-
-            <div class="span3" style="width: 200px; margin-left: 10px">
-                Sub grupo
-                <g:if test="${rubro?.departamento?.id}">
-                    <g:select name="rubro.departamento.id" id="selSubgrupo" from="${janus.DepartamentoItem.findAllBySubgrupo(rubro?.departamento?.subgrupo)}"
-                              class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.departamento?.id}"/>
-                </g:if>
-                <g:else>
-                    <select id="selSubgrupo" class="span12"></select>
-                </g:else>
-            </div>
-
-            <div class="span1" style="width: 75px; margin-left: 10px">
-                Unidad
-                <g:select name="rubro.unidad.id" from="${janus.Unidad.list()}" class="span12" optionKey="id" optionValue="codigo" value="${rubro?.unidad?.id}"/>
-            </div>
-
-            <div class="span4" style="color: #01a; width: 300px; margin-left: 10px" >
-                Responsable: <br>
-                <g:if test="${modifica}">
-                    %{--<g:select name="rubro.responsable.id" id="selResponsable" from="${resps}" value="${rubro?.responsable?.id?:session.usuario.id}"--}%
-                              %{--optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;" readonly="true"></g:select>--}%
-                    <input type="hidden" name="rubro.responsable" class="span72" value="${rubro?.responsable?.id?:session.usuario.id}" id="selResponsable">
-                    <input type="text" name="persona" class="span72" value="${rubro?.responsable?:session.usuario}" id="Responsable" readonly>
-                </g:if>
-                <g:else>
-                    ${rubro?.responsable}
-                </g:else>
-                %{--<input type="text" name="rubro.nombre" class="span12" value="${session.usuario}" readonly="" style="color: #01a">--}%
-            </div>
-
-            %{--<div class="span2"  >--}%
-            %{--Rendimiento--}%
-            %{--<input type="text" name="rubro.rendimiento" class="span24">--}%
+            %{--<div class="btn-group span7" data-toggle="buttons-radio" style="float: right;">--}%
+            %{--<button type="button" class="btn btn-info active tipoPrecio" id="C">Civiles</button>--}%
+            %{--<button type="button" class="btn btn-info tipoPrecio" id="V">Viales</button>--}%
+            %{--</div>--}%
             %{--</div>--}%
 
-        </div>
-    </g:form>
-</div>
-
-<div style="border-bottom: 1px solid black;padding-left: 50px;margin-top: 10px;position: relative;">
-    <p class="css-vertical-text">Items</p>
-
-    <div class="linea" style="height: 100px;"></div>
-
-    <div class="row-fluid" style="color: #248">
-        %{--<div class="span3">--}%
-        %{--<div style="height: 40px;float: left;width: 100px">Lista de precios</div>--}%
-
-        %{--<div class="btn-group span7" data-toggle="buttons-radio" style="float: right;">--}%
-        %{--<button type="button" class="btn btn-info active tipoPrecio" id="C">Civiles</button>--}%
-        %{--<button type="button" class="btn btn-info tipoPrecio" id="V">Viales</button>--}%
-        %{--</div>--}%
-        %{--</div>--}%
-
-        <div class="span6" style="width: 500px;">
-            Lista de precios: MO y Equipos
-            <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 300px"/>
-        </div>
-
-        <div class="span3" style="width: 180px;">
-            % costos indirectos
-            <input type="text" style="width: 30px;" id="costo_indi" value="22.5">
-        </div>
-
-        <div class="span2">
-            Fecha
-            <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
-        </div>
-
-        <g:if test="${rubro && modifica}">
-            <div class="span2" style="margin-left: -10px">
-                <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
-                    Copiar composición
-                </a>
+            <div class="span6" style="width: 500px;">
+                Lista de precios: MO y Equipos
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 300px"/>
             </div>
-            <div class="span1" style="margin-left: -10px">
-                <a class="btn btn-small btn-info infoItem" href="#" rel="tooltip" title="Información">
-                    <i class="icon-exclamation"></i> Info</a>
+
+            <div class="span3" style="width: 180px;">
+                % costos indirectos
+                <input type="text" style="width: 30px;" id="costo_indi" value="22.5">
             </div>
-        </g:if>
 
-    </div>
-
-    <div class="row-fluid" style="margin-bottom: 5px">
-        <div class="span2">
-            CÓDIGO
-            <input type="text" name="item.codigo" id="cdgo_buscar" class="span24">
-            <input type="hidden" id="item_id">
-            <input type="hidden" id="item_tipoLista">
-        </div>
-
-        <div class="span6">
-            DESCRIPCIÓN
-            <input type="text" name="item.descripcion" id="item_desc" class="span11" disabled="disabled">
-        </div>
-
-        <div class="span1" style="margin-right: 0px;margin-left: -30px;">
-            UNIDAD
-            <input type="text" name="item.unidad" id="item_unidad" class="span8" disabled="true">
-        </div>
-
-        <div class="span1" style="margin-left: -5px !important;">
-            CANTIDAD
-            <input type="text" name="item.cantidad" class="span12" id="item_cantidad" value="0" style="text-align: right">
-        </div>
-
-        <div class="span2">
-            RENDIMIENTO
-            <input type="text" name="item.rendimiento" class="span8" id="item_rendimiento" value="1" style="text-align: right; color: #44a;width: 170px;">
-        </div>
-
-        <g:if test="${modifica}">
-            <div class="span1" style="border: 0px solid black;height: 45px;padding-top: 22px;margin-left: 10px">
-                <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Agregar" id="btn_agregarItem">
-                    <i class="icon-plus"></i>
-                </a>
-
+            <div class="span2">
+                Fecha
+                <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
             </div>
-        </g:if>
 
-    </div>
-</div>
-
-<input type="hidden" id="actual_row">
-
-<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;float: left;width: 95%" id="tablas">
-    <p class="css-vertical-text">Composición</p>
-
-    <div class="linea" style="height: 98%;"></div>
-    <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 10px;">
-        <thead>
-        <tr>
-            <th style="width: 80px;">
-                CÓDIGO
-            </th>
-            <th style="width: 600px;">
-                EQUIPO
-            </th>
-            <th style="width: 80px;">
-                CANTIDAD
-            </th>
-            <th class="col_tarifa" style="display: none;">TARIFA <br>($/hora)</th>
-            <th class="col_hora" style="display: none;">COSTO($)</th>
-            <th class="col_rend" style="width: 50px">RENDIMIENTO</th>
-            <th class="col_total" style="display: none;"><C class="TOTAL"></C>C.TOTAL($)<br>($/hora)</th>
-            <th style="width: 40px" class="col_delete"></th>
-        </tr>
-        </thead>
-        <tbody id="tabla_equipo">
-        <g:each in="${items}" var="rub" status="i">
-            <g:if test="${rub.item.departamento.subgrupo.grupo.id == 3}">
-                <tr class="item_row " id="${rub.id}" tipo="${rub.item.departamento.subgrupo.grupo.id}">
-                    <td class="cdgo">${rub.item.codigo}</td>
-                    <td>${rub.item.nombre}</td>
-                    <td style="text-align: right" class="cant">
-                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
-                    </td>
-
-                    <td class="col_tarifa cod_${rub.item.codigo?.replaceAll('\\.', '_')}" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
-                    <td class="col_hora" style="display: none;text-align: right"></td>
-                    <td class="col_rend rend" style="width: 50px;text-align: right" valor="${rub.rendimiento}">
-                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
-                    </td>
-                    <td class="col_total" style="display: none;text-align: right"></td>
-                    <td style="width: 50px;text-align: center" class="col_delete">
-                        <g:if test="${modifica}">
-                            <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
-                                <i class="icon-trash"></i></a>
-                        </g:if>
-                    </td>
-                </tr>
+            <g:if test="${rubro && modifica}">
+                <div class="span2" style="margin-left: -10px">
+                    <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
+                        Copiar composición
+                    </a>
+                </div>
+                <div class="span1" style="margin-left: -10px">
+                    <a class="btn btn-small btn-info infoItem" href="#" rel="tooltip" title="Información">
+                        <i class="icon-exclamation"></i> Info</a>
+                </div>
             </g:if>
-        </g:each>
-        </tbody>
-    </table>
-    <table class="table table-bordered table-striped table-condensed table-hover">
-        <thead>
-        <tr>
-            <th style="width: 80px;">
-                CÓDIGO
-            </th>
-            <th style="width: 600px;">
-                MANO DE OBRA
-            </th>
-            <th style="width: 80px">
-                CANTIDAD
-            </th>
 
-            <th class="col_jornal" style="display: none;">JORNAL<br>($/hora)</th>
-            <th class="col_hora" style="display: none;">COSTO($)</th>
-            <th class="col_rend" style="width: 50px;">RENDIMIENTO</th>
-            <th class="col_total" style="display: none;">C.TOTAL($)</th>
-            <th style="width: 40px" class="col_delete"></th>
-        </tr>
-        </thead>
-        <tbody id="tabla_mano">
-        <g:each in="${items}" var="rub" status="i">
-            <g:if test="${rub.item.departamento.subgrupo.grupo.id == 2}">
-                <tr class="item_row" id="${rub.id}" tipo="${rub.item.departamento.subgrupo.grupo.id}">
-                    <td class="cdgo">${rub.item.codigo}</td>
-                    <td>${rub.item.nombre}</td>
-                    <td style="text-align: right" class="cant">
-                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
-                    </td>
+        </div>
 
-                    <td class="col_jornal" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
-                    <td class="col_hora" style="display: none;text-align: right"></td>
-                    <td class="col_rend rend" style="width: 50px;text-align: right" valor="${rub.rendimiento}">
-                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
-                    </td>
-                    <td class="col_total" style="display: none;text-align: right"></td>
-                    <td style="width: 50px;text-align: center" class="col_delete">
-                        <g:if test="${modifica}">
-                            <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
-                                <i class="icon-trash"></i></a>
-                        </g:if>
-                    </td>
-                </tr>
-            </g:if>
-        </g:each>
-        </tbody>
-    </table>
-    <table class="table table-bordered table-striped table-condensed table-hover">
-        <thead>
-        <tr>
-            <th style="width: 80px;">
+        <div class="row-fluid" style="margin-bottom: 5px">
+            <div class="span2">
                 CÓDIGO
-            </th>
-            <th style="width: 600px;">
-                MATERIAL
-            </th>
-            <th style="width: 60px" class="col_unidad">
+                <input type="text" name="item.codigo" id="cdgo_buscar" class="span24">
+                <input type="hidden" id="item_id">
+                <input type="hidden" id="item_tipoLista">
+            </div>
+
+            <div class="span6">
+                DESCRIPCIÓN
+                <input type="text" name="item.descripcion" id="item_desc" class="span11" disabled="disabled">
+            </div>
+
+            <div class="span1" style="margin-right: 0px;margin-left: -30px;">
                 UNIDAD
-            </th>
-            <th style="width: 80px">
+                <input type="text" name="item.unidad" id="item_unidad" class="span8" disabled="true">
+            </div>
+
+            <div class="span1" style="margin-left: -5px !important;">
                 CANTIDAD
-            </th>
-            <th style="width: 40px" class="col_delete"></th>
-            <th class="col_precioUnit" style="display: none;">UNITARIO</th>
-            <th class="col_total" style="display: none;">C.TOTAL($)</th>
-        </tr>
-        </thead>
-        <tbody id="tabla_material">
-        <g:each in="${items}" var="rub" status="i" >
-            <g:if test="${rub.item.departamento.subgrupo.grupo.id == 1}">
-                <tr class="item_row" id="${rub.id}" tipo="${rub.item.departamento.subgrupo.grupo.id}">
-                    <td class="cdgo">${rub.item.codigo}</td>
-                    <td>${rub.item.nombre}</td>
-                    <td style="width: 60px !important;text-align: center" class="col_unidad">${rub.item.unidad.codigo}</td>
-                    <td style="text-align: right" class="cant">
-                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
-                    </td>
-                    <td class="col_precioUnit" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
+                <input type="text" name="item.cantidad" class="span12" id="item_cantidad" value="0" style="text-align: right">
+            </div>
 
-                    <td class="col_total" style="display: none;text-align: right"></td>
-                    <td style="width: 50px;text-align: center" class="col_delete">
-                        <g:if test="${modifica}">
-                            <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
-                                <i class="icon-trash"></i></a>
-                        </g:if>
-                    </td>
-                </tr>
+            <div class="span2">
+                RENDIMIENTO
+                <input type="text" name="item.rendimiento" class="span8" id="item_rendimiento" value="1" style="text-align: right; color: #44a;width: 170px;">
+            </div>
+
+            <g:if test="${modifica}">
+                <div class="span1" style="border: 0px solid black;height: 45px;padding-top: 22px;margin-left: 10px">
+                    <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Agregar" id="btn_agregarItem">
+                        <i class="icon-plus"></i>
+                    </a>
+
+                </div>
             </g:if>
-        </g:each>
-        </tbody>
-    </table>
 
-    <div id="tabla_transporte"></div>
+        </div>
+    </div>
 
-    <div id="tabla_indi"></div>
+    <input type="hidden" id="actual_row">
 
-    <div id="tabla_costos" style="height: 120px;display: none;float: right;width: 100%;margin-bottom: 10px;"></div>
-</div>
+    <div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;float: left;width: 95%" id="tablas">
+        <p class="css-vertical-text">Composición</p>
+
+        <div class="linea" style="height: 98%;"></div>
+        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 10px;">
+            <thead>
+            <tr>
+                <th style="width: 80px;">
+                    CÓDIGO
+                </th>
+                <th style="width: 600px;">
+                    EQUIPO
+                </th>
+                <th style="width: 80px;">
+                    CANTIDAD
+                </th>
+                <th class="col_tarifa" style="display: none;">TARIFA <br>($/hora)</th>
+                <th class="col_hora" style="display: none;">COSTO($)</th>
+                <th class="col_rend" style="width: 50px">RENDIMIENTO</th>
+                <th class="col_total" style="display: none;"><C class="TOTAL"></C>C.TOTAL($)<br>($/hora)</th>
+                <th style="width: 40px" class="col_delete"></th>
+            </tr>
+            </thead>
+            <tbody id="tabla_equipo">
+            <g:each in="${items}" var="rub" status="i">
+                <g:if test="${rub.item.departamento.subgrupo.grupo.id == 3}">
+                    <tr class="item_row " id="${rub.id}" tipo="${rub.item.departamento.subgrupo.grupo.id}">
+                        <td class="cdgo">${rub.item.codigo}</td>
+                        <td>${rub.item.nombre}</td>
+                        <td style="text-align: right" class="cant">
+                            <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                        </td>
+
+                        <td class="col_tarifa cod_${rub.item.codigo?.replaceAll('\\.', '_')}" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
+                        <td class="col_hora" style="display: none;text-align: right"></td>
+                        <td class="col_rend rend" style="width: 50px;text-align: right" valor="${rub.rendimiento}">
+                            <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                        </td>
+                        <td class="col_total" style="display: none;text-align: right"></td>
+                        <td style="width: 50px;text-align: center" class="col_delete">
+                            <g:if test="${modifica}">
+                                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
+                                    <i class="icon-trash"></i></a>
+                            </g:if>
+                        </td>
+                    </tr>
+                </g:if>
+            </g:each>
+            </tbody>
+        </table>
+        <table class="table table-bordered table-striped table-condensed table-hover">
+            <thead>
+            <tr>
+                <th style="width: 80px;">
+                    CÓDIGO
+                </th>
+                <th style="width: 600px;">
+                    MANO DE OBRA
+                </th>
+                <th style="width: 80px">
+                    CANTIDAD
+                </th>
+
+                <th class="col_jornal" style="display: none;">JORNAL<br>($/hora)</th>
+                <th class="col_hora" style="display: none;">COSTO($)</th>
+                <th class="col_rend" style="width: 50px;">RENDIMIENTO</th>
+                <th class="col_total" style="display: none;">C.TOTAL($)</th>
+                <th style="width: 40px" class="col_delete"></th>
+            </tr>
+            </thead>
+            <tbody id="tabla_mano">
+            <g:each in="${items}" var="rub" status="i">
+                <g:if test="${rub.item.departamento.subgrupo.grupo.id == 2}">
+                    <tr class="item_row" id="${rub.id}" tipo="${rub.item.departamento.subgrupo.grupo.id}">
+                        <td class="cdgo">${rub.item.codigo}</td>
+                        <td>${rub.item.nombre}</td>
+                        <td style="text-align: right" class="cant">
+                            <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                        </td>
+
+                        <td class="col_jornal" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
+                        <td class="col_hora" style="display: none;text-align: right"></td>
+                        <td class="col_rend rend" style="width: 50px;text-align: right" valor="${rub.rendimiento}">
+                            <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                        </td>
+                        <td class="col_total" style="display: none;text-align: right"></td>
+                        <td style="width: 50px;text-align: center" class="col_delete">
+                            <g:if test="${modifica}">
+                                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
+                                    <i class="icon-trash"></i></a>
+                            </g:if>
+                        </td>
+                    </tr>
+                </g:if>
+            </g:each>
+            </tbody>
+        </table>
+        <table class="table table-bordered table-striped table-condensed table-hover">
+            <thead>
+            <tr>
+                <th style="width: 80px;">
+                    CÓDIGO
+                </th>
+                <th style="width: 600px;">
+                    MATERIAL
+                </th>
+                <th style="width: 60px" class="col_unidad">
+                    UNIDAD
+                </th>
+                <th style="width: 80px">
+                    CANTIDAD
+                </th>
+                <th style="width: 40px" class="col_delete"></th>
+                <th class="col_precioUnit" style="display: none;">UNITARIO</th>
+                <th class="col_total" style="display: none;">C.TOTAL($)</th>
+            </tr>
+            </thead>
+            <tbody id="tabla_material">
+            <g:each in="${items}" var="rub" status="i" >
+                <g:if test="${rub.item.departamento.subgrupo.grupo.id == 1}">
+                    <tr class="item_row" id="${rub.id}" tipo="${rub.item.departamento.subgrupo.grupo.id}">
+                        <td class="cdgo">${rub.item.codigo}</td>
+                        <td>${rub.item.nombre}</td>
+                        <td style="width: 60px !important;text-align: center" class="col_unidad">${rub.item.unidad.codigo}</td>
+                        <td style="text-align: right" class="cant">
+                            <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                        </td>
+                        <td class="col_precioUnit" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
+
+                        <td class="col_total" style="display: none;text-align: right"></td>
+                        <td style="width: 50px;text-align: center" class="col_delete">
+                            <g:if test="${modifica}">
+                                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
+                                    <i class="icon-trash"></i></a>
+                            </g:if>
+                        </td>
+                    </tr>
+                </g:if>
+            </g:each>
+            </tbody>
+        </table>
+
+        <div id="tabla_transporte"></div>
+
+        <div id="tabla_indi"></div>
+
+        <div id="tabla_costos" style="height: 120px;display: none;float: right;width: 100%;margin-bottom: 10px;"></div>
+    </div>
 
 </div>
 
@@ -637,14 +637,14 @@
     <div class="modal-footer" id="modal_trans_footer">
         <a href="#" data-dismiss="modal" class="btn btn-primary">OK</a>
     </div>
-%{--03.001.00--}%
+    %{--03.001.00--}%
     <div id="imprimirTransporteDialog">
 
         <fieldset>
 
             <div class="span4" style="margin-top: 10px">
-              Se imprime a la Fecha de:
-              <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${rubro?.fechaModificacion}" style="width: 100px"/>
+                Se imprime a la Fecha de:
+                <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${rubro?.fechaModificacion}" style="width: 100px"/>
             </div>
 
             <div class="span4" style="margin-top: 10px;">
@@ -1304,7 +1304,7 @@
 
         $("#detalle").click(function () {
             var child = window.open('${createLink(controller:"rubro",action:"showFoto",id: rubro?.id, params:[tipo:"dt"])}',
-                    'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
+                'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
 
             if (child.opener == null)
                 child.opener = self;
@@ -1790,21 +1790,21 @@
 
                                         }
                                         %{--"Aceptar" : function () {--}%
-                                            %{--$("#dlgLoad").dialog("open");--}%
-                                            %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'copiaRubro')}",--}%
-                                                %{--data     : "id=${rubro?.id}",--}%
-                                                %{--success  : function (msg) {--}%
-                                                    %{--$("#dlgLoad").dialog("close");--}%
-                                                    %{--if(msg=="true"){--}%
-                                                        %{--alert("Error al generar historico del rubro, comunique este error al administrador del sistema")--}%
-                                                    %{--}else{--}%
-                                                    %{--console.log("es historico",msg)--}%
-                                                        %{--$("#boxHiddenDlg").dialog("close");--}%
-                                                        %{--agregar(msg,"H");--}%
+                                        %{--$("#dlgLoad").dialog("open");--}%
+                                        %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'copiaRubro')}",--}%
+                                        %{--data     : "id=${rubro?.id}",--}%
+                                        %{--success  : function (msg) {--}%
+                                        %{--$("#dlgLoad").dialog("close");--}%
+                                        %{--if(msg=="true"){--}%
+                                        %{--alert("Error al generar historico del rubro, comunique este error al administrador del sistema")--}%
+                                        %{--}else{--}%
+                                        %{--console.log("es historico",msg)--}%
+                                        %{--$("#boxHiddenDlg").dialog("close");--}%
+                                        %{--agregar(msg,"H");--}%
 
-                                                    %{--}--}%
-                                                %{--}--}%
-                                            %{--});--}%
+                                        %{--}--}%
+                                        %{--}--}%
+                                        %{--});--}%
                                         %{--}--}%
                                     }
                                 }
@@ -1831,71 +1831,61 @@
                                             }
                                         }
                                     });
-
                                 }
                             });
-
                         }
                     }
                 });
-
             }
-
         });
-
 
         $(".infoItem").click(function () {
 
             var tr = $(this).parent().parent()
             var boton = $(this)
 
-                $("#dlgLoad").dialog("open")
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'verificaRubro')}",
-                    data     : "id=${rubro?.id}",
-                    success  : function (msg) {
-                        $("#dlgLoad").dialog("close")
-                        var resp = msg.split('_')
-                        if(resp[0] == "1"){
-                            var d =   $.box({
-                                imageClass : "box_info",
-                                text       : "Este rubro forma parte de la(s) obra(s):" + resp[1],
-                                title      : "Alerta",
-                                iconClose  : false,
-                                dialog     : {
-                                    resizable : false,
-                                    width: '500px',
-                                    draggable : false,
-                                    buttons   : {
-                                        "Cancelar":function(){
-
-                                        }
-                                     }
-                                }
-                            });
-                        }else{
-                            var d =   $.box({
-                                imageClass : "box_info",
-                                text       : "Este rubro no forma parte de ninguna obra",
-                                title      : "Alerta",
-                                iconClose  : false,
-                                dialog     : {
-                                    resizable : false,
-                                    width: '500px',
-                                    draggable : false,
-                                    buttons   : {
-                                        "Cancelar":function(){
-
-                                        }
+            $("#dlgLoad").dialog("open")
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'verificaRubro')}",
+                data     : "id=${rubro?.id}",
+                success  : function (msg) {
+                    $("#dlgLoad").dialog("close")
+                    var resp = msg.split('_')
+                    if(resp[0] == "1"){
+                        var d =   $.box({
+                            imageClass : "box_info",
+                            text       : "Este rubro forma parte de la(s) obra(s):" + resp[1],
+                            title      : "Alerta",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable : false,
+                                width: '500px',
+                                draggable : false,
+                                buttons   : {
+                                    "Cancelar":function(){
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
+                    }else{
+                        var d =   $.box({
+                            imageClass : "box_info",
+                            text       : "Este rubro no forma parte de ninguna obra",
+                            title      : "Alerta",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable : false,
+                                width: '500px',
+                                draggable : false,
+                                buttons   : {
+                                    "Cancelar":function(){
+                                    }
+                                }
+                            }
+                        });
                     }
-                });
+                }
+            });
         });
-
-
-
 
         $("#cdgo_buscar").dblclick(function () {
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
@@ -1942,8 +1932,6 @@
                 $("#item_id").val("")
                 $("#item_desc").val("")
                 $("#item_unidad").val("")
-            } else {
-//                ////console.log("no reset")
             }
 
         });
@@ -1981,42 +1969,39 @@
 
 
         %{--function revisarCodigo (espec) {--}%
-            %{--$.ajax({--}%
-                %{--type: 'POST',--}%
-                %{--url: "${createLink(controller: 'rubro', action: 'revisarCodigo_ajax')}",--}%
-                %{--data:{--}%
-                    %{--id: '${rubro?.id}',--}%
-                    %{--codigo: espec--}%
-                %{--},--}%
-                %{--success: function (msg){--}%
-                    %{--console.log(msg)--}%
-                    %{--if(msg == 'ok'){--}%
-                        %{--$.box({--}%
-                            %{--imageClass : "box_info",--}%
-                            %{--text       : "Código de especificación duplicado!",--}%
-                            %{--title      : "Alerta",--}%
-                            %{--iconClose  : false,--}%
-                            %{--dialog     : {--}%
-                                %{--resizable : false,--}%
-                                %{--draggable : false,--}%
-                                %{--buttons   : {--}%
-                                    %{--"Aceptar" : function () {--}%
-                                    %{--}--}%
-                                %{--}--}%
-                            %{--}--}%
-                        %{--});--}%
-                    %{--}else{--}%
-                        %{--console.log("Sin error")--}%
-                    %{--}--}%
-                %{--}--}%
-            %{--})--}%
+        %{--$.ajax({--}%
+        %{--type: 'POST',--}%
+        %{--url: "${createLink(controller: 'rubro', action: 'revisarCodigo_ajax')}",--}%
+        %{--data:{--}%
+        %{--id: '${rubro?.id}',--}%
+        %{--codigo: espec--}%
+        %{--},--}%
+        %{--success: function (msg){--}%
+        %{--console.log(msg)--}%
+        %{--if(msg == 'ok'){--}%
+        %{--$.box({--}%
+        %{--imageClass : "box_info",--}%
+        %{--text       : "Código de especificación duplicado!",--}%
+        %{--title      : "Alerta",--}%
+        %{--iconClose  : false,--}%
+        %{--dialog     : {--}%
+        %{--resizable : false,--}%
+        %{--draggable : false,--}%
+        %{--buttons   : {--}%
+        %{--"Aceptar" : function () {--}%
+        %{--}--}%
+        %{--}--}%
+        %{--}--}%
+        %{--});--}%
+        %{--}else{--}%
+        %{--console.log("Sin error")--}%
+        %{--}--}%
+        %{--}--}%
+        %{--})--}%
 
         %{--}--}%
 
-
-
         $("#guardar").click(function () {
-
 
             var cod = $("#input_codigo").val()
             var desc = $("#input_descripcion").val()
@@ -2026,7 +2011,6 @@
             var espec = $("#input_codigo_es").val();
 
 //            revisarCodigo(espec);
-
 
             console.log('reponsable:',resp)
             if (cod.trim().length > 30 || cod.trim().length < 1) {
@@ -2093,21 +2077,13 @@
                         });
 
                     } else {
-//                        console.log("sub")
                         $("#frmRubro").submit()
                     }
-
                 }
             });
-
-//            console.log("fin")
         });
 
         <g:if test="${rubro}">
-
-
-
-
 
         $("#btn_agregarItem").click(function () {
 //            console.log("valor:" + $('#item_desc').val().length);
@@ -2152,7 +2128,7 @@
                     $("#dlgLoad").dialog("close")
                     var resp = msg.split('_')
                     if(resp[0] == "1"){
-                       var d =   $.box({
+                        var d =   $.box({
                             imageClass : "box_info",
                             text       : "Este rubro ya forma parte de la(s) obra(s):" + resp[1] + "Desea crear una nueva versión de este rubro, y hacer una versión histórica?",
                             title      : "Alerta",
@@ -2179,25 +2155,21 @@
                                                     agregar(msg,"H");
 
                                                 }
-
                                             }
                                         });
                                     }
-
                                 }
                             }
                         });
                     }else{
-                       agregar(${rubro?.id},"");
-
+                        agregar(${rubro?.id},"");
                     }
                 }
             });
-
-
         });
         </g:if>
         <g:else>
+
         $("#btn_agregarItem").click(function () {
             $.box({
                 imageClass : "box_info",
@@ -2214,7 +2186,6 @@
                     width     : 500
                 }
             });
-
         });
         </g:else>
 
@@ -2228,11 +2199,11 @@
             height    : 200,
             position  : 'center',
             title     : 'Imprimir Rubro',
-/*
-            open: function( event, ui ) {
-                $( "#fechaSalidaId" ).datepicker( "hide" );
-            },
-*/
+            /*
+             open: function( event, ui ) {
+             $( "#fechaSalidaId" ).datepicker( "hide" );
+             },
+             */
             buttons   : {
                 "Si VAE" : function () {
                     var dsp0 = $("#dist_p1").val()
@@ -2245,7 +2216,7 @@
                     var chofer = $("#costo_chofer").val()
                     var fechaSalida = $("#fechaSalidaId").val();
                     datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq="
-                    + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "WfechaSalida=" + fechaSalida
+                        + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "WfechaSalida=" + fechaSalida
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVae')}?" + datos
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");
@@ -2261,8 +2232,8 @@
                     var chofer = $("#costo_chofer").val()
                     var fechaSalida = $("#fechaSalidaId").val();
                     datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val()
-                    + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val()
-                    + "Windi=" + $("#costo_indi").val() + "Wtrans=no" + "WfechaSalida=" + fechaSalida
+                        + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val()
+                        + "Windi=" + $("#costo_indi").val() + "Wtrans=no" + "WfechaSalida=" + fechaSalida
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVae')}?" + datos
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");
@@ -2283,7 +2254,7 @@
 //                    console.log(fechaSalida)
 
                     datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq="
-                            + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "WfechaSalida=" + fechaSalida
+                        + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "WfechaSalida=" + fechaSalida
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}?" + datos
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");
@@ -2300,28 +2271,17 @@
                     var fechaSalida = $("#fechaSalidaId").val();
 
                     datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val()
-                            + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val()
-                            + "Windi=" + $("#costo_indi").val() + "Wtrans=no" + "WfechaSalida=" + fechaSalida
+                        + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val()
+                        + "Windi=" + $("#costo_indi").val() + "Wtrans=no" + "WfechaSalida=" + fechaSalida
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}?" + datos
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");
                 },
                 "Cancelar" :  function () {
-
-
                     $("#imprimirTransporteDialog").dialog("close");
-
-
                 }
-
-
-
             }
-
-
-
         });
-
     });
 </script>
 

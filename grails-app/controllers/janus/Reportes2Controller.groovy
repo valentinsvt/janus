@@ -1524,7 +1524,7 @@ class Reportes2Controller {
             items += it
         }
         def res = []
-
+        def numeros = []
 
         def tmp
         if(items == [] || items == ''){
@@ -1536,6 +1536,7 @@ class Reportes2Controller {
             def nombres = []
             def corregidos = []
 
+
             tmp = preciosService.getPrecioRubroItemOrder(fecha, lugar, items, orden, "asc")
             tmp.each {
                 res.add(PrecioRubrosItems.get(it))
@@ -1543,7 +1544,13 @@ class Reportes2Controller {
 
             res.each {
             nombres += it?.item?.nombre
+            def sql2 = "select count(*) from vlobitem where item__id = ${it?.item?.id}"
+                println("sql2 " + sql2)
+            def cn = dbConnectionService.getConnection()
+                numeros += cn.rows(sql2.toString())
             }
+
+            println("numeros " + numeros)
 
             nombres.each {
                 def text = (it ?: '')
@@ -1566,7 +1573,7 @@ class Reportes2Controller {
 
 //        println("res" + res + "grupo" + grupo)
 
-        return [lugar: lugar, cols: params.col, precios: res, grupo: grupo]
+        return [lugar: lugar, cols: params.col, precios: res, grupo: grupo, numeros: numeros]
     }
 
     def reporteExcelComposicionTotales() {
@@ -1989,7 +1996,7 @@ class Reportes2Controller {
     }
 
     def reportePreciosExcel() {
-//        println("params " + params)
+        println("params " + params)
         def orden = "itemnmbr"
         if (params.orden == "n") {
             orden = "itemcdgo"
@@ -2020,6 +2027,7 @@ class Reportes2Controller {
             res.add(PrecioRubrosItems.get(it))
         }
 
+
 //        println("excel" + res)
         //excel
 
@@ -2045,6 +2053,7 @@ class Reportes2Controller {
         sheet.setColumnView(4, 20)
         sheet.setColumnView(5, 20)
         sheet.setColumnView(6, 25)
+        sheet.setColumnView(7, 25)
 
 
         def label
@@ -2071,22 +2080,27 @@ class Reportes2Controller {
         }
         label = new jxl.write.Label(col, 6, "COSTO", times16format); sheet.addCell(label); col++;
         label = new jxl.write.Label(col, 6, "FECHA ACT.", times16format); sheet.addCell(label); col++;
+        label = new jxl.write.Label(col, 6, "# OBRAS", times16format); sheet.addCell(label); col++;
 
         res.each {
+
+            def sql2 = "select count(*) from vlobitem where item__id = ${it?.item?.id}"
+            def cn = dbConnectionService.getConnection()
+            def numero = cn.rows(sql2.toString())
+
             col = 0
-            label = new jxl.write.Label(col, fila, it?.item?.codigo.toString()); sheet.addCell(label); col++;
-            label = new jxl.write.Label(col, fila, it?.item?.nombre.toString()); sheet.addCell(label); col++;
-            label = new jxl.write.Label(col, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label); col++;
+            label = new jxl.write.Label(col, fila, it?.item?.codigo?.toString()); sheet.addCell(label); col++;
+            label = new jxl.write.Label(col, fila, it?.item?.nombre?.toString()); sheet.addCell(label); col++;
+            label = new jxl.write.Label(col, fila, it?.item?.unidad?.codigo?.toString()); sheet.addCell(label); col++;
             if (grupo.id == 1) {
                 number = new jxl.write.Number(col, fila, it?.item?.peso); sheet.addCell(number); col++;
             }
             number = new jxl.write.Number(col, fila, it?.precioUnitario); sheet.addCell(number); col++;
-            label = new jxl.write.Label(col, fila, it?.fecha.format("dd-MM-yyyy")); sheet.addCell(label); col++;
+            label = new jxl.write.Label(col, fila, it?.fecha?.format("dd-MM-yyyy")); sheet.addCell(label); col++;
+            number = new jxl.write.Number(col, fila, numero[0].count); sheet.addCell(number); col++;
 
             fila++
-
         }
-
 
         workbook.write();
         workbook.close();

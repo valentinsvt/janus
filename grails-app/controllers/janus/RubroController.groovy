@@ -973,6 +973,11 @@ class RubroController extends janus.seguridad.Shield {
         if(error==false)
             error=nuevo.id
         render error
+    }
+
+    def borrarArchivo(){
+
+        println("params " + params)
 
     }
 

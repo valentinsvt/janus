@@ -14,8 +14,6 @@
         <link href="${resource(dir: 'css', file: 'mobile2.css')}" rel="stylesheet">
         <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.highlight.js')}"></script>
 
-        %{--<link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">--}%
-
         <link href="${resource(dir: 'js/jquery/css/twitBoot', file: 'jquery-ui-1.9.1.custom.min.css')}" rel="stylesheet">
 
         <script src="${resource(dir: 'js', file: 'functions.js')}"></script>
@@ -52,8 +50,7 @@
                     <a href="#" id="salir" class="btn ">
                         <i class="icon-minus-sign"></i> Salir
                     </a>
-
-                    <div class="btn-group" style="margin-top: 20px;">
+                    <div class="btn-group" style="margin-top: 0px;">
                         <g:if test="${filePath}">
                             <g:if test="${tipo == 'il'}">
                                 <g:link action="downloadFile" id="${rubro.id}" params="[tipo: tipo]" class="btn btn-info">
@@ -73,7 +70,12 @@
                    <p style="color: #800">No se ha cargado ningún archivo para este rubro</p>
             </g:if>
             <g:else>
-                ${filePath}
+                Archivo cargado: <strong>${filePath}</strong>
+                <g:if test="${session.perfil.codigo == 'CSTO'}">
+                    <a href="#" name="botonB" class="btn btn-danger btnBorrar" data-id="${ares}" style="float: right">
+                        <i class="icon-delete"></i> Borrar
+                    </a>
+                </g:if>
             </g:else>
         </fieldset>
         <g:if test="${ext?.toLowerCase() == 'pdf'}">
@@ -89,7 +91,6 @@
                 <p class="css-vertical-text">
                     Foto
                 </p>
-
                 <div class="linea" style="height: 98%;"></div>
                 <img src="${resource(dir: 'rubros', file: filePath)}" alt="" style="margin-bottom: 10px;max-width: 600px"/>
             </fieldset>
@@ -105,3 +106,47 @@
 
     </body>
 </html>
+
+<script type="text/javascript">
+
+    $(".btnBorrar").click(function () {
+        console.log("-----")
+        var id = $(this).data("id");
+
+        if(confirm("esta seguro de borrar este archivo?")){
+
+        }else{
+
+        }
+
+            $.box({
+                imageClass : "box_info",
+                title      : "Alerta",
+                text       : "Está seguro de eliminar este archivo?" + "Esta acción no se puede deshacer.",
+                iconClose  : false,
+                dialog     : {
+                    resizable     : false,
+                    draggable     : false,
+                    buttons       : {
+                        "Aceptar"  : function () {
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'borrarArchivo')}",
+                                data    : {
+                                    id : id
+                                },
+                                success : function (msg) {
+
+                                }
+                            });
+                        },
+                        "Cancelar" : function () {
+                        }
+                    }
+                }
+            });
+    });
+
+
+
+</script>

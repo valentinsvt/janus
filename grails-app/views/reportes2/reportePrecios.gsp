@@ -175,7 +175,7 @@
                             </g:if>
                             <g:if test="${cols?.contains('o')}">
                                 <td class="tright">
-
+                                    ${numeros[i].count ?: '0'}
                                 </td>
                             </g:if>
                         </tr>
