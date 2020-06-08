@@ -991,12 +991,12 @@ class RubroController extends janus.seguridad.Shield {
                 }
                 break;
             case "dt":
-                def ares = ArchivoEspecificacion.get(params.id)
-                if(!ares.delete(flush: true)){
-                    errores += ares.errors
-                }else{
-
-                }
+//                def ares = ArchivoEspecificacion.get(params.id)
+//                if(!ares.delete(flush: true)){
+//                    errores += ares.errors
+//                }else{
+//
+//                }
                 break;
         }
 

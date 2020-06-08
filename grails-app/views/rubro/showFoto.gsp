@@ -72,9 +72,11 @@
     <g:else>
         Archivo cargado: <strong>${filePath}</strong>
         <g:if test="${session.perfil.codigo == 'CSTO'}">
-            <a href="#" name="botonB" class="btn btn-danger btnBorrar" data-id="${ares}" data-tipo="${tipo}" data-rubro="${rubro?.id}" style="float: right">
-                <i class="icon-delete"></i> Borrar
-            </a>
+            <g:if test="${tipo == 'il'}">
+                <a href="#" name="botonB" class="btn btn-danger btnBorrar" data-id="${ares}" data-tipo="${tipo}" data-rubro="${rubro?.id}" style="float: right">
+                    <i class="icon-delete"></i> Borrar
+                </a>
+            </g:if>
         </g:if>
     </g:else>
 </fieldset>
