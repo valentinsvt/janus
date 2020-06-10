@@ -93,7 +93,7 @@
             <h2>REPORTE DE COSTOS DE ${grupo?.descripcion?.toUpperCase()}</h2>
 
             <div style="height: 30px;">
-                <div class="left strong"> LISTA DE PRECIOS: ${lugar?.descripcion?.toUpperCase()}</div>
+                <div class="left strong"> LISTA DE PRECIOS: ${lugar?.descripcion?.toUpperCase() + (estado == 'A' ? ' - ACTIVOS' : ' - INACTIVOS')}</div>
 
                 <div class="right strong">FECHA DE CONSULTA: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
             </div>

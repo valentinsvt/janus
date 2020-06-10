@@ -1586,7 +1586,7 @@ class Reportes2Controller {
 
 //        println("res" + res + "grupo" + grupo)
 
-        return [lugar: lugar, cols: params.col, precios: res, grupo: grupo, numeros: numeros, rubros: rubros]
+        return [lugar: lugar, cols: params.col, precios: res, grupo: grupo, numeros: numeros, rubros: rubros, estado: estado]
     }
 
     def reporteExcelComposicionTotales() {
@@ -2087,7 +2087,7 @@ class Reportes2Controller {
         label = new jxl.write.Label(2, 2, "REPORTE COSTOS DE: ${grupo.descripcion.toUpperCase()}", times16format);
         sheet.addCell(label);
 
-        label = new jxl.write.Label(1, 4, "LISTA DE PRECIOS: " + lugar?.descripcion, times16format);
+        label = new jxl.write.Label(1, 4, "LISTA DE PRECIOS: " + lugar?.descripcion + (estado == 'A' ? ' - ACTIVOS' : ' - INACTIVOS'), times16format);
         sheet.addCell(label);
         label = new jxl.write.Label(4, 4, "FECHA DE CONSULTA: " + new Date().format("dd-MM-yyyy"), times16format);
         sheet.addCell(label);
