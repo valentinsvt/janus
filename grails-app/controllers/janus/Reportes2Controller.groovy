@@ -310,7 +310,7 @@ class Reportes2Controller {
                 if (extEspecificacion.toLowerCase() != "pdf") { //es una imgaen png, jpg...
                     def img = Image.getInstance(pathEspecificacion);
 //                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
-                        img.scaleToFit(maxImageSize, maxImageSize);
+                    img.scaleToFit(maxImageSize, maxImageSize);
 //                    }
                     addCellTabla(tablaRubro, img, prmsEs)
                 } else {
@@ -331,7 +331,7 @@ class Reportes2Controller {
 //                    println "w: ${img.getScaledWidth()}, h: ${img.getScaledHeight()}"
 
 //                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
-                        img.scaleToFit(maxImageSize, maxImageSize);
+                    img.scaleToFit(maxImageSize, maxImageSize);
 //                    }
 
                     addCellTabla(tablaRubro, img, prmsEs)
@@ -666,12 +666,12 @@ class Reportes2Controller {
                         render "SI*"
                         mensaje += "..ok"
                     }
-                  catch(e){
-                      arrIl += (rubro?.foto+"*")
-                      mensaje += " **** no existe"
-                      error = true
-                      render "NO*" + arrIl[0]
-                  }
+                    catch(e){
+                        arrIl += (rubro?.foto+"*")
+                        mensaje += " **** no existe"
+                        error = true
+                        render "NO*" + arrIl[0]
+                    }
                 }
             }
 //            if (rubro.especificaciones && tipo.contains("e")) {
@@ -695,12 +695,12 @@ class Reportes2Controller {
                         render "SI*"
                         mensaje += "..ok"
                     }
-                     catch (e){
-                         arrIe += (ares?.ruta + "*")
-                         mensaje += "********* No existe"
-                         error = true
-                         render "NO*" + arrIe[0]
-                     }
+                    catch (e){
+                        arrIe += (ares?.ruta + "*")
+                        mensaje += "********* No existe"
+                        error = true
+                        render "NO*" + arrIe[0]
+                    }
                 }
             }
 //            println mensaje
@@ -954,29 +954,29 @@ class Reportes2Controller {
         def nombresTodos = []
         def corregidos = []
 
-            rubros.each { rubro ->
-                def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
-                preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
-                def res = preciosService.rb_precios(parametros, "")
+        rubros.each { rubro ->
+            def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
+            preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
+            def res = preciosService.rb_precios(parametros, "")
 
 //            println("res" + res)
 //            println("rubro " + rubro)
 
-                nombresTodos += rubro.nombre
-                def temp = [:]
-                def total = 0
-                res.each { r ->
-                    total += r["parcial"] + r["parcial_t"]
-                }
-                total = total * (1 + indi / 100)
-                temp.put("codigo", rubro.codigo)
-                temp.put("nombre", rubro.nombre)
-                temp.put("unidad", rubro.unidad.codigo)
-                temp.put("total", total)
-                datos.add(temp)
+            nombresTodos += rubro.nombre
+            def temp = [:]
+            def total = 0
+            res.each { r ->
+                total += r["parcial"] + r["parcial_t"]
+            }
+            total = total * (1 + indi / 100)
+            temp.put("codigo", rubro.codigo)
+            temp.put("nombre", rubro.nombre)
+            temp.put("unidad", rubro.unidad.codigo)
+            temp.put("total", total)
+            datos.add(temp)
 //            println "res "+res
 //            println("datos " + datos)
-            }
+        }
 
         def l = listas.split(",")
 //        println "listas str "+listas+" "+l
@@ -1506,16 +1506,24 @@ class Reportes2Controller {
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
 //        println("fecha:" + fecha)
 
+        def estado
+
+        if(params.estado == 'true'){
+            estado = 'A'
+        }else{
+            estado = 'B'
+        }
+
         def items = ""
         def lista = Item.withCriteria {
             eq("tipoItem", TipoItem.findByCodigo("I"))
-            eq("estado", "A")
+            eq("estado", estado)
             departamento {
                 subgrupo {
                     eq("grupo", grupo)
                 }
             }
-            eq("estado", "A")
+//            eq("estado", "A")
         }
         lista.id.each {
             if (items != "") {
@@ -1525,6 +1533,7 @@ class Reportes2Controller {
         }
         def res = []
         def numeros = []
+        def rubros = []
 
         def tmp
         if(items == [] || items == ''){
@@ -1543,14 +1552,18 @@ class Reportes2Controller {
             }
 
             res.each {
-            nombres += it?.item?.nombre
-            def sql2 = "select count(*) from vlobitem where item__id = ${it?.item?.id}"
-                println("sql2 " + sql2)
-            def cn = dbConnectionService.getConnection()
-                numeros += cn.rows(sql2.toString())
-            }
+                nombres += it?.item?.nombre
 
-            println("numeros " + numeros)
+                def sql2 = "select count(*) from vlobitem where item__id = ${it?.item?.id}"
+                println("sql2 " + sql2)
+                def cn = dbConnectionService.getConnection()
+                numeros += cn.rows(sql2.toString())
+
+                def sql3 = "select count(*) from item it, item rb, rbro where rbro.rbrocdgo = rb.item__id and rbro.item__id = it.item__id and it.item__id = ${it?.item?.id}"
+                def cn2 = dbConnectionService.getConnection()
+                rubros += cn2.rows(sql3.toString())
+            }
+//            println("numeros " + numeros)
 
             nombres.each {
                 def text = (it ?: '')
@@ -1573,7 +1586,7 @@ class Reportes2Controller {
 
 //        println("res" + res + "grupo" + grupo)
 
-        return [lugar: lugar, cols: params.col, precios: res, grupo: grupo, numeros: numeros]
+        return [lugar: lugar, cols: params.col, precios: res, grupo: grupo, numeros: numeros, rubros: rubros]
     }
 
     def reporteExcelComposicionTotales() {
@@ -2387,9 +2400,9 @@ class Reportes2Controller {
         def responsableRol = PersonaRol.findByPersona(Persona.get(obra?.responsableObra?.id))
 
         elabUtfpu.each {
-           if(it?.id == responsableRol?.id){
-               ban = 1
-           }
+            if(it?.id == responsableRol?.id){
+                ban = 1
+            }
         }
 
 
@@ -2422,13 +2435,13 @@ class Reportes2Controller {
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
         if(coordinador){
-                if(ban == 1){
-                    firmaCoordinador = coordinadorUtfpu.persona
-                    addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-                }else{
-                    firmaCoordinador = coordinador.persona
-                    addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-                }
+            if(ban == 1){
+                firmaCoordinador = coordinadorUtfpu.persona
+                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            }else{
+                firmaCoordinador = coordinador.persona
+                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            }
 
         }else{
             addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
@@ -2719,22 +2732,22 @@ class Reportes2Controller {
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
         def prmsDerecha = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_RIGHT]
         def prmsSubtotal = [border: Color.BLACK, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsDerecha: prmsDerecha]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsDerecha: prmsDerecha]
 
 
         def baos = new ByteArrayOutputStream()
@@ -2750,7 +2763,7 @@ class Reportes2Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
 
 
         Document document
@@ -2985,22 +2998,22 @@ class Reportes2Controller {
 //        def prmsHeaderHojaBorde = [border: Color.WHITE, bordeBot:"1"]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
         def prmsDerecha = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_RIGHT]
         def prmsSubtotal = [border: Color.BLACK, colspan: 6,
-                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsDerecha: prmsDerecha]
+                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsDerecha: prmsDerecha]
 
 
         def baos = new ByteArrayOutputStream()
@@ -3016,7 +3029,7 @@ class Reportes2Controller {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
 
 
         Document document

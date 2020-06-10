@@ -1,7 +1,16 @@
+
+<script src="${resource(dir: 'js', file: 'jquery.switcher.js')}"></script>
+<link href="${resource(dir: 'css', file: 'switcher.css')}" rel="stylesheet">
+
+
 <style type="text/css">
 fieldset {
     margin-bottom : 15px;
 }
+
+    .izq{
+        margin-left: 20px;
+    }
 </style>
 
 <div class="tituloTree">${grupo.descripcion}</div>
@@ -24,34 +33,36 @@ fieldset {
             <a href="#" id="f" class="col btn">
                 Fecha de Act.
             </a>
+            <a href="#" id="r" class="col btn">
+                Rubros
+            </a>
             <a href="#" id="o" class="col btn">
                 Obras
             </a>
         </div>
     </fieldset>
     <fieldset>
-        <legend>Orden de impresión</legend>
-
+        <legend>Orden de impresión - Activos/Inactivos</legend>
+        %{--<div class="col-md-12">--}%
+        %{--<div class="col-md-6">--}%
         <div class="btn-group" data-toggle="buttons-radio">
             <a href="#" id="a" class="orden btn active">
                 Alfabético
             </a>
-            <a href="#" id="n" class="orden btn">
+            <a href="#" id="n" class="orden btn" style="margin-right: 60px">
                 Numérico
             </a>
+            <input class="form-check-input revisar" type="checkbox" value="option1" checked="checked">
         </div>
+        %{--<div class="form-check form-check-inline col-md-3">--}%
+
+        %{--</div>--}%
+
     </fieldset>
+
     <fieldset class="form-inline">
         <legend>Lugar y fecha de referencia</legend>
 
-        %{--<div class="btn-group noMargin" data-toggle="buttons-radio">--}%
-        %{--<a href="#" id="c" class="tipo btn active">--}%
-        %{--Civil--}%
-        %{--</a>--}%
-        %{--<a href="#" id="v" class="tipo btn">--}%
-        %{--Vial--}%
-        %{--</a>--}%
-        %{--</div>--}%
         <g:set var="tipoMQ" value="${janus.TipoLista.findAllByCodigo('MQ')}"/>
 
         <g:if test="${grupo.id == 1}">
@@ -61,91 +72,13 @@ fieldset {
             <g:select name="lugarRep" from="${janus.Lugar.findAllByTipoListaInList(tipoMQ, [sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
         </g:else>
 
-        %{--<g:set var="d" value="${new Date()}"/>--}%
-
         <elm:datepicker name="fechaRep" class="datepicker required" style="width: 90px" value="${new Date()}"
                         yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"
                         maxDate="${(new Date().format('dd').toInteger() + 31)}"/>
-
-        %{--<div class="row-fluid" style="margin-top: 10px">--}%
-
-        %{--<div class="span3">--}%
-        %{--Cantón--}%
-        %{--</div>--}%
-
-
-        %{--<div class="span6">--}%
-
-        %{--<g:select name="lugar.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']" />--}%
-
-        %{--</div>--}%
-        %{--</div>--}%
-
-        %{--<div class="row-fluid" style="margin-top: 10px">--}%
-
-        %{--<div class="span3">--}%
-        %{--Petreos Hormigones--}%
-        %{--</div>--}%
-
-        %{--<div class="span6">--}%
-
-        %{--<g:select name="listaVolumen0.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
-        %{--</div>--}%
-        %{--</div>--}%
-
-
-        %{--<div class="row-fluid" style="margin-top: 10px">--}%
-        %{--<div class="span3">--}%
-        %{--Especial--}%
-        %{--</div>--}%
-        %{--<div class="span6">--}%
-
-        %{--<g:select name="listaPeso1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
-        %{--</div>--}%
-
-
-
-        %{--</div>--}%
-
-
-        %{--<div class="row-fluid" style="margin-top: 10px">--}%
-        %{--<div class="span3">--}%
-        %{--Mejoramiento--}%
-        %{--</div>--}%
-        %{--<div class="span6">--}%
-        %{--<g:select name="listaVolumen1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion"  class="span6" noSelection="['null': 'Seleccione...']"/>--}%
-        %{--</div>--}%
-        %{--</div>--}%
-
-        %{--<div class="row-fluid" style="margin-top: 10px">--}%
-
-        %{--<div class="span3">--}%
-        %{--Carpeta Asfáltica--}%
-        %{--</div>--}%
-
-        %{--<div class="span6">--}%
-        %{--<g:select name="listaVolumen2.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
-
-        %{--</div>--}%
-        %{--</div>--}%
 
     </fieldset>
 </g:form>
 
 <script type="text/javascript">
-    %{--$(".tipo").click(function () {--}%
-    %{--if (!$(this).hasClass("active")) {--}%
-    %{--var tipo = $(this).attr("id");--}%
-    %{--$.ajax({--}%
-    %{--type    : "POST",--}%
-    %{--url     : "${createLink(action:'loadLugarPorTipo')}",--}%
-    %{--data    : {--}%
-    %{--tipo : tipo--}%
-    %{--},--}%
-    %{--success : function (msg) {--}%
-    %{--$("#lugar").replaceWith(msg);--}%
-    %{--}--}%
-    %{--});--}%
-    %{--}--}%
-    %{--});--}%
+    $.switcher('input[type=checkbox]');
 </script>

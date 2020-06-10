@@ -895,6 +895,7 @@
                                 data += "Wlugar=" + $("#lugarRep").val();
                                 data += "Wfecha=" + $("#fechaRep").val();
                                 data += "Wgrupo=" + current;
+                                data += "Westado=" + $(".revisar").is(":checked");
 
                                 $(".col.active").each(function () {
                                     data += "Wcol=" + $(this).attr("id");

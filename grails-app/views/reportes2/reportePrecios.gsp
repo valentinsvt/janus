@@ -129,9 +129,14 @@
                                 FECHA ACT.
                             </th>
                         </g:if>
+                        <g:if test="${cols?.contains('r')}">
+                            <th>
+                                # RUBROS
+                            </th>
+                        </g:if>
                         <g:if test="${cols?.contains('o')}">
                             <th>
-                                # OBRAS.
+                                # OBRAS
                             </th>
                         </g:if>
                     </tr>
@@ -171,6 +176,11 @@
                             <g:if test="${cols?.contains('f')}">
                                 <td class="tright">
                                     <g:formatDate date="${precio?.fecha}" format="dd-MM-yyyy"/>
+                                </td>
+                            </g:if>
+                            <g:if test="${cols?.contains('r')}">
+                                <td class="tright">
+                                    ${rubros[i].count ?: '0'}
                                 </td>
                             </g:if>
                             <g:if test="${cols?.contains('o')}">
