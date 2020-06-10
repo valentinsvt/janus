@@ -888,6 +888,8 @@
                             var btnSave = $('<a href="#"  class="btn btn-success" data-dismiss="modal"><i class="icon-print"></i> Ver</a>');
                             var btnExcel = $('<a href="#" class="btn btnExcel" data-dismiss="modal"><i class="icon-table"></i> Excel</a>');
 
+                            var be = $(".revisar").is(":checked");
+
                             btnSave.click(function () {
                                 var data = "";
                                 data += "orden=" + $(".orden.active").attr("id");
@@ -928,7 +930,7 @@
                                 var grupo = current;
 
                                 location.href = "${g.createLink(controller: 'reportes2', action: 'reportePreciosExcel')}?fecha=" +
-                                        fecha + "&lugar=" + lugar + "&grupo=" + grupo;
+                                        fecha + "&lugar=" + lugar + "&grupo=" + grupo + "&estado=" + $(".revisar").is(":checked");
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");

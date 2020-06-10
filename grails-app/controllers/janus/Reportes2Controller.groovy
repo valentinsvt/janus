@@ -2009,18 +2009,27 @@ class Reportes2Controller {
     }
 
     def reportePreciosExcel() {
-        println("params " + params)
+//        println("params " + params)
         def orden = "itemnmbr"
         if (params.orden == "n") {
             orden = "itemcdgo"
         }
+
+        def estado = ''
+
+        if(params.estado == 'true'){
+            estado = 'A'
+        }else{
+            estado = 'B'
+        }
+
         def grupo = Grupo.get(params.grupo.toLong())
         def lugar = Lugar.get(params.lugar.toLong())
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def items = ""
         def lista = Item.withCriteria {
             eq("tipoItem", TipoItem.findByCodigo("I"))
-            eq("estado", "A")
+            eq("estado", estado)
             departamento {
                 subgrupo {
                     eq("grupo", grupo)
@@ -2093,6 +2102,7 @@ class Reportes2Controller {
         }
         label = new jxl.write.Label(col, 6, "COSTO", times16format); sheet.addCell(label); col++;
         label = new jxl.write.Label(col, 6, "FECHA ACT.", times16format); sheet.addCell(label); col++;
+        label = new jxl.write.Label(col, 6, "# RUBROS", times16format); sheet.addCell(label); col++;
         label = new jxl.write.Label(col, 6, "# OBRAS", times16format); sheet.addCell(label); col++;
 
         res.each {
@@ -2100,6 +2110,10 @@ class Reportes2Controller {
             def sql2 = "select count(*) from vlobitem where item__id = ${it?.item?.id}"
             def cn = dbConnectionService.getConnection()
             def numero = cn.rows(sql2.toString())
+
+            def sql3 = "select count(*) from item it, item rb, rbro where rbro.rbrocdgo = rb.item__id and rbro.item__id = it.item__id and it.item__id = ${it?.item?.id}"
+            def cn2 = dbConnectionService.getConnection()
+            def rubros = cn2.rows(sql3.toString())
 
             col = 0
             label = new jxl.write.Label(col, fila, it?.item?.codigo?.toString()); sheet.addCell(label); col++;
@@ -2110,6 +2124,7 @@ class Reportes2Controller {
             }
             number = new jxl.write.Number(col, fila, it?.precioUnitario); sheet.addCell(number); col++;
             label = new jxl.write.Label(col, fila, it?.fecha?.format("dd-MM-yyyy")); sheet.addCell(label); col++;
+            number = new jxl.write.Number(col, fila, rubros[0].count); sheet.addCell(number); col++;
             number = new jxl.write.Number(col, fila, numero[0].count); sheet.addCell(number); col++;
 
             fila++
