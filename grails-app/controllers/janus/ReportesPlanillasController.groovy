@@ -16,7 +16,8 @@ import janus.actas.Acta
 import janus.actas.Avance
 import janus.actas.FraseClima;
 import janus.ejecucion.DetallePlanilla;
-import janus.ejecucion.DetallePlanillaCosto;
+import janus.ejecucion.DetallePlanillaCosto
+import janus.ejecucion.DetallePlanillaEjecucion;
 import janus.ejecucion.FormulaPolinomicaContractual
 import janus.ejecucion.MultasPlanilla;
 import janus.ejecucion.PeriodoPlanilla;
@@ -141,7 +142,8 @@ class ReportesPlanillasController {
         def indirecto = obra.totales / 100
         preciosService.ac_rbroObra(obra.id)
         def detalles = [:]
-        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "item"])
+//        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "item"])
+        def volumenes = VolumenContrato.findAllByObra(obra, [sort: "item"])
 
         volumenes.each { vol ->
             vol.refresh()
@@ -166,16 +168,17 @@ class ReportesPlanillasController {
                         ]
                 ]
             }
-            detalles[vol.item].cantidad.contratado += vol.cantidad
-            detalles[vol.item].valor.contratado += ((vol.cantidad * precio).toDouble().round(2))
+            detalles[vol.item].cantidad.contratado += vol.volumenCantidad
+            detalles[vol.item].valor.contratado += ((vol.volumenCantidad * precio).toDouble().round(2))
         }
 
         planillasAvance.each { pla ->
-            def det = DetallePlanilla.findAllByPlanilla(pla)
+//            def det = DetallePlanilla.findAllByPlanilla(pla)
+            def det = DetallePlanillaEjecucion.findAllByPlanilla(pla)
             det.each { dt ->
-                if (detalles[dt.volumenObra.item]) {
-                    detalles[dt.volumenObra.item].cantidad.ejecutado += dt.cantidad
-                    detalles[dt.volumenObra.item].valor.ejecutado += dt.monto
+                if (detalles[dt.volumenContrato.item]) {
+                    detalles[dt.volumenContrato.item].cantidad.ejecutado += dt.cantidad
+                    detalles[dt.volumenContrato.item].valor.ejecutado += dt.monto
                 } else {
                     println "no existe detalle para " + dt.volumenObra.item + "???"
                 }
