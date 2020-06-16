@@ -37,14 +37,15 @@
 
 %{--<fieldset class="borde">--}%
 
-    <div style="margin-top: 30px; min-height: 650px" class="vertical-container">
+    <div style="margin-top: 10px; min-height: 650px" class="vertical-container">
         <table class="table table-bordered table-hover table-condensed" style="width: 100%">
             <thead>
             <tr>
                 <th class="alinear" style="width: 10%">Código</th>
-                <th class="alinear" style="width: 55%">Nombre</th>
+                <th class="alinear" style="width: 45%">Nombre</th>
                 <th class="alinear" style="width: 10%">Unidad</th>
                 <th class="alinear" style="width: 10%">Fecha</th>
+                <th class="alinear" style="width: 10%">Estado</th>
                 <th style="width: 15%">Registrar
                     <a href="#" class="btn " title="Todos" id="seleccionar"><i class="icon-check"></i>Todos</a>
                 </th>
