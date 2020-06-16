@@ -13,20 +13,20 @@
                     ${item.itemcdgo}
                 </td>
 
-                <td style="width: 46%">
+                <td style="width: 58%">
                     ${item.itemnmbr}
                 </td>
 
-                <td style="width: 10%; text-align: center">
+                <td style="width: 6%; text-align: center">
                     ${item.unddcdgo}
                 </td>
-                <td style="width: 10%; text-align: center">
+                <td style="width: 8%; text-align: center">
                     ${item.itemfcha}
                 </td>
-                <td style="width: 10%; text-align: center">
+                <td style="width: 6%; text-align: center">
                     ${item.itemetdo}
                 </td>
-                <td style="width: 15%; text-align: center" class="chk">
+                <td style="width: 11%; text-align: center" class="chk">
                     %{--<g:if test="${item.itemetdo == 'A'}">--}%
                         %{--<input type="checkbox" class="chequear" checked/>--}%
                     %{--</g:if>--}%

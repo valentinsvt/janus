@@ -28,8 +28,8 @@
             </a>
         </div>
         <div class="btn-group span1" style=" width: 200px;">
-            <a href="#" class="btn btn-consultar"><i class="icon-search"></i>Consultar</a>
-            <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i>Guardar</a>
+            <a href="#" class="btn btn-consultar"><i class="icon-search"></i> Consultar Ítems sin uso </a>
+            <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i> Borrar ítems señalados</a>
         </div>
     </div>
 </div>
@@ -42,11 +42,11 @@
             <thead>
             <tr>
                 <th class="alinear" style="width: 10%">Código</th>
-                <th class="alinear" style="width: 45%">Nombre</th>
-                <th class="alinear" style="width: 10%">Unidad</th>
-                <th class="alinear" style="width: 10%">Fecha</th>
-                <th class="alinear" style="width: 10%">Estado</th>
-                <th style="width: 15%">Registrar
+                <th class="alinear" style="width: 58%">Nombre</th>
+                <th class="alinear" style="width: 6%">Unidad</th>
+                <th class="alinear" style="width: 8%">Fecha</th>
+                <th class="alinear" style="width: 6%">Estado</th>
+                <th style="width: 12%">Registrar
                     <a href="#" class="btn " title="Todos" id="seleccionar"><i class="icon-check"></i>Todos</a>
                 </th>
             </tr>
@@ -114,49 +114,48 @@
         });
 
         $(".btn-actualizar").click(function () {
-            %{--$("#dlgLoad").dialog("open");--}%
-            %{--var data = "";--}%
+            $("#dlgLoad").dialog("open");
+            var data = "";
 
-            %{--$(".editable").each(function () {--}%
-                %{--var id = $(this).attr("id");--}%
-                %{--var valor = $(this).data("valor");--}%
-                %{--var data1 = $(this).data("original");--}%
+            $(".editable").each(function () {
+                var id = $(this).attr("id");
 
-                %{--var chk = $(this).siblings(".chk").children("input").is(":checked");--}%
+                var chk = $(this).siblings(".chk").children("input").is(":checked");
 
-                %{--if (chk || (parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {--}%
-                    %{--if (data != "") {--}%
-                        %{--data += "&";--}%
-                    %{--}--}%
-                    %{--var val = valor ? valor : data1;--}%
-                    %{--data += "item=" + id + "_" + val + "_" + chk;--}%
-                %{--}--}%
-            %{--});--}%
+                if (chk) {
+                    if (data != "") {
+                        data += "&";
+                    }
+                    data += "item=" + id + "_" + chk;
+                }
+            });
 
-            %{--$.ajax({--}%
-                %{--type    : "POST",--}%
-                %{--url     : "${createLink(action: 'actualizarRegistro')}",--}%
-                %{--data    : data,--}%
-                %{--success : function (msg) {--}%
-                    %{--$("#dlgLoad").dialog("close");--}%
-                    %{--var parts = msg.split("_");--}%
-                    %{--var ok = parts[0];--}%
-                    %{--var no = parts[1];--}%
+            console.log('data:', data);
+            
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action: 'borrarItem')}",
+                data    : data,
+                success : function (msg) {
+                    $("#dlgLoad").dialog("close");
+                    var parts = msg.split("_");
+                    var ok = parts[0];
+                    var no = parts[1];
 
-                    %{--$(ok).each(function () {--}%
-                        %{--$(this).removeClass("editable").removeClass("selected");--}%
-                        %{--var $tdChk = $(this).siblings(".chk");--}%
-                        %{--var chk = $tdChk.children("input").is(":checked");--}%
-                        %{--if (chk) {--}%
-                            %{--$tdChk.html('<i class="icon-ok"></i>');--}%
-                        %{--}--}%
-                    %{--});--}%
-                    %{--$(".editable").first().addClass("selected");--}%
-                    %{--doHighlight({elem : $(ok), clase : "ok"});--}%
-                    %{--doHighlight({elem : $(no), clase : "no"});--}%
-                %{--}--}%
-            %{--});--}%
-            %{--return false;--}%
+                    $(ok).each(function () {
+                        $(this).removeClass("editable").removeClass("selected");
+                        var $tdChk = $(this).siblings(".chk");
+                        var chk = $tdChk.children("input").is(":checked");
+                        if (chk) {
+                            $tdChk.html('<i class="icon-ok"></i>');
+                        }
+                    });
+                    $(".editable").first().addClass("selected");
+//                    doHighlight({elem : $(ok), clase : "ok"});
+//                    doHighlight({elem : $(no), clase : "no"});
+                }
+            });
+            return false;
         });
 
     });
