@@ -1660,5 +1660,18 @@ class MantenimientoItemsController extends Shield {
         }
     }
 
+    def itemsUso () {
+
+    }
+
+    def tablaItemsUso_ajax() {
+
+        def sql = "select * from item_uso()"
+        def cn = dbConnectionService.getConnection()
+        def res = cn.rows(sql.toString())
+
+        return[items: res]
+    }
+
 
 }
