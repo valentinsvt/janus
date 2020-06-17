@@ -8,7 +8,7 @@
     <table class="table table-bordered table-striped table-hover table-condensed" style="width: 100%">
         <g:each in="${items}" var="item">
 
-            <tr data-id="${item.item__id}">
+            <tr>
                 <td style="width: 10%">
                     ${item.itemcdgo}
                 </td>
@@ -31,7 +31,7 @@
                         %{--<input type="checkbox" class="chequear" checked/>--}%
                     %{--</g:if>--}%
                     %{--<g:else>--}%
-                        <input type="checkbox" class="chequear"/>
+                        <input type="checkbox" class="chequear" data-id="${item.item__id}"/>
                     %{--</g:else>--}%
                 </td>
             </tr>

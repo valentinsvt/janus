@@ -34,8 +34,17 @@
     </div>
 </div>
 
+<g:if test="${flash.message}">
+    <div class="row">
+        <div class="span12">
+            <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                ${flash.message}
+            </div>
+        </div>
+    </div>
+</g:if>
 
-%{--<fieldset class="borde">--}%
 
     <div style="margin-top: 10px; min-height: 650px" class="vertical-container">
         <table class="table table-bordered table-hover table-condensed" style="width: 100%">
@@ -57,19 +66,6 @@
         </div>
     </div>
 
-    %{--<div id="divTabla" style="height: 760px; overflow-y:auto; overflow-x: hidden;">--}%
-
-    %{--</div>--}%
-
-
-    %{--<fieldset class="borde hide" style="width: 1170px; height: 58px" id="error">--}%
-
-        %{--<div class="alert alert-error">--}%
-            %{--<h4 style="margin-left: 450px">No existen datos!!</h4>--}%
-        %{--</div>--}%
-    %{--</fieldset>--}%
-
-%{--</fieldset>--}%
 
 
 <script type="text/javascript">
@@ -117,20 +113,21 @@
             $("#dlgLoad").dialog("open");
             var data = "";
 
-            $(".editable").each(function () {
-                var id = $(this).attr("id");
-
-                var chk = $(this).siblings(".chk").children("input").is(":checked");
+            $(".chequear").each(function () {
+                var id;
+//                var chk = $(this).siblings(".chk").children("input").is(":checked");
+                var chk = $(this).is(":checked");
 
                 if (chk) {
+                    id = $(this).data("id");
                     if (data != "") {
                         data += "&";
                     }
-                    data += "item=" + id + "_" + chk;
+                    data += "item=" + id;
                 }
             });
 
-            console.log('data:', data);
+//            console.log('data:', data);
             
             $.ajax({
                 type    : "POST",
@@ -138,10 +135,12 @@
                 data    : data,
                 success : function (msg) {
                     $("#dlgLoad").dialog("close");
-                    var parts = msg.split("_");
-                    var ok = parts[0];
-                    var no = parts[1];
+//                    var parts = msg.split("_");
+//                    var ok = parts[0];
+//                    var no = parts[1];
 
+                    location.reload(true);
+/*
                     $(ok).each(function () {
                         $(this).removeClass("editable").removeClass("selected");
                         var $tdChk = $(this).siblings(".chk");
@@ -151,8 +150,7 @@
                         }
                     });
                     $(".editable").first().addClass("selected");
-//                    doHighlight({elem : $(ok), clase : "ok"});
-//                    doHighlight({elem : $(no), clase : "no"});
+*/
                 }
             });
             return false;

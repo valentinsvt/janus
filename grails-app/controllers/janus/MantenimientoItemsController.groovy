@@ -1675,6 +1675,13 @@ class MantenimientoItemsController extends Shield {
 
 
     def borrarItem() {
+        def cn = dbConnectionService.getConnection()
+        def sql1 = "delete from ares where item__id = "
+        def sql2 = "delete from itva where item__id = "
+        def sql3 = "delete from rbpc where item__id = "
+        def sql4 = "delete from item where item__id = "
+        def sql = ""
+        def res = true
         println "borrarItem: $params"
         //item=145629_0.12601_true&item=478_0.11000_true&item=650_0.29000_false
         //      idRubroPrecio_precio_registrado
@@ -1683,35 +1690,30 @@ class MantenimientoItemsController extends Shield {
             params.item = [params.item]
         }
         def oks = "", nos = ""
-        params.item.each {
-            def parts = it.split("_")
-            println ">>" + parts
-
-//            def rubroId = parts[0]
-//            def precio = parts[1]
-//            def reg = parts[2] == 'true' ? 'R' : 'N'
-
-/*
-            def rubroPrecioInstance = PrecioRubrosItems.get(rubroId);
-
-            rubroPrecioInstance.precioUnitario = precio.toDouble()
-            rubroPrecioInstance.registrado = reg
-
-            if (!rubroPrecioInstance.save(flush: true)) {
-                println "item controller l 547: " + "error " + parts
-                if (nos != "") {
-                    nos += ","
-                }
-                nos += "#" + rubroId
-            } else {
-                if (oks != "") {
-                    oks += ","
-                }
-                oks += "#" + rubroId
+        params.item.each {it ->
+//            println ">> ${it.toInteger()}"
+            try {
+                cn.execute("begin")
+                cn.execute("$sql1 ${it.toInteger()}".toString())
+                cn.execute("$sql2 ${it.toInteger()}".toString())
+                cn.execute("$sql3 ${it.toInteger()}".toString())
+                cn.execute("$sql4 ${it.toInteger()}".toString())
+                println "borrado id: $it"
+                flash.clase = "alert-success"
+                flash.message = "Se ha borrado el item con éxito"
+//                println "$sql1 ${it.toInteger()};"
+//                println "$sql2 ${it.toInteger()};"
+//                println "$sql3 ${it.toInteger()};"
+//                println "$sql4 ${it.toInteger()};"
+//                cn.execute("rollback")
+                cn.execute("commit")
+            } catch (e) {
+                println "error: $e"
+                flash.clase = "alert-error"
+                flash.message = "No se puede borrar el item"
             }
-*/
         }
-        render oks + "_" + nos
+        render "ok_"
     }
 
 
