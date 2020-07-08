@@ -215,7 +215,7 @@ class ActaTagLib {
         }
 */
         def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'B']), [sort: 'fechaIngreso'])
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'B', 'L']), [sort: 'fechaIngreso'])
 //        println "planillas: ${planillas.valor}"
 
         def tabla = "<table class='table table-bordered table-condensed'>"
@@ -444,7 +444,7 @@ class ActaTagLib {
 
 //        def planillas = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O']), [sort: 'fechaIngreso'])
         def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'P', [sort: 'fechaIngreso']).last()
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'L']), 'P', [sort: 'fechaIngreso']).last()
         def planillasCmpl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
                 TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'C', [sort: 'fechaIngreso'])
         def ultimaPlnlCmpl = planillasCmpl? planillasCmpl.last() : null
@@ -532,7 +532,7 @@ class ActaTagLib {
         def total1 = av + cp
 
         def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'P', [sort: 'fechaIngreso']).last()
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'L']), 'P', [sort: 'fechaIngreso']).last()
         def planillasCmpl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
                 TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'C', [sort: 'fechaIngreso'])
         def ultimaPlnlCmpl = planillasCmpl? planillasCmpl.last() : null
@@ -654,7 +654,7 @@ class ActaTagLib {
         def contrato = acta.contrato
 //        def planillas = Planilla.findAllByContrato(contrato, [sort: "numero"])
         def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
-                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'P', [sort: 'fechaIngreso']).last()
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'L']), 'P', [sort: 'fechaIngreso']).last()
         def planillasCmpl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
                 TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R']), 'C', [sort: 'fechaIngreso'])
         def ultimaPlnlCmpl = planillasCmpl? planillasCmpl.last() : null
