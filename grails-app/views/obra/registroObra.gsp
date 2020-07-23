@@ -506,9 +506,14 @@
         <div class="span12">
             <div class="span1">Descripción de la Obra</div>
 
-            <div class="span6"><g:textArea name="descripcion" rows="5" cols="5" class="required"
-                                           style="width: 1007px; height: 40px; resize: none" maxlength="511"
+            %{--<div class="span6"><g:textArea name="descripcion" rows="5" cols="5" class="required"--}%
+                                           %{--style="width: 1007px; height: 40px; resize: none" maxlength="511"--}%
+                                           %{--value="${obra?.descripcion}" title="Descripción"/></div>--}%
+            <div class="span7"><g:textArea name="descripcion" rows="5" cols="5" class="required"
+                                           style="width:100%; height: 40px; resize: none" maxlength="511"
                                            value="${obra?.descripcion}" title="Descripción"/></div>
+            <div class="span1">Código CPC</div>
+            <div class="span2"><g:textField name="codigoCPC" maxlength="9" style="width: 100%" class="number" type="number"/></div>
         </div>
 
         <div class="span12">
