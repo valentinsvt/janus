@@ -1,5 +1,7 @@
 package janus
 
+import janus.pac.CodigoComprasPublicas
+
 class Obra implements Serializable {
     Persona responsableObra
     Persona revisor
@@ -126,6 +128,8 @@ class Obra implements Serializable {
     double indiceCampo = 0
     double indiceCampamento = 0
     double indiceGastoObra = 0
+
+    CodigoComprasPublicas codigoComprasPublicas
 
     static auditable = true
     static mapping = {
@@ -258,6 +262,7 @@ class Obra implements Serializable {
             indiceCampo column: 'indicmpo'
             indiceCampamento column: 'indicmpm'
             indiceGastoObra column: 'indigaob'
+            codigoComprasPublicas column: 'cpac__id'
 
         }
     }
@@ -386,6 +391,8 @@ class Obra implements Serializable {
         indiceCampo(blank:true, nullable:true)
         indiceCampamento(blank:true, nullable:true)
         indiceGastoObra(blank:true, nullable:true)
+
+        codigoComprasPublicas
     }
 
     String toString() {

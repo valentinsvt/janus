@@ -1166,7 +1166,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def codigoCPC_ajax() {
-        println "params codigo cpc" + params
+//        println "params codigo cpc" + params
 
         def codigos
         def orden;
@@ -1184,12 +1184,12 @@ class ObraController extends janus.seguridad.Shield {
 
         def txwh = " where ${campos[cmpo - 1]} ilike '%${params.criterio}%'"
 
-        sqlTx = "${select} ${txwh} order by ${campos[cmpo - 1]} ".toString()
+        sqlTx = "${select} ${txwh} order by ${campos[cmpo - 1]} ${orden} limit 40".toString()
 
         def cn = dbConnectionService.getConnection()
         codigos = cn.rows(sqlTx)
 
-        println("sql " + sqlTx)
+//        println("sql " + sqlTx)
 
         return [codigos: codigos]
     }

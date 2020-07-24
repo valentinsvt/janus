@@ -150,12 +150,11 @@
             </g:if>
         </g:if>
     </g:if>
-    <g:else>%{-- usuarurio de UTFPU --}%
+    <g:else>%{-- usuario de UTFPU --}%
 
         <g:if test="${obra?.estado != 'R'}">
             <g:if test="${duenoObra == 1 || obra?.id == null}">
-                <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
-                </button>
+                <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar</button>
             </g:if>
         </g:if>
 
@@ -514,12 +513,9 @@
                                            value="${obra?.descripcion}" title="Descripción"/></div>
             <div class="span1">Código CPC</div>
             <div class="span2">
-                    %{--<input type="text" style="width: 130px;" id="item_codigo">--}%
-                    %{--<input type="hidden" id="item_cpac">--}%
-
-                <g:hiddenField name="codigoCPC"/>
+                <g:hiddenField name="codigoComprasPublicas" value="${obra?.codigoComprasPublicas?.id}"/>
                 <g:textField style="width: 130px;" name="codigoCPCNombre" id="item_codigo" class=""
-                             value="${''}" />
+                             value="${obra?.codigoComprasPublicas?.numero}" />
             </div>
         </div>
 

@@ -11,8 +11,8 @@
 </head>
 
 <body>
-
-<table class="table table-bordered table-striped table-hover table-condensed" id="tabla">
+<div class="alert alert-info">* Máxima cantidad de registros en pantalla 40, use las opciones de búsqueda</div>
+<table class="table table-bordered table-striped table-hover table-condensed" id="tabla" style="margin-top: -20px">
 
     <thead>
 
@@ -45,7 +45,7 @@
         var codigo = $(this).data("numero")
         var nombre = $(this).data("nombre")
 
-        $("#codigoCPC").val(id)
+        $("#codigoComprasPublicas").val(id)
         $("#item_codigo").val(codigo)
 
         $("#busqueda_CPC").dialog("close");
