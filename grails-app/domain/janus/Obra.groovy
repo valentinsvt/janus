@@ -392,7 +392,7 @@ class Obra implements Serializable {
         indiceCampamento(blank:true, nullable:true)
         indiceGastoObra(blank:true, nullable:true)
 
-        codigoComprasPublicas
+        codigoComprasPublicas(blank:true, nullable:true)
     }
 
     String toString() {
