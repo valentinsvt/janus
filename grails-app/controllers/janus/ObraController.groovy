@@ -495,6 +495,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def prov = Provincia.list();
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "canton": ["Canton", "string"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"], "estado": ["Estado", "string"], "valor": ["Monto", "number"]]
+        def camposCPC = ["numero": ["Código", "string"], "descripcion": ["Descripción", "string"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
             cn.eachRow("select distinct sbpr__id from mfrb where obra__id = ${obra.id} order by sbpr__id".toString()) { d ->
@@ -533,10 +534,9 @@ class ObraController extends janus.seguridad.Shield {
             cn.close()
 
             duenoObra = esDuenoObra(obra) ? 1 : 0
-
             println "dueÑo: $duenoObra, concurso: $concurso"
 
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen,
+            [campos: campos, camposCPC: camposCPC, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen,
              matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra,
              claseObra: claseObra, grupoDir: grupo, dire  : direccion, depar: departamentos, concurso: concurso,
              personasUtfpu: personasUtfpu, duenoObra: duenoObra, sbprMF:sbprMF]
@@ -544,8 +544,7 @@ class ObraController extends janus.seguridad.Shield {
 
             duenoObra = 0
 
-
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil, programa: programa,
+            [campos: campos, camposCPC: camposCPC, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil, programa: programa,
              tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos,
              fcha: fechaPrecio, personasUtfpu: personasUtfpu, duenoObra: duenoObra, sbprMF:sbprMF]
         }
@@ -1164,6 +1163,35 @@ class ObraController extends janus.seguridad.Shield {
         comunidades = cn.rows(sqlTx)
         [comunidades: comunidades, colorComn: colorComn, colorProv: colorProv, colorParr: colorParr, colorCant: colorCant]
 
+    }
+
+    def codigoCPC_ajax() {
+        println "params codigo cpc" + params
+
+        def codigos
+        def orden;
+        def select = "select * from cpac"
+//        def txwh = "where cntn.prov__id = prov.prov__id and parr.cntn__id = cntn.cntn__id and cmnd.parr__id = parr.parr__id"
+        def campos = ['cpacnmro', 'cpacdscr']
+        def cmpo = params.buscarPor.toInteger()
+        def sqlTx = ""
+
+        if (params.ordenar == '1') {
+            orden = "asc";
+        } else {
+            orden = "desc";
+        }
+
+        def txwh = " where ${campos[cmpo - 1]} ilike '%${params.criterio}%'"
+
+        sqlTx = "${select} ${txwh} order by ${campos[cmpo - 1]} ".toString()
+
+        def cn = dbConnectionService.getConnection()
+        codigos = cn.rows(sqlTx)
+
+        println("sql " + sqlTx)
+
+        return [codigos: codigos]
     }
 
     def form_ajax() {

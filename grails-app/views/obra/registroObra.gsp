@@ -513,7 +513,14 @@
                                            style="width:100%; height: 40px; resize: none" maxlength="511"
                                            value="${obra?.descripcion}" title="Descripción"/></div>
             <div class="span1">Código CPC</div>
-            <div class="span2"><g:textField name="codigoCPC" maxlength="9" style="width: 100%" class="number" type="number"/></div>
+            <div class="span2">
+                    %{--<input type="text" style="width: 130px;" id="item_codigo">--}%
+                    %{--<input type="hidden" id="item_cpac">--}%
+
+                <g:hiddenField name="codigoCPC"/>
+                <g:textField style="width: 130px;" name="codigoCPCNombre" id="item_codigo" class=""
+                             value="${''}" />
+            </div>
         </div>
 
         <div class="span12">
@@ -543,11 +550,8 @@
         </div>
 
         <div class="span12">
-
-            <div class="span1" style="margin-top: 15px; width: 90px;"><button class="btn btn-buscar btn-info"
-                                                                              id="btn-buscar"><i
-                        class="icon-globe"></i> Buscar
-            </button>
+            <div class="span1" style="margin-top: 15px; width: 90px;">
+                <button class="btn btn-buscar btn-info" id="btn-buscar"><is="icon-globe"></i> Buscar</button>
             </div>
 
             <div class="span2" style="width: 220px; margin-left: 10px;">Cantón
@@ -786,6 +790,46 @@
     </fieldset>
 
 </div>
+
+
+<div id="busqueda_CPC">
+
+    <fieldset class="borde">
+        <div class="span7">
+            <div class="span2">Buscar Por</div>
+            <div class="span2">Criterio</div>
+            <div class="span1">Ordenar</div>
+        </div>
+
+        <div>
+            <div class="span2"><g:select name="buscarPor_CPC" class="buscarPor_CPC"
+                                         from="['1': 'Código', '2': 'Descripción']"
+                                         style="width: 120px" optionKey="key"
+                                         optionValue="value"/></div>
+
+            <div class="span2" style="margin-left: -20px"><g:textField name="criterio_CPC" class="criterio_CPC"/></div>
+
+            <div class="span1"><g:select name="ordenar_CPC" class="ordenar_CPC" from="['1': 'Ascendente', '2': 'Descendente']"
+                                         style="width: 120px; margin-left: 60px;" optionKey="key"
+                                         optionValue="value"/></div>
+
+            <div class="span2" style="margin-left: 140px"><button class="btn btn-info" id="btn-consultar_CPC"><i
+                    class="icon-check"></i> Consultar
+            </button></div>
+
+        </div>
+    </fieldset>
+
+    <fieldset class="borde">
+        <div id="divTabla_CPC" style="height: 460px; overflow-y:auto; overflow-x: auto;">
+        </div>
+    </fieldset>
+
+</div>
+
+
+
+
 
 <div id="estadoDialog">
 
@@ -1083,8 +1127,26 @@
     </fieldset>
 </div>
 
+%{--<div class="modal grandote hide fade" id="modal-ccp" style="overflow: hidden;">--}%
+    %{--<div class="modal-header btn-info">--}%
+        %{--<button type="button" class="close" data-dismiss="modal">×</button>--}%
+
+        %{--<h3 id="modalTitle_CPC"></h3>--}%
+    %{--</div>--}%
+
+    %{--<div class="modal-body" id="modalBody_CPC">--}%
+        %{--<bsc:buscador name="pac.buscador.id" value="" accion="buscaCpac" controlador="pac" campos="${camposCPC}" label="cpac" tipo="lista"/>--}%
+    %{--</div>--}%
+
+    %{--<div class="modal-footer" id="modalFooter_CPC">--}%
+    %{--</div>--}%
+%{--</div>--}%
+
 
 <script type="text/javascript">
+
+
+
 
     $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
 
@@ -1822,6 +1884,17 @@
             return false;
         });
 
+
+        $("#item_codigo").dblclick(function () {
+            $("#dlgLoad").dialog("close");
+            $("#busqueda_CPC").dialog("open");
+            $(".ui-dialog-titlebar-close").html("x")
+            return false;
+        });
+
+
+
+
         $("#departamento").change(function () {
             loadSalida();
             loadPersonas();
@@ -2069,6 +2142,12 @@
             busqueda();
         });
 
+        $("#btn-consultar_CPC").click(function () {
+            $("#dlgLoad").dialog("open");
+            busqueda_CPC();
+        });
+
+
         $("#btnImprimir").click(function () {
             $("#dlgLoad").dialog("open");
             location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistro', id: obra?.id)}"
@@ -2219,6 +2298,18 @@
             position: 'center',
             title: 'Datos de Situación Geográfica'
         });
+
+        $("#busqueda_CPC").dialog({
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            width: 800,
+            height: 600,
+            position: 'center',
+            title: 'Código Compras Públicas'
+        });
+
 
         $("#estadoDialog").dialog({
 
@@ -2617,6 +2708,28 @@
                 }
             });
         }
+
+        function busqueda_CPC() {
+            var buscarPor = $("#buscarPor_CPC").val();
+            var criterio = $(".criterio_CPC").val();
+            var ordenar = $("#ordenar_CPC").val();
+            $.ajax({
+                type: "POST",
+                url: "${createLink(controller: 'obra', action:'codigoCPC_ajax')}",
+                data: {
+                    buscarPor: buscarPor,
+                    criterio: criterio,
+                    ordenar: ordenar
+
+                },
+                success: function (msg) {
+                    $("#divTabla_CPC").html(msg);
+                    $("#dlgLoad").dialog("close");
+                }
+            });
+        }
+
+
     });
 
     $("#errorDialog").dialog({
