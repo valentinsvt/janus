@@ -2338,6 +2338,10 @@ class ReportesController {
         addCellTabla(tablaReferencia, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaReferencia, new Paragraph(obra?.referencia, times8normal), prmsHeaderHoja)
 
+        addCellTabla(tablaReferencia, new Paragraph("Código CPC", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph((obra?.codigoComprasPublicas.numero ?: ''), times8normal), prmsHeaderHoja)
+
 
         addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
         addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
