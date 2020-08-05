@@ -412,7 +412,7 @@
                         </g:if>
                         <br/>
                         %{--DELEGADO DIRECCIÓN DE FISCALIZACIÓN--}%
-                        DELEGADO DE LA MÁXIMA AUTORIDAD
+                        TÉCNICO DESIGNADO POR LA MÁXIMA AUTORIDAD O SU DELEGADO
                     </div>
 
                     <div class="firma">
