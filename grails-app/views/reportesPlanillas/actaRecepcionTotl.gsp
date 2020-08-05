@@ -441,7 +441,8 @@
                             ${directorDeFiscalizacion.titulo?.toUpperCase() ?: ""} ${directorDeFiscalizacion.nombre} ${directorDeFiscalizacion.apellido}
                         </g:if>
                         <br/>
-                        DELEGADO DIRECCIÓN DE FISCALIZACIÓN
+                        %{--DELEGADO DIRECCIÓN DE FISCALIZACIÓN--}%
+                        DELEGADO DE LA MÁXIMA AUTORIDAD
                     </div>
 
                     <div class="firma">

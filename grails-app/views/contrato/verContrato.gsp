@@ -459,19 +459,23 @@
                     <li>
                         %{--<g:if test="${esDirFis == 'S'}">--}%
                         <a href="#" id="btnDelFisc">
-                            <i class="icon-user"></i> Delegado fiscalización
+                            <i class="icon-user"></i> Delegado de la máxima Autoridad
                         </a>
                         %{--</g:if>--}%
                     </li>
 
+%{--
                     <li>
-                    %{--<g:if test="${esDirector == 'S'}">--}%
+                    --}%
+%{--<g:if test="${esDirector == 'S'}">--}%%{--
+
                         <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
                             <a href="#" id="btnPref">
                                 <i class="icon-user"></i> Delegado del Prefecto
                             </a>
                         </g:if>
                     </li>
+--}%
 
                     <li>
                         <g:if test="${contrato.fiscalizador?.id == session.usuario.id}">
