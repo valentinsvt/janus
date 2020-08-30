@@ -2326,7 +2326,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 //        println "tx2: $tx2"
         cn.execute(tx1.toString())
         cn.execute(tx2.toString())
-//        println "ha borrado registros temporales, prejActual: ${prejActual.id}"
+        println "ha borrado registros temporales, prejActual: ${prejActual.id}"
 
         tx1 = "insert into prej_t(prej__id, cntr__id, obra__id, prejfcfn, prejfcin, prejnmro, prejtipo, " +
                 "prejcrpa, prejcntr, prejcmpl) " +
@@ -2338,14 +2338,14 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 "select creo__id, prej__id, vocr__id, creocntd, creoprct, creoprco " +
                 "from creo where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})"
         cn.execute(tx1.toString())
-//        println "se ha creado registros temporales en prej_t y creo_t"
+        println "se ha creado registros temporales en prej_t y creo_t"
 
 
         /** borra crej y prej actuales **/
         cn.execute("delete from crej where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})".toString())
         cn.execute("delete from creo where prej__id in (select prej__id from prej where cntr__id = ${cntr.id})".toString())
         cn.execute("delete from prej where cntr__id = ${cntr.id}".toString())
-//        println "borrado de datos actuales de prej y crej"
+        println "borrado de datos actuales de prej y crej"
 
         def suspension
         def diasSusp = 0
@@ -2445,7 +2445,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         cn.execute(sql.toString())
         println "Insertados los periodos hasta la suspensión: ${mdfc.id}, anteriores a ${pfcin.format('yyyy-MM-dd')}"
 
-        /* se procesa el prime periodo luego de la suspensión */
+        /* se procesa el primer periodo luego de la suspensión */
         sql = "select prej__id, prejfcin, prejfcfn, prejnmro, prejfcfn::date - prejfcin::date dias from prej_t " +
                 "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') and " +
 //                "prejfcin <= '${pfcin.format('yyyy-MM-dd')}' order by prejfcin limit 1"
@@ -2576,6 +2576,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         sql = "select prejnmro, sum((prejfcfn::date - prejfcin::date) + 1) dias, prejtipo from prej_t " +
                 "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') " +
                 "group by prejnmro, prejtipo order by 1"
+//        sql = "select prejnmro, sum((prejfcfn::date - prejfcin::date) + 1) dias from prej_t " +
+//                "where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') " +
+//                "group by prejnmro order by 1"
         println "2 ---> $sql"
 
         def periodos = cn.rows(sql.toString())
@@ -2591,7 +2594,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 if(diasrsto < diasPrdo) {
                     fctr = diasrsto / diasPrdo
                     println "+++++ se debe dividir en otro mes ++++++"
-                    sql = "select prej__id from prej_t where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') and " +
+//                    sql = "select prej__id from prej_t where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') and " +
+//                            "prejnmro = ${prdo} order by 1;"
+                    sql = "select prej__id from prej_t where cntr__id = ${cntr.id} and prejtipo = '${prejtipo}' and " +
                             "prejnmro = ${prdo} order by 1;"
                     def prej = ""
                     cn.eachRow(sql.toString()) {d ->
@@ -2618,7 +2623,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     println "NuevoPrej: ${obra.id}, $prdo, $prejtipo, $fcin, $fcfn, ${cntr.id}"
                     nuevoId = insertaPrejNuevo(obra, prdo, prejtipo, fcin, fcfn, cntr)
 
-                    sql = "select prej__id from prej_t where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') and " +
+//                    sql = "select prej__id from prej_t where cntr__id = ${cntr.id} and prejtipo in ('P', 'C', 'A') and " +
+//                            "prejnmro = ${prdo} order by 1;"
+                    sql = "select prej__id from prej_t where cntr__id = ${cntr.id} and prejtipo = '${prejtipo}' and " +
                             "prejnmro = ${prdo} order by 1;"
                     def prej = ""
                     cn.eachRow(sql.toString()) {d ->

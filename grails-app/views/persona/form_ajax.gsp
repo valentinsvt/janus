@@ -146,7 +146,8 @@
             </td>
 --}%
             <td>
-                <g:select name="sexo" from="${personaInstance.constraints.sexo.inList}" class="" value="${personaInstance?.sexo}" style="width:60px;"/>
+                <g:select name="sexo" from="${personaInstance.constraints.sexo.inList}" class=""
+                          value="${personaInstance?.sexo}" style="width:60px;"/>
             </td>
 
             <td>
