@@ -379,7 +379,7 @@
         var ini = $("#fechaInicio").datepicker("getDate");
         var fin = $("#fechaFinalizacion").datepicker("getDate");
         if (ini && fin) {
-            var dif = daydiff(ini, fin);
+            var dif = Math.round(daydiff(ini, fin),0);
             if (dif < 0) {
                 dif = 0;
             }
