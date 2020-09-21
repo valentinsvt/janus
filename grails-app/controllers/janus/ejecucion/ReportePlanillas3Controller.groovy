@@ -3723,8 +3723,8 @@ class ReportePlanillas3Controller {
 
         def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
         def height = 12
-        def maxRows = 45     //45
-        def extraRows = 10   //18
+        def maxRows = 35     //45
+        def extraRows = 6   //18
         def currentRows = 1
         def chequeoPg = 0
 
@@ -3732,7 +3732,7 @@ class ReportePlanillas3Controller {
         document.newPage()
         tablaDetalles = new PdfPTable(11);
         tablaDetalles.setWidthPercentage(100);
-        tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+        tablaDetalles.setWidths(arregloEnteros([10, 40, 5, 8, 11, 11, 11, 11, 11, 11, 11]))
 //        tablaDetalles.setSpacingAfter(1f);
         tablaDetalles.setSplitLate(false);
         def currentPag = 1
@@ -3839,7 +3839,7 @@ class ReportePlanillas3Controller {
                 document.newPage()
                 tablaDetalles = new PdfPTable(11);
                 tablaDetalles.setWidthPercentage(100);
-                tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+                tablaDetalles.setWidths(arregloEnteros([10, 40, 5, 8, 11, 11, 11, 11, 11, 11, 11]))
                 tablaDetalles.setSpacingAfter(1f);
                 printHeaderDetalle([pag: currentPag, total: totalPags])
                 rowsCurPag = 1
