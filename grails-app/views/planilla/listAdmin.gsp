@@ -326,17 +326,27 @@
                         <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
                             <g:if test="${planillaInstance?.valor > 0}">
                                 <a href="#" class="btn btn-small btnPedidoPagoAnticipo"
-                                   title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                   title="Imprimir memorando de pedido de pago" data-id="${planillaInstance.id}">
                                     <i class="icon-print"></i>
                                 </a>
                             </g:if>
                         </g:if>
-                        <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">
-                            <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memorandum de pedido de pago"
+                        %{--<g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">--}%
+                        ${Math.abs(cmpl)}
+                        <g:if test="${(cmpl > 0) && (Math.abs(lblBtn) > 3) && (planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L'])}">
+                            <a href="#" class="btn btn-small btnPedidoPagoC" title="Pedido de pago Complementarios"
                                data-id="${planillaInstance.id}">
                                 <i class="icon-print"></i>
                             </a>
                         </g:if>
+                        <g:else>
+                            <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">
+                                <a href="#" class="btn btn-small btnPedidoPagoC text-info" title="Imprimir memorandum de pedido de pago"
+                                   data-id="${planillaInstance.id}">
+                                    <i class="icon-print"></i>
+                                </a>
+                            </g:if>
+                        </g:else>
                 </td>
             </tr>
         </g:each>
@@ -405,6 +415,13 @@
             %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
             %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
             location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPago')}/" + $(this).data("id");
+            return false;
+        });
+
+        $(".btnPedidoPagoC").click(function () {
+            %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
+            %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
+            location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPagoComp')}/" + $(this).data("id");
             return false;
         });
 

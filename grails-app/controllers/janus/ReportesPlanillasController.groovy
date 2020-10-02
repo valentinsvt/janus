@@ -3457,6 +3457,309 @@ class ReportesPlanillasController {
         response.getOutputStream().write(b)
     }
 
+    def memoPedidoPagoComp() {
+        def planilla = Planilla.get(params.id)
+        def obra = planilla.contrato.oferta.concurso.obra
+        def contrato = planilla.contrato
+        def cmpl = Contrato.findByPadre(contrato)
+        def costo = Planilla.findByPadreCosto(planilla)?.valor?:0
+
+        def rjplAntr = planillasService.reajusteAnterior(planilla)
+        def rjplAcml = planillasService.reajusteAcumulado(planilla)
+        def rjplActl = rjplAcml - rjplAntr
+
+        def rjplAntrCp = planillasService.reajusteAnterior(planilla.planillaCmpl)
+        def rjplAcmlCp = planillasService.reajusteAcumulado(planilla.planillaCmpl)
+        rjplAntr += rjplAntrCp
+        rjplAcml += rjplAcmlCp
+        rjplActl = rjplAcml - rjplAntr
+
+
+        def ok = true
+        def str = ""
+
+        def texto = Pdfs.findAllByPlanilla(planilla)
+        if (texto.size() == 0) {
+            redirect(controller: "planilla", action: "configPedidoPagoComp", id: planilla.id)
+            return
+        } else if (texto.size() > 1) {
+            str += "<li>Se encontraron ${texto.size()} textos. No se pudo generar el pdf.</li>"
+            ok = false
+        } else {
+            texto = texto.first()
+        }
+
+        if (!ok) {
+            flash.message = "<ul>" + str + "</ul>"
+
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def link = "<a href='${url}' class='btn btn-danger'>Regresar</a>"
+
+            redirect(action: "errores", params: [link: link])
+            return
+        }
+
+
+        def tramite = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
+        def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def precios = [:]
+        def indirecto = obra.totales / 100
+
+//        println "personas: ${prsn.persona.id} ${prsn.persona.nombre}"
+        preciosService.ac_rbroObra(obra.id)
+
+        detalle.each {
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+        }
+
+        def baos = new ByteArrayOutputStream()
+        def name = "memo_pedido_pago_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+
+        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font fontInfo = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+
+        Font fontThHeader = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdHeader = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        Font fontThHeaderGris = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
+        Font fontTdHeaderGris = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        Font fontThTabla = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdTabla = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        Font fontContenido = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        Font fontFirma = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        def prmsTdNoBorder = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+
+        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
+        Image logo = Image.getInstance(logoPath);
+        logo.scaleToFit(52, 52)
+        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
+
+        Document document
+        document = new Document(PageSize.A4);
+        document.setMargins(86.4, 56.2, 56.2, 56.2);
+        // margins: left, right, top, bottom
+        // 1 in = 72, 1cm=28.1, 3cm = 86.4
+        def pdfw = PdfWriter.getInstance(document, baos);
+
+        document.open();
+        PdfContentByte cb = pdfw.getDirectContent();
+        document.addTitle("Memo de pedido de pago" + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, memo, pedido, pago, anticipo");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("SEP - G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("MEMO DE PEDIDO DE PAGO ", fontTituloGad));
+        preface.add(new Paragraph(obra.nombre, fontTituloGad));
+        addEmptyLine(preface, 1);
+//        Paragraph preface2 = new Paragraph();
+//        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), fontInfo))
+//        addEmptyLine(preface2, 1);
+        document.add(logo)
+        document.add(preface);
+//        document.add(preface2);
+
+        /* *********************************** DATOS OBRA **********************************/
+        PdfPTable tablaDatosObra = new PdfPTable(5);
+        tablaDatosObra.setWidthPercentage(100);
+        tablaDatosObra.setWidths(arregloEnteros([12, 24, 10, 12, 24]))
+        tablaDatosObra.setSpacingAfter(10f)
+
+        def bgObra = Color.LIGHT_GRAY
+
+        def strPeriodo = (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy'))
+
+        addCellTabla(tablaDatosObra, new Paragraph("Obra", fontThHeaderGris), [bg: bgObra, border: bgObra, bct: Color.BLACK, bwt: 0.1, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(obra.nombre, fontTdHeaderGris), [bg: bgObra, border: bgObra, bct: Color.BLACK, bwt: 0.1, bcr: Color.BLACK, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+
+        addCellTabla(tablaDatosObra, new Paragraph("Lugar", fontThHeaderGris), [bg: bgObra, border: bgObra, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(obra.barrio, fontTdHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+//        addCellTabla(tablaDatosObra, new Paragraph("", fontThHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosObra, new Paragraph("Planilla", fontThHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(planilla.numero, fontTdHeaderGris), [bg: bgObra, border: bgObra, bcr: Color.BLACK, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosObra, new Paragraph("Ubicación", fontThHeaderGris), [bg: bgObra, border: bgObra, bcl: Color.BLACK, bwl: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre, fontTdHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+//        addCellTabla(tablaDatosObra, new Paragraph("", fontThHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosObra, new Paragraph("Monto contrato", fontThHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(numero(contrato.monto, 2), fontTdHeaderGris), [bcr: Color.BLACK, bwr: 0.1, bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosObra, new Paragraph("Contratista", fontThHeaderGris), [bg: bgObra, bcl: Color.BLACK, bwl: 0.1, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(contrato.oferta.proveedor.nombre, fontTdHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+//        addCellTabla(tablaDatosObra, new Paragraph("", fontThHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosObra, new Paragraph("Periodo", fontThHeaderGris), [bg: bgObra, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(strPeriodo, fontTdHeaderGris), [bg: bgObra, bcr: Color.BLACK, bwr: 0.1, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosObra, new Paragraph("Plazo", fontThHeaderGris), [pb: 5, bg: bgObra, bcl: Color.BLACK, bwl: 0.1, bcb: Color.BLACK, bwb: 0.1, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph(numero(contrato.plazo, 0) + " días", fontTdHeaderGris), [bg: bgObra, bcb: Color.BLACK, bwb: 0.1, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph("", fontThHeaderGris), [bg: bgObra, border: bgObra, bcb: Color.BLACK, bwb: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph("", fontThHeaderGris), [bg: bgObra, border: bgObra, bcb: Color.BLACK, bwb: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosObra, new Paragraph("", fontTdHeaderGris), [bg: bgObra, bcr: Color.BLACK, bwr: 0.1, bcb: Color.BLACK, bwb: 0.1, border: bgObra, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tablaDatosObra);
+        /* *********************************** FIN DATOS OBRA **********************************/
+
+        /* *********************************** DATOS MEMO **********************************/
+        PdfPTable tablaDatosMemo = new PdfPTable(2);
+        tablaDatosMemo.setWidthPercentage(100);
+        tablaDatosMemo.setWidths(arregloEnteros([12, 88]))
+        tablaDatosMemo.setSpacingAfter(10f)
+
+        addCellTabla(tablaDatosMemo, new Paragraph("No.", fontThHeader), [border: Color.WHITE, bct: Color.BLACK, bwt: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(tramite.memo, fontTdHeader), [border: Color.WHITE, bct: Color.BLACK, bwt: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosMemo, new Paragraph("Para", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(prsn[1].persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(prsn[1].persona?.departamento?.direccion?.nombre, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(prsn[0].persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosMemo, new Paragraph("De", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(prsn[0].persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosMemo, new Paragraph("Fecha", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(fechaConFormato(tramite?.fecha, "dd-MM-yyyy"), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaDatosMemo, new Paragraph("Asunto", fontThHeader), [pb: 5, border: Color.WHITE, bcb: Color.BLACK, bwb: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(tramite?.descripcion, fontTdHeader), [border: Color.WHITE, bcb: Color.BLACK, bwb: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tablaDatosMemo);
+        /* *********************************** FIN DATOS MEMO **********************************/
+
+        /* *********************************** CONTENIDOS **********************************/
+//        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+//                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+//                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+//                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+//        Paragraph parrafo1 = new Paragraph(strParrafo1, fontContenido);
+        Paragraph parrafo1 = new Paragraph(texto.parrafo1, fontContenido);
+        parrafo1.setAlignment(Element.ALIGN_JUSTIFIED);
+        addEmptyLine(parrafo1, 1);
+        document.add(parrafo1)
+
+//        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} " +
+//                "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
+//        Paragraph parrafo2 = new Paragraph(strParrafo2, fontContenido);
+        Paragraph parrafo2 = new Paragraph(texto.parrafo2, fontContenido);
+        parrafo2.setAlignment(Element.ALIGN_JUSTIFIED);
+        addEmptyLine(parrafo2, 1);
+        document.add(parrafo2)
+
+        def cn = dbConnectionService.getConnection()
+        def sql= "select sum(rjplvlor) suma from rjpl where plnl__id = (select max(plnlrjst) from rjpl " +
+                "where plnl__id = ${planilla.id} and plnlrjst < plnl__id)"
+        println "--sql: $sql"
+        def reajusteAnterior = cn.rows(sql.toString())[0].suma
+        def reajuste = ReajustePlanilla.findAllByPlanilla(planilla).sum{ it.valorReajustado} - reajusteAnterior
+
+
+        def tablaValores = new PdfPTable(2);
+        tablaValores.setWidthPercentage(75);
+        tablaValores.setHorizontalAlignment(Element.ALIGN_LEFT);
+        tablaValores.setWidths(arregloEnteros([70, 30]))
+        tablaValores.setSpacingBefore(5f)
+        tablaValores.setSpacingAfter(5f)
+
+        if (planilla.tipoPlanilla.codigo == 'A') {
+            addCellTabla(tablaValores, new Paragraph("${numero(contrato?.porcentajeAnticipo, 0)}% de anticipo", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        } else {
+            addCellTabla(tablaValores, new Paragraph("Valor planilla", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        }
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.planillaCmpl.valor, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+        addCellTabla(tablaValores, new Paragraph("(+) Reajuste  ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(rjplActl, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("Total planilla + reajuste ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero((rjplActl + planilla.valor + planilla.planillaCmpl.valor), 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("(-) Anticipo  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.descuentos, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("(-) Multas  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        def multas = 0
+        multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+        multas += planilla.multaEspecial?:0
+        addCellTabla(tablaValores, new Paragraph("${numero(multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+
+        addCellTabla(tablaValores, new Paragraph("SUMA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.planillaCmpl.valor + rjplActl - planilla.descuentos - multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+        if(planilla.noPagoValor > 0) {
+            addCellTabla(tablaValores, new Paragraph("${planilla.noPago}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaValores, new Paragraph("${numero(planilla.noPagoValor, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+
+        if(costo){  // existe planilla de costo + porcentaje
+            addCellTabla(tablaValores, new Paragraph("(+) Costo + Porcentaje ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaValores, new Paragraph("${numero(costo, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+
+        addCellTabla(tablaValores, new Paragraph("A FAVOR DEL CONTRATISTA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + rjplActl + planilla.planillaCmpl.valor - planilla.descuentos - multas - planilla.noPagoValor + costo, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tablaValores)
+        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas + costo
+        def neg = ""
+        if (totalLetras < 0) {
+            totalLetras = totalLetras * -1
+            neg = "MENOS "
+        }
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
+//        println "a letras: $totalLetras, resulta: $numerosALetras"
+//       def strParrafo3 = "Son ${neg}${numerosALetras}"
+//        Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
+        Paragraph parrafo3 = new Paragraph(texto.parrafo3, fontContenido);
+        parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
+        addEmptyLine(parrafo3, 1);
+        document.add(parrafo3)
+
+//        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
+//                "Dirección la fecha de pago del anticipo reajustado y su valor."
+
+//        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del valor a pagar a la cuenta del contratista."
+//        Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
+        Paragraph parrafo4 = new Paragraph(texto.parrafo4, fontContenido);
+        parrafo4.setAlignment(Element.ALIGN_JUSTIFIED);
+        addEmptyLine(parrafo4, 1);
+        document.add(parrafo4)
+
+        Paragraph parrafo5 = new Paragraph(texto.parrafo5, fontContenido);
+        parrafo5.setAlignment(Element.ALIGN_JUSTIFIED);
+        document.add(parrafo5)
+        /* *********************************** FIN CONTENIDOS **********************************/
+
+        /* *********************************** FIRMA **********************************/
+
+        def strParrafoFirma = "\n\n\n______________________________________\n${nombrePersona(prsn[0].persona)}\n${prsn[0].persona.departamento}"
+        Paragraph parrafoFirma = new Paragraph(strParrafoFirma, fontFirma);
+        parrafoFirma.setAlignment(Element.ALIGN_JUSTIFIED);
+        addEmptyLine(parrafoFirma, 1);
+        document.add(parrafoFirma)
+        /* *********************************** FIN FIRMA **********************************/
+
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
     def memoPedidoPagoAnticipo() {
         def planilla = Planilla.get(params.id)
         println("memoPedidoPagoAnticipo - planilla " + params.id)

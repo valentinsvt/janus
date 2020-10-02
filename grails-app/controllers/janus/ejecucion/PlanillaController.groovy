@@ -19,6 +19,7 @@ class PlanillaController extends janus.seguridad.Shield {
     def buscadorService
     def diasLaborablesService
     def dbConnectionService
+    def planillasService
 
 /*
     def tests() {
@@ -175,6 +176,138 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "<tr>"
         tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
         tabla += "<td class='tr'>${numero(planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "</table>"
+
+        if (texto.size() == 0) {
+
+            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo
+            def neg = ""
+            if (totalLetras < 0) {
+                totalLetras = totalLetras * -1
+                neg = "MENOS "
+            }
+            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
+
+            def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+                    "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+                    "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+                    "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+
+//            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${contrato?.oferta?.proveedor.pagarNombre} "
+            def editParrafo2 = "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
+
+            def strParrafo3 = "Son ${neg}${numerosALetras}"
+
+            def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del valor a pagar a la cuenta del contratista."
+
+            textos[0] = [
+                    [tipo: "S", string: strParrafo1]
+            ]
+            textos[1] = [
+                    [tipo: "S", string: strParrafo2],
+                    [tipo: "E", string: editParrafo2, w: "940px", h: "25px"]
+            ]
+            textos[2] = [
+                    [tipo: "S", string: tabla]
+            ]
+            textos[3] = [
+                    [tipo: "S", string: strParrafo3]
+            ]
+            textos[4] = [
+                    [tipo: "E", string: strParrafo4, w: "940px", h: "50px"]
+            ]
+
+        } else if (texto.size() > 1) {
+            println "Se encontraron ${texto.size()} textos para la obra ${obra.id}: ${texto.id}"
+            texto = texto.first()
+        } else {
+            texto = texto.first()
+        }
+
+        return [planilla: planilla, obra: obra, contrato: contrato, textos: textos, texto: texto, tabla: tabla]
+    }
+
+    def configPedidoPagoComp() {
+        def planilla = Planilla.get(params.id)
+        def contrato = planilla.contrato
+        def obra = contrato.obra
+        def costo = Planilla.findByPadreCosto(planilla)?.valor?:0
+
+        def plnlAnterior = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(planilla.contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P']), planilla.fechaPresentacion, [sort: 'fechaPresentacion']).last()
+        def rjplAnterior = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnlAnterior])
+        def rjpl = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: planilla])
+        def rjplComp = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: planilla.planillaCmpl])
+        def reajuste = rjpl[0] - rjplAnterior[0]
+
+        def rjplAntr = planillasService.reajusteAnterior(planilla)
+        def rjplAcml = planillasService.reajusteAcumulado(planilla)
+        def rjplActl = rjplAcml - rjplAntr
+
+        def rjplAntrCp = planillasService.reajusteAnterior(planilla.planillaCmpl)
+        def rjplAcmlCp = planillasService.reajusteAcumulado(planilla.planillaCmpl)
+        rjplAntr += rjplAntrCp
+        rjplAcml += rjplAcmlCp
+        rjplActl = rjplAcml - rjplAntr
+
+//        println "---reajuste de la planillas: $rjplAnterior, actual $rjpl"
+
+        def texto = Pdfs.findAllByPlanilla(planilla)
+        def textos = []
+
+        def multas = 0
+        // TODO: revisar si estos valores afectan al valor a pagar, si si, tomar de MLPL
+//        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+        multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+        multas += planilla.multaEspecial?:0
+
+//        println "multas: ${multas}, espacial: ${planilla.multaEspecial}"
+
+        def tabla = "<table border='0'>"
+        tabla += "<tr>"
+        if (planilla.tipoPlanilla.codigo == 'A') {
+            tabla += "<th class='tl'>${numero(contrato?.porcentajeAnticipo, 0)}% de anticipo</t>"
+        } else {
+            tabla += "<th class='tl'>Valor planilla</t>"
+        }
+        tabla += "<td class='tr'>${numero(planilla.valor + planilla.planillaCmpl.valor, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>(+) Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}</th>"
+        tabla += "<td class='tr'>${numero(rjplActl, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>(-) Anticipo</th>"
+        tabla += "<td class='tr'>${numero(planilla.descuentos, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>(-) Multas</th>"
+        tabla += "<td class='tr'>${numero(multas, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>SUMA</th>"
+        tabla += "<td class='tr'>${numero(planilla.valor + planilla.planillaCmpl.valor + rjplActl - planilla.descuentos - multas, 2)}</td>"
+        tabla += "</tr>"
+
+        if(planilla.noPagoValor > 0) {
+            tabla += "<tr>"
+            tabla += "<th class='tl'>${planilla.noPago}</th>"
+            tabla += "<td class='tr'>${numero(planilla.noPagoValor, 2)}</td>"
+            tabla += "</tr>"
+        }
+
+        if(costo) {
+            tabla += "<tr>"
+            tabla += "<th class='tl'>Costo + Porcentaje</th>"
+            tabla += "<td class='tr'>${numero(costo, 2)}</td>"
+            tabla += "</tr>"
+        }
+
+        tabla += "<tr>"
+        tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
+        tabla += "<td class='tr'>${numero(planilla.valor + planilla.planillaCmpl.valor + rjplActl - planilla.descuentos - multas - planilla.noPagoValor + costo, 2)}</td>"
         tabla += "</tr>"
         tabla += "</table>"
 
@@ -536,6 +669,92 @@ class PlanillaController extends janus.seguridad.Shield {
         redirect(action: "configPedidoPago", id: planilla.id)
     }
 
+    def savePedidoPagoComp() {
+        def planilla = Planilla.get(params.id)
+        def contrato = planilla.contrato
+        def obra = contrato.obra
+        def texto = new Pdfs()
+        def costo = Planilla.findByPadreCosto(planilla)?.valor?:0
+        texto.planilla = planilla
+        texto.fecha = new Date()
+
+        def cn = dbConnectionService.getConnection()
+        def sql= "select sum(rjplvlor) suma from rjpl where plnl__id = (select max(plnlrjst) from rjpl " +
+                "where plnl__id = ${planilla.id} and plnlrjst < plnl__id)"
+        println "--sql: $sql"
+        def reajusteAnterior = cn.rows(sql.toString())[0].suma
+        def reajuste = ReajustePlanilla.findAllByPlanilla(planilla).sum{ it.valorReajustado} - reajusteAnterior
+
+
+        def multas = 0
+        // TODO: actualizar esta línea al igual que en la 122 (configPedidoPago)
+//        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+        multas = MultasPlanilla.executeQuery("select sum(monto) from MultasPlanilla where planilla = :p", [p: planilla])[0]?:0
+        multas += planilla.multaEspecial?:0
+
+        def rjplAntr = planillasService.reajusteAnterior(planilla)
+        def rjplAcml = planillasService.reajusteAcumulado(planilla)
+        def rjplActl = rjplAcml - rjplAntr
+
+        def rjplAntrCp = planillasService.reajusteAnterior(planilla.planillaCmpl)
+        def rjplAcmlCp = planillasService.reajusteAcumulado(planilla.planillaCmpl)
+        rjplAntr += rjplAntrCp
+        rjplAcml += rjplAcmlCp
+        rjplActl = rjplAcml - rjplAntr
+
+
+//        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas - planilla.noPagoValor
+        def totalLetras = planilla.valor + planilla.planillaCmpl.valor + rjplActl - planilla.descuentos - multas - planilla.noPagoValor + costo
+        def neg = ""
+        if (totalLetras < 0) {
+            totalLetras = totalLetras * -1
+            neg = "MENOS "
+        }
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
+
+        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+
+        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+
+        def strParrafo3 = "Son ${neg}${numerosALetras}"
+
+        def textos = []
+        textos[0] = [
+                strParrafo1
+        ]
+        textos[1] = [
+                strParrafo2,
+                params["edit_2_1"]
+        ]
+        textos[2] = [
+                // tabla
+        ]
+        textos[3] = [
+                strParrafo3
+        ]
+        textos[4] = [
+                params["edit_5_1"]
+        ]
+
+        texto.parrafo1 = strParrafo1
+        texto.parrafo2 = strParrafo2 + " " + params["edit_2_1"]
+        texto.parrafo3 = strParrafo3
+        texto.parrafo4 = params["edit_5_1"]
+        texto.parrafo5 = params.extra?.trim()
+
+        if (texto.save([flush: true])) {
+            flash.clase = "alert-success"
+            flash.message = "Pedido de pago de la planilla guardado exitosamente."
+        } else {
+            flash.clase = "alert-error"
+            flash.message = "Ha ocurrido un error al guardar el pedido de pago de la planilla."
+        }
+        redirect(action: "configPedidoPago", id: planilla.id)
+    }
+
     def errorIndice() {
         def planilla = Planilla.get(params.id)
         return [planilla: planilla, errores: params.errores, alertas: params.alertas]
@@ -640,6 +859,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 return
         }
         def contrato = Contrato.get(params.id)
+        def cmpl = Contrato.findByPadre(contrato)
         def obra = contrato.oferta.concurso.obra
 
 //        def fp = janus.FormulaPolinomica.findAllByObra(obra)
@@ -656,7 +876,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def firma = Persona.findAllByCargoIlike("Direct%");
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList,
-                firma: firma, garantia: garantia]
+                firma: firma, garantia: garantia, cmpl: cmpl.id]
     }
 
 
