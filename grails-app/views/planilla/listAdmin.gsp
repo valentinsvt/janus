@@ -332,16 +332,22 @@
                             </g:if>
                         </g:if>
                         %{--<g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">--}%
-                        ${Math.abs(cmpl)}
-                        <g:if test="${(cmpl > 0) && (Math.abs(lblBtn) > 3) && (planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L'])}">
-                            <a href="#" class="btn btn-small btnPedidoPagoC" title="Pedido de pago Complementarios"
+                        %{--${Math.abs(cmpl)}--}%
+                        <g:if test="${(cmpl > 0) && (Math.abs(lblBtn?:0) > 3) && (planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L'])}">
+                            <a href="#" class="btn btn-small btnPedidoPagoC btn-info" title="Pedido de pago Complementarios"
                                data-id="${planillaInstance.id}">
                                 <i class="icon-print"></i>
                             </a>
+                            <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">
+                                <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memorandum de pedido de pago"
+                                   data-id="${planillaInstance.id}">
+                                    <i class="icon-print"></i>
+                                </a>
+                            </g:if>
                         </g:if>
                         <g:else>
                             <g:if test="${(planillaInstance.tipoPlanilla.codigo in ['O', 'P', 'Q', 'L']) && Math.abs(lblBtn) > 3}">
-                                <a href="#" class="btn btn-small btnPedidoPagoC text-info" title="Imprimir memorandum de pedido de pago"
+                                <a href="#" class="btn btn-small btnPedidoPago text-info" title="Imprimir memorandum de pedido de pago"
                                    data-id="${planillaInstance.id}">
                                     <i class="icon-print"></i>
                                 </a>

@@ -876,7 +876,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def firma = Persona.findAllByCargoIlike("Direct%");
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList,
-                firma: firma, garantia: garantia, cmpl: cmpl.id]
+                firma: firma, garantia: garantia, cmpl: cmpl?.id?:0]
     }
 
 
