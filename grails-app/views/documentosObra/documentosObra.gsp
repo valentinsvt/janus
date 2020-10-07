@@ -57,7 +57,7 @@
 <div id="tabs" style="width: 800px; height: 1060px">
     <ul>
         <li><a href="#tab-presupuesto">Presupuesto</a></li>
-        <li><a href="#tab-memorando">Memorando</a></li>
+        <li><a href="#tab-memorando">Informe</a></li>
         <li><a href="#tab-polinomica">F. Polinómica</a></li>
         <li><a href="#tab-memorandoPresu">Adm. Directa/Cogestión</a></li>
         <li><a href="#tab-textosFijos">Textos Fijos</a></li>
@@ -429,7 +429,7 @@
                 <legend>Cabecera</legend>
 
                 <div class="span6">
-                    <div class="span1">Memo N°</div>
+                    <div class="span1">Informe N°</div>
 
                     <div class="span3"><g:textField name="numeroMemo" value="${obra?.memoSalida}" disabled="true"/></div>
                 </div>
@@ -443,7 +443,7 @@
                     %{--disabled="true"/></div>--}%
 
 
-                    <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS'}" disabled="true"/></div>
+                    <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'COORDINACIÓN DE FIJACIÓN DE COSTOS'}" disabled="true"/></div>
 
                 </div>
 

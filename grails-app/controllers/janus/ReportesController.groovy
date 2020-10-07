@@ -2156,15 +2156,18 @@ class ReportesController {
         if(session.perfil.id == 16){
             headers.add(new Paragraph(obra?.departamento?.codigo + " - Presupuesto borrador", times12bold));
         }else{
-            headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
+            headers.add(new Paragraph("DGCP - Coordinación de Fijación de Costos", times12bold));
         }
 
 
+/*
         if (obra?.oficioSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
         } else {
             headers.add(new Paragraph("Informe N°. " + obra?.oficioSalida, times12bold));
         }
+*/
+        headers.add(new Paragraph(obra?.codigo, times12bold));
 
         println("obra " + obra.id)
 
@@ -4598,9 +4601,9 @@ class ReportesController {
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
 //        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times14bold));
-        headers.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS", times14bold));
+        headers.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE COSTOS", times14bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("MEMORANDO", times14bold))
+        headers.add(new Paragraph("INFORME", times14bold))
 
         Paragraph txtIzq = new Paragraph();
         addEmptyLine(txtIzq, 1);
@@ -4613,10 +4616,10 @@ class ReportesController {
 
         if (obra?.memoSalida == null) {
             addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph("Memo N°:", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("Informe N°:", times10bold), prmsHeaderHoja)
         } else {
             addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph("Memo N°: " + obra?.memoSalida, times10bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("Informe N°: " + obra?.memoSalida, times10bold), prmsHeaderHoja)
         }
 
         PdfPTable tablaQuito = new PdfPTable(2);
@@ -4706,7 +4709,8 @@ class ReportesController {
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph(obra?.oficioSalida, times10normal), prmsHeaderHoja)
+//            addCellTabla(tablaMemo, new Paragraph(obra?.oficioSalida, times10normal), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph(obra?.codigo, times10normal), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph("Fórmula Polinómica", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
@@ -4716,7 +4720,8 @@ class ReportesController {
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph(" : " + obra?.oficioSalida, times10normal), prmsHeaderHoja)
+//            addCellTabla(tablaMemo, new Paragraph(" : " + obra?.oficioSalida, times10normal), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph(" : " + obra?.codigo, times10normal), prmsHeaderHoja)
         }
 
         addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
