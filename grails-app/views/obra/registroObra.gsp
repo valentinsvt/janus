@@ -703,41 +703,41 @@
         </div>
 
         <div class="span12" style="margin-top: 10px" id="dirSalida">
-            <div class="span2 formato" style="width: 230px;">Destino: Dirección
-            <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id"
-                      optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos"
-                      noSelection="['null': 'Seleccione ...']"/>
+            %{--<div class="span2 formato" style="width: 230px;">Destino: Dirección--}%
+            %{--<g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id"--}%
+                      %{--optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos"--}%
+                      %{--noSelection="['null': 'Seleccione ...']"/>--}%
 
-            </div>
+            %{--</div>--}%
 
-            <div class="span2 formato" style="width: 230px;">Destino: Coordinación
-            <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id"
-                      optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos"
-                      noSelection="['null': 'Seleccione ...']"/>
-            </div>
+            %{--<div class="span2 formato" style="width: 230px;">Destino: Coordinación--}%
+            %{--<g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id"--}%
+                      %{--optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos"--}%
+                      %{--noSelection="['null': 'Seleccione ...']"/>--}%
+            %{--</div>--}%
 
-            <div class="span1 formato" style="width: 120px;margin-left: 30px;">Informe
-            <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20"
-                         title="Número Oficio de Salida" style="width: 120px;"/>
-            </div>
+            %{--<div class="span1 formato" style="width: 120px;margin-left: 30px;">Informe--}%
+            %{--<g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20"--}%
+                         %{--title="Número Oficio de Salida" style="width: 120px;"/>--}%
+            %{--</div>--}%
 
-            <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
-            <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20"
-                         title="Memorandum de salida" style="width: 120px;"/>
-            </div>
+            %{--<div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando--}%
+            %{--<g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20"--}%
+                         %{--title="Memorandum de salida" style="width: 120px;"/>--}%
+            %{--</div>--}%
 
-            <g:if test="${obra?.id && obra?.tipo != 'D'}">
-                <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
-                    <g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"
-                                 title="Fórmula Polinómica" style="width: 120px;" value="${obra?.formulaPolinomica}"/>
-                </g:if>
-                <g:else>
-                    <g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"
-                                 title="Fórmula Polinómica" style="width: 120px;"/>
-                </g:else>
-                </div>
-            </g:if>
+            %{--<g:if test="${obra?.id && obra?.tipo != 'D'}">--}%
+                %{--<div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.--}%
+                %{--<g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">--}%
+                    %{--<g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"--}%
+                                 %{--title="Fórmula Polinómica" style="width: 120px;" value="${obra?.formulaPolinomica}"/>--}%
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<g:textField name="formulaPolinomica" class="span2 allCaps" maxlength="20"--}%
+                                 %{--title="Fórmula Polinómica" style="width: 120px;"/>--}%
+                %{--</g:else>--}%
+                %{--</div>--}%
+            %{--</g:if>--}%
 
 %{--
             <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha

@@ -1224,8 +1224,19 @@ class ObraController extends janus.seguridad.Shield {
 
         params.oficioIngreso = params.oficioIngreso.toUpperCase()
         params.memoCantidadObra = params.memoCantidadObra.toUpperCase()
-        params.oficioSalida = params.oficioSalida.toUpperCase()
-        params.memoSalida = params.memoSalida.toUpperCase()
+
+        if(params.memoSalida){
+            params.memoSalida = params.memoSalida.toUpperCase()
+        }else{
+            params.memoSalida = null
+        }
+
+        if(params.oficioSalida){
+            params.oficioSalida = params.oficioSalida.toUpperCase()
+        }else{
+            params.oficioSalida = null
+        }
+
         params.codigo = params.codigo.toUpperCase()
 
         if (params.anchoVia) {
