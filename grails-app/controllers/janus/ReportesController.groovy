@@ -2743,11 +2743,11 @@ class ReportesController {
 
         addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        if(session.perfil.id != 16){
-            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
-        }else{
+//        if(session.perfil.id != 16){
+//            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+//        }else{
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        }
+//        }
 
 
         def arregloFirmas = []
@@ -2779,29 +2779,31 @@ class ReportesController {
 
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
-       if(session.perfil.id != 16){
-           if(params.firmaCoordinador != ''){
-               def personaRol = PersonaRol.get(params.firmaCoordinador)
-               firmaCoordinador = personaRol.persona
-               addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-           }else{
-               addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
-           }
-       }else{
+//       if(session.perfil.id != 16){
+//           if(params.firmaCoordinador != ''){
+//               def personaRol = PersonaRol.get(params.firmaCoordinador)
+//               firmaCoordinador = personaRol.persona
+//               addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+//           }else{
+//               addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+//           }
+//       }else{
            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
-       }
+//       }
 
         addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         if(session.perfil.id == 16){
             addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
         }else{
-            addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
         }
 
         addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)

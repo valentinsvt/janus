@@ -13,16 +13,18 @@
     <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
     </div>
 
+%{--
     <div class="span1 formato" style="width: 120px;margin-left: 30px;">Informe
     <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
     </div>
+--}%
 
-    <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
+    <div class="span1 formato" style="width: 120px; margin-left: 20px;">Informe
     <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
     </div>
 
     <g:if test="${obra?.id && obra?.tipo != 'D'}">
-        <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
+        <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula Polinómica
             <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
                 %{--<div style="font-weight: normal;">${obra?.formulaPolinomica}</div>--}%
                 <g:textField name="formulaPolinomica" class="span2 allCaps"  maxlength="20" title="Fórmula Polinómica" style="width: 120px;" value="${obra?.formulaPolinomica}"/>

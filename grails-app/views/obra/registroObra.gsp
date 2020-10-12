@@ -739,10 +739,12 @@
                 </div>
             </g:if>
 
+%{--
             <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha
             <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
                             value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
             </div>
+--}%
         </div>
         <div class="span12" style="margin-top: 10px">
 
