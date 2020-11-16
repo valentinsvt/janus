@@ -312,8 +312,9 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "</table>"
 
         if (texto.size() == 0) {
-
-            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo
+//            println "totalLetras: ${planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo}"
+//            def totalLetras = planilla.valor + reajuste - planilla.descuentos - multas - planilla.noPagoValor + costo
+            def totalLetras = planilla.valor + planilla.planillaCmpl.valor + rjplActl - planilla.descuentos - multas - planilla.noPagoValor + costo
             def neg = ""
             if (totalLetras < 0) {
                 totalLetras = totalLetras * -1
