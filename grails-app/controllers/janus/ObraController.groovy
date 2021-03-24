@@ -25,7 +25,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def iniciarObraAdm() {
-        //println "incio obra dm " + params
+        println "incio obra dm " + params
         def obra = Obra.get(params.obra)
         def fecha
         try {

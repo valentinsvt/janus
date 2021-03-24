@@ -2289,9 +2289,14 @@ class PlanillaController extends janus.seguridad.Shield {
             plnlCmpl.numero += '-C'
             plnlCmpl.descripcion += "Contrato Complementario"
             plnlCmpl.formulaPolinomicaReajuste = fp
-            plnlCmpl.save(flush: true)
-            planillaInstance.planillaCmpl = plnlCmpl
-            planillaInstance.save(flush: true)
+//            plnlCmpl.save(flush: true)
+            if (!plnlCmpl.save(flush: true)) {
+                println "Error al crear plnlCmpl: ${plnlCmpl.errors}"
+            } else {
+                plnlCmpl.refresh()
+                planillaInstance.planillaCmpl = plnlCmpl
+                planillaInstance.save(flush: true)
+            }
         }
 
         switch (planillaInstance.tipoPlanilla.codigo) {
@@ -4507,22 +4512,31 @@ class PlanillaController extends janus.seguridad.Shield {
         insertaMulta(prmt)
 
         /********  multa por incumplimiento cronograma -- no se aplica a Liquidación "Q" **********/
+        /* se cambia el criterio del 80% por el 100% de ejecutado */
         if(plnl.tipoPlanilla.codigo == 'P'){
-            multaPlanilla = Math.round(((rjpl.last().acumuladoPlanillas / rjpl.last().acumuladoCronograma < 0.80) ? plnl.contrato.monto / 1000 : 0) * 100) / 100
+//            multaPlanilla = Math.round(((rjpl.last().acumuladoPlanillas / rjpl.last().acumuladoCronograma < 0.80) ? plnl.contrato.monto / 1000 : 0) * 100) / 100
             dias = 0
-            dias = (plnl?.fechaFin - plnl?.fechaInicio) - plnl.valor / rjpl.last().parcialCronograma * (plnl?.fechaFin - plnl?.fechaInicio)
+            println "dias_eje: ${plnl.fechaFin} - ${plnl.contrato.obra.fechaInicio}"
+            def dias_eje = plnl.fechaFin - plnl.contrato.obra.fechaInicio + 1
+            dias = (rjpl.last().acumuladoCronograma - rjpl.last().acumuladoPlanillas) / ( (rjpl.last().acumuladoCronograma)/dias_eje )
+            dias = Math.round(dias)
             dias = (dias > 0) ? dias : 0
+            println "dias_eje: $dias_eje dias: $dias"
+            multaPlanilla = Math.round(((rjpl.last().acumuladoPlanillas < rjpl.last().acumuladoCronograma) ?
+                    (plnl.contrato.monto - rjpl.last().acumuladoPlanillas) / 1000 * dias : 0) * 100) / 100
             prmt = [:]
             prmt.planilla = plnl
             prmt.tipoMulta = TipoMulta.get(2) ////// 2 multa por incumplimiento cronograma
             if(plnl.tipoContrato == 'P') {
-                prmt.descripcion = "${plnl.contrato.multaIncumplimiento} x 1000 de ${formatoNum.format(plnl.contrato.monto)}"
+                prmt.descripcion = "${plnl.contrato.multaIncumplimiento} x 1000 x ${dias} de " +
+                        "${formatoNum.format(plnl.contrato.monto - rjpl.last().acumuladoPlanillas)}"
             } else {
                 prmt.descripcion = "${cmpl.multaIncumplimiento} x 1000 de ${formatoNum.format(cmpl.monto)}"
             }
             prmt.valorCronograma = rjpl.last().parcialCronograma
             prmt.monto = multaPlanilla
             prmt.periodo = "${rjpl.last().mes}"
+            prmt.dias = dias
             insertaMulta(prmt)
         }
 

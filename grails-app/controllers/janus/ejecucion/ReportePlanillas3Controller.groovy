@@ -2659,8 +2659,11 @@ class ReportePlanillas3Controller {
                     addCellTabla(tablaMultaDisp, new Paragraph("Cronograma", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph(numero(acCronograma,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph("Planillado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-//                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.planilla.valor,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph(numero(acPlanilla,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY,
+                       align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.dias,0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//                    addCellTabla(tablaMultaDisp, new Paragraph(numero(mt.planilla.valor,2) , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph(mt.descripcion , fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaMultaDisp, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])

@@ -199,7 +199,7 @@
                             </div>
 
                             <div class="span4">
-                                <g:textField name="numero" maxlength="30" class="span3 required allCaps"
+                                <g:textField name="numero" maxlength="28" class="span3 required allCaps"
                                              value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
                                 <p class="help-block ui-helper-hidden"></p>
                             </div>

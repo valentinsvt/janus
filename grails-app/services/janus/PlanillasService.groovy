@@ -152,8 +152,8 @@ class PlanillasService {
                 tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
                 orden++
             }
-//            println "tablaBo: $tblaBo"
-//            println "titulos: $titulos"
+            println "tablaBo: $tblaBo"
+            println "titulos: $titulos"
         }
         cn.close()
 //        def cb = cabeceraBo(tblaBo, plnl)
@@ -241,7 +241,8 @@ class PlanillasService {
         def sql = "select frplnmro, dtrjinpr, dtrjvlpr from dtrj, frpl " +
                 "where dtrj.frpl__id = frpl.frpl__id and rjpl__id = ${rjpl} and frplnmro ilike '${tp}%' " +
                 "order by frplnmro"
-//        println "sql armaIndices: $sql"
+        println "sql armaIndices: $sql"
+        println "tbla: $tbla"
         cn.eachRow(sql.toString()){d ->
             tbla.find {it.numero == d.frplnmro}["indc${orden}"] = d.dtrjinpr
             tbla.find {it.numero == d.frplnmro}["vlor${orden}"] = d.dtrjvlpr
