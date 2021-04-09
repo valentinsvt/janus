@@ -1923,7 +1923,8 @@
             </g:else>
             </g:else>
 
-            var idObra = ${obra?.id}
+            var idObra = "${obra?.id}"
+
                 $.ajax({
                     type: "POST",
                     url: "${g.createLink(action:'getSalida')}",
