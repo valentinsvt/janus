@@ -1899,9 +1899,7 @@
         });
 
         function loadSalida() {
-
             var direccionEl;
-
             <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
             <g:if test="${obra}">
             <g:if test="${duenoObra == 1}">
@@ -1926,7 +1924,6 @@
             </g:else>
 
             var idObra = ${obra?.id}
-
                 $.ajax({
                     type: "POST",
                     url: "${g.createLink(action:'getSalida')}",
@@ -1935,7 +1932,6 @@
                         obra: idObra
                     },
                     success: function (msg) {
-
                         $("#dirSalida").html(msg);
                     }
                 });

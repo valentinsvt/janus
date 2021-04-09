@@ -46,10 +46,6 @@
     </div>
 <script type="text/javascript">
 
-
-
-
-
 $("#btnGenerarFP").click(function () {
 
     var btn = $(this);
