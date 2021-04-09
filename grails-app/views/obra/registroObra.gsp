@@ -1948,7 +1948,7 @@
         $("#btnRubros").click(function () {
             var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
             var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${obra?.id}Wdesglose=";
-            var idObra = ${obra?.id}
+            var idObra = "${obra?.id}"
 
 
                 $.ajax({
