@@ -44,6 +44,7 @@
     <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
                     value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
     </div>
+%{--
 <script type="text/javascript">
 
 $("#btnGenerarFP").click(function () {
@@ -96,4 +97,4 @@ $("#btnGenerarFP").click(function () {
             });
             return false;
         });
-</script>
+</script>--}%
