@@ -1900,17 +1900,18 @@
 
         function loadSalida() {
             var direccionEl;
-            <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+            <g:if test="${persona?.departamento?.codigo?.trim() == 'UTFPU'}">
             <g:if test="${obra}">
             <g:if test="${duenoObra == 1}">
-            direccionEl = $("#departamento option:selected").attr("class");
+//            direccionEl = $("#departamento option:selected").attr("class");
+            direccionEl = $("#departamento option:selected").val();
             </g:if>
             <g:else>
             direccionEl = $("#departamentoDire").val();
             </g:else>
             </g:if>
             <g:else>
-            direccionEl = $("#departamento option:selected").attr("class");
+            direccionEl = $("#departamento option:selected").val();
             </g:else>
             </g:if>
             <g:else>
@@ -1918,8 +1919,7 @@
             direccionEl = $("#departamentoDire").val();
             </g:if>
             <g:else>
-            direccionEl =
-            ${persona?.departamento?.direccion?.id}
+            direccionEl = ${persona?.departamento?.direccion?.id}
             </g:else>
             </g:else>
 
