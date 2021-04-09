@@ -1624,9 +1624,9 @@
 
         loadPersonas();
 
-        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+        %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
         loadSalida();
-        </g:if>
+        %{--</g:if>--}%
 
 
         <g:if test="${obra}">
