@@ -1903,15 +1903,15 @@
             <g:if test="${persona?.departamento?.codigo?.trim() == 'UTFPU'}">
             <g:if test="${obra}">
             <g:if test="${duenoObra == 1}">
-//            direccionEl = $("#departamento option:selected").attr("class");
-            direccionEl = $("#departamento option:selected").val();
+            direccionEl = $("#departamento option:selected").attr("class");
+//            direccionEl = $("#departamento").val();
             </g:if>
             <g:else>
             direccionEl = $("#departamentoDire").val();
             </g:else>
             </g:if>
             <g:else>
-            direccionEl = $("#departamento option:selected").val();
+            direccionEl = $("#departamento option:selected").attr("class");
             </g:else>
             </g:if>
             <g:else>
