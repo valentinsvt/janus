@@ -78,7 +78,7 @@ class ReportesPlanillasController {
     def actaRecepcion() {
         println "acta recepcion: " + params
         def acta = Acta.get(params.id)
-//        println ">>>> " + acta
+        println ">>>> " + acta
         def direccion = Direccion.findAllByNombreIlike("%FISCALIZACI%")
         def delegadoFiscalizacion = null
         if(acta.contrato.delegadoFiscalizacion) {
