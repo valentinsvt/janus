@@ -2545,6 +2545,8 @@ class ReportePlanillas3Controller {
 
         document.add(tbAntc)
 
+        document.add(firmas("otro", "vertical", planilla))
+
         document.close();
         pdfw.close()
         return baos
