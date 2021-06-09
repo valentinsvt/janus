@@ -129,7 +129,7 @@ class PlanillasService {
      * 1. carga los índices de la oferta y añade columnas para cada reajuste de la planilla
      * tp: 'c' para cuadrilla tipo y 'p' para FP */
     def armaTablaFr(plnl, fprj, tp) {
-//        println "arma tablaFr plnl: $plnl, fprj: $fprj, tp: $tp"
+        println "arma tablaFr plnl: $plnl, fprj: $fprj, tp: $tp"
         def cn = dbConnectionService.getConnection()
         def planilla = Planilla.get(plnl)
         def tblaBo = []
@@ -141,7 +141,7 @@ class PlanillasService {
         sql = "select rjpl__id, prindscr, rjplprdo from rjpl, plnl, prin " +
                 "where rjpl.plnl__id = ${plnl} and rjpl.fprj__id = ${fprj} and plnl.plnl__id = rjpl.plnl__id and " +
                 "prin.prin__id = rjpl.prin__id order by rjpl.rjplprdo"
-//        println "sql armaTablaFr: $sql"
+        println "sql armaTablaFr: $sql"
         cn.eachRow(sql.toString()) {rj ->
 //            println "arma tablaFr --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
             if(rj.rjplprdo == 0) {
@@ -149,6 +149,10 @@ class PlanillasService {
                 tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
                 orden++
             }  else {
+                if(planilla.contrato.anticipo == 0 && !tblaBo) {
+                    tblaBo = armaIndices(rj.rjpl__id, tp) // si no hay anticipo /* ojo */
+                }
+                println "tblaBo: $tblaBo"
                 tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
                 orden++
             }
@@ -221,7 +225,7 @@ class PlanillasService {
         def sql = "select indcdscr, frplvlor, frplnmro, dtrjinof, dtrjvlof from dtrj, frpl, indc " +
                 "where indc.indc__id = frpl.indc__id and dtrj.frpl__id = frpl.frpl__id and " +
                 "rjpl__id = ${rjpl} and frplnmro ilike '${tp}%' order by frplnmro"
-//        println "sql armaIndices: $sql"
+        println "*sql armaIndices: $sql"
         cn.eachRow(sql.toString()){d ->
             mapa = [:]
             mapa.numero      = d.frplnmro

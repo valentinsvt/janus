@@ -45,7 +45,7 @@
 
     <div class="span12" id="confirmacion"></div>
 
-    <hr>
+    <hr/>
     <div class="span4" id="funcionDiv" style="margin-top: 10px;">
         <div class="span2" style="font-weight: bold; margin-left: -10px">Asignar Función:</div>
         <elm:select name="funcion" id="funcion" from="${janus.Funcion?.findAllByCodigo('D')}" optionValue="descripcion" optionKey="id"

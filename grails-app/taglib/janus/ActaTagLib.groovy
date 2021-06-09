@@ -531,6 +531,8 @@ class ActaTagLib {
         def cp = planillasCosto.sum { it.valor } ?: 0
         def total1 = av + cp
 
+        def ultimaPlnl2 = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
+                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'L']), 'P', [sort: 'fechaIngreso'])
         def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
                 TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'O', 'R', 'L']), 'P', [sort: 'fechaIngreso']).last()
         def planillasCmpl = Planilla.findAllByContratoAndTipoPlanillaInListAndTipoContrato(contrato,
@@ -539,6 +541,7 @@ class ActaTagLib {
 //        def ultimaPlnl = Planilla.findAllByContratoAndTipoPlanillaInList(contrato,
 //                TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q', 'R']), [sort: 'fechaIngreso']).last()
 
+        println "ultimaPlnl: ${ultimaPlnl2}"
         def total2 = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla " +
                 "where planilla = :p", [p:ultimaPlnl])[0]?:0
 

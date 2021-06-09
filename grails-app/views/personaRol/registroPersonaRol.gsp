@@ -34,7 +34,7 @@
 
 
     <div class="span12" id="filaPersonas"></div>
-    <hr>
+    <hr/>
     <div class="span4" id="funcionDiv" style="margin-top: 10px;">
         <div class="span2" style="margin-left: -1px; font-weight: bold">Nueva Función:</div>
         %{--<elm:select name="funcion" id="funcion" from="${janus.Funcion?.list()}" optionValue="descripcion" optionKey="id"--}%
