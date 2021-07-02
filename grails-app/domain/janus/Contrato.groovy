@@ -173,7 +173,7 @@ class Contrato implements Serializable {
     }
 
     def getObra() {
-        println "(obraContratada): ${this.obraContratada}, concurso: ${this.oferta?.concurso?.obra?.codigo}"
+//        println "(obraContratada): ${this.obraContratada}, concurso: ${this.oferta?.concurso?.obra?.codigo}"
         if(this.obraContratada == null){
             def tmp_obra = Obra.findByCodigo(this.oferta?.concurso?.obra?.codigo+"-OF")
             if(!tmp_obra) {

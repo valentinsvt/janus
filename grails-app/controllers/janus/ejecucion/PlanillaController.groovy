@@ -4517,8 +4517,11 @@ class PlanillaController extends janus.seguridad.Shield {
 //            multaPlanilla = Math.round(((rjpl.last().acumuladoPlanillas / rjpl.last().acumuladoCronograma < 0.80) ? plnl.contrato.monto / 1000 : 0) * 100) / 100
             dias = 0
             println "dias_eje: ${plnl.fechaFin} - ${plnl.contrato.obra.fechaInicio}"
-            def dias_eje = plnl.fechaFin - plnl.contrato.obra.fechaInicio + 1
-            dias = (rjpl.last().acumuladoCronograma - rjpl.last().acumuladoPlanillas) / ( (rjpl.last().acumuladoCronograma)/dias_eje )
+//            def dias_eje = plnl.fechaFin - plnl.contrato.obra.fechaInicio + 1
+            def dias_eje = dias_obra(plnl)
+//            dias = (rjpl.last().acumuladoCronograma - rjpl.last().acumuladoPlanillas) / ( (rjpl.last().acumuladoCronograma)/dias_eje )
+            def valor_dia = valor_dia_perio(plnl.id)
+            dias = (rjpl.last().acumuladoCronograma - rjpl.last().acumuladoPlanillas) / valor_dia
             dias = Math.round(dias)
             dias = (dias > 0) ? dias : 0
             println "dias_eje: $dias_eje dias: $dias"
@@ -4527,6 +4530,7 @@ class PlanillaController extends janus.seguridad.Shield {
             prmt = [:]
             prmt.planilla = plnl
             prmt.tipoMulta = TipoMulta.get(2) ////// 2 multa por incumplimiento cronograma
+
             if(plnl.tipoContrato == 'P') {
                 prmt.descripcion = "${plnl.contrato.multaIncumplimiento} x 1000 x ${dias} de " +
                         "${formatoNum.format(plnl.contrato.monto - rjpl.last().acumuladoPlanillas)}"
@@ -4567,8 +4571,8 @@ class PlanillaController extends janus.seguridad.Shield {
 
             def tpml = TipoMulta.get(4)  /** 4 retraso de obra **/
 
+/*
             def cn = dbConnectionService.getConnection()
-//            def sql = "select sum(cast(to_char(prejfcfn - prejfcin, 'dd') as integer) + 1) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo = 'P'"
             def sql = "select sum((prejfcfn - prejfcin) + 1) dias from prej where cntr__id = ${plnl.contrato.id} and prejtipo in ('P', 'C')"
             println "sql: $sql"
             dias  = (int) cn.rows(sql.toString())[0].dias
@@ -4579,8 +4583,6 @@ class PlanillaController extends janus.seguridad.Shield {
 
             dias -= plnl.contrato.plazo + ampliacion
 
-//            sql = "select cast(to_char(plnlfcfn - max(prejfcfn), 'dd') as integer) cntd from plnl, prej " +
-//                    "where plnl__id = ${plnl.id} and plnl.cntr__id = prej.cntr__id group by plnlfcfn"
             sql = "select plnlfcfn - max(prejfcfn) cntd from plnl, prej " +
                     "where plnl__id = ${plnl.id} and plnl.cntr__id = prej.cntr__id group by plnlfcfn"
 
@@ -4588,10 +4590,11 @@ class PlanillaController extends janus.seguridad.Shield {
             def retrasoObra = cn.rows(sql.toString())[0].cntd
 
             dias += retrasoObra
+*/
 
+            dias = calcula_dias(plnl)
             println "retraso de obra: ${dias} dias"
 
-//            dias = 4
             if(dias > 0) {
                 prmt = [:]
 
@@ -4615,6 +4618,47 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
+    }
+
+
+    def calcula_dias(plnl) {
+        def cn = dbConnectionService.getConnection()
+        def sql = "select sum((prejfcfn - prejfcin) + 1) dias from prej where cntr__id = ${plnl.contrato.id} and " +
+                "prejtipo in ('P', 'C')"
+        println "sql: $sql"
+        def dias  = (int) cn.rows(sql.toString())[0].dias
+        sql = "select sum(mdcedias) dias from mdce where cntr__id = ${plnl.contrato.id} and mdcetipo = 'A'"
+        def ampliacion = (int) cn.rows(sql.toString())[0].dias?:0
+
+        println "...dias: $dias, ampliacion: $ampliacion, plazo: ${plnl.contrato.plazo}"
+
+        dias -= plnl.contrato.plazo + ampliacion
+        sql = "select plnlfcfn - max(prejfcfn) cntd from plnl, prej " +
+                "where plnl__id = ${plnl.id} and plnl.cntr__id = prej.cntr__id group by plnlfcfn"
+
+        println "retraso sql: $sql"
+        def retrasoObra = cn.rows(sql.toString())[0].cntd
+
+        dias += retrasoObra
+        return dias
+    }
+
+    def dias_obra(plnl) {
+        def cn = dbConnectionService.getConnection()
+        def sql = "select sum((prejfcfn - prejfcin) + 1) dias from prej, plnl where prej.cntr__id = ${plnl.contrato.id} and " +
+                "prejtipo in ('P', 'C') and plnl.cntr__id = prej.cntr__id and plnl__id = ${plnl.id} and prejfcfn <= plnlfcfn"
+        println "dias_obra sql: $sql"
+        def dias  = (int) cn.rows(sql.toString())[0].dias
+        return dias
+    }
+
+    def valor_dia_perio(plnl_id) {
+        def cn = dbConnectionService.getConnection()
+        def sql = "select ( prejcrpa/(prejfcfn - prejfcin + 1) )::numeric(8,2) dia from prej, plnl where prejfcin <= plnlfcfn and " +
+                "prejfcfn >= plnlfcfn and plnl__id = ${plnl_id} and prej.cntr__id = plnl.cntr__id"
+        println "dias_obra sql: $sql"
+        def valor = (int) cn.rows(sql.toString())[0].dia
+        return valor
     }
 
     def procesaMultasSinRj(id){
