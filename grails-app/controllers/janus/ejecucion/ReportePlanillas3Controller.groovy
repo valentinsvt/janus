@@ -2204,7 +2204,7 @@ class ReportePlanillas3Controller {
                 if(!totalAvance[i-1]) totalAvance[i-1] = 0
                 addCellTabla(tablaB0, new Paragraph(numero(d["indc$i"], 2), fontTd), bordeTdRecuadroDer)
                 addCellTabla(tablaB0, new Paragraph(numero(d["vlor$i"], 3), fontTd), bordeTdRecuadroDer)
-//                println "----- d[vlor $i ]: ${d["vlor$i"]}"
+                println "----- d[vlor $i ]: ${d["vlor$i"]}"
                 totalAvance[i-1] += d["vlor$i"]
 //                totalAvance[i-1] += d["vlor$i"]?:0
             }
