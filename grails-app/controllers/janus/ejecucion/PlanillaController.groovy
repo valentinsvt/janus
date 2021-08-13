@@ -4115,7 +4115,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def insertaRjpl(prmt) {
         def rjpl = new ReajustePlanilla()
-        println "inserta reajuste planilla : ${prmt}"
+//        println "inserta reajuste planilla : ${prmt}"
         def rjpl_an = ReajustePlanilla.findByPlanillaAndPlanillaReajustadaAndPeriodoAndFpReajuste(prmt.planilla,
                 prmt.planillaReajustada, prmt.periodo, prmt.fpReajuste)
         if (rjpl_an) {
@@ -4464,7 +4464,7 @@ class PlanillaController extends janus.seguridad.Shield {
         } else {
             fechaMax = res[1]
         }
-//        println "fechaPresentacion: $fechaPresentacion, fechaMax: $fechaMax "
+        println "fechaPresentacion: $fechaPresentacion, fechaMax: $fechaMax --> $res "
 
         res = diasLaborablesService.diasLaborablesEntre(fechaPresentacion, fechaMax)
         if (!res[0]) {
@@ -4473,11 +4473,14 @@ class PlanillaController extends janus.seguridad.Shield {
             retraso = res[1]
         }
 
-        if (fechaPresentacion < fechaMax) {
+        if (fechaPresentacion <= fechaMax) {
+            println "--- no hay retraso"
             retraso *= -1
         }
 
-        if (retraso > 0 || plnl.valor == 0) {
+        println "retraso: $retraso"
+//        if (retraso > 0 || plnl.valor == 0) {
+        if (retraso > 0) {
             retraso = 1
         } else {
             retraso = 0
@@ -4867,7 +4870,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def insertaMulta(prmt) {
         def mlpl = new MultasPlanilla()
-//        println "inserta multas de la planilla : ${prmt}"
+        println "inserta multas de la planilla : ${prmt}"
         def mlpl_an = MultasPlanilla.findByPlanillaAndTipoMulta(prmt.planilla, prmt.tipoMulta)
         if (mlpl_an) {
             mlpl = MultasPlanilla.get(mlpl_an.id)
