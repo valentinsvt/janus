@@ -1936,10 +1936,9 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-        if (tiposPlanilla.find { it.codigo == "P" }) {
-            tiposPlanilla -= liquidacionReajuste
-//            println "9: " + tiposPlanilla.codigo
-        }
+//        if (tiposPlanilla.find { it.codigo == "P" }) {
+//            tiposPlanilla -= liquidacionReajuste
+//        }
 
         def periodos = []
         if(!params.id){
@@ -2000,7 +1999,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println "final..: ${tiposPlanilla.codigo} contrato: $contrato"
 
         //planilla asociada
-        def tiposPlan = TipoPlanilla.findAllByCodigoInList(["P", "Q", "R", ])
+        def tiposPlan = TipoPlanilla.findAllByCodigoInList(["P", "Q", "R"])
         def planillasAvanceAsociada = Planilla.findAllByContratoAndTipoPlanillaInList(contrato, tiposPlan, [sort: 'fechaInicio'])
 
         def formulasVarias = FormulaPolinomicaReajuste.findAllByContrato(contrato)

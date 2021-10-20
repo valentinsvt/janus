@@ -525,7 +525,7 @@ class ObraController extends janus.seguridad.Shield {
                 matrizOk = true
             }
             def concurso = janus.pac.Concurso.findByObra(obra)
-//            println "concursos: $concurso?.fechaLimiteEntregaOfertas"
+            println "concursos: $concurso?.fechaLimiteEntregaOfertas"
             if (concurso) {
                 if (!concurso.fechaLimiteEntregaOfertas)
                     concurso = null
