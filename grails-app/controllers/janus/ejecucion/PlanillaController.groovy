@@ -4988,7 +4988,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         prmt.periodoInec = indicesDisponiblesAnticipo(p, fcha, null)
                         prmt.mes = preciosService.componeMes(p.fechaIngreso.format('MMM-yyyy'))
                     }
-//                    println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${p?.fechaPago}, --> $prdoInec"
+                    println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${p?.fechaPago}, --> $prdoInec"
 
                     prmt.periodoInec = prdoInec ?: indicesDisponibles(p, fcha, '')
                     prmt.planilla = plnl
@@ -5166,19 +5166,25 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         if(plnl.tipoPlanilla.toString() in ['L']) { /** planillas de liquidacion del reajuste **/
-            println "----porcesa planillas anteriores----------..."
-            def pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(plnl.contrato,
-                    TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q']), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])
+            println "----+porcesa planillas anteriores----------..."
+//            def pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThan(plnl.contrato,
+//                    TipoPlanilla.findAllByCodigoInList(['A', 'P', 'Q']), plnl.fechaPresentacion, [sort: 'fechaPresentacion'])
+            def pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThanAndTipoContrato(plnl.contrato,
+                    TipoPlanilla.findAllByCodigoInList(['A', 'B', 'P', 'Q']), plnl.fechaPresentacion, plnl.tipoContrato, [sort: 'fechaPresentacion'])
             pl.each { p ->   /** las planillas anteriores solo son A o P **/
                 println "procesa planilla ${p.id} tipo: ${p.tipoPlanilla}"
                 prmt = [:]
-                if(p.tipoPlanilla.toString() == 'A'){
+                if(p.tipoPlanilla.toString() in ['A','B']){
                     fcha = p.periodoIndices? p.periodoIndices.fechaInicio : plnl.fechaIngreso
-                    prdoInec = indicesDisponiblesAnticipo(p, p.fechaPago, 'R') // para recalcular reajuste
+                    def fechaPago = p.fechaPago?:p.fechaPresentacion
+//                    prdoInec = indicesDisponiblesAnticipo(p, p.fechaPago, 'R') // para recalcular reajuste
+                    prdoInec = indicesDisponiblesAnticipo(p, fechaPago, 'R') // para recalcular reajuste
                     println "P_Q:+++ existe indices para prdo: $prdoInec"
-                    FormulaPolinomicaReajuste.findAllByContrato(p.contrato).each {
+
+
+//                    FormulaPolinomicaReajuste.findAllByContrato(p.contrato).each {
                         /** debe reajustar con índices de la fecha de pago si ya esá apgada y si existen los índices **/
-                        println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${p.fechaPago}"
+                        println "hay que recalcular reajuste de plnl: ${p.id}, tipo: ${p.tipoPlanilla}, pagada: ${fechaPago}"
                         prmt.periodoInec = prdoInec ?: indicesDisponibles(p, fcha, '')
                         prmt.planilla = plnl
                         prmt.planillaReajustada = p
@@ -5188,14 +5194,15 @@ class PlanillaController extends janus.seguridad.Shield {
                         prmt.acumuladoPlanillas = 0
                         prmt.valorPo = p.valor
                         prmt.periodo = 0
-                        prmt.mes = preciosService.componeMes(p.fechaPago.format('MMM-yyyy'))
-//                    prmt.fpReajuste = pl.formulaPolinomicaReajuste
-                        prmt.fpReajuste = it
+                        prmt.mes = preciosService.componeMes(fechaPago.format('MMM-yyyy'))
+                        prmt.fpReajuste = p.formulaPolinomicaReajuste
+//                      prmt.fpReajuste = it
 //                        println "  inserta ... rjpl: ${it.id}, prmt: $prmt"
                         insertaRjpl(prmt)
 //                        println "inserta ok..."
-                    }
+//                    }
 
+                    
 //                } else if((p.tipoPlanilla.toString() == 'P') && (p == pl.last())) {  // reajusta sólo planillas de avance
                 } else if((p.tipoPlanilla.toString() in ['P', 'Q'])) {
                     /** recalcula Po en base a lo recalculado de la planilla anterior **/
