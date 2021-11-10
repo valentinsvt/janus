@@ -2421,8 +2421,10 @@ class ReportesController {
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
                     addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+//                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
+//                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
                     addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
-                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                            4, maxFractionDigits: 4, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
                     totales = it.totl
                     totalPrueba = total2 += totales
                     totalPresupuesto = (total1 += totales);
@@ -2436,7 +2438,8 @@ class ReportesController {
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("SUBTOTAL:", times8bold), prmsCellLeft)
-            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+//            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times8bold), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
@@ -2459,7 +2462,8 @@ class ReportesController {
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
+//        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times8bold), prmsCellRight2)
 
 //        tablaTotal.setSpacingBefore(500)
 
@@ -4792,7 +4796,8 @@ class ReportesController {
 
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
             addCellTabla(tablaBaseMemo, new Paragraph("Valor del Presupuesto :", times10bold), prmsHeaderHojaLeft)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: (totalBase), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+//            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: (totalBase), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: (totalBase), format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 //            solo Iva
@@ -4802,12 +4807,15 @@ class ReportesController {
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
                 addCellTabla(tablaBaseMemo, new Paragraph("Iva " + paux?.iva + " % :", times10bold), prmsHeaderHojaLeft)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
+//                addCellTabla(tablaBaseMemo, new Paragraph("Valor total incluido IVA:", times10bold), prmsHeaderHojaRight4)
                 addCellTabla(tablaBaseMemo, new Paragraph("Valor total incluido IVA:", times10bold), prmsHeaderHojaRight4)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight3)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
             }
 
@@ -4823,12 +4831,14 @@ class ReportesController {
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
                 addCellTabla(tablaBaseMemo, new Paragraph("Proyección del Reajuste (" + "Período: " + g.formatNumber(number: mesesMemo, format: "##.##", locale: "ec") + " meses, " + "Inflación: " + g.formatNumber(number: inflacion, format: "####.##", locale: "ec") + "%):", times10bold), prmsHeaderHojaLeft)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
                 addCellTabla(tablaBaseMemo, new Paragraph("Valor Total :", times10bold), prmsHeaderHojaRight4)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight3)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
             }
 
@@ -4844,22 +4854,26 @@ class ReportesController {
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
                 addCellTabla(tablaBaseMemo, new Paragraph("Proyección del Reajuste (" + "Período: " + g.formatNumber(number: mesesMemo, format: "##.##", locale: "ec") + " meses, " + "Inflación: " + g.formatNumber(number: inflacion, format: "####.##", locale: "ec") + "%):", times10bold), prmsHeaderHojaLeft)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
                 addCellTabla(tablaBaseMemo, new Paragraph("Subtotal :", times10bold), prmsHeaderHojaRight4)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: subTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: subTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: subTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight3)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
                 addCellTabla(tablaBaseMemo, new Paragraph("Iva " + paux?.iva + " % :", times10bold), prmsHeaderHojaLeft)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
                 addCellTabla(tablaBaseMemo, new Paragraph("Valor total incluido IVA:", times10bold), prmsHeaderHojaRight4)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+//                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight3)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "##,##0", locale: "ec", maxFractionDigits: 4, minFractionDigits: 4), times10bold), prmsHeaderHojaRight3)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
             }
             if (params.proyeccionMemo == 'false' && params.reajusteIvaMemo == 'false') {
@@ -5300,7 +5314,8 @@ class ReportesController {
         addCellTabla(tablaPie, new Paragraph("Fecha de actualización: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(printFecha(obra?.fechaPreciosRubros), times10normal), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
+//        addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 4, maxFractionDigits: 4, format: "##,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph("Atentamente,  ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10normal), prmsHeaderHoja)
