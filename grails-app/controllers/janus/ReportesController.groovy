@@ -3785,7 +3785,8 @@ class ReportesController {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
+//        headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
+        headers.add(new Paragraph("DGCP - Coordinación de Fijación de Costos", times12bold));
 
         if (obra?.oficioSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
