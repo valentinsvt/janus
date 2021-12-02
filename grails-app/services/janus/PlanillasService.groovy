@@ -143,7 +143,7 @@ class PlanillasService {
                 "prin.prin__id = rjpl.prin__id order by rjpl.rjplprdo"
         println "sql armaTablaFr: $sql"
         cn.eachRow(sql.toString()) {rj ->
-            println "arma tablaFr --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
+//            println "arma tablaFr --2 rj: ${rj.rjplprdo}, ${rj.rjpl__id} --> indc,vlor: $orden"
             if(rj.rjplprdo == 0) {
                 tblaBo = armaIndices(rj.rjpl__id, tp)
                 tblaBo = aumentaColumna(tblaBo, rj.rjpl__id, orden, tp)
@@ -245,8 +245,8 @@ class PlanillasService {
         def sql = "select frplnmro, dtrjinpr, dtrjvlpr from dtrj, frpl " +
                 "where dtrj.frpl__id = frpl.frpl__id and rjpl__id = ${rjpl} and frplnmro ilike '${tp}%' " +
                 "order by frplnmro"
-        println "sql armaIndices: $sql"
-        println "tbla: $tbla"
+//        println "sql armaIndices: $sql"
+//        println "tbla: $tbla"
         cn.eachRow(sql.toString()){d ->
             tbla.find {it.numero == d.frplnmro}["indc${orden}"] = d.dtrjinpr
             tbla.find {it.numero == d.frplnmro}["vlor${orden}"] = d.dtrjvlpr
@@ -311,6 +311,7 @@ class PlanillasService {
 //        println "sql reajusteAnterior: $sql"
         def valor = cn.rows(sql.toString())[0].suma
         if(!valor) return 0
+//        println "--> valor: $valor"
         return valor
         cn.close()
     }
@@ -349,6 +350,21 @@ class PlanillasService {
 //        println str
 //        println "****************************************************"
         return str
+    }
+
+
+    def armaResumenReajuste(plnl) {
+//        println "arma tabla resumen anticipo para plnl: $plnl"
+        def cn = dbConnectionService.getConnection()
+        def reajuste
+//        def rj_anterior = 0
+        def rj_anterior = reajusteAnteriorLq(plnl)
+        def sql = "select sum(rjplvlor) suma from rjpl where rjpl.plnl__id = ${plnl} "
+//        println "sql resumenReajuste: $sql"
+        def actual = cn.rows(sql.toString())[0].suma
+        reajuste = actual - rj_anterior
+        cn.close()
+        reajuste  //retorna tabla armada
     }
 
 
