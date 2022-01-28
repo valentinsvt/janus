@@ -208,7 +208,8 @@ class ComposicionController extends janus.seguridad.Shield {
         def transporte = getPreciosTransporte(obra, item)
         if (comp) {
 //            println "si item"
-            msg = "El item seleccionado ya se encuentra dentro de la composición, si desea editarlo hagalo mediante las herramientas de edición"
+            msg = "El item seleccionado ya se encuentra dentro de la composición, si desea editarlo hágalo " +
+                    "mediante las herramientas de edición"
             render msg
             return
         } else {

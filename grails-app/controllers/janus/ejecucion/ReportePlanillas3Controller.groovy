@@ -2059,6 +2059,13 @@ class ReportePlanillas3Controller {
             contador++
         }
 
+        if(planilla.tipoPlanilla.codigo == 'L') {
+//            println "invoca a resumen... planilla"
+            pl = resumenReajuste(planilla)
+            pdfs.add(pl.toByteArray())
+            contador++
+        }
+
         if(contador > 1) {
             def baos = new ByteArrayOutputStream()
             Document document
@@ -2544,6 +2551,99 @@ class ReportePlanillas3Controller {
         addCellTabla(tbAntc, new Paragraph(numero(total, 2), fontTh), bordeThRecuadroDer)
 
         document.add(tbAntc)
+
+        document.add(firmas("otro", "vertical", planilla))
+
+        document.close();
+        pdfw.close()
+        return baos
+    }
+
+    def resumenReajuste(planilla) {
+
+//        println "reporteTablas de la planilla ${planilla.id}"
+        def obra = planilla.contrato.obra
+        def contrato = planilla.contrato
+
+        /* crea el PDF */
+        def baos = new ByteArrayOutputStream()
+
+        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Document document
+        document = new Document();
+        document.setMargins(50,30,30,28)  // 28 equivale a 1 cm: izq, derecha, arriba y abajo
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.resetHeader()
+        document.resetFooter()
+
+        document.open();
+        document.addTitle("Planillas de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, planillas");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        def bordeThRecuadro = [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def bordeTdRecuadro = [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def bordeThRecuadroDer= [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def bordeTdRecuadroDer = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+
+        document.setPageSize(PageSize.A4);
+        document.newPage();
+//            headerPlanilla([size: 10, espacio: 2])
+        document.add(titlLogo())
+        document.add(titlInst(1, planilla, obra));
+        document.add(titlSbtt(planilla.fechaIngreso));
+        document.add(encabezado(2, 10, planilla, ""))
+
+
+        Paragraph titulo = new Paragraph();
+        addEmptyLine(titulo, 2)
+        titulo.setAlignment(Element.ALIGN_CENTER);
+        titulo.add(new Paragraph("Liquidación del Reajuste", fontTitle));
+        addEmptyLine(titulo, 1)
+        document.add(titulo)
+
+        /** anticipo */
+
+        PdfPTable tbAntc = new PdfPTable(2);
+        tbAntc.setWidths(arregloEnteros([30, 8]))
+        tbAntc.setWidthPercentage(90);
+        tbAntc.setSpacingAfter(5f);
+
+        addCellTabla(tbAntc, new Paragraph("Reajuste del Contrato ${contrato.codigo}", fontTh), bordeThRecuadro)
+        addCellTabla(tbAntc, new Paragraph("Reajuste", fontTh), bordeThRecuadro)
+
+        def reajusteP = planillasService.armaResumenReajuste(planilla.id)
+        def reajusteC = 0
+        def total = 0
+        if(planilla.planillaCmpl) {
+            reajusteC = planillasService.armaResumenReajuste(planilla.planillaCmpl.id)
+        }
+        total = reajusteP + reajusteC
+
+        addCellTabla(tbAntc, new Paragraph("Reajuste planillas del contrato principal", fontTd), bordeTdRecuadro)
+        addCellTabla(tbAntc, new Paragraph(numero(reajusteP,2), fontTd), bordeTdRecuadroDer)
+
+        if(planilla.planillaCmpl) {
+            addCellTabla(tbAntc, new Paragraph("Reajuste planillas del contrato complementario", fontTd), bordeTdRecuadro)
+            addCellTabla(tbAntc, new Paragraph(numero(reajusteC, 2), fontTd), bordeTdRecuadroDer)
+        }
+
+        addCellTabla(tbAntc, new Paragraph("Total reajuste", fontTh), bordeThRecuadro + [colspan: 1])
+        addCellTabla(tbAntc, new Paragraph(numero(total, 2), fontTh), bordeThRecuadroDer)
+
+        document.add(tbAntc)
+
+        Paragraph abajo = new Paragraph()
+        addEmptyLine(abajo, 2)
+        document.add(abajo)
 
         document.add(firmas("otro", "vertical", planilla))
 
@@ -3326,8 +3426,8 @@ class ReportePlanillas3Controller {
         def totalAnterior = 0, totalActual = 0, totalAcumulado = 0, sp = null
         def height = 12
 //        def maxRows = 45     //45
-        def maxRows = 58     //45
-        def extraRows = 10   //18
+        def maxRows = 60     //45
+        def extraRows = 9   //18
         def currentRows = 1
         def chequeoPg = 0
 
@@ -3764,7 +3864,7 @@ class ReportePlanillas3Controller {
 
         def sps = cn.rows(sql.toString())[0].cnta
         sql = "select * from detalle(${cntr.id}, ${obra.id}, ${planilla.id}, '${tipoRprt}')"
-//        println "sql: $sql"
+        println "sql: $sql"
         def vocr = cn.rows(sql.toString())
 
         println "registros: ${vocr.size()}, sps: $sps, extra: $extraRows --> num: ${(vocr.size() + sps + extraRows)} / $maxRows "
