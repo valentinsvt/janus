@@ -4035,7 +4035,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 def max = 10
                 def fecha = fcha
                 while(!existe){
-//                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
+                    println "periodo actual...: $prin, fcha: ${fcha}, fecha: ${fecha}"
                     fecha = preciosService.primerDiaDelMes(fecha) - 15
                     prin = PeriodosInec.findByFechaInicioLessThanAndFechaFinGreaterThan(fecha, fecha)
                     existe = preciosService.verificaIndicesPeriodoTodo(plnl.contrato.id, prin.id).size() == 0
@@ -4933,6 +4933,7 @@ class PlanillaController extends janus.seguridad.Shield {
             fcha = plnl.periodoIndices? plnl.periodoIndices.fechaInicio : plnl.fechaIngreso
 //            println "es anticipo -- $fcha"
             def prin = indicesDisponiblesAnticipo(plnl, fcha, null)
+            println "Indices disponibles anticipo: ${prin.id}: ${prin.descripcion} ${prin.fechaInicio}"
             /** para cada FPRJ crea un registro en RJPL **/
             FormulaPolinomicaReajuste.findAllByContrato(plnl.contrato).each {
 //                println "++++indice disponible: $prin, fprj: ${it.id}"
