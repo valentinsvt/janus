@@ -421,8 +421,8 @@
 
             <div class="span1">
                 <g:textField name="indirectos" class="anticipo activo"
-                             value="${g.formatNumber(number: contrato?.indirectos ?: 0, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"
-                             style="width: 30px; text-align: right"/> %
+                             value="${g.formatNumber(number: contrato?.indirectos ?: 0, maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"
+                             style="width: 41px; text-align: right"/> %
             </div>
 
             <div class="span 3" style="border-color: #888; border-style: solid; border-width: thin">
