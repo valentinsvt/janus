@@ -197,16 +197,18 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         def plazoMesesContrato = Math.ceil(plazoDiasContrato / 30);
         def plazoObra = obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)
 
-        println "meses: ${plazoMesesContrato}, dias: ${plazoDiasContrato},cronoCntr: $cronoCntr "
+        println "meses: ${plazoMesesContrato}, dias: ${plazoDiasContrato},cronoCntr: $cronoCntr, obra: ${obra.id} "
 //        println "cronoCntr: $cronoCntr, detalle: ${detalle.size()}"
 
         if (cronoCntr == 0) {
             detalle.each { vol ->
 //                def c = CronogramaContratado.findAllByVolumenContrato(vol)
-//                println "buscar: ${vol.item.id}, ${vol.volumenOrden}, ${vol.obra.id}"
+                println "buscar: ${vol.item.id}, ${vol.volumenOrden}, ${vol.obra.id}, contrato: ${contrato.id}"
+                def vo = VolumenesObra.findByItemAndObraAndOrdenAndObra(vol.item, vol.obra, vol.volumenOrden, vol.obra)
+                println "--> vlob: ${vo.id}"
                 def c = Cronograma.findAllByVolumenObra(VolumenesObra.findByItemAndObraAndOrdenAndObra(vol.item, vol.obra, vol.volumenOrden, vol.obra))
                 def resto = c.sum { it.porcentaje }
-//                println "....1 ${c.size()}"
+                println "....1 ${c.size()}"
                 c.eachWithIndex { crono, cont ->
 //                    println "procesa: $crono, $cont  plazo: $plazoMesesContrato"
 //                    if (cont < plazoMesesContrato) {

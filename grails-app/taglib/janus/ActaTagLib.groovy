@@ -688,14 +688,17 @@ class ActaTagLib {
 
         tabla += "<tbody>"
         def totalProvisional = 0, totalDefinitivo = 0, totalDiferencia = 0
-        def liquidacion = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('L'))
+        def liquidacion = Planilla.findAllByContratoAndTipoPlanillaAndTipoContrato(contrato, TipoPlanilla.findByCodigo('L'), 'P')
+        def liquidacionC = Planilla.findAllByContratoAndTipoPlanillaAndTipoContrato(contrato, TipoPlanilla.findByCodigo('L'), 'C')
         if(liquidacion) {
             liquidacion = liquidacion.last()
         }
         def diferencia = 0
         def rj_lq = 0
         def sql = "select rjplvlor from rjpl where plnl__id = ${liquidacion.id} and plnlrjst = "
+        def sqlC = "select rjplvlor from rjpl where plnl__id = ${liquidacionC.id} and plnlrjst = "
 
+        println "Planillas: P: ${liquidacion.id}, C: ${liquidacionC.id}"
 
         rjpl.each { rj ->
             if (rj.planillaReajustada.tipoPlanilla.codigo != "L" && rj.planillaReajustada.tipoPlanilla.codigo != "M" && rj.planillaReajustada.tipoPlanilla.codigo != "C") {
@@ -746,7 +749,7 @@ class ActaTagLib {
 
         if(rjplCmpl) {
             rjplCmpl.each { rj ->
-                if (rj.planillaReajustada.tipoPlanilla.codigo != "L" && rj.planillaReajustada.tipoPlanilla.codigo != "M" && rj.planillaReajustada.tipoPlanilla.codigo != "C") {
+                if (rj.planillaReajustada.tipoPlanilla.codigo != "L" && rj.planillaReajustada.tipoPlanilla.codigo != "M" && rj.planillaReajustada.tipoPlanilla.codigo == "!C") {
                     tabla += "<tr>"
                     tabla += "<td style='text-align:center;'>${rj.planillaReajustada.numero}</td>"
                     tabla += "<td style='text-align:center;'>"
@@ -759,8 +762,10 @@ class ActaTagLib {
                     tabla += "</td>"
 
                     if(liquidacion) {
-//                    println "liquidación.... ${ultimaPlnl.id}, lq: ${liquidacion.id}"
-                        rj_lq = cn.rows(sql + " ${rj.planillaReajustada.id}".toString())[0].rjplvlor
+                        println "liquidación.... ${ultimaPlnlC?.id}, lq: ${liquidacion.id} - ${rj.planillaReajustada.id}"
+                        def sql1 = sqlC + " ${rj.planillaReajustada.id}"
+                        println "sql: $sql1"
+                        rj_lq = cn.rows(sqlC + " ${rj.planillaReajustada.id}".toString())[0].rjplvlor
                         diferencia = rj_lq - rj.valorReajustado
                         tabla += "<td style='text-align:center;'>${numero(numero: rj.valorReajustado)}</td>"
                         tabla += "<td style='text-align:center;'>${numero(numero: rj_lq)}</td>"
