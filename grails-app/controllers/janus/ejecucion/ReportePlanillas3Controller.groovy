@@ -2155,7 +2155,7 @@ class ReportePlanillas3Controller {
         def tbBo = planillasService.armaTablaFr(rjpl.planilla.id, rjpl.fpReajuste.id, 'c')
         def titlIndices = tbBo.pop()
         def titulos = tbBo.pop()
-//        println "tbBo: $tbBo"
+        println "tbBo: $tbBo"
 //        println "resumen titulosIndices: $titlIndices"
 
         Paragraph tituloB0 = new Paragraph();

@@ -510,9 +510,10 @@ class PreciosService {
         return result
      }
 
-    def rbro_pcun_v4(obra,orden){
+    def rbro_pcun_v4(obra, orden){
 
 
+        /*** todo: si la obra esta registrada, retornar simplemente los campos de vlob  ***/
 //        println("ordenv4:" + orden)
 
         def cn = dbConnectionService.getConnection()

@@ -912,7 +912,7 @@ class ReportesController {
         sheet.setColumnView(6, 15)
 
         def label = new Label(0, 1, "SEP - G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 2, "DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2, "DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 
         sheet.mergeCells(0, 1, 1, 1)
@@ -1159,7 +1159,7 @@ class ReportesController {
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
-                            "                    <b>DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS</b>\n" +
+                            "                    <b>DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS</b>\n" +
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
@@ -2156,7 +2156,7 @@ class ReportesController {
         if(session.perfil.id == 16){
             headers.add(new Paragraph(obra?.departamento?.codigo + " - Presupuesto borrador", times12bold));
         }else{
-            headers.add(new Paragraph("DGCP - Coordinación de Fijación de Costos", times12bold));
+            headers.add(new Paragraph("DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", times12bold));
         }
 
 
@@ -2980,7 +2980,7 @@ class ReportesController {
         if(session.perfil.id == 16){
             headers.add(new Paragraph(obra?.departamento?.codigo + " - Presupuesto borrador", times12bold));
         }else{
-            headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
+            headers.add(new Paragraph("DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", times12bold));
         }
 
         if (obra?.oficioSalida == null) {
@@ -3786,7 +3786,7 @@ class ReportesController {
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
 //        headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
-        headers.add(new Paragraph("DGCP - Coordinación de Fijación de Costos", times12bold));
+        headers.add(new Paragraph("DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", times12bold));
 
         if (obra?.oficioSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
@@ -4608,7 +4608,7 @@ class ReportesController {
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
 //        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times14bold));
-        headers.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE COSTOS", times14bold));
+        headers.add(new Paragraph("DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", times14bold));
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("INFORME", times14bold))
 
@@ -5097,7 +5097,7 @@ class ReportesController {
 
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
-        headers.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS", times12bold))
+        headers.add(new Paragraph("DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", times12bold))
         headers.add(new Paragraph("FÓRMULA POLINÓMICA: " + obra?.formulaPolinomica, times12bold))
 //        headers.add(new Paragraph(obra?.formulaPolinomica, times12bold))
         document.add(headers);
@@ -5306,14 +5306,16 @@ class ReportesController {
         txtIzqPie.setAlignment(Element.ALIGN_LEFT);
         txtIzqPie.setIndentationLeft(28);
         txtIzqPie.add(new Paragraph(nota?.texto, times10normal));
-        txtIzqPie.add(new Paragraph(" ", times10bold));
+//        txtIzqPie.add(new Paragraph(" ", times10bold));
         document.add(txtIzqPie)
 
         PdfPTable tablaPie = new PdfPTable(4);
         tablaPie.setWidthPercentage(90);
 
-        addCellTabla(tablaPie, new Paragraph("Fecha de actualización: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph(printFecha(obra?.fechaPreciosRubros), times10normal), prmsHeaderHoja)
+//        addCellTabla(tablaPie, new Paragraph("Fecha de actualización: ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaPie, new Paragraph(printFecha(obra?.fechaPreciosRubros), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph("", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph("", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
 //        addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 4, maxFractionDigits: 4, format: "##,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
@@ -5647,7 +5649,7 @@ class ReportesController {
 
 
         label = new Label(2, 2, "SEP - G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
-        label = new Label(2, 4, "DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", times16format); sheet.addCell(label);
         label = new Label(2, 6, "PRESUPUESTO", times16format); sheet.addCell(label);
         label = new Label(2, 8, "FECHA: " + obra?.fechaCreacionObra.format("dd-MM-yyyy"), times16format);
         sheet.addCell(label);

@@ -155,7 +155,7 @@
         </p>
 
         <p style="font-size: 14px; margin-top: -15px;">
-            <b>DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS</b><br/>
+            <b>DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS</b><br/>
             <b>ANÁLISIS DE PRECIOS UNITARIOS</b>
         </p>
     </div>

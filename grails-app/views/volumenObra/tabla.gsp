@@ -106,7 +106,7 @@
             <td class="col_precio" style="display: none;text-align: right" id="i_${val.item__id}"><g:formatNumber
                     number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
             <td class="col_total total" style="display: none;text-align: right">
-                <g:formatNumber number="${val.totl}" format="##,##0" minFractionDigits="4"  maxFractionDigits="2"  locale="ec"/>
+                <g:formatNumber number="${val.totl}" format="##,##0" minFractionDigits="6"  maxFractionDigits="2"  locale="ec"/>
             </td>
             <g:if test="${obra.estado!='R' && duenoObra == 1}">
                 <td style="width: 40px;text-align: center" class="col_delete">

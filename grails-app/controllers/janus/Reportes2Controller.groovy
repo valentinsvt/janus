@@ -2223,7 +2223,7 @@ class Reportes2Controller {
 
 //        preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont2));
         preface.add(new Paragraph("CRONOGRAMA", catFont2));
-        preface.add(new Paragraph("DGCP - COORDINACIÓN DE FIJACIÓN DE PRECIOS UNITARIOS", catFont2));
+        preface.add(new Paragraph("DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", catFont2));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
 //        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))

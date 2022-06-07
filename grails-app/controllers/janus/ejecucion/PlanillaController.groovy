@@ -4423,7 +4423,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     /** halla el valor del índice en PRIN de la oferta**/
     def valorIndice(indc, prin) {
-//        println "valor Indice de: $indc : ${indc.id} periodo: $prin"
+        println "valor Indice de: $indc : ${indc.id} periodo: $prin --> ${prin.id}"
         ValorIndice.findByIndiceAndPeriodo(indc, prin).valor
     }
 

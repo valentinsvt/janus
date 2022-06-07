@@ -1923,6 +1923,8 @@
             </g:else>
             </g:else>
 
+
+            console.log('direccion:', direccionEl )
             var idObra = "${obra?.id}"
 
                 $.ajax({

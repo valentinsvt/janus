@@ -41,7 +41,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
         codigo += concursoInstance.pac.tipoProcedimiento.sigla + "-"
 //        codigo += "GADPP" + "-"
-        codigo += sec + "-DGCP-"
+        codigo += sec + "-DCP-"
         codigo += new Date().format("yyyy")
 //        println codigo
 //        println "________________________________________________________"
