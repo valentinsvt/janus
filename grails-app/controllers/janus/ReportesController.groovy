@@ -3673,7 +3673,7 @@ class ReportesController {
 
     def reporteDocumentosObraVae() {
 
-//        println("*****--->" + params)
+        println("*****--->" + params)
 
         def cd
         def auxiliar = janus.Auxiliar.get(1);
@@ -3788,10 +3788,11 @@ class ReportesController {
 //        headers.add(new Paragraph("DGCP - Coordinación de Fijación de Precios Unitarios", times12bold));
         headers.add(new Paragraph("DCP - COORDINACIÓN DE RÉGIMEN DE FIJACIÓN DE COSTOS", times12bold));
 
-        if (obra?.oficioSalida == null) {
+        if (obra?.memoSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
         } else {
-            headers.add(new Paragraph("Informe N°. " + obra?.oficioSalida, times12bold));
+//            headers.add(new Paragraph("Informe N°. " + obra?.oficioSalida, times12bold));
+            headers.add(new Paragraph("Informe N°. " + obra?.memoSalida, times12bold));
         }
 
         Paragraph headerFecha = new Paragraph();
