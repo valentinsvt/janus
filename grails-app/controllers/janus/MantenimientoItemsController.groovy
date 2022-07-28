@@ -539,7 +539,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def loadTreePart() {
-        println "loadTreePart ----"
+//        println "loadTreePart ----"
         render(makeBasicTree(params))
     }
 

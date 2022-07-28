@@ -375,7 +375,7 @@ class IndiceController extends janus.seguridad.Shield {
     def tablaValores() {
         def cn = dbConnectionService.getConnection()
         def cn1 = dbConnectionService.getConnection()
-        //println params
+        println params
 
 //        def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by indcdscr limit 10"
         def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by tpin__id desc, indcdscr"
@@ -387,7 +387,7 @@ class IndiceController extends janus.seguridad.Shield {
         def fcha = PeriodosInec.get(prin).fechaInicio - 1
         def prinAnterior = PeriodosInec.findByFechaFinBetween(fcha, fcha + 2)?.id
         def periodos = [prinAnterior, prin]
-//        println prinAnterior
+        println " prinAnterior: $prinAnterior"
 
         def html = "<table class=\"table table-bordered table-striped table-hover table-condensed\" id=\"tablaPrecios\">"
         html += "<thead>"
@@ -410,7 +410,7 @@ class IndiceController extends janus.seguridad.Shield {
                 rubro = "new"
                 txValor = "select vlin__id, vlinvalr, vlin.prin__id from vlin, prin where vlin.prin__id = ${periodos[cont]} and " +
                     "vlin.indc__id = ${d.indc__id} and prin.prin__id = vlin.prin__id order by prinfcin"
-                println txValor
+//                println txValor
                 prec = g.formatNumber(number: 0.0, maxFractionDigits: 2, minFractionDigits: 2, locale: "ec")
                 p = 0.0
                 editar = periodos[cont]? "editable" : ""
