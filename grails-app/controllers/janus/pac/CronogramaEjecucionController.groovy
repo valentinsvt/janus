@@ -2472,7 +2472,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def diasrsto = fcfn - pfcin + 1
         def fcfm = preciosService.ultimoDiaDelMes(pfcfn)
 
-        println "procesa primer periodo: ${prej_id} desde ${pfcin} a ${fcfn}, inicia en: $fcin"
+        println "procesa primer periodo: ${prej_id} desde ${pfcin} a ${fcfn}, inicia en: $fcin, diasPrdo: $diasPrdo"
 
         def nuevoId
         /* se proceso solo el periodo hasta antes de la suspensión */
@@ -2498,6 +2498,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             nuevoId = insertaPrejNuevo(obra, prdo, 'S', pfcin, pfcfn, cntr)
             if (nuevoId) {
                 if(fcfm > pfcfn) {
+                    println ">>luego de crear suspensión fcfm: $fcfm, pfcfn: $pfcfn"
                     dias = fcfm - pfcfn
                     fcin = pfcfn + 1
 
@@ -2552,7 +2553,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     println "====> $sql"
                     cn.execute(sql.toString())
                 }
-
+                /* falta la segunda parte del prdo 2 **/
             }
         } else {
             println "---> obra: $obra, prdo: $prdo, 'S', de: $pfcin, a. $pfcfn, cntr: $cntr"
@@ -2583,6 +2584,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def periodos = cn.rows(sql.toString())
         def prejtipo = ''
+        fctr = 0
+        diasrsto = 0
         periodos.each { pr ->
             prdo = pr.prejnmro
             diasPrdo = pr.dias
