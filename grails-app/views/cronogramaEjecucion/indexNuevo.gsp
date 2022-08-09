@@ -88,6 +88,12 @@
                 <i class="icon-print"></i>
                 %{--Imprimir--}%
             </a>
+        </g:if>
+        <g:if test="${contrato.fiscalizador?.id == session.usuario.id || contrato.administrador?.id == session.usuario.id}">
+            <g:if test="${contrato.administrador?.id == session.usuario.id}">
+            <div class="btn-group" style="width: 400px">
+            </div>
+            </g:if>
 
             <div class="btn" style="height: 30px; font-size: 10px">
                 De:
