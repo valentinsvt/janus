@@ -1969,7 +1969,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def fechaMax
         if (contrato.fechaSubscripcion)
-            fechaMax = contrato.fechaSubscripcion.plus(720)
+            fechaMax = contrato.fechaSubscripcion.plus(1080)
         else
             fechaMax = new Date()
 //        println "fecha max " + fechaMax
