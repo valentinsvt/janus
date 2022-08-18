@@ -390,7 +390,7 @@
 
             <div class="span3">${contrato?.delegadoPrefecto?.titulo} ${contrato?.delegadoPrefecto?.nombre} ${contrato?.delegadoPrefecto?.apellido}</div>
 
-            <div class="span3 formato">Delegado de fiscalización </div>
+            <div class="span3 formato">Delegado de la máxima autoridad </div>
 
             <div class="span3">${contrato?.delegadoFiscalizacion?.titulo} ${contrato?.delegadoFiscalizacion?.nombre} ${contrato?.delegadoFiscalizacion?.apellido}</div>
         </div>
