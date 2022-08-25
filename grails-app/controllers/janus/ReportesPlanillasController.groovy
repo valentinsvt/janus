@@ -647,7 +647,12 @@ class ReportesPlanillasController {
         def contrato = plnl.contrato
         def avanceContrato
 
-        def modificaciones = Modificaciones.findAllByContratoAndFechaFinIsNotNull(contrato)
+//        def modificaciones = Modificaciones.findAllByContratoAndFechaFinIsNotNull(contrato)
+        def modificaciones = Modificaciones.withCriteria {
+            eq('contrato', contrato)
+            isNotNull('fechaFin')
+            lt('fechaInicio', plnl.fechaFin)
+        }
 
 //        println("Modificaciones " + modificaciones)
 
