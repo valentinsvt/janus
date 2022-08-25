@@ -579,6 +579,7 @@ class PreciosService {
 
     def verificaIndicesPeriodoTodo(cntr, prdo){
         def cn = dbConnectionService.getConnection()
+        println "verificaIndicesPeriodoTodo, cntr: $cntr, prdo: $prdo"
         if(prdo) {
             def sql = "select * from verifica_indices("+ cntr + ","+ prdo +") "
             def result = []
