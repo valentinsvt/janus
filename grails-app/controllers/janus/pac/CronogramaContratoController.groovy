@@ -292,7 +292,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         def precios = [:]
 //        def indirecto = obra.totales / 100
 
-        println "detalle: $detalle"
+        println "detalle size: ${detalle.size()}"
         detalle.each {
 //            it.refresh()
 //            def res = preciosService.rbro_pcun_v2_item(obra.id, it.subPresupuesto.id, it.item.id)

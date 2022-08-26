@@ -3855,11 +3855,11 @@ class Reportes2Controller {
         document.add(codigoObra);
 
         Paragraph docReferencia = new Paragraph();
-        docReferencia.add(new Paragraph("Doc. Referencia: ${obra?.oficioIngreso}", info))
+        docReferencia.add(new Paragraph("Contrato: ${contrato?.codigo}", info))
         document.add(docReferencia);
 
         Paragraph fecha = new Paragraph();
-        fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
+        fecha.add(new Paragraph("Objeto: ${contrato.objeto}", info))
         document.add(fecha);
 
         def cmpl = Contrato.findByPadre(contrato)
