@@ -3429,7 +3429,8 @@ class ReportePlanillas3Controller {
         def height = 12
 //        def maxRows = 45     //45
         def maxRows = 60     //45
-        def extraRows = 9   //18
+//        def extraRows = 9   //18
+        def extraRows = 8   //18
         def currentRows = 1
         def chequeoPg = 0
 
