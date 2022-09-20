@@ -72,7 +72,7 @@
 </div>
 
 <div class="row">
-    <div class="span12" role="navigation">
+    <div class="span4" role="navigation">
         <g:if test="${obra.fechaInicio}">
             <a href="#" class="btn  " id="imprimir">
                 <i class="icon-print"></i>
@@ -80,6 +80,22 @@
             </a>
         </g:if>
     </div>
+    <div class="span5" role="navigation">
+    <g:if test="${contrato.administrador.id == session.usuario.id}">
+        <g:link controller="acta" action="form" class="btn btn-info" params="[contrato: contrato.id, tipo: 'P']">
+            <i class="icon-stackexchange"></i>
+            Acta de recepción provisional
+        </g:link>
+        <g:set var="actaProvisional" value="${janus.actas.Acta.findAllByContratoAndTipo(contrato, 'P')}"/>
+        <g:if test="${actaProvisional.size() == 1 && actaProvisional[0].registrada == 1}">
+            <g:link controller="acta" action="form" class="btn btn-info" params="[contrato: contrato.id, tipo: 'D']">
+                <i class="icon-stackexchange"></i>
+                Acta de recepción definitiva
+            </g:link>
+        </g:if>
+    </g:if>
+    </div>
+
 </div>
 
 <g:form action="delete" name="frmDelete-Planilla">
