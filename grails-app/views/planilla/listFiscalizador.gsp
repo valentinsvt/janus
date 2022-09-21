@@ -265,8 +265,8 @@
                         </g:link>
                     </g:if>
                     <g:if test="${planillaInstance.tipoPlanilla.codigo != 'C' && janus.ejecucion.ReajustePlanilla.countByPlanilla(planillaInstance) > 0}">
-                        <g:link controller="reportePlanillas3" action="reportePlanillaNuevo" id="${planillaInstance.id}"
-                                class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Nuevo">
+                        <g:link controller="reportePlanillas4" action="reportePlanillaNuevo1f" id="${planillaInstance.id}"
+                                class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Nuevo2">
                             <i class="icon-print"></i>
                         </g:link>
                     </g:if>

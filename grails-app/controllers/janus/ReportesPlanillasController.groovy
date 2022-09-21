@@ -96,7 +96,7 @@ class ReportesPlanillasController {
     }
 
     def actaRecepcionTotl() {
-//        println "acta recepcion total: " + params
+        println "acta recepcion total: " + params
         def acta = Acta.get(params.id)
         def cmpl = Contrato.findByPadre(acta.contrato)
         def total = acta.contrato.monto + cmpl.monto
