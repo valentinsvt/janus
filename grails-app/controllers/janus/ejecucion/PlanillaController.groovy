@@ -4567,7 +4567,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
 
         /** multa por retraso de obra: fechaFinObra - FechaCronograma * valor de multa **/
-        if(plnl.tipoPlanilla.codigo == 'Q'){
+        if(plnl.tipoPlanilla.codigo != 'Q'){
             def valor = ReajustePlanilla.executeQuery("select sum(valorReajustado) from ReajustePlanilla where planilla = :p", [p: plnl])
             def reajustado = valor[0] > 0 ? valor[0] : 0
             def total = plnl.contrato.monto.toDouble()
