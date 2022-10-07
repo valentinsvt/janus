@@ -55,7 +55,7 @@
         @page {
             @bottom-right {
                 %{--content   : 'Elaborado por: ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido} (FISCALIZADOR) ______________';--}%
-                content   : 'Elaborado por: ${actaInstance.contrato.administrador.titulo ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido} (FISCALIZADOR) ______________';
+                content   : 'Elaborado por: ${actaInstance.contrato.administrador.titulo ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido} (ADMINISTRADOR) ______________';
                 font-size : 8pt;
                 color     : #000;
             }
