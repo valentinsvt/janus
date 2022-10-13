@@ -445,8 +445,8 @@ class ReportePlanillas4Controller {
      * Obtiene los reportes pdf de tablas, resumen de reajustes, multas y detalle de planilla si existe
      * crear reporte de resumen de reajustes
      **/
-    def reportePlanillaTotal() {
-//        println "reportePlanillaTotal params: $params"
+    def reportePlanillaTotal1f() {
+        println "reportePlanillaTotal1f params: $params"
         def planilla = Planilla.get(params.id)
 
         if (planilla.tipoPlanilla.codigo == 'Q') {

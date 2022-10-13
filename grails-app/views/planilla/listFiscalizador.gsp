@@ -272,7 +272,7 @@
                     </g:if>
 
                     <g:if test="${planillaInstance.planillaCmpl && janus.ejecucion.DetallePlanillaEjecucion.countByPlanilla(planillaInstance) >= 0}">
-                        <g:link controller="reportePlanillas3" action="reportePlanillaTotal" id="${planillaInstance.id}"
+                        <g:link controller="reportePlanillas4" action="reportePlanillaTotal1f" id="${planillaInstance.id}"
                                 class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir Total">
                             <i class="icon-copy"></i>
                         </g:link>
