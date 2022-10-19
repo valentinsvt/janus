@@ -4660,10 +4660,17 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def valor_dia_perio(plnl_id) {
         def cn = dbConnectionService.getConnection()
-        def sql = "select ( prejcrpa/(prejfcfn - prejfcin + 1) )::numeric(8,2) dia from prej, plnl where prejfcin <= plnlfcfn and " +
-                "prejfcfn >= plnlfcfn and plnl__id = ${plnl_id} and prej.cntr__id = plnl.cntr__id"
-        println "dias_obra sql: $sql"
-        def valor = (int) cn.rows(sql.toString())[0].dia
+        def sql1 = "select sum(prejcrpa) suma from prej, plnl where prejfcin >= plnlfcin and prejfcfn <= plnlfcfn and " +
+                "plnl__id = ${plnl_id} and prej.cntr__id = plnl.cntr__id"
+        def acumulado = (int) cn.rows(sql1.toString())[0].suma
+        sql1 = "select ((plnlfcfn - plnlfcin + 1) ) suma from plnl where plnl__id = ${plnl_id}"
+        def dias_planilla = cn.rows(sql1.toString())[0].suma
+
+//        def sql = "select ( prejcrpa/(prejfcfn - prejfcin + 1) )::numeric(8,2) dia from prej, plnl where prejfcin <= plnlfcfn and " +
+//                "prejfcfn >= plnlfcfn and plnl__id = ${plnl_id} and prej.cntr__id = plnl.cntr__id"
+//        def valor = (int) cn.rows(sql.toString())[0].dia
+        def valor = (int) acumulado / dias_planilla
+        println "valor por día: $valor"
         return valor
     }
 
