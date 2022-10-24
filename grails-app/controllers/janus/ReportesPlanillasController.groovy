@@ -512,8 +512,10 @@ class ReportesPlanillasController {
                 "<a href='#' class='btn btn-primary btnPrint'><i class='icon icon-print'></i>Imprimir</a>" +
                 "<a href='#' class='btn btn-success btnPrintTotal'><i class='icon icon-print'></i>Imprimir Total</a></legend>"
 //        if (band == 1) {
-        def suspension = cn.rows("select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'".toString())[0]
-//        println "suspensión: $suspension, ${suspension.prejfcin.class}"
+        def sql = "select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'"
+        println "suspensiones: $sql"
+        def suspension = cn.rows(sql.toString())
+        println "suspensión: $suspension"
         def dateFormat = new SimpleDateFormat("EEEE dd-MM-yyyy", new Locale("es"))
         titulos.eachWithIndex { t, i ->
             html += "<h5>${t}</h5>"
@@ -532,8 +534,10 @@ class ReportesPlanillasController {
                 def fin = plnl.fechaFin
                 while (dia <= fin) {
                     /** eliminar suspensiones **/
-                    if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
-//                        println "dia: $dia es suspensión"
+//                    if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
+//                    println "retorna: ${esSuspension(dia, suspension)}"
+                    if( esSuspension(dia, suspension) ) {
+//                        println "ssssss dia: $dia es suspensión"
                     } else {
                         def valM = "", valT = ""
                         if (frases.size() > 0) {
@@ -1014,7 +1018,11 @@ class ReportesPlanillasController {
 //                    def fin = periodo[0].fechaFin
                     def dia = plnl.fechaInicio
                     def fin = plnl.fechaFin
-                    def suspension = cn.rows("select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'".toString())[0]
+//                    def suspension = cn.rows("select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'".toString())[0]
+                    def sql = "select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'"
+//                    println "suspensiones: $sql"
+                    def suspension = cn.rows(sql.toString())
+
                     def tablaClima = new PdfPTable(3);
                     tablaClima.setWidths(arregloEnteros([40, 30, 30]))
                     tablaClima.setWidthPercentage(50);
@@ -1025,7 +1033,8 @@ class ReportesPlanillasController {
                     addCellTabla(tablaClima, new Paragraph('Tarde', fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
                     while (dia <= fin) {
-                        if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
+//                        if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
+                        if( esSuspension(dia, suspension) ) {
 //                            println "dia: $dia es suspensión"
                         } else {
                             def valM = "", valT = ""
@@ -1409,7 +1418,10 @@ class ReportesPlanillasController {
                     //lo del clima
                     def dia = plnl.fechaInicio
                     def fin = plnl.fechaFin
-                    def suspension = cn.rows("select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'".toString())[0]
+//                    def suspension = cn.rows("select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'".toString())[0]
+                    def sql = "select prejfcin, prejfcfn from prej where cntr__id = ${contrato.id} and prejtipo = 'S'"
+//                    println "suspensiones: $sql"
+                    def suspension = cn.rows(sql.toString())
                     def tablaClima = new PdfPTable(3);
                     tablaClima.setWidths(arregloEnteros([40, 30, 30]))
                     tablaClima.setWidthPercentage(50);
@@ -1420,7 +1432,8 @@ class ReportesPlanillasController {
                     addCellTabla(tablaClima, new Paragraph('Tarde', fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
                     while (dia <= fin) {
-                        if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
+//                        if(dia >= suspension?.prejfcin && dia <= suspension?.prejfcfn) {
+                        if( esSuspension(dia, suspension) ) {
 //                            println "dia: $dia es suspensión"
                         } else {
                             def valM = "", valT = ""
@@ -4312,6 +4325,19 @@ class ReportesPlanillasController {
             response.setContentLength(b.length)
             response.getOutputStream().write(b)
         }
+    }
+
+
+    def esSuspension(dia, suspensiones) {
+//        println "El día: $dia"
+        def susp = false;
+        suspensiones.each { s ->
+            if(dia >= s?.prejfcin && dia <= s?.prejfcfn) {
+//                println "suspensión $dia entre ${s.prejfcin} - ${s.prejfcfn}"
+                susp = true
+            }
+        }
+        return susp
     }
 
 }
