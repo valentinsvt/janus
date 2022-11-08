@@ -3519,7 +3519,7 @@ class PlanillaController extends janus.seguridad.Shield {
         fpsp.each {
             sbpr.add(it.subPresupuesto)
         }
-        println "subpresupuestos de la obra con esta FP: $sbpr"
+        println "subpresupuestos de la obra con esta FP: $sbpr --> respaldo: dcmtdscr ilike '%respaldo%adicio%' $respaldo, cncr: ${contrato.oferta.concurso.id}"
 //        detalle = VolumenesObra.findAllByObraAndSubPresupuestoInList(obra, sbpr, [sort: "orden"])
         detalle = VolumenContrato.findAllByContratoAndObraAndSubPresupuestoInList(contrato, obra, sbpr, [sort: "volumenOrden"])
 
@@ -4424,7 +4424,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     /** halla el valor del índice en PRIN de la oferta**/
     def valorIndice(indc, prin) {
-        println "valor Indice de: $indc : ${indc.id} periodo: $prin --> ${prin.id}"
+//        println "valor Indice de: $indc : ${indc.id} periodo: $prin --> ${prin.id}"
         ValorIndice.findByIndiceAndPeriodo(indc, prin).valor
     }
 
@@ -4550,6 +4550,30 @@ class PlanillaController extends janus.seguridad.Shield {
             insertaMulta(prmt)
         }
 
+        /********  multa por retraso de obra -- para liquidación "Q" **********/
+        /* 1. se calcula el valor por día: contrato/dias_obra
+        ** 2. se calcula el retraso respecto de la fecha de finalización en días
+        *  3. multa = valor_dia * dias_retraso
+         */
+        if(plnl.tipoPlanilla.codigo == 'Q'){
+            dias = 0
+            def diasmlta = dias_obra_total(plnl)
+            def restante = plnl.contrato.monto - valor_ejecutado(plnl.id)
+//            println "dias: $diasmlta, ejecutado: ${valor_ejecutado(plnl.id)} restante: $restante"
+            multaPlanilla = Math.round((restante /1000 * diasmlta))
+            prmt = [:]
+            prmt.planilla = plnl
+            prmt.tipoMulta = TipoMulta.get(4) ////// 2 multa por incumplimiento cronograma
+
+            prmt.descripcion = "${plnl.contrato.multaIncumplimiento} x 1000 x ${diasmlta} de " +
+                        "${formatoNum.format(restante)}"
+            prmt.valorCronograma = restante
+            prmt.monto = multaPlanilla
+            prmt.periodo = "${rjpl.last().mes}"
+            prmt.dias = diasmlta
+            insertaMulta(prmt)
+        }
+
         /********* multa por no acatar disposiciones del fiscalizador  **********/
         multaPlanilla = Math.round(plnl.contrato.monto * plnl.diasMultaDisposiciones * (plnl.contrato.multaDisposiciones / 1000)*100)/100
         prmt = [:]
@@ -4658,6 +4682,16 @@ class PlanillaController extends janus.seguridad.Shield {
         return dias
     }
 
+    def dias_obra_total(plnl) {
+        def cn = dbConnectionService.getConnection()
+        def sql = "select max(prejfcfn) final from prej where prej.cntr__id = ${plnl.contrato.id}"
+        def termina  = cn.rows(sql.toString())[0].final
+        sql = "select plnlfcfn - '${termina}'::date dias from plnl where plnl__id = ${plnl.id}"
+        println "dias_obra_total sql: $sql"
+        def dias  = (int) cn.rows(sql.toString())[0].dias
+        return dias
+    }
+
     def valor_dia_perio(plnl_id) {
         def cn = dbConnectionService.getConnection()
         def sql1 = "select sum(prejcrpa) suma from prej, plnl where prejfcin >= plnlfcin and prejfcfn <= plnlfcfn and " +
@@ -4671,6 +4705,14 @@ class PlanillaController extends janus.seguridad.Shield {
 //        def valor = (int) cn.rows(sql.toString())[0].dia
         def valor = (int) acumulado / dias_planilla
         println "valor por día: $valor"
+        return valor
+    }
+
+    def valor_ejecutado(plnl_id) {
+        def cn = dbConnectionService.getConnection()
+        def sql1 = "select max(rjplplac) suma from rjpl where plnl__id = ${plnl_id} and plnlrjst < ${plnl_id}"
+        def valor = cn.rows(sql1.toString())[0].suma
+        println "valor ejecutado: $valor sql: $sql1"
         return valor
     }
 
