@@ -9,13 +9,18 @@ ${html}
             $("#btnSpin").show();
             var data = "id=${contrato.id}&plnl=${plnl}";
             $(".texto").each(function () {
-                data += "&texto=" + $(this).data("num") + sep + $(this).val();
+                var tx = $(this).val();
+                tx = tx.replaceAll('%', ' por ciento');
+//                console.log('--', tx);
+//                data += "&texto=" + $(this).data("num") + sep + $(this).val();
+                data += "&texto=" + $(this).data("num") + sep + tx;
             });
             $(".clima").each(function () {
                 var $tarde = $(this).parents("td").next().children("select");
                 data += "&clima=" + $(this).data("fecha") + sep + $(this).val();
                 data += sep + $tarde.val();
             });
+//            console.log("data: ", data);
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(action: 'saveAvance')}",

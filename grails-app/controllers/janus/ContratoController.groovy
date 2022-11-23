@@ -102,6 +102,7 @@ class ContratoController extends janus.seguridad.Shield {
                 def esDirector = directores.contains(session.usuario.id) ? "S" : "N"
 
                 println "esDirector: $esDirector directores: $directores"
+                println "${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A'))}  > 0 && ${contrato.oferta.concurso.obra.fechaInicio}"
 
 
                 def personalFis = Persona.findAllByDepartamento(Departamento.findByCodigo('FISC'))
