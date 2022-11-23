@@ -4473,7 +4473,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        if (retraso > 0 || plnl.valor == 0) {
         if (retraso > 0) {
             println "retraso presentación de planillas: $retraso"
-//            retraso = 1
+            retraso = 1
         } else {
             retraso = 0
         }
