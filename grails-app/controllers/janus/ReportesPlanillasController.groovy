@@ -598,7 +598,7 @@ class ReportesPlanillasController {
         params.texto.each { t ->
             def parts = t.toString().split("\\^")
             println "--------- ${parts}"
-            println "--------- ${parts[0]}: ${parts[1]?.size()}"
+//            println "--------- ${parts[0]}: ${parts[1]?.size()}"
             if (parts.size() == 2) {
                 avanceContrato["frase" + parts[0]] = parts[1]
             } else if (parts.size() == 1){
