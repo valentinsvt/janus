@@ -4676,7 +4676,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def sql = "select max(prejfcfn) final from prej where prej.cntr__id = ${plnl.contrato.id}"
         def termina = cn.rows(sql.toString())[0].final
-        sql = "select plnlfcfn - '${termina}'::date + 1 dias from plnl where plnl__id = ${plnl.id}"
+        sql = "select plnlfcfn - '${termina}'::date dias from plnl where plnl__id = ${plnl.id}"
         println "dias_obra_total sql: $sql"
         def dias = (int) cn.rows(sql.toString())[0].dias
         return dias
