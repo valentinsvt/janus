@@ -5050,7 +5050,7 @@ class PlanillaController extends janus.seguridad.Shield {
             listPl = ['P', 'Q']
             pl = Planilla.findAllByContratoAndTipoPlanillaInListAndFechaPresentacionLessThanAndTipoContrato(plnl.contrato,
                     TipoPlanilla.findAllByCodigoInList(listPl), plnl.fechaPresentacion, plnl.tipoContrato, [sort: 'fechaPresentacion'])
-            println "planillas P por procesar: ${pl.size()}: ${pl.id}"
+//            println "planillas P por procesar: ${pl.size()}: ${pl.id}"
             pl.each { p ->   /** las planillas anteriores de avance P o Q **/
                 if ((p == pl.last())) {  // reajusta sólo planillas de avance
                     /** pone Po en base a lo recalculado de la planilla anterior **/
@@ -5068,16 +5068,19 @@ class PlanillaController extends janus.seguridad.Shield {
                             prmt.parcialCronograma = po.parcialCronograma
                             prmt.acumuladoCronograma = po.acumuladoCronograma
 
-                            if (po.acumuladoCronograma > po.acumuladoPlanillas) {
-                                if ((po.acumuladoCronograma - po.acumuladoPlanillas) * dsct <= (plnl.valor - plParaPo)) {
-                                    prmt.valorPo = Math.round(po.parcialCronograma * dsct * 100) / 100
-                                    plParaPo += prmt.valorPo - po.valorPo
-                                } else {
-                                    prmt.valorPo = po.valorPo  //queda igual
-                                }
-                            } else { // esta adelantado en el cronograma queda igual
-                                prmt.valorPo = po.valorPo
-                            }
+//                            if (po.acumuladoCronograma > po.acumuladoPlanillas) {
+//                                println "(${po.acumuladoCronograma} - ${po.acumuladoPlanillas} ) * $dsct <= ${(plnl.valor - plParaPo)}"
+//                                if ((po.acumuladoCronograma - po.acumuladoPlanillas) * dsct <= (plnl.valor - plParaPo)) {
+//                                    prmt.valorPo = Math.round(po.parcialCronograma * dsct * 100) / 100
+//                                    plParaPo += prmt.valorPo - po.valorPo
+//                                } else {
+//                                    prmt.valorPo = po.valorPo  //queda igual
+//                                }
+//                            } else { // esta adelantado en el cronograma queda igual
+//                                prmt.valorPo = po.valorPo
+//                            }
+
+                            prmt.valorPo = po.valorPo
 
                             prmt.parcialPlanillas = po.parcialPlanillas      //igual
                             prmt.acumuladoPlanillas = po.acumuladoPlanillas  //igual
