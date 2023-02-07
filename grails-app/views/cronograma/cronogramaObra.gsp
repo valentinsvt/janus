@@ -1323,9 +1323,9 @@
             d += "&dataf=" + dataFis + "&txf=" + ticksXFis + "&tyf=" + ticksYFis + "&mf=" + maxFis + "&titulof=" + titulof + "&colorf=" + colorf;
             d += "&obra=${obra.id}";
             d += "&subpre=${subpre}";
-
+            console.log('antes de llamada:', d);
             var url = "${createLink(action: 'graficos2')}?" + d;
-//                    ////console.log(url);
+            console.log(url);
             location.href = url;
 
             return false;

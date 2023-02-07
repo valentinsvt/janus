@@ -25,7 +25,7 @@ class InicioController extends janus.seguridad.Shield {
 
         //println "formula "
         //oferentesService.copiaFormula(1457,1485)
-       // println " crono "
+        // println " crono "
         //oferentesService.copiaCrono(1457,1485)
         return [prms: prms, empr: empr]
     }

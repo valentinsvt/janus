@@ -4547,9 +4547,9 @@ class PlanillaController extends janus.seguridad.Shield {
         if (plnl.tipoPlanilla.codigo == 'Q') {
             dias = 0
             def diasmlta = dias_obra_total(plnl)
-            if (diasmlta > 0) {
+            if (diasmlta > 0 && plnl.tipoContrato != 'C') {
                 def restante = plnl.contrato.monto - valor_ejecutado(plnl.id)
-                println "dias: $diasmlta, ejecutado: ${valor_ejecutado(plnl.id)} restante: $restante"
+                println "dias: $diasmlta, ejecutado: ${valor_ejecutado(plnl.id)} restante: $restante, tppl: ${plnl.tipoPlanilla}"
                 multaPlanilla = Math.round((restante / 1000 * diasmlta))
                 prmt = [:]
                 prmt.planilla = plnl

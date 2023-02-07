@@ -226,12 +226,15 @@ class VolumenObraController extends janus.seguridad.Shield {
 
     /** carga tabla de detalle de volúmenes de obra **/
     def tabla() {
-//        println "params tabla Vlob--->>>> "+params
+        println "params tabla Vlob--->>>> "+params
         def usuario = session.usuario.id
         def persona = Persona.get(usuario)
+        println "persona $persona ${persona?.departamento?.direccion?.id}"
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
         def grupo = Grupo.findAllByDireccion(direccion)
+        println "grupo --> $grupo"
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
+        println "sbpr --> $subPresupuesto1"
         def obra = Obra.get(params.obra)
 
 //        def volumenes = VolumenesObra.findAllByObra(obra);

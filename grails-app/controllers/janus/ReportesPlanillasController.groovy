@@ -733,7 +733,7 @@ class ReportesPlanillasController {
         tx = "select sum(mlplmnto) suma from mlpl where plnl__id in (select plnl__id from plnl " +
                 "where cntr__id = ${plnl.contrato.id} and tppl__id in (3,9,4) and plnlfcfn <= '${plnl.fechaFin}')"
 
-//        println "multas: $tx"
+        println "multas: $tx"
         def multas = cn.rows(tx.toString())[0]?.suma?:0
         println "multas mlpl: $multas, este plnlmles: ${plnl.multaEspecial?:0}"
         tx = "select sum(plnlmles) suma from plnl where cntr__id = ${plnl.contrato.id} and " +

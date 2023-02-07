@@ -104,6 +104,7 @@ class CronogramaController extends janus.seguridad.Shield {
     }
 
     def graficos2() {
+        println "graficos2: $params"
 //        params.each {
 //            println it
 //        }
@@ -358,7 +359,7 @@ class CronogramaController extends janus.seguridad.Shield {
     }
 
     def cronogramaObra() {
-//        println "--- cronograma"
+        println "--- cronograma"
         def cn = dbConnectionService.getConnection()
         // debe mostrar los rubros con sus precios unitarios y totales
 //        def inicio = new Date()
