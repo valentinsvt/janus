@@ -787,7 +787,8 @@ class Reportes5Controller extends Shield{
 
         label = new Label(1, 6, obra?.formulaPolinomica, times16format); sheet.addCell(label);
 
-        label = new Label(1, 8, "De existir variaciones en los costos de los componentes de precios unitarios estipulados en el contrato para la contrucción de:", times16format);
+        label = new Label(1, 8, "De existir variaciones en los costos de los componentes de precios unitarios " +
+                "estipulados en el contrato para la construcción de:", times16format);
         sheet.addCell(label);
 
         label = new Label(1, 10, "Nombre: ", times16format); sheet.addCell(label);
@@ -810,7 +811,8 @@ class Reportes5Controller extends Shield{
         label = new Label(1, 19, "Los costos se reajustarán para efecto de pago, mediante la fórmula general: ", times16format);
         sheet.addCell(label);
 
-        label = new Label(1, 21, "Pr = Po (p01B1/Bo + p02C1/Co + p03D1/Do + p04E1/Eo + p05F1/Fo + p06G1/Go + p07H1/Ho + p08I1/Io + p09J1/Jo + p10K1/Ko + pxX1/Xo) ", times16format);
+        label = new Label(1, 21, "Pr = Po (p01B1/Bo + p02C1/Co + p03D1/Do + p04E1/Eo + p05F1/Fo + p06G1/Go + p07H1/Ho + " +
+                "p08I1/Io + p09J1/Jo + p10K1/Ko + pxX1/Xo) ", times16format);
         sheet.addCell(label);
 
         def textoFormula = "Pr=Po(";

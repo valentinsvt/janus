@@ -5083,7 +5083,8 @@ class ReportesController {
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal, times18bold: times18bold]
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite,
+                     times8normal: times8normal, times10normal: times10normal, times18bold: times18bold]
 
         Document document
         document = new Document(PageSize.A4);
@@ -5107,8 +5108,10 @@ class ReportesController {
 
         Paragraph txtIzq = new Paragraph();
         txtIzq.setAlignment(Element.ALIGN_CENTER);
-        txtIzq.setIndentationLeft(20)
-        txtIzq.add(new Paragraph("De existir variaciones en los costos de los componentes de precios unitarios estipulados en el contrato para la contrucción de: ", times10normal));
+        txtIzq.setIndentationLeft(15)
+        txtIzq.add(new Paragraph("De existir variaciones en los costos de los componentes de precios unitarios " +
+                "estipulados en el contrato para la construcción de: ", times10normal));
+        txtIzq.add(new Paragraph("", times8normal));
         document.add(txtIzq);
 
         PdfPTable tablaObra = new PdfPTable(2);

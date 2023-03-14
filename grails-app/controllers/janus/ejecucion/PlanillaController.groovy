@@ -5608,7 +5608,7 @@ class PlanillaController extends janus.seguridad.Shield {
         return periodos
     }
 
-    //calcula el total sbpr que apica a esta FP
+    //calcula el total sbpr que aplica a esta FP
     def prorrateaPo(fprj, cntr, plnl) {
         println "prorrateaPo: fprj: $fprj, obra: ${cntr.obraContratada.id}, valor: $plnl"
         def cn = dbConnectionService.getConnection()
@@ -5617,6 +5617,10 @@ class PlanillaController extends janus.seguridad.Shield {
         println "prorrateaPo--sql: $sql"
         def valor = cn.rows(sql.toString())[0].suma * plnl / cntr.monto
         println "valor: $valor"
+        /* todo*/
+        /* verificar que no hayan registro repetidos en fpsp
+        * algo como select sbpr__id from fpsp where fprj__id = ${fprj__id} group by sbpr__id
+        * having count(*) > 1; */
         return valor
     }
 
