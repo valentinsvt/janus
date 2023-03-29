@@ -1581,7 +1581,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def d = fechaMin.format("dd").toInteger()
 
         fechaMin = "new Date(${y},${m},${d})"
-        fechaMax = "new Date(${y + 2},${m},${d})"
+        fechaMax = "new Date(${y+2},${m+6},${d})"    //plazo de inicio 2.5 años
 
         def firma = Persona.findAllByCargoIlike("Direct%");
         println "fache min: $fechaMin"
