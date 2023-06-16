@@ -156,19 +156,19 @@ class VolumenObraController extends janus.seguridad.Shield {
 
     def copiarItem() {
 
-//        println "copiarItem "+params
+        println "copiarItem "+params
         def obra = Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
 //        println("rubro " + rubro)
         def sbprDest = SubPresupuesto.get(params.subDest)
         def sbpr = SubPresupuesto.get(params.sub)
 
-        def itemVolumen = VolumenesObra.findByItemAndSubPresupuesto(rubro, sbpr)
+        def itemVolumen = VolumenesObra.findByItemAndSubPresupuestoAndObra(rubro, sbpr, obra)
         def itemVolumenDest = VolumenesObra.findByItemAndSubPresupuestoAndObra(rubro, sbprDest, obra)
 
         def volumen
 
-        def volu = VolumenesObra.list()
+//        def volu = VolumenesObra.list()
 
         if (params.id)
             volumen = VolumenesObra.get(params.id)
@@ -198,7 +198,8 @@ class VolumenObraController extends janus.seguridad.Shield {
         }
 
 
-        volumen.orden = (volu.orden.size().toInteger()) + 1
+//        volumen.orden = (volu.orden.size().toInteger()) + 1
+        volumen.orden = 10000
         volumen.subPresupuesto = SubPresupuesto.get(params.subDest)
         volumen.obra = obra
         volumen.item = rubro

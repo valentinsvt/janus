@@ -60,7 +60,7 @@ class Obra implements Serializable {
     double indiceUtilidad
     int contrato
     double totales
-    double valor
+    double valor = 0
     Presupuesto partidaObra
     String memoCertificacionPartida
     String memoActualizacionPrefecto
